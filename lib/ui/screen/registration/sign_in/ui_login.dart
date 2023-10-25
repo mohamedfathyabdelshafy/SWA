@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:swa/core/utilts/My_Colors.dart';
 import 'package:swa/core/utilts/styles.dart';
 import 'package:swa/ui/component/custom_Button.dart';
 import 'package:swa/ui/component/custom_text_form_field.dart';
-import 'package:swa/ui/home/home_screen.dart';
-import 'package:swa/ui/registration/forget_password/forget_password.dart';
-import 'package:swa/ui/registration/sign_up/sign_up.dart';
-
-import '../../../core/utilts/My_Colors.dart';
+import 'package:swa/ui/screen/home/home_screen.dart';
+import 'package:swa/ui/screen/registration/forget_password/forget_password.dart';
+import 'package:swa/ui/screen/registration/sign_up/sign_up.dart';
 
 
 class LoginScreen extends StatelessWidget {

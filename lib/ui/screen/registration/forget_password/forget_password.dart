@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:swa/core/utilts/My_Colors.dart';
 import 'package:swa/ui/component/custom_Button.dart';
 import 'package:swa/ui/component/custom_text_form_field.dart';
-import 'package:swa/ui/registration/forget_password/pass_code.dart';
+import 'package:swa/ui/screen/registration/forget_password/pass_code.dart';
 
-import '../../../core/utilts/My_Colors.dart';
 
 class ForgetPasswordScreen extends StatelessWidget {
  TextEditingController emailController = TextEditingController();

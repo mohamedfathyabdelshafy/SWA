@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:swa/core/utilts/My_Colors.dart';
 import 'package:swa/ui/component/custom_Button.dart';
-import 'package:swa/ui/registration/forget_password/new_password.dart';
-import 'package:swa/ui/registration/forget_password/widget/pin_code_text_field.dart';
+import 'package:swa/ui/screen/registration/forget_password/new_password.dart';
+import 'package:swa/ui/screen/registration/forget_password/widget/pin_code_text_field.dart';
 
 class CreatePasscodeForm extends StatelessWidget {
   TextEditingController pin1Controller = TextEditingController();

@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:swa/core/utilts/My_Colors.dart';
 import 'package:swa/ui/component/custom_Button.dart';
 import 'package:swa/ui/component/custom_text_form_field.dart';
-import 'package:swa/ui/registration/forget_password/widget/done_login.dart';
+import 'package:swa/ui/screen/registration/forget_password/widget/done_login.dart';
 
 class NewPasswordScreen extends StatelessWidget {
   TextEditingController newPassController = TextEditingController();

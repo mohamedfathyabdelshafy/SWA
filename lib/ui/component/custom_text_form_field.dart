@@ -44,14 +44,18 @@ class _CustomizedFieldState extends State<CustomizedField> {
             borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
           child: TextFormField(
+
             maxLength: widget.maxLength,
+
             controller: widget.controller,
             obscureText: widget.obsecureText,
             keyboardType: widget.keyboardType,
             validator: widget.validator,
             style: TextStyle(color: widget.colorText, fontSize: 18),
             cursorColor: MyColors.white,
+
             decoration: InputDecoration(
+
               suffixIcon: widget.ispassword
                   ? IconButton(
                 icon: Icon(
@@ -69,7 +73,7 @@ class _CustomizedFieldState extends State<CustomizedField> {
                   : null,
               labelText: widget.labelText,
               labelStyle: TextStyle(
-                color: MyColors.grey,
+                color: MyColors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
