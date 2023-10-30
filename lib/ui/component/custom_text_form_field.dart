@@ -78,7 +78,7 @@ class _CustomizedFieldState extends State<CustomizedField> {
                 fontWeight: FontWeight.bold,
               ),
               hintText: widget.hintText,
-              errorStyle: TextStyle(fontSize: 10),
+              errorStyle: TextStyle(color:MyColors.white,fontSize: 10),
               border: InputBorder.none,
               hintStyle: TextStyle(
                 color: MyColors.white,
