@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:swa/ui/screen/registration/sign_in/ui_login.dart';
+import 'package:swa/config/routes/app_routes.dart';
+import 'package:swa/core/utils/app_strings.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,12 +12,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        LoginScreen.routeName: (_)=> LoginScreen()
-      },
-      initialRoute:LoginScreen.routeName ,
+    return const MaterialApp(
+      title: AppStrings.appName,
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      onGenerateRoute: AppRoute.onGenerateRoute,
     );
   }
 }
-
