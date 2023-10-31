@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swa/ui/screen/home/home_screen.dart';
 import 'package:swa/ui/screen/registration/sign_in/ui_login.dart';
 
 void main() {
@@ -13,9 +14,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        LoginScreen.routeName: (_)=> LoginScreen()
+        LoginScreen.routeName: (_)=> LoginScreen(),
+        HomeScreen.routeName :(_)=>HomeScreen()
       },
-      initialRoute:LoginScreen.routeName ,
+      initialRoute:HomeScreen.routeName,
     );
   }
 }

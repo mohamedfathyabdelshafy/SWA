@@ -11,6 +11,8 @@ abstract class MyColors {
   static const Color grey = Color(0xff616B80);
   static const Color greyLight = Color(0xffD5D5D5);
   static const Color darkPurple = Color(0xff28242A);
+  static const Color darkGrey = Color(0xff6F6B70);
+  static const blue = Color(0xFF2A3244);
 
 
 }
