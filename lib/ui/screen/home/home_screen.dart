@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swa/core/utilts/My_Colors.dart';
 import 'package:swa/ui/component/custom_Button.dart';
 import 'package:swa/ui/component/custom_drop_down.dart';
+import 'package:swa/ui/screen/payment/my_wallet.dart';
 
 class HomeScreen extends StatefulWidget {
   static String routeName = '';
@@ -258,21 +259,29 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      Container(
-                        height: 50,
-                        //padding:  EdgeInsets.symmetric(horizontal: 10,vertical:20),
-                        //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
-                        decoration:BoxDecoration(
-                            color: MyColors.primaryColor,
-                            borderRadius: BorderRadius.circular(15)
-                        ) ,
-                        child: Center(
-                          child: Text(
-                            "Search Bus",
-                            style: TextStyle(
-                                color: MyColors.white,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 20
+                      InkWell(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context){
+                                return MyCredit();
+                              }));
+                        },
+                        child: Container(
+                          height: 50,
+                          //padding:  EdgeInsets.symmetric(horizontal: 10,vertical:20),
+                          //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
+                          decoration:BoxDecoration(
+                              color: MyColors.primaryColor,
+                              borderRadius: BorderRadius.circular(15)
+                          ) ,
+                          child: Center(
+                            child: Text(
+                              "Search Bus",
+                              style: TextStyle(
+                                  color: MyColors.white,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 20
+                              ),
                             ),
                           ),
                         ),
