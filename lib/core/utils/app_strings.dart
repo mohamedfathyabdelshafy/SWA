@@ -13,4 +13,6 @@ class AppStrings{
   static const String serverFailure = 'Server Failure';
   static const String cacheFailure = 'Cache Failure';
 
+  static const String cachedUserLoginData = 'CACHED_USER_LOGIN_DATA';
+
 }

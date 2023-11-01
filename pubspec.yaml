@@ -22,6 +22,8 @@ dependencies:
   http_interceptor:
   flutter_bloc:
   flutter_device_type:
+  get_it:
+  injectable:
 
 dev_dependencies:
   flutter_test:

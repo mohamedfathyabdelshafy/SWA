@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swa/core/utils/app_colors.dart';
+import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/widgets/custom_drop_down_list.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,8 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double sizeHeight = MediaQuery.of(context).size.height;
-    double sizeWidth = MediaQuery.of(context).size.width;
+    double sizeHeight = context.height;
+    double sizeWidth = context.width;
 
     return Scaffold(
       bottomNavigationBar: Container(

@@ -18,7 +18,10 @@ class HttpConsumer implements ApiConsumer{
     try {
       final response = await client.get(
         Uri.parse(path),
-        headers: await _getToken()
+        headers: {
+          "APIKey":"546548dwfdfsd3f4sdfhgat52"
+        },
+        // headers: await _getToken()
       );
       return _handleResponseErrors(response);
     }on TimeoutException catch(error){
@@ -34,7 +37,10 @@ class HttpConsumer implements ApiConsumer{
       final response = await client.post(
         Uri.parse(path),
         body: body,
-        headers: await _getToken()
+        headers: {
+          "APIKey":"546548dwfdfsd3f4sdfhgat52"
+        },
+        // headers: await _getToken()
       );
       return _handleResponseErrors(response);
     }on TimeoutException catch(error){

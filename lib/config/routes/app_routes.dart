@@ -7,8 +7,10 @@ import 'package:swa/features/done_login/presentation/pages/done_login.dart';
 import 'package:swa/features/forgot_password/presentation/pages/forgot_password.dart';
 import 'package:swa/features/home/presentation/pages/home.dart';
 import 'package:swa/features/new_password/presentation/pages/new_password.dart';
-import 'package:swa/features/sign_in/presentation/pages/login.dart';
+import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
+import 'package:swa/features/sign_in/presentation/screens/login.dart';
 import 'package:swa/features/sign_up/presentation/pages/sign_up.dart';
+import 'package:swa/main.dart';
 
 class Routes {
   static const String initialRoute = '/';
@@ -28,7 +30,10 @@ class AppRoute {
     final Object? args = settings.arguments;
     switch(settings.name){
       case Routes.initialRoute:
-        return MaterialPageRoute(builder: (context) => LoginScreen());
+        return MaterialPageRoute(builder: (context) => BlocProvider(
+          create: (context) => sl<LoginCubit>(),
+          child: LoginScreen(),
+        ),);
         // return MaterialPageRoute(builder: (context) => MultiBlocProvider(
         //   providers: [
         //     BlocProvider<CampusThemeCubit>(create: (context) => sl<CampusThemeCubit>(),),

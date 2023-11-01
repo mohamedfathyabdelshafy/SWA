@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:swa/bloc_observer.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_strings.dart';
+import 'package:swa/features/sign_in/signin_injection_container.dart';
+import 'package:swa/injection_container.dart';
 
-void main() {
+
+final sl = GetIt.instance;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  ///Authorization Screens
+  await loginDependencyInjectionInit();//For initializing login
+
+
+
+
+  await dependencyInjectionInit();//For initializing network info and shared preferences
   runApp(const MyApp());
+  Bloc.observer = AppBlocObserver();
 }
 
 class MyApp extends StatelessWidget {
