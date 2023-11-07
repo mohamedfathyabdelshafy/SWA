@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:swa/core/utilts/My_Colors.dart';
 import 'package:swa/core/utilts/styles.dart';
 import 'package:swa/ui/component/custom_Button.dart';
-import 'package:swa/ui/screen/payment/add_card.dart';
+import 'package:swa/ui/screen/payment/select_payment_screen.dart';
 
 class MyCredit extends StatelessWidget {
   const MyCredit({super.key});
@@ -59,7 +59,7 @@ class MyCredit extends StatelessWidget {
         InkWell(
           onTap: (){
             Navigator.push(context, MaterialPageRoute(builder: (context){
-              return AddCreditCard();
+              return SelectPaymentScreen();
             }));
           },
           child: Padding(
