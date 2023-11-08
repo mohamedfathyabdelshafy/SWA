@@ -38,28 +38,14 @@ class Constants{
   static void showDefaultSnackBar({required BuildContext context, required String text, VoidCallback? onPress, bool? showDuration}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: Theme.of(context).primaryColor,
-
+        backgroundColor: AppColors.blackColor,
         content: Text(
           text,
           style: TextStyle(
-              color: Theme.of(context).canvasColor,
+              color: AppColors.primaryColor,
               fontSize: (Device.get().isTablet) ? Theme.of(context).textTheme.headline5!.fontSize : Theme.of(context).textTheme.subtitle1!.fontSize,
               fontWeight: FontWeight.bold
           ),
-        ),
-        action: SnackBarAction(
-          label: 'Ok',
-          onPressed: () {
-            if (showDuration == null) {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            } else {
-              ScaffoldMessenger.of(context).removeCurrentSnackBar();
-            }
-            if(onPress != null) {
-              onPress();
-            }
-          },
         ),
         duration: (showDuration == null) ? const Duration(seconds: 5) : const Duration(seconds: 10),
       ),
@@ -77,7 +63,7 @@ class Constants{
             height: 80,
             padding: const EdgeInsets.all(12.0),
             child: CircularProgressIndicator(
-              color: Theme.of(context).primaryColor,
+              color: AppColors.primaryColor,
             ),
           ),
         ),
@@ -86,4 +72,40 @@ class Constants{
   }
   static void showLoadingDialog(BuildContext context, {Key? key}) => showDialog<void>(context: context, useRootNavigator: false, barrierDismissible: false, builder: (_) => LoadingDialog(context),).then((_) => FocusScope.of(context).requestFocus(FocusNode()));
   static void hideLoadingDialog(BuildContext context) => Navigator.pop(context);
+  static dynamic showListDialog(BuildContext context, String dialogName, Widget listViewWidget) {
+    return showDialog(context: context, builder: (_){
+      return WillPopScope(
+        //Set onWillPop to false if need to prevent the dialog from closing
+        onWillPop: () async => true,
+        child: Center(
+          child: Container(
+            margin: const EdgeInsets.only(top: 80, bottom: 80, left: 20, right: 20),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Material(
+                    child: ListTile(
+                      title: Text(
+                          dialogName,
+                          style: TextStyle(
+                              color: AppColors.primaryColor,
+                              fontSize: Theme.of(context).textTheme.headline6!.fontSize,
+                              fontWeight: FontWeight.bold
+                          )
+                      ),
+                    ),
+                  ),
+                  const Divider(),
+                  listViewWidget
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    });
+  }
 }

@@ -2,6 +2,7 @@ import 'package:swa/features/sign_in/data/data_sources/login_local_data_source.d
 import 'package:swa/features/sign_in/data/data_sources/login_remote_data_source.dart';
 import 'package:swa/features/sign_in/data/repositories/login_repository_impl.dart';
 import 'package:swa/features/sign_in/domain/repositories/login_repository.dart';
+import 'package:swa/features/sign_in/domain/use_cases/get_user_data.dart';
 import 'package:swa/features/sign_in/domain/use_cases/login.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/main.dart';
@@ -10,11 +11,12 @@ Future<void> loginDependencyInjectionInit() async {
   //! Features
 
   // Blocs
-  sl.registerFactory<LoginCubit>(() => LoginCubit(userLoginUseCase: sl(), ));
+  sl.registerFactory<LoginCubit>(() => LoginCubit(userLoginUseCase: sl(), getUserDataUseCase: sl(), ));
 
   // Use cases
   //We use lazy we don't need to load the whole app
   sl.registerLazySingleton<UserLogin>(() => UserLogin(userRepository: sl()));
+  sl.registerLazySingleton<GetUserDataUseCase>(() => GetUserDataUseCase(userRepository: sl()));
 
 
   // Repository

@@ -19,9 +19,8 @@ class _CustomDropDownListState extends State<CustomDropDownList> {
     return Padding(
       padding: EdgeInsets.zero,
       child: Container(
-
         width: double.infinity,
-        //color: Colors.red,
+        // color: Colors.red,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -49,8 +48,7 @@ class _CustomDropDownListState extends State<CustomDropDownList> {
                   selectedValue = newValue!;
                 });
               },
-              items: widget.items
-                  ?.map((value) {
+              items: widget.items?.map((value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value,style: TextStyle(

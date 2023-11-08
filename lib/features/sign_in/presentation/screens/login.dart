@@ -72,7 +72,11 @@ class LoginScreen extends StatelessWidget {
                     Constants.showLoadingDialog(context);
                   }else if (state is UserLoginLoadedState) {
                     Constants.hideLoadingDialog(context);
-                    Navigator.pushReplacementNamed(context, Routes.homeRoute);
+                    if(state.userResponse.status == 'failed') {
+                      Constants.showDefaultSnackBar(context: context, text: state.userResponse.massage.toString());
+                    }else {
+                      Navigator.pushReplacementNamed(context, Routes.initialRoute);
+                    }
                   }else if (state is LoginErrorState) {
                     Constants.hideLoadingDialog(context);
                     Constants.showDefaultSnackBar(context: context, text: state.error.toString());

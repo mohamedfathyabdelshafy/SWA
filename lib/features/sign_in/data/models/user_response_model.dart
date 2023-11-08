@@ -4,21 +4,18 @@ import 'package:swa/features/sign_in/domain/entities/user_response.dart';
 
 class UserResponseModel extends UserResponse {
   UserResponseModel({
-     // required String? massage,
+     required String? massage,
      required String? status,
      required User? user,
      required dynamic balance,
      required dynamic object,
      required dynamic obj,
-  }) : super(status: status, user: user, balance: balance, object: object, obj: obj); //massage: massage,
+  }) : super(status: status, user: user, balance: balance, object: object, obj: obj, massage: massage);
 
   factory UserResponseModel.fromJson(Map<String, dynamic> json) => UserResponseModel(
     status : json['status'],
-    // massage : json['message'],
-
-    // loginInfo : (json['LoginInfo'] as List?)?.map((dynamic e) => LoginInfoModel.fromJson(e as Map<String,dynamic>)).toList(),
-
-    user : json['message'] != null ? UserModel.fromJson(json['message']) : null,
+    massage : (json['status'] == 'failed') ? json['message'] : null,
+    user : (json['message'] != null && json['status'] != 'failed') ? UserModel.fromJson(json['message']) : null,
     balance : json['balance'],
     object : json['Object'],
     obj : json['Obj'],

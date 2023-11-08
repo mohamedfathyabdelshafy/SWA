@@ -16,14 +16,9 @@ class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
   @override
   Future<UserResponseModel> userLogin(UserLoginParams params) async{
     final response = await apiConsumer.post(
-      EndPoints.login,
-      body: <String, String>{
-        "username": params.username,
-        "password": params.password,
-        "type": "Customer"
-      },
+      '${EndPoints.login}?username=${params.username}&password=${params.password}&type=Customer',
     );
-    return UserResponseModel.fromJson(json.decode(response.body.toString()).first);
+    return UserResponseModel.fromJson(json.decode(response.body.toString()));
   }
 
 }

@@ -9,7 +9,7 @@ class UserResponse extends Equatable {
   final dynamic object;
   final dynamic obj;
 
-  UserResponse({
+  const UserResponse({
     this.massage,
     this.status,
     this.user,
