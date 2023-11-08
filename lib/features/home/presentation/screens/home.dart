@@ -5,7 +5,7 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/widgets/custom_drop_down_list.dart';
-import 'package:swa/features/home/domain/entities/from_station.dart';
+import 'package:swa/features/home/domain/entities/cities_stations.dart';
 import 'package:swa/features/home/domain/entities/station_list.dart';
 import 'package:swa/features/home/domain/use_cases/get_to_stations_list_data.dart';
 import 'package:swa/features/home/presentation/cubit/home_cubit.dart';
@@ -22,8 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
   DateTime selectedDayFrom = DateTime.now();
   DateTime selectedDayTo = DateTime.now();
-  List<FromStations>? _fromStations;
-  List<FromStations>? _toStations;
+  List<CitiesStations>? _fromStations;
+  List<CitiesStations>? _toStations;
   ///To be changed by selected station id
   int? _fromStationId;
   int? _toStationId;
@@ -154,12 +154,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           }else if (state is GetFromStationsListLoadedState) {
                             Constants.hideLoadingDialog(context);
                             setState(() {
-                              if(state.messageResponse.status == 'failed') {
-                                Constants.showDefaultSnackBar(context: context, text: state.messageResponse.massage.toString());
+                              if(state.homeMessageResponse.status == 'failed') {
+                                Constants.showDefaultSnackBar(context: context, text: state.homeMessageResponse.message.toString());
                               }else {
-                                _fromStations = state.messageResponse.massage.cast<FromStations>().toList();
+                                _fromStations = state.homeMessageResponse.citiesStations!.cast<CitiesStations>().toList();
                               }
-
                             });
                             Widget _fromStationsListWidget = ListView.builder(
                               scrollDirection: Axis.vertical,
@@ -243,7 +242,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           }else if (state is GetToStationsListLoadedState) {
                             Constants.hideLoadingDialog(context);
                             setState(() {
-                              _toStations = state.toStations.cast<FromStations>().toList();
+                              if(state.homeMessageResponse.status == 'failed') {
+                                Constants.showDefaultSnackBar(context: context, text: state.homeMessageResponse.message.toString());
+                              }else {
+                                _toStations = state.homeMessageResponse.citiesStations!.cast<CitiesStations>().toList();
+                              }
                             });
                             Widget _toStationsListWidget = ListView.builder(
                               scrollDirection: Axis.vertical,
@@ -399,7 +402,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       bottomNavigationBar: SizedBox(
-        height: sizeHeight * 0.09,
+        height: sizeHeight * 0.1,
         child: Theme(
           data:Theme.of(context).copyWith(canvasColor: AppColors.darkPurple,),
           child: BottomNavigationBar(
@@ -439,7 +442,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 label: "Account",
 
-              ),BottomNavigationBarItem(
+              ),
+              BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SvgPicture.asset(

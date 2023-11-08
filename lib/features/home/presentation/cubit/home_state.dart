@@ -8,14 +8,14 @@ class GetFromStationsListLoadingState extends HomeState {}
 class GetToStationsListLoadingState extends HomeState {}
 //ForgotPassword States
 class GetFromStationsListLoadedState extends HomeState {
-  final MessageResponse messageResponse;
-  GetFromStationsListLoadedState({required this.messageResponse});
-  List<Object> get props => [messageResponse];
+  final HomeMessageResponse homeMessageResponse;
+  GetFromStationsListLoadedState({required this.homeMessageResponse});
+  List<Object> get props => [homeMessageResponse];
 }
 class GetToStationsListLoadedState extends HomeState {
-  final List<FromStations> toStations;
-  GetToStationsListLoadedState({required this.toStations});
-  List<Object> get props => [toStations];
+  final HomeMessageResponse homeMessageResponse;
+  GetToStationsListLoadedState({required this.homeMessageResponse});
+  List<Object> get props => [homeMessageResponse];
 }
 //Error States
 class GetFromStationsListErrorState extends HomeState {

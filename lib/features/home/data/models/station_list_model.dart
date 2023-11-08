@@ -1,4 +1,4 @@
-import 'package:swa/features/home/domain/entities/from_station.dart';
+import 'package:swa/features/home/domain/entities/cities_stations.dart';
 import 'package:swa/features/home/domain/entities/station_list.dart';
 import 'package:swa/features/sign_in/data/models/user_model.dart';
 

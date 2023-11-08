@@ -2,12 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:swa/features/home/domain/entities/station_list.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 
-class FromStations extends Equatable {
+class CitiesStations extends Equatable {
   final int cityID;
   final String cityName;
   final List<StationList> stationList;
 
-  const FromStations({
+  const CitiesStations({
     required this.cityID,
     required this.cityName,
     required this.stationList

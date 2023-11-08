@@ -1,15 +1,18 @@
 import 'package:equatable/equatable.dart';
+import 'package:swa/features/home/domain/entities/cities_stations.dart';
 
 class HomeMessageResponse extends Equatable {
-  final String? massage;
+  final String? message;
   final String? status;
+  final List<CitiesStations>? citiesStations;
   final dynamic balance;
   final dynamic object;
   final dynamic obj;
 
   const HomeMessageResponse({
-    this.massage,
+    this.message,
     this.status,
+    this.citiesStations,
     this.balance,
     this.object,
     this.obj,
@@ -18,7 +21,7 @@ class HomeMessageResponse extends Equatable {
 
   @override
   List<Object?> get props => [
-    massage,
+    message,
     status,
     balance,
     object,
