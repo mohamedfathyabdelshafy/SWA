@@ -38,27 +38,36 @@ flutter:
     - assets/images/
 
   fonts:
-    - family: English_Black
+    - family: bold
       fonts:
-        - asset: assets/fonts/Poppins-Black.otf
-    - family: English_Bold
-      fonts:
-        - asset: assets/fonts/Poppins-Bold.otf
-    - family: English_Regular
-      fonts:
-        - asset: assets/fonts/Poppins-Regular.otf
-    - family: English_Medium
-      fonts:
-        - asset: assets/fonts/Poppins-Medium.otf
+        - asset: assets/fonts/NeueHaasGrotesk-Bold.ttf
 
-    - family: Arabic_Medium
+    - family: regular
       fonts:
-        - asset: assets/fonts/arabic_medium.ttf
+        - asset: assets/fonts/NeueHaasGrotesk-Regular.ttf
 
-    - family: Arabic_Bold
-      fonts:
-        - asset: assets/fonts/arabic_bold.ttf
-
-    - family: Arabic_Regular
-      fonts:
-        - asset: assets/fonts/arabic_regular.ttf
+#  fonts:
+#    - family: English_Black
+#      fonts:
+#        - asset: assets/fonts/Poppins-Black.otf
+#    - family: English_Bold
+#      fonts:
+#        - asset: assets/fonts/Poppins-Bold.otf
+#    - family: English_Regular
+#      fonts:
+#        - asset: assets/fonts/Poppins-Regular.otf
+#    - family: English_Medium
+#      fonts:
+#        - asset: assets/fonts/Poppins-Medium.otf
+#
+#    - family: Arabic_Medium
+#      fonts:
+#        - asset: assets/fonts/arabic_medium.ttf
+#
+#    - family: Arabic_Bold
+#      fonts:
+#        - asset: assets/fonts/arabic_bold.ttf
+#
+#    - family: Arabic_Regular
+#      fonts:
+#        - asset: assets/fonts/arabic_regular.ttf

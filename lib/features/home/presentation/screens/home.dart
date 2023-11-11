@@ -9,6 +9,7 @@ import 'package:swa/features/home/domain/entities/cities_stations.dart';
 import 'package:swa/features/home/domain/entities/station_list.dart';
 import 'package:swa/features/home/domain/use_cases/get_to_stations_list_data.dart';
 import 'package:swa/features/home/presentation/cubit/home_cubit.dart';
+import 'package:swa/features/payment/wallet/presentation/screens/my_wallet.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -371,21 +372,28 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      Container(
-                        height: 50,
-                        //padding:  EdgeInsets.symmetric(horizontal: 10,vertical:20),
-                        //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
-                        decoration:BoxDecoration(
-                            color: AppColors.primaryColor,
-                            borderRadius: BorderRadius.circular(15)
-                        ) ,
-                        child: Center(
-                          child: Text(
-                            "Search Bus",
-                            style: TextStyle(
-                                color: AppColors.white,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 20
+                      InkWell(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context){
+                            return const MyCredit();
+                          }));
+                        },
+                        child: Container(
+                          height: 50,
+                          //padding:  EdgeInsets.symmetric(horizontal: 10,vertical:20),
+                          //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
+                          decoration:BoxDecoration(
+                              color: AppColors.primaryColor,
+                              borderRadius: BorderRadius.circular(15)
+                          ) ,
+                          child: Center(
+                            child: Text(
+                              "Search Bus",
+                              style: TextStyle(
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 20
+                              ),
                             ),
                           ),
                         ),
@@ -465,6 +473,16 @@ class _HomeScreenState extends State<HomeScreen> {
       initialDate: selectedDay,
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColors.primaryColor,
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (newSelectedDay != null) {

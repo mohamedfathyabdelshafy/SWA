@@ -3,13 +3,13 @@ import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:swa/core/utils/app_colors.dart';
 
 class Constants{
-  static Widget customButton({required String text}) {
+  static Widget customButton({required String text, Color? color}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20,vertical:20),
       //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
       decoration:BoxDecoration(
-        color: AppColors.darkRed,
-        borderRadius: BorderRadius.circular(10)
+          color: color ?? AppColors.darkRed,
+          borderRadius: BorderRadius.circular(10)
       ) ,
       child: Center(
         child: Text(
