@@ -38,7 +38,8 @@ class HttpConsumer implements ApiConsumer{
         Uri.parse(path),
         body: body,
         headers: {
-          "APIKey":"546548dwfdfsd3f4sdfhgat52"
+          "APIKey":"546548dwfdfsd3f4sdfhgat52",
+          "content-type": "application/json",
         },
         // headers: await _getToken()
       );

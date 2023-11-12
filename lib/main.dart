@@ -7,6 +7,8 @@ import 'package:swa/core/utils/app_strings.dart';
 import 'package:swa/features/change_password/change_password_injection_container.dart';
 import 'package:swa/features/forgot_password/forgot_password_injection_container.dart';
 import 'package:swa/features/home/home_injection_container.dart';
+import 'package:swa/features/payment/electronic_wallet/eWallet_injection_container.dart';
+import 'package:swa/features/payment/fawry/fawry_injection_container.dart';
 import 'package:swa/features/sign_in/signin_injection_container.dart';
 import 'package:swa/features/sign_up/signup_injection_container.dart';
 import 'package:swa/injection_container.dart';
@@ -22,6 +24,8 @@ Future<void> main() async {
   await forgotPasswordDependencyInjectionInit();//For initializing forgot password
   await changePasswordDependencyInjectionInit();//For initializing change password
   await homeDependencyInjectionInit();//For initializing Home
+  await fawryDependencyInjectionInit();//For initializing Fawry
+  await eWalletDependencyInjectionInit();//For initializing E-Wallet
 
 
 

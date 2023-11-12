@@ -10,6 +10,11 @@ import 'package:swa/features/forgot_password/presentation/screens/forgot_passwor
 import 'package:swa/features/home/presentation/cubit/home_cubit.dart';
 import 'package:swa/features/home/presentation/screens/home.dart';
 import 'package:swa/features/change_password/presentation/screens/new_password.dart';
+import 'package:swa/features/payment/electronic_wallet/presentation/cubit/eWallet_cubit.dart';
+import 'package:swa/features/payment/electronic_wallet/presentation/screens/electronic_screens.dart';
+import 'package:swa/features/payment/fawry/presentation/cubit/fawry_cubit.dart';
+import 'package:swa/features/payment/fawry/presentation/screens/fawry.dart';
+import 'package:swa/features/payment/wallet/presentation/screens/my_wallet.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/features/sign_in/presentation/screens/login.dart';
 import 'package:swa/features/sign_up/presentation/cubit/register_cubit.dart';
@@ -24,6 +29,10 @@ class Routes {
   static const String newPasswordRoute = '/newPassword';
   static const String forgotPasswordRoute = '/forgotPassword';
   static const String createPasscode = '/createPasscode';
+  ///Payment Screens
+  static const String myWalletScreen = '/myCredit';
+  static const String fawryPaymentScreen = '/fawry';
+  static const String eWalletScreen ='/eWallet';
   // static const String homeRoute = '/home';
 
 
@@ -34,10 +43,13 @@ class AppRoute {
     final Object? args = settings.arguments;
     switch(settings.name){
       case Routes.initialRoute:
-        return MaterialPageRoute(builder: (context) => BlocProvider(
-          create: (context) => sl<HomeCubit>(),
-          child: const HomeScreen(),
-        ),);
+        return MaterialPageRoute(builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<LoginCubit>(create: (context) => sl<LoginCubit>(),),
+            BlocProvider<HomeCubit>(create: (context) => sl<HomeCubit>(),),
+          ],
+          child: const HomeScreen()
+        ));
       case Routes.signInRoute:
         return MaterialPageRoute(builder: (context) => BlocProvider(
           create: (context) => sl<LoginCubit>(),
@@ -65,6 +77,24 @@ class AppRoute {
         ),);
       case Routes.createPasscode:
         return MaterialPageRoute(builder: (context) => CreatePasscodeFormScreen());
+      case Routes.myWalletScreen:
+        return MaterialPageRoute(builder: (context) => const MyCredit());
+      case Routes.fawryPaymentScreen:
+        return MaterialPageRoute(builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider<LoginCubit>(create: (context) => sl<LoginCubit>(),),
+              BlocProvider<FawryCubit>(create: (context) => sl<FawryCubit>(),),
+            ],
+            child: const FawryScreen()//ElectronicScreen
+        ));
+      case Routes.eWalletScreen:
+        return MaterialPageRoute(builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider<LoginCubit>(create: (context) => sl<LoginCubit>(),),
+              BlocProvider<EWalletCubit>(create: (context) => sl<EWalletCubit>(),),
+            ],
+            child: const ElectronicScreen()
+        ));
       default :
         return _errorRoute();
     }

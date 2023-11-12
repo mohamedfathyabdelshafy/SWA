@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/features/payment/credit_card/presentation/screens/credit_card.dart';
 import 'package:swa/features/payment/electronic_wallet/presentation/screens/electronic_screens.dart';
@@ -44,50 +45,9 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
               style: TextStyle(color: AppColors.white,fontSize: 34,fontFamily: "bold"),
             ),
             const SizedBox(height: 37,),
-
-
             const SizedBox(height: 17,),
             InkWell(
               onTap: () async {
-                // // itemcount ++;
-                // Navigator.push(context, MaterialPageRoute(
-                //   builder: (context) {
-                //     return CreditCardPayView(
-                //       index: 1,
-                //     );
-                //   },
-                // ));
-
-
-                // name = await Navigator.push<String>(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) {
-                //       return AddCreditCard();
-                //     },
-                //   ),
-                // );
-                // month = await Navigator.push<String>(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) {
-                //       return AddCreditCard();
-                //     },
-                //   ),
-                // );
-                // cardHolder = await Navigator.push<String>(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) {
-                //       return AddCreditCard();
-                //     },
-                //   ),
-                // );
-
-                // if (card is CardModel) {
-                //  cards.add(card);
-                //   setState(() {});
-                // }
 
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context){
@@ -119,15 +79,10 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
             const SizedBox(height: 17,),
             InkWell(
               onTap: () {
-                //Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context){
-                      return FawryScreen();
-                    }));
+                Navigator.pushNamed(context, Routes.fawryPaymentScreen);
               },
               child: Row(
                 children: [
-
                   Container(
                     padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
@@ -148,22 +103,9 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
               ),
             ),
             const SizedBox(height: 17,),
-
-            // const Divider(
-            //   color: Colors.black54,
-            // ),
-
-            // const Divider(
-            //   color: Colors.black54,
-            // ),
             InkWell(
               onTap: () {
-                //Navigator.pop(context);
-
-
-                Navigator.push(context, MaterialPageRoute(builder: (contex){
-                  return const ElectronicScreen();
-                }));
+                Navigator.pushNamed(context, Routes.eWalletScreen);
               },
               child: Row(
                 children: [
@@ -180,31 +122,6 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
                 ],
               ),
             ),
-            // SizedBox(height: 17,),
-            // InkWell(
-            //   onTap: () {
-            //     // Navigator.push(context, MaterialPageRoute(builder: (context){
-            //     //   return InstallmentScreen();
-            //     // }));
-            //   },
-            //   child: Row(
-            //     children: [
-            //       SizedBox(width: 7,),
-            //       Container(
-            //         height : 30,
-            //         width: 30,
-            //         child: SvgPicture.asset(
-            //           'assets/images/CreditCard.svg',
-            //           fit: BoxFit.fitWidth,
-            //         ),
-            //       ),
-            //       const SizedBox(
-            //         width: 10,
-            //       ),
-            //       customText("Installment")
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),

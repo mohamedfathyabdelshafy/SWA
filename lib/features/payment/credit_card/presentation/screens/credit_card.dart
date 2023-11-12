@@ -14,13 +14,9 @@ class AddCreditCard extends StatefulWidget {
 
 class _AddCreditCardState extends State<AddCreditCard> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
   TextEditingController cardNumberController = TextEditingController();
-
   TextEditingController monthController = TextEditingController();
-
   TextEditingController cvvController = TextEditingController();
-
   TextEditingController cardHolderController = TextEditingController();
 
   @override
