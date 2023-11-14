@@ -45,6 +45,9 @@ flutter:
     - family: regular
       fonts:
         - asset: assets/fonts/NeueHaasGrotesk-Regular.ttf
+    - family: black
+      fonts:
+        - asset: assets/fonts/NeueHaasGrotesk-Black.ttf
 
 #  fonts:
 #    - family: English_Black

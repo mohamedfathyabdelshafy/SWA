@@ -10,6 +10,8 @@ import 'package:swa/features/home/domain/entities/cities_stations.dart';
 import 'package:swa/features/home/domain/entities/station_list.dart';
 import 'package:swa/features/home/domain/use_cases/get_to_stations_list_data.dart';
 import 'package:swa/features/home/presentation/cubit/home_cubit.dart';
+import 'package:swa/features/home/presentation/screens/select_from_city/select_from_city.dart';
+import 'package:swa/features/home/presentation/screens/select_to_city/select_to_city.dart';
 import 'package:swa/features/payment/wallet/presentation/screens/my_wallet.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
@@ -175,58 +177,69 @@ class _HomeScreenState extends State<HomeScreen> {
                                     _fromStations = state.homeMessageResponse.citiesStations!.cast<CitiesStations>().toList();
                                   }
                                 });
-                                Widget _fromStationsListWidget = ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  itemCount: _fromStations!.length,
-                                  itemBuilder: (context, index) {
-                                    String cityName = _fromStations![index].cityName;
-                                    List<StationList> stationsList = _fromStations![index].stationList;
-                                    return stationsList.isNotEmpty ? Material(
-                                      child: ExpansionTile(
-                                        backgroundColor: Colors.grey[200],
-                                        iconColor: AppColors.primaryColor,
-                                        title: Text(
-                                          cityName,
-                                          style: const TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold
-                                          ),
-                                        ),
-                                        children: [
-                                          ListView.builder(
-                                            shrinkWrap: true,
-                                            physics: const ClampingScrollPhysics(),//NeverScrollableScrollPhysics(),
-                                            scrollDirection: Axis.vertical,
-                                            itemCount: stationsList.length,
-                                            itemBuilder: (context, index) {
-                                              return ListTile(
-                                                onTap: (){
-                                                  setState(() {
-                                                    _fromStationId = stationsList[index].stationId;
-                                                    _fromCityName = stationsList[index].stationName;
-                                                  });
-                                                  Navigator.of(context).pop();
-                                                },
-                                                leading: IconButton(
-                                                  icon: Icon(
-                                                    Icons.arrow_forward_ios_outlined,
-                                                    size: 20,
-                                                    color: AppColors.primaryColor,
-                                                  ),
-                                                  onPressed: () {
-                                                  },
-                                                ),
-                                                title: Text(stationsList[index].stationName),
-                                              );
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ) : const SizedBox(width: 60,);
-                                  },
-                                );
-                                Constants.showListDialog(context, 'From Stations', _fromStationsListWidget);
+                                final result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                  return SelectFromCity(fromStations: _fromStations!);
+                                }));
+                                if (result != null) {
+                                  setState(() {
+                                    _fromStationId = result['_fromStationId'];
+                                    _fromCityName = result['_fromCityName'];
+                                  });
+                                }
+                                print("bassnt nasralla2$_fromStationId $_fromCityName");
+
+                                // Widget _fromStationsListWidget = ListView.builder(
+                                //   scrollDirection: Axis.vertical,
+                                //   shrinkWrap: true,
+                                //   itemCount: _fromStations!.length,
+                                //   itemBuilder: (context, index) {
+                                //     String cityName = _fromStations![index].cityName;
+                                //     List<StationList> stationsList = _fromStations![index].stationList;
+                                //     return stationsList.isNotEmpty ? Material(
+                                //       child: ExpansionTile(
+                                //         backgroundColor: Colors.grey[200],
+                                //         iconColor: AppColors.primaryColor,
+                                //         title: Text(
+                                //           cityName,
+                                //           style: const TextStyle(
+                                //               color: Colors.black,
+                                //               fontWeight: FontWeight.bold
+                                //           ),
+                                //         ),
+                                //         children: [
+                                //           ListView.builder(
+                                //             shrinkWrap: true,
+                                //             physics: const ClampingScrollPhysics(),//NeverScrollableScrollPhysics(),
+                                //             scrollDirection: Axis.vertical,
+                                //             itemCount: stationsList.length,
+                                //             itemBuilder: (context, index) {
+                                //               return ListTile(
+                                //                 onTap: (){
+                                //                   setState(() {
+                                //                     _fromStationId = stationsList[index].stationId;
+                                //                     _fromCityName = stationsList[index].stationName;
+                                //                   });
+                                //                   Navigator.of(context).pop();
+                                //                 },
+                                //                 leading: IconButton(
+                                //                   icon: Icon(
+                                //                     Icons.arrow_forward_ios_outlined,
+                                //                     size: 20,
+                                //                     color: AppColors.primaryColor,
+                                //                   ),
+                                //                   onPressed: () {
+                                //                   },
+                                //                 ),
+                                //                 title: Text(stationsList[index].stationName),
+                                //               );
+                                //             },
+                                //           ),
+                                //         ],
+                                //       ),
+                                //     ) : const SizedBox(width: 60,);
+                                //   },
+                                // );
+                                // Constants.showListDialog(context, 'From Stations', _fromStationsListWidget);
                               }else if (state is GetFromStationsListErrorState) {
                                 Constants.hideLoadingDialog(context);
                                 Constants.showDefaultSnackBar(context: context, text: state.error.toString());
@@ -236,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               onTap: () {
                                 BlocProvider.of<HomeCubit>(context).getFromStationsListData();
                               },
-                              child: CustomDropDownList(hint: _fromCityName)
+                              child: CustomDropDownList(hint:_fromCityName)
                             ),
                           ),
                           SizedBox(height: sizeHeight*0.07,),
@@ -263,58 +276,70 @@ class _HomeScreenState extends State<HomeScreen> {
                                     _toStations = state.homeMessageResponse.citiesStations!.cast<CitiesStations>().toList();
                                   }
                                 });
-                                Widget _toStationsListWidget = ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  itemCount: _toStations!.length,
-                                  itemBuilder: (context, index) {
-                                    String cityName = _toStations![index].cityName;
-                                    List<StationList> stationsList = _toStations![index].stationList;
-                                    return stationsList.isNotEmpty ? Material(
-                                      child: ExpansionTile(
-                                        backgroundColor: Colors.grey[200],
-                                        iconColor: AppColors.primaryColor,
-                                        title: Text(
-                                          cityName,
-                                          style: const TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold
-                                          ),
-                                        ),
-                                        children: [
-                                          ListView.builder(
-                                            shrinkWrap: true,
-                                            physics: const ClampingScrollPhysics(),//NeverScrollableScrollPhysics(),
-                                            scrollDirection: Axis.vertical,
-                                            itemCount: stationsList.length,
-                                            itemBuilder: (context, index) {
-                                              return ListTile(
-                                                onTap: () {
-                                                  setState(() {
-                                                    _toStationId = stationsList[index].stationId;
-                                                    _toCityName = stationsList[index].stationName;
-                                                  });
-                                                  Navigator.of(context).pop();
-                                                },
-                                                leading: IconButton(
-                                                  icon: Icon(
-                                                    Icons.arrow_forward_ios_outlined,
-                                                    size: 20,
-                                                    color: AppColors.primaryColor,
-                                                  ),
-                                                  onPressed: () {
-                                                  },
-                                                ),
-                                                title: Text(stationsList[index].stationName),
-                                              );
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ) : const SizedBox(width: 60,);
-                                  },
-                                );
-                                Constants.showListDialog(context, 'To Stations', _toStationsListWidget);
+                                final result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                  return SelectToCity(toStations: _toStations!);
+                                }));
+                                if (result != null) {
+                                  setState(() {
+                                    _toStationId = result['_toStationId'];
+                                    _toCityName = result['_toCityName'];
+                                  });
+                                }
+                                print("bassnt nasralla2$_fromStationId $_fromCityName");
+
+
+                                // Widget _toStationsListWidget = ListView.builder(
+                                //   scrollDirection: Axis.vertical,
+                                //   shrinkWrap: true,
+                                //   itemCount: _toStations!.length,
+                                //   itemBuilder: (context, index) {
+                                //     String cityName = _toStations![index].cityName;
+                                //     List<StationList> stationsList = _toStations![index].stationList;
+                                //     return stationsList.isNotEmpty ? Material(
+                                //       child: ExpansionTile(
+                                //         backgroundColor: Colors.grey[200],
+                                //         iconColor: AppColors.primaryColor,
+                                //         title: Text(
+                                //           cityName,
+                                //           style: const TextStyle(
+                                //               color: Colors.black,
+                                //               fontWeight: FontWeight.bold
+                                //           ),
+                                //         ),
+                                //         children: [
+                                //           ListView.builder(
+                                //             shrinkWrap: true,
+                                //             physics: const ClampingScrollPhysics(),//NeverScrollableScrollPhysics(),
+                                //             scrollDirection: Axis.vertical,
+                                //             itemCount: stationsList.length,
+                                //             itemBuilder: (context, index) {
+                                //               return ListTile(
+                                //                 onTap: () {
+                                //                   setState(() {
+                                //                     _toStationId = stationsList[index].stationId;
+                                //                     _toCityName = stationsList[index].stationName;
+                                //                   });
+                                //                   Navigator.of(context).pop();
+                                //                 },
+                                //                 leading: IconButton(
+                                //                   icon: Icon(
+                                //                     Icons.arrow_forward_ios_outlined,
+                                //                     size: 20,
+                                //                     color: AppColors.primaryColor,
+                                //                   ),
+                                //                   onPressed: () {
+                                //                   },
+                                //                 ),
+                                //                 title: Text(stationsList[index].stationName),
+                                //               );
+                                //             },
+                                //           ),
+                                //         ],
+                                //       ),
+                                //     ) : const SizedBox(width: 60,);
+                                //   },
+                                // );
+                                // Constants.showListDialog(context, 'To Stations', _toStationsListWidget);
                               }else if (state is GetToStationsListErrorState) {
                                 Constants.hideLoadingDialog(context);
                                 Constants.showDefaultSnackBar(context: context, text: state.error.toString());
@@ -388,11 +413,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           InkWell(
                             onTap: (){
-                              if(_user != null) {
-                                Navigator.pushNamed(context, Routes.myWalletScreen);
-                              }else {
-                                Navigator.pushNamed(context, Routes.signInRoute);
-                              }
+                              Navigator.pushNamed(context, Routes.timesScreen);
+
                             },
                             child: Container(
                               height: 50,

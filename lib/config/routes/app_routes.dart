@@ -19,6 +19,7 @@ import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/features/sign_in/presentation/screens/login.dart';
 import 'package:swa/features/sign_up/presentation/cubit/register_cubit.dart';
 import 'package:swa/features/sign_up/presentation/screens/sign_up.dart';
+import 'package:swa/features/times_trips/presentation/screens/times_screen.dart';
 import 'package:swa/main.dart';
 
 class Routes {
@@ -33,7 +34,9 @@ class Routes {
   static const String myWalletScreen = '/myCredit';
   static const String fawryPaymentScreen = '/fawry';
   static const String eWalletScreen ='/eWallet';
-  // static const String homeRoute = '/home';
+  static const String timesScreen ='/timesScreen';
+
+// static const String homeRoute = '/home';
 
 
 }
@@ -95,6 +98,8 @@ class AppRoute {
             ],
             child: const ElectronicScreen()
         ));
+      case Routes.timesScreen:
+        return MaterialPageRoute(builder: (context) => const TimesScreen());
       default :
         return _errorRoute();
     }
