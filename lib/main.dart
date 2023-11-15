@@ -13,6 +13,9 @@ import 'package:swa/features/sign_in/signin_injection_container.dart';
 import 'package:swa/features/sign_up/signup_injection_container.dart';
 import 'package:swa/injection_container.dart';
 
+import 'features/times_trips/presentation/PLOH/times_trips_cubit.dart';
+import 'features/times_trips/times_trips_injection_container.dart';
+
 
 final sl = GetIt.instance;
 
@@ -26,6 +29,7 @@ Future<void> main() async {
   await homeDependencyInjectionInit();//For initializing Home
   await fawryDependencyInjectionInit();//For initializing Fawry
   await eWalletDependencyInjectionInit();//For initializing E-Wallet
+await TimesTripInjectionInit();
 
 
 

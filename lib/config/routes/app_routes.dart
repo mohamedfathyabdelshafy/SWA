@@ -19,6 +19,7 @@ import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/features/sign_in/presentation/screens/login.dart';
 import 'package:swa/features/sign_up/presentation/cubit/register_cubit.dart';
 import 'package:swa/features/sign_up/presentation/screens/sign_up.dart';
+import 'package:swa/features/times_trips/presentation/PLOH/times_trips_cubit.dart';
 import 'package:swa/features/times_trips/presentation/screens/times_screen.dart';
 import 'package:swa/main.dart';
 
@@ -50,6 +51,7 @@ class AppRoute {
           providers: [
             BlocProvider<LoginCubit>(create: (context) => sl<LoginCubit>(),),
             BlocProvider<HomeCubit>(create: (context) => sl<HomeCubit>(),),
+            BlocProvider<TimesTripsCubit>(create: (context)=> sl<TimesTripsCubit>())
           ],
           child: const HomeScreen()
         ));
@@ -99,7 +101,7 @@ class AppRoute {
             child: const ElectronicScreen()
         ));
       case Routes.timesScreen:
-        return MaterialPageRoute(builder: (context) => const TimesScreen());
+      //  return MaterialPageRoute(builder: (context) => const TimesScreen());
       default :
         return _errorRoute();
     }

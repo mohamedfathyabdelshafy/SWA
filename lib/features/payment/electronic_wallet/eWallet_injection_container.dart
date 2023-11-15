@@ -10,7 +10,6 @@ Future<void> eWalletDependencyInjectionInit() async {
 
   // Blocs
   sl.registerFactory<EWalletCubit>(() => EWalletCubit(eWalletUseCase: sl()));
-
   // Use cases
   //We use lazy we don't need to load the whole app
   sl.registerLazySingleton<EWalletUseCase>(() => EWalletUseCase(eWalletPaymentRepository: sl()));

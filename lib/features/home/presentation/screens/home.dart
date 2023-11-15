@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swa/config/routes/app_routes.dart';
+import 'package:swa/core/api/api_consumer.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/media_query_values.dart';
@@ -12,9 +13,14 @@ import 'package:swa/features/home/domain/use_cases/get_to_stations_list_data.dar
 import 'package:swa/features/home/presentation/cubit/home_cubit.dart';
 import 'package:swa/features/home/presentation/screens/select_from_city/select_from_city.dart';
 import 'package:swa/features/home/presentation/screens/select_to_city/select_to_city.dart';
-import 'package:swa/features/payment/wallet/presentation/screens/my_wallet.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
+import 'package:swa/features/times_trips/data/repo/times_trips_repo.dart';
+import 'package:swa/features/times_trips/presentation/screens/times_screen.dart';
+
+import '../../../../main.dart';
+import '../../../times_trips/presentation/PLOH/times_trips_cubit.dart';
+import '../../../times_trips/presentation/PLOH/times_trips_states.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,6 +30,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  TimesTripsRepo timesTripsRepo = TimesTripsRepo(apiConsumer: sl(),);
   bool isTabbed = false;
   int currentIndex = 0;
   DateTime selectedDayFrom = DateTime.now();
@@ -166,9 +173,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           BlocListener(
                             bloc: BlocProvider.of<HomeCubit>(context),
                             listener: (BuildContext context, state) async {
-                              if(state is GetFromStationsListLoadingState){
+                              if(state is GetFromStationsListLoadingState) {
                                 Constants.showLoadingDialog(context);
-                              }else if (state is GetFromStationsListLoadedState) {
+                              }
+                              else if (state is GetFromStationsListLoadedState) {
                                 Constants.hideLoadingDialog(context);
                                 setState(() {
                                   if(state.homeMessageResponse.status == 'failed') {
@@ -240,7 +248,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 //   },
                                 // );
                                 // Constants.showListDialog(context, 'From Stations', _fromStationsListWidget);
-                              }else if (state is GetFromStationsListErrorState) {
+                              }
+                              else if (state is GetFromStationsListErrorState) {
                                 Constants.hideLoadingDialog(context);
                                 Constants.showDefaultSnackBar(context: context, text: state.error.toString());
                               }
@@ -267,7 +276,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             listener: (BuildContext context, state) async {
                               if(state is GetToStationsListLoadingState){
                                 Constants.showLoadingDialog(context);
-                              }else if (state is GetToStationsListLoadedState) {
+                              }
+                              else if (state is GetToStationsListLoadedState) {
                                 Constants.hideLoadingDialog(context);
                                 setState(() {
                                   if(state.homeMessageResponse.status == 'failed') {
@@ -340,7 +350,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 //   },
                                 // );
                                 // Constants.showListDialog(context, 'To Stations', _toStationsListWidget);
-                              }else if (state is GetToStationsListErrorState) {
+                              }
+                              else if (state is GetToStationsListErrorState) {
                                 Constants.hideLoadingDialog(context);
                                 Constants.showDefaultSnackBar(context: context, text: state.error.toString());
                               }
@@ -411,26 +422,55 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                           ),
-                          InkWell(
-                            onTap: (){
-                              Navigator.pushNamed(context, Routes.timesScreen);
+                          BlocListener<TimesTripsCubit,TimesTripsStates>(
+                            bloc: BlocProvider.of<TimesTripsCubit>(context),
+                            listener: (context,state){
+                              if (state is LoadingTimesTrips) {
+                              Constants.showLoadingDialog(context);
+                            }else if(state is LoadedTimesTrips){
+                                Constants.hideLoadingDialog(context);
+                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                                  return TimesScreen(tripList:state.timesTripsResponse.message!.tripList!);
+                                }));
+                              }else if(state is ErrorTimesTrips){
+                                Constants.hideLoadingDialog(context);
+                                Constants.showDefaultSnackBar(context: context, text: state.msg);
+                              }
+                          },
+                          child: InkWell(
+                              onTap: (){
+                                if(_fromStationId ==null || _toStationId == null) {
+                                  Constants.showDefaultSnackBar(context: context, text:"please select from city or to city" );
 
-                            },
-                            child: Container(
-                              height: 50,
-                              //padding:  EdgeInsets.symmetric(horizontal: 10,vertical:20),
-                              //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
-                              decoration:BoxDecoration(
-                                  color: AppColors.primaryColor,
-                                  borderRadius: BorderRadius.circular(15)
-                              ) ,
-                              child: Center(
-                                child: Text(
-                                  "Search Bus",
-                                  style: TextStyle(
-                                      color: AppColors.white,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 20
+                                }
+                                else {
+
+                                  BlocProvider.of<TimesTripsCubit>(context)
+                                      .getTimes(
+                                    TripType: "1",
+                                    FromStationID: _fromStationId.toString(),
+                                    ToStationID: _toStationId.toString(),
+                                    DateGo: selectedDayFrom.toString(),
+                                    DateBack: selectedDayTo.toString(),
+                                  );
+                                }
+                              },
+                              child: Container(
+                                height: 50,
+                                //padding:  EdgeInsets.symmetric(horizontal: 10,vertical:20),
+                                //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
+                                decoration:BoxDecoration(
+                                    color: AppColors.primaryColor,
+                                    borderRadius: BorderRadius.circular(15)
+                                ) ,
+                                child: Center(
+                                  child: Text(
+                                    "Search Bus",
+                                    style: TextStyle(
+                                        color: AppColors.white,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 20
+                                    ),
                                   ),
                                 ),
                               ),

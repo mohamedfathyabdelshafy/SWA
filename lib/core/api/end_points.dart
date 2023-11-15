@@ -9,4 +9,6 @@ class EndPoints {
   static const String getToStationsList = '${baseUrl}/Stations/GetSationListTo';
   static const String fawryPaymentMethod = '${baseUrl}Fawry/RefNumPayment';
   static const String eWalletPaymentMethod = '${baseUrl}Fawry/EwalletPayment';
+  static const String timesTrips = '${baseUrl}Trip/GetTrips';
+
 }
