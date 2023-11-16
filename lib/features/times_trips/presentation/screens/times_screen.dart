@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/features/bus_reservation_layout/presentation/screens/bus_layout.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../data/models/TimesTripsResponsedart.dart';
 
@@ -52,63 +53,71 @@ class _TimesScreenState extends State<TimesScreen> {
                            child: ListView.builder(
                              itemCount: widget.tripList.length,
                              itemBuilder:(context,index) {
-                               return Padding(
-                                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                 child: Row(
-                                   children: [
-                                     Column(
-                                       children: [
-                                         Row(
-                                           children: [
-                                             Text(
-                                           widget.tripList[index].from!,
-                                               style: TextStyle(color: AppColors.white,fontSize:15 ),)
-                                           ],
-                                         ),
-                                         Text(
-                                             widget.tripList[index].emptySeat.toString(),
-                                             textAlign: TextAlign.center,
-                                             style: TextStyle(color: AppColors.white,fontSize: 20 )),
-                                       ],
-                                     ),
-
-                                     Column(
-                                       mainAxisAlignment: MainAxisAlignment.center,
-                                       children: [
-                                         Text(
-                                             widget.tripList[index].lineName.toString(),
-                                             style: TextStyle(color: AppColors.white,fontSize: 20 )),
-                                         Container(
-                                           padding:const EdgeInsets.symmetric(horizontal: 20),
-                                           width:sizeWidth *0.62,
-                                           child: const Divider(
-                                             color: Colors.white,
-                                             thickness: 2, // Adjust the thickness of the divider
-                                             // height: 100,
-                                             // Adjust the height of the divider
+                               return InkWell(
+                                 onTap: (){
+                                   Navigator.push(context, MaterialPageRoute(builder: (context){
+                                     return BusLayoutScreen(to: widget.tripList[index].to!,
+                                         from: widget.tripList[index].from!);
+                                   }));
+                                 },
+                                 child: Padding(
+                                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                   child: Row(
+                                     children: [
+                                       Column(
+                                         children: [
+                                           Row(
+                                             children: [
+                                               Text(
+                                             widget.tripList[index].from!,
+                                                 style: TextStyle(color: AppColors.white,fontSize:15 ),)
+                                             ],
                                            ),
-                                         ),
-                                         Text(
-                                             widget.tripList[index].serviceType.toString(),
-                                             style: TextStyle(color: AppColors.white,fontSize: 20 )),
-                                       ],
-                                     ),
-                                     Column(
-                                       children: [
-                                         Row(
-                                           children: [
-                                             Text(
-                                               widget.tripList[index].to!,
-                                               style: TextStyle(color: AppColors.white,fontSize:12 ),)
-                                           ],
-                                         ),
-                                         Text(
-                                             "${widget.tripList[index].price!.toString()}.LE",
-                                             textAlign: TextAlign.center,
-                                             style: TextStyle(color: AppColors.primaryColor,fontSize: 20,fontFamily: "bold" )),
-                                       ],
-                                     ),
-                                   ],
+                                           Text(
+                                               widget.tripList[index].emptySeat.toString(),
+                                               textAlign: TextAlign.center,
+                                               style: TextStyle(color: AppColors.white,fontSize: 20 )),
+                                         ],
+                                       ),
+
+                                       Column(
+                                         mainAxisAlignment: MainAxisAlignment.center,
+                                         children: [
+                                           Text(
+                                               widget.tripList[index].lineName.toString(),
+                                               style: TextStyle(color: AppColors.white,fontSize: 20 )),
+                                           Container(
+                                             padding:const EdgeInsets.symmetric(horizontal: 20),
+                                             width:sizeWidth *0.62,
+                                             child: const Divider(
+                                               color: Colors.white,
+                                               thickness: 2, // Adjust the thickness of the divider
+                                               // height: 100,
+                                               // Adjust the height of the divider
+                                             ),
+                                           ),
+                                           Text(
+                                               widget.tripList[index].serviceType.toString(),
+                                               style: TextStyle(color: AppColors.white,fontSize: 20 )),
+                                         ],
+                                       ),
+                                       Column(
+                                         children: [
+                                           Row(
+                                             children: [
+                                               Text(
+                                                 widget.tripList[index].to!,
+                                                 style: TextStyle(color: AppColors.white,fontSize:12 ),)
+                                             ],
+                                           ),
+                                           Text(
+                                               "${widget.tripList[index].price!.toString()}.LE",
+                                               textAlign: TextAlign.center,
+                                               style: TextStyle(color: AppColors.primaryColor,fontSize: 20,fontFamily: "bold" )),
+                                         ],
+                                       ),
+                                     ],
+                                   ),
                                  ),
                                );
                              }

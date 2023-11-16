@@ -30,7 +30,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  TimesTripsRepo timesTripsRepo = TimesTripsRepo(apiConsumer: sl(),);
   bool isTabbed = false;
   int currentIndex = 0;
   DateTime selectedDayFrom = DateTime.now();
@@ -295,7 +294,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     _toCityName = result['_toCityName'];
                                   });
                                 }
-                                print("bassnt nasralla2$_fromStationId $_fromCityName");
 
 
                                 // Widget _toStationsListWidget = ListView.builder(
@@ -447,11 +445,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                   BlocProvider.of<TimesTripsCubit>(context)
                                       .getTimes(
-                                    TripType: "1",
-                                    FromStationID: _fromStationId.toString(),
-                                    ToStationID: _toStationId.toString(),
-                                    DateGo: selectedDayFrom.toString(),
-                                    DateBack: selectedDayTo.toString(),
+                                    tripType: "1",
+                                    fromStationID: _fromStationId.toString(),
+                                    toStationID: _toStationId.toString(),
+                                    dateGo: selectedDayFrom.toString(),
+                                    dateBack: selectedDayTo.toString(),
                                   );
                                 }
                               },

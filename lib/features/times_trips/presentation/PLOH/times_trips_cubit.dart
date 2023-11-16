@@ -9,20 +9,20 @@ class TimesTripsCubit extends Cubit<TimesTripsStates> {
   TimesTripsCubit() :super(InitialTimesTrips());
 TimesTripsRepo timesTripsRepo = TimesTripsRepo(apiConsumer: sl(),);
   Future<TimesTripsResponse?>getTimes({
-    required String TripType,
-    required String FromStationID,
-    required String ToStationID,
-    required String DateGo,
-    required String DateBack
+    required String tripType,
+    required String fromStationID,
+    required String toStationID,
+    required String dateGo,
+    required String dateBack
 })async {
     try{
       emit(LoadingTimesTrips());
       final res = await timesTripsRepo.getTimesTrip(
-        TripType: TripType,
-        FromStationID: FromStationID,
-        ToStationID: ToStationID,
-        DateGo: DateGo,
-        DateBack: DateBack,
+        TripType: tripType,
+        FromStationID: fromStationID,
+        ToStationID: toStationID,
+        DateGo: dateGo,
+        DateBack: dateBack,
       );
       if(res.message != null){
         emit(LoadedTimesTrips(timesTripsResponse: res));

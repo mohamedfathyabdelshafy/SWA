@@ -56,7 +56,7 @@ class _AddCreditCardState extends State<AddCreditCard> {
 
                   Text(
                     "Add Card",
-                    style: fontStyle(color: AppColors.white,fontSize: 34,fontFamily: FontFamily.bold),
+                    style: TextStyle(color: AppColors.white,fontSize: 34,fontFamily:"bold"),
                   ),
                   const SizedBox(height: 37,),
                   Row(
