@@ -7,6 +7,7 @@ import 'package:swa/features/bus_reservation_layout/presentation/widgets/bus_sea
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/bus_seat_widget/seat_model.dart';
 
 import '../../../data/models/BusSeatsModel.dart';
+import '../../PLOH/bus_layout_reservation_cubit.dart';
 
 class SeatWidget extends StatefulWidget {
   final SeatModel model;
@@ -30,7 +31,7 @@ class SeatWidget extends StatefulWidget {
 class _SeatWidgetState extends State<SeatWidget> {
   int rowI = 0;
   int colI = 0;
-
+List<num> countSeats=[];
   @override
   void initState() {
     super.initState();
@@ -46,15 +47,17 @@ class _SeatWidgetState extends State<SeatWidget> {
         height: widget.seatHeight,
         child: InkWell(
           onTap: () {
+            countSeats.add(widget.model.seat.seatBusID!);
+            print("widget.model.seat.seatBusID${countSeats}");
             print("GestureDetector ${widget.model.seat.seatState}  ${widget.model.seat.seatBusID}");
               switch (widget.model.seat.seatState) {
                 case SeatState.selected:
                   {
-                    // setState(() {
+                    setState(() {
                     widget.model.seat.seatState = SeatState.available;
                     widget.onSeatStateChanged(
                         rowI, colI, SeatState.available, widget.model.seat);
-                    // });
+                    });
                   }
                   break;
                 case SeatState.available:
@@ -84,19 +87,20 @@ class _SeatWidgetState extends State<SeatWidget> {
                       Center(
                         child: SvgPicture.asset(
                           _getSvgPath(widget.model.seat.seatState!),
-                          height: 20,
-                          width: 27,
+                          height: 30,
+                          width: 40,
                           color:
-                              Colors.red,
-                              // : widget.model.seat.seatState == SeatState.sold
-                              //     ? Colors.grey
-                              //     : widget.model.seat.seatState ==
-                              //             SeatState.available
-                              //         ? AppColors.yellow2
-                              //         : widget.model.seat.seatState ==
-                              //                 SeatState.selected
-                              //             ? AppColors.blue
-                              //             : null,
+                          widget.model.seat.seatState==SeatState.sold
+                              ?
+                          Colors.grey
+                              :
+                          widget.model.seat.seatState==SeatState.available
+                              ?
+                          Colors.green
+                              :
+                          widget.model.seat.seatState==SeatState.selected
+                              ?
+                          Colors.red:null,
                           fit: BoxFit.cover,
                         ),
                       ),

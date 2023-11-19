@@ -159,10 +159,12 @@ class SeatDetails {
     if (seatNo == 0) {
       return SeatState.empty;
     }
-    if (isReserved == true || isReservedBeforeFromStudent == true) {
-      return SeatState.sold;
+    if(isReserved == false && isAvailable == false){
+      return SeatState.available;
     } else if (isAvailable == true) {
       return SeatState.available;
+    }else if(isReserved == true ) {
+      return SeatState.sold;
     }
     return SeatState.empty;
   }
