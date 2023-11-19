@@ -20,7 +20,7 @@ dependencies:
   http:
   http_interceptor:
   flutter_bloc:
-  flutter_device_type:
+  flutter_device_type: ^0.4.0
   get_it:
   injectable:
 book_my_seat:

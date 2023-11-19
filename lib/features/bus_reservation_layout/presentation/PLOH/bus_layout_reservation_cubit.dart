@@ -3,6 +3,7 @@ import 'package:swa/features/bus_reservation_layout/data/repo/bus_reservation_re
 
 import '../../../../main.dart';
 import '../../data/models/BusSeatsModel.dart';
+import '../../data/models/ReservationResponse.dart';
 import 'bus_layout_reservation_states.dart';
 
 class ReservationCubit extends Cubit<ReservationState> {
@@ -42,4 +43,30 @@ class ReservationCubit extends Cubit<ReservationState> {
     });
     emit(ReservationInitial());
   }
+
+  Future<ReservationResponse?>addReservation({
+    required List<num> seatIdsOneTrip,
+    List<int>? seatIdsRoundTrip,
+    required int custId,
+    required String oneTripID,
+    String? roundTripID
+  })async {
+    try{
+      emit(GetAdReservationLoadingState());
+      final res = await busLayoutRepo.addReservation(
+          seatIdsOneTrip: seatIdsOneTrip,
+          seatIdsRoundTrip: seatIdsRoundTrip,
+          custId: custId,
+          oneTripID: oneTripID,
+          roundTripID: roundTripID);
+      if(res.message != null){
+        emit(GetAdReservationLoadedState(reservationResponse: res.message));
+      }else{
+        emit(GetAdReservationErrorState(mas: res.message.toString()));
+      }
+    }catch (e){
+      emit(GetAdReservationErrorState(mas: e.toString()));
+    }
+  }
 }
+

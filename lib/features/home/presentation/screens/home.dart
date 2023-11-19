@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String _toCityName = 'Select';
   ///Getting if user is logged in or not
   User? _user;
-
+ String tripTypeId = "1";
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 0)).then((_) async {
@@ -100,6 +100,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 onTap: (){
                                   setState(() {
                                     isTabbed = !isTabbed;
+                                    tripTypeId = "1";
+                                      print("tripTypeId$tripTypeId");
+
                                   });
                                 },
                                 child: Container(
@@ -131,6 +134,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 onTap: (){
                                   setState(() {
                                     isTabbed = !isTabbed;
+
+                                      tripTypeId = "2";
+                                      print("tripTypeId$tripTypeId");
+
+
                                   });
                                 },
                                 child: Container(
@@ -428,7 +436,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             }else if(state is LoadedTimesTrips){
                                 Constants.hideLoadingDialog(context);
                                 Navigator.push(context, MaterialPageRoute(builder: (context){
-                                  return TimesScreen(tripList:state.timesTripsResponse.message!.tripList!);
+                                  return TimesScreen(tripList:state.timesTripsResponse.message!.tripList!,tripTypeId: tripTypeId,);
                                 }));
                               }else if(state is ErrorTimesTrips){
                                 Constants.hideLoadingDialog(context);
@@ -445,7 +453,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                   BlocProvider.of<TimesTripsCubit>(context)
                                       .getTimes(
-                                    tripType: "1",
+                                    tripType: tripTypeId,
                                     fromStationID: _fromStationId.toString(),
                                     toStationID: _toStationId.toString(),
                                     dateGo: selectedDayFrom.toString(),

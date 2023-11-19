@@ -13,6 +13,7 @@ import 'package:swa/features/sign_in/signin_injection_container.dart';
 import 'package:swa/features/sign_up/signup_injection_container.dart';
 import 'package:swa/injection_container.dart';
 
+import 'features/bus_reservation_layout/bus_layout_injection_container.dart';
 import 'features/times_trips/presentation/PLOH/times_trips_cubit.dart';
 import 'features/times_trips/times_trips_injection_container.dart';
 
@@ -30,7 +31,7 @@ Future<void> main() async {
   await fawryDependencyInjectionInit();//For initializing Fawry
   await eWalletDependencyInjectionInit();//For initializing E-Wallet
 await TimesTripInjectionInit();
-
+await BusLayoutInjectionInit();
 
 
   await dependencyInjectionInit();//For initializing network info and shared preferences

@@ -1,8 +1,13 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/widgets/icon_back.dart';
 import 'package:swa/features/bus_reservation_layout/data/repo/bus_reservation_repo.dart';
+import 'package:swa/features/bus_reservation_layout/presentation/PLOH/bus_layout_reservation_cubit.dart';
+import 'package:swa/features/bus_reservation_layout/presentation/PLOH/bus_layout_reservation_states.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/screens/reservation_ticket.dart';
 
 import '../../../../core/utils/app_colors.dart';
@@ -13,9 +18,10 @@ import '../widgets/bus_seat_widget/seat_layout_model.dart';
 import '../widgets/bus_seat_widget/seat_layout_widget.dart';
 
 class BusLayoutScreen extends StatefulWidget {
-   BusLayoutScreen({super.key,required this.to,required this.from});
+   BusLayoutScreen({super.key,required this.to,required this.from,required this.triTypeId});
 String from;
 String to;
+String triTypeId;
   @override
   State<BusLayoutScreen> createState() => _BusLayoutScreenState();
 }
@@ -25,15 +31,17 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
   BusSeatsModel? busSeatsModel;
   BusLayoutRepo busLayoutRepo = BusLayoutRepo(apiConsumer: (sl())) ;
   int unavailable=0 ;
+  List<num> countSeats = [];
+  int countSeatesNum = 0;
 @override
-
   void initState() {
+  print("tripTypeId${widget.triTypeId}}");
   // busLayoutRepo?.getBusSeatsData();
   get();
    super.initState();
   }
   void get()async{
-    await busLayoutRepo?.getBusSeatsData().then((value){
+    await busLayoutRepo.getBusSeatsData().then((value){
       busSeatsModel =  value;
       if(busSeatsModel != null) {
         unavailable = busSeatsModel!.busSeatDetails!.totalSeats! - busSeatsModel!.busSeatDetails!.emptySeats!;
@@ -48,8 +56,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
   @override
   Widget build(BuildContext context) {
     double sizeHeight = context.height;
-    double sizeWidth = context.width;
-    
+
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -68,8 +75,8 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
             ),
           ),
           Container(
-            padding: EdgeInsets.all(15),
-            margin: EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.all(15),
+            margin: const EdgeInsets.symmetric(horizontal: 15),
             decoration: BoxDecoration(
               color: AppColors.primaryColor,
               borderRadius: BorderRadius.circular(10)
@@ -83,7 +90,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                     Container(
                       height: sizeHeight * 0.07 ,
                       width: 4,
-                      margin: EdgeInsetsDirectional.symmetric(horizontal: 12),
+                      margin: const EdgeInsetsDirectional.symmetric(horizontal: 12),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
                         gradient: LinearGradient(
@@ -97,15 +104,15 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                       children: [
                         Text(
                           widget.from,
-                          style: TextStyle(
+                          style:const TextStyle(
                             fontSize: 18,
                             fontFamily: "bold",
                             color: Colors.white
                           ),
                         ),
-                        Text(
+                         Text(
                           widget.to,
-                          style: TextStyle(
+                          style:const TextStyle(
                               fontSize: 18,
                               fontFamily: "bold",
                               color: Colors.white
@@ -127,10 +134,9 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                     child: Column(
                       children: [
 
-                        Text(
-
+                        const  Text(
                               'Available',
-                          style: const TextStyle(
+                          style:  TextStyle(
                               fontSize: 20,
                               fontFamily: "regular",
                             color: Colors.white
@@ -146,27 +152,27 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                 color: AppColors.primaryColor),
                           ),
                         ),
-                        SizedBox(height: 20),
-                        Text(
+                        const SizedBox(height: 20),
+                       const Text(
                          'Selected',
-                          style: const TextStyle(
+                          style:  TextStyle(
                               fontSize: 20,
                               fontFamily: "regular",
                             color: Colors.white
                           ),
                         ),
                         Text(
-                          "03",
-                          style:  TextStyle(
+                          countSeatesNum.toString(),
+                          style:const  TextStyle(
                             fontSize: 60,
                             fontFamily: "black",
                             color: Color(0xff5332F7),
                           ),
                         ),
                         const SizedBox(height: 20),
-                        Text(
+                      const   Text(
                           'Unavailable',
-                          style: const TextStyle(
+                          style:  TextStyle(
                               fontSize: 20,
                               fontFamily: "regular",
                               color: Colors.white
@@ -211,28 +217,50 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                 seatHeight: sizeHeight * .047,
                                 onSeatStateChanged: (rowI, colI,
                                     seatState, seat) {
-                                  if (seatState == SeatState.selected) {
-                                    selectedSeats = seat;
-                                    busSeatsModel?.busSeatDetails?.busDetails?.rowList
-                                        ?.forEach((element) {
-                                      element.seats.forEach((element) {
-                                        if (element.seatBusID != seat.seatBusID &&
-                                            element.seatState == SeatState.selected) {
-                                          print("kjbnljkblnkn");
-                                          element.seatState =
-                                              SeatState.available;
-                                        }
-                                      });
+                                  if(seatState == SeatState.selected){
+                                    countSeats.add( busSeatsModel!.busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatBusID!);
+                                    print("countSeats${countSeats}");
+                                    countSeatesNum =countSeats.length;
+                                    setState(() {
+
                                     });
                                   } else {
                                     selectedSeats = null;
-                                    busSeatsModel?.busSeatDetails?.busDetails?.rowList?[rowI]
+                                    busSeatsModel
+                                        ?.busSeatDetails
+                                        ?.busDetails
+                                        ?.rowList?[rowI]
                                         .seats[colI]
-                                        .seatState =
-                                        SeatState.available;
-                                    // selectedSeats.remove(SeatNumber(rowI: rowI, colI: colI));
+                                        .seatState = SeatState.available;
+                                    countSeats.remove(busSeatsModel!.busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatBusID!);
+                                    countSeatesNum =countSeats.length;
+setState(() {
+
+});
                                   }
-                                  setState(() {});
+
+                                  // if (seatState == SeatState.selected) {
+                                  //   selectedSeats = seat;
+                                  //   busSeatsModel?.busSeatDetails?.busDetails?.rowList
+                                  //       ?.forEach((element) {
+                                  //     element.seats.forEach((element) {
+                                  //       if (element.seatBusID != seat.seatBusID &&
+                                  //           element.seatState == SeatState.selected) {
+                                  //         print("kjbnljkblnkn");
+                                  //         element.seatState =
+                                  //             SeatState.available;
+                                  //       }
+                                  //     });
+                                  //   });
+                                  // } else {
+                                  //   selectedSeats = null;
+                                  //   busSeatsModel?.busSeatDetails?.busDetails?.rowList?[rowI]
+                                  //       .seats[colI]
+                                  //       .seatState =
+                                  //       SeatState.available;
+                                  //   // selectedSeats.remove(SeatNumber(rowI: rowI, colI: colI));
+                                  // }
+                                  // setState(() {});
                                 },
                                 stateModel:
                                 SeatLayoutStateModel(
@@ -241,7 +269,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                       5,
                                   seatSvgSize: 35,
                                   pathSelectedSeat:
-                                  'assets/images/unavailable_seats.svg',
+                                  'assets/images/unavailable_sets.svg',
                                   pathDisabledSeat:
                                   'assets/images/unavailable_seats.svg',
                                   pathSoldSeat:
@@ -264,17 +292,47 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
               ),]
             ),
           ),
-          InkWell
-            (
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context){
-                  return const ReservationTicket();
-                }));
-              },
-              child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: Constants.customButton(text: "confirm",color: AppColors.primaryColor),
-          ))
+         // BlocListener(
+         //    bloc: BlocProvider.of<ReservationCubit>(context),
+         //    listener: (context,state){
+         //      if (state is GetReservationLoadingState) {
+         //        Constants.showLoadingDialog(context);
+         //      }else if(state is GetAdReservationLoadedState){
+         //        Constants.hideLoadingDialog(context);
+         //        Navigator.push(context, MaterialPageRoute(builder: (context){
+         //          return ReservationTicket();
+         //        }));
+         //      }else if(state is GetAdReservationErrorState){
+         //        Constants.hideLoadingDialog(context);
+         //        Constants.showDefaultSnackBar(context: context, text: state.mas!);
+         //      }
+         //    },
+          // child:
+            InkWell
+              (
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return BlocProvider<ReservationCubit>(
+                        create: (context) => ReservationCubit(), // Replace with your actual cubit creation logic
+                        child: ReservationTicket(
+                          countSeates: countSeats,
+                          busId: busSeatsModel!.busSeatDetails!.busDetails!.busID!,
+                          tripTypeId: widget.triTypeId,
+                          from: widget.from,
+                          to: widget.to,
+                          oneTripId: busSeatsModel!.busSeatDetails!.tripId!,
+                        )
+                      );
+                    }),
+                  );
+                },
+                child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Constants.customButton(text: "Get Ticket",color: AppColors.primaryColor),
+            )),
+        // )
         ],
       ),
     );

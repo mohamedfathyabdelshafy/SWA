@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swa/core/utils/app_strings.dart';
 import 'package:swa/core/utils/constants.dart';
+import 'package:swa/features/bus_reservation_layout/presentation/PLOH/bus_layout_reservation_cubit.dart';
 import 'package:swa/features/change_password/presentation/cubit/new_password_cubit.dart';
 import 'package:swa/features/create_passcode/presentation/pages/create_passcode.dart';
 import 'package:swa/features/done_login/presentation/pages/done_login.dart';
@@ -51,7 +52,8 @@ class AppRoute {
           providers: [
             BlocProvider<LoginCubit>(create: (context) => sl<LoginCubit>(),),
             BlocProvider<HomeCubit>(create: (context) => sl<HomeCubit>(),),
-            BlocProvider<TimesTripsCubit>(create: (context)=> sl<TimesTripsCubit>())
+            BlocProvider<TimesTripsCubit>(create: (context)=> sl<TimesTripsCubit>()),
+
           ],
           child: const HomeScreen()
         ));
@@ -101,7 +103,7 @@ class AppRoute {
             child: const ElectronicScreen()
         ));
       case Routes.timesScreen:
-      //  return MaterialPageRoute(builder: (context) => const TimesScreen());
+       // return MaterialPageRoute(builder: (context) => const TimesScreen());
       default :
         return _errorRoute();
     }

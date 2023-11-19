@@ -26,3 +26,23 @@ class BusSeatsLoadingState extends ReservationState {
   List<Object?> get props => [];
 }
 
+class GetAdReservationLoadingState extends ReservationState{
+  @override
+  List<Object?> get props => [];
+
+}
+class GetAdReservationLoadedState extends ReservationState{
+  String? reservationResponse;
+  GetAdReservationLoadedState({required this.reservationResponse});
+  @override
+  List<Object?> get props =>[];
+
+}
+class GetAdReservationErrorState extends ReservationState{
+  String? mas;
+  GetAdReservationErrorState({required this.mas});
+  @override
+  List<Object?> get props => [];
+
+}
+

@@ -70,7 +70,13 @@ class Constants{
       ),
     );
   }
-  static void showLoadingDialog(BuildContext context, {Key? key}) => showDialog<void>(context: context, useRootNavigator: false, barrierDismissible: false, builder: (_) => LoadingDialog(context),).then((_) => FocusScope.of(context).requestFocus(FocusNode()));
+  static void showLoadingDialog(BuildContext context, {Key? key}) =>
+      showDialog<void>(
+        context: context,
+        useRootNavigator: false,
+        barrierDismissible: false,
+        builder: (_) => LoadingDialog(context),
+      ).then((_) => FocusScope.of(context).requestFocus(FocusNode()));
   static void hideLoadingDialog(BuildContext context) => Navigator.pop(context);
   static dynamic showListDialog(BuildContext context, String dialogName, Widget listViewWidget) {
     return showDialog(context: context, builder: (_){

@@ -23,11 +23,11 @@ class BusLayoutRepo {
     return busSeatsModel;
   }
   Future<ReservationResponse> addReservation ({
-    required List<int> seatIdsOneTrip,
-    required List<int> seatIdsRoundTrip,
+    required List<num> seatIdsOneTrip,
+     List<int>? seatIdsRoundTrip,
     required int custId,
     required String oneTripID,
-    required String roundTripID
+    String? roundTripID
   })async {
     var response = await apiConsumer.post(
         EndPoints.reservation,

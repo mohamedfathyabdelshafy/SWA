@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/screens/bus_layout.dart';
 import '../../../../core/utils/app_colors.dart';
+import '../../../bus_reservation_layout/presentation/PLOH/bus_layout_reservation_cubit.dart';
 import '../../data/models/TimesTripsResponsedart.dart';
 
 // ignore: must_be_immutable
 class TimesScreen extends StatefulWidget {
-  TimesScreen({super.key,required this.tripList});
+  TimesScreen({super.key,required this.tripList,required this.tripTypeId});
   List <TripList> tripList ;
+  String tripTypeId;
   @override
   State<TimesScreen> createState() => _TimesScreenState();
 }
@@ -55,10 +58,19 @@ class _TimesScreenState extends State<TimesScreen> {
                             itemBuilder:(context,index) {
                               return InkWell(
                                 onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context){
-                                    return BusLayoutScreen(to:widget.tripList[index].to??"",
-                                        from: widget.tripList[index].from??"");
-                                  }));
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return BlocProvider<ReservationCubit>(
+                                        create: (context) => ReservationCubit(), // Replace with your actual cubit creation logic
+                                        child: BusLayoutScreen(
+                                          to: widget.tripList[index].to ?? "",
+                                          from: widget.tripList[index].from ?? "",
+                                          triTypeId: widget.tripTypeId,
+                                        ),
+                                      );
+                                    }),
+                                  );
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 8.0),

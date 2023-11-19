@@ -32,6 +32,8 @@ class _SeatWidgetState extends State<SeatWidget> {
   int rowI = 0;
   int colI = 0;
 List<num> countSeats=[];
+List<SeatDetails> selectedSeats = []; // Add this line
+
   @override
   void initState() {
     super.initState();
@@ -50,32 +52,17 @@ List<num> countSeats=[];
             countSeats.add(widget.model.seat.seatBusID!);
             print("widget.model.seat.seatBusID${countSeats}");
             print("GestureDetector ${widget.model.seat.seatState}  ${widget.model.seat.seatBusID}");
-              switch (widget.model.seat.seatState) {
-                case SeatState.selected:
-                  {
-                    setState(() {
-                    widget.model.seat.seatState = SeatState.available;
-                    widget.onSeatStateChanged(
-                        rowI, colI, SeatState.available, widget.model.seat);
-                    });
-                  }
-                  break;
-                case SeatState.available:
-                  {
-                    // setState(() {
-                    widget.model.seat.seatState = SeatState.selected;
-                    widget.onSeatStateChanged(
-                        rowI, colI, SeatState.selected, widget.model.seat);
-                    // });
-                  }
-                  break;
-                case SeatState.sold:
-                case SeatState.empty:
-                default:
-                  {}
-                  break;
-              }
 
+            setState(() {
+              if (widget.model.seat.seatState == SeatState.selected) {
+                widget.model.seat.seatState = SeatState.available;
+                selectedSeats.remove(widget.model.seat);
+              } else {
+                widget.model.seat.seatState = SeatState.selected;
+                selectedSeats.add(widget.model.seat);
+              }
+              widget.onSeatStateChanged(rowI, colI, widget.model.seat.seatState!, widget.model.seat);
+            });
           },
           child: widget.model.seat.seatState != SeatState.empty
               ? Container(
@@ -96,11 +83,11 @@ List<num> countSeats=[];
                               :
                           widget.model.seat.seatState==SeatState.available
                               ?
-                          Colors.green
+                          AppColors.primaryColor
                               :
                           widget.model.seat.seatState==SeatState.selected
                               ?
-                          Colors.red:null,
+                          Color(0xff5332F7):null,
                           fit: BoxFit.cover,
                         ),
                       ),
