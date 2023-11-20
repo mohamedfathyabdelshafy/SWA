@@ -1,12 +1,12 @@
-class ReservationResponse {
-  ReservationResponse({
+class ReservationResponseModel {
+  ReservationResponseModel({
       this.status, 
       this.message, 
       this.balance, 
       this.object, 
       this.obj,});
 
-  ReservationResponse.fromJson(dynamic json) {
+  ReservationResponseModel.fromJson(dynamic json) {
     status = json['status'];
     message = json['message'];
     balance = json['balance'];

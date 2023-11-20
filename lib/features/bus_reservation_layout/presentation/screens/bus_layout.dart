@@ -11,6 +11,7 @@ import 'package:swa/features/bus_reservation_layout/presentation/PLOH/bus_layout
 import 'package:swa/features/bus_reservation_layout/presentation/screens/reservation_ticket.dart';
 import 'package:swa/features/times_trips/presentation/screens/times_screen.dart';
 
+import '../../../../core/local_cache_helper.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../main.dart';
@@ -22,11 +23,18 @@ import '../widgets/bus_seat_widget/seat_layout_model.dart';
 import '../widgets/bus_seat_widget/seat_layout_widget.dart';
 
 class BusLayoutScreen extends StatefulWidget {
-   BusLayoutScreen({super.key,required this.to,required this.from,required this.triTypeId,this.tripListBack});
+   BusLayoutScreen({super.key,
+      required this.to,
+      required this.from,
+      required this.triTypeId,
+      this.tripListBack,
+     required this.price
+   });
 String from;
 String to;
 String triTypeId;
 List<TripListBack>? tripListBack;
+double price;
   @override
   State<BusLayoutScreen> createState() => _BusLayoutScreenState();
 }
@@ -37,6 +45,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
   BusLayoutRepo busLayoutRepo = BusLayoutRepo(apiConsumer: (sl())) ;
   int unavailable=0 ;
   List<num> countSeats = [];
+  List<dynamic>? cachCountSeats;
   int countSeatesNum = 0;
 @override
   void initState() {
@@ -226,6 +235,10 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                     countSeats.add( busSeatsModel!.busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatBusID!);
                                     print("countSeats${countSeats}");
                                     countSeatesNum =countSeats.length;
+                                    CacheHelper.setDataToSharedPref(key: 'countSeats',
+                                    value: countSeats
+                                    );
+
                                     setState(() {
 
                                     });
@@ -317,6 +330,8 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
             InkWell
               (
                 onTap: (){
+                  cachCountSeats = CacheHelper.getDataToSharedPref(key: 'countSeats')?.map((e) => int.tryParse(e) ?? 0).toList();
+                  print("countSeats2Bassant$cachCountSeats");
                   if(widget.triTypeId == "1"){
                   Navigator.push(
                     context,
@@ -324,12 +339,15 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                       return BlocProvider<ReservationCubit>(
                         create: (context) => ReservationCubit(), // Replace with your actual cubit creation logic
                         child: ReservationTicket(
+                          price: widget.price,
                           countSeates: countSeats,
                           busId: busSeatsModel!.busSeatDetails!.busDetails!.busID!,
-                          tripTypeId: widget.triTypeId,
+                          tripTypeId: "1",
                           from: widget.from,
                           to: widget.to,
                           oneTripId: busSeatsModel!.busSeatDetails!.tripId!,
+                          countSeats1: cachCountSeats!,
+
                         )
                       );
                     }),
@@ -341,6 +359,8 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                         return BlocProvider<TimesTripsCubit>(
                             create: (context) => TimesTripsCubit(), // Replace with your actual cubit creation logic
                             child: TimesScreenBack(
+                              price: widget.price,
+                              countSeats: cachCountSeats!,
                                 tripListBack: widget.tripListBack!,
                                 tripTypeId: widget.triTypeId)
                         );

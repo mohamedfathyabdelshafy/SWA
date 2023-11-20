@@ -69,6 +69,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                           from: widget.tripList[index].from ?? "",
                                           triTypeId: widget.tripTypeId,
                                           tripListBack: widget.tripListBack,
+                                          price:widget.tripList[index].price!
                                         ),
                                       );
                                     }),

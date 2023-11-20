@@ -141,23 +141,24 @@ class _FawryScreenState extends State<FawryScreen> {
                         ],
                       ),
                       const Spacer(),
-                      BlocListener(
-                        bloc: BlocProvider.of<FawryCubit>(context),
-                        listener: (context, state) {
-                          if(state is FawryLoadingState){
-                            Constants.showLoadingDialog(context);
-                          }else if (state is FawryLoadedState) {
-                            Constants.hideLoadingDialog(context);
-                            Constants.showDefaultSnackBar(context: context, text: state.paymentMessageResponse.paymentMessage!.statusDescription);
-                            Future.delayed(const Duration(seconds: 5), () {
-                              Navigator.pushReplacementNamed(context, Routes.initialRoute);
-                            });
-                          }else if (state is FawryErrorState) {
-                            Constants.hideLoadingDialog(context);
-                            Constants.showDefaultSnackBar(context: context, text: state.error.toString());
-                          }
-                        },
-                        child: InkWell(
+                    //  BlocListener(
+                        // bloc: BlocProvider.of<FawryCubit>(context),
+                        // listener: (context, state) {
+                        //   if(state is FawryLoadingState){
+                        //     Constants.showLoadingDialog(context);
+                        //   }else if (state is FawryLoadedState) {
+                        //     Constants.hideLoadingDialog(context);
+                        //     Constants.showDefaultSnackBar(context: context, text: state.paymentMessageResponse.paymentMessage!.statusDescription);
+                        //     Future.delayed(const Duration(seconds: 5), () {
+                        //       Navigator.pushReplacementNamed(context, Routes.initialRoute);
+                        //     });
+                        //   }else if (state is FawryErrorState) {
+                        //     Constants.hideLoadingDialog(context);
+                        //     Constants.showDefaultSnackBar(context: context, text: state.error.toString());
+                        //   }
+                        // },
+                        //child:
+                        InkWell(
                           onTap: (){
                             if(_user != null && formKey.currentState!.validate()) {
                               BlocProvider.of<FawryCubit>(context).fawryPaymentFunction(FawryParams(customerId: _user!.customerId.toString(), amount: amountController.text));
@@ -168,7 +169,7 @@ class _FawryScreenState extends State<FawryScreen> {
                             child: Constants.customButton(text: "Charge", color: AppColors.primaryColor,),
                           ),
                         ),
-                      )
+                      //)
 
                     ],
                   ),
