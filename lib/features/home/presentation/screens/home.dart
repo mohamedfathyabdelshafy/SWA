@@ -98,18 +98,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               InkWell(
                                 onTap: (){
+                                  tripTypeId = "1";
                                   setState(() {
-                                    isTabbed = !isTabbed;
-                                    tripTypeId = "1";
                                       print("tripTypeId$tripTypeId");
-
                                   });
                                 },
                                 child: Container(
                                   height:sizeHeight *0.12,
                                   width: sizeWidth * 0.45,
                                   decoration: BoxDecoration(
-                                    color: isTabbed ? AppColors.darkPurple : AppColors.primaryColor,
+                                    color: tripTypeId == "1"?AppColors.primaryColor: AppColors.darkPurple,
                                     borderRadius: BorderRadius.circular(10)
                                   ),
                                   child: Column(
@@ -132,20 +130,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               SizedBox(width: sizeWidth *0.02,),
                               InkWell(
                                 onTap: (){
+                                  tripTypeId = "2";
                                   setState(() {
-                                    isTabbed = !isTabbed;
-
-                                      tripTypeId = "2";
                                       print("tripTypeId$tripTypeId");
-
-
                                   });
                                 },
                                 child: Container(
                                   height:sizeHeight *0.12,
                                   width: sizeWidth * 0.45,
                                   decoration: BoxDecoration(
-                                      color:isTabbed?AppColors.primaryColor:AppColors.darkPurple,
+                                      color: tripTypeId == "2"?AppColors.primaryColor:AppColors.darkPurple,
                                       borderRadius: BorderRadius.circular(10)
                                   ),
                                   child: Column(
@@ -376,7 +370,36 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding:  const EdgeInsets.symmetric(horizontal: 30,vertical: 20),
                             child: Row(
                               children: [
-                                Column(
+                                tripTypeId == "1"?
+                                     Row(
+                                       children: [
+                                         SizedBox(width: sizeWidth * 0.25,),
+                                         Column(
+                                  children: [
+                                    Row(
+                                          children: [
+                                            Icon(Icons.date_range_outlined,color: AppColors.white,size: 16,),
+                                            SizedBox(width: sizeWidth * 0.01,),
+                                            Text("DEPART ON",
+                                              style: TextStyle(color: AppColors.white,fontSize:12 ),)
+                                          ],
+                                    ),
+                                    InkWell(
+                                          onTap: () {
+                                            showMyDatePicker(selectedDayFrom);
+                                            setState(() {
+                                              selectedDayFrom;
+                                            });
+                                          },
+                                          child: Text(
+                                              "${selectedDayFrom.day}/${selectedDayFrom.month}/${selectedDayFrom.year}",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(color: AppColors.white,fontSize: 20 )),
+                                    ),
+                                  ],
+                                ),
+                                       ],
+                                     ): Column(
                                   children: [
                                     Row(
                                       children: [
@@ -400,8 +423,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ],
                                 ),
-                                const Spacer(),
-                                Column(
+                                tripTypeId == "2"? const Spacer():SizedBox(),
+                              tripTypeId == "2"?
+                              Column(
                                   children: [
                                     Row(
                                       children: [
@@ -424,7 +448,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           style: TextStyle(color: AppColors.white,fontSize: 20 )),
                                     ),
                                   ],
-                                ),
+                                ):SizedBox(),
                               ],
                             ),
                           ),
@@ -436,7 +460,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             }else if(state is LoadedTimesTrips){
                                 Constants.hideLoadingDialog(context);
                                 Navigator.push(context, MaterialPageRoute(builder: (context){
-                                  return TimesScreen(tripList:state.timesTripsResponse.message!.tripList!,tripTypeId: tripTypeId,);
+                                  return TimesScreen(tripList:state.timesTripsResponse.message!.tripList!,tripTypeId: tripTypeId,
+                                   tripListBack: state.timesTripsResponse.message!.tripListBack ?? [],
+                                  );
                                 }));
                               }else if(state is ErrorTimesTrips){
                                 Constants.hideLoadingDialog(context);
@@ -450,14 +476,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                 }
                                 else {
+                                  print("tripTypeIdBassant  $tripTypeId  ${_fromStationId.toString()}  ${ _toStationId.toString()}"
+                                      "  ${selectedDayFrom.toString()}  ${ selectedDayTo.toString()}");
 
                                   BlocProvider.of<TimesTripsCubit>(context)
                                       .getTimes(
                                     tripType: tripTypeId,
                                     fromStationID: _fromStationId.toString(),
-                                    toStationID: _toStationId.toString(),
-                                    dateGo: selectedDayFrom.toString(),
-                                    dateBack: selectedDayTo.toString(),
+                                    toStationID: "11",
+                                    dateGo: "11-09-2023",
+                                    dateBack: "11-10-2023",
                                   );
                                 }
                               },

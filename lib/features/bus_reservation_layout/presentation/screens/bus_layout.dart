@@ -9,19 +9,24 @@ import 'package:swa/features/bus_reservation_layout/data/repo/bus_reservation_re
 import 'package:swa/features/bus_reservation_layout/presentation/PLOH/bus_layout_reservation_cubit.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/PLOH/bus_layout_reservation_states.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/screens/reservation_ticket.dart';
+import 'package:swa/features/times_trips/presentation/screens/times_screen.dart';
 
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../main.dart';
+import '../../../times_trips/data/models/TimesTripsResponsedart.dart';
+import '../../../times_trips/presentation/PLOH/times_trips_cubit.dart';
+import '../../../times_trips/presentation/screens/times_screen_back.dart';
 import '../../data/models/BusSeatsModel.dart';
 import '../widgets/bus_seat_widget/seat_layout_model.dart';
 import '../widgets/bus_seat_widget/seat_layout_widget.dart';
 
 class BusLayoutScreen extends StatefulWidget {
-   BusLayoutScreen({super.key,required this.to,required this.from,required this.triTypeId});
+   BusLayoutScreen({super.key,required this.to,required this.from,required this.triTypeId,this.tripListBack});
 String from;
 String to;
 String triTypeId;
+List<TripListBack>? tripListBack;
   @override
   State<BusLayoutScreen> createState() => _BusLayoutScreenState();
 }
@@ -234,9 +239,10 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                         .seatState = SeatState.available;
                                     countSeats.remove(busSeatsModel!.busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatBusID!);
                                     countSeatesNum =countSeats.length;
-setState(() {
+                                    setState(() {
 
-});
+                                    });
+
                                   }
 
                                   // if (seatState == SeatState.selected) {
@@ -311,6 +317,7 @@ setState(() {
             InkWell
               (
                 onTap: (){
+                  if(widget.triTypeId == "1"){
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
@@ -327,10 +334,23 @@ setState(() {
                       );
                     }),
                   );
+                  }else if(widget.triTypeId == "2"){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return BlocProvider<TimesTripsCubit>(
+                            create: (context) => TimesTripsCubit(), // Replace with your actual cubit creation logic
+                            child: TimesScreenBack(
+                                tripListBack: widget.tripListBack!,
+                                tripTypeId: widget.triTypeId)
+                        );
+                      }),
+                    );
+                  }
                 },
                 child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Constants.customButton(text: "Get Ticket",color: AppColors.primaryColor),
+              child: Constants.customButton(text: "Choose Seats",color: AppColors.primaryColor),
             )),
         // )
         ],

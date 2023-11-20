@@ -8,15 +8,14 @@ import '../../../bus_reservation_layout/presentation/PLOH/bus_layout_reservation
 import '../../data/models/TimesTripsResponsedart.dart';
 
 // ignore: must_be_immutable
-class TimesScreen extends StatefulWidget {
-  TimesScreen({super.key,required this.tripList,required this.tripTypeId,this.tripListBack});
-  List <TripList> tripList ;
-  List <TripListBack>? tripListBack;
+class TimesScreenBack extends StatefulWidget {
+  TimesScreenBack({super.key,required this.tripListBack,required this.tripTypeId});
+  List <TripListBack> tripListBack ;
   String tripTypeId;
   @override
-  State<TimesScreen> createState() => _TimesScreenState();
+    State<TimesScreenBack> createState() => _TimesScreenBackState();
 }
-class _TimesScreenState extends State<TimesScreen> {
+class _TimesScreenBackState extends State<TimesScreenBack> {
   @override
   Widget build(BuildContext context) {
     double sizeHeight = context.height;
@@ -55,7 +54,7 @@ class _TimesScreenState extends State<TimesScreen> {
 
                       Expanded(
                         child: ListView.builder(
-                            itemCount: widget.tripList.length,
+                            itemCount: widget.tripListBack.length,
                             itemBuilder:(context,index) {
                               return InkWell(
                                 onTap: (){
@@ -65,10 +64,9 @@ class _TimesScreenState extends State<TimesScreen> {
                                       return BlocProvider<ReservationCubit>(
                                         create: (context) => ReservationCubit(), // Replace with your actual cubit creation logic
                                         child: BusLayoutScreen(
-                                          to: widget.tripList[index].to ?? "",
-                                          from: widget.tripList[index].from ?? "",
+                                          to: widget.tripListBack[index].to ?? "",
+                                          from: widget.tripListBack[index].from ?? "",
                                           triTypeId: widget.tripTypeId,
-                                          tripListBack: widget.tripListBack,
                                         ),
                                       );
                                     }),
@@ -83,12 +81,12 @@ class _TimesScreenState extends State<TimesScreen> {
                                           Row(
                                             children: [
                                               Text(
-                                                widget.tripList[index].from!,
+                                                widget.tripListBack[index].from!,
                                                 style: TextStyle(color: AppColors.white,fontSize:15 ),)
                                             ],
                                           ),
                                           Text(
-                                              widget.tripList[index].emptySeat.toString(),
+                                              widget.tripListBack[index].emptySeat.toString(),
                                               textAlign: TextAlign.center,
                                               style: TextStyle(color: AppColors.white,fontSize: 20 )),
                                         ],
@@ -98,7 +96,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                              widget.tripList[index].lineName.toString(),
+                                              widget.tripListBack[index].lineName.toString(),
                                               style: TextStyle(color: AppColors.white,fontSize: 20 )),
                                           Container(
                                             padding:const EdgeInsets.symmetric(horizontal: 20),
@@ -111,7 +109,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                             ),
                                           ),
                                           Text(
-                                              widget.tripList[index].serviceType.toString(),
+                                              widget.tripListBack[index].serviceType.toString(),
                                               style: TextStyle(color: AppColors.white,fontSize: 20 )),
                                         ],
                                       ),
@@ -120,14 +118,14 @@ class _TimesScreenState extends State<TimesScreen> {
                                           Row(
                                             children: [
                                               Text(
-                                                widget.tripList[index].to!,
+                                                widget.tripListBack[index].to!,
                                                 style: TextStyle(color: AppColors.white,fontSize:12 ),)
                                             ],
                                           ),
                                           Text(
-                                              "${widget.tripList[index].price!.toString()}.LE",
+                                              "${widget.tripListBack[index].price!.toString()}.LE",
                                               textAlign: TextAlign.center,
-                                              style: TextStyle(color: AppColors.primaryColor,fontSize: 20,fontFamily: "bold" )),
+                                              style: TextStyle(color: AppColors.primaryColor,fontSize: 18,fontFamily: "bold" )),
                                         ],
                                       ),
                                     ],
