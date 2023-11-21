@@ -6,10 +6,12 @@ import 'package:swa/features/bus_reservation_layout/presentation/widgets/Contain
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/text_widget.dart';
 import 'package:swa/features/payment/fawry/presentation/screens/fawry.dart';
 
+import '../../../../config/routes/app_routes.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../core/widgets/icon_back.dart';
 import '../../../../main.dart';
+import '../../../sign_in/domain/entities/user.dart';
 import '../../../sign_in/domain/use_cases/get_user_data.dart';
 import '../../../sign_in/domain/use_cases/login.dart';
 import '../../../sign_in/presentation/cubit/login_cubit.dart';
@@ -46,12 +48,11 @@ String tripTypeId;
 
 class _ReservationTicketState extends State<ReservationTicket> {
   bool switch1 = false;
+  User? _user;
 
   @override
   void initState() {
-    print("tripTypeId${widget.tripTypeId}${widget.to}${widget.from}${widget.countSeates}${widget.busId}   ${widget.oneTripId}");
-    print("to fromWidget ${widget.to}");
-    print("ListBassant ${widget.countSeats2}====${widget.countSeats1}");
+
     Future.delayed(const Duration(seconds: 0)).then((_) async {
       BlocProvider.of<LoginCubit>(context).getUserData();
     });
@@ -625,62 +626,66 @@ class _ReservationTicketState extends State<ReservationTicket> {
             child: InkWell
               (
                 onTap: (){
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Container(
-                        height: sizeHeight * 0.2,
-                        child: AlertDialog(
+                  if(_user == null){
+                    Navigator.pushNamed(context, Routes.signInRoute);
 
-                          title: Text('Choose Options'),
-                          content: SizedBox(
-                            height: sizeHeight * 0.25,
-                            child: Column(
-                              children: [
-                                SwitchListTile(
-                                  title: Text('Wallet deduction'),
-                                  value: switch1,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      switch1 = value;
-                                      Navigator.pop(context);
-                                    });
-                                  },
-                                ),
-                                TextButton(child: Text('Ewallet'),onPressed: (){}),
-                                TextButton(child: Text("Fawry"),onPressed: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context){
-                                    LoginCubit loginCubit = context.read<LoginCubit>();
-                                    return BlocProvider(
-                                      create: (context) => sl<LoginCubit>(),
-                                      child: FawryScreen(),
-                                    );
-                                  }));
-                                }),
-                                TextButton(child: Text("CreditCard"),onPressed: (){})
+                  }else {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Container(
+                          height: sizeHeight * 0.2,
 
-                              ],
+                          child: AlertDialog(
+
+                            title: Text('Choose Options'),
+                            content: SizedBox(
+                              height: sizeHeight * 0.25,
+                              child: Column(
+                                children: [
+                                  SwitchListTile(
+                                    title: Text('Wallet deduction'),
+                                    value: switch1,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        switch1 = value;
+                                        Navigator.pop(context);
+                                      });
+                                    },
+                                  ),
+                                  TextButton(
+                                      child: Text('Ewallet'), onPressed: () {}),
+                                  TextButton(
+                                      child: Text("Fawry"), onPressed: () {
+                                    Navigator.pushNamed(
+                                        context, Routes.fawryPaymentScreen);
+                                  }),
+                                  TextButton(child: Text("CreditCard"),
+                                      onPressed: () {})
+
+                                ],
+                              ),
                             ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context); // Close the dialog
+                                },
+                                child: Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  // Do something with the selected options
+                                  Navigator.pop(context); // Close the dialog
+                                },
+                                child: Text('OK'),
+                              ),
+                            ],
                           ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context); // Close the dialog
-                              },
-                              child: Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                // Do something with the selected options
-                                Navigator.pop(context); // Close the dialog
-                              },
-                              child: Text('OK'),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
+                        );
+                      },
+                    );
+                  }
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),

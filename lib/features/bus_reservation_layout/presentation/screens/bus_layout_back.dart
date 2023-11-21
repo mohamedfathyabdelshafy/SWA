@@ -10,6 +10,7 @@ import '../../../../core/local_cache_helper.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../main.dart';
+import '../../../sign_in/presentation/cubit/login_cubit.dart';
 import '../../data/models/BusSeatsModel.dart';
 import '../widgets/bus_seat_widget/seat_layout_model.dart';
 import '../widgets/bus_seat_widget/seat_layout_widget.dart';
@@ -324,23 +325,22 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
 
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) {
-                      return BlocProvider<ReservationCubit>(
-                          create: (context) => ReservationCubit(), // Replace with your actual cubit creation logic
-                          child: ReservationTicket(
-                            price: widget.price,
-                            countSeates: countSeats,
-                            busId: busSeatsModel!.busSeatDetails!.busDetails!.busID!,
-                            tripTypeId:"2",
-                            from: widget.from,
-                            to: widget.to,
-                            oneTripId: busSeatsModel!.busSeatDetails!.tripId!,
-                            countSeats1: widget.cachCountSeats1,
-                            countSeats2: cachCountSeats2,
-                          )
-                      );
-                    }),
-                  );
+                       MaterialPageRoute(builder: (context) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider<LoginCubit>(create: (context) => sl<LoginCubit>(),),
+                    ],
+                    child:ReservationTicket(
+                      price: widget.price,
+                      countSeates: countSeats,
+                      busId: busSeatsModel!.busSeatDetails!.busDetails!.busID!,
+                      tripTypeId:"2",
+                      from: widget.from,
+                      to: widget.to,
+                      oneTripId: busSeatsModel!.busSeatDetails!.tripId!,
+                      countSeats1: widget.cachCountSeats1,
+                      countSeats2: cachCountSeats2,
+                    )//ElectronicScreen
+                )));
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
