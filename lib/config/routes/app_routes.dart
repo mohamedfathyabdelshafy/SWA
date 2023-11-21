@@ -92,7 +92,7 @@ class AppRoute {
               BlocProvider<LoginCubit>(create: (context) => sl<LoginCubit>(),),
               BlocProvider<FawryCubit>(create: (context) => sl<FawryCubit>(),),
             ],
-            child: const FawryScreen()//ElectronicScreen
+            child:  FawryScreen()//ElectronicScreen
         ));
       case Routes.eWalletScreen:
         return MaterialPageRoute(builder: (context) => MultiBlocProvider(

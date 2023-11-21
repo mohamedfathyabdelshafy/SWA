@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/screens/bus_layout.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/screens/bus_layout_back.dart';
+import '../../../../core/local_cache_helper.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../bus_reservation_layout/presentation/PLOH/bus_layout_reservation_cubit.dart';
 import '../../data/models/TimesTripsResponsedart.dart';
@@ -12,7 +13,8 @@ import '../../data/models/TimesTripsResponsedart.dart';
 class TimesScreenBack extends StatefulWidget {
   TimesScreenBack({super.key,required this.tripListBack,required this.tripTypeId,
   required this.countSeats,
-    required this.price
+    required this.price,
+
 
   });
   List <TripListBack> tripListBack ;
@@ -66,6 +68,8 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                             itemBuilder:(context,index) {
                               return InkWell(
                                 onTap: (){
+                                  CacheHelper.setDataToSharedPref(key: 'tripRoundId', value: widget.tripListBack[index].tripId.toString());
+
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) {

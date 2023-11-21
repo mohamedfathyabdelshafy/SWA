@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:swa/core/api/end_points.dart';
-import 'package:swa/features/bus_reservation_layout/data/models/Reservation_Response_model.dart';
+import 'package:swa/features/bus_reservation_layout/data/models/Reservation_Response_fawry_model.dart';
 
 import '../../../../core/api/api_consumer.dart';
+import '../../../payment/select_payment/data/models/payment_message_response_model.dart';
 import '../models/BusSeatsModel.dart';
 import '../models/reservation_request_model.dart';
 
@@ -23,17 +24,15 @@ class BusLayoutRepo {
     BusSeatsModel busSeatsModel = BusSeatsModel.fromJson(decodedResponse);
     return busSeatsModel;
   }
-  Future<ReservationResponseModel> addReservation ({
-    required List<num> seatIdsOneTrip,
-     List<int>? seatIdsRoundTrip,
+  Future<PaymentMessageResponseModel> addReservation ({
+    required List<dynamic> seatIdsOneTrip,
+    List<dynamic>? seatIdsRoundTrip,
     required int custId,
     required String oneTripID,
     String? roundTripID,
-    required int paymentMethodID,
-    required int paymentTypeID,
+    required String paymentMethodID,
+    required String paymentTypeID,
     double? amount,
-    double? amount2,
-    double? amount3,
     String? cardNumber,
     String? cardExpiryYear,
     String? cardExpiryMonth,
@@ -61,11 +60,11 @@ class BusLayoutRepo {
         },
         "EwalletModel": {
           "customerId": custId, // Assuming you want to use the same customerId for EwalletModel
-          "amount": amount2,
+          "amount": amount,
           "mobile": mobile,
         },
         "RefNoModel": {
-          "amount": amount3,
+          "amount": amount,
           "customerId": custId, // Assuming you want to use the same customerId for RefNoModel
         },
       }),
@@ -73,9 +72,9 @@ class BusLayoutRepo {
     log('ReservationResponse ' + response.body);
 
     var decodedResponse = json.decode(response.body);
-    ReservationResponseModel reservationResponseModel = ReservationResponseModel.fromJson(decodedResponse);
+    PaymentMessageResponseModel paymentMessageResponseModel = PaymentMessageResponseModel.fromJson(decodedResponse);
     print("response ${json.decode(response.body)}");
-    return reservationResponseModel;
+    return paymentMessageResponseModel;
   }
 
 

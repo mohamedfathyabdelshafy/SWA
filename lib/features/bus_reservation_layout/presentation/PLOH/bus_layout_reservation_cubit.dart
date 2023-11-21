@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:swa/features/bus_reservation_layout/data/models/Reservation_Response_model.dart';
+import 'package:swa/features/bus_reservation_layout/data/models/Reservation_Response_fawry_model.dart';
 import 'package:swa/features/bus_reservation_layout/data/repo/bus_reservation_repo.dart';
 import '../../../../main.dart';
 import '../../data/models/BusSeatsModel.dart';
@@ -43,50 +43,46 @@ class ReservationCubit extends Cubit<ReservationState> {
     emit(ReservationInitial());
   }
 
-  Future<ReservationResponseModel?>addReservation({
-    required List<num> seatIdsOneTrip,
-    List<int>? seatIdsRoundTrip,
-    required int custId,
-    required String oneTripID,
-    String? roundTripID,
-    required int paymentMethodID,
-    required int paymentTypeID,
-    double? amount,
-    String? cardNumber,
-    String? cardExpiryYear,
-    String? cardExpiryMonth,
-    String? cvv,
-    double? amount2,
-    String? mobile,
-    double? amount3,
-  })async {
-    try{
-      emit(GetAdReservationLoadingState());
-      final res = await busLayoutRepo.addReservation(
-         custId: custId,
-        oneTripID: oneTripID,
-        paymentMethodID: paymentMethodID,
-        paymentTypeID: paymentTypeID,
-        seatIdsOneTrip: seatIdsOneTrip,
-        amount: amount,
-        mobile: mobile,
-        cvv: cvv,
-        cardNumber: cardNumber,
-        cardExpiryYear: cardExpiryYear,
-        cardExpiryMonth: cardExpiryMonth,
-        amount2: amount2,
-        amount3: amount3,
-        roundTripID: roundTripID,
-        seatIdsRoundTrip: seatIdsRoundTrip
-      );
-      if(res.message != null){
-        emit(GetAdReservationLoadedState(reservationResponse: res.message));
-      }else{
-        emit(GetAdReservationErrorState(mas: res.message.toString()));
-      }
-    }catch (e){
-      emit(GetAdReservationErrorState(mas: e.toString()));
-    }
-  }
+  // Future<ReservationResponseModel?>addReservation({
+  //   required List<num> seatIdsOneTrip,
+  //   List<int>? seatIdsRoundTrip,
+  //   required int custId,
+  //   required String oneTripID,
+  //   String? roundTripID,
+  //   required int paymentMethodID,
+  //   required int paymentTypeID,
+  //   double? amount,
+  //   String? cardNumber,
+  //   String? cardExpiryYear,
+  //   String? cardExpiryMonth,
+  //   String? cvv,
+  //   String? mobile,
+  // })async {
+  //   try{
+  //     emit(GetAdReservationLoadingState());
+  //     final res = await busLayoutRepo.addReservation(
+  //        custId: custId,
+  //       oneTripID: oneTripID,
+  //       paymentMethodID: paymentMethodID,
+  //       paymentTypeID: paymentTypeID,
+  //       seatIdsOneTrip: seatIdsOneTrip,
+  //       amount: amount,
+  //       mobile: mobile,
+  //       cvv: cvv,
+  //       cardNumber: cardNumber,
+  //       cardExpiryYear: cardExpiryYear,
+  //       cardExpiryMonth: cardExpiryMonth,
+  //       roundTripID: roundTripID,
+  //       seatIdsRoundTrip: seatIdsRoundTrip
+  //     );
+  //     if(res.message != null){
+  //       emit(GetAdReservationLoadedState(reservationResponse: res.message));
+  //     }else{
+  //       emit(GetAdReservationErrorState(mas: res.message.toString()));
+  //     }
+  //   }catch (e){
+  //     emit(GetAdReservationErrorState(mas: e.toString()));
+  //   }
+  // }
 }
 

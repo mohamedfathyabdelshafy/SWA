@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/screens/bus_layout.dart';
+import '../../../../core/local_cache_helper.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../bus_reservation_layout/presentation/PLOH/bus_layout_reservation_cubit.dart';
 import '../../data/models/TimesTripsResponsedart.dart';
@@ -59,6 +60,8 @@ class _TimesScreenState extends State<TimesScreen> {
                             itemBuilder:(context,index) {
                               return InkWell(
                                 onTap: (){
+                                  CacheHelper.setDataToSharedPref(key:'tripOneId', value:widget.tripList[index].tripId??0);
+                                  print(" widget.tripList[index].tripId${ widget.tripList[index].tripId}");
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) {
@@ -69,7 +72,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                           from: widget.tripList[index].from ?? "",
                                           triTypeId: widget.tripTypeId,
                                           tripListBack: widget.tripListBack,
-                                          price:widget.tripList[index].price!
+                                          price:widget.tripList[index].price!,
                                         ),
                                       );
                                     }),

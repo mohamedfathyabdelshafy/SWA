@@ -4,19 +4,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/Container_Widget.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/text_widget.dart';
-import 'package:swa/features/payment/fawry/presentation/screens/fawry.dart';
 
-import '../../../../config/routes/app_routes.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../core/widgets/icon_back.dart';
-import '../../../../main.dart';
+import '../../../payment/fawry2/presentation/PLOH/fawry_Reservation_cubit.dart';
+import '../../../payment/fawry2/presentation/screens/fawry.dart';
 import '../../../sign_in/domain/entities/user.dart';
-import '../../../sign_in/domain/use_cases/get_user_data.dart';
-import '../../../sign_in/domain/use_cases/login.dart';
 import '../../../sign_in/presentation/cubit/login_cubit.dart';
-import '../PLOH/bus_layout_reservation_cubit.dart';
-import '../PLOH/bus_layout_reservation_states.dart';
 
 class ReservationTicket extends StatefulWidget {
    ReservationTicket({super.key,
@@ -28,7 +23,7 @@ class ReservationTicket extends StatefulWidget {
      required this.oneTripId,
      required this.countSeats1,
      this.countSeats2,
-     required this.price
+     required this.price,
 
    });
 List<num> countSeates ;
@@ -83,14 +78,21 @@ class _ReservationTicketState extends State<ReservationTicket> {
           ),
           SizedBox(
             height: sizeHeight * 0.7,
-            child: Expanded(
-              child: SingleChildScrollView(
+            child: SingleChildScrollView(
+              // child: BlocListener(
+              //   bloc: BlocProvider.of<LoginCubit>(context),
+              //   listener: (context, state) {
+              //     if (state is UserLoginLoadedState) {
+              //       _user = state.userResponse.user;
+              //     }
+              //   },
                 child: Column(
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 50),
                       child: Container(
                         height: sizeHeight * 0.65 ,
+                        width: sizeWidth * 0.9,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: Colors.transparent,
@@ -167,16 +169,20 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                   ],
                                 ),
                               ),
-                              const SizedBox(
-                                width: double.infinity,
-                                child: Text(
-                                  "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontFamily: "regular"
-                                  ),
+                               SizedBox(
+                                width: sizeWidth * 0.9,
+                                child: Divider(
+                                  thickness: 1,
+                                  color: Colors.white,
                                 ),
+                                //  child:const  Text(
+                                //   "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ",
+                                //   style: TextStyle(
+                                //     color: Colors.white,
+                                //     fontSize: 20,
+                                //     fontFamily: "regular"
+                                //   ),
+                                // ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -283,42 +289,44 @@ class _ReservationTicketState extends State<ReservationTicket> {
                               ),
                               Container(
                                 height: sizeHeight *0.05,
-                                child: Expanded(
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                      itemCount: widget.countSeats1.length,
-                                      itemBuilder: (context , index){
-                                        return Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            children: [
-                                              Container(
-                                                child: Stack(
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                      "assets/images/unavailable_seats.svg",
-                                                      color:AppColors.primaryColor,
-                                                    )
-                                                  ],
-                                                ),
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                    itemCount: widget.countSeats1.length,
+                                    itemBuilder: (context , index){
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              child: Stack(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    "assets/images/unavailable_seats.svg",
+                                                    color:AppColors.primaryColor,
+                                                  )
+                                                ],
                                               ),
-                                              //SizedBox(width: 5,)
-                                            ],
-                                          ),
-                                        );
-                                      }),
-                                ),
+                                            ),
+                                            //SizedBox(width: 5,)
+                                          ],
+                                        ),
+                                      );
+                                    }),
                               ),
-                              const SizedBox(
-                                width: double.infinity,
-                                child: Text(
-                                  "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontFamily: "regular"
-                                  ),
+                              SizedBox(
+                                width: sizeWidth * 0.9,
+                                child:const Divider(
+                                  thickness: 1,
+                                  color: Colors.white,
                                 ),
+                                //  child:const  Text(
+                                //   "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ",
+                                //   style: TextStyle(
+                                //     color: Colors.white,
+                                //     fontSize: 20,
+                                //     fontFamily: "regular"
+                                //   ),
+                                // ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(5),
@@ -426,16 +434,20 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                   ],
                                 ),
                               ),
-                              const SizedBox(
-                                width: double.infinity,
-                                child: Text(
-                                  "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontFamily: "regular"
-                                  ),
+                              SizedBox(
+                                width: sizeWidth * 0.9,
+                                child: const Divider(
+                                  thickness: 1,
+                                  color: Colors.white,
                                 ),
+                                //  child:const  Text(
+                                //   "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ",
+                                //   style: TextStyle(
+                                //     color: Colors.white,
+                                //     fontSize: 20,
+                                //     fontFamily: "regular"
+                                //   ),
+                                // ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -542,42 +554,44 @@ class _ReservationTicketState extends State<ReservationTicket> {
                               ),
                               Container(
                                 height: sizeHeight *0.05,
-                                child: Expanded(
-                                  child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: widget.countSeats2!.length,
-                                      itemBuilder: (context , index){
-                                        return Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            children: [
-                                              Container(
-                                                child: Stack(
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                      "assets/images/unavailable_seats.svg",
-                                                      color:AppColors.primaryColor,
-                                                    )
-                                                  ],
-                                                ),
+                                child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: widget.countSeats2!.length,
+                                    itemBuilder: (context , index){
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              child: Stack(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    "assets/images/unavailable_seats.svg",
+                                                    color:AppColors.primaryColor,
+                                                  )
+                                                ],
                                               ),
-                                              //SizedBox(width: 5,)
-                                            ],
-                                          ),
-                                        );
-                                      }),
-                                ),
+                                            ),
+                                            //SizedBox(width: 5,)
+                                          ],
+                                        ),
+                                      );
+                                    }),
                               ),
-                              const SizedBox(
-                                width: double.infinity,
-                                child: Text(
-                                  "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontFamily: "regular"
-                                  ),
+                              SizedBox(
+                                width: sizeWidth * 0.9,
+                                child:const Divider(
+                                  thickness: 1,
+                                  color: Colors.white,
                                 ),
+                                //  child:const  Text(
+                                //   "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ",
+                                //   style: TextStyle(
+                                //     color: Colors.white,
+                                //     fontSize: 20,
+                                //     fontFamily: "regular"
+                                //   ),
+                                // ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(5),
@@ -608,28 +622,17 @@ class _ReservationTicketState extends State<ReservationTicket> {
                 ),
               ),
             ),
-          ),
+         // ),
 
          const Spacer(),
-          BlocListener(
-               bloc: BlocProvider.of<ReservationCubit>(context),
-               listener: (context,state){
-                 if (state is GetReservationLoadingState) {
-                   Constants.showLoadingDialog(context);
-                 }else if(state is GetAdReservationLoadedState){
-                   Constants.hideLoadingDialog(context);
-                 }else if(state is GetAdReservationErrorState){
-                   Constants.hideLoadingDialog(context);
-                   Constants.showDefaultSnackBar(context: context, text: state.mas!);
-                 }
-               },
-            child: InkWell
+
+             InkWell
               (
                 onTap: (){
-                  if(_user == null){
-                    Navigator.pushNamed(context, Routes.signInRoute);
-
-                  }else {
+                  // if(_user == null){
+                  //   Navigator.pushNamed(context, Routes.signInRoute);
+                  //
+                  // }else {
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -657,9 +660,25 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                       child: Text('Ewallet'), onPressed: () {}),
                                   TextButton(
                                       child: Text("Fawry"), onPressed: () {
-                                    Navigator.pushNamed(
-                                        context, Routes.fawryPaymentScreen);
-                                  }),
+                                    int lenght = widget.countSeats2?.length??0;
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BlocProvider<FawryReservation>(
+                                          create: (context) => FawryReservation(),
+                                          child: FawryScreenReservation(
+                                            roundTripID:"91" ,
+                                            oneTripID: "168",
+                                            seatIdsOneTrip:[332,333],
+                                            seatIdsRoundTrip:[332,333] ,
+                                            price:lenght* widget.price +
+                                                 widget.countSeats1.length * widget.price,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },),
                                   TextButton(child: Text("CreditCard"),
                                       onPressed: () {})
 
@@ -685,13 +704,13 @@ class _ReservationTicketState extends State<ReservationTicket> {
                         );
                       },
                     );
-                  }
+                //  }
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Constants.customButton(text: "Payment",color: AppColors.primaryColor),
                 )),
-          ),
+
         ],
       ),
     );
