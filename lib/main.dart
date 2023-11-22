@@ -13,6 +13,7 @@ import 'package:swa/features/sign_in/signin_injection_container.dart';
 import 'package:swa/features/sign_up/signup_injection_container.dart';
 import 'package:swa/injection_container.dart';
 
+import 'core/local_cache_helper.dart';
 import 'features/bus_reservation_layout/bus_layout_injection_container.dart';
 import 'features/times_trips/presentation/PLOH/times_trips_cubit.dart';
 import 'features/times_trips/times_trips_injection_container.dart';
@@ -32,7 +33,11 @@ Future<void> main() async {
   await eWalletDependencyInjectionInit();//For initializing E-Wallet
 await TimesTripInjectionInit();
 await BusLayoutInjectionInit();
-
+  //await CacheHelper.deleteDataToSharedPref(key: 'tripOneId');
+  // await CacheHelper.deleteDataToSharedPref(key: 'tripRoundId');
+  // await CacheHelper.deleteDataToSharedPref(key: 'countSeats');
+  // await CacheHelper.deleteDataToSharedPref(key: 'countSeats2');
+  await CacheHelper.init();
 
   await dependencyInjectionInit();//For initializing network info and shared preferences
   runApp(const MyApp());

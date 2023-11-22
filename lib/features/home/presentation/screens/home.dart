@@ -462,6 +462,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.push(context, MaterialPageRoute(builder: (context){
                                   return TimesScreen(tripList:state.timesTripsResponse.message!.tripList!,tripTypeId: tripTypeId,
                                    tripListBack: state.timesTripsResponse.message!.tripListBack ?? [],
+                                    user: _user,
                                   );
                                 }));
                               }else if(state is ErrorTimesTrips){

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/Container_Widget.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/text_widget.dart';
+import 'package:swa/features/payment/select_payment/presentation/screens/select_payment.dart';
 
+import '../../../../config/routes/app_routes.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../core/widgets/icon_back.dart';
@@ -24,7 +27,7 @@ class ReservationTicket extends StatefulWidget {
      required this.countSeats1,
      this.countSeats2,
      required this.price,
-
+     this.user
    });
 List<num> countSeates ;
 int busId;
@@ -35,6 +38,7 @@ String tripTypeId;
    List <dynamic> countSeats1;
    List <dynamic>? countSeats2;
    double price;
+   User? user;
 
 
    @override
@@ -43,7 +47,6 @@ String tripTypeId;
 
 class _ReservationTicketState extends State<ReservationTicket> {
   bool switch1 = false;
-  User? _user;
 
   @override
   void initState() {
@@ -629,82 +632,24 @@ class _ReservationTicketState extends State<ReservationTicket> {
              InkWell
               (
                 onTap: (){
-                  // if(_user == null){
-                  //   Navigator.pushNamed(context, Routes.signInRoute);
-                  //
-                  // }else {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return Container(
-                          height: sizeHeight * 0.2,
+                  if(widget.user == null){
+                    Navigator.pushNamed(context, Routes.signInRoute);
 
-                          child: AlertDialog(
-
-                            title: Text('Choose Options'),
-                            content: SizedBox(
-                              height: sizeHeight * 0.25,
-                              child: Column(
-                                children: [
-                                  SwitchListTile(
-                                    title: Text('Wallet deduction'),
-                                    value: switch1,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        switch1 = value;
-                                        Navigator.pop(context);
-                                      });
-                                    },
-                                  ),
-                                  TextButton(
-                                      child: Text('Ewallet'), onPressed: () {}),
-                                  TextButton(
-                                      child: Text("Fawry"), onPressed: () {
-                                    int lenght = widget.countSeats2?.length??0;
-
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => BlocProvider<FawryReservation>(
-                                          create: (context) => FawryReservation(),
-                                          child: FawryScreenReservation(
-                                            roundTripID:"91" ,
-                                            oneTripID: "168",
-                                            seatIdsOneTrip:[332,333],
-                                            seatIdsRoundTrip:[332,333] ,
-                                            price:lenght* widget.price +
-                                                 widget.countSeats1.length * widget.price,
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },),
-                                  TextButton(child: Text("CreditCard"),
-                                      onPressed: () {})
-
-                                ],
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context); // Close the dialog
-                                },
-                                child: Text('Cancel'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  // Do something with the selected options
-                                  Navigator.pop(context); // Close the dialog
-                                },
-                                child: Text('OK'),
-                              ),
-                            ],
+                  }else {
+                    int lenght = widget.countSeats2?.length??0;
+                    CacheHelper.setDataToSharedPref(key: 'price', value: lenght* widget.price +
+                        widget.countSeats1.length * widget.price,);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BlocProvider<FawryReservation>(
+                          create: (context) => FawryReservation(),
+                          child: SelectPaymentScreen(
                           ),
-                        );
-                      },
+                        ),
+                      ),
                     );
-                //  }
+                 }
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),

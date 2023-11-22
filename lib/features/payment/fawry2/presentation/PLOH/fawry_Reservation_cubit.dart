@@ -16,9 +16,14 @@ class FawryReservation extends Cubit<FawryReservationState>{
     required int custId,
     required String oneTripID,
     String? roundTripID,
-    required String paymentMethodID,
-    required String paymentTypeID,
-    double? amount,
+    required int paymentMethodID,
+    required int paymentTypeID,
+    required String amount,
+    String? cardNumber,
+    String? cardExpiryYear,
+    String? cardExpiryMonth,
+    String? cvv,
+    String? mobile
   })async {
     try{
       emit(FawryLoadingReservationState());
@@ -27,10 +32,17 @@ class FawryReservation extends Cubit<FawryReservationState>{
           seatIdsRoundTrip: seatIdsRoundTrip,
           roundTripID: roundTripID,
           oneTripID: oneTripID,
-          paymentMethodID: "2",
-          paymentTypeID: "68",
+          paymentMethodID: 2,
+          paymentTypeID: 68,
           seatIdsOneTrip: seatIdsOneTrip,
-          amount: amount,);
+          amount: amount,
+        cardExpiryMonth: cardExpiryMonth,
+        cardExpiryYear: cardExpiryYear,
+        cardNumber: cardNumber,
+        cvv: cvv,
+        mobile: mobile
+
+      );
       if(res.message != null){
         emit(FawryLoadedReservationState(paymentMessageResponse: res));
       }else{

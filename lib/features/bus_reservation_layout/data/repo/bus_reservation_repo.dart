@@ -30,9 +30,9 @@ class BusLayoutRepo {
     required int custId,
     required String oneTripID,
     String? roundTripID,
-    required String paymentMethodID,
-    required String paymentTypeID,
-    double? amount,
+    required int paymentMethodID,
+    required int paymentTypeID,
+   required String amount,
     String? cardNumber,
     String? cardExpiryYear,
     String? cardExpiryMonth,
@@ -64,8 +64,8 @@ class BusLayoutRepo {
           "mobile": mobile,
         },
         "RefNoModel": {
-          "amount": amount,
-          "customerId": custId, // Assuming you want to use the same customerId for RefNoModel
+          "Amount": amount,
+          "CustomerId": custId, // Assuming you want to use the same customerId for RefNoModel
         },
       }),
     );

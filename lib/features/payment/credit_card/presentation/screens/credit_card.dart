@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/styles.dart';
+
+import '../../../../../core/local_cache_helper.dart';
+import '../../model/card_model.dart';
 
 
 class AddCreditCard extends StatefulWidget {
@@ -23,8 +28,6 @@ class _AddCreditCardState extends State<AddCreditCard> {
   Widget build(BuildContext context) {
     double sizeHeight = MediaQuery.of(context).size.height;
     double sizeWidth = MediaQuery.of(context).size.width;
-
-
     return Scaffold(
       backgroundColor:Colors.black,
       appBar: AppBar(
@@ -337,9 +340,40 @@ class _AddCreditCardState extends State<AddCreditCard> {
                   const Spacer(),
                   InkWell(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context){
-                        return const AddCreditCard();
-                      }));
+                      print(monthController.text.substring(0, 2));
+                      if(formKey.currentState!.validate()) {
+                        final addedCard = CardModel(
+                          month:  monthController.text,
+                          cardName: cardHolderController.text,
+                          cardNumber: cardNumberController.text,);
+
+                        final jsonData = CacheHelper.getDataToSharedPref(key: 'cards');
+                        print(jsonData.runtimeType);
+                        print("Doneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee1");
+                        print(jsonData);
+                        final card = [];
+                        card.add(addedCard);
+                        print("Doneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee2$card");
+                        if(jsonData != null &&jsonData is String) {
+                          final cachedcard = json.decode(jsonData).map<CardModel>((e) => CardModel.fromJsom(e)).toList();
+                          card.addAll(cachedcard);
+                          print("Doneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee2$card");
+                        }
+
+                        CacheHelper.setDataToSharedPref(
+                          key:"cards",
+                          value:json.encode(
+                            card.map((e) => e.toJson()).toList(),
+                          ),
+                        ).then((value) {
+                          print("from local ${CacheHelper.getDataToSharedPref(key: 'cards')}");
+                          Navigator.pop<CardModel>(context, addedCard);
+
+                        });
+
+                      }else{
+                        return;
+                      }
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),

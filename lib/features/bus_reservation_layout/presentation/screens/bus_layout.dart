@@ -15,6 +15,7 @@ import '../../../../core/local_cache_helper.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../main.dart';
+import '../../../sign_in/domain/entities/user.dart';
 import '../../../times_trips/data/models/TimesTripsResponsedart.dart';
 import '../../../times_trips/presentation/PLOH/times_trips_cubit.dart';
 import '../../../times_trips/presentation/screens/times_screen_back.dart';
@@ -29,12 +30,15 @@ class BusLayoutScreen extends StatefulWidget {
       required this.triTypeId,
       this.tripListBack,
      required this.price,
+     this.user
    });
 String from;
 String to;
 String triTypeId;
 List<TripListBack>? tripListBack;
 double price;
+   User? user;
+
   @override
   State<BusLayoutScreen> createState() => _BusLayoutScreenState();
 }
@@ -348,6 +352,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                             to: widget.to,
                             oneTripId: busSeatsModel!.busSeatDetails!.tripId!,
                             countSeats1: cachCountSeats!,
+                            user: widget.user,
 
                           )
                         );
@@ -363,7 +368,10 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                 price: widget.price,
                                 countSeats: cachCountSeats!,
                                   tripListBack: widget.tripListBack!,
-                                  tripTypeId: widget.triTypeId)
+                                  tripTypeId: widget.triTypeId,
+                                user: widget.user,
+
+                              )
                           );
                         }),
                       );

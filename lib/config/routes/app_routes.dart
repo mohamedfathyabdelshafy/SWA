@@ -95,13 +95,13 @@ class AppRoute {
             child:  FawryScreen()//ElectronicScreen
         ));
       case Routes.eWalletScreen:
-        return MaterialPageRoute(builder: (context) => MultiBlocProvider(
-            providers: [
-              BlocProvider<LoginCubit>(create: (context) => sl<LoginCubit>(),),
-              BlocProvider<EWalletCubit>(create: (context) => sl<EWalletCubit>(),),
-            ],
-            child: const ElectronicScreen()
-        ));
+        // return MaterialPageRoute(builder: (context) => MultiBlocProvider(
+        //     providers: [
+        //       BlocProvider<LoginCubit>(create: (context) => sl<LoginCubit>(),),
+        //       BlocProvider<EWalletCubit>(create: (context) => sl<EWalletCubit>(),),
+        //     ],
+        //     child: const ElectronicScreen()
+        // ));
       case Routes.timesScreen:
        // return MaterialPageRoute(builder: (context) => const TimesScreen());
       default :

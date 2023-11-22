@@ -7,6 +7,7 @@ import 'package:swa/features/bus_reservation_layout/presentation/screens/bus_lay
 import '../../../../core/local_cache_helper.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../bus_reservation_layout/presentation/PLOH/bus_layout_reservation_cubit.dart';
+import '../../../sign_in/domain/entities/user.dart';
 import '../../data/models/TimesTripsResponsedart.dart';
 
 // ignore: must_be_immutable
@@ -14,13 +15,14 @@ class TimesScreenBack extends StatefulWidget {
   TimesScreenBack({super.key,required this.tripListBack,required this.tripTypeId,
   required this.countSeats,
     required this.price,
-
+    this.user
 
   });
   List <TripListBack> tripListBack ;
   String tripTypeId;
   List<dynamic> countSeats;
   double price;
+  User? user;
 
   @override
     State<TimesScreenBack> createState() => _TimesScreenBackState();
@@ -81,6 +83,8 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                           triTypeId: widget.tripTypeId,
                                           cachCountSeats1: widget.countSeats,
                                           price: widget.price,
+                                          user: widget.user,
+
                                         ),
                                       );
                                     }),

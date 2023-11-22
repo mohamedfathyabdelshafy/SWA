@@ -6,14 +6,16 @@ import 'package:swa/features/bus_reservation_layout/presentation/screens/bus_lay
 import '../../../../core/local_cache_helper.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../bus_reservation_layout/presentation/PLOH/bus_layout_reservation_cubit.dart';
+import '../../../sign_in/domain/entities/user.dart';
 import '../../data/models/TimesTripsResponsedart.dart';
 
 // ignore: must_be_immutable
 class TimesScreen extends StatefulWidget {
-  TimesScreen({super.key,required this.tripList,required this.tripTypeId,this.tripListBack});
+  TimesScreen({super.key,required this.tripList,required this.tripTypeId,this.tripListBack,this.user});
   List <TripList> tripList ;
   List <TripListBack>? tripListBack;
   String tripTypeId;
+  User? user;
   @override
   State<TimesScreen> createState() => _TimesScreenState();
 }
@@ -73,6 +75,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                           triTypeId: widget.tripTypeId,
                                           tripListBack: widget.tripListBack,
                                           price:widget.tripList[index].price!,
+                                          user: widget.user,
                                         ),
                                       );
                                     }),

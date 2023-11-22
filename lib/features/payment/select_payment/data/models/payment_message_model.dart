@@ -9,7 +9,14 @@ class PaymentMessageModel extends PaymentMessage {
     required int statusCode,
     required String statusDescription,
     required dynamic nextAction,
-  }) : super(type: type, referenceNumber: referenceNumber, merchantRefNumber: merchantRefNumber, orderStatus: orderStatus, statusCode: statusCode, statusDescription: statusDescription, nextAction: nextAction);
+  }) : super(
+            type: type,
+            referenceNumber: referenceNumber,
+            merchantRefNumber: merchantRefNumber,
+            orderStatus: orderStatus,
+            statusCode: statusCode,
+            statusDescription: statusDescription,
+            nextAction: nextAction);
 
   factory PaymentMessageModel.fromJson(Map<String, dynamic> json) => PaymentMessageModel(
     type: json["type"],

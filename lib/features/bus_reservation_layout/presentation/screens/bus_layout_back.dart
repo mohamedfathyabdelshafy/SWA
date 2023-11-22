@@ -10,6 +10,7 @@ import '../../../../core/local_cache_helper.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../main.dart';
+import '../../../sign_in/domain/entities/user.dart';
 import '../../data/models/BusSeatsModel.dart';
 import '../widgets/bus_seat_widget/seat_layout_model.dart';
 import '../widgets/bus_seat_widget/seat_layout_widget.dart';
@@ -21,12 +22,14 @@ class BusLayoutScreenBack extends StatefulWidget {
       required this.triTypeId,
       required this.cachCountSeats1,
       required this.price,
+    this.user
   });
   String from;
   String to;
   String triTypeId;
   List<dynamic> cachCountSeats1;
   double price;
+  User? user;
 
   @override
   State<BusLayoutScreenBack> createState() => _BusLayoutScreenBackState();
@@ -344,6 +347,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                               oneTripId: busSeatsModel!.busSeatDetails!.tripId!,
                               countSeats1: widget.cachCountSeats1,
                               countSeats2: cachCountSeats2,
+                              user: widget.user,
                             )
                         );
                       }),

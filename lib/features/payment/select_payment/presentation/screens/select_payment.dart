@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
-import 'package:swa/features/payment/credit_card/presentation/screens/credit_card.dart';
 import 'package:swa/features/payment/electronic_wallet/presentation/screens/electronic_screens.dart';
-import 'package:swa/features/payment/fawry/presentation/screens/fawry.dart';
+import 'package:swa/features/payment/fawry2/presentation/screens/fawry.dart';
+
+import '../../../credit_card/presentation/screens/credit_card_pay_viewd.dart';
+import '../../../fawry2/presentation/PLOH/fawry_Reservation_cubit.dart';
 
 
 class SelectPaymentScreen extends StatefulWidget {
-  const SelectPaymentScreen({super.key});
-
+  const SelectPaymentScreen({super.key,});
   @override
   State<SelectPaymentScreen> createState() => _SelectPaymentScreenState();
 }
@@ -49,10 +50,15 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
             InkWell(
               onTap: () async {
 
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context){
-                      return const AddCreditCard();
-                    }));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider<FawryReservation>(
+                        create: (context) => FawryReservation(),
+                        child: CreditCardPayView(index:  1,)
+                    ),
+                  ),
+                );
 
               },
               child: Row(
@@ -79,7 +85,16 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
             const SizedBox(height: 17,),
             InkWell(
               onTap: () {
-                Navigator.pushNamed(context, Routes.fawryPaymentScreen);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider<FawryReservation>(
+                      create: (context) => FawryReservation(),
+                      child: FawryScreenReservation(
+                      ),
+                    ),
+                  ),
+                );
               },
               child: Row(
                 children: [
@@ -105,8 +120,15 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
             const SizedBox(height: 17,),
             InkWell(
               onTap: () {
-                Navigator.pushNamed(context, Routes.eWalletScreen);
-              },
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider<FawryReservation>(
+                      create: (context) => FawryReservation(),
+                      child: ElectronicScreen()
+                    ),
+                  ),
+                );              },
               child: Row(
                 children: [
                   Image.asset(

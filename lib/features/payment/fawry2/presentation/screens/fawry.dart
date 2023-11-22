@@ -17,28 +17,21 @@ import '../PLOH/fawry_Reservation_states.dart';
 
 
 class FawryScreenReservation extends StatefulWidget {
-  FawryScreenReservation({super.key,required this.price,
-  required this.roundTripID,
-    this.seatIdsRoundTrip,
-    required this.seatIdsOneTrip,
-    required this.oneTripID
+  FawryScreenReservation({super.key,
+
   });
- double price;
-List<dynamic> seatIdsOneTrip;
-  String oneTripID;
- List<dynamic>? seatIdsRoundTrip;
-  String roundTripID;
+
   @override
   State<FawryScreenReservation> createState() => _FawryScreenReservationState();
 }
 
 class _FawryScreenReservationState extends State<FawryScreenReservation> {
   final formKey = GlobalKey<FormState>();
+  final price =CacheHelper.getDataToSharedPref(key: 'price');
+
   User? _user;
-  late String amount;
   @override
   void initState() {
-     amount = widget.price.toString();
 
     // Future.delayed(const Duration(seconds: 0)).then((_) async {
     //   BlocProvider.of<LoginCubit>(context).getUserData();
@@ -112,7 +105,7 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                             ),
                             const SizedBox(width: 5,),
                             Container(
-                              height: 40,
+                              height:sizeHeight * 0.07,
                               width: 300,
                               //    padding:
                               //    const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
@@ -124,38 +117,27 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                                 // ),
 
                               ),
-                              child: TextFormField(
-                                autofocus: true,
-                                style: fontStyle(color: AppColors.white, fontSize: 16),
-                                cursorColor: AppColors.blue,
-                                controller: amountController,
-                                inputFormatters: [NumericTextFormatter()],
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Amount',
-                                  errorStyle: fontStyle(
-                                    color: Colors.red,
-                                    fontSize: 11,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    "amount",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontFamily: "bold",
+                                        color: AppColors.greyLight
+                                    ),
                                   ),
-                                  hintStyle: fontStyle(
-                                      color: AppColors.greyLight,
-                                      fontSize: 15,
-                                      fontFamily: FontFamily.bold),
-                                  labelStyle: fontStyle(
-                                      color: AppColors.grey,
-                                      fontSize: 12,
-                                      fontFamily: FontFamily.bold
-                                  ),
-                                ),
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'This Field is Required';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                              ),
+                                  Text(
+                                    price.toString(),
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontFamily: "bold",
+                                        color: AppColors.primaryColor
+                                    ),
+                                  )
+                                ],
+                              )
                             ),
                           ],
                         ),
@@ -167,7 +149,7 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                               Constants.showLoadingDialog(context);
                             }else if (state is FawryLoadedReservationState) {
                               Constants.hideLoadingDialog(context);
-                              Constants.showDefaultSnackBar(context: context, text: state.paymentMessageResponse.paymentMessage!.statusDescription);
+                              // Constants.showDefaultSnackBar(context: context, text: state.paymentMessageResponse.paymentMessage!.statusDescription);
 
                               Future.delayed(const Duration(seconds: 5), () {
                                 Navigator.pushReplacementNamed(context, Routes.initialRoute);
@@ -182,18 +164,22 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                             onTap: (){
                               final tripOneId = CacheHelper.getDataToSharedPref(key: 'tripOneId');
                               final tripRoundId = CacheHelper.getDataToSharedPref(key: 'tripRoundId');
-                              print("tripOneId${tripOneId}=====================tripOneId${tripRoundId}");
+                              final seatIdsOneTrip = CacheHelper.getDataToSharedPref(key: 'countSeats')?.map((e) => int.tryParse(e) ?? 0).toList();
+                              final seatIdsRoundTrip = CacheHelper.getDataToSharedPref(key: 'countSeats2')?.map((e) => int.tryParse(e) ?? 0).toList();
+                              final price =CacheHelper.getDataToSharedPref(key: 'price');
+
+                              print("tripOneId${tripOneId}==tripOneId${tripRoundId }=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price");
 
                               // if(_user != null && formKey.currentState!.validate()) {
                                 BlocProvider.of<FawryReservation>(context).addReservation(
-                                    seatIdsOneTrip:widget.seatIdsOneTrip ,
+                                    seatIdsOneTrip:seatIdsOneTrip ,
                                     custId: 4,
                                     oneTripID:tripOneId.toString(),
-                                    paymentMethodID: "2",
-                                    paymentTypeID: "68",
-                                  seatIdsRoundTrip:widget.seatIdsRoundTrip ,
+                                    paymentMethodID: 2,
+                                    paymentTypeID: 68,
+                                  seatIdsRoundTrip:seatIdsRoundTrip??[],
                                   roundTripID:tripRoundId.toString(),
-                                  amount:widget.price
+                                  amount:price.toStringAsFixed(2).toString()
                                 );
                               //}
                             },
