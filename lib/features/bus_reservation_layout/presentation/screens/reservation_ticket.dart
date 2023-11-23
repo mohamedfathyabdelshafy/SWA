@@ -5,14 +5,13 @@ import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/Container_Widget.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/text_widget.dart';
-import 'package:swa/features/payment/select_payment/presentation/screens/select_payment.dart';
-
+import 'package:swa/features/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
+import 'package:swa/features/select_payment2/presentation/screens/select_payment.dart';
 import '../../../../config/routes/app_routes.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../core/widgets/icon_back.dart';
 import '../../../payment/fawry2/presentation/PLOH/fawry_Reservation_cubit.dart';
-import '../../../payment/fawry2/presentation/screens/fawry.dart';
 import '../../../sign_in/domain/entities/user.dart';
 import '../../../sign_in/presentation/cubit/login_cubit.dart';
 
@@ -642,10 +641,9 @@ class _ReservationTicketState extends State<ReservationTicket> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => BlocProvider<FawryReservation>(
-                          create: (context) => FawryReservation(),
-                          child: SelectPaymentScreen(
-                          ),
+                        builder: (context) => BlocProvider<ReservationCubit>(
+                          create: (context) => ReservationCubit(),
+                          child: SelectPaymentScreen2(),
                         ),
                       ),
                     );

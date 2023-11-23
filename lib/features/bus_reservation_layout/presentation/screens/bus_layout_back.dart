@@ -335,9 +335,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
-                        return BlocProvider<ReservationCubit>(
-                            create: (context) => ReservationCubit(), // Replace with your actual cubit creation logic
-                            child: ReservationTicket(
+                        return  ReservationTicket(
                               price: widget.price,
                               countSeates: countSeats,
                               busId: busSeatsModel!.busSeatDetails!.busDetails!.busID!,
@@ -348,7 +346,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                               countSeats1: widget.cachCountSeats1,
                               countSeats2: cachCountSeats2,
                               user: widget.user,
-                            )
+
                         );
                       }),
                     );

@@ -9,11 +9,13 @@ import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/payment/fawry/domain/use_cases/fawry_use_case.dart';
 import 'package:swa/features/payment/fawry/presentation/cubit/fawry_cubit.dart';
+import 'package:swa/features/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 
-import '../PLOH/fawry_Reservation_cubit.dart';
-import '../PLOH/fawry_Reservation_states.dart';
+import '../../../payment/fawry2/presentation/PLOH/fawry_Reservation_cubit.dart';
+import '../../../payment/fawry2/presentation/PLOH/fawry_Reservation_states.dart';
+import '../PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
 
 
 class FawryScreenReservation extends StatefulWidget {
@@ -143,43 +145,50 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                         ),
                         const Spacer(),
                        BlocListener(
-                          bloc: BlocProvider.of<FawryReservation>(context),
-                          listener: (context, state) {
-                            if(state is FawryLoadingReservationState){
-                              Constants.showLoadingDialog(context);
-                            }else if (state is FawryLoadedReservationState) {
-                              Constants.hideLoadingDialog(context);
-                              // Constants.showDefaultSnackBar(context: context, text: state.paymentMessageResponse.paymentMessage!.statusDescription);
+                          bloc: BlocProvider.of<ReservationCubit>(context),
+                         listener: (context, state) {
+                           if(state is LoadingElectronicWalletState){
+                             Constants.showLoadingDialog(context);
+                           }else if (state is LoadedElectronicWalletState) {
+                             Constants.hideLoadingDialog(context);
+                             Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
 
-                              Future.delayed(const Duration(seconds: 5), () {
-                                Navigator.pushReplacementNamed(context, Routes.initialRoute);
-                              });
-                            }else if (state is FawryErrorReservationState) {
-                              Constants.hideLoadingDialog(context);
-                              Constants.showDefaultSnackBar(context: context, text: state.error.toString());
-                            }
-                          },
+                           }else if (state is ErrorElectronicWalletState) {
+                             Constants.hideLoadingDialog(context);
+                             Constants.showDefaultSnackBar(context: context, text: state.error.toString());
+                           }
+                         },
                           child:
                           InkWell(
                             onTap: (){
                               final tripOneId = CacheHelper.getDataToSharedPref(key: 'tripOneId');
                               final tripRoundId = CacheHelper.getDataToSharedPref(key: 'tripRoundId');
+                              final selectedDayTo = CacheHelper.getDataToSharedPref(key: 'selectedDayTo');
+                              final selectedDayFrom = CacheHelper.getDataToSharedPref(key: 'selectedDayFrom');
+                              final toStationId = CacheHelper.getDataToSharedPref(key: 'toStationId');
+                              final fromStationId = CacheHelper.getDataToSharedPref(key: 'fromStationId');
                               final seatIdsOneTrip = CacheHelper.getDataToSharedPref(key: 'countSeats')?.map((e) => int.tryParse(e) ?? 0).toList();
                               final seatIdsRoundTrip = CacheHelper.getDataToSharedPref(key: 'countSeats2')?.map((e) => int.tryParse(e) ?? 0).toList();
                               final price =CacheHelper.getDataToSharedPref(key: 'price');
-
                               print("tripOneId${tripOneId}==tripOneId${tripRoundId }=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price");
+                              print("tripOneId${selectedDayTo}==tripOneId${selectedDayFrom }=====${toStationId}===${fromStationId}==$price");
+
+                              print("tripOneId${tripOneId}==tripOneId${tripRoundId }=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price==");
 
                               // if(_user != null && formKey.currentState!.validate()) {
-                                BlocProvider.of<FawryReservation>(context).addReservation(
-                                    seatIdsOneTrip:seatIdsOneTrip ,
+                                BlocProvider.of<ReservationCubit>(context).addReservationFawry(
+                                    seatIdsOneTrip:seatIdsOneTrip,
                                     custId: 4,
                                     oneTripID:tripOneId.toString(),
                                     paymentMethodID: 2,
                                     paymentTypeID: 68,
-                                  seatIdsRoundTrip:seatIdsRoundTrip??[],
-                                  roundTripID:tripRoundId.toString(),
-                                  amount:price.toStringAsFixed(2).toString()
+                                    seatIdsRoundTrip:seatIdsRoundTrip??[],
+                                    roundTripID:tripRoundId??"",
+                                    amount:price.toStringAsFixed(2).toString(),
+                                    fromStationID:fromStationId,
+                                    toStationId:toStationId,
+                                    tripDateGo:selectedDayFrom,
+                                    tripDateBack: selectedDayTo
                                 );
                               //}
                             },

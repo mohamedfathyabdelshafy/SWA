@@ -5,8 +5,8 @@ import '../../../../main.dart';
 import '../../data/models/BusSeatsModel.dart';
 import 'bus_layout_reservation_states.dart';
 
-class ReservationCubit extends Cubit<ReservationState> {
-  ReservationCubit() :super(ReservationInitial());
+class BusLayoutCubit extends Cubit<ReservationState> {
+  BusLayoutCubit() :super(ReservationInitial());
   BusLayoutRepo busLayoutRepo = BusLayoutRepo(apiConsumer: sl());
   BusSeatsModel? busSeatsModel;
 

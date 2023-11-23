@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:swa/core/utils/media_query_values.dart';
-import 'package:swa/features/bus_reservation_layout/presentation/screens/bus_layout.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/screens/bus_layout_back.dart';
 import '../../../../core/local_cache_helper.dart';
 import '../../../../core/utils/app_colors.dart';
-import '../../../bus_reservation_layout/presentation/PLOH/bus_layout_reservation_cubit.dart';
 import '../../../sign_in/domain/entities/user.dart';
 import '../../data/models/TimesTripsResponsedart.dart';
 
@@ -70,22 +67,21 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                             itemBuilder:(context,index) {
                               return InkWell(
                                 onTap: (){
-                                  CacheHelper.setDataToSharedPref(key: 'tripRoundId', value: widget.tripListBack[index].tripId.toString());
+                                  CacheHelper.setDataToSharedPref(
+                                      key: 'tripRoundId',
+                                      value: widget.tripListBack[index].tripId
+                                          .toString());
 
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) {
-                                      return BlocProvider<ReservationCubit>(
-                                        create: (context) => ReservationCubit(), // Replace with your actual cubit creation logic
-                                        child: BusLayoutScreenBack(
+                                      return  BusLayoutScreenBack(
                                           to: widget.tripListBack[index].to ?? "",
                                           from: widget.tripListBack[index].from ?? "",
                                           triTypeId: widget.tripTypeId,
                                           cachCountSeats1: widget.countSeats,
                                           price: widget.price,
                                           user: widget.user,
-
-                                        ),
                                       );
                                     }),
                                   );

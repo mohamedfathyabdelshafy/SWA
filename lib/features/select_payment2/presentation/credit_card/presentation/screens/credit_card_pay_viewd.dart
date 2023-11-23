@@ -1,12 +1,18 @@
 import 'dart:convert';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/app_colors.dart';
+import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/media_query_values.dart';
-import '../../../../../core/local_cache_helper.dart';
-import '../../../../../core/utils/constants.dart';
-import '../../../electronic_wallet/presentation/cubit/eWallet_cubit.dart';
-import '../../../fawry2/presentation/PLOH/fawry_Reservation_cubit.dart';
+import 'package:swa/features/payment/fawry2/presentation/PLOH/fawry_Reservation_cubit.dart';
+import 'package:swa/features/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../../../../payment/electronic_wallet/presentation/cubit/eWallet_cubit.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+import '../../../PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
 import '../../model/card_model.dart';
 import 'credit_card.dart';
 
@@ -393,15 +399,15 @@ backgroundColor: Colors.black,
                                             :const SizedBox(),
                                         const Spacer(),
                                         BlocListener(
-                                          bloc: BlocProvider.of<FawryReservation>(context),
+                                          bloc: BlocProvider.of<ReservationCubit>(context),
                                           listener: (context, state) {
-                                            if(state is EWalletLoadingState){
+                                            if(state is LoadingCreditCardState){
                                               Constants.showLoadingDialog(context);
-                                            }else if (state is EWalletLoadedState) {
+                                            }else if (state is LoadedCreditCardState) {
                                               Constants.hideLoadingDialog(context);
-                                              Constants.showDefaultSnackBar(context: context, text: state.paymentMessageResponse.paymentMessage!.statusDescription);
-
-                                            }else if (state is EWalletErrorState) {
+                                              showWebViewDialog( context,state.reservationResponseCreditCard.message?.nextAction?.redirectUrl??"");
+                                              Constants.showDefaultSnackBar(context: context, text: state.reservationResponseCreditCard.message!.statusDescription!);
+                                            }else if (state is ErrorCreditCardState) {
                                               Constants.hideLoadingDialog(context);
                                               Constants.showDefaultSnackBar(context: context, text: state.error.toString());
                                             }
@@ -412,22 +418,35 @@ backgroundColor: Colors.black,
                                               if (formKey.currentState!.validate()) {
                                                 final tripOneId = CacheHelper.getDataToSharedPref(key: 'tripOneId');
                                                 final tripRoundId = CacheHelper.getDataToSharedPref(key: 'tripRoundId');
+                                                final selectedDayTo = CacheHelper.getDataToSharedPref(key: 'selectedDayTo');
+                                                final selectedDayFrom = CacheHelper.getDataToSharedPref(key: 'selectedDayFrom');
+                                                final toStationId = CacheHelper.getDataToSharedPref(key: 'toStationId');
+                                                final fromStationId = CacheHelper.getDataToSharedPref(key: 'fromStationId');
                                                 final seatIdsOneTrip = CacheHelper.getDataToSharedPref(key: 'countSeats')?.map((e) => int.tryParse(e) ?? 0).toList();
                                                 final seatIdsRoundTrip = CacheHelper.getDataToSharedPref(key: 'countSeats2')?.map((e) => int.tryParse(e) ?? 0).toList();
                                                 final price =CacheHelper.getDataToSharedPref(key: 'price');
-
                                                 print("tripOneId${tripOneId}==tripOneId${tripRoundId }=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price");
+                                                print("tripOneId${selectedDayTo}==tripOneId${selectedDayFrom }=====${toStationId}===${fromStationId}==$price");
+
+                                                print("tripOneId${tripOneId}==tripOneId${tripRoundId }=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price==");
+
+
+
 
                                                 // if(_user != null && formKey.currentState!.validate()) {
-                                                BlocProvider.of<FawryReservation>(context).addReservation(
-                                                  seatIdsOneTrip:seatIdsOneTrip ,
-                                                  custId: 4,
-                                                  oneTripID:tripOneId.toString(),
-                                                  paymentMethodID: 4,
-                                                  paymentTypeID: 68,
-                                                  seatIdsRoundTrip:seatIdsRoundTrip??[],
-                                                  roundTripID:tripRoundId.toString(),
-                                                  amount:price.toStringAsFixed(2).toString(),
+                                                BlocProvider.of<ReservationCubit>(context).addReservationCreditCard(
+                                                    seatIdsOneTrip:seatIdsOneTrip,
+                                                    custId: 4,
+                                                    oneTripID:tripOneId.toString(),
+                                                    paymentMethodID: 4,
+                                                    paymentTypeID: 68,
+                                                    seatIdsRoundTrip:seatIdsRoundTrip??[],
+                                                    roundTripID:tripRoundId??"",
+                                                    amount:price.toStringAsFixed(2).toString(),
+                                                    fromStationID:fromStationId,
+                                                    toStationId:toStationId,
+                                                    tripDateGo:selectedDayFrom,
+                                                    tripDateBack: selectedDayTo,
                                                   cvv:cvv.toString() ,
                                                   cardNumber: cards[widget.index].cardNumber!.toString().replaceAll(" ", "") ,
                                                   cardExpiryYear: cards[widget.index].month!.substring(0, 2).toString(),
@@ -575,6 +594,60 @@ class PayField extends StatelessWidget {
   }
 }
 
+Future<dynamic> showDoneConfirmationDialog(BuildContext context,
+    {required String message,
+      String? callbackTitle,
+      bool isError = false,
+      required Function callback}) async {
+  return CoolAlert.show(
+      barrierDismissible: false,
+      context: context,
+      confirmBtnText: "ok",
+      title:isError?'error':'success',
+      lottieAsset: isError ? 'assets/json/error.json' : 'assets/json/done.json',
+      type: isError ? CoolAlertType.error : CoolAlertType.success,
+      loopAnimation: false,
+      backgroundColor: isError ? Colors.red : Colors.white,
+      text: message,
+      onConfirmBtnTap: () {
+        callback();
+      });
+}
 
 
+void showWebViewDialog(BuildContext context, String? url) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('WebView Dialog'),
+        content: Container(
+          height: 300, // Adjust the height as needed
+          width: 300, // Adjust the width as needed
+          child: InkWell(
+            onTap: (){
+              launchUrl(Uri.parse(url??""),
+                  mode: LaunchMode.externalApplication);
+            },
+            child: Container(
+
+              child: Text(
+                "url",
+
+              ),
+            ),
+          )
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Close'),
+          ),
+        ],
+      );
+    },
+  );
+}
 

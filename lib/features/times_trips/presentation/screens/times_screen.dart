@@ -67,16 +67,14 @@ class _TimesScreenState extends State<TimesScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) {
-                                      return BlocProvider<ReservationCubit>(
-                                        create: (context) => ReservationCubit(), // Replace with your actual cubit creation logic
-                                        child: BusLayoutScreen(
+                                      return  BusLayoutScreen(
                                           to: widget.tripList[index].to ?? "",
                                           from: widget.tripList[index].from ?? "",
                                           triTypeId: widget.tripTypeId,
                                           tripListBack: widget.tripListBack,
                                           price:widget.tripList[index].price!,
                                           user: widget.user,
-                                        ),
+
                                       );
                                     }),
                                   );

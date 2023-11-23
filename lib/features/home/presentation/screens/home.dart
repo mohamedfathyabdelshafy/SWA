@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/api/api_consumer.dart';
+import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/media_query_values.dart';
@@ -33,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isTabbed = false;
   int currentIndex = 0;
   DateTime selectedDayFrom = DateTime.now();
-  DateTime selectedDayTo = DateTime.now();
+  DateTime selectedDayTo = DateTime.now().add(Duration(days: 1));
   List<CitiesStations>? _fromStations;
   List<CitiesStations>? _toStations;
   ///To be changed by selected station id
@@ -479,14 +480,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                 else {
                                   print("tripTypeIdBassant  $tripTypeId  ${_fromStationId.toString()}  ${ _toStationId.toString()}"
                                       "  ${selectedDayFrom.toString()}  ${ selectedDayTo.toString()}");
-
+                                 CacheHelper.setDataToSharedPref(key: 'fromStationId', value: _fromStationId.toString() );
+                                    CacheHelper.setDataToSharedPref(key: 'toStationId', value: _toStationId.toString() );
+                                   CacheHelper.setDataToSharedPref(key: 'selectedDayTo', value: selectedDayTo.toString() );
+                                  CacheHelper.setDataToSharedPref(key: 'selectedDayFrom', value: selectedDayFrom.toString() );
+                                  print("$_fromStationId===}$_toStationId===$selectedDayTo===$selectedDayFrom");
                                   BlocProvider.of<TimesTripsCubit>(context)
                                       .getTimes(
                                     tripType: tripTypeId,
                                     fromStationID: _fromStationId.toString(),
-                                    toStationID: "11",
-                                    dateGo: "11-09-2023",
-                                    dateBack: "11-10-2023",
+                                    toStationID: _toStationId.toString(),
+                                    dateGo: selectedDayFrom.toString(),
+                                    dateBack:selectedDayTo.toString(),
                                   );
                                 }
                               },

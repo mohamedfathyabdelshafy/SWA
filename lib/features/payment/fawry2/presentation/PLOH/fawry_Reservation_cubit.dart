@@ -16,7 +16,7 @@ class FawryReservation extends Cubit<FawryReservationState>{
     required int custId,
     required String oneTripID,
     String? roundTripID,
-    required int paymentMethodID,
+    int? paymentMethodID,
     required int paymentTypeID,
     required String amount,
     String? cardNumber,
@@ -25,32 +25,32 @@ class FawryReservation extends Cubit<FawryReservationState>{
     String? cvv,
     String? mobile
   })async {
-    try{
-      emit(FawryLoadingReservationState());
-      final res = await busLayoutRepo.addReservation(
-          custId: custId,
-          seatIdsRoundTrip: seatIdsRoundTrip,
-          roundTripID: roundTripID,
-          oneTripID: oneTripID,
-          paymentMethodID: 2,
-          paymentTypeID: 68,
-          seatIdsOneTrip: seatIdsOneTrip,
-          amount: amount,
-        cardExpiryMonth: cardExpiryMonth,
-        cardExpiryYear: cardExpiryYear,
-        cardNumber: cardNumber,
-        cvv: cvv,
-        mobile: mobile
-
-      );
-      if(res.message != null){
-        emit(FawryLoadedReservationState(paymentMessageResponse: res));
-      }else{
-        emit(FawryErrorReservationState(error: res.message! ));
-      }
-    }catch (e){
-      emit(FawryErrorReservationState(error: e.toString()));
-    }
+    // try{
+    //   emit(FawryLoadingReservationState());
+    //   final res = await busLayoutRepo.addReservation(
+    //       custId: custId,
+    //       seatIdsRoundTrip: seatIdsRoundTrip,
+    //       roundTripID: roundTripID,
+    //       oneTripID: oneTripID,
+    //       paymentMethodID: 2,
+    //       paymentTypeID: 68,
+    //       seatIdsOneTrip: seatIdsOneTrip,
+    //       amount: amount,
+    //     cardExpiryMonth: cardExpiryMonth,
+    //     cardExpiryYear: cardExpiryYear,
+    //     cardNumber: cardNumber,
+    //     cvv: cvv,
+    //     mobile: mobile
+    //
+    //   );
+    //   if(res.message != null){
+    //     emit(FawryLoadedReservationState(paymentMessageResponse: res));
+    //   }else{
+    //     emit(FawryErrorReservationState(error: res.message! ));
+    //   }
+    // }catch (e){
+    //   emit(FawryErrorReservationState(error: e.toString()));
+    // }
   }
 
 }

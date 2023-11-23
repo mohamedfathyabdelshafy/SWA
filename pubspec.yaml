@@ -11,6 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
+  webview_flutter: ^3.0.0
+  cool_alert: ^1.0.3
+  url_launcher: ^6.0.13
   flutter_svg: ^1.0.3
   sizer: ^2.0.15
   equatable:
@@ -35,6 +38,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/json/
 
   fonts:
     - family: bold
