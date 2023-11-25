@@ -6,17 +6,10 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
-import 'package:swa/features/payment/electronic_wallet/domain/use_cases/ewallet_use_case.dart';
-import 'package:swa/features/payment/electronic_wallet/presentation/cubit/eWallet_cubit.dart';
-import 'package:swa/features/payment/fawry/presentation/cubit/fawry_cubit.dart';
-import 'package:swa/features/payment/fawry/presentation/screens/fawry.dart';
-import 'package:swa/features/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
-import 'package:swa/features/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
-import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
-
+import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
+import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
 import '../../../../../core/local_cache_helper.dart';
-import '../../../payment/fawry2/presentation/PLOH/fawry_Reservation_cubit.dart';
 
 class ElectronicScreen2 extends StatefulWidget {
   const ElectronicScreen2({super.key});
@@ -64,8 +57,8 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
           child: Column(
             children: [
               const SizedBox(height: 10,),
-              const Row(
-                children:  [
+              Row(
+                children: const [
                   Text(
                     'Electronic wallet',
                     style: TextStyle(
@@ -207,7 +200,78 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                             Constants.showLoadingDialog(context);
                           }else if (state is LoadedElectronicWalletState) {
                             Constants.hideLoadingDialog(context);
-                            Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
+                            // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
+
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: const [
+                                      Icon(
+                                        Icons.check_circle,
+                                        color: Colors.green,
+                                      ),
+                                      Text("You will get a notification by applying your wallet \n In order to agree to pay"),
+                                    ],
+                                  ),
+                                  titleTextStyle: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 20
+                                  ),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text('Amount: '),
+                                          Text(price.toString())
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text('Reference Number: '),
+                                          Text(state.reservationResponseElectronicModel.message!.referenceNumber.toString())
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  actionsOverflowButtonSpacing: 20,
+                                  actions: [
+                                    ElevatedButton(
+                                        onPressed: (){
+                                          Navigator.pop(context);
+                                          Navigator.pushNamed(context, Routes.initialRoute);
+                                        },
+                                        child: Container(
+                                          // padding: const EdgeInsets.symmetric(horizontal: 20,vertical:20),
+                                          // margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
+                                          decoration:BoxDecoration(
+                                            // color: color ?? AppColors.darkRed,
+                                              borderRadius: BorderRadius.circular(100)
+                                          ) ,
+                                          child: Center(
+                                            child: Text(
+                                              'OK',
+                                              style: TextStyle(
+                                                  color: AppColors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 22
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                    ),
+                                  ],
+
+                                );
+                              },
+                            );
 
                           }else if (state is ErrorElectronicWalletState) {
                             Constants.hideLoadingDialog(context);

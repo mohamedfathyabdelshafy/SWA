@@ -1,10 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/Reservation_Response_fawry_model.dart';
-import 'package:swa/features/select_payment2/data/models/Reservation_Response_Credit_Card.dart';
-import 'package:swa/features/select_payment2/data/models/Reservation_Response_Electronic_model.dart';
-import 'package:swa/features/select_payment2/data/models/Reservation_response_MyWallet_model.dart';
-
-
+import 'package:swa/select_payment2/data/models/Reservation_Response_Credit_Card.dart';
+import 'package:swa/select_payment2/data/models/Reservation_Response_Electronic_model.dart';
+import 'package:swa/select_payment2/data/models/Reservation_response_MyWallet_model.dart';
 abstract class ReservationStates extends Equatable {
 }
 class LoadingMyWalletState extends ReservationStates{

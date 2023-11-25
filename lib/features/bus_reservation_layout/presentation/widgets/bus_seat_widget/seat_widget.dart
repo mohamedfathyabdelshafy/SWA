@@ -49,20 +49,27 @@ List<SeatDetails> selectedSeats = []; // Add this line
         height: widget.seatHeight,
         child: InkWell(
           onTap: () {
-            countSeats.add(widget.model.seat.seatBusID!);
-            print("widget.model.seat.seatBusID${countSeats}");
-            print("GestureDetector ${widget.model.seat.seatState}  ${widget.model.seat.seatBusID}");
+            if(widget.model.seat.seatState == SeatState.empty){
+              return;
+            }else {
+              countSeats.add(widget.model.seat.seatBusID!);
+              print("widget.model.seat.seatBusID${countSeats}");
+              print("GestureDetector ${widget.model.seat.seatState}  ${widget
+                  .model.seat.seatBusID}");
 
-            setState(() {
-              if (widget.model.seat.seatState == SeatState.selected) {
-                widget.model.seat.seatState = SeatState.available;
-                selectedSeats.remove(widget.model.seat);
-              } else {
-                widget.model.seat.seatState = SeatState.selected;
-                selectedSeats.add(widget.model.seat);
-              }
-              widget.onSeatStateChanged(rowI, colI, widget.model.seat.seatState!, widget.model.seat);
-            });
+              setState(() {
+                if (widget.model.seat.seatState == SeatState.selected) {
+                  widget.model.seat.seatState = SeatState.available;
+                  selectedSeats.remove(widget.model.seat);
+                } else {
+                  widget.model.seat.seatState = SeatState.selected;
+                  selectedSeats.add(widget.model.seat);
+                }
+                widget.onSeatStateChanged(
+                    rowI, colI, widget.model.seat.seatState!,
+                    widget.model.seat);
+              });
+            }
           },
           child: widget.model.seat.seatState != SeatState.empty
               ? Container(

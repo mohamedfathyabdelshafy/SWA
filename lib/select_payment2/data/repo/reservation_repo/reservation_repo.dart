@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:swa/features/select_payment2/data/models/Reservation_Response_Credit_Card.dart';
-import 'package:swa/features/select_payment2/data/models/Reservation_Response_Electronic_model.dart';
+
+import 'package:swa/select_payment2/data/models/Reservation_Response_Credit_Card.dart';
+import 'package:swa/select_payment2/data/models/Reservation_Response_Electronic_model.dart';
 
 import '../../../../../core/api/api_consumer.dart';
 import '../../../../../core/api/end_points.dart';
-import '../../../../payment/select_payment/data/models/payment_message_response_model.dart';
 import '../../models/Reservation_response_MyWallet_model.dart';
 
 class ReservationRepo{

@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:swa/core/utils/app_colors.dart';
-import 'package:swa/features/payment/electronic_wallet/presentation/screens/electronic_screens.dart';
-import 'package:swa/features/payment/fawry2/presentation/PLOH/fawry_Reservation_cubit.dart';
-import 'package:swa/features/select_payment2/presentation/credit_card/presentation/screens/credit_card_pay_viewd.dart';
-import 'package:swa/features/select_payment2/presentation/screens/fawry.dart';
-import 'package:swa/features/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
-import 'package:swa/features/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
-import 'package:swa/features/select_payment2/presentation/screens/electronic_screens.dart';
+import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
+import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
+import 'package:swa/select_payment2/presentation/credit_card/presentation/screens/credit_card_pay_viewd.dart';
+import 'package:swa/select_payment2/presentation/screens/electronic_screens.dart';
+import 'package:swa/select_payment2/presentation/screens/fawry.dart';
 
 import '../../../../../core/local_cache_helper.dart';
 import '../../../../../core/utils/constants.dart';
