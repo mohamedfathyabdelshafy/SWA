@@ -22,7 +22,9 @@ class BusLayoutScreenBack extends StatefulWidget {
       required this.triTypeId,
       required this.cachCountSeats1,
       required this.price,
-    this.user
+    this.user,
+    required this.tripId
+
   });
   String from;
   String to;
@@ -30,6 +32,7 @@ class BusLayoutScreenBack extends StatefulWidget {
   List<dynamic> cachCountSeats1;
   double price;
   User? user;
+  int tripId;
 
   @override
   State<BusLayoutScreenBack> createState() => _BusLayoutScreenBackState();
@@ -52,7 +55,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
     super.initState();
   }
   void get()async{
-    await busLayoutRepo.getBusSeatsData().then((value){
+    await busLayoutRepo.getBusSeatsData(tripId: widget.tripId).then((value){
       busSeatsModel =  value;
       if(busSeatsModel != null) {
         unavailable = busSeatsModel!.busSeatDetails!.totalSeats! - busSeatsModel!.busSeatDetails!.emptySeats!;

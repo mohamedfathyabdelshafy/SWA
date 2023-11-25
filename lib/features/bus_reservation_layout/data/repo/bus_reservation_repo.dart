@@ -12,11 +12,10 @@ import '../models/reservation_request_model.dart';
 class BusLayoutRepo {
   final ApiConsumer apiConsumer;
   BusLayoutRepo({required this.apiConsumer});
-  Future<BusSeatsModel> getBusSeatsData(
-
+  Future<BusSeatsModel> getBusSeatsData({ required int tripId}
   ) async {
     var response = await apiConsumer.get(
-    "http://testapi.swabus.com/api/Trip/GetSingleTripDetails?tripId=106"
+    "http://testapi.swabus.com/api/Trip/GetSingleTripDetails?tripId=$tripId"
     );
 
     log('ReservationData response ' + response.body);

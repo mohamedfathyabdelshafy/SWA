@@ -40,6 +40,8 @@ class _MyHomeState extends State<MyHome> {
   User? _user;
   String tripTypeId = "1";
   List <dynamic> tripListBack = [];
+  List <dynamic> tripList = [];
+
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 0)).then((_) async {
@@ -448,13 +450,16 @@ class _MyHomeState extends State<MyHome> {
                                 Constants.showLoadingDialog(context);
                               }else if(state is LoadedTimesTrips){
                                 tripListBack = state.timesTripsResponse.message!.tripListBack ?? [];
+                                tripList = state.timesTripsResponse.message!.tripList??[];
                                 Constants.hideLoadingDialog(context);
                                 Navigator.push(context, MaterialPageRoute(builder: (context){
+
                                   return TimesScreen(tripList:state.timesTripsResponse.message!.tripList!,tripTypeId: tripTypeId,
                                     tripListBack: state.timesTripsResponse.message!.tripListBack ?? [],
                                     user: _user,
                                   );
                                 }));
+
                               }else if(state is ErrorTimesTrips){
                                 Constants.hideLoadingDialog(context);
                                 Constants.showDefaultSnackBar(context: context, text: state.msg);
@@ -462,6 +467,7 @@ class _MyHomeState extends State<MyHome> {
                             },
                             child: InkWell(
                               onTap: (){
+                                print(tripList);
                                 if(_fromStationId ==null || _toStationId == null) {
                                   Constants.showDefaultSnackBar(context: context, text:"please select from city or to city" );
 
@@ -469,6 +475,10 @@ class _MyHomeState extends State<MyHome> {
                                   Constants.showDefaultSnackBar(context: context, text:"This journey has no return " );
 
                                 }
+                                // if(tripList.isEmpty ){
+                                //   Constants.showDefaultSnackBar(context: context, text:"No Trips in this day " );
+                                //
+                                // }
                                 else {
                                   print("tripTypeIdBassant  $tripTypeId  ${_fromStationId.toString()}  ${ _toStationId.toString()}"
                                       "  ${selectedDayFrom.toString()}  ${ selectedDayTo.toString()}");

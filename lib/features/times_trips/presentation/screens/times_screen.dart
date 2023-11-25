@@ -68,6 +68,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                     context,
                                     MaterialPageRoute(builder: (context) {
                                       return  BusLayoutScreen(
+                                        tripId: widget.tripList[index].tripId??0,
                                           to: widget.tripList[index].to ?? "",
                                           from: widget.tripList[index].from ?? "",
                                           triTypeId: widget.tripTypeId,

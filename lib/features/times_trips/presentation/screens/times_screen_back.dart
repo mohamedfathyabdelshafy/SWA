@@ -76,6 +76,7 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                     context,
                                     MaterialPageRoute(builder: (context) {
                                       return  BusLayoutScreenBack(
+                                        tripId: widget.tripListBack[index].tripId??0,
                                           to: widget.tripListBack[index].to ?? "",
                                           from: widget.tripListBack[index].from ?? "",
                                           triTypeId: widget.tripTypeId,

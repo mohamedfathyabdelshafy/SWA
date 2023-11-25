@@ -30,7 +30,8 @@ class BusLayoutScreen extends StatefulWidget {
       required this.triTypeId,
       this.tripListBack,
      required this.price,
-     this.user
+     this.user,
+     required this.tripId
    });
 String from;
 String to;
@@ -38,6 +39,7 @@ String triTypeId;
 List<TripListBack>? tripListBack;
 double price;
    User? user;
+   int tripId;
 
   @override
   State<BusLayoutScreen> createState() => _BusLayoutScreenState();
@@ -59,7 +61,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
    super.initState();
   }
   void get()async{
-    await busLayoutRepo.getBusSeatsData().then((value){
+    await busLayoutRepo.getBusSeatsData(tripId: widget.tripId).then((value){
       busSeatsModel =  value;
       if(busSeatsModel != null) {
         unavailable = busSeatsModel!.busSeatDetails!.totalSeats! - busSeatsModel!.busSeatDetails!.emptySeats!;
@@ -82,69 +84,69 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
         leading:iconBack(context),
         backgroundColor: Colors.black,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 45),
-              child: Text(
-                "Select seats",
-                style: TextStyle(color: AppColors.white,fontSize: 34,fontFamily:"regular"),
-              ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 45),
+            child: Text(
+              "Select seats",
+              style: TextStyle(color: AppColors.white,fontSize: 34,fontFamily:"regular"),
             ),
-            Container(
-              padding: const EdgeInsets.all(15),
-              margin: const EdgeInsets.symmetric(horizontal: 15),
-              decoration: BoxDecoration(
-                color: AppColors.primaryColor,
-                borderRadius: BorderRadius.circular(10)
-              ),
-              height: sizeHeight * 0.12,
-              width: double.infinity,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        height: sizeHeight * 0.07 ,
-                        width: 4,
-                        margin: const EdgeInsetsDirectional.symmetric(horizontal: 12),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          gradient: LinearGradient(
-                            begin: AlignmentDirectional.topStart,
-                            end: AlignmentDirectional.bottomStart,
-                            colors: [AppColors.white, AppColors.yellow2],
-                          ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(15),
+            margin: const EdgeInsets.symmetric(horizontal: 15),
+            decoration: BoxDecoration(
+              color: AppColors.primaryColor,
+              borderRadius: BorderRadius.circular(10)
+            ),
+            height: sizeHeight * 0.12,
+            width: double.infinity,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      height: sizeHeight * 0.07 ,
+                      width: 4,
+                      margin: const EdgeInsetsDirectional.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        gradient: LinearGradient(
+                          begin: AlignmentDirectional.topStart,
+                          end: AlignmentDirectional.bottomStart,
+                          colors: [AppColors.white, AppColors.yellow2],
                         ),
                       ),
-                      Column(
-                        children: [
-                          Text(
-                            widget.from,
-                            style:const TextStyle(
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          widget.from,
+                          style:const TextStyle(
+                            fontSize: 18,
+                            fontFamily: "bold",
+                            color: Colors.white
+                          ),
+                        ),
+                         Text(
+                          widget.to,
+                          style:const TextStyle(
                               fontSize: 18,
                               fontFamily: "bold",
                               color: Colors.white
-                            ),
                           ),
-                           Text(
-                            widget.to,
-                            style:const TextStyle(
-                                fontSize: 18,
-                                fontFamily: "bold",
-                                color: Colors.white
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )
-                ],
-              ),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+              ],
             ),
-            SizedBox(
+          ),
+          SingleChildScrollView(
+            child: SizedBox(
               height: sizeHeight * 0.60,
               child: ListView(
                 children: [Row(
@@ -209,106 +211,108 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                         ],
                       ),
                     ),
-                    Expanded(
-                      flex: 2,
-                      child: SizedBox(
-                        height: sizeHeight * 0.60,
-                        child: Stack(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 27),
-                              child: SizedBox(
-                                  width: 240,
-                                  height: sizeHeight * .23,
-                                  child: SvgPicture.asset(
-                                    'assets/images/bus_body.svg',
-                                    fit: BoxFit.fill,
-                                  )),
-                            ),
-                            Positioned(
-                              top: sizeHeight * .10 * .52,
-                              right: 51,
-                              bottom: 0,
-                              child: SizedBox(
-                                height: sizeHeight * .55,
-                                child: SeatLayoutWidget(
-                                  seatHeight: sizeHeight * .047,
-                                  onSeatStateChanged: (rowI, colI,
-                                      seatState, seat) {
-                                    if(seatState == SeatState.selected){
-                                      countSeats.add( busSeatsModel!.busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatBusID!);
-                                      print("countSeats${countSeats}");
-                                      countSeatesNum =countSeats.length;
-                                      CacheHelper.setDataToSharedPref(key: 'countSeats',
-                                      value: countSeats
-                                      );
+                    SingleChildScrollView(
+                      child: Expanded(
+                        flex: 2,
+                        child: SizedBox(
+                          height: sizeHeight * 0.60,
+                          child: Stack(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 27),
+                                child: SizedBox(
+                                    width: 240,
+                                    height: sizeHeight * .23,
+                                    child: SvgPicture.asset(
+                                      'assets/images/bus_body.svg',
+                                      fit: BoxFit.fill,
+                                    )),
+                              ),
+                              Positioned(
+                                top: sizeHeight * .10 * .52,
+                                right: 51,
+                                bottom: 0,
+                                child: SizedBox(
+                                  height: sizeHeight * .55,
+                                  child: SeatLayoutWidget(
+                                    seatHeight: sizeHeight * .047,
+                                    onSeatStateChanged: (rowI, colI,
+                                        seatState, seat) {
+                                      if(seatState == SeatState.selected){
+                                        countSeats.add( busSeatsModel!.busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatBusID!);
+                                        print("countSeats${countSeats}");
+                                        countSeatesNum =countSeats.length;
+                                        CacheHelper.setDataToSharedPref(key: 'countSeats',
+                                        value: countSeats
+                                        );
 
-                                      setState(() {
+                                        setState(() {
 
-                                      });
-                                    } else {
-                                      selectedSeats = null;
-                                      busSeatsModel
-                                          ?.busSeatDetails
-                                          ?.busDetails
-                                          ?.rowList?[rowI]
-                                          .seats[colI]
-                                          .seatState = SeatState.available;
-                                      countSeats.remove(busSeatsModel!.busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatBusID!);
-                                      countSeatesNum =countSeats.length;
-                                      setState(() {
+                                        });
+                                      } else {
+                                        selectedSeats = null;
+                                        busSeatsModel
+                                            ?.busSeatDetails
+                                            ?.busDetails
+                                            ?.rowList?[rowI]
+                                            .seats[colI]
+                                            .seatState = SeatState.available;
+                                        countSeats.remove(busSeatsModel!.busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatBusID!);
+                                        countSeatesNum =countSeats.length;
+                                        setState(() {
 
-                                      });
+                                        });
 
-                                    }
+                                      }
 
-                                    // if (seatState == SeatState.selected) {
-                                    //   selectedSeats = seat;
-                                    //   busSeatsModel?.busSeatDetails?.busDetails?.rowList
-                                    //       ?.forEach((element) {
-                                    //     element.seats.forEach((element) {
-                                    //       if (element.seatBusID != seat.seatBusID &&
-                                    //           element.seatState == SeatState.selected) {
-                                    //         print("kjbnljkblnkn");
-                                    //         element.seatState =
-                                    //             SeatState.available;
-                                    //       }
-                                    //     });
-                                    //   });
-                                    // } else {
-                                    //   selectedSeats = null;
-                                    //   busSeatsModel?.busSeatDetails?.busDetails?.rowList?[rowI]
-                                    //       .seats[colI]
-                                    //       .seatState =
-                                    //       SeatState.available;
-                                    //   // selectedSeats.remove(SeatNumber(rowI: rowI, colI: colI));
-                                    // }
-                                    // setState(() {});
-                                  },
-                                  stateModel:
-                                  SeatLayoutStateModel(
-                                    rows: busSeatsModel?.busSeatDetails?.busDetails?.rowList?.length ??0,
-                                    cols:busSeatsModel?.busSeatDetails?.busDetails?.totalColumn ??
-                                        5,
-                                    seatSvgSize: 35,
-                                    pathSelectedSeat:
-                                    'assets/images/unavailable_sets.svg',
-                                    pathDisabledSeat:
-                                    'assets/images/unavailable_seats.svg',
-                                    pathSoldSeat:
-                                    'assets/images/unavailable_seats.svg',
-                                    pathUnSelectedSeat:
-                                    'assets/images/unavailable_seats.svg',
-                                    currentSeats: List.generate(
-                                      busSeatsModel?.busSeatDetails?.busDetails?.rowList?.length ?? 0, // Number of rows based on totalSeats
-                                          (row) => busSeatsModel!.busSeatDetails!.busDetails!.rowList![row].seats,
+                                      // if (seatState == SeatState.selected) {
+                                      //   selectedSeats = seat;
+                                      //   busSeatsModel?.busSeatDetails?.busDetails?.rowList
+                                      //       ?.forEach((element) {
+                                      //     element.seats.forEach((element) {
+                                      //       if (element.seatBusID != seat.seatBusID &&
+                                      //           element.seatState == SeatState.selected) {
+                                      //         print("kjbnljkblnkn");
+                                      //         element.seatState =
+                                      //             SeatState.available;
+                                      //       }
+                                      //     });
+                                      //   });
+                                      // } else {
+                                      //   selectedSeats = null;
+                                      //   busSeatsModel?.busSeatDetails?.busDetails?.rowList?[rowI]
+                                      //       .seats[colI]
+                                      //       .seatState =
+                                      //       SeatState.available;
+                                      //   // selectedSeats.remove(SeatNumber(rowI: rowI, colI: colI));
+                                      // }
+                                      // setState(() {});
+                                    },
+                                    stateModel:
+                                    SeatLayoutStateModel(
+                                      rows: busSeatsModel?.busSeatDetails?.busDetails?.rowList?.length ??0,
+                                      cols:busSeatsModel?.busSeatDetails?.busDetails?.totalColumn ??
+                                          5,
+                                      seatSvgSize: 35,
+                                      pathSelectedSeat:
+                                      'assets/images/unavailable_sets.svg',
+                                      pathDisabledSeat:
+                                      'assets/images/unavailable_seats.svg',
+                                      pathSoldSeat:
+                                      'assets/images/unavailable_seats.svg',
+                                      pathUnSelectedSeat:
+                                      'assets/images/unavailable_seats.svg',
+                                      currentSeats: List.generate(
+                                        busSeatsModel?.busSeatDetails?.busDetails?.rowList?.length ?? 0, // Number of rows based on totalSeats
+                                            (row) => busSeatsModel!.busSeatDetails!.busDetails!.rowList![row].seats,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -316,73 +320,73 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                 ),]
               ),
             ),
-           // BlocListener(
-           //    bloc: BlocProvider.of<ReservationCubit>(context),
-           //    listener: (context,state){
-           //      if (state is GetReservationLoadingState) {
-           //        Constants.showLoadingDialog(context);
-           //      }else if(state is GetAdReservationLoadedState){
-           //        Constants.hideLoadingDialog(context);
-           //        Navigator.push(context, MaterialPageRoute(builder: (context){
-           //          return ReservationTicket();
-           //        }));
-           //      }else if(state is GetAdReservationErrorState){
-           //        Constants.hideLoadingDialog(context);
-           //        Constants.showDefaultSnackBar(context: context, text: state.mas!);
-           //      }
-           //    },
-            // child:
-              InkWell
-                (
-                  onTap: (){
-                    cachCountSeats = CacheHelper.getDataToSharedPref(key: 'countSeats')?.map((e) => int.tryParse(e) ?? 0).toList();
-                    print("countSeats2Bassant$cachCountSeats");
-                    if(widget.triTypeId == "1"){
+          ),
+         // BlocListener(
+         //    bloc: BlocProvider.of<ReservationCubit>(context),
+         //    listener: (context,state){
+         //      if (state is GetReservationLoadingState) {
+         //        Constants.showLoadingDialog(context);
+         //      }else if(state is GetAdReservationLoadedState){
+         //        Constants.hideLoadingDialog(context);
+         //        Navigator.push(context, MaterialPageRoute(builder: (context){
+         //          return ReservationTicket();
+         //        }));
+         //      }else if(state is GetAdReservationErrorState){
+         //        Constants.hideLoadingDialog(context);
+         //        Constants.showDefaultSnackBar(context: context, text: state.mas!);
+         //      }
+         //    },
+          // child:
+            InkWell
+              (
+                onTap: (){
+                  cachCountSeats = CacheHelper.getDataToSharedPref(key: 'countSeats')?.map((e) => int.tryParse(e) ?? 0).toList();
+                  print("countSeats2Bassant$cachCountSeats");
+                  if(widget.triTypeId == "1"){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return  // Replace with your actual cubit creation logic
+                         ReservationTicket(
+                          price: widget.price,
+                          countSeates: countSeats,
+                          busId: busSeatsModel!.busSeatDetails!.busDetails!.busID!,
+                          tripTypeId: "1",
+                          from: widget.from,
+                          to: widget.to,
+                          oneTripId: busSeatsModel!.busSeatDetails!.tripId!,
+                          countSeats1: cachCountSeats!,
+                          user: widget.user,
+
+
+                      );
+                    }),
+                  );
+                  }else if(widget.triTypeId == "2"){
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
-                        return  // Replace with your actual cubit creation logic
-                           ReservationTicket(
-                            price: widget.price,
-                            countSeates: countSeats,
-                            busId: busSeatsModel!.busSeatDetails!.busDetails!.busID!,
-                            tripTypeId: "1",
-                            from: widget.from,
-                            to: widget.to,
-                            oneTripId: busSeatsModel!.busSeatDetails!.tripId!,
-                            countSeats1: cachCountSeats!,
-                            user: widget.user,
+                        return BlocProvider<TimesTripsCubit>(
+                            create: (context) => TimesTripsCubit(), // Replace with your actual cubit creation logic
+                            child: TimesScreenBack(
+                              price: widget.price,
+                              countSeats: cachCountSeats!,
+                                tripListBack: widget.tripListBack!,
+                                tripTypeId: widget.triTypeId,
+                              user: widget.user,
 
-
+                            )
                         );
                       }),
                     );
-                    }else if(widget.triTypeId == "2"){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) {
-                          return BlocProvider<TimesTripsCubit>(
-                              create: (context) => TimesTripsCubit(), // Replace with your actual cubit creation logic
-                              child: TimesScreenBack(
-                                price: widget.price,
-                                countSeats: cachCountSeats!,
-                                  tripListBack: widget.tripListBack!,
-                                  tripTypeId: widget.triTypeId,
-                                user: widget.user,
-
-                              )
-                          );
-                        }),
-                      );
-                    }
-                  },
-                  child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40),
-                child: Constants.customButton(text: "Choose Seats",color: AppColors.primaryColor),
-              )),
-          // )
-          ],
-        ),
+                  }
+                },
+                child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Constants.customButton(text: "Choose Seats",color: AppColors.primaryColor),
+            )),
+        // )
+        ],
       ),
     );
   }

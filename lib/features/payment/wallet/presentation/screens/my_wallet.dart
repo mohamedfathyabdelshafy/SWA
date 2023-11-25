@@ -70,7 +70,7 @@ class MyCredit extends StatelessWidget {
                   ) ,
                   child: Center(
                     child: Text(
-                      "Save",
+                      "Add ",
                       style: TextStyle(
                           color: AppColors.white,
                           fontWeight: FontWeight.bold,
