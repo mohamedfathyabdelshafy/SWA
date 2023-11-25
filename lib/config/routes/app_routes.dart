@@ -11,6 +11,7 @@ import 'package:swa/features/forgot_password/presentation/screens/forgot_passwor
 import 'package:swa/features/home/presentation/cubit/home_cubit.dart';
 import 'package:swa/features/home/presentation/screens/home.dart';
 import 'package:swa/features/change_password/presentation/screens/new_password.dart';
+import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/presentation/PLOH/ticket_history_cubit.dart';
 import 'package:swa/features/payment/electronic_wallet/presentation/cubit/eWallet_cubit.dart';
 import 'package:swa/features/payment/electronic_wallet/presentation/screens/electronic_screens.dart';
 import 'package:swa/features/payment/fawry/presentation/cubit/fawry_cubit.dart';
@@ -53,6 +54,7 @@ class AppRoute {
             BlocProvider<LoginCubit>(create: (context) => sl<LoginCubit>(),),
             BlocProvider<HomeCubit>(create: (context) => sl<HomeCubit>(),),
             BlocProvider<TimesTripsCubit>(create: (context)=> sl<TimesTripsCubit>()),
+            BlocProvider<TicketCubit>(create: (context)=> sl<TicketCubit>()),
 
           ],
           child: const HomeScreen()

@@ -7,6 +7,7 @@ import 'package:swa/core/utils/app_strings.dart';
 import 'package:swa/features/change_password/change_password_injection_container.dart';
 import 'package:swa/features/forgot_password/forgot_password_injection_container.dart';
 import 'package:swa/features/home/home_injection_container.dart';
+import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/ticket_injection_container.dart';
 import 'package:swa/features/payment/electronic_wallet/eWallet_injection_container.dart';
 import 'package:swa/features/payment/fawry/fawry_injection_container.dart';
 import 'package:swa/features/sign_in/signin_injection_container.dart';
@@ -30,6 +31,7 @@ Future<void> main() async {
   await fawryDependencyInjectionInit();//For initializing Fawry
   await eWalletDependencyInjectionInit();//For initializing E-Wallet
 await TimesTripInjectionInit();
+await TicketHistoryInjectionInit();
   await CacheHelper.init();
 await CacheHelper.deleteDataToSharedPref(key: 'tripOneId');
   await CacheHelper.deleteDataToSharedPref(key: 'tripRoundId');

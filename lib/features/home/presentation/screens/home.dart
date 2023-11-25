@@ -1,26 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/app_colors.dart';
-import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/media_query_values.dart';
-import 'package:swa/core/widgets/custom_drop_down_list.dart';
-import 'package:swa/features/home/domain/entities/cities_stations.dart';
-import 'package:swa/features/home/domain/use_cases/get_to_stations_list_data.dart';
-import 'package:swa/features/home/presentation/cubit/home_cubit.dart';
-import 'package:swa/features/home/presentation/screens/select_from_city/select_from_city.dart';
-import 'package:swa/features/home/presentation/screens/select_to_city/select_to_city.dart';
 import 'package:swa/features/home/presentation/screens/tabs/account.dart';
 import 'package:swa/features/home/presentation/screens/tabs/my_home.dart';
-import 'package:swa/features/home/presentation/screens/tabs/ticket_history.dart';
+import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/presentation/screen/ticket_history.dart';
 import 'package:swa/features/payment/wallet/presentation/screens/my_wallet.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
-import 'package:swa/features/times_trips/presentation/screens/times_screen.dart';
-
-import '../../../times_trips/presentation/PLOH/times_trips_cubit.dart';
-import '../../../times_trips/presentation/PLOH/times_trips_states.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
