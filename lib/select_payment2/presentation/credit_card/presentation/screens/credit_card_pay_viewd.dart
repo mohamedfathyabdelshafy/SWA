@@ -842,38 +842,38 @@ Future<dynamic> showDoneConfirmationDialog(BuildContext context,
       });
 }
 
-void showWebViewDialog(BuildContext context, String? url) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('WebView Dialog'),
-        content: Container(
-            height: 300, // Adjust the height as needed
-            width: 300, // Adjust the width as needed
-            child: InkWell(
-              onTap: () {
-                launchUrl(Uri.parse(url ?? ""),
-                    mode: LaunchMode.externalApplication);
-              },
-              child: Container(
-                child: Text(
-                  "url",
-                ),
-              ),
-            )),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('Close'),
-          ),
-        ],
-      );
-    },
-  );
-}
+// void showWebViewDialog(BuildContext context, String? url) {
+//   showDialog(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return AlertDialog(
+//         title: Text('WebView Dialog'),
+//         content: Container(
+//             height: 300, // Adjust the height as needed
+//             width: 300, // Adjust the width as needed
+//             child: InkWell(
+//               onTap: () {
+//                 launchUrl(Uri.parse(url ?? ""),
+//                     mode: LaunchMode.externalApplication);
+//               },
+//               child: Container(
+//                 child: Text(
+//                   "url",
+//                 ),
+//               ),
+//             )),
+//         actions: [
+//           TextButton(
+//             onPressed: () {
+//               Navigator.of(context).pop();
+//             },
+//             child: Text('Close'),
+//           ),
+//         ],
+//       );
+//     },
+//   );
+// }
 
 class ConfirmPayWebView extends StatefulWidget {
   final String webViewLink;

@@ -22,7 +22,8 @@ class BusLayoutScreenBack extends StatefulWidget {
       required this.triTypeId,
       required this.cachCountSeats1,
       required this.price,
-    this.user
+    this.user,
+    required this.tripId
   });
   String from;
   String to;
@@ -30,7 +31,7 @@ class BusLayoutScreenBack extends StatefulWidget {
   List<dynamic> cachCountSeats1;
   double price;
   User? user;
-
+int tripId;
   @override
   State<BusLayoutScreenBack> createState() => _BusLayoutScreenBackState();
 }
@@ -52,7 +53,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
     super.initState();
   }
   void get()async{
-    await busLayoutRepo.getBusSeatsData().then((value){
+    await busLayoutRepo.getBusSeatsData(tripId: widget.tripId).then((value){
       busSeatsModel =  value;
       if(busSeatsModel != null) {
         unavailable = busSeatsModel!.busSeatDetails!.totalSeats! - busSeatsModel!.busSeatDetails!.emptySeats!;
@@ -74,18 +75,18 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
       appBar: AppBar(
         leading:iconBack(context),
         backgroundColor: Colors.black,
+        title:  Text(
+          "Select seats",
+          style: TextStyle(color: AppColors.white,fontSize: 34,fontFamily:"regular"),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 45),
-              child: Text(
-                "Select seats",
-                style: TextStyle(color: AppColors.white,fontSize: 34,fontFamily:"regular"),
-              ),
-            ),
+            SizedBox(height:sizeHeight *0.05,),
+
+
             Container(
               padding: const EdgeInsets.all(15),
               margin: const EdgeInsets.symmetric(horizontal: 15),
@@ -138,7 +139,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
               ),
             ),
             SizedBox(
-              height: sizeHeight * 0.60,
+              height: sizeHeight * 0.75,
               child: ListView(
                   children: [Row(
                     children: [
@@ -198,14 +199,61 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                                   fontFamily: "black",
                                   color: Colors.grey),
                             ),
+                            InkWell
+                              (
+                                onTap: (){
+                                  cachCountSeats2 = CacheHelper.getDataToSharedPref(key: 'countSeats2')?.map((e) => int.tryParse(e) ?? 0).toList();
+                                  print("countSeats3Bassant$cachCountSeats2");
+                                  print("countSeats4Bassant${widget.cachCountSeats1}");
 
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return  ReservationTicket(
+                                        price: widget.price,
+                                        countSeates: countSeats,
+                                        busId: busSeatsModel!.busSeatDetails!.busDetails!.busID!,
+                                        tripTypeId:"2",
+                                        from: widget.from,
+                                        to: widget.to,
+                                        oneTripId: busSeatsModel!.busSeatDetails!.tripId!,
+                                        countSeats1: widget.cachCountSeats1,
+                                        countSeats2: cachCountSeats2,
+                                        user: widget.user,
+
+                                      );
+                                    }),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    padding:EdgeInsets.all(5),
+                                    width: sizeHeight *0.3,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primaryColor,
+                                      borderRadius: BorderRadius.circular(20),
+
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "choose seats",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: "bold",
+                                            fontSize: 18
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ))
                           ],
                         ),
                       ),
                       Expanded(
                         flex: 2,
                         child: SizedBox(
-                          height: sizeHeight * 0.60,
+                          height: sizeHeight * 0.78,
                           child: Stack(
                             children: [
                               Padding(
@@ -220,7 +268,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                                     )),
                               ),
                               Positioned(
-                                top: sizeHeight * .10 * .52,
+                                top: sizeHeight * .10 * .45,
                                 right: 51,
                                 bottom: 0,
                                 child: SizedBox(
@@ -325,36 +373,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
             //      }
             //    },
             // child:
-            InkWell
-              (
-                onTap: (){
-                  cachCountSeats2 = CacheHelper.getDataToSharedPref(key: 'countSeats2')?.map((e) => int.tryParse(e) ?? 0).toList();
-                  print("countSeats3Bassant$cachCountSeats2");
-                  print("countSeats4Bassant${widget.cachCountSeats1}");
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) {
-                        return  ReservationTicket(
-                              price: widget.price,
-                              countSeates: countSeats,
-                              busId: busSeatsModel!.busSeatDetails!.busDetails!.busID!,
-                              tripTypeId:"2",
-                              from: widget.from,
-                              to: widget.to,
-                              oneTripId: busSeatsModel!.busSeatDetails!.tripId!,
-                              countSeats1: widget.cachCountSeats1,
-                              countSeats2: cachCountSeats2,
-                              user: widget.user,
-
-                        );
-                      }),
-                    );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40),
-                  child: Constants.customButton(text: "Choose Seats",color: AppColors.primaryColor),
-                )),
             // )
           ],
         ),

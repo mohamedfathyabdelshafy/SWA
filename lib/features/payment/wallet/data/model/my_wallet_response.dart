@@ -1,12 +1,12 @@
-class ResponseTicketHistoryModel {
-  ResponseTicketHistoryModel({
+class MyWalletResponse {
+  MyWalletResponse({
       this.status, 
       this.message, 
       this.balance, 
       this.object, 
       this.obj,});
 
-  ResponseTicketHistoryModel.fromJson(dynamic json) {
+  MyWalletResponse.fromJson(dynamic json) {
     status = json['status'];
     if (json['message'] != null) {
       message = [];
@@ -85,7 +85,7 @@ class Message {
     accessBusTime = json['AccessBusTime'];
     tripType = json['TripType'];
     statusName = json['StatusName'];
-    reservationDate = json['ReservationDate'] != null ? DateTime.parse(json["ReservationDate"]) : null;
+    reservationDate = json['ReservationDate'];
   }
   int? seatBusNo;
   int? reservationID;
@@ -93,7 +93,7 @@ class Message {
   String? lineName;
   int? busID;
   String? plateNo;
-  dynamic status;
+  int? status;
   String? from;
   String? to;
   String? creationDate;
@@ -102,13 +102,13 @@ class Message {
   int? seatNumberReserved;
   int? ticketNumber;
   int? tripNumber;
-  int? fromStationID;
-  int? toStationID;
-  String? tripDate;
+  dynamic fromStationID;
+  dynamic toStationID;
+  dynamic tripDate;
   String? accessBusTime;
   String? tripType;
   String? statusName;
-  DateTime? reservationDate;
+  String? reservationDate;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

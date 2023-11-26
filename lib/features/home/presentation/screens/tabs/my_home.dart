@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
@@ -9,6 +10,7 @@ import 'package:swa/core/widgets/custom_drop_down_list.dart';
 import 'package:swa/features/home/domain/entities/cities_stations.dart';
 import 'package:swa/features/home/domain/use_cases/get_to_stations_list_data.dart';
 import 'package:swa/features/home/presentation/cubit/home_cubit.dart';
+import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/my_account.dart';
 import 'package:swa/features/home/presentation/screens/select_from_city/select_from_city.dart';
 import 'package:swa/features/home/presentation/screens/select_to_city/select_to_city.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
@@ -31,7 +33,8 @@ class _MyHomeState extends State<MyHome> {
   DateTime selectedDayTo = DateTime.now().add(Duration(days: 1));
   List<CitiesStations>? _fromStations;
   List<CitiesStations>? _toStations;
-
+  List<dynamic> tripList = [];
+  List<dynamic> tripListBack = [];
   ///To be changed by selected station id
   int? _fromStationId;
   int? _toStationId;
@@ -41,7 +44,7 @@ class _MyHomeState extends State<MyHome> {
   ///Getting if user is logged in or not
   User? _user;
   String tripTypeId = "1";
-  List<dynamic> tripListBack = [];
+
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 0)).then((_) async {
@@ -66,7 +69,7 @@ class _MyHomeState extends State<MyHome> {
         child: Container(
           color: Colors.black,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Stack(
                 children: [
@@ -85,8 +88,68 @@ class _MyHomeState extends State<MyHome> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical:30),
+                          child:_user == null ?
+                            Row(
+                            children: [
+                             const Spacer(),
+                              InkWell(
+                                onTap: (){
+                                  Navigator.pushNamed(context, Routes.signInRoute);
+                                },
+                                child: Container(
+                                  height: sizeHeight * 0.05,
+                                  width: sizeWidth * 0.3,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: AppColors.darkPurple,
+
+                                  ),
+                                  child:const Center(
+                                    child:  Text(
+                                    "Login",
+                                    style: TextStyle(
+                                      color: Colors.white
+                                    ),
+                                ),
+                                  ),),
+                              ),
+                            ],
+                          ):
+                          Row(
+                            children: [
+                              const Spacer(),
+                              InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                                    return MyAccountScreen();
+                                  }));
+                                },
+                                child: Container(
+                                  height: sizeHeight * 0.05,
+                                  width: sizeWidth * 0.3,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: AppColors.darkPurple,
+
+                                  ),
+                                  child:const Center(
+                                    child:  Text(
+                                      "My Account",
+                                      style: TextStyle(
+                                          color: Colors.white
+                                      ),
+                                    ),
+                                  ),),
+                              ),
+                            ],
+                          ),
+
+                        ),
+
                         SizedBox(
-                          height: sizeHeight * 0.10,
+                          height: sizeHeight * 0.02,
                         ),
                         SvgPicture.asset(
                           "assets/images/Swa Logo.svg",
@@ -540,9 +603,7 @@ class _MyHomeState extends State<MyHome> {
                                   [];
                               Constants.hideLoadingDialog(context);
 
-                              if (state.timesTripsResponse.message!.tripList!
-                                      .length >
-                                  0) {
+                              if (state.timesTripsResponse.message!.tripList!.length > 0) {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   return TimesScreen(
@@ -574,11 +635,7 @@ class _MyHomeState extends State<MyHome> {
                                     context: context,
                                     text: "please select from city or to city");
                               }
-                              if (tripTypeId == "2" && tripListBack.isEmpty) {
-                                Constants.showDefaultSnackBar(
-                                    context: context,
-                                    text: "This journey has no return ");
-                              } else {
+                            else {
                                 print(
                                     "tripTypeIdBassant    ${_fromStationId.toString()}  ${_toStationId.toString()}"
                                     "  ${selectedDayFrom.toString()}  ${selectedDayTo.toString()}");
@@ -633,6 +690,7 @@ class _MyHomeState extends State<MyHome> {
           ),
         ),
       ),
+
     );
   }
 

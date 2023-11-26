@@ -82,6 +82,7 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                           cachCountSeats1: widget.countSeats,
                                           price: widget.price,
                                           user: widget.user,
+                                        tripId: widget.tripListBack[index].tripId!,
                                       );
                                     }),
                                   );

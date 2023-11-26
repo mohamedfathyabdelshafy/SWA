@@ -32,14 +32,16 @@ class BusLayoutScreen extends StatefulWidget {
       required this.triTypeId,
       this.tripListBack,
       required this.price,
-      this.user});
+      this.user,
+      required this.tripId
+      });
   String from;
   String to;
   String triTypeId;
   List<TripListBack>? tripListBack;
   double price;
   User? user;
-
+int tripId;
   @override
   State<BusLayoutScreen> createState() => _BusLayoutScreenState();
 }
@@ -61,7 +63,8 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
   }
 
   void get() async {
-    await busLayoutRepo.getBusSeatsData().then((value) {
+    print("ttttttttttttt${widget.tripId}");
+    await busLayoutRepo.getBusSeatsData(tripId: widget.tripId).then((value) {
       busSeatsModel = value;
       if (busSeatsModel != null) {
         unavailable = busSeatsModel!.busSeatDetails!.totalSeats! -
@@ -83,28 +86,27 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
       appBar: AppBar(
         leading: iconBack(context),
         backgroundColor: Colors.black,
+        title:  Text(
+          "Select seats",
+          style: TextStyle(
+              color: AppColors.white,
+              fontSize: 34,
+              fontFamily: "regular"),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 45),
-              child: Text(
-                "Select seats",
-                style: TextStyle(
-                    color: AppColors.white,
-                    fontSize: 34,
-                    fontFamily: "regular"),
-              ),
-            ),
+            SizedBox(height:sizeHeight *0.05,),
+
             Container(
               padding: const EdgeInsets.all(15),
               margin: const EdgeInsets.symmetric(horizontal: 15),
               decoration: BoxDecoration(
                   color: AppColors.primaryColor,
                   borderRadius: BorderRadius.circular(10)),
-              height: sizeHeight * 0.14,
+              height: sizeHeight * 0.12,
               width: double.infinity,
               child: Column(
                 children: [
@@ -147,8 +149,9 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                 ],
               ),
             ),
+            SizedBox(height: 10,),
             SizedBox(
-              height: sizeHeight * 0.60,
+              height: sizeHeight * 0.73,
               child: ListView(children: [
                 Row(
                   children: [
@@ -205,13 +208,91 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                 fontFamily: "black",
                                 color: Colors.grey),
                           ),
+                          SizedBox(height: 15,),
+                          InkWell(
+                              onTap: () {
+                                cachCountSeats =
+                                    CacheHelper.getDataToSharedPref(key: 'countSeats')
+                                        ?.map((e) => int.tryParse(e) ?? 0)
+                                        .toList();
+                                print("countSeats2Bassant$cachCountSeats");
+                                if(countSeats == null || countSeatesNum == null || busSeatsModel == null){
+                                  Constants.showDefaultSnackBar(context: context, text: "please select your seats");
+                                }
+                                else {
+                                  if (widget.triTypeId == "1") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            BlocProvider<LoginCubit>(
+                                                create: (context) => sl<LoginCubit>(),
+                                                child: ReservationTicket(
+                                                  price: widget.price,
+                                                  countSeates: countSeats,
+                                                  busId: busSeatsModel!
+                                                      .busSeatDetails!.busDetails!.busID!,
+                                                  tripTypeId: "1",
+                                                  from: widget.from,
+                                                  to: widget.to,
+                                                  oneTripId: busSeatsModel!.busSeatDetails!
+                                                      .tripId!,
+                                                  countSeats1: cachCountSeats!,
+                                                  user: widget.user,
+                                                )),
+                                      ),
+                                    );
+                                  } else if (widget.triTypeId == "2") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) {
+                                        return BlocProvider<TimesTripsCubit>(
+                                            create: (context) =>
+                                                TimesTripsCubit(),
+                                            // Replace with your actual cubit creation logic
+                                            child: TimesScreenBack(
+                                              price: widget.price,
+                                              countSeats: cachCountSeats!,
+                                              tripListBack: widget.tripListBack!,
+                                              tripTypeId: widget.triTypeId,
+                                              user: widget.user,
+                                            ));
+                                      }),
+                                    );
+                                  }
+                                }
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  padding:EdgeInsets.all(5),
+                                  width: sizeHeight *0.3,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primaryColor,
+                                    borderRadius: BorderRadius.circular(20),
+
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "choose seats",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: "bold",
+                                        fontSize: 18
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ),
+                          SizedBox(height: sizeHeight * 0.05,)
                         ],
                       ),
                     ),
                     Expanded(
                       flex: 2,
                       child: SizedBox(
-                        height: sizeHeight * 0.60,
+                        height: sizeHeight * 0.73,
                         child: Stack(
                           children: [
                             Padding(
@@ -226,11 +307,11 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                   )),
                             ),
                             Positioned(
-                              top: sizeHeight * .10 * .52,
+                              top: sizeHeight * .10 * .45,
                               right: 51,
                               bottom: 0,
                               child: SizedBox(
-                                height: sizeHeight * .55,
+                                height: sizeHeight * 0.7,
                                 child: SeatLayoutWidget(
                                   seatHeight: sizeHeight * .047,
                                   onSeatStateChanged:
@@ -340,56 +421,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
             //      }
             //    },
             // child:
-            InkWell(
-                onTap: () {
-                  cachCountSeats =
-                      CacheHelper.getDataToSharedPref(key: 'countSeats')
-                          ?.map((e) => int.tryParse(e) ?? 0)
-                          .toList();
-                  print("countSeats2Bassant$cachCountSeats");
-                  if (widget.triTypeId == "1") {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BlocProvider<LoginCubit>(
-                            create: (context) => sl<LoginCubit>(),
-                            child: ReservationTicket(
-                              price: widget.price,
-                              countSeates: countSeats,
-                              busId: busSeatsModel!
-                                  .busSeatDetails!.busDetails!.busID!,
-                              tripTypeId: "1",
-                              from: widget.from,
-                              to: widget.to,
-                              oneTripId: busSeatsModel!.busSeatDetails!.tripId!,
-                              countSeats1: cachCountSeats!,
-                              user: widget.user,
-                            )),
-                      ),
-                    );
-                  } else if (widget.triTypeId == "2") {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) {
-                        return BlocProvider<TimesTripsCubit>(
-                            create: (context) =>
-                                TimesTripsCubit(), // Replace with your actual cubit creation logic
-                            child: TimesScreenBack(
-                              price: widget.price,
-                              countSeats: cachCountSeats!,
-                              tripListBack: widget.tripListBack!,
-                              tripTypeId: widget.triTypeId,
-                              user: widget.user,
-                            ));
-                      }),
-                    );
-                  }
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40),
-                  child: Constants.customButton(
-                      text: "Choose Seats", color: AppColors.primaryColor),
-                )),
+
             // )
           ],
         ),

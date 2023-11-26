@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swa/core/utils/app_colors.dart';
+import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/media_query_values.dart';
-import 'package:swa/features/home/presentation/screens/tabs/account.dart';
 import 'package:swa/features/home/presentation/screens/tabs/my_home.dart';
+import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/presentation/PLOH/ticket_history_cubit.dart';
+import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/presentation/PLOH/ticket_history_state.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/presentation/screen/ticket_history.dart';
 import 'package:swa/features/payment/wallet/presentation/screens/my_wallet.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
@@ -50,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       body: screens[currentIndex],
-      bottomNavigationBar: SizedBox(
+      bottomNavigationBar:SizedBox(
         height: sizeHeight * 0.1,
         child: Theme(
           data: Theme.of(context).copyWith(
@@ -89,10 +91,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   label: "Ticket"),
               BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/images/Icon material-person-outline.svg",
+                icon: Icon(Icons.wallet,
                   color: currentIndex == 2
-                      ? AppColors.primaryColor
+                  ? AppColors.primaryColor
                       : AppColors.darkGrey,
                 ),
                 label: "My wallet",
@@ -112,6 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+
     );
   }
 

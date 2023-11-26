@@ -22,38 +22,41 @@ class SeatLayoutWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      ...List<int>.generate(stateModel.rows, (rowI) => rowI)
-          .map<Row>(
-            (rowI) => Row(
-              children: [
-                ...List<int>.generate(stateModel.cols, (colI) => colI)
-                    .map<SeatWidget>((colI) {
-                  print(
-                      "sdfhjg ${stateModel.currentSeats[rowI][colI].seatState}  ${stateModel.currentSeats[rowI][colI].seatBusID}");
-                  return SeatWidget(
-                    model: SeatModel(
-                      // seatState: stateModel.currentSeats[rowI][colI].getSeatState,
-                      seat: stateModel.currentSeats[rowI][colI],
-                      text:
-                          stateModel.currentSeats[rowI][colI].seatNo.toString(),
-                      rowI: rowI,
-                      colI: colI,
-                      seatSvgSize: stateModel.seatSvgSize,
-                      pathSelectedSeat: stateModel.pathSelectedSeat,
-                      pathDisabledSeat: stateModel.pathDisabledSeat,
-                      pathSoldSeat: stateModel.pathSoldSeat,
-                      pathUnSelectedSeat: stateModel.pathUnSelectedSeat,
-                      seatLayoutStateModel: stateModel,
-                    ),
-                    onSeatStateChanged: onSeatStateChanged,
-                    seatHeight: seatHeight,
-                  );
-                }).toList()
-              ],
-            ),
-          )
-          .toList()
-    ]);
+    return SizedBox(
+      height: MediaQuery.of(context).size.height *0.65,
+      child: Column(children: [
+        ...List<int>.generate(stateModel.rows, (rowI) => rowI)
+            .map<Row>(
+              (rowI) => Row(
+                children: [
+                  ...List<int>.generate(stateModel.cols, (colI) => colI)
+                      .map<SeatWidget>((colI) {
+                    print(
+                        "sdfhjg ${stateModel.currentSeats[rowI][colI].seatState}  ${stateModel.currentSeats[rowI][colI].seatBusID}");
+                    return SeatWidget(
+                      model: SeatModel(
+                        // seatState: stateModel.currentSeats[rowI][colI].getSeatState,
+                        seat: stateModel.currentSeats[rowI][colI],
+                        text:
+                            stateModel.currentSeats[rowI][colI].seatNo.toString(),
+                        rowI: rowI,
+                        colI: colI,
+                        seatSvgSize: stateModel.seatSvgSize,
+                        pathSelectedSeat: stateModel.pathSelectedSeat,
+                        pathDisabledSeat: stateModel.pathDisabledSeat,
+                        pathSoldSeat: stateModel.pathSoldSeat,
+                        pathUnSelectedSeat: stateModel.pathUnSelectedSeat,
+                        seatLayoutStateModel: stateModel,
+                      ),
+                      onSeatStateChanged: onSeatStateChanged,
+                      seatHeight: seatHeight,
+                    );
+                  }).toList()
+                ],
+              ),
+            )
+            .toList()
+      ]),
+    );
   }
 }

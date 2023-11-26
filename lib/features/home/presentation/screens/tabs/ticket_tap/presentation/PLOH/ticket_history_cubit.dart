@@ -21,7 +21,7 @@ class TicketCubit extends Cubit<TicketStates>{
         emit(ErrorTicketHistory(msg: "SomeThing went wrong please try again"));
 
     }catch(e){
-      emit(ErrorTicketHistory(msg: e.toString()));
+      print(e.toString());
     }
   }
 }

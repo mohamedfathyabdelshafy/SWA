@@ -30,7 +30,7 @@ TimesTripsRepo timesTripsRepo = TimesTripsRepo(apiConsumer: sl(),);
         emit(ErrorTimesTrips(msg: res.message.toString()));
       }
     }catch (e){
-      emit(ErrorTimesTrips(msg: e.toString()));
+      print(e.toString());
     }
   }
 }

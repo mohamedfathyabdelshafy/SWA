@@ -14,7 +14,7 @@ class BusLayoutCubit extends Cubit<ReservationState> {
       {required int tripId,
         SeatDetails? seat}) async {
     emit(BusSeatsLoadingState());
-    await busLayoutRepo.getBusSeatsData().then((value) {
+    await busLayoutRepo.getBusSeatsData(tripId: tripId).then((value) {
       busSeatsModel = value;
       if (seat != null) {
         busSeatsModel?.busSeatDetails?.busDetails?.rowList =
