@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
+import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/change_password/presentation/PLOH/change_password_cubit.dart';
+import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/change_password/presentation/screen/change_password.dart';
+import 'package:swa/features/sign_in/domain/entities/user.dart';
 
 class MyAccountScreen extends StatelessWidget {
-  const MyAccountScreen({super.key});
+   MyAccountScreen({super.key,required this.user});
+  User user;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,15 +46,23 @@ class MyAccountScreen extends StatelessWidget {
                 const SizedBox(height: 17,),
                 customText("Personal Info"),
                 const SizedBox(height: 17,),
-                customText("Change Password"),
+                InkWell(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                        return BlocProvider<ChangePasswordCubit>(
+                            create: (context) => ChangePasswordCubit(),
+                          child: ChangePassword(user: user,),
+                        );
+                      }));
+                    },
+                    child: customText("Change Password")),
 
                 const SizedBox(height: 17,),
                 InkWell(
                     onTap: (){
-                      Navigator.pushNamedAndRemoveUntil(
+                      Navigator.pushNamed(
                         context,
                         Routes.signInRoute,
-                            (Route<dynamic> route) => false,
                       );                    },
                     child: customText("Logout")),
               ],

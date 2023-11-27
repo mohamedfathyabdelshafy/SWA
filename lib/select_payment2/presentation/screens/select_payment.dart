@@ -175,7 +175,7 @@ class _SelectPaymentScreen2State extends State<SelectPaymentScreen2> {
               bloc: BlocProvider.of<ReservationCubit>(context),
               listener: (context,state){
                 if(state is LoadingMyWalletState){
-                  Constants.LoadingDialog(context);
+                  Constants.showLoadingDialog(context);
                 }if(state is LoadedMyWalletState){
                   Constants.hideLoadingDialog(context);
                   Constants.showDefaultSnackBar(context: context, text: state.reservationResponseMyWalletModel.message!);

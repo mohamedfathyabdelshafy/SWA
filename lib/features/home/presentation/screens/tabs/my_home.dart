@@ -49,6 +49,9 @@ class _MyHomeState extends State<MyHome> {
   void initState() {
     Future.delayed(const Duration(seconds: 0)).then((_) async {
       BlocProvider.of<LoginCubit>(context).getUserData();
+      setState(() {
+
+      });
     });
     super.initState();
   }
@@ -123,7 +126,7 @@ class _MyHomeState extends State<MyHome> {
                               InkWell(
                                 onTap: (){
                                   Navigator.push(context, MaterialPageRoute(builder: (context){
-                                    return MyAccountScreen();
+                                    return MyAccountScreen(user: _user!,);
                                   }));
                                 },
                                 child: Container(
@@ -201,6 +204,7 @@ class _MyHomeState extends State<MyHome> {
                             ),
                             InkWell(
                               onTap: () {
+                                print("userId=======${_user!.userId!}");
                                 tripTypeId = "2";
                                 setState(() {
                                   print("tripTypeId");
