@@ -31,12 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   User? _user;
   String tripTypeId = "1";
   List<dynamic> tripListBack = [];
-  List<Widget> screens = [
-    MyHome(),
-    TicketHistory(),
-    MyCredit(),
-    MyCredit(),
-  ];
+
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 0)).then((_) async {
@@ -49,7 +44,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     double sizeHeight = context.height;
     double sizeWidth = context.width;
-
+    List<Widget> screens = [
+      MyHome(),
+      TicketHistory(),
+      MyCredit(user: _user),
+      MyCredit(user: _user,),
+    ];
     return Scaffold(
       body: screens[currentIndex],
       bottomNavigationBar:SizedBox(

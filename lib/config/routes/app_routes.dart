@@ -102,8 +102,8 @@ class AppRoute {
       case Routes.createPasscode:
         return MaterialPageRoute(
             builder: (context) => CreatePasscodeFormScreen());
-      case Routes.myWalletScreen:
-        return MaterialPageRoute(builder: (context) => const MyCredit());
+      // case Routes.myWalletScreen:
+      //   return MaterialPageRoute(builder: (context) => const MyCredit());
       case Routes.fawryPaymentScreen:
         return MaterialPageRoute(
             builder: (context) => MultiBlocProvider(providers: [

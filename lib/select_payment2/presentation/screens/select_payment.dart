@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:swa/core/utils/app_colors.dart';
+import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
 import 'package:swa/select_payment2/presentation/credit_card/presentation/screens/credit_card_pay_viewd.dart';
@@ -12,7 +13,8 @@ import 'package:swa/select_payment2/presentation/screens/fawry.dart';
 import '../../../../../core/local_cache_helper.dart';
 import '../../../../../core/utils/constants.dart';
 class SelectPaymentScreen2 extends StatefulWidget {
-  const SelectPaymentScreen2({super.key,});
+   SelectPaymentScreen2({super.key,this.user});
+  User? user;
   @override
   State<SelectPaymentScreen2> createState() => _SelectPaymentScreen2State();
 }
@@ -76,7 +78,7 @@ class _SelectPaymentScreen2State extends State<SelectPaymentScreen2> {
                      MaterialPageRoute(
                        builder: (context) => BlocProvider<ReservationCubit>(
                            create: (context) => ReservationCubit(),
-                           child: CreditCardPayView(index:  1,)
+                           child: CreditCardPayView(index:  1,user:widget.user!)
                        ),
                      ),
                    );
@@ -112,6 +114,7 @@ class _SelectPaymentScreen2State extends State<SelectPaymentScreen2> {
                        builder: (context) => BlocProvider<ReservationCubit>(
                          create: (context) => ReservationCubit(),
                          child: FawryScreenReservation(
+                           user:widget.user!
                          ),
                        ),
                      ),
@@ -146,7 +149,7 @@ class _SelectPaymentScreen2State extends State<SelectPaymentScreen2> {
                      MaterialPageRoute(
                        builder: (context) => BlocProvider<ReservationCubit>(
                            create: (context) => ReservationCubit(),
-                           child:const ElectronicScreen2()
+                           child: ElectronicScreen2(user:widget.user!)
                        ),
                      ),
                    );              },
@@ -168,10 +171,11 @@ class _SelectPaymentScreen2State extends State<SelectPaymentScreen2> {
              ],
            ),
             const Spacer(),
-            BlocListener(
+            _switchValue? BlocListener(
               bloc: BlocProvider.of<ReservationCubit>(context),
               listener: (context,state){
                 if(state is LoadingMyWalletState){
+                  Constants.LoadingDialog(context);
                 }if(state is LoadedMyWalletState){
                   Constants.hideLoadingDialog(context);
                   Constants.showDefaultSnackBar(context: context, text: state.reservationResponseMyWalletModel.message!);
@@ -193,7 +197,7 @@ class _SelectPaymentScreen2State extends State<SelectPaymentScreen2> {
                   final price =CacheHelper.getDataToSharedPref(key: 'price');
                   print("tripOneId${tripOneId}==tripRoundId${tripRoundId }=====seatIdsOneTrip${seatIdsOneTrip}===seatIdsRoundTrip${seatIdsRoundTrip}==$price");
                   print("tripOneId${selectedDayTo}==tripOneId${selectedDayFrom }=====${toStationId}===${fromStationId}==$price");
-
+                   print("user${widget.user!.customerId}");
                   // if(_user != null && formKey.currentState!.validate()) {
                   BlocProvider.of<ReservationCubit>(context).addReservationMyWallet(
                     toStationId:toStationId ,
@@ -201,7 +205,7 @@ class _SelectPaymentScreen2State extends State<SelectPaymentScreen2> {
                     tripDateGo:selectedDayFrom ,
                     tripDateBack:selectedDayTo ,
                     seatIdsOneTrip:seatIdsOneTrip ,
-                    custId: 4,
+                    custId:widget.user!.customerId! ,
                     oneTripID:tripOneId.toString(),
                     paymentTypeID: 67,
                     seatIdsRoundTrip:seatIdsRoundTrip??[],
@@ -214,7 +218,7 @@ class _SelectPaymentScreen2State extends State<SelectPaymentScreen2> {
                   child: Constants.customButton(text: "payment",color:AppColors.primaryColor,),
                 ),
               ),
-            )
+            ):SizedBox()
           ],
 
         ),

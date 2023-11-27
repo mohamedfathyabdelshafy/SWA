@@ -671,7 +671,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                     MaterialPageRoute(
                       builder: (context) => BlocProvider<ReservationCubit>(
                         create: (context) => ReservationCubit(),
-                        child: SelectPaymentScreen2(),
+                        child: SelectPaymentScreen2(user: widget.user),
                       ),
                     ),
                   );

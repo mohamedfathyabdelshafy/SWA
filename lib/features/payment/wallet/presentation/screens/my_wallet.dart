@@ -3,12 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/payment/select_payment/presentation/screens/select_payment.dart';
+import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
 import 'package:swa/select_payment2/presentation/screens/select_payment.dart';
 
 class MyCredit extends StatelessWidget {
-  const MyCredit({super.key});
-
+   MyCredit({super.key, this.user});
+User? user;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

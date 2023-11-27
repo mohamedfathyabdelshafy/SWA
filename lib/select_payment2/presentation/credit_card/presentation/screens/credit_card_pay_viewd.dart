@@ -7,6 +7,7 @@ import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
 import 'package:swa/select_payment2/presentation/credit_card/presentation/navigation_helper.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -18,8 +19,9 @@ import 'credit_card.dart';
 
 class CreditCardPayView extends StatefulWidget {
   int index;
+  User user;
 
-  CreditCardPayView({super.key, required this.index});
+  CreditCardPayView({super.key, required this.index,required this.user});
 
   @override
   State<CreditCardPayView> createState() => _CreditCardPayViewState();
@@ -657,7 +659,7 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                       BlocProvider.of<ReservationCubit>(context)
                                           .addReservationCreditCard(
                                         seatIdsOneTrip: seatIdsOneTrip,
-                                        custId: 4,
+                                        custId: widget.user.customerId!,
                                         oneTripID: tripOneId.toString(),
                                         paymentMethodID: 4,
                                         paymentTypeID: 68,

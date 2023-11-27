@@ -12,8 +12,8 @@ import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuib
 import '../../../../../core/local_cache_helper.dart';
 
 class ElectronicScreen2 extends StatefulWidget {
-  const ElectronicScreen2({super.key});
-
+   ElectronicScreen2({super.key,required this.user});
+User user;
   @override
   State<ElectronicScreen2> createState() => _ElectronicScreen2State();
 }
@@ -298,7 +298,7 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                             // if(_user != null && formKey.currentState!.validate()) {
                             BlocProvider.of<ReservationCubit>(context).addReservationElectronicWallet(
                               seatIdsOneTrip:seatIdsOneTrip,
-                              custId: 4,
+                              custId: widget.user.customerId!,
                               oneTripID:tripOneId.toString(),
                               paymentMethodID: 5,
                               paymentTypeID: 68,

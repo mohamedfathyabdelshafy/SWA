@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/features/payment/electronic_wallet/presentation/cubit/eWallet_cubit.dart';
 import 'package:swa/features/payment/electronic_wallet/presentation/screens/electronic_screens.dart';
+import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/main.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
@@ -13,9 +14,11 @@ import 'package:swa/select_payment2/presentation/screens/fawry.dart';
 import '../../../fawry2/presentation/PLOH/fawry_Reservation_cubit.dart';
 
 class SelectPaymentScreen extends StatefulWidget {
-  const SelectPaymentScreen({
+   SelectPaymentScreen({
     super.key,
+    this.user
   });
+  User? user;
   @override
   State<SelectPaymentScreen> createState() => _SelectPaymentScreenState();
 }
@@ -64,6 +67,7 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
                     builder: (context) => BlocProvider<ReservationCubit>(
                         create: (context) => ReservationCubit(),
                         child: CreditCardPayView(
+                          user:widget.user! ,
                           index: 1,
                         )),
                   ),
@@ -100,7 +104,7 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
                   MaterialPageRoute(
                     builder: (context) => BlocProvider<ReservationCubit>(
                       create: (context) => ReservationCubit(),
-                      child: FawryScreenReservation(),
+                      child: FawryScreenReservation(user: widget.user!,),
                     ),
                   ),
                 );

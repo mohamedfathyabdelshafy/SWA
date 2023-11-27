@@ -64,10 +64,10 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
 
   void get() async {
     print("ttttttttttttt${widget.tripId}");
-    await busLayoutRepo.getBusSeatsData(tripId: widget.tripId).then((value) {
-      busSeatsModel = value;
+     busLayoutRepo.getBusSeatsData(tripId: widget.tripId).then((value)async {
+      busSeatsModel = await value;
       if (busSeatsModel != null) {
-        unavailable = busSeatsModel!.busSeatDetails!.totalSeats! -
+        unavailable = await busSeatsModel!.busSeatDetails!.totalSeats! -
             busSeatsModel!.busSeatDetails!.emptySeats!;
         setState(() {});
       }

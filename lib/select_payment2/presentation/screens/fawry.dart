@@ -14,7 +14,10 @@ import '../PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
 class FawryScreenReservation extends StatefulWidget {
   FawryScreenReservation({
     super.key,
+    required this.user
   });
+
+  User user;
 
   @override
   State<FawryScreenReservation> createState() => _FawryScreenReservationState();
@@ -24,7 +27,6 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
   final formKey = GlobalKey<FormState>();
   final price = CacheHelper.getDataToSharedPref(key: 'price');
 
-  User? _user;
   @override
   void initState() {
     // Future.delayed(const Duration(seconds: 0)).then((_) async {
@@ -290,7 +292,7 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                             BlocProvider.of<ReservationCubit>(context)
                                 .addReservationFawry(
                                     seatIdsOneTrip: seatIdsOneTrip,
-                                    custId: 4,
+                                    custId: widget.user.customerId!,
                                     oneTripID: tripOneId.toString(),
                                     paymentMethodID: 2,
                                     paymentTypeID: 68,
