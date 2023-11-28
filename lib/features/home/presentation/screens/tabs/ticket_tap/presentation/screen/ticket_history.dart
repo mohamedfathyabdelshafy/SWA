@@ -23,21 +23,20 @@ class _TicketHistoryState extends State<TicketHistory> {
   TicketRepo ticketRepo = TicketRepo(sl());
   @override
   void initState() {
-     get();
+    get();
     super.initState();
 
-  //   Future.delayed(const Duration(seconds: 0)).then((_) async {
-  //     BlocProvider.of<TicketCubit>(context).getTicketHistory(3);
-  //   });
-   }
-get ()async{
-     responseTicketHistoryModel = await ticketRepo.getTicketHistory(customerId: 3);
-     print("========${responseTicketHistoryModel!.message![1].price}");
-     setState(() {
+    //   Future.delayed(const Duration(seconds: 0)).then((_) async {
+    //     BlocProvider.of<TicketCubit>(context).getTicketHistory(3);
+    //   });
+  }
 
-     });
-}
-
+  get() async {
+    responseTicketHistoryModel =
+        await ticketRepo.getTicketHistory(customerId: 3);
+    print("========${responseTicketHistoryModel!.message![1].price}");
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,335 +51,338 @@ get ()async{
       body: SizedBox(
         height: sizeHeight * 0.9,
         child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 45),
-                child: Text(
-                  "Your Tickets",
-                  style: TextStyle(
-                      color: AppColors.white, fontSize: 34, fontFamily: "regular"),
-                ),
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 45),
+              child: Text(
+                "Your Tickets",
+                style: TextStyle(
+                    color: AppColors.white,
+                    fontSize: 34,
+                    fontFamily: "regular"),
               ),
-              Expanded(
-                child: ListView.builder(
+            ),
+            Expanded(
+              child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: responseTicketHistoryModel?.message?.length,
                   itemBuilder: (context, index) {
                     print(
                         "responseTicketHistoryModel?.message?.length${responseTicketHistoryModel?.message?.length}");
-                    final ticket =
-                        responseTicketHistoryModel?.message![index];
+                    final ticket = responseTicketHistoryModel?.message![index];
                     return SizedBox(
                       height: sizeHeight * 0.8,
-
                       child: Column(
                         children: [
-                        Expanded(
-                          child:
-                              Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 50),
-                                child: Container(
-                                  height: sizeHeight * 0.63,
-                                  width: sizeWidth * 0.8,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(color: Colors.white)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 15),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                                      children: [
-                                        const Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 15),
-                                          child: Text(
-                                            "Departure on",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontFamily: "regular",
-                                                fontSize: 12),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 50),
+                                  child: Container(
+                                    height: sizeHeight * 0.63,
+                                    width: sizeWidth * 0.8,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        border:
+                                            Border.all(color: Colors.white)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 15),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 15),
+                                            child: Text(
+                                              "Departure on",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: "regular",
+                                                  fontSize: 12),
+                                            ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 15, vertical: 10),
-                                          child: Row(
-                                            children: [
-                                               Text(
-                                               "#${ticket?.tripNumber?.toString()}"??"",
-                                                style: TextStyle(
-                                                    fontFamily: "regular",
-                                                    fontSize: 15,
-                                                    color: Colors.white),
-                                              ),
-                                              SizedBox(
-                                                width: sizeWidth * 0.05,
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.symmetric(
-                                                    horizontal: 10),
-                                                width: sizeWidth * 0.45,
-                                                decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(15),
-                                                    color: AppColors.primaryColor),
-                                                child:  Text(
-                                                  "Elite Business Class",
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 15, vertical: 5),
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  "#${ticket?.tripNumber?.toString()}" ??
+                                                      "",
                                                   style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 18,
-                                                    fontFamily: "regular",
+                                                      fontFamily: "regular",
+                                                      fontSize: 15,
+                                                      color: Colors.white),
+                                                ),
+                                                SizedBox(
+                                                  width: sizeWidth * 0.05,
+                                                ),
+                                                Container(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 10),
+                                                  width: sizeWidth * 0.45,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15),
+                                                      color: AppColors
+                                                          .primaryColor),
+                                                  child: Text(
+                                                    "Elite Business Class",
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18,
+                                                      fontFamily: "regular",
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 25, vertical: 5),
-                                          child: Row(
-                                            children: [
-                                              SvgPicture.asset(
-                                                  "assets/images/Icon awesome-bus-alt.svg"),
-                                              SizedBox(
-                                                width: sizeWidth * 0.05,
-                                              ),
-                                               Text(
-                                                 DateFormat('d/M/y, hh:mm a').format(ticket?.reservationDate??DateTime.now()),
-                                                style: TextStyle(
-                                                    fontFamily: "regular",
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 25, vertical: 5),
+                                            child: Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                    "assets/images/Icon awesome-bus-alt.svg"),
+                                                SizedBox(
+                                                  width: sizeWidth * 0.05,
+                                                ),
+                                                Text(
+                                                  DateFormat('d/M/y, hh:mm a')
+                                                      .format(ticket
+                                                              ?.reservationDate ??
+                                                          DateTime.now()),
+                                                  style: TextStyle(
+                                                      fontFamily: "regular",
+                                                      fontSize: 15,
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: sizeWidth * 0.9,
+                                            child: const Divider(
+                                              thickness: 1,
+                                              color: Colors.white,
+                                            ),
+                                            //  child:const  Text(
+                                            //   "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ",
+                                            //   style: TextStyle(
+                                            //     color: Colors.white,
+                                            //     fontSize: 20,
+                                            //     fontFamily: "regular"
+                                            //   ),
+                                            // ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 15),
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  height: sizeHeight * 0.018,
+                                                  width: sizeHeight * 0.018,
+                                                  decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: Colors.transparent,
+                                                      border: Border.all(
+                                                          color: Colors.white)),
+                                                ),
+                                                SizedBox(
+                                                  width: sizeWidth * 0.02,
+                                                ),
+                                                TextWidget(
+                                                  text: "From",
+                                                  fontSize: 15,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 5),
+                                                    child: TextWidget(
+                                                      text: ticket?.from ?? "",
+                                                      fontSize: 18,
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 18),
+                                            child: Row(
+                                              children: [
+                                                ContainerWidget(
+                                                  color: AppColors.primaryColor,
+                                                  height: 0.013,
+                                                ),
+                                                SizedBox(
+                                                  width: sizeWidth * 0.005,
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 12),
+                                                  child: TextWidget(
+                                                    text: "",
                                                     fontSize: 15,
-                                                    color: Colors.white),
-                                              )
-                                            ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          width: sizeWidth * 0.9,
-                                          child: const Divider(
-                                            thickness: 1,
-                                            color: Colors.white,
+                                          SizedBox(
+                                            height: sizeHeight * 0.015,
                                           ),
-                                          //  child:const  Text(
-                                          //   "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ",
-                                          //   style: TextStyle(
-                                          //     color: Colors.white,
-                                          //     fontSize: 20,
-                                          //     fontFamily: "regular"
-                                          //   ),
-                                          // ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.symmetric(horizontal: 15),
-                                          child: Row(
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 18),
+                                            child: Row(
+                                              children: [
+                                                ContainerWidget(
+                                                  color: AppColors.primaryColor,
+                                                  height: 0.013,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: sizeHeight * 0.015,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 15),
+                                            child: Row(
+                                              children: [
+                                                ContainerWidget(
+                                                  color: AppColors.primaryColor,
+                                                  height: 0.025,
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 12),
+                                                  child: TextWidget(
+                                                    text: "To",
+                                                    fontSize: 15,
+                                                    color:
+                                                        AppColors.primaryColor,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          Row(
                                             children: [
-                                              Container(
-                                                height: sizeHeight * 0.018,
-                                                width: sizeHeight * 0.018,
-                                                decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: Colors.transparent,
-                                                    border:
-                                                        Border.all(color: Colors.white)),
-                                              ),
-                                              SizedBox(
-                                                width: sizeWidth * 0.02,
-                                              ),
-                                              TextWidget(
-                                                text: "From",
-                                                fontSize: 15,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.symmetric(horizontal: 18),
-                                          child: Row(
-                                            children: [
-                                              ContainerWidget(
-                                                color: Colors.transparent,
-                                                height: 0.01,
-                                              ),
                                               Padding(
-                                                padding: const EdgeInsets.symmetric(
-                                                    horizontal: 15),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 15),
                                                 child: TextWidget(
-                                                  text: ticket?.from??"",
+                                                  text: ticket?.to ?? "",
                                                   fontSize: 18,
                                                 ),
                                               )
                                             ],
                                           ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.symmetric(horizontal: 18),
-                                          child: Row(
-                                            children: [
-                                              ContainerWidget(
-                                                color: AppColors.primaryColor,
-                                                height: 0.013,
-                                              ),
-                                              SizedBox(
-                                                width: sizeWidth * 0.005,
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.symmetric(
-                                                    horizontal: 12),
-                                                child: TextWidget(
-                                                  text: "",
-                                                  fontSize: 15,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: sizeHeight * 0.015,
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.symmetric(horizontal: 18),
-                                          child: Row(
-                                            children: [
-                                              ContainerWidget(
-                                                color: AppColors.primaryColor,
-                                                height: 0.013,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: sizeHeight * 0.015,
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.symmetric(horizontal: 15),
-                                          child: Row(
-                                            children: [
-                                              ContainerWidget(
-                                                color: AppColors.primaryColor,
-                                                height: 0.025,
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.symmetric(
-                                                    horizontal: 12),
-                                                child: TextWidget(
-                                                  text: "To",
-                                                  fontSize: 15,
-                                                  color: AppColors.primaryColor,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 40),
-                                              child: TextWidget(
-                                                text: ticket?.to??"",
-                                                fontSize: 18,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 42),
-                                              child: TextWidget(
-                                                text: "",
-                                                fontSize: 15,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        Container(
-                                          height: sizeHeight * 0.05,
-                                          child: ListView.builder(
-                                              scrollDirection: Axis.horizontal,
-                                              itemCount: 0,
-                                              itemBuilder: (context, index) {
-                                                return Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Row(
-                                                    children: [
-                                                      Container(
-                                                        child: Stack(
-                                                          children: [
-                                                            SvgPicture.asset(
-                                                              "assets/images/unavailable_seats.svg",
-                                                              color: AppColors.primaryColor,
-                                                            )
-                                                          ],
+                                          Container(
+                                            height: sizeHeight * 0.05,
+                                            child: ListView.builder(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount: 0,
+                                                itemBuilder: (context, index) {
+                                                  return Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Row(
+                                                      children: [
+                                                        Container(
+                                                          child: Stack(
+                                                            children: [
+                                                              SvgPicture.asset(
+                                                                "assets/images/unavailable_seats.svg",
+                                                                color: AppColors
+                                                                    .primaryColor,
+                                                              )
+                                                            ],
+                                                          ),
                                                         ),
-                                                      ),
-                                                      //SizedBox(width: 5,)
-                                                    ],
-                                                  ),
-                                                );
-                                              }),
-                                        ),
-                                        SizedBox(
-                                          width: sizeWidth * 0.9,
+                                                        //SizedBox(width: 5,)
+                                                      ],
+                                                    ),
+                                                  );
+                                                }),
+                                          ),
+                                          SizedBox(
+                                            width: sizeWidth * 0.9,
 
-                                          child: const Divider(
-                                            thickness: 1,
-                                            color: Colors.white,
+                                            child: const Divider(
+                                              thickness: 1,
+                                              color: Colors.white,
+                                            ),
+                                            //  child:const  Text(
+                                            //   "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ",
+                                            //   style: TextStyle(
+                                            //     color: Colors.white,
+                                            //     fontSize: 20,
+                                            //     fontFamily: "regular"
+                                            //   ),
+                                            // ),
                                           ),
-                                          //  child:const  Text(
-                                          //   "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ",
-                                          //   style: TextStyle(
-                                          //     color: Colors.white,
-                                          //     fontSize: 20,
-                                          //     fontFamily: "regular"
-                                          //   ),
-                                          // ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(5),
-                                          child: Row(
-                                            children: [
-                                              Spacer(),
-                                              Text(
-                                                ("EGP ${ticket?.price??0}").toString(),
-                                                style: TextStyle(
-                                                    color: AppColors.primaryColor,
-                                                    fontFamily: "bold",
-                                                    fontSize: 25),
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      ],
+                                          Padding(
+                                            padding: const EdgeInsets.all(5),
+                                            child: Row(
+                                              children: [
+                                                Spacer(),
+                                                Text(
+                                                  ("EGP ${ticket?.price ?? 0}")
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      color: AppColors
+                                                          .primaryColor,
+                                                      fontFamily: "bold",
+                                                      fontSize: 25),
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-
-                            ],
-
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                  ),
+                        ],
+                      ),
                     );
-
-
-    }
-                ),
-              ),
-            ],
-          ),
+                  }),
+            ),
+          ],
+        ),
       ),
-
     );
   }
 }

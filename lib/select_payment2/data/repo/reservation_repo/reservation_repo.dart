@@ -103,7 +103,7 @@ class ReservationRepo {
     required String amount,
   }) async {
     final msg = jsonEncode({
-      "CustId": custId,
+      "CustomerId": custId,
       "Amount": amount,
     });
 

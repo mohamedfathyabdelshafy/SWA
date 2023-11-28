@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:swa/features/payment/fawry/presentation/cubit/fawry_cubit.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
+import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
 
 class FawryScreen extends StatefulWidget {
   FawryScreen({
@@ -153,48 +155,135 @@ class _FawryScreenState extends State<FawryScreen> {
                               ],
                             ),
                             const Spacer(),
-                            //  BlocListener(
-                            // bloc: BlocProvider.of<FawryCubit>(context),
-                            // listener: (context, state) {
-                            //   if(state is FawryLoadingState){
-                            //     Constants.showLoadingDialog(context);
-                            //   }else if (state is FawryLoadedState) {
-                            //     Constants.hideLoadingDialog(context);
-                            //     Constants.showDefaultSnackBar(context: context, text: state.paymentMessageResponse.paymentMessage!.statusDescription);
-                            //     Future.delayed(const Duration(seconds: 5), () {
-                            //       Navigator.pushReplacementNamed(context, Routes.initialRoute);
-                            //     });
-                            //   }else if (state is FawryErrorState) {
-                            //     Constants.hideLoadingDialog(context);
-                            //     Constants.showDefaultSnackBar(context: context, text: state.error.toString());
-                            //   }
-                            // },
-                            //child:
-                            InkWell(
-                              onTap: () {
-                                if (_user != null &&
-                                    formKey.currentState!.validate()) {
-                                  double amount =
-                                      double.parse(amountController.text);
-
-                                  BlocProvider.of<ReservationCubit>(context)
-                                      .fawrycharge(
-                                          customerid: _user!.customerId!,
-                                          amount: amount
-                                              .toStringAsFixed(2)
-                                              .toString());
+                            BlocListener(
+                              bloc: BlocProvider.of<ReservationCubit>(context),
+                              listener: (context, state) {
+                                if (state is LoadingElectronicWalletState) {
+                                  Constants.showLoadingDialog(context);
+                                } else if (state
+                                    is LoadedElectronicWalletState) {
+                                  Constants.hideLoadingDialog(context);
+                                  // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
+                                  showDoneConfirmationDialog(context,
+                                      isError: false, callback: () {
+                                    Navigator.pop(context);
+                                    Navigator.pushNamed(
+                                        context, Routes.initialRoute);
+                                  },
+                                      body: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text(
+                                                'Amount: ',
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              Text(amountController.text
+                                                  .toString())
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text(
+                                                'Reference Number: ',
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              Expanded(
+                                                child: Row(
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () async {
+                                                        Constants
+                                                            .showDefaultSnackBar(
+                                                                context:
+                                                                    context,
+                                                                text:
+                                                                    'Reference Number copied');
+                                                        await Clipboard.setData(
+                                                            ClipboardData(
+                                                                text: state
+                                                                    .reservationResponseElectronicModel
+                                                                    .message!
+                                                                    .referenceNumber
+                                                                    .toString()));
+                                                      },
+                                                      child: Container(
+                                                          width: 15,
+                                                          height: 15,
+                                                          child: Icon(
+                                                            Icons.copy_outlined,
+                                                            size: 14,
+                                                          )),
+                                                    ),
+                                                    Expanded(
+                                                      child: Text(
+                                                        state
+                                                            .reservationResponseElectronicModel
+                                                            .message!
+                                                            .referenceNumber
+                                                            .toString(),
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                      message:
+                                          "You will get a notification by applying your wallet \n In order to agree to pay");
+                                } else if (state
+                                    is ErrorElectronicWalletState) {
+                                  Constants.hideLoadingDialog(context);
+                                  Constants.showDefaultSnackBar(
+                                      context: context,
+                                      text: state.error.toString());
                                 }
                               },
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 30),
-                                child: Constants.customButton(
-                                  text: "Chargee",
-                                  color: AppColors.primaryColor,
+                              child: InkWell(
+                                onTap: () {
+                                  if (_user != null &&
+                                      formKey.currentState!.validate()) {
+                                    double amount =
+                                        double.parse(amountController.text);
+
+                                    BlocProvider.of<ReservationCubit>(context)
+                                        .fawrycharge(
+                                            customerid: _user!.customerId!,
+                                            amount: amount
+                                                .toStringAsFixed(2)
+                                                .toString());
+                                  }
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 30),
+                                  child: Constants.customButton(
+                                    text: "Chargee",
+                                    color: AppColors.primaryColor,
+                                  ),
                                 ),
                               ),
-                            ),
-                            //)
+                            )
                           ],
                         ),
                       ),
@@ -209,6 +298,28 @@ class _FawryScreenState extends State<FawryScreen> {
         ),
       ),
     );
+  }
+
+  Future<dynamic> showDoneConfirmationDialog(BuildContext context,
+      {required String message,
+      bool isError = false,
+      Widget? body,
+      required Function callback}) async {
+    return CoolAlert.show(
+        barrierDismissible: true,
+        context: context,
+        confirmBtnText: "ok",
+        title: isError ? 'error' : 'success',
+        lottieAsset:
+            isError ? 'assets/json/error.json' : 'assets/json/done.json',
+        type: isError ? CoolAlertType.error : CoolAlertType.success,
+        loopAnimation: false,
+        backgroundColor: isError ? Colors.red : Colors.white,
+        text: message,
+        widget: body,
+        onConfirmBtnTap: () {
+          callback();
+        });
   }
 }
 
