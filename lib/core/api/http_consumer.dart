@@ -126,4 +126,28 @@ class HttpConsumer implements ApiConsumer {
     //   return <String, String>{};
     // }
   }
+
+  @override
+  Future put(String path, {body, Map<String, dynamic>? queryParameters})async {
+    Map<String, String> headers = {
+      "APIKey": "546548dwfdfsd3f4sdfhgat52",
+    };
+
+    //Map<String, dynamic>
+    try {
+      final response = await client.put(
+        Uri.parse(path),
+        body: body,
+        headers: headers,
+        // headers: await _getToken()
+      );
+      return _handleResponseErrors(response);
+    } on TimeoutException catch (error) {
+      throw FetchDataException(error.toString());
+    } on Exception catch (error) {
+      throw NoInternetConnectionException(error.toString());
+    }
+  }
+
+
 }

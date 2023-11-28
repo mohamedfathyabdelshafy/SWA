@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swa/core/utils/app_colors.dart';
-import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/features/home/presentation/screens/tabs/my_home.dart';
-import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/presentation/PLOH/ticket_history_cubit.dart';
-import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/presentation/PLOH/ticket_history_state.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/presentation/screen/ticket_history.dart';
 import 'package:swa/features/payment/wallet/presentation/screens/my_wallet.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
@@ -23,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isTabbed = false;
   int currentIndex = 0;
   DateTime selectedDayFrom = DateTime.now();
-  DateTime selectedDayTo = DateTime.now().add(Duration(days: 1));
+  DateTime selectedDayTo = DateTime.now().add(const Duration(days: 1));
 
   ///To be changed by selected station id
 
@@ -43,14 +40,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     double sizeHeight = context.height;
-    double sizeWidth = context.width;
     List<Widget> screens = [
-      MyHome(),
+      const MyHome(),
       TicketHistory(),
       MyCredit(user: _user),
-      MyCredit(
-        user: _user,
-      ),
     ];
     return Scaffold(
       body: screens[currentIndex],

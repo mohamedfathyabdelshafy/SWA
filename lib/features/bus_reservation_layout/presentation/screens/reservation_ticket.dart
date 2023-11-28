@@ -90,7 +90,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 50),
                     child: Container(
-                      height: sizeHeight * 0.65,
+                      height: sizeHeight * 0.60,
                       width: sizeWidth * 0.9,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
@@ -309,7 +309,9 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                 )
                               ],
                             ),
-                            Expanded(
+
+                            Container(
+                              height: sizeHeight * 0.06,
                               child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: widget.countSeats1.length,
@@ -333,6 +335,13 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                       ),
                                     );
                                   }),
+                            ),
+                            SizedBox(
+                              width: sizeWidth * 0.5,
+                              child: Divider(
+                                thickness: 1,
+                                color: Colors.white,
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(5),

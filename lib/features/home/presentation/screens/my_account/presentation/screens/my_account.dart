@@ -5,6 +5,8 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/change_password/presentation/PLOH/change_password_cubit.dart';
 import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/change_password/presentation/screen/change_password.dart';
+import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/personal_info/presentation/PLOH/personal_info_cubit.dart';
+import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/personal_info/presentation/screen/personal_info.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 
 class MyAccountScreen extends StatelessWidget {
@@ -12,6 +14,8 @@ class MyAccountScreen extends StatelessWidget {
   User user;
   @override
   Widget build(BuildContext context) {
+    print("_user${user?.customerId??0}");
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -44,7 +48,15 @@ class MyAccountScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 17,),
-                customText("Personal Info"),
+                InkWell(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                        return BlocProvider<PersonalInfoCubit>(
+                            create: (context) =>PersonalInfoCubit(),
+                            child: PersonalInfoScreen(user: user,));
+                      }));
+                    },
+                    child: customText("Personal Info")),
                 const SizedBox(height: 17,),
                 InkWell(
                     onTap: (){

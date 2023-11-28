@@ -269,13 +269,13 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                                   )),
                             ),
                             Positioned(
-                              top: sizeHeight * .10 * .45,
+                              top: sizeHeight * .23 - 80,
                               right: 51,
                               bottom: 0,
                               child: SizedBox(
                                 height: sizeHeight * .55,
                                 child: SeatLayoutWidget(
-                                  seatHeight: sizeHeight * .047,
+                                  seatHeight: sizeHeight * .040,
                                   onSeatStateChanged:
                                       (rowI, colI, seatState, seat) {
                                     if (seatState == SeatState.selected) {

@@ -597,6 +597,7 @@ class _MyHomeState extends State<MyHome> {
                             ],
                           ),
                         ),
+                        SizedBox(height: 25,),
                         BlocListener<TimesTripsCubit, TimesTripsStates>(
                           bloc: BlocProvider.of<TimesTripsCubit>(context),
                           listener: (context, state) {

@@ -16,7 +16,7 @@ class ChangePasswordCubit extends Cubit<ChangePasswordStates>{
       }
       )async{
     try {
-      emit(ChangePasswordInitial());
+      emit(ChangePasswordLoading());
       final res = await changePasswordRepo.changePassword(
           userId: userId, oldPass: oldPass, newPass: newPass);
       if(res != null){

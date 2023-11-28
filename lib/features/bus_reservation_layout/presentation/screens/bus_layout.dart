@@ -311,7 +311,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                           bottom: 0,
                           child: SizedBox(
                             child: SeatLayoutWidget(
-                              seatHeight: sizeHeight * .043,
+                              seatHeight: sizeHeight * .040,
                               onSeatStateChanged:
                                   (rowI, colI, seatState, seat) {
                                 if (seatState == SeatState.selected) {
