@@ -52,67 +52,75 @@ class _HomeScreenState extends State<HomeScreen> {
         user: _user,
       ),
     ];
-    return Scaffold(
-      body: screens[currentIndex],
-      bottomNavigationBar: SizedBox(
-        height: sizeHeight * 0.1,
-        child: Theme(
-          data: Theme.of(context).copyWith(
-            canvasColor: AppColors.darkPurple,
-          ),
-          child: BottomNavigationBar(
-            onTap: (index) {
-              if (index != 3) {
-                setState(() {
-                  currentIndex = index;
-                });
-              }
-            },
-            currentIndex: currentIndex,
-            showUnselectedLabels: true,
-            showSelectedLabels: true,
-            selectedItemColor: AppColors
-                .primaryColor, // Color for the selected tab icon and label
-            unselectedItemColor: AppColors.darkGrey,
-            selectedLabelStyle: TextStyle(color: AppColors.primaryColor),
-            items: [
-              BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    "assets/images/Icon awesome-bus.svg",
-                    color: currentIndex == 0
-                        ? AppColors.primaryColor
-                        : AppColors.darkGrey,
-                  ),
-                  label: "Book Now"),
-              BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    "assets/images/Icon awesome-ticket-alt.svg",
-                    color: currentIndex == 1
-                        ? AppColors.primaryColor
-                        : AppColors.darkGrey,
-                  ),
-                  label: "Ticket"),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.wallet,
-                  color: currentIndex == 2
-                      ? AppColors.primaryColor
-                      : AppColors.darkGrey,
-                ),
-                label: "My wallet",
-              ),
-              BottomNavigationBarItem(
-                  icon: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SvgPicture.asset(
-                      "assets/images/Group 175.svg",
-                      color: currentIndex == 3
+    return BlocListener(
+      bloc: BlocProvider.of<LoginCubit>(context),
+      listener: (context, state) {
+        if (state is UserLoginLoadedState) {
+          _user = state.userResponse.user;
+        }
+      },
+      child: Scaffold(
+        body: screens[currentIndex],
+        bottomNavigationBar: SizedBox(
+          height: sizeHeight * 0.1,
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              canvasColor: AppColors.darkPurple,
+            ),
+            child: BottomNavigationBar(
+              onTap: (index) {
+                if (index != 3) {
+                  setState(() {
+                    currentIndex = index;
+                  });
+                }
+              },
+              currentIndex: currentIndex,
+              showUnselectedLabels: true,
+              showSelectedLabels: true,
+              selectedItemColor: AppColors
+                  .primaryColor, // Color for the selected tab icon and label
+              unselectedItemColor: AppColors.darkGrey,
+              selectedLabelStyle: TextStyle(color: AppColors.primaryColor),
+              items: [
+                BottomNavigationBarItem(
+                    icon: SvgPicture.asset(
+                      "assets/images/Icon awesome-bus.svg",
+                      color: currentIndex == 0
                           ? AppColors.primaryColor
                           : AppColors.darkGrey,
                     ),
+                    label: "Book Now"),
+                BottomNavigationBarItem(
+                    icon: SvgPicture.asset(
+                      "assets/images/Icon awesome-ticket-alt.svg",
+                      color: currentIndex == 1
+                          ? AppColors.primaryColor
+                          : AppColors.darkGrey,
+                    ),
+                    label: "Ticket"),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.wallet,
+                    color: currentIndex == 2
+                        ? AppColors.primaryColor
+                        : AppColors.darkGrey,
                   ),
-                  label: "More"),
-            ],
+                  label: "My wallet",
+                ),
+                BottomNavigationBarItem(
+                    icon: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset(
+                        "assets/images/Group 175.svg",
+                        color: currentIndex == 3
+                            ? AppColors.primaryColor
+                            : AppColors.darkGrey,
+                      ),
+                    ),
+                    label: "More"),
+              ],
+            ),
           ),
         ),
       ),

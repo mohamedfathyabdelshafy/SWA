@@ -4,10 +4,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/features/payment/electronic_wallet/presentation/cubit/eWallet_cubit.dart';
 import 'package:swa/features/payment/electronic_wallet/presentation/screens/electronic_screens.dart';
+import 'package:swa/features/payment/fawry/presentation/cubit/fawry_cubit.dart';
+import 'package:swa/features/payment/fawry/presentation/screens/fawry.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/main.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
+import 'package:swa/select_payment2/presentation/credit_card/presentation/screens/chargeCard_screen.dart';
 import 'package:swa/select_payment2/presentation/credit_card/presentation/screens/credit_card_pay_viewd.dart';
 import 'package:swa/select_payment2/presentation/screens/fawry.dart';
 
@@ -63,7 +66,7 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
                   MaterialPageRoute(
                     builder: (context) => BlocProvider<ReservationCubit>(
                         create: (context) => ReservationCubit(),
-                        child: CreditCardPayView(
+                        child: chargeCard(
                           user: widget.user!,
                           index: 1,
                         )),
@@ -99,11 +102,19 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => BlocProvider<ReservationCubit>(
-                      create: (context) => ReservationCubit(),
-                      child: FawryScreenReservation(
-                        user: widget.user!,
-                      ),
+                    builder: (context) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider<LoginCubit>(
+                          create: (context) => sl<LoginCubit>(),
+                        ),
+                        BlocProvider<FawryCubit>(
+                          create: (context) => sl<FawryCubit>(),
+                        ),
+                        BlocProvider<ReservationCubit>(
+                          create: (context) => ReservationCubit(),
+                        ),
+                      ],
+                      child: FawryScreen(),
                     ),
                   ),
                 );

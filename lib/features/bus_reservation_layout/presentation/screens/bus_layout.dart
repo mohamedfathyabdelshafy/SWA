@@ -101,7 +101,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
             decoration: BoxDecoration(
                 color: AppColors.primaryColor,
                 borderRadius: BorderRadius.circular(10)),
-            height: 85,
+            height: 87,
             width: double.infinity,
             child: Column(
               children: [
@@ -148,7 +148,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
             height: 10,
           ),
           Container(
-            height: MediaQuery.sizeOf(context).height - 175,
+            height: MediaQuery.sizeOf(context).height - 180,
             child: Row(
               children: [
                 Expanded(
@@ -292,7 +292,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                 Expanded(
                   flex: 2,
                   child: SizedBox(
-                    height: sizeHeight * 0.73,
+                    height: sizeHeight * 0.75,
                     child: Stack(
                       children: [
                         Padding(

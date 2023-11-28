@@ -144,7 +144,7 @@ class _MyHomeState extends State<MyHome> {
                                         ),
                                         child: Center(
                                           child: Text(
-                                            _user!.userName!,
+                                            _user!.name!,
                                             style:
                                                 TextStyle(color: Colors.white),
                                           ),

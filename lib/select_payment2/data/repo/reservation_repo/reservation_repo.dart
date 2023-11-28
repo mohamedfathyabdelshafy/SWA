@@ -86,7 +86,36 @@ class ReservationRepo {
         },
       }),
     );
+
+    log('body ' + response.request.body);
+
     log('ReservationResponse ' + response.body);
+
+    var decodedResponse = json.decode(response.body);
+    ReservationResponseElectronicModel reservationResponseElectronicModel =
+        ReservationResponseElectronicModel.fromJson(decodedResponse);
+    print("response ${json.decode(response.body)}");
+    return reservationResponseElectronicModel;
+  }
+
+  Future<ReservationResponseElectronicModel?> chargefawrymeth({
+    required int custId,
+    required String amount,
+  }) async {
+    final msg = jsonEncode({
+      "CustId": custId,
+      "Amount": amount,
+    });
+
+    print(msg);
+    var response = await apiConsumer.post(
+      EndPoints.fawryPaymentMethod,
+      body: msg,
+    );
+
+    print(" Body " + response.request.body);
+
+    log('fawry Response ' + response.body);
 
     var decodedResponse = json.decode(response.body);
     ReservationResponseElectronicModel reservationResponseElectronicModel =
@@ -133,6 +162,38 @@ class ReservationRepo {
         ReservationResponseElectronicModel.fromJson(decodedResponse);
     print("response ${json.decode(response.body)}");
     return reservationResponseElectronicModel;
+  }
+
+  Future<ReservationResponseCreditCard?> chargeusingcard({
+    required int custId,
+    required String amount,
+    required String cardNumber,
+    required String cardExpiryYear,
+    required String cvv,
+    required String cardExpiryMonth,
+  }) async {
+    print('helloooooo');
+
+    final msg = jsonEncode({
+      "CustomerId": custId,
+      "amount": amount,
+      "cardNumber": cardNumber,
+      "cardExpiryYear": cardExpiryYear,
+      "cardExpiryMonth": cardExpiryMonth,
+      "cvv": cvv
+    });
+
+    print(msg);
+    var response = await apiConsumer.post(EndPoints.chargecard, body: msg);
+    print(" Body " + response.request.toString());
+
+    log('charge Response ' + response.body);
+
+    var decodedResponse = json.decode(response.body);
+    ReservationResponseCreditCard reservationResponseCreditCard =
+        ReservationResponseCreditCard.fromJson(decodedResponse);
+    print("response ${json.decode(response.body)}");
+    return reservationResponseCreditCard;
   }
 
   Future<ReservationResponseCreditCard?> addReservationCreditCard({

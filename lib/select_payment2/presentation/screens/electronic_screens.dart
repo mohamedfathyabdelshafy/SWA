@@ -12,14 +12,14 @@ import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuib
 import '../../../../../core/local_cache_helper.dart';
 
 class ElectronicScreen2 extends StatefulWidget {
-   ElectronicScreen2({super.key,required this.user});
-User user;
+  ElectronicScreen2({super.key, required this.user});
+  User user;
   @override
   State<ElectronicScreen2> createState() => _ElectronicScreen2State();
 }
 
 class _ElectronicScreen2State extends State<ElectronicScreen2> {
-  final price =CacheHelper.getDataToSharedPref(key: 'price');
+  final price = CacheHelper.getDataToSharedPref(key: 'price');
   final formKey = GlobalKey<FormState>();
   TextEditingController amountController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -27,7 +27,6 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
 
   @override
   void initState() {
-
     super.initState();
   }
 
@@ -41,7 +40,7 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
         elevation: 0,
         backgroundColor: Colors.black,
         leading: InkWell(
-          onTap: (){
+          onTap: () {
             Navigator.pop(context);
           },
           child: Icon(
@@ -56,20 +55,21 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               Row(
                 children: const [
                   Text(
                     'Electronic wallet',
                     style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                        fontFamily: "bold"
-                    ),
+                        color: Colors.white, fontSize: 30, fontFamily: "bold"),
                   ),
                 ],
               ),
-              const SizedBox(height: 50,),
+              const SizedBox(
+                height: 50,
+              ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.65,
                 // child: BlocListener(
@@ -88,32 +88,33 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                           Container(
                             height: 40,
                             width: 1,
-                            decoration: const BoxDecoration(
-                                color: Color(0xff47A9EB)
-                            ),
+                            decoration:
+                                const BoxDecoration(color: Color(0xff47A9EB)),
                           ),
                           Container(
                             height: 70,
                             width: 300,
-                            padding:
-                            const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 18),
                             decoration: const BoxDecoration(
-                              //color: AppColors.yellow
-                              // border: Border.all(
-                              //   color: AppColors.blue,
-                              //   width: 0.3,
-                              // ),
-                              // borderRadius:
-                              // const BorderRadius.all(Radius.circular(10))
-                            ),
+                                //color: AppColors.yellow
+                                // border: Border.all(
+                                //   color: AppColors.blue,
+                                //   width: 0.3,
+                                // ),
+                                // borderRadius:
+                                // const BorderRadius.all(Radius.circular(10))
+                                ),
                             child: TextFormField(
                               maxLength: 11,
                               autofocus: true,
-                              style: fontStyle(color: AppColors.white, fontSize: 16),
+                              style: fontStyle(
+                                  color: AppColors.white, fontSize: 16),
                               cursorColor: AppColors.blue,
                               controller: phoneController,
                               inputFormatters: [
-                                FilteringTextInputFormatter.allow(RegExp("[0-9]"))
+                                FilteringTextInputFormatter.allow(
+                                    RegExp("[0-9]"))
                               ],
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
@@ -151,23 +152,22 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                           Container(
                             height: 20,
                             width: 1,
-                            decoration: const BoxDecoration(
-                                color: Color(0xffD865A4)
-                            ),
+                            decoration:
+                                const BoxDecoration(color: Color(0xffD865A4)),
                           ),
                           Container(
-                              height:sizeHeight * 0.07,
-                              width:300,
-                              padding:
-                              const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
+                              height: sizeHeight * 0.07,
+                              width: 300,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 2, horizontal: 18),
                               decoration: const BoxDecoration(
-                                // border: Border.all(
-                                //   color: AppColors.blue,
-                                //   width: 0.3,
-                                // ),
-                                // borderRadius:
-                                // const BorderRadius.all(Radius.circular(10))
-                              ),
+                                  // border: Border.all(
+                                  //   color: AppColors.blue,
+                                  //   width: 0.3,
+                                  // ),
+                                  // borderRadius:
+                                  // const BorderRadius.all(Radius.circular(10))
+                                  ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
@@ -176,29 +176,26 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                                     style: TextStyle(
                                         fontSize: 15,
                                         fontFamily: "bold",
-                                        color: AppColors.greyLight
-                                    ),
+                                        color: AppColors.greyLight),
                                   ),
                                   Text(
                                     price.toString(),
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontFamily: "bold",
-                                        color: AppColors.primaryColor
-                                    ),
+                                        color: AppColors.primaryColor),
                                   )
                                 ],
-                              )
-                          ),
+                              )),
                         ],
                       ),
                       const Spacer(),
                       BlocListener(
                         bloc: BlocProvider.of<ReservationCubit>(context),
                         listener: (context, state) {
-                          if(state is LoadingElectronicWalletState){
+                          if (state is LoadingElectronicWalletState) {
                             Constants.showLoadingDialog(context);
-                          }else if (state is LoadedElectronicWalletState) {
+                          } else if (state is LoadedElectronicWalletState) {
                             Constants.hideLoadingDialog(context);
                             // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
 
@@ -207,36 +204,43 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     mainAxisSize: MainAxisSize.min,
                                     children: const [
                                       Icon(
                                         Icons.check_circle,
                                         color: Colors.green,
                                       ),
-                                      Text("You will get a notification by applying your wallet \n In order to agree to pay"),
+                                      Text(
+                                          "You will get a notification by applying your wallet \n In order to agree to pay"),
                                     ],
                                   ),
                                   titleTextStyle: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
-                                      fontSize: 20
-                                  ),
+                                      fontSize: 20),
                                   content: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           const Text('Amount: '),
                                           Text(price.toString())
                                         ],
                                       ),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           const Text('Reference Number: '),
-                                          Text(state.reservationResponseElectronicModel.message!.referenceNumber.toString())
+                                          Text(state
+                                              .reservationResponseElectronicModel
+                                              .message!
+                                              .referenceNumber
+                                              .toString())
                                         ],
                                       )
                                     ],
@@ -244,81 +248,104 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                                   actionsOverflowButtonSpacing: 20,
                                   actions: [
                                     ElevatedButton(
-                                        onPressed: (){
+                                        onPressed: () {
                                           Navigator.pop(context);
-                                          Navigator.pushNamed(context, Routes.initialRoute);
+                                          Navigator.pushNamed(
+                                              context, Routes.initialRoute);
                                         },
                                         child: Container(
                                           // padding: const EdgeInsets.symmetric(horizontal: 20,vertical:20),
                                           // margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
-                                          decoration:BoxDecoration(
-                                            // color: color ?? AppColors.darkRed,
-                                              borderRadius: BorderRadius.circular(100)
-                                          ) ,
+                                          decoration: BoxDecoration(
+                                              // color: color ?? AppColors.darkRed,
+                                              borderRadius:
+                                                  BorderRadius.circular(100)),
                                           child: Center(
                                             child: Text(
                                               'OK',
                                               style: TextStyle(
                                                   color: AppColors.white,
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: 22
-                                              ),
+                                                  fontSize: 22),
                                             ),
                                           ),
-                                        )
-                                    ),
+                                        )),
                                   ],
-
                                 );
                               },
                             );
-
-                          }else if (state is ErrorElectronicWalletState) {
+                          } else if (state is ErrorElectronicWalletState) {
                             Constants.hideLoadingDialog(context);
-                            Constants.showDefaultSnackBar(context: context, text: state.error.toString());
+                            Constants.showDefaultSnackBar(
+                                context: context, text: state.error.toString());
                           }
                         },
                         child: InkWell(
-                          onTap: (){
-                            final tripOneId = CacheHelper.getDataToSharedPref(key: 'tripOneId');
-                            final tripRoundId = CacheHelper.getDataToSharedPref(key: 'tripRoundId');
-                            final selectedDayTo = CacheHelper.getDataToSharedPref(key: 'selectedDayTo');
-                            final selectedDayFrom = CacheHelper.getDataToSharedPref(key: 'selectedDayFrom');
-                            final toStationId = CacheHelper.getDataToSharedPref(key: 'toStationId');
-                            final fromStationId = CacheHelper.getDataToSharedPref(key: 'fromStationId');
-                            final seatIdsOneTrip = CacheHelper.getDataToSharedPref(key: 'countSeats')?.map((e) => int.tryParse(e) ?? 0).toList();
-                            final seatIdsRoundTrip = CacheHelper.getDataToSharedPref(key: 'countSeats2')?.map((e) => int.tryParse(e) ?? 0).toList();
-                            final price =CacheHelper.getDataToSharedPref(key: 'price');
-                            print("tripOneId${tripOneId}==tripOneId${tripRoundId }=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price");
-                            print("tripOneId${selectedDayTo}==tripOneId${selectedDayFrom }=====${toStationId}===${fromStationId}==$price");
+                          onTap: () {
+                            final tripOneId = CacheHelper.getDataToSharedPref(
+                                key: 'tripOneId');
+                            final tripRoundId = CacheHelper.getDataToSharedPref(
+                                key: 'tripRoundId');
+                            final selectedDayTo =
+                                CacheHelper.getDataToSharedPref(
+                                    key: 'selectedDayTo');
+                            final selectedDayFrom =
+                                CacheHelper.getDataToSharedPref(
+                                    key: 'selectedDayFrom');
+                            final toStationId = CacheHelper.getDataToSharedPref(
+                                key: 'toStationId');
+                            final fromStationId =
+                                CacheHelper.getDataToSharedPref(
+                                    key: 'fromStationId');
+                            final seatIdsOneTrip =
+                                CacheHelper.getDataToSharedPref(
+                                        key: 'countSeats')
+                                    ?.map((e) => int.tryParse(e) ?? 0)
+                                    .toList();
+                            final seatIdsRoundTrip =
+                                CacheHelper.getDataToSharedPref(
+                                        key: 'countSeats2')
+                                    ?.map((e) => int.tryParse(e) ?? 0)
+                                    .toList();
+                            final price =
+                                CacheHelper.getDataToSharedPref(key: 'price');
+                            print(
+                                "tripOneId${tripOneId}==tripOneId${tripRoundId}=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price");
+                            print(
+                                "tripOneId${selectedDayTo}==tripOneId${selectedDayFrom}=====${toStationId}===${fromStationId}==$price");
 
-                            String mobile =phoneController.text;
-                            print("tripOneId${tripOneId}==tripOneId${tripRoundId }=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price==$mobile");
+                            String mobile = phoneController.text;
+                            print(
+                                "tripOneId${tripOneId}==tripOneId${tripRoundId}=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price==$mobile");
 
                             // if(_user != null && formKey.currentState!.validate()) {
-                            BlocProvider.of<ReservationCubit>(context).addReservationElectronicWallet(
-                              seatIdsOneTrip:seatIdsOneTrip,
-                              custId: widget.user.customerId!,
-                              oneTripID:tripOneId.toString(),
-                              paymentMethodID: 5,
-                              paymentTypeID: 68,
-                              seatIdsRoundTrip:seatIdsRoundTrip??[],
-                              roundTripID:tripRoundId??"",
-                              amount:price.toStringAsFixed(2).toString(),
-                              mobile:mobile,
-                              fromStationID:fromStationId,
-                              toStationId:toStationId,
-                              tripDateGo:selectedDayFrom,
-                              tripDateBack: selectedDayTo
-                            );
+                            BlocProvider.of<ReservationCubit>(context)
+                                .addReservationElectronicWallet(
+                                    seatIdsOneTrip: seatIdsOneTrip,
+                                    custId: widget.user.customerId!,
+                                    oneTripID: tripOneId.toString(),
+                                    paymentMethodID: 5,
+                                    paymentTypeID: 68,
+                                    seatIdsRoundTrip: seatIdsRoundTrip ?? [],
+                                    roundTripID: tripRoundId ?? "",
+                                    amount: price.toStringAsFixed(2).toString(),
+                                    mobile: mobile,
+                                    fromStationID: fromStationId,
+                                    toStationId: toStationId,
+                                    tripDateGo: selectedDayFrom,
+                                    tripDateBack: selectedDayTo);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 30,),
-                            child: Constants.customButton(text: "Charge",color:AppColors.primaryColor,),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 30,
+                            ),
+                            child: Constants.customButton(
+                              text: "Charge",
+                              color: AppColors.primaryColor,
+                            ),
                           ),
                         ),
                       ),
-
                     ],
                   ),
                 ),

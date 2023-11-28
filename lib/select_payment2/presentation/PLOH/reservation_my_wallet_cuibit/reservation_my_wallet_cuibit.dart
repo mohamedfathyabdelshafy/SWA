@@ -89,6 +89,28 @@ class ReservationCubit extends Cubit<ReservationStates> {
     }
   }
 
+  Future<ReservationResponseMyWalletModel?> fawrycharge({
+    required int customerid,
+    required String amount,
+  }) async {
+    try {
+      emit(LoadingElectronicWalletState());
+      final res = await reservationRepo.chargefawrymeth(
+        custId: customerid,
+        amount: amount,
+      );
+      if (res?.message != null) {
+        emit(LoadedElectronicWalletState(
+            reservationResponseElectronicModel: res!));
+      } else {
+        emit(ErrorElectronicWalletState(
+            error: res!.message!.statusDescription.toString()));
+      }
+    } catch (e) {
+      emit(ErrorElectronicWalletState(error: e.toString()));
+    }
+  }
+
   Future<ReservationResponseMyWalletModel?> addReservationFawry(
       {required List<dynamic> seatIdsOneTrip,
       List<dynamic>? seatIdsRoundTrip,
@@ -164,6 +186,36 @@ class ReservationCubit extends Cubit<ReservationStates> {
           tripDateGo: tripDateGo,
           tripDateBack: tripDateBack,
           paymentMethodID: paymentMethodID,
+          cardExpiryMonth: cardExpiryMonth,
+          cardExpiryYear: cardExpiryYear,
+          cardNumber: cardNumber,
+          cvv: cvv);
+      if (res?.message!.statusCode == 200) {
+        emit(LoadedCreditCardState(reservationResponseCreditCard: res!));
+      } else {
+        emit(ErrorCreditCardState(
+            error: res!.message!.statusDescription.toString()));
+      }
+    } catch (e) {
+      print('a7a');
+
+      emit(ErrorCreditCardState(error: e.toString()));
+    }
+  }
+
+  Future<ReservationResponseCreditCard?> chargebycard({
+    required int custId,
+    required String amount,
+    required String cardNumber,
+    required String cardExpiryYear,
+    required String cvv,
+    required String cardExpiryMonth,
+  }) async {
+    try {
+      emit(LoadingCreditCardState());
+      final res = await reservationRepo.chargeusingcard(
+          custId: custId,
+          amount: amount,
           cardExpiryMonth: cardExpiryMonth,
           cardExpiryYear: cardExpiryYear,
           cardNumber: cardNumber,

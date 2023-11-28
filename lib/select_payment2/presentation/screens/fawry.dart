@@ -12,10 +12,7 @@ import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuib
 import '../PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
 
 class FawryScreenReservation extends StatefulWidget {
-  FawryScreenReservation({
-    super.key,
-    required this.user
-  });
+  FawryScreenReservation({super.key, required this.user});
 
   User user;
 

@@ -14,16 +14,6 @@ class MyCredit extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back,
-            color: AppColors.primaryColor,
-            size: 30,
-          ),
-        ),
         backgroundColor: Colors.black,
       ),
       backgroundColor: Colors.black,
@@ -49,7 +39,7 @@ class MyCredit extends StatelessWidget {
               style: TextStyle(fontSize: 18, color: AppColors.darkGrey),
             ),
             Text(
-              "EGP2,343",
+              user!.walletBalance.toString(),
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 31,
