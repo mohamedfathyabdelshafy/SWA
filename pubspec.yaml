@@ -1,0 +1,81 @@
+name: swa
+description: A new Flutter project.
+publish_to: 'SWA' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.19.6 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  intl: ^0.17.0
+  #  webview_flutter: ^3.0.0
+  cool_alert: ^1.0.3
+  url_launcher: ^6.0.13
+  flutter_svg: ^1.0.3
+  sizer: ^2.0.15
+  equatable:
+  dartz:
+  internet_connection_checker:
+  shared_preferences:
+  http:
+  http_interceptor:
+  flutter_bloc:
+  flutter_device_type: ^0.4.0
+  get_it:
+  injectable:
+  webview_flutter: ^4.4.2
+book_my_seat:
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/json/
+
+  fonts:
+    - family: bold
+      fonts:
+        - asset: assets/fonts/NeueHaasGrotesk-Bold.ttf
+
+    - family: regular
+      fonts:
+        - asset: assets/fonts/NeueHaasGrotesk-Regular.ttf
+    - family: black
+      fonts:
+        - asset: assets/fonts/NeueHaasGrotesk-Black.ttf
+
+#  fonts:
+#    - family: English_Black
+#      fonts:
+#        - asset: assets/fonts/Poppins-Black.otf
+#    - family: English_Bold
+#      fonts:
+#        - asset: assets/fonts/Poppins-Bold.otf
+#    - family: English_Regular
+#      fonts:
+#        - asset: assets/fonts/Poppins-Regular.otf
+#    - family: English_Medium
+#      fonts:
+#        - asset: assets/fonts/Poppins-Medium.otf
+#
+#    - family: Arabic_Medium
+#      fonts:
+#        - asset: assets/fonts/arabic_medium.ttf
+#
+#    - family: Arabic_Bold
+#      fonts:
+#        - asset: assets/fonts/arabic_bold.ttf
+#
+#    - family: Arabic_Regular
+#      fonts:
+#        - asset: assets/fonts/arabic_regular.ttf
