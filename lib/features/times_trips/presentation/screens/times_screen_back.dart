@@ -133,7 +133,6 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                               widget.tripListBack[index].lineName.toString(),
                                               style: TextStyle(color: AppColors.white,fontSize: 20 )),
                                           Container(
-                                            padding:const EdgeInsets.symmetric(horizontal: 20),
                                             width:sizeWidth *0.62,
                                             child: const Divider(
                                               color: Colors.white,
@@ -152,14 +151,14 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                           Row(
                                             children: [
                                               Text(
-                                                widget.tripListBack[index].to!,
+                                                widget.tripListBack[index].accessBusTime!,
                                                 style: TextStyle(color: AppColors.white,fontSize:12 ),)
                                             ],
                                           ),
                                           Text(
                                               "${widget.tripListBack[index].price!.toString()}.LE",
                                               textAlign: TextAlign.center,
-                                              style: TextStyle(color: AppColors.primaryColor,fontSize: 18,fontFamily: "bold" )),
+                                              style: TextStyle(color: AppColors.primaryColor,fontSize: 16,fontFamily: "bold" )),
                                         ],
                                       ),
                                     ],

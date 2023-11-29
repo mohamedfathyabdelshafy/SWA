@@ -225,6 +225,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                                       countSeats1: widget.cachCountSeats1,
                                       countSeats2: cachCountSeats2,
                                       user: widget.user,
+                                      tripId:widget.triTypeId
                                     );
                                   }),
                                 );

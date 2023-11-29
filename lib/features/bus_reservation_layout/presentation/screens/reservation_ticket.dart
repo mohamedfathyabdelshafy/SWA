@@ -27,7 +27,8 @@ class ReservationTicket extends StatefulWidget {
       required this.countSeats1,
       this.countSeats2,
       required this.price,
-      this.user});
+      this.user,
+      this.tripId});
   List<num> countSeates;
   int busId;
   String tripTypeId;
@@ -38,6 +39,7 @@ class ReservationTicket extends StatefulWidget {
   List<dynamic>? countSeats2;
   double price;
   User? user;
+  String? tripId;
 
   @override
   State<ReservationTicket> createState() => _ReservationTicketState();
@@ -55,6 +57,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
   String? elite2;
   String? accessBusTime2;
   String? lineName2;
+  
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 0)).then((_) async {
@@ -65,15 +68,17 @@ class _ReservationTicketState extends State<ReservationTicket> {
    elite = CacheHelper.getDataToSharedPref(key: "elite");
    accessBusTime = CacheHelper.getDataToSharedPref(key: "accessBusTime");
    lineName = CacheHelper.getDataToSharedPref(key: "lineName");
-     if(numberTrip2 !=null &&elite2!=null&&accessBusTime2!=null&&lineName2!=null) {
-       numberTrip2 = CacheHelper.getDataToSharedPref(key: 'numberTrip2');
-       elite2 = CacheHelper.getDataToSharedPref(key: "elite2");
-       accessBusTime2 = CacheHelper.getDataToSharedPref(key: "accessBusTime2");
-       lineName2 = CacheHelper.getDataToSharedPref(key: "lineName2");
-     }
+   if(widget.tripId == "2") {
+     numberTrip2 = CacheHelper.getDataToSharedPref(key: 'numberTrip2');
+     elite2 = CacheHelper.getDataToSharedPref(key: "elite2");
+     accessBusTime2 = CacheHelper.getDataToSharedPref(key: "accessBusTime2");
+     lineName2 = CacheHelper.getDataToSharedPref(key: "lineName2");
+   }
     super.initState();
   }
-
+// bool getTripId()async{
+//     String tripId = CacheHelper.getDataToSharedPref(key: "")
+// }
   @override
   Widget build(BuildContext context) {
     double sizeHeight = context.height;

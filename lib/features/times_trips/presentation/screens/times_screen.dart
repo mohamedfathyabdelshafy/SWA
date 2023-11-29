@@ -164,7 +164,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                           Row(
                                             children: [
                                               Text(
-                                                widget.tripList[index].to!,
+                                                widget.tripList[index].accessBusTime!,
                                                 style: TextStyle(
                                                     color: AppColors.white,
                                                     fontSize: 12),
