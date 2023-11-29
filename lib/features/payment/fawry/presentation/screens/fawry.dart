@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,11 +11,13 @@ import 'package:swa/features/payment/fawry/domain/use_cases/fawry_use_case.dart'
 import 'package:swa/features/payment/fawry/presentation/cubit/fawry_cubit.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
-
+import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
+import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
 
 class FawryScreen extends StatefulWidget {
-   FawryScreen({super.key,});
-
+  FawryScreen({
+    super.key,
+  });
 
   @override
   State<FawryScreen> createState() => _FawryScreenState();
@@ -44,7 +47,7 @@ class _FawryScreenState extends State<FawryScreen> {
         elevation: 0,
         backgroundColor: Colors.black,
         leading: InkWell(
-          onTap: (){
+          onTap: () {
             Navigator.pop(context);
           },
           child: Icon(
@@ -59,23 +62,24 @@ class _FawryScreenState extends State<FawryScreen> {
         child: SingleChildScrollView(
           child: Expanded(
             child: SizedBox(
-              height:sizeHeight * 1 ,
+              height: sizeHeight * 1,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: const [
                       Text(
-                        'Fawry' ,
+                        'Fawry',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 30,
-                            fontFamily: "bold"
-                        ),
+                            fontFamily: "bold"),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 30,),
+                  const SizedBox(
+                    height: 30,
+                  ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.7,
                     child: BlocListener(
@@ -97,26 +101,28 @@ class _FawryScreenState extends State<FawryScreen> {
                                   height: 40,
                                   width: 1,
                                   decoration: const BoxDecoration(
-                                    color: Color(0xff47A9EB)
-                                  ),
+                                      color: Color(0xff47A9EB)),
                                 ),
-                                const SizedBox(width: 5,),
+                                const SizedBox(
+                                  width: 5,
+                                ),
                                 Container(
                                   height: 40,
                                   width: 300,
                                   //    padding:
                                   //    const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
                                   decoration: const BoxDecoration(
-                                    // color: Colors.red
-                                    // border: Border.all(
-                                    //   color: AppColors.blue,
-                                    //   width: 0.3,
-                                    // ),
+                                      // color: Colors.red
+                                      // border: Border.all(
+                                      //   color: AppColors.blue,
+                                      //   width: 0.3,
+                                      // ),
 
-                                  ),
+                                      ),
                                   child: TextFormField(
                                     autofocus: true,
-                                    style: fontStyle(color: AppColors.white, fontSize: 16),
+                                    style: fontStyle(
+                                        color: AppColors.white, fontSize: 16),
                                     cursorColor: AppColors.blue,
                                     controller: amountController,
                                     inputFormatters: [NumericTextFormatter()],
@@ -135,8 +141,7 @@ class _FawryScreenState extends State<FawryScreen> {
                                       labelStyle: fontStyle(
                                           color: AppColors.grey,
                                           fontSize: 12,
-                                          fontFamily: FontFamily.bold
-                                      ),
+                                          fontFamily: FontFamily.bold),
                                     ),
                                     validator: (value) {
                                       if (value!.isEmpty) {
@@ -150,36 +155,135 @@ class _FawryScreenState extends State<FawryScreen> {
                               ],
                             ),
                             const Spacer(),
-                          //  BlocListener(
-                              // bloc: BlocProvider.of<FawryCubit>(context),
-                              // listener: (context, state) {
-                              //   if(state is FawryLoadingState){
-                              //     Constants.showLoadingDialog(context);
-                              //   }else if (state is FawryLoadedState) {
-                              //     Constants.hideLoadingDialog(context);
-                              //     Constants.showDefaultSnackBar(context: context, text: state.paymentMessageResponse.paymentMessage!.statusDescription);
-                              //     Future.delayed(const Duration(seconds: 5), () {
-                              //       Navigator.pushReplacementNamed(context, Routes.initialRoute);
-                              //     });
-                              //   }else if (state is FawryErrorState) {
-                              //     Constants.hideLoadingDialog(context);
-                              //     Constants.showDefaultSnackBar(context: context, text: state.error.toString());
-                              //   }
-                              // },
-                              //child:
-                              InkWell(
-                                onTap: (){
-                                  if(_user != null && formKey.currentState!.validate()) {
-                                    BlocProvider.of<FawryCubit>(context).fawryPaymentFunction(FawryParams(customerId: _user!.customerId.toString(), amount: amountController.text));
+                            BlocListener(
+                              bloc: BlocProvider.of<ReservationCubit>(context),
+                              listener: (context, state) {
+                                if (state is LoadingElectronicWalletState) {
+                                  Constants.showLoadingDialog(context);
+                                } else if (state
+                                    is LoadedElectronicWalletState) {
+                                  Constants.hideLoadingDialog(context);
+                                  // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
+                                  showDoneConfirmationDialog(context,
+                                      isError: false, callback: () {
+                                    Navigator.pop(context);
+                                    Navigator.pushNamed(
+                                        context, Routes.initialRoute);
+                                  },
+                                      body: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text(
+                                                'Amount: ',
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              Text(amountController.text
+                                                  .toString())
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text(
+                                                'Reference Number: ',
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              Expanded(
+                                                child: Row(
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () async {
+                                                        Constants
+                                                            .showDefaultSnackBar(
+                                                                context:
+                                                                    context,
+                                                                text:
+                                                                    'Reference Number copied');
+                                                        await Clipboard.setData(
+                                                            ClipboardData(
+                                                                text: state
+                                                                    .reservationResponseElectronicModel
+                                                                    .message!
+                                                                    .referenceNumber
+                                                                    .toString()));
+                                                      },
+                                                      child: Container(
+                                                          width: 15,
+                                                          height: 15,
+                                                          child: Icon(
+                                                            Icons.copy_outlined,
+                                                            size: 14,
+                                                          )),
+                                                    ),
+                                                    Expanded(
+                                                      child: Text(
+                                                        state
+                                                            .reservationResponseElectronicModel
+                                                            .message!
+                                                            .referenceNumber
+                                                            .toString(),
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                      message:
+                                          "You will get a notification by applying your wallet \n In order to agree to pay");
+                                } else if (state
+                                    is ErrorElectronicWalletState) {
+                                  Constants.hideLoadingDialog(context);
+                                  Constants.showDefaultSnackBar(
+                                      context: context,
+                                      text: state.error.toString());
+                                }
+                              },
+                              child: InkWell(
+                                onTap: () {
+                                  if (_user != null &&
+                                      formKey.currentState!.validate()) {
+                                    double amount =
+                                        double.parse(amountController.text);
+
+                                    BlocProvider.of<ReservationCubit>(context)
+                                        .fawrycharge(
+                                            customerid: _user!.customerId!,
+                                            amount: amount
+                                                .toStringAsFixed(2)
+                                                .toString());
                                   }
                                 },
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                                  child: Constants.customButton(text: "Charge", color: AppColors.primaryColor,),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 30),
+                                  child: Constants.customButton(
+                                    text: "Chargee",
+                                    color: AppColors.primaryColor,
+                                  ),
                                 ),
                               ),
-                            //)
-
+                            )
                           ],
                         ),
                       ),
@@ -195,15 +299,39 @@ class _FawryScreenState extends State<FawryScreen> {
       ),
     );
   }
+
+  Future<dynamic> showDoneConfirmationDialog(BuildContext context,
+      {required String message,
+      bool isError = false,
+      Widget? body,
+      required Function callback}) async {
+    return CoolAlert.show(
+        barrierDismissible: true,
+        context: context,
+        confirmBtnText: "ok",
+        title: isError ? 'error' : 'success',
+        lottieAsset:
+            isError ? 'assets/json/error.json' : 'assets/json/done.json',
+        type: isError ? CoolAlertType.error : CoolAlertType.success,
+        loopAnimation: false,
+        backgroundColor: isError ? Colors.red : Colors.white,
+        text: message,
+        widget: body,
+        onConfirmBtnTap: () {
+          callback();
+        });
+  }
 }
 
 class NumericTextFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     if (newValue.text.isEmpty) {
       return newValue.copyWith(text: '');
     } else if (newValue.text.compareTo(oldValue.text) != 0) {
-      final int selectionIndexFromTheRight = newValue.text.length - newValue.selection.end;
+      final int selectionIndexFromTheRight =
+          newValue.text.length - newValue.selection.end;
       var value = newValue.text;
       if (newValue.text.length > 2) {
         value = value.replaceAll(RegExp(r'\D'), '');
@@ -212,7 +340,8 @@ class NumericTextFormatter extends TextInputFormatter {
       }
       return TextEditingValue(
         text: value,
-        selection: TextSelection.collapsed(offset: value.length - selectionIndexFromTheRight),
+        selection: TextSelection.collapsed(
+            offset: value.length - selectionIndexFromTheRight),
       );
     } else {
       return newValue;

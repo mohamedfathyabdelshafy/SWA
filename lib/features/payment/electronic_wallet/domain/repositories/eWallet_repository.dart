@@ -4,5 +4,6 @@ import 'package:swa/features/payment/electronic_wallet/domain/use_cases/ewallet_
 import 'package:swa/features/payment/select_payment/domain/entities/payment_message_response.dart';
 
 abstract class EWalletPaymentRepository {
-  Future<Either<Failure, PaymentMessageResponse>> eWalletPayment(EWalletParams params);
+  Future<Either<Failure, PaymentMessageResponse>> eWalletPayment(
+      EWalletParams params);
 }
