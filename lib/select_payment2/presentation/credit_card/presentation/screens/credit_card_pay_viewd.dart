@@ -6,6 +6,7 @@ import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
+import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
@@ -113,7 +114,7 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Text(
-                                'Payment',
+                                LanguageClass.isEnglish? 'Payment':'دفع',
                                 style: TextStyle(
                                     color: AppColors.white,
                                     fontSize: 30,
@@ -156,7 +157,7 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                                                 .start,
                                                         children: [
                                                           Text(
-                                                            'Choose Card',
+                                                            LanguageClass.isEnglish?'Choose Card':"اختر كارت",
                                                             style: TextStyle(
                                                                 fontSize: 15,
                                                                 fontFamily:
@@ -313,7 +314,7 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                                                   }
                                                                 },
                                                                 child: Text(
-                                                                  'Add New Card',
+                                                                  LanguageClass.isEnglish?'Add New Card':"اضافة كارت جديد",
                                                                   style: TextStyle(
                                                                       fontSize:
                                                                           15.45,
@@ -374,7 +375,7 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                               }
                                             },
                                             child: Text(
-                                              'Add credit Card',
+                                              LanguageClass.isEnglish?'Add credit Card':"اضافة كارت جديد",
                                               style: TextStyle(
                                                   fontSize: 15.45,
                                                   fontFamily: "bold",
@@ -392,7 +393,7 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                       height: 20,
                                       width: 1,
                                       color: const Color(0xff47A9EB),
-                                      hint: 'CVV',
+                                      hint:  LanguageClass.isEnglish?'CVV':"الرقم السري",
                                       textInputType: TextInputType.number,
                                       onChange: (value) {
                                         setState(() {
@@ -437,7 +438,7 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                                   CrossAxisAlignment.stretch,
                                               children: [
                                                 Text(
-                                                  "amount",
+                                                  LanguageClass.isEnglish?"amount":"القيمة",
                                                   style: TextStyle(
                                                       fontSize: 15,
                                                       fontFamily: "bold",
@@ -705,11 +706,11 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                             color: AppColors.primaryColor,
                                             borderRadius:
                                                 BorderRadius.circular(15)),
-                                        child: const Center(
+                                        child:  Center(
                                           child: Padding(
                                             padding: EdgeInsets.all(8.0),
                                             child: Text(
-                                              'Charge',
+                                              LanguageClass.isEnglish? 'Charge':"شحن",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 20,

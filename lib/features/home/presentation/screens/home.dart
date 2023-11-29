@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swa/core/utils/app_colors.dart';
+import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/features/home/presentation/screens/tabs/my_home.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/presentation/screen/ticket_history.dart';
@@ -83,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ? AppColors.primaryColor
                           : AppColors.darkGrey,
                     ),
-                    label: "Book Now"),
+                    label:  LanguageClass.isEnglish?"Book Now":"حجز الان"),
                 BottomNavigationBarItem(
                     icon: SvgPicture.asset(
                       "assets/images/Icon awesome-ticket-alt.svg",
@@ -91,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ? AppColors.primaryColor
                           : AppColors.darkGrey,
                     ),
-                    label: "Ticket"),
+                    label:  LanguageClass.isEnglish?"Ticket":"تذكرة"),
                 BottomNavigationBarItem(
                   icon: Icon(
                     Icons.wallet,
@@ -99,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ? AppColors.primaryColor
                         : AppColors.darkGrey,
                   ),
-                  label: "My wallet",
+                  label:  LanguageClass.isEnglish?"My wallet":"محفظتي",
                 ),
                 BottomNavigationBarItem(
                     icon: Padding(
@@ -111,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             : AppColors.darkGrey,
                       ),
                     ),
-                    label: "More"),
+                    label:  LanguageClass.isEnglish?"More":"المزيد"),
               ],
             ),
           ),

@@ -32,12 +32,21 @@ Future<void> main() async {
   await eWalletDependencyInjectionInit(); //For initializing E-Wallet
   await TimesTripInjectionInit();
   await TicketHistoryInjectionInit();
+  await dependencyInjectionInit(); //For initializing network info and shared preferences
   await CacheHelper.init();
+  await CacheHelper.getDataToSharedPref(key: 'language');
   await CacheHelper.deleteDataToSharedPref(key: 'tripOneId');
   await CacheHelper.deleteDataToSharedPref(key: 'tripRoundId');
   await CacheHelper.deleteDataToSharedPref(key: 'countSeats');
   await CacheHelper.deleteDataToSharedPref(key: 'countSeats2');
-  await dependencyInjectionInit(); //For initializing network info and shared preferences
+  await CacheHelper.deleteDataToSharedPref(key: 'numberTrip');
+  await CacheHelper.deleteDataToSharedPref(key: "elite");
+  await CacheHelper.deleteDataToSharedPref(key: "accessBusTime");
+  await CacheHelper.deleteDataToSharedPref(key: "lineName");
+  await CacheHelper.deleteDataToSharedPref(key: 'numberTrip2');
+  await CacheHelper.deleteDataToSharedPref(key: "elite2");
+  await CacheHelper.deleteDataToSharedPref(key: "accessBusTime2");
+  await CacheHelper.deleteDataToSharedPref(key: "lineName2");
   runApp(const MyApp());
   Bloc.observer = AppBlocObserver();
 }

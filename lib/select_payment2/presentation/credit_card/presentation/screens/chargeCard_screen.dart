@@ -6,6 +6,7 @@ import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
+import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/payment/fawry/presentation/screens/fawry.dart';
@@ -97,673 +98,677 @@ class _chargeCardState extends State<chargeCard> {
               size: 32,
             )),
       ),
-      body: Form(
-        key: formKey,
-        child: SizedBox(
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 35),
-                      child: SingleChildScrollView(
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.85,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                'Payment',
-                                style: TextStyle(
-                                    color: AppColors.white,
-                                    fontSize: 30,
-                                    fontFamily: "bold"),
-                              ),
-                              const SizedBox(height: 40),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    color: AppColors.white,
-                                    border: Border.all(color: AppColors.grey),
-                                    borderRadius: BorderRadius.circular(15)),
-                                child: Row(
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/master_card.png',
-                                      height: 11,
-                                      width: 17,
-                                      fit: BoxFit.fitWidth,
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    (widget.index >= 0 && cards.isNotEmpty)
-                                        ? InkWell(
-                                            onTap: () {
-                                              showModalBottomSheet(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            30),
-                                                    child: Container(
-                                                      height: 270,
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            'Choose Card',
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                fontFamily:
-                                                                    "bold",
+      body: Directionality(
+        textDirection: LanguageClass.isEnglish?TextDirection.ltr:TextDirection.rtl,
+
+        child: Form(
+          key: formKey,
+          child: SizedBox(
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 35),
+                        child: SingleChildScrollView(
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.85,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  LanguageClass.isEnglish?'Payment':"الدفع",
+                                  style: TextStyle(
+                                      color: AppColors.white,
+                                      fontSize: 30,
+                                      fontFamily: "bold"),
+                                ),
+                                const SizedBox(height: 40),
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      color: AppColors.white,
+                                      border: Border.all(color: AppColors.grey),
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Row(
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/master_card.png',
+                                        height: 11,
+                                        width: 17,
+                                        fit: BoxFit.fitWidth,
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      (widget.index >= 0 && cards.isNotEmpty)
+                                          ? InkWell(
+                                              onTap: () {
+                                                showModalBottomSheet(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              30),
+                                                      child: Container(
+                                                        height: 270,
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                             LanguageClass.isEnglish? 'Choose Card':'اختر كارت ',
+                                                              style: TextStyle(
+                                                                  fontSize: 15,
+                                                                  fontFamily:
+                                                                      "bold",
+                                                                  color: AppColors
+                                                                      .blackColor),
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                            Divider(
+                                                                thickness: 0.5,
                                                                 color: AppColors
-                                                                    .blackColor),
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Divider(
-                                                              thickness: 0.5,
-                                                              color: AppColors
-                                                                  .grey),
-                                                          Column(
-                                                            children: List<
-                                                                    Widget>.generate(
-                                                                cards.length,
-                                                                (index) {
-                                                              return Column(
-                                                                children: [
-                                                                  InkWell(
-                                                                    onTap: () {
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                      setState(
-                                                                          () {
-                                                                        widget.index =
-                                                                            index;
-                                                                      });
-                                                                    },
-                                                                    child: Row(
-                                                                      children: [
-                                                                        Checkbox(
-                                                                          value: widget.index == index
-                                                                              ? true
-                                                                              : false,
-                                                                          activeColor:
-                                                                              Colors.yellow,
-                                                                          shape:
-                                                                              RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-                                                                          onChanged:
-                                                                              (value) {},
-                                                                        ),
-                                                                        Image
-                                                                            .asset(
-                                                                          'assets/images/master_card.png',
-                                                                          height:
-                                                                              11,
-                                                                          width:
-                                                                              17,
-                                                                          fit: BoxFit
-                                                                              .fitWidth,
-                                                                        ),
-                                                                        Text(
-                                                                          "XXXX-XXXX-XXXX-${cards[index].cardNumber!.substring(cards[index].cardNumber!.length - 4)}",
-                                                                          style:
-                                                                              TextStyle(
-                                                                            fontSize:
-                                                                                20,
-                                                                            fontFamily:
-                                                                                "regular",
-                                                                            color:
-                                                                                Colors.black,
+                                                                    .grey),
+                                                            Column(
+                                                              children: List<
+                                                                      Widget>.generate(
+                                                                  cards.length,
+                                                                  (index) {
+                                                                return Column(
+                                                                  children: [
+                                                                    InkWell(
+                                                                      onTap: () {
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                        setState(
+                                                                            () {
+                                                                          widget.index =
+                                                                              index;
+                                                                        });
+                                                                      },
+                                                                      child: Row(
+                                                                        children: [
+                                                                          Checkbox(
+                                                                            value: widget.index == index
+                                                                                ? true
+                                                                                : false,
+                                                                            activeColor:
+                                                                                Colors.yellow,
+                                                                            shape:
+                                                                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+                                                                            onChanged:
+                                                                                (value) {},
                                                                           ),
-                                                                        ),
-                                                                        Spacer(),
-                                                                        InkWell(
-                                                                          onTap:
-                                                                              () {
-                                                                            setState(() {
-                                                                              if (index >= 0 && index < cards.length) {
-                                                                                cards.removeAt(index);
-                                                                              }
-                                                                              // cards.removeAt(index);
+                                                                          Image
+                                                                              .asset(
+                                                                            'assets/images/master_card.png',
+                                                                            height:
+                                                                                11,
+                                                                            width:
+                                                                                17,
+                                                                            fit: BoxFit
+                                                                                .fitWidth,
+                                                                          ),
+                                                                          Text(
+                                                                            "XXXX-XXXX-XXXX-${cards[index].cardNumber!.substring(cards[index].cardNumber!.length - 4)}",
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontSize:
+                                                                                  20,
+                                                                              fontFamily:
+                                                                                  "regular",
+                                                                              color:
+                                                                                  Colors.black,
+                                                                            ),
+                                                                          ),
+                                                                          Spacer(),
+                                                                          InkWell(
+                                                                            onTap:
+                                                                                () {
+                                                                              setState(() {
+                                                                                if (index >= 0 && index < cards.length) {
+                                                                                  cards.removeAt(index);
+                                                                                }
+                                                                                // cards.removeAt(index);
+                                                                                CacheHelper.setDataToSharedPref(
+                                                                                  key: "cards",
+                                                                                  value: json.encode(
+                                                                                    cards.map((e) => e.toJson()).toList(),
+                                                                                  ),
+                                                                                );
+                                                                                Navigator.pop(context);
+                                                                                //  Navigator.pop(context);
+                                                                              });
                                                                               CacheHelper.setDataToSharedPref(
                                                                                 key: "cards",
                                                                                 value: json.encode(
                                                                                   cards.map((e) => e.toJson()).toList(),
                                                                                 ),
                                                                               );
-                                                                              Navigator.pop(context);
-                                                                              //  Navigator.pop(context);
-                                                                            });
-                                                                            CacheHelper.setDataToSharedPref(
-                                                                              key: "cards",
-                                                                              value: json.encode(
-                                                                                cards.map((e) => e.toJson()).toList(),
-                                                                              ),
-                                                                            );
-                                                                          },
-                                                                          child:
-                                                                              Icon(Icons.delete),
-                                                                        )
-                                                                      ],
+                                                                            },
+                                                                            child:
+                                                                                Icon(Icons.delete),
+                                                                          )
+                                                                        ],
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                ],
-                                                              );
-                                                            }),
-                                                          ),
-                                                          Divider(
-                                                              thickness: 0.5,
-                                                              color: AppColors
-                                                                  .grey),
-                                                          Row(
-                                                            children: [
-                                                              SizedBox(
-                                                                width:
-                                                                    sizeWidth *
-                                                                        0.03,
-                                                              ),
-                                                              Container(
-                                                                  decoration: BoxDecoration(
-                                                                      shape: BoxShape
-                                                                          .circle,
-                                                                      color: AppColors
-                                                                          .grey),
-                                                                  child:
-                                                                      const Icon(
-                                                                    Icons.add,
-                                                                    color: Colors
-                                                                        .lightGreen,
-                                                                    size: 20,
-                                                                  )),
-                                                              SizedBox(
-                                                                width:
-                                                                    sizeWidth *
-                                                                        0.03,
-                                                              ),
-                                                              InkWell(
-                                                                onTap:
-                                                                    () async {
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                  final card =
-                                                                      await Navigator
-                                                                          .push<
-                                                                              CardModel>(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) {
-                                                                        return const AddCreditCard();
-                                                                      },
-                                                                    ),
-                                                                  );
-                                                                  if (card
-                                                                      is CardModel) {
-                                                                    cards.add(
-                                                                        card);
-                                                                    setState(
-                                                                        () {});
-                                                                  }
-                                                                },
-                                                                child: Text(
-                                                                  'Add New Card',
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          15.45,
-                                                                      fontFamily:
-                                                                          "bold",
-                                                                      color: AppColors
-                                                                          .blackColor),
+                                                                  ],
+                                                                );
+                                                              }),
+                                                            ),
+                                                            Divider(
+                                                                thickness: 0.5,
+                                                                color: AppColors
+                                                                    .grey),
+                                                            Row(
+                                                              children: [
+                                                                SizedBox(
+                                                                  width:
+                                                                      sizeWidth *
+                                                                          0.03,
                                                                 ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  (widget.index >= 0 &&
-                                                          widget.index <
-                                                              cards.length)
-                                                      ? "XXXX-XXXX-XXXX-${cards[widget.index].cardNumber!.substring(cards[widget.index].cardNumber!.length - 4)}"
-                                                      : "Choose Card",
-                                                  style: const TextStyle(
-                                                      fontSize: 20,
-                                                      fontFamily: "regular",
-                                                      color: Colors.black),
-                                                ),
-                                                const SizedBox(
-                                                  width: 15,
-                                                ),
-                                                const Icon(
-                                                  Icons
-                                                      .keyboard_arrow_down_outlined,
-                                                  size: 30,
-                                                )
-                                              ],
-                                            ),
-                                          )
-                                        : InkWell(
-                                            onTap: () async {
-                                              //Navigator.pop(context);
-                                              final card = await Navigator.push<
-                                                  CardModel>(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) {
-                                                    return AddCreditCard();
-                                                  },
-                                                ),
-                                              );
-                                              if (card is CardModel) {
-                                                cards.add(card);
-                                                setState(() {});
-                                              }
-                                            },
-                                            child: Text(
-                                              'Add credit Card',
-                                              style: TextStyle(
-                                                  fontSize: 15.45,
-                                                  fontFamily: "bold",
-                                                  color: AppColors.blackColor),
-                                            ),
-                                          )
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              (widget.index >= 0 && cards.isNotEmpty)
-                                  ? PayField(
-                                      height: 20,
-                                      width: 1,
-                                      color: const Color(0xff47A9EB),
-                                      hint: 'CVV',
-                                      textInputType: TextInputType.number,
-                                      onChange: (value) {
-                                        setState(() {
-                                          showCardBack = true;
-                                          cvv = value;
-                                        });
-                                      },
-                                      focusNode: cvvNode,
-                                      maxLength: 3,
-                                      onFieldSubmitted: (value) {
-                                        setState(() {
-                                          showCardBack = false;
-                                          amountNode.requestFocus();
-                                        });
-                                      },
-                                    )
-                                  : const SizedBox(),
-                              (widget.index >= 0 && cards.isNotEmpty)
-                                  ? Row(
-                                      children: [
-                                        Container(
-                                          height: 20,
-                                          width: 1,
-                                          decoration: const BoxDecoration(
-                                              color: Color(0xffD865A4)),
-                                        ),
-                                        Container(
-                                            height: sizeHeight * 0.07,
-                                            width: 300,
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 2, horizontal: 18),
-                                            decoration: const BoxDecoration(
-                                                // border: Border.all(
-                                                //   color: AppColors.blue,
-                                                //   width: 0.3,
-                                                // ),
-                                                // borderRadius:
-                                                // const BorderRadius.all(Radius.circular(10))
-                                                ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.stretch,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Container(
-                                                      height: 40,
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width -
-                                                              150,
-                                                      //    padding:
-                                                      //    const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
-                                                      decoration: const BoxDecoration(
-                                                          // color: Colors.red
-                                                          // border: Border.all(
-                                                          //   color: AppColors.blue,
-                                                          //   width: 0.3,
-                                                          // ),
-
-                                                          ),
-                                                      child: TextFormField(
-                                                        autofocus: true,
-                                                        style: fontStyle(
-                                                            color:
-                                                                AppColors.white,
-                                                            fontSize: 16),
-                                                        cursorColor:
-                                                            AppColors.blue,
-                                                        controller:
-                                                            amountController,
-                                                        inputFormatters: [
-                                                          NumericTextFormatter()
-                                                        ],
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        decoration:
-                                                            InputDecoration(
-                                                          border:
-                                                              InputBorder.none,
-                                                          hintText: 'Amount',
-                                                          errorStyle: fontStyle(
-                                                            color: Colors.red,
-                                                            fontSize: 11,
-                                                          ),
-                                                          hintStyle: fontStyle(
-                                                              color: AppColors
-                                                                  .greyLight,
-                                                              fontSize: 15,
-                                                              fontFamily:
-                                                                  FontFamily
-                                                                      .bold),
-                                                          labelStyle: fontStyle(
-                                                              color: AppColors
-                                                                  .grey,
-                                                              fontSize: 12,
-                                                              fontFamily:
-                                                                  FontFamily
-                                                                      .bold),
+                                                                Container(
+                                                                    decoration: BoxDecoration(
+                                                                        shape: BoxShape
+                                                                            .circle,
+                                                                        color: AppColors
+                                                                            .grey),
+                                                                    child:
+                                                                        const Icon(
+                                                                      Icons.add,
+                                                                      color: Colors
+                                                                          .lightGreen,
+                                                                      size: 20,
+                                                                    )),
+                                                                SizedBox(
+                                                                  width:
+                                                                      sizeWidth *
+                                                                          0.03,
+                                                                ),
+                                                                InkWell(
+                                                                  onTap:
+                                                                      () async {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                    final card =
+                                                                        await Navigator
+                                                                            .push<
+                                                                                CardModel>(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) {
+                                                                          return const AddCreditCard();
+                                                                        },
+                                                                      ),
+                                                                    );
+                                                                    if (card
+                                                                        is CardModel) {
+                                                                      cards.add(
+                                                                          card);
+                                                                      setState(
+                                                                          () {});
+                                                                    }
+                                                                  },
+                                                                  child: Text(
+                                                                    LanguageClass.isEnglish?'Add New Card':'اضافة كارت جديد',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            15.45,
+                                                                        fontFamily:
+                                                                            "bold",
+                                                                        color: AppColors
+                                                                            .blackColor),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
                                                         ),
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
-                                                            return 'This Field is Required';
-                                                          } else {
-                                                            return null;
-                                                          }
-                                                        },
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            )),
-                                      ],
-                                    )
-                                  : const SizedBox(),
-                              const Spacer(),
-                              BlocListener(
-                                bloc:
-                                    BlocProvider.of<ReservationCubit>(context),
-                                listener: (context, state) {
-                                  if (state is LoadingCreditCardState) {
-                                    Constants.showLoadingDialog(context);
-                                  } else if (state is LoadedCreditCardState) {
-                                    Navigator.pop(context);
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    (widget.index >= 0 &&
+                                                            widget.index <
+                                                                cards.length)
+                                                        ? "XXXX-XXXX-XXXX-${cards[widget.index].cardNumber!.substring(cards[widget.index].cardNumber!.length - 4)}"
+                                                        : "Choose Card",
+                                                    style: const TextStyle(
+                                                        fontSize: 20,
+                                                        fontFamily: "regular",
+                                                        color: Colors.black),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 15,
+                                                  ),
+                                                  const Icon(
+                                                    Icons
+                                                        .keyboard_arrow_down_outlined,
+                                                    size: 30,
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          : InkWell(
+                                              onTap: () async {
+                                                //Navigator.pop(context);
+                                                final card = await Navigator.push<
+                                                    CardModel>(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) {
+                                                      return AddCreditCard();
+                                                    },
+                                                  ),
+                                                );
+                                                if (card is CardModel) {
+                                                  cards.add(card);
+                                                  setState(() {});
+                                                }
+                                              },
+                                              child: Text(
+                                                LanguageClass.isEnglish?'Add credit Card':"اضافة كارت جديد",
+                                                style: TextStyle(
+                                                    fontSize: 15.45,
+                                                    fontFamily: "bold",
+                                                    color: AppColors.blackColor),
+                                              ),
+                                            )
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                (widget.index >= 0 && cards.isNotEmpty)
+                                    ? PayField(
+                                        height: 20,
+                                        width: 1,
+                                        color: const Color(0xff47A9EB),
+                                        hint:LanguageClass.isEnglish? 'CVV':'رقم السري',
+                                        textInputType: TextInputType.number,
+                                        onChange: (value) {
+                                          setState(() {
+                                            showCardBack = true;
+                                            cvv = value;
+                                          });
+                                        },
+                                        focusNode: cvvNode,
+                                        maxLength: 3,
+                                        onFieldSubmitted: (value) {
+                                          setState(() {
+                                            showCardBack = false;
+                                            amountNode.requestFocus();
+                                          });
+                                        },
+                                      )
+                                    : const SizedBox(),
+                                (widget.index >= 0 && cards.isNotEmpty)
+                                    ? Row(
+                                        children: [
+                                          Container(
+                                            height: 20,
+                                            width: 1,
+                                            decoration: const BoxDecoration(
+                                                color: Color(0xffD865A4)),
+                                          ),
+                                          Container(
+                                              height: sizeHeight * 0.07,
+                                              width: 300,
+                                              padding: const EdgeInsets.symmetric(
+                                                  vertical: 2, horizontal: 18),
+                                              decoration: const BoxDecoration(
+                                                  // border: Border.all(
+                                                  //   color: AppColors.blue,
+                                                  //   width: 0.3,
+                                                  // ),
+                                                  // borderRadius:
+                                                  // const BorderRadius.all(Radius.circular(10))
+                                                  ),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.stretch,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Container(
+                                                        height: 40,
+                                                        width:
+                                                            MediaQuery.of(context)
+                                                                    .size
+                                                                    .width -
+                                                                150,
+                                                        //    padding:
+                                                        //    const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
+                                                        decoration: const BoxDecoration(
+                                                            // color: Colors.red
+                                                            // border: Border.all(
+                                                            //   color: AppColors.blue,
+                                                            //   width: 0.3,
+                                                            // ),
 
-                                    showDoneConfirmationDialog(context,
-                                        callbackTitle: "Go to OTP",
-                                        message: 'Complete the payment process',
-                                        callback: () {
+                                                            ),
+                                                        child: TextFormField(
+                                                          autofocus: true,
+                                                          style: fontStyle(
+                                                              color:
+                                                                  AppColors.white,
+                                                              fontSize: 16),
+                                                          cursorColor:
+                                                              AppColors.blue,
+                                                          controller:
+                                                              amountController,
+                                                          inputFormatters: [
+                                                            NumericTextFormatter()
+                                                          ],
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .number,
+                                                          decoration:
+                                                              InputDecoration(
+                                                            border:
+                                                                InputBorder.none,
+                                                            hintText: LanguageClass.isEnglish?'Amount':'القيمة',
+                                                            errorStyle: fontStyle(
+                                                              color: Colors.red,
+                                                              fontSize: 11,
+                                                            ),
+                                                            hintStyle: fontStyle(
+                                                                color: AppColors
+                                                                    .greyLight,
+                                                                fontSize: 15,
+                                                                fontFamily:
+                                                                    FontFamily
+                                                                        .bold),
+                                                            labelStyle: fontStyle(
+                                                                color: AppColors
+                                                                    .grey,
+                                                                fontSize: 12,
+                                                                fontFamily:
+                                                                    FontFamily
+                                                                        .bold),
+                                                          ),
+                                                          validator: (value) {
+                                                            if (value!.isEmpty) {
+                                                              return 'This Field is Required';
+                                                            } else {
+                                                              return null;
+                                                            }
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              )),
+                                        ],
+                                      )
+                                    : const SizedBox(),
+                                const Spacer(),
+                                BlocListener(
+                                  bloc:
+                                      BlocProvider.of<ReservationCubit>(context),
+                                  listener: (context, state) {
+                                    if (state is LoadingCreditCardState) {
+                                      Constants.showLoadingDialog(context);
+                                    } else if (state is LoadedCreditCardState) {
                                       Navigator.pop(context);
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (_) => ConfirmPayWebView(
-                                                    webViewLink: state
-                                                        .reservationResponseCreditCard
-                                                        .message!
-                                                        .nextAction!
-                                                        .redirectUrl!,
-                                                  )));
-                                      // launchUrl(Uri.parse(state.url.toString()));
-                                    });
 
-                                    // Constants.hideLoadingDialog(context);
-                                    // showWebViewDialog(
-                                    //     context,
-                                    //     state
-                                    //             .reservationResponseCreditCard
-                                    //             .message
-                                    //             ?.nextAction
-                                    //             ?.redirectUrl ??
-                                    //         "");
-                                    // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseCreditCard.message!.statusDescription!);
+                                      showDoneConfirmationDialog(context,
+                                          callbackTitle: "Go to OTP",
+                                          message: 'Complete the payment process',
+                                          callback: () {
+                                        Navigator.pop(context);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) => ConfirmPayWebView(
+                                                      webViewLink: state
+                                                          .reservationResponseCreditCard
+                                                          .message!
+                                                          .nextAction!
+                                                          .redirectUrl!,
+                                                    )));
+                                        // launchUrl(Uri.parse(state.url.toString()));
+                                      });
 
-                                    // showDialog(
-                                    //   context: context,
-                                    //   builder: (BuildContext context) {
-                                    //     return AlertDialog(
-                                    //       title: Column(
-                                    //         mainAxisAlignment:
-                                    //             MainAxisAlignment.spaceBetween,
-                                    //         mainAxisSize: MainAxisSize.min,
-                                    //         children: const [
-                                    //           Icon(
-                                    //             Icons.check_circle,
-                                    //             color: Colors.green,
-                                    //           ),
-                                    //           Text(
-                                    //               "You will get a notification by applying your wallet \n In order to agree to pay"),
-                                    //         ],
-                                    //       ),
-                                    //       titleTextStyle: const TextStyle(
-                                    //           fontWeight: FontWeight.bold,
-                                    //           color: Colors.black,
-                                    //           fontSize: 20),
-                                    //       content: Column(
-                                    //         mainAxisSize: MainAxisSize.min,
-                                    //         children: [
-                                    //           Row(
-                                    //             mainAxisAlignment:
-                                    //                 MainAxisAlignment
-                                    //                     .spaceBetween,
-                                    //             children: [
-                                    //               const Text('Amount: '),
-                                    //               Text(price.toString())
-                                    //             ],
-                                    //           ),
-                                    //           Row(
-                                    //             mainAxisAlignment:
-                                    //                 MainAxisAlignment
-                                    //                     .spaceBetween,
-                                    //             children: [
-                                    //               const Text('Url: '),
-                                    //               InkWell(
-                                    //                   onTap: () {
-                                    //                     launchUrl(
-                                    //                         Uri.parse(state
-                                    //                                 .reservationResponseCreditCard
-                                    //                                 .message!
-                                    //                                 .nextAction!
-                                    //                                 .redirectUrl ??
-                                    //                             ""),
-                                    //                         mode: LaunchMode
-                                    //                             .externalApplication);
-                                    //                   },
-                                    //                   child: Text(state
-                                    //                       .reservationResponseCreditCard
-                                    //                       .message!
-                                    //                       .nextAction!
-                                    //                       .redirectUrl
-                                    //                       .toString()))
-                                    //             ],
-                                    //           )
-                                    //         ],
-                                    //       ),
-                                    //       actionsOverflowButtonSpacing: 20,
-                                    //       actions: [
-                                    //         ElevatedButton(
-                                    //             onPressed: () {
-                                    //               Navigator.pop(context);
-                                    //               Navigator.pushNamed(context,
-                                    //                   Routes.initialRoute);
-                                    //             },
-                                    //             child: Container(
-                                    //               // padding: const EdgeInsets.symmetric(horizontal: 20,vertical:20),
-                                    //               // margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
-                                    //               decoration: BoxDecoration(
-                                    //                   // color: color ?? AppColors.darkRed,
-                                    //                   borderRadius:
-                                    //                       BorderRadius.circular(
-                                    //                           100)),
-                                    //               child: Center(
-                                    //                 child: Text(
-                                    //                   'OK',
-                                    //                   style: TextStyle(
-                                    //                       color:
-                                    //                           AppColors.white,
-                                    //                       fontWeight:
-                                    //                           FontWeight.bold,
-                                    //                       fontSize: 22),
-                                    //                 ),
-                                    //               ),
-                                    //             )),
-                                    //       ],
-                                    //     );
-                                    //   },
-                                    // );
-                                  } else if (state is ErrorCreditCardState) {
-                                    Constants.hideLoadingDialog(context);
-                                    Constants.showDefaultSnackBar(
-                                        context: context,
-                                        text: state.error.toString());
-                                  }
-                                },
-                                child: InkWell(
-                                  onTap: () {
-                                    print(cards[widget.index]
-                                        .cardNumber!
-                                        .toString()
-                                        .replaceAll(" ", ""));
-                                    if (formKey.currentState!.validate()) {
-                                      final tripOneId =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'tripOneId');
-                                      final tripRoundId =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'tripRoundId');
-                                      final selectedDayTo =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'selectedDayTo');
-                                      final selectedDayFrom =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'selectedDayFrom');
-                                      final toStationId =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'toStationId');
-                                      final fromStationId =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'fromStationId');
-                                      final seatIdsOneTrip =
-                                          CacheHelper.getDataToSharedPref(
-                                                  key: 'countSeats')
-                                              ?.map((e) => int.tryParse(e) ?? 0)
-                                              .toList();
-                                      final seatIdsRoundTrip =
-                                          CacheHelper.getDataToSharedPref(
-                                                  key: 'countSeats2')
-                                              ?.map((e) => int.tryParse(e) ?? 0)
-                                              .toList();
-                                      final price =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'price');
+                                      // Constants.hideLoadingDialog(context);
+                                      // showWebViewDialog(
+                                      //     context,
+                                      //     state
+                                      //             .reservationResponseCreditCard
+                                      //             .message
+                                      //             ?.nextAction
+                                      //             ?.redirectUrl ??
+                                      //         "");
+                                      // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseCreditCard.message!.statusDescription!);
 
+                                      // showDialog(
+                                      //   context: context,
+                                      //   builder: (BuildContext context) {
+                                      //     return AlertDialog(
+                                      //       title: Column(
+                                      //         mainAxisAlignment:
+                                      //             MainAxisAlignment.spaceBetween,
+                                      //         mainAxisSize: MainAxisSize.min,
+                                      //         children: const [
+                                      //           Icon(
+                                      //             Icons.check_circle,
+                                      //             color: Colors.green,
+                                      //           ),
+                                      //           Text(
+                                      //               "You will get a notification by applying your wallet \n In order to agree to pay"),
+                                      //         ],
+                                      //       ),
+                                      //       titleTextStyle: const TextStyle(
+                                      //           fontWeight: FontWeight.bold,
+                                      //           color: Colors.black,
+                                      //           fontSize: 20),
+                                      //       content: Column(
+                                      //         mainAxisSize: MainAxisSize.min,
+                                      //         children: [
+                                      //           Row(
+                                      //             mainAxisAlignment:
+                                      //                 MainAxisAlignment
+                                      //                     .spaceBetween,
+                                      //             children: [
+                                      //               const Text('Amount: '),
+                                      //               Text(price.toString())
+                                      //             ],
+                                      //           ),
+                                      //           Row(
+                                      //             mainAxisAlignment:
+                                      //                 MainAxisAlignment
+                                      //                     .spaceBetween,
+                                      //             children: [
+                                      //               const Text('Url: '),
+                                      //               InkWell(
+                                      //                   onTap: () {
+                                      //                     launchUrl(
+                                      //                         Uri.parse(state
+                                      //                                 .reservationResponseCreditCard
+                                      //                                 .message!
+                                      //                                 .nextAction!
+                                      //                                 .redirectUrl ??
+                                      //                             ""),
+                                      //                         mode: LaunchMode
+                                      //                             .externalApplication);
+                                      //                   },
+                                      //                   child: Text(state
+                                      //                       .reservationResponseCreditCard
+                                      //                       .message!
+                                      //                       .nextAction!
+                                      //                       .redirectUrl
+                                      //                       .toString()))
+                                      //             ],
+                                      //           )
+                                      //         ],
+                                      //       ),
+                                      //       actionsOverflowButtonSpacing: 20,
+                                      //       actions: [
+                                      //         ElevatedButton(
+                                      //             onPressed: () {
+                                      //               Navigator.pop(context);
+                                      //               Navigator.pushNamed(context,
+                                      //                   Routes.initialRoute);
+                                      //             },
+                                      //             child: Container(
+                                      //               // padding: const EdgeInsets.symmetric(horizontal: 20,vertical:20),
+                                      //               // margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
+                                      //               decoration: BoxDecoration(
+                                      //                   // color: color ?? AppColors.darkRed,
+                                      //                   borderRadius:
+                                      //                       BorderRadius.circular(
+                                      //                           100)),
+                                      //               child: Center(
+                                      //                 child: Text(
+                                      //                   'OK',
+                                      //                   style: TextStyle(
+                                      //                       color:
+                                      //                           AppColors.white,
+                                      //                       fontWeight:
+                                      //                           FontWeight.bold,
+                                      //                       fontSize: 22),
+                                      //                 ),
+                                      //               ),
+                                      //             )),
+                                      //       ],
+                                      //     );
+                                      //   },
+                                      // );
+                                    } else if (state is ErrorCreditCardState) {
+                                      Constants.hideLoadingDialog(context);
+                                      Constants.showDefaultSnackBar(
+                                          context: context,
+                                          text: state.error.toString());
+                                    }
+                                  },
+                                  child: InkWell(
+                                    onTap: () {
                                       print(cards[widget.index]
-                                          .month!
-                                          .substring(0, 2)
-                                          .toString());
+                                          .cardNumber!
+                                          .toString()
+                                          .replaceAll(" ", ""));
+                                      if (formKey.currentState!.validate()) {
+                                        final tripOneId =
+                                            CacheHelper.getDataToSharedPref(
+                                                key: 'tripOneId');
+                                        final tripRoundId =
+                                            CacheHelper.getDataToSharedPref(
+                                                key: 'tripRoundId');
+                                        final selectedDayTo =
+                                            CacheHelper.getDataToSharedPref(
+                                                key: 'selectedDayTo');
+                                        final selectedDayFrom =
+                                            CacheHelper.getDataToSharedPref(
+                                                key: 'selectedDayFrom');
+                                        final toStationId =
+                                            CacheHelper.getDataToSharedPref(
+                                                key: 'toStationId');
+                                        final fromStationId =
+                                            CacheHelper.getDataToSharedPref(
+                                                key: 'fromStationId');
+                                        final seatIdsOneTrip =
+                                            CacheHelper.getDataToSharedPref(
+                                                    key: 'countSeats')
+                                                ?.map((e) => int.tryParse(e) ?? 0)
+                                                .toList();
+                                        final seatIdsRoundTrip =
+                                            CacheHelper.getDataToSharedPref(
+                                                    key: 'countSeats2')
+                                                ?.map((e) => int.tryParse(e) ?? 0)
+                                                .toList();
+                                        final price =
+                                            CacheHelper.getDataToSharedPref(
+                                                key: 'price');
 
-                                      print(cards[widget.index]
-                                          .month!
-                                          .substring(
-                                            3,
-                                          )
-                                          .toString());
+                                        print(cards[widget.index]
+                                            .month!
+                                            .substring(0, 2)
+                                            .toString());
 
-                                      double amount =
-                                          double.parse(amountController.text);
-
-                                      print(
-                                          "tripOneId${tripOneId}==tripOneId${tripRoundId}=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price");
-                                      print(
-                                          "tripOneId${selectedDayTo}==tripOneId${selectedDayFrom}=====${toStationId}===${fromStationId}==$price");
-
-                                      print(
-                                          "tripOneId${tripOneId}==tripOneId${tripRoundId}=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price==");
-
-                                      // if(_user != null && formKey.currentState!.validate()) {
-                                      BlocProvider.of<ReservationCubit>(context)
-                                          .chargebycard(
-                                        custId: widget.user.customerId!,
-                                        amount: amount
-                                            .toStringAsFixed(2)
-                                            .toString(),
-                                        cvv: cvv.toString(),
-                                        cardNumber: cards[widget.index]
-                                            .cardNumber!
-                                            .toString()
-                                            .replaceAll(" ", ""),
-                                        cardExpiryYear: cards[widget.index]
+                                        print(cards[widget.index]
                                             .month!
                                             .substring(
                                               3,
                                             )
-                                            .toString(),
-                                        cardExpiryMonth: cards[widget.index]
-                                            .month!
-                                            .substring(0, 2)
-                                            .toString(),
-                                      );
-                                    }
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(25),
-                                    child: Container(
-                                      width: 200,
-                                      height: 70,
-                                      decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(50)),
-                                      ),
+                                            .toString());
+
+                                        double amount =
+                                            double.parse(amountController.text);
+
+                                        print(
+                                            "tripOneId${tripOneId}==tripOneId${tripRoundId}=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price");
+                                        print(
+                                            "tripOneId${selectedDayTo}==tripOneId${selectedDayFrom}=====${toStationId}===${fromStationId}==$price");
+
+                                        print(
+                                            "tripOneId${tripOneId}==tripOneId${tripRoundId}=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price==");
+
+                                        // if(_user != null && formKey.currentState!.validate()) {
+                                        BlocProvider.of<ReservationCubit>(context)
+                                            .chargebycard(
+                                          custId: widget.user.customerId!,
+                                          amount: amount
+                                              .toStringAsFixed(2)
+                                              .toString(),
+                                          cvv: cvv.toString(),
+                                          cardNumber: cards[widget.index]
+                                              .cardNumber!
+                                              .toString()
+                                              .replaceAll(" ", ""),
+                                          cardExpiryYear: cards[widget.index]
+                                              .month!
+                                              .substring(
+                                                3,
+                                              )
+                                              .toString(),
+                                          cardExpiryMonth: cards[widget.index]
+                                              .month!
+                                              .substring(0, 2)
+                                              .toString(),
+                                        );
+                                      }
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(25),
                                       child: Container(
-                                        height: 65,
-                                        decoration: BoxDecoration(
-                                            color: AppColors.primaryColor,
-                                            borderRadius:
-                                                BorderRadius.circular(15)),
-                                        child: const Center(
-                                          child: Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: Text(
-                                              'Charge',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily: "bold"),
+                                        width: 200,
+                                        height: 70,
+                                        decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(50)),
+                                        ),
+                                        child: Container(
+                                          height: 65,
+                                          decoration: BoxDecoration(
+                                              color: AppColors.primaryColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          child:  Center(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Text(
+                                                LanguageClass.isEnglish?'Charge':'شحن',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: "bold"),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -771,13 +776,13 @@ class _chargeCardState extends State<chargeCard> {
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -5,6 +5,7 @@ import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
+import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/widgets/custom_drop_down_list.dart';
 import 'package:swa/features/home/domain/entities/cities_stations.dart';
@@ -39,8 +40,8 @@ class _MyHomeState extends State<MyHome> {
   ///To be changed by selected station id
   int? _fromStationId;
   int? _toStationId;
-  String _fromCityName = 'Select';
-  String _toCityName = 'Select';
+  String _fromCityName =LanguageClass.isEnglish? 'Select':'تحديد';
+  String _toCityName = LanguageClass.isEnglish? 'Select':'تحديد';
 
   ///Getting if user is logged in or not
   User? _user;
@@ -68,633 +69,687 @@ class _MyHomeState extends State<MyHome> {
             _user = state.userResponse.user;
           }
         },
-        child: Container(
-          color: Colors.black,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Stack(
-                children: [
-                  SizedBox(
-                    width: double.infinity, // Take the full width of the screen
-                    child: Image.asset(
-                      "assets/images/oranaa.agency_85935_luxor_landscape_and_sky_with_ballons_on_sky_e8ecb03c-2e93-4118-abed-39447bd055c9.png",
-                      fit: BoxFit.cover,
-                      // Maintain the aspect ratio
+        child: Directionality(
+          textDirection: LanguageClass.isEnglish?TextDirection.ltr:TextDirection.rtl,
+          child: Container(
+            color: Colors.black,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Stack(
+                  children: [
+                    SizedBox(
+                      width: double.infinity, // Take the full width of the screen
+                      child: Image.asset(
+                        "assets/images/oranaa.agency_85935_luxor_landscape_and_sky_with_ballons_on_sky_e8ecb03c-2e93-4118-abed-39447bd055c9.png",
+                        fit: BoxFit.cover,
+                        // Maintain the aspect ratio
+                      ),
                     ),
-                  ),
-                  Center(
-                      child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 30),
-                          child: _user == null
-                              ? Row(
-                                  children: [
-                                    const Spacer(),
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.pushNamed(
-                                            context, Routes.signInRoute);
-                                      },
-                                      child: Container(
-                                        height: sizeHeight * 0.05,
-                                        width: sizeWidth * 0.3,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          color: AppColors.darkPurple,
-                                        ),
-                                        child: const Center(
-                                          child: Text(
-                                            "Login",
-                                            style:
-                                                TextStyle(color: Colors.white),
+                    Center(
+                        child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 30),
+                            child: _user == null
+                                ? Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            LanguageClass.isEnglish = !LanguageClass.isEnglish;
+                                            print("LanguageClass.isEnglish${LanguageClass.isEnglish}");
+                                          });
+                                          CacheHelper.setDataToSharedPref(key: 'language', value: LanguageClass.isEnglish);
+                                        },
+                                        child: Container(
+                                          height: sizeHeight * 0.05,
+                                          width: sizeWidth * 0.1,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius.circular(20),
+                                            color: AppColors.darkPurple,
+                                          ),
+                                          child:  Center(
+                                            child: Text(
+                                              LanguageClass.isEnglish?"ع":"En",
+                                              style:
+                                              TextStyle(color: Colors.white),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                )
-                              : Row(
-                                  children: [
-                                    const Spacer(),
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(
-                                                builder: (context) {
-                                          return MyAccountScreen(
-                                            user: _user!,
-                                          );
-                                        }));
-                                      },
-                                      child: Container(
-                                        height: sizeHeight * 0.05,
-                                        width: sizeWidth * 0.3,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          color: AppColors.darkPurple,
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            _user!.name!,
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                      const Spacer(),
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                              context, Routes.signInRoute);
+                                        },
+                                        child: Container(
+                                          height: sizeHeight * 0.05,
+                                          width: sizeWidth * 0.3,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: AppColors.darkPurple,
+                                          ),
+                                          child: const Center(
+                                            child: Text(
+                                              "Login",
+                                              style:
+                                                  TextStyle(color: Colors.white),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                        ),
-                        SizedBox(
-                          height: sizeHeight * 0.02,
-                        ),
-                        SvgPicture.asset(
-                          "assets/images/Swa Logo.svg",
-                          height: sizeHeight * 0.06,
-                          width: sizeWidth * 0.06,
-                        ),
-                        SizedBox(
-                          height: sizeHeight * 0.06,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                tripTypeId = "1";
-                                setState(() {
-                                  print("tripTypeId");
-                                });
-                              },
-                              child: Container(
-                                height: sizeHeight * 0.12,
-                                width: sizeWidth * 0.44,
-                                decoration: BoxDecoration(
-                                    color: tripTypeId == "1"
-                                        ? AppColors.primaryColor
-                                        : AppColors.darkPurple,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      "assets/images/arrow_one_way.svg",
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      "One way",
-                                      style: TextStyle(
-                                        color: AppColors.white,
-                                        fontSize: 18,
+                                    ],
+                                  )
+                                : Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            LanguageClass.isEnglish = !LanguageClass.isEnglish;
+                                            print("LanguageClass.isEnglish${LanguageClass.isEnglish}");
+                                          });
+                                          CacheHelper.setDataToSharedPref(key: 'language', value: LanguageClass.isEnglish);
+                                        },
+                                        child: Container(
+                                          height: sizeHeight * 0.05,
+                                          width: sizeWidth * 0.1,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius.circular(20),
+                                            color: AppColors.darkPurple,
+                                          ),
+                                          child:  Center(
+                                            child: Text(
+                                              LanguageClass.isEnglish?"ع":"En",
+                                              style:
+                                              TextStyle(color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: sizeWidth * 0.02,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                print("userId=======${_user!.userId!}");
-                                tripTypeId = "2";
-                                setState(() {
-                                  print("tripTypeId");
-                                });
-                              },
-                              child: Container(
-                                height: sizeHeight * 0.12,
-                                width: sizeWidth * 0.44,
-                                decoration: BoxDecoration(
-                                    color: tripTypeId == "2"
-                                        ? AppColors.primaryColor
-                                        : AppColors.darkPurple,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      "assets/images/bus.svg",
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      "Round Trip",
-                                      style: TextStyle(
-                                        color: AppColors.white,
-                                        fontSize: 18,
+                                      const Spacer(),
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                            return MyAccountScreen(
+                                              user: _user!,
+                                            );
+                                          }));
+                                        },
+                                        child: Container(
+                                          height: sizeHeight * 0.05,
+                                          width: sizeWidth * 0.3,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: AppColors.darkPurple,
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              _user!.name!,
+                                              style:
+                                                  TextStyle(color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: sizeHeight * 0.02,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.zero,
-                          child: Text(
-                            "From",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                            textAlign: TextAlign.left,
+                                    ],
+                                  ),
                           ),
-                        ),
-                        BlocListener(
-                          bloc: BlocProvider.of<HomeCubit>(context),
-                          listener: (BuildContext context, state) async {
-                            if (state is GetFromStationsListLoadingState) {
-                              Constants.showLoadingDialog(context);
-                            } else if (state
-                                is GetFromStationsListLoadedState) {
-                              Constants.hideLoadingDialog(context);
-                              setState(() {
-                                if (state.homeMessageResponse.status ==
-                                    'failed') {
-                                  Constants.showDefaultSnackBar(
-                                      context: context,
-                                      text: state.homeMessageResponse.message
-                                          .toString());
-                                } else {
-                                  _fromStations = state
-                                      .homeMessageResponse.citiesStations!
-                                      .cast<CitiesStations>()
-                                      .toList();
-                                }
-                              });
-                              final result = await Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return SelectFromCity(
-                                    fromStations: _fromStations!);
-                              }));
-                              if (result != null) {
-                                setState(() {
-                                  _fromStationId = result['_fromStationId'];
-                                  _fromCityName = result['_fromCityName'];
-                                });
-                              }
-                              print("bassnt nasralla2 ");
-
-                              // Widget _fromStationsListWidget = ListView.builder(
-                              //   scrollDirection: Axis.vertical,
-                              //   shrinkWrap: true,
-                              //   itemCount: _fromStations!.length,
-                              //   itemBuilder: (context, index) {
-                              //     String cityName = _fromStations![index].cityName;
-                              //     List<StationList> stationsList = _fromStations![index].stationList;
-                              //     return stationsList.isNotEmpty ? Material(
-                              //       child: ExpansionTile(
-                              //         backgroundColor: Colors.grey[200],
-                              //         iconColor: AppColors.primaryColor,
-                              //         title: Text(
-                              //           cityName,
-                              //           style: const TextStyle(
-                              //               color: Colors.black,
-                              //               fontWeight: FontWeight.bold
-                              //           ),
-                              //         ),
-                              //         children: [
-                              //           ListView.builder(
-                              //             shrinkWrap: true,
-                              //             physics: const ClampingScrollPhysics(),//NeverScrollableScrollPhysics(),
-                              //             scrollDirection: Axis.vertical,
-                              //             itemCount: stationsList.length,
-                              //             itemBuilder: (context, index) {
-                              //               return ListTile(
-                              //                 onTap: (){
-                              //                   setState(() {
-                              //                     _fromStationId = stationsList[index].stationId;
-                              //                     _fromCityName = stationsList[index].stationName;
-                              //                   });
-                              //                   Navigator.of(context).pop();
-                              //                 },
-                              //                 leading: IconButton(
-                              //                   icon: Icon(
-                              //                     Icons.arrow_forward_ios_outlined,
-                              //                     size: 20,
-                              //                     color: AppColors.primaryColor,
-                              //                   ),
-                              //                   onPressed: () {
-                              //                   },
-                              //                 ),
-                              //                 title: Text(stationsList[index].stationName),
-                              //               );
-                              //             },
-                              //           ),
-                              //         ],
-                              //       ),
-                              //     ) : const SizedBox(width: 60,);
-                              //   },
-                              // );
-                              // Constants.showListDialog(context, 'From Stations', _fromStationsListWidget);
-                            } else if (state is GetFromStationsListErrorState) {
-                              Constants.hideLoadingDialog(context);
-                              Constants.showDefaultSnackBar(
-                                  context: context,
-                                  text: state.error.toString());
-                            }
-                          },
-                          child: InkWell(
-                              onTap: () {
-                                BlocProvider.of<HomeCubit>(context)
-                                    .getFromStationsListData();
-                              },
-                              child: CustomDropDownList(hint: _fromCityName)),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.zero,
-                          child: Text(
-                            "To",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                            textAlign: TextAlign.left,
+                          SizedBox(
+                            height: sizeHeight * 0.02,
                           ),
-                        ),
-                        BlocListener(
-                          bloc: BlocProvider.of<HomeCubit>(context),
-                          listener: (BuildContext context, state) async {
-                            if (state is GetToStationsListLoadingState) {
-                              Constants.showLoadingDialog(context);
-                            } else if (state is GetToStationsListLoadedState) {
-                              Constants.hideLoadingDialog(context);
-                              setState(() {
-                                if (state.homeMessageResponse.status ==
-                                    'failed') {
-                                  Constants.showDefaultSnackBar(
-                                      context: context,
-                                      text: state.homeMessageResponse.message
-                                          .toString());
-                                } else {
-                                  _toStations = state
-                                      .homeMessageResponse.citiesStations!
-                                      .cast<CitiesStations>()
-                                      .toList();
-                                }
-                              });
-                              final result = await Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return SelectToCity(toStations: _toStations!);
-                              }));
-                              if (result != null) {
-                                setState(() {
-                                  _toStationId = result['_toStationId'];
-                                  _toCityName = result['_toCityName'];
-                                });
-                              }
-
-                              // Widget _toStationsListWidget = ListView.builder(
-                              //   scrollDirection: Axis.vertical,
-                              //   shrinkWrap: true,
-                              //   itemCount: _toStations!.length,
-                              //   itemBuilder: (context, index) {
-                              //     String cityName = _toStations![index].cityName;
-                              //     List<StationList> stationsList = _toStations![index].stationList;
-                              //     return stationsList.isNotEmpty ? Material(
-                              //       child: ExpansionTile(
-                              //         backgroundColor: Colors.grey[200],
-                              //         iconColor: AppColors.primaryColor,
-                              //         title: Text(
-                              //           cityName,
-                              //           style: const TextStyle(
-                              //               color: Colors.black,
-                              //               fontWeight: FontWeight.bold
-                              //           ),
-                              //         ),
-                              //         children: [
-                              //           ListView.builder(
-                              //             shrinkWrap: true,
-                              //             physics: const ClampingScrollPhysics(),//NeverScrollableScrollPhysics(),
-                              //             scrollDirection: Axis.vertical,
-                              //             itemCount: stationsList.length,
-                              //             itemBuilder: (context, index) {
-                              //               return ListTile(
-                              //                 onTap: () {
-                              //                   setState(() {
-                              //                     _toStationId = stationsList[index].stationId;
-                              //                     _toCityName = stationsList[index].stationName;
-                              //                   });
-                              //                   Navigator.of(context).pop();
-                              //                 },
-                              //                 leading: IconButton(
-                              //                   icon: Icon(
-                              //                     Icons.arrow_forward_ios_outlined,
-                              //                     size: 20,
-                              //                     color: AppColors.primaryColor,
-                              //                   ),
-                              //                   onPressed: () {
-                              //                   },
-                              //                 ),
-                              //                 title: Text(stationsList[index].stationName),
-                              //               );
-                              //             },
-                              //           ),
-                              //         ],
-                              //       ),
-                              //     ) : const SizedBox(width: 60,);
-                              //   },
-                              // );
-                              // Constants.showListDialog(context, 'To Stations', _toStationsListWidget);
-                            } else if (state is GetToStationsListErrorState) {
-                              Constants.hideLoadingDialog(context);
-                              Constants.showDefaultSnackBar(
-                                  context: context,
-                                  text: state.error.toString());
-                            }
-                          },
-                          child: InkWell(
-                              onTap: () {
-                                if (_fromStationId != null) {
-                                  BlocProvider.of<HomeCubit>(context)
-                                      .getToStationsListData(ToStationsParams(
-                                          stationId:
-                                              _fromStationId.toString()));
-                                }
-                              },
-                              child: CustomDropDownList(hint: _toCityName)),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 10),
-                          child: Row(
+                          SvgPicture.asset(
+                            "assets/images/Swa Logo.svg",
+                            height: sizeHeight * 0.06,
+                            width: sizeWidth * 0.06,
+                          ),
+                          SizedBox(
+                            height: sizeHeight * 0.06,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              tripTypeId == "1"
-                                  ? Row(
-                                      children: [
-                                        SizedBox(
-                                          width: sizeWidth * 0.25,
+                              InkWell(
+                                onTap: () {
+                                  tripTypeId = "1";
+                                  setState(() {
+                                    print("tripTypeId");
+                                  });
+                                },
+                                child: Container(
+                                  height: sizeHeight * 0.12,
+                                  width: sizeWidth * 0.44,
+                                  decoration: BoxDecoration(
+                                      color: tripTypeId == "1"
+                                          ? AppColors.primaryColor
+                                          : AppColors.darkPurple,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        "assets/images/arrow_one_way.svg",
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        LanguageClass.isEnglish?"One Way":"ذهاب فقط",
+                                        style: TextStyle(
+                                          color: AppColors.white,
+                                          fontSize: 18,
                                         ),
-                                        Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.date_range_outlined,
-                                                  color: AppColors.white,
-                                                  size: 16,
-                                                ),
-                                                SizedBox(
-                                                  width: sizeWidth * 0.01,
-                                                ),
-                                                Text(
-                                                  "DEPART ON",
-                                                  style: TextStyle(
-                                                      color: AppColors.white,
-                                                      fontSize: 12),
-                                                )
-                                              ],
-                                            ),
-                                            InkWell(
-                                              onTap: () {
-                                                showMyDatePicker(
-                                                    selectedDayFrom);
-                                                setState(() {
-                                                  selectedDayFrom;
-                                                });
-                                              },
-                                              child: Text(
-                                                  "${selectedDayFrom.day}/${selectedDayFrom.month}/${selectedDayFrom.year}",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: AppColors.white,
-                                                      fontSize: 20)),
-                                            ),
-                                          ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: sizeWidth * 0.02,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  print("userId=======${_user!.userId!}");
+                                  tripTypeId = "2";
+                                  setState(() {
+                                    print("tripTypeId");
+                                  });
+                                },
+                                child: Container(
+                                  height: sizeHeight * 0.12,
+                                  width: sizeWidth * 0.44,
+                                  decoration: BoxDecoration(
+                                      color: tripTypeId == "2"
+                                          ? AppColors.primaryColor
+                                          : AppColors.darkPurple,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        "assets/images/bus.svg",
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        LanguageClass.isEnglish?"Round Trip":"ذهاب وعوده",
+                                        style: TextStyle(
+                                          color: AppColors.white,
+                                          fontSize: 18,
                                         ),
-                                      ],
-                                    )
-                                  : Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.date_range_outlined,
-                                              color: AppColors.white,
-                                              size: 16,
-                                            ),
-                                            SizedBox(
-                                              width: sizeWidth * 0.01,
-                                            ),
-                                            Text(
-                                              "DEPART ON",
-                                              style: TextStyle(
-                                                  color: AppColors.white,
-                                                  fontSize: 12),
-                                            )
-                                          ],
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-                                            showMyDatePicker(selectedDayFrom);
-                                            setState(() {
-                                              selectedDayFrom;
-                                            });
-                                          },
-                                          child: Text(
-                                              "${selectedDayFrom.day}/${selectedDayFrom.month}/${selectedDayFrom.year}",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: AppColors.white,
-                                                  fontSize: 20)),
-                                        ),
-                                      ],
-                                    ),
-                              tripTypeId == "2" ? const Spacer() : SizedBox(),
-                              tripTypeId == "2"
-                                  ? Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.date_range_outlined,
-                                              color: AppColors.white,
-                                              size: 16,
-                                            ),
-                                            SizedBox(
-                                              width: sizeWidth * 0.01,
-                                            ),
-                                            Text(
-                                              "DEPART ON",
-                                              style: TextStyle(
-                                                  color: AppColors.white,
-                                                  fontSize: 12),
-                                            )
-                                          ],
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-                                            showMyDatePicker(selectedDayTo);
-                                            setState(() {
-                                              selectedDayTo;
-                                            });
-                                          },
-                                          child: Text(
-                                              "${selectedDayTo.day}/${selectedDayTo.month}/${selectedDayTo.year}",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: AppColors.white,
-                                                  fontSize: 20)),
-                                        ),
-                                      ],
-                                    )
-                                  : SizedBox(),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
                             ],
                           ),
-                        ),
-                        SizedBox(height: 25,),
-                        BlocListener<TimesTripsCubit, TimesTripsStates>(
-                          bloc: BlocProvider.of<TimesTripsCubit>(context),
-                          listener: (context, state) {
-                            if (state is LoadingTimesTrips) {
-                              Constants.showLoadingDialog(context);
-                            } else if (state is LoadedTimesTrips) {
-                              tripListBack = state.timesTripsResponse.message!
-                                      .tripListBack ??
-                                  [];
-                              Constants.hideLoadingDialog(context);
+                          SizedBox(
+                            height: sizeHeight * 0.02,
+                          ),
+                           Text(
+                             LanguageClass.isEnglish?"From":"من",
 
-                              if (state.timesTripsResponse.message!.tripList!
-                                      .length >
-                                  0) {
-                                Navigator.push(context,
+                             style: TextStyle(color: Colors.white, fontSize: 20),
+                             textAlign: TextAlign.left,
+                           ),
+                          BlocListener(
+                            bloc: BlocProvider.of<HomeCubit>(context),
+                            listener: (BuildContext context, state) async {
+                              if (state is GetFromStationsListLoadingState) {
+                                Constants.showLoadingDialog(context);
+                              } else if (state
+                                  is GetFromStationsListLoadedState) {
+                                Constants.hideLoadingDialog(context);
+                                setState(() {
+                                  if (state.homeMessageResponse.status ==
+                                      'failed') {
+                                    Constants.showDefaultSnackBar(
+                                        context: context,
+                                        text: state.homeMessageResponse.message
+                                            .toString());
+                                  } else {
+                                    _fromStations = state
+                                        .homeMessageResponse.citiesStations!
+                                        .cast<CitiesStations>()
+                                        .toList();
+                                  }
+                                });
+                                final result = await Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
-                                  return TimesScreen(
-                                    tripList: state
-                                        .timesTripsResponse.message!.tripList!,
-                                    tripTypeId: tripTypeId,
-                                    tripListBack: state.timesTripsResponse
-                                            .message!.tripListBack ??
-                                        [],
-                                    user: _user,
-                                  );
+                                  return SelectFromCity(
+                                      fromStations: _fromStations!);
                                 }));
-                              } else {
+                                if (result != null) {
+                                  setState(() {
+                                    _fromStationId = result['_fromStationId'];
+                                    _fromCityName = result['_fromCityName'];
+                                  });
+                                }
+                                print("bassnt nasralla2 ");
+
+                                // Widget _fromStationsListWidget = ListView.builder(
+                                //   scrollDirection: Axis.vertical,
+                                //   shrinkWrap: true,
+                                //   itemCount: _fromStations!.length,
+                                //   itemBuilder: (context, index) {
+                                //     String cityName = _fromStations![index].cityName;
+                                //     List<StationList> stationsList = _fromStations![index].stationList;
+                                //     return stationsList.isNotEmpty ? Material(
+                                //       child: ExpansionTile(
+                                //         backgroundColor: Colors.grey[200],
+                                //         iconColor: AppColors.primaryColor,
+                                //         title: Text(
+                                //           cityName,
+                                //           style: const TextStyle(
+                                //               color: Colors.black,
+                                //               fontWeight: FontWeight.bold
+                                //           ),
+                                //         ),
+                                //         children: [
+                                //           ListView.builder(
+                                //             shrinkWrap: true,
+                                //             physics: const ClampingScrollPhysics(),//NeverScrollableScrollPhysics(),
+                                //             scrollDirection: Axis.vertical,
+                                //             itemCount: stationsList.length,
+                                //             itemBuilder: (context, index) {
+                                //               return ListTile(
+                                //                 onTap: (){
+                                //                   setState(() {
+                                //                     _fromStationId = stationsList[index].stationId;
+                                //                     _fromCityName = stationsList[index].stationName;
+                                //                   });
+                                //                   Navigator.of(context).pop();
+                                //                 },
+                                //                 leading: IconButton(
+                                //                   icon: Icon(
+                                //                     Icons.arrow_forward_ios_outlined,
+                                //                     size: 20,
+                                //                     color: AppColors.primaryColor,
+                                //                   ),
+                                //                   onPressed: () {
+                                //                   },
+                                //                 ),
+                                //                 title: Text(stationsList[index].stationName),
+                                //               );
+                                //             },
+                                //           ),
+                                //         ],
+                                //       ),
+                                //     ) : const SizedBox(width: 60,);
+                                //   },
+                                // );
+                                // Constants.showListDialog(context, 'From Stations', _fromStationsListWidget);
+                              } else if (state is GetFromStationsListErrorState) {
+                                Constants.hideLoadingDialog(context);
                                 Constants.showDefaultSnackBar(
                                     context: context,
-                                    text: "No trips in this date");
-                              }
-                            } else if (state is ErrorTimesTrips) {
-                              Constants.hideLoadingDialog(context);
-                              Constants.showDefaultSnackBar(
-                                  context: context, text: state.msg);
-                            }
-                          },
-                          child: InkWell(
-                            onTap: () {
-                              if (_fromStationId == null ||
-                                  _toStationId == null) {
-                                Constants.showDefaultSnackBar(
-                                    context: context,
-                                    text:
-                                        "please select from city and to city");
-                              } else {
-                                print(
-                                    "tripTypeIdBassant    ${_fromStationId.toString()}  ${_toStationId.toString()}"
-                                    "  ${selectedDayFrom.toString()}  ${selectedDayTo.toString()}");
-                                CacheHelper.setDataToSharedPref(
-                                    key: 'fromStationId',
-                                    value: _fromStationId.toString());
-                                CacheHelper.setDataToSharedPref(
-                                    key: 'toStationId',
-                                    value: _toStationId.toString());
-                                CacheHelper.setDataToSharedPref(
-                                    key: 'selectedDayTo',
-                                    value: selectedDayTo.toString());
-                                CacheHelper.setDataToSharedPref(
-                                    key: 'selectedDayFrom',
-                                    value: selectedDayFrom.toString());
-                                print("===}======");
-                                BlocProvider.of<TimesTripsCubit>(context)
-                                    .getTimes(
-                                  tripType: tripTypeId.toString(),
-                                  fromStationID: _fromStationId.toString(),
-                                  toStationID: _toStationId.toString(),
-                                  dateGo: selectedDayFrom.toString(),
-                                  dateBack: selectedDayTo.toString(),
-                                );
+                                    text: state.error.toString());
                               }
                             },
-                            child: Container(
-                              height: 50,
-                              //padding:  EdgeInsets.symmetric(horizontal: 10,vertical:20),
-                              //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
-                              decoration: BoxDecoration(
-                                  color: AppColors.primaryColor,
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: Center(
-                                child: Text(
-                                  "Search Bus",
-                                  style: TextStyle(
-                                      color: AppColors.white,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 20),
+                            child: InkWell(
+                                onTap: () {
+                                  BlocProvider.of<HomeCubit>(context)
+                                      .getFromStationsListData();
+                                },
+                                child: CustomDropDownList(hint: _fromCityName)),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                           Padding(
+                            padding: EdgeInsets.zero,
+                            child: Text(
+                              LanguageClass.isEnglish?"To":"الي",
+
+                              style: TextStyle(color: Colors.white, fontSize: 20),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          BlocListener(
+                            bloc: BlocProvider.of<HomeCubit>(context),
+                            listener: (BuildContext context, state) async {
+                              if (state is GetToStationsListLoadingState) {
+                                Constants.showLoadingDialog(context);
+                              } else if (state is GetToStationsListLoadedState) {
+                                Constants.hideLoadingDialog(context);
+                                setState(() {
+                                  if (state.homeMessageResponse.status ==
+                                      'failed') {
+                                    Constants.showDefaultSnackBar(
+                                        context: context,
+                                        text: state.homeMessageResponse.message
+                                            .toString());
+                                  } else {
+                                    _toStations = state
+                                        .homeMessageResponse.citiesStations!
+                                        .cast<CitiesStations>()
+                                        .toList();
+                                  }
+                                });
+                                final result = await Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return SelectToCity(toStations: _toStations!);
+                                }));
+                                if (result != null) {
+                                  setState(() {
+                                    _toStationId = result['_toStationId'];
+                                    _toCityName = result['_toCityName'];
+                                  });
+                                }
+
+                                // Widget _toStationsListWidget = ListView.builder(
+                                //   scrollDirection: Axis.vertical,
+                                //   shrinkWrap: true,
+                                //   itemCount: _toStations!.length,
+                                //   itemBuilder: (context, index) {
+                                //     String cityName = _toStations![index].cityName;
+                                //     List<StationList> stationsList = _toStations![index].stationList;
+                                //     return stationsList.isNotEmpty ? Material(
+                                //       child: ExpansionTile(
+                                //         backgroundColor: Colors.grey[200],
+                                //         iconColor: AppColors.primaryColor,
+                                //         title: Text(
+                                //           cityName,
+                                //           style: const TextStyle(
+                                //               color: Colors.black,
+                                //               fontWeight: FontWeight.bold
+                                //           ),
+                                //         ),
+                                //         children: [
+                                //           ListView.builder(
+                                //             shrinkWrap: true,
+                                //             physics: const ClampingScrollPhysics(),//NeverScrollableScrollPhysics(),
+                                //             scrollDirection: Axis.vertical,
+                                //             itemCount: stationsList.length,
+                                //             itemBuilder: (context, index) {
+                                //               return ListTile(
+                                //                 onTap: () {
+                                //                   setState(() {
+                                //                     _toStationId = stationsList[index].stationId;
+                                //                     _toCityName = stationsList[index].stationName;
+                                //                   });
+                                //                   Navigator.of(context).pop();
+                                //                 },
+                                //                 leading: IconButton(
+                                //                   icon: Icon(
+                                //                     Icons.arrow_forward_ios_outlined,
+                                //                     size: 20,
+                                //                     color: AppColors.primaryColor,
+                                //                   ),
+                                //                   onPressed: () {
+                                //                   },
+                                //                 ),
+                                //                 title: Text(stationsList[index].stationName),
+                                //               );
+                                //             },
+                                //           ),
+                                //         ],
+                                //       ),
+                                //     ) : const SizedBox(width: 60,);
+                                //   },
+                                // );
+                                // Constants.showListDialog(context, 'To Stations', _toStationsListWidget);
+                              } else if (state is GetToStationsListErrorState) {
+                                Constants.hideLoadingDialog(context);
+                                Constants.showDefaultSnackBar(
+                                    context: context,
+                                    text: state.error.toString());
+                              }
+                            },
+                            child: InkWell(
+                                onTap: () {
+                                  if (_fromStationId != null) {
+                                    BlocProvider.of<HomeCubit>(context)
+                                        .getToStationsListData(ToStationsParams(
+                                            stationId:
+                                                _fromStationId.toString()));
+                                  }
+                                },
+                                child: CustomDropDownList(hint: _toCityName)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 10),
+                            child: Row(
+                              children: [
+                                tripTypeId == "1"
+                                    ? Row(
+                                        children: [
+                                          SizedBox(
+                                            width: sizeWidth * 0.25,
+                                          ),
+                                          Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.date_range_outlined,
+                                                    color: AppColors.white,
+                                                    size: 16,
+                                                  ),
+                                                  SizedBox(
+                                                    width: sizeWidth * 0.01,
+                                                  ),
+                                                  Text(
+                                                  LanguageClass.isEnglish?  "DEPART ON":"تغادر من",
+                                                    style: TextStyle(
+                                                        color: AppColors.white,
+                                                        fontSize: 12),
+                                                  )
+                                                ],
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  showMyDatePicker(
+                                                      selectedDayFrom);
+                                                  setState(() {
+                                                    selectedDayFrom;
+                                                  });
+                                                },
+                                                child: Text(
+                                                    "${selectedDayFrom.day}/${selectedDayFrom.month}/${selectedDayFrom.year}",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        color: AppColors.white,
+                                                        fontSize: 20)),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      )
+                                    : Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.date_range_outlined,
+                                                color: AppColors.white,
+                                                size: 16,
+                                              ),
+                                              SizedBox(
+                                                width: sizeWidth * 0.01,
+                                              ),
+                                              Text(
+                                                LanguageClass.isEnglish?  "DEPART ON":"تغادر من",
+                                                style: TextStyle(
+                                                    color: AppColors.white,
+                                                    fontSize: 12),
+                                              )
+                                            ],
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              showMyDatePicker(selectedDayFrom);
+                                              setState(() {
+                                                selectedDayFrom;
+                                              });
+                                            },
+                                            child: Text(
+                                                "${selectedDayFrom.day}/${selectedDayFrom.month}/${selectedDayFrom.year}",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: AppColors.white,
+                                                    fontSize: 20)),
+                                          ),
+                                        ],
+                                      ),
+                                tripTypeId == "2" ? const Spacer() : SizedBox(),
+                                tripTypeId == "2"
+                                    ? Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.date_range_outlined,
+                                                color: AppColors.white,
+                                                size: 16,
+                                              ),
+                                              SizedBox(
+                                                width: sizeWidth * 0.01,
+                                              ),
+                                              Text(
+                                                LanguageClass.isEnglish?  "DEPART ON":"تغادر من",
+                                                style: TextStyle(
+                                                    color: AppColors.white,
+                                                    fontSize: 12),
+                                              )
+                                            ],
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              showMyDatePicker(selectedDayTo);
+                                              setState(() {
+                                                selectedDayTo;
+                                              });
+                                            },
+                                            child: Text(
+                                                "${selectedDayTo.day}/${selectedDayTo.month}/${selectedDayTo.year}",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: AppColors.white,
+                                                    fontSize: 20)),
+                                          ),
+                                        ],
+                                      )
+                                    : SizedBox(),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 25,),
+                          BlocListener<TimesTripsCubit, TimesTripsStates>(
+                            bloc: BlocProvider.of<TimesTripsCubit>(context),
+                            listener: (context, state) {
+                              if (state is LoadingTimesTrips) {
+                                Constants.showLoadingDialog(context);
+                              } else if (state is LoadedTimesTrips) {
+                                tripListBack = state.timesTripsResponse.message!
+                                        .tripListBack ??
+                                    [];
+                                Constants.hideLoadingDialog(context);
+
+                                if (state.timesTripsResponse.message!.tripList!
+                                        .length >
+                                    0) {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return TimesScreen(
+                                      tripList: state
+                                          .timesTripsResponse.message!.tripList!,
+                                      tripTypeId: tripTypeId,
+                                      tripListBack: state.timesTripsResponse
+                                              .message!.tripListBack ??
+                                          [],
+                                      user: _user,
+                                    );
+                                  }));
+                                } else {
+                                  Constants.showDefaultSnackBar(
+                                      context: context,
+                                      text: LanguageClass.isEnglish?"No trips in this date":"لا يوجد مواعيد في هذا الموعد");
+                                }
+                              } else if (state is ErrorTimesTrips) {
+                                Constants.hideLoadingDialog(context);
+                                Constants.showDefaultSnackBar(
+                                    context: context, text: state.msg);
+                              }
+                            },
+                            child: InkWell(
+                              onTap: () {
+                                if (_fromStationId == null ||
+                                    _toStationId == null) {
+                                  Constants.showDefaultSnackBar(
+                                      context: context,
+                                      text:
+                                          LanguageClass.isEnglish?"please select from city and to city":
+                                          " برجاء تحديد المدينة "
+                                  );
+                                } else {
+                                  print(
+                                      "tripTypeIdBassant    ${_fromStationId.toString()}  ${_toStationId.toString()}"
+                                      "  ${selectedDayFrom.toString()}  ${selectedDayTo.toString()}");
+                                  CacheHelper.setDataToSharedPref(
+                                      key: 'fromStationId',
+                                      value: _fromStationId.toString());
+                                  CacheHelper.setDataToSharedPref(
+                                      key: 'toStationId',
+                                      value: _toStationId.toString());
+                                  CacheHelper.setDataToSharedPref(
+                                      key: 'selectedDayTo',
+                                      value: selectedDayTo.toString());
+                                  CacheHelper.setDataToSharedPref(
+                                      key: 'selectedDayFrom',
+                                      value: selectedDayFrom.toString());
+                                  print("===}======");
+                                  BlocProvider.of<TimesTripsCubit>(context)
+                                      .getTimes(
+                                    tripType: tripTypeId.toString(),
+                                    fromStationID: _fromStationId.toString(),
+                                    toStationID: _toStationId.toString(),
+                                    dateGo: selectedDayFrom.toString(),
+                                    dateBack: selectedDayTo.toString(),
+                                  );
+                                }
+                              },
+                              child: Container(
+                                height: 50,
+                                //padding:  EdgeInsets.symmetric(horizontal: 10,vertical:20),
+                                //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
+                                decoration: BoxDecoration(
+                                    color: AppColors.primaryColor,
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: Center(
+                                  child: Text(
+                                   LanguageClass.isEnglish? "Search Bus":"بحث عن الاتوبيس",
+                                    style: TextStyle(
+                                        color: AppColors.white,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 20),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        )
-                      ],
-                    ),
-                  )),
-                ],
-              ),
-            ],
+                          )
+                        ],
+                      ),
+                    )),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

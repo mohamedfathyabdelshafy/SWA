@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/widgets/icon_back.dart';
 import 'package:swa/features/bus_reservation_layout/data/repo/bus_reservation_repo.dart';
@@ -77,7 +78,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
         leading: iconBack(context),
         backgroundColor: Colors.black,
         title: Text(
-          "Select seats",
+          LanguageClass.isEnglish?"Select seats":"حدد كراسيك",
           style: TextStyle(
               color: AppColors.white, fontSize: 34, fontFamily: "regular"),
         ),
@@ -147,8 +148,8 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                     Expanded(
                       child: Column(
                         children: [
-                          const Text(
-                            'Available',
+                           Text(
+                            LanguageClass.isEnglish?'Available':'المتاح',
                             style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: "regular",
@@ -167,8 +168,8 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          const Text(
-                            'Selected',
+                           Text(
+                            LanguageClass.isEnglish? 'Selected':'تم تحديده',
                             style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: "regular",
@@ -183,8 +184,8 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          const Text(
-                            'Unavailable',
+                           Text(
+                            LanguageClass.isEnglish?'Unavailable':'غير متاح',
                             style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: "regular",
@@ -239,7 +240,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      "choose seats",
+                                      LanguageClass.isEnglish?"Save":"تم",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontFamily: "bold",

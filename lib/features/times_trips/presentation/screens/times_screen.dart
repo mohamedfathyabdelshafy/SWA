@@ -71,11 +71,24 @@ class _TimesScreenState extends State<TimesScreen> {
                               return InkWell(
                                 onTap: () {
                                   CacheHelper.setDataToSharedPref(
+                                      key: 'numberTrip',
+                                      value: widget.tripList[index].tripNumber);
+                                  CacheHelper.setDataToSharedPref(
+                                      key: 'elite',
+                                      value: widget.tripList[index].serviceType
+                                  );
+                                  CacheHelper.setDataToSharedPref(
+                                      key: 'accessBusTime',
+                                      value: widget.tripList[index].accessBusTime
+                                  );
+                                  CacheHelper.setDataToSharedPref(
+                                      key: 'lineName',
+                                      value:widget.tripList[index].lineName
+                                  );
+                                  CacheHelper.setDataToSharedPref(
                                       key: 'tripOneId',
-                                      value:
-                                          widget.tripList[index].tripId ?? 0);
-                                  print(
-                                      " widget.tripList[index].tripId${widget.tripList[index].tripId}");
+                                      value: widget.tripList[index].tripId ?? 0);
+                                  print(" widget.tripList[index].tripId${widget.tripList[index].tripId}");
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) {
@@ -122,8 +135,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                              widget.tripList[index].lineName
-                                                  .toString(),
+                                              widget.tripList[index].lineName!,
                                               style: TextStyle(
                                                   color: AppColors.white,
                                                   fontSize: 20)),

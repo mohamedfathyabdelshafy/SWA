@@ -68,6 +68,25 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                               return InkWell(
                                 onTap: (){
                                   CacheHelper.setDataToSharedPref(
+                                      key: 'numberTrip2',
+                                      value: widget.tripListBack[index].tripNumber);
+                                  CacheHelper.setDataToSharedPref(
+                                      key: 'elite2',
+                                      value: widget.tripListBack[index].serviceType
+                                  );
+                                  CacheHelper.setDataToSharedPref(
+                                      key: 'accessBusTime2',
+                                      value: widget.tripListBack[index].accessBusTime
+                                  );
+                                  CacheHelper.setDataToSharedPref(
+                                      key: 'lineName2',
+                                      value:widget.tripListBack[index].lineName
+                                  );
+                                  CacheHelper.setDataToSharedPref(
+                                      key: 'tripOneId',
+                                      value: widget.tripListBack[index].tripId ?? 0);
+
+                                  CacheHelper.setDataToSharedPref(
                                       key: 'tripRoundId',
                                       value: widget.tripListBack[index].tripId
                                           .toString());
