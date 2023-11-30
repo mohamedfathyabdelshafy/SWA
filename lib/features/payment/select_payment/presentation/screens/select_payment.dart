@@ -46,14 +46,14 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Directionality(
-          textDirection: LanguageClass.isEnglish?TextDirection.ltr:TextDirection.rtl,
-
+          textDirection:
+              LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                LanguageClass.isEnglish?"Select payment":"حدد طريقة الدفع",
+                LanguageClass.isEnglish ? "Select payment" : "حدد طريقة الدفع",
                 style: TextStyle(
                     color: AppColors.white, fontSize: 34, fontFamily: "bold"),
               ),
@@ -94,7 +94,9 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
                     const SizedBox(
                       width: 5,
                     ),
-                    customText(LanguageClass.isEnglish?"Debit or credit card":"بطاقة الخصم او الائتمان")
+                    customText(LanguageClass.isEnglish
+                        ? "Debit or credit card"
+                        : "بطاقة الخصم او الائتمان")
                   ],
                 ),
               ),
@@ -141,7 +143,8 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
                     const SizedBox(
                       width: 5,
                     ),
-                    customText(LanguageClass.isEnglish?"Pay Fawry":"مدفوعات فوري")
+                    customText(
+                        LanguageClass.isEnglish ? "Pay Fawry" : "مدفوعات فوري")
                   ],
                 ),
               ),
@@ -175,7 +178,9 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
                     const SizedBox(
                       width: 10,
                     ),
-                    customText(LanguageClass.isEnglish?"Electronic wallet":"المحفظة الاكترونية")
+                    customText(LanguageClass.isEnglish
+                        ? "Electronic wallet"
+                        : "المحفظة الاكترونية")
                   ],
                 ),
               ),

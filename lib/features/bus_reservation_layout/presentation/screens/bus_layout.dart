@@ -149,7 +149,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
             height: 10,
           ),
           Container(
-            height: MediaQuery.sizeOf(context).height - 180,
+            height: MediaQuery.of(context).size.height - 180,
             child: Row(
               children: [
                 Expanded(
@@ -221,7 +221,9 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                               busSeatsModel == null) {
                             Constants.showDefaultSnackBar(
                                 context: context,
-                                text: LanguageClass.isEnglish?"please select your seats":"برجاء تحديد كراسي");
+                                text: LanguageClass.isEnglish
+                                    ? "please select your seats"
+                                    : "برجاء تحديد كراسي");
                           } else {
                             if (widget.triTypeId == "1") {
                               Navigator.push(
@@ -250,18 +252,26 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                             } else if (widget.triTypeId == "2") {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) {
-                                  return BlocProvider<TimesTripsCubit>(
-                                      create: (context) => TimesTripsCubit(),
-                                      // Replace with your actual cubit creation logic
-                                      child: TimesScreenBack(
-                                        price: widget.price,
-                                        countSeats: cachCountSeats!,
-                                        tripListBack: widget.tripListBack!,
-                                        tripTypeId: widget.triTypeId,
-                                        user: widget.user,
-                                      ));
-                                }),
+                                MaterialPageRoute(
+                                    builder: (context) => MultiBlocProvider(
+                                            providers: [
+                                              BlocProvider<LoginCubit>(
+                                                  create: (context) =>
+                                                      sl<LoginCubit>()),
+                                              BlocProvider<TimesTripsCubit>(
+                                                create: (context) =>
+                                                    TimesTripsCubit(),
+                                              )
+                                            ],
+                                            // Replace with your actual cubit creation logic
+                                            child: TimesScreenBack(
+                                              price: widget.price,
+                                              countSeats: cachCountSeats!,
+                                              tripListBack:
+                                                  widget.tripListBack!,
+                                              tripTypeId: widget.triTypeId,
+                                              user: widget.user,
+                                            ))),
                               );
                             }
                           }
@@ -275,7 +285,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                           ),
                           child: Center(
                             child: Text(
-                              LanguageClass.isEnglish?"Save":"تم",
+                              LanguageClass.isEnglish ? "Save" : "تم",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontFamily: "bold",

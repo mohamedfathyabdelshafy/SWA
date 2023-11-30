@@ -40,8 +40,8 @@ class _MyHomeState extends State<MyHome> {
   ///To be changed by selected station id
   int? _fromStationId;
   int? _toStationId;
-  String _fromCityName =LanguageClass.isEnglish? 'Select':'تحديد';
-  String _toCityName = LanguageClass.isEnglish? 'Select':'تحديد';
+  String _fromCityName = '';
+  String _toCityName = '';
 
   ///Getting if user is logged in or not
   User? _user;
@@ -70,7 +70,8 @@ class _MyHomeState extends State<MyHome> {
           }
         },
         child: Directionality(
-          textDirection: LanguageClass.isEnglish?TextDirection.ltr:TextDirection.rtl,
+          textDirection:
+              LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
           child: Container(
             color: Colors.black,
             child: Column(
@@ -79,7 +80,8 @@ class _MyHomeState extends State<MyHome> {
                 Stack(
                   children: [
                     SizedBox(
-                      width: double.infinity, // Take the full width of the screen
+                      width:
+                          double.infinity, // Take the full width of the screen
                       child: Image.asset(
                         "assets/images/oranaa.agency_85935_luxor_landscape_and_sky_with_ballons_on_sky_e8ecb03c-2e93-4118-abed-39447bd055c9.png",
                         fit: BoxFit.cover,
@@ -102,24 +104,30 @@ class _MyHomeState extends State<MyHome> {
                                       InkWell(
                                         onTap: () {
                                           setState(() {
-                                            LanguageClass.isEnglish = !LanguageClass.isEnglish;
-                                            print("LanguageClass.isEnglish${LanguageClass.isEnglish}");
+                                            LanguageClass.isEnglish =
+                                                !LanguageClass.isEnglish;
+                                            print(
+                                                "LanguageClass.isEnglish${LanguageClass.isEnglish}");
                                           });
-                                          CacheHelper.setDataToSharedPref(key: 'language', value: LanguageClass.isEnglish);
+                                          CacheHelper.setDataToSharedPref(
+                                              key: 'language',
+                                              value: LanguageClass.isEnglish);
                                         },
                                         child: Container(
                                           height: sizeHeight * 0.05,
                                           width: sizeWidth * 0.1,
                                           decoration: BoxDecoration(
                                             borderRadius:
-                                            BorderRadius.circular(20),
+                                                BorderRadius.circular(20),
                                             color: AppColors.darkPurple,
                                           ),
-                                          child:  Center(
+                                          child: Center(
                                             child: Text(
-                                              LanguageClass.isEnglish?"ع":"En",
-                                              style:
-                                              TextStyle(color: Colors.white),
+                                              LanguageClass.isEnglish
+                                                  ? "ع"
+                                                  : "En",
+                                              style: TextStyle(
+                                                  color: Colors.white),
                                             ),
                                           ),
                                         ),
@@ -141,8 +149,8 @@ class _MyHomeState extends State<MyHome> {
                                           child: const Center(
                                             child: Text(
                                               "Login",
-                                              style:
-                                                  TextStyle(color: Colors.white),
+                                              style: TextStyle(
+                                                  color: Colors.white),
                                             ),
                                           ),
                                         ),
@@ -154,24 +162,30 @@ class _MyHomeState extends State<MyHome> {
                                       InkWell(
                                         onTap: () {
                                           setState(() {
-                                            LanguageClass.isEnglish = !LanguageClass.isEnglish;
-                                            print("LanguageClass.isEnglish${LanguageClass.isEnglish}");
+                                            LanguageClass.isEnglish =
+                                                !LanguageClass.isEnglish;
+                                            print(
+                                                "LanguageClass.isEnglish${LanguageClass.isEnglish}");
                                           });
-                                          CacheHelper.setDataToSharedPref(key: 'language', value: LanguageClass.isEnglish);
+                                          CacheHelper.setDataToSharedPref(
+                                              key: 'language',
+                                              value: LanguageClass.isEnglish);
                                         },
                                         child: Container(
                                           height: sizeHeight * 0.05,
                                           width: sizeWidth * 0.1,
                                           decoration: BoxDecoration(
                                             borderRadius:
-                                            BorderRadius.circular(20),
+                                                BorderRadius.circular(20),
                                             color: AppColors.darkPurple,
                                           ),
-                                          child:  Center(
+                                          child: Center(
                                             child: Text(
-                                              LanguageClass.isEnglish?"ع":"En",
-                                              style:
-                                              TextStyle(color: Colors.white),
+                                              LanguageClass.isEnglish
+                                                  ? "ع"
+                                                  : "En",
+                                              style: TextStyle(
+                                                  color: Colors.white),
                                             ),
                                           ),
                                         ),
@@ -198,8 +212,8 @@ class _MyHomeState extends State<MyHome> {
                                           child: Center(
                                             child: Text(
                                               _user!.name!,
-                                              style:
-                                                  TextStyle(color: Colors.white),
+                                              style: TextStyle(
+                                                  color: Colors.white),
                                             ),
                                           ),
                                         ),
@@ -246,7 +260,9 @@ class _MyHomeState extends State<MyHome> {
                                         height: 10,
                                       ),
                                       Text(
-                                        LanguageClass.isEnglish?"One Way":"ذهاب فقط",
+                                        LanguageClass.isEnglish
+                                            ? "One Way"
+                                            : "ذهاب فقط",
                                         style: TextStyle(
                                           color: AppColors.white,
                                           fontSize: 18,
@@ -285,7 +301,9 @@ class _MyHomeState extends State<MyHome> {
                                         height: 10,
                                       ),
                                       Text(
-                                        LanguageClass.isEnglish?"Round Trip":"ذهاب وعوده",
+                                        LanguageClass.isEnglish
+                                            ? "Round Trip"
+                                            : "ذهاب وعوده",
                                         style: TextStyle(
                                           color: AppColors.white,
                                           fontSize: 18,
@@ -300,12 +318,13 @@ class _MyHomeState extends State<MyHome> {
                           SizedBox(
                             height: sizeHeight * 0.02,
                           ),
-                           Text(
-                             LanguageClass.isEnglish?"From":"من",
-
-                             style: TextStyle(color: Colors.white, fontSize: 20),
-                             textAlign: TextAlign.left,
-                           ),
+                          Text(
+                            LanguageClass.isEnglish ? "From" : "من",
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                            textAlign: LanguageClass.isEnglish
+                                ? TextAlign.left
+                                : TextAlign.right,
+                          ),
                           BlocListener(
                             bloc: BlocProvider.of<HomeCubit>(context),
                             listener: (BuildContext context, state) async {
@@ -393,7 +412,8 @@ class _MyHomeState extends State<MyHome> {
                                 //   },
                                 // );
                                 // Constants.showListDialog(context, 'From Stations', _fromStationsListWidget);
-                              } else if (state is GetFromStationsListErrorState) {
+                              } else if (state
+                                  is GetFromStationsListErrorState) {
                                 Constants.hideLoadingDialog(context);
                                 Constants.showDefaultSnackBar(
                                     context: context,
@@ -405,18 +425,25 @@ class _MyHomeState extends State<MyHome> {
                                   BlocProvider.of<HomeCubit>(context)
                                       .getFromStationsListData();
                                 },
-                                child: CustomDropDownList(hint: _fromCityName)),
+                                child: CustomDropDownList(
+                                    hint: _fromCityName == ''
+                                        ? LanguageClass.isEnglish
+                                            ? 'Select'
+                                            : 'تحديد'
+                                        : _fromCityName)),
                           ),
                           SizedBox(
                             height: 10,
                           ),
-                           Padding(
+                          Padding(
                             padding: EdgeInsets.zero,
                             child: Text(
-                              LanguageClass.isEnglish?"To":"الي",
-
-                              style: TextStyle(color: Colors.white, fontSize: 20),
-                              textAlign: TextAlign.left,
+                              LanguageClass.isEnglish ? "To" : "الي",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
+                              textAlign: LanguageClass.isEnglish
+                                  ? TextAlign.left
+                                  : TextAlign.right,
                             ),
                           ),
                           BlocListener(
@@ -424,7 +451,8 @@ class _MyHomeState extends State<MyHome> {
                             listener: (BuildContext context, state) async {
                               if (state is GetToStationsListLoadingState) {
                                 Constants.showLoadingDialog(context);
-                              } else if (state is GetToStationsListLoadedState) {
+                              } else if (state
+                                  is GetToStationsListLoadedState) {
                                 Constants.hideLoadingDialog(context);
                                 setState(() {
                                   if (state.homeMessageResponse.status ==
@@ -519,7 +547,12 @@ class _MyHomeState extends State<MyHome> {
                                                 _fromStationId.toString()));
                                   }
                                 },
-                                child: CustomDropDownList(hint: _toCityName)),
+                                child: CustomDropDownList(
+                                    hint: _toCityName == ''
+                                        ? LanguageClass.isEnglish
+                                            ? 'Select'
+                                            : 'تحديد'
+                                        : _toCityName)),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(
@@ -545,7 +578,9 @@ class _MyHomeState extends State<MyHome> {
                                                     width: sizeWidth * 0.01,
                                                   ),
                                                   Text(
-                                                  LanguageClass.isEnglish?  "DEPART ON":"تغادر من",
+                                                    LanguageClass.isEnglish
+                                                        ? "DEPART ON"
+                                                        : "تغادر من",
                                                     style: TextStyle(
                                                         color: AppColors.white,
                                                         fontSize: 12),
@@ -584,7 +619,9 @@ class _MyHomeState extends State<MyHome> {
                                                 width: sizeWidth * 0.01,
                                               ),
                                               Text(
-                                                LanguageClass.isEnglish?  "DEPART ON":"تغادر من",
+                                                LanguageClass.isEnglish
+                                                    ? "DEPART ON"
+                                                    : "تغادر من",
                                                 style: TextStyle(
                                                     color: AppColors.white,
                                                     fontSize: 12),
@@ -622,7 +659,9 @@ class _MyHomeState extends State<MyHome> {
                                                 width: sizeWidth * 0.01,
                                               ),
                                               Text(
-                                                LanguageClass.isEnglish?  "DEPART ON":"تغادر من",
+                                                LanguageClass.isEnglish
+                                                    ? "DEPART ON"
+                                                    : "تغادر من",
                                                 style: TextStyle(
                                                     color: AppColors.white,
                                                     fontSize: 12),
@@ -649,7 +688,9 @@ class _MyHomeState extends State<MyHome> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 25,),
+                          SizedBox(
+                            height: 25,
+                          ),
                           BlocListener<TimesTripsCubit, TimesTripsStates>(
                             bloc: BlocProvider.of<TimesTripsCubit>(context),
                             listener: (context, state) {
@@ -667,8 +708,8 @@ class _MyHomeState extends State<MyHome> {
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
                                     return TimesScreen(
-                                      tripList: state
-                                          .timesTripsResponse.message!.tripList!,
+                                      tripList: state.timesTripsResponse
+                                          .message!.tripList!,
                                       tripTypeId: tripTypeId,
                                       tripListBack: state.timesTripsResponse
                                               .message!.tripListBack ??
@@ -679,7 +720,9 @@ class _MyHomeState extends State<MyHome> {
                                 } else {
                                   Constants.showDefaultSnackBar(
                                       context: context,
-                                      text: LanguageClass.isEnglish?"No trips in this date":"لا يوجد مواعيد في هذا الموعد");
+                                      text: LanguageClass.isEnglish
+                                          ? "No trips in this date"
+                                          : "لا يوجد مواعيد في هذا الموعد");
                                 }
                               } else if (state is ErrorTimesTrips) {
                                 Constants.hideLoadingDialog(context);
@@ -693,10 +736,9 @@ class _MyHomeState extends State<MyHome> {
                                     _toStationId == null) {
                                   Constants.showDefaultSnackBar(
                                       context: context,
-                                      text:
-                                          LanguageClass.isEnglish?"please select from city and to city":
-                                          " برجاء تحديد المدينة "
-                                  );
+                                      text: LanguageClass.isEnglish
+                                          ? "please select from city and to city"
+                                          : " برجاء تحديد المدينة ");
                                 } else {
                                   print(
                                       "tripTypeIdBassant    ${_fromStationId.toString()}  ${_toStationId.toString()}"
@@ -733,7 +775,9 @@ class _MyHomeState extends State<MyHome> {
                                     borderRadius: BorderRadius.circular(15)),
                                 child: Center(
                                   child: Text(
-                                   LanguageClass.isEnglish? "Search Bus":"بحث عن الاتوبيس",
+                                    LanguageClass.isEnglish
+                                        ? "Search Bus"
+                                        : "بحث عن الاتوبيس",
                                     style: TextStyle(
                                         color: AppColors.white,
                                         fontWeight: FontWeight.normal,

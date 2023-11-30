@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:swa/bloc_observer.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_strings.dart';
+import 'package:swa/core/utils/language.dart';
 import 'package:swa/features/change_password/change_password_injection_container.dart';
 import 'package:swa/features/forgot_password/forgot_password_injection_container.dart';
 import 'package:swa/features/home/home_injection_container.dart';
@@ -34,7 +35,8 @@ Future<void> main() async {
   await TicketHistoryInjectionInit();
   await dependencyInjectionInit(); //For initializing network info and shared preferences
   await CacheHelper.init();
-  await CacheHelper.getDataToSharedPref(key: 'language');
+  LanguageClass.isEnglish =
+      await CacheHelper.getDataToSharedPref(key: 'language') ?? true;
   await CacheHelper.deleteDataToSharedPref(key: 'tripOneId');
   await CacheHelper.deleteDataToSharedPref(key: 'tripRoundId');
   await CacheHelper.deleteDataToSharedPref(key: 'countSeats');

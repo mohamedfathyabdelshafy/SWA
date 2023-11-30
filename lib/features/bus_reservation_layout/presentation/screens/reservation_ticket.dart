@@ -27,8 +27,7 @@ class ReservationTicket extends StatefulWidget {
       required this.countSeats1,
       this.countSeats2,
       required this.price,
-      this.user,
-      this.tripId});
+      this.user});
   List<num> countSeates;
   int busId;
   String tripTypeId;
@@ -39,7 +38,6 @@ class ReservationTicket extends StatefulWidget {
   List<dynamic>? countSeats2;
   double price;
   User? user;
-  String? tripId;
 
   @override
   State<ReservationTicket> createState() => _ReservationTicketState();
@@ -48,7 +46,7 @@ class ReservationTicket extends StatefulWidget {
 class _ReservationTicketState extends State<ReservationTicket> {
   bool switch1 = false;
   bool accept = false;
-  int numberTrip =0;
+  int numberTrip = 0;
   String elite = "";
   String accessBusTime = "";
   String lineName = "";
@@ -57,28 +55,28 @@ class _ReservationTicketState extends State<ReservationTicket> {
   String? elite2;
   String? accessBusTime2;
   String? lineName2;
-  
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 0)).then((_) async {
       BlocProvider.of<LoginCubit>(context).getUserData();
     });
 
-   numberTrip =  CacheHelper.getDataToSharedPref(key: 'numberTrip');
-   elite = CacheHelper.getDataToSharedPref(key: "elite");
-   accessBusTime = CacheHelper.getDataToSharedPref(key: "accessBusTime");
-   lineName = CacheHelper.getDataToSharedPref(key: "lineName");
-   if(widget.tripId == "2") {
-     numberTrip2 = CacheHelper.getDataToSharedPref(key: 'numberTrip2');
-     elite2 = CacheHelper.getDataToSharedPref(key: "elite2");
-     accessBusTime2 = CacheHelper.getDataToSharedPref(key: "accessBusTime2");
-     lineName2 = CacheHelper.getDataToSharedPref(key: "lineName2");
-   }
+    numberTrip = CacheHelper.getDataToSharedPref(key: 'numberTrip');
+    elite = CacheHelper.getDataToSharedPref(key: "elite");
+    accessBusTime = CacheHelper.getDataToSharedPref(key: "accessBusTime");
+    lineName = CacheHelper.getDataToSharedPref(key: "lineName");
+    if (numberTrip2 != null &&
+        elite2 != null &&
+        accessBusTime2 != null &&
+        lineName2 != null) {
+      numberTrip2 = CacheHelper.getDataToSharedPref(key: 'numberTrip2');
+      elite2 = CacheHelper.getDataToSharedPref(key: "elite2");
+      accessBusTime2 = CacheHelper.getDataToSharedPref(key: "accessBusTime2");
+      lineName2 = CacheHelper.getDataToSharedPref(key: "lineName2");
+    }
     super.initState();
   }
-// bool getTripId()async{
-//     String tripId = CacheHelper.getDataToSharedPref(key: "")
-// }
+
   @override
   Widget build(BuildContext context) {
     double sizeHeight = context.height;
@@ -91,17 +89,18 @@ class _ReservationTicketState extends State<ReservationTicket> {
         backgroundColor: Colors.black,
       ),
       body: Directionality(
-        textDirection: LanguageClass.isEnglish?TextDirection.ltr:TextDirection.rtl,
-
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        textDirection:
+            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+        child: ListView(
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 45),
               child: Text(
-                LanguageClass.isEnglish?"Ticket":"تذكرتك",
+                LanguageClass.isEnglish ? "Ticket" : "تذكرتك",
                 style: TextStyle(
-                    color: AppColors.white, fontSize: 34, fontFamily: "regular"),
+                    color: AppColors.white,
+                    fontSize: 34,
+                    fontFamily: "regular"),
               ),
             ),
             SizedBox(
@@ -130,11 +129,13 @@ class _ReservationTicketState extends State<ReservationTicket> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                               Padding(
+                              Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 15),
                                 child: Text(
-                                 LanguageClass.isEnglish? "Departure on":"تغادر في",
-                                  style:const TextStyle(
+                                  LanguageClass.isEnglish
+                                      ? "Departure on"
+                                      : "تغادر في",
+                                  style: const TextStyle(
                                       color: Colors.white,
                                       fontFamily: "regular",
                                       fontSize: 12),
@@ -145,8 +146,8 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                     horizontal: 15, vertical: 5),
                                 child: Row(
                                   children: [
-                                     Text(
-                                     numberTrip.toString(),
+                                    Text(
+                                      numberTrip.toString(),
                                       style: TextStyle(
                                           fontFamily: "regular",
                                           fontSize: 15,
@@ -163,7 +164,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                             borderRadius:
                                                 BorderRadius.circular(15),
                                             color: AppColors.primaryColor),
-                                        child:  Center(
+                                        child: Center(
                                           child: Text(
                                             elite,
                                             style: TextStyle(
@@ -188,7 +189,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                     SizedBox(
                                       width: sizeWidth * 0.05,
                                     ),
-                                     Text(
+                                    Text(
                                       accessBusTime,
                                       style: TextStyle(
                                           fontFamily: "regular",
@@ -200,7 +201,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                               ),
                               SizedBox(
                                 width: sizeWidth * 0.5,
-                                child:const Divider(
+                                child: const Divider(
                                   thickness: 1,
                                   color: Colors.white,
                                 ),
@@ -231,7 +232,9 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                       width: sizeWidth * 0.02,
                                     ),
                                     TextWidget(
-                                      text: "From",
+                                      text: LanguageClass.isEnglish
+                                          ? "From"
+                                          : "من",
                                       fontSize: 15,
                                     )
                                   ],
@@ -308,7 +311,9 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 12),
                                       child: TextWidget(
-                                        text: "To",
+                                        text: LanguageClass.isEnglish
+                                            ? "To"
+                                            : "الي",
                                         fontSize: 15,
                                         color: AppColors.primaryColor,
                                       ),
@@ -340,9 +345,8 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                   )
                                 ],
                               ),
-
                               Container(
-                                height: sizeHeight * 0.06,
+                                height: sizeHeight * 0.05,
                                 child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     itemCount: widget.countSeats1.length,
@@ -356,7 +360,8 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                 children: [
                                                   SvgPicture.asset(
                                                     "assets/images/unavailable_seats.svg",
-                                                    color: AppColors.primaryColor,
+                                                    color:
+                                                        AppColors.primaryColor,
                                                   )
                                                 ],
                                               ),
@@ -385,7 +390,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                       style: TextStyle(
                                           color: AppColors.primaryColor,
                                           fontFamily: "bold",
-                                          fontSize: 25),
+                                          fontSize: 18),
                                     )
                                   ],
                                 ),
@@ -408,15 +413,19 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                   color: Colors.transparent,
                                   border: Border.all(color: Colors.white)),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 15),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 15),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
-                                     Padding(
+                                    Padding(
                                       padding:
                                           EdgeInsets.symmetric(horizontal: 15),
                                       child: Text(
-                                       LanguageClass.isEnglish? "Departure on":"تغادر من",
+                                        LanguageClass.isEnglish
+                                            ? "Departure on"
+                                            : "تغادر من",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontFamily: "regular",
@@ -428,7 +437,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                           horizontal: 15, vertical: 10),
                                       child: Row(
                                         children: [
-                                           Text(
+                                          Text(
                                             numberTrip2.toString(),
                                             style: TextStyle(
                                                 fontFamily: "regular",
@@ -446,9 +455,9 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                 borderRadius:
                                                     BorderRadius.circular(15),
                                                 color: AppColors.primaryColor),
-                                            child:  Center(
+                                            child: Center(
                                               child: Text(
-                                                elite2??"",
+                                                elite2 ?? "",
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 18,
@@ -470,8 +479,8 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                           SizedBox(
                                             width: sizeWidth * 0.05,
                                           ),
-                                           Text(
-                                            accessBusTime2??"",
+                                          Text(
+                                            accessBusTime2 ?? "",
                                             style: TextStyle(
                                                 fontFamily: "regular",
                                                 fontSize: 30,
@@ -513,7 +522,9 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                             width: sizeWidth * 0.02,
                                           ),
                                           TextWidget(
-                                            text: LanguageClass.isEnglish?"To":"الي",
+                                            text: LanguageClass.isEnglish
+                                                ? "To"
+                                                : "الي",
                                             fontSize: 15,
                                           )
                                         ],
@@ -555,7 +566,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 12),
                                             child: TextWidget(
-                                              text:lineName2??"",
+                                              text: lineName2 ?? "",
                                               fontSize: 15,
                                             ),
                                           )
@@ -593,7 +604,9 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 12),
                                             child: TextWidget(
-                                              text: LanguageClass.isEnglish?"From":"من",
+                                              text: LanguageClass.isEnglish
+                                                  ? "From"
+                                                  : "من",
                                               fontSize: 15,
                                               color: AppColors.primaryColor,
                                             ),
@@ -619,7 +632,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 42),
                                           child: TextWidget(
-                                            text:lineName2??"",
+                                            text: lineName2 ?? "",
                                             fontSize: 15,
                                           ),
                                         )
@@ -632,7 +645,8 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                           itemCount: widget.countSeats2!.length,
                                           itemBuilder: (context, index) {
                                             return Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Row(
                                                 children: [
                                                   Container(
@@ -711,12 +725,78 @@ class _ReservationTicketState extends State<ReservationTicket> {
                       activeColor: Colors.white,
                       fillColor: MaterialStatePropertyAll(Colors.white),
                       onChanged: (value) {
+                        showGeneralDialog(
+                          context: context,
+                          pageBuilder: (context, Animation<double> animation,
+                              Animation<double> secondaryAnimation) {
+                            return Container(
+                              color: Colors.transparent,
+                              margin: EdgeInsets.all(50),
+                              child: Container(
+                                padding: EdgeInsets.all(15),
+                                color: Colors.white,
+                                child: Material(
+                                  color: Colors.white,
+                                  child: ListView(
+                                    children: [
+                                      Text(
+                                        ''' 1-التاكد من تاريخ و ميعاد واتجاه الرحله مسؤليه الراكب.
+                              
+2-الاطفال فوق 4 سنوات تذكرة كامله ولايوجد نصف تذكرة
+                              
+3-يجوز تعديل ميعاد التذكرة مقابل سداد رسم تعديل من 15-10جنيه شرط تقديمها للمكتب قبل ميعاد الرحله المحدد ب 4 ساعات
+                              
+4- يحق للراكب اصطحاب 2 شنطة ماليس متوسطة الحجم ما يزيد عن ذلك بتم تقديره بقيمة الشحن.
+                              
+5-خصم خاص عند حجز تذكرة ذهاب وعودة.
+                              
+6-الرجاء المحافظة علي التذكرة وتقديمها عند الطلب وفي حابه فقد التذكرة يتم اركاب العميل بعد مراجعة الرحله بمحطة المغادرة النهائية بايصال نقدي
+                              
+7- في حاله تسبب الشركة في فقدان احد  الامتعة يكون الحد الاقصي للتعويض 100جنية والشركة غير مسؤلة عما بداخل الحقائب
+                              
+8- الشركة غير مسؤلة عن المتعة صحبة الراكب داخل صالون السيارة والايجوز التعويض عنها
+                              
+9-ممنوع نقل او اصطحاب حيوانات او سمك او طيور او المواد القابله للاشتعال او المواد السائله
+                              
+10- الحجز والشكاوي من خلال موقعنا www.Swa.com للاستعلام
+                              
+11- تعديل او الغاء التذكرة يتم في مكتب الاصدار فقط''',
+                                        textAlign: TextAlign.right,
+                                        textDirection: TextDirection.rtl,
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text(LanguageClass.isEnglish
+                                              ? "Done"
+                                              : 'تم'))
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          barrierDismissible: true,
+                          barrierLabel: MaterialLocalizations.of(context)
+                              .modalBarrierDismissLabel,
+                          barrierColor: Colors.black.withOpacity(0.5),
+                          transitionDuration: const Duration(milliseconds: 200),
+                        );
+
                         setState(() {
                           accept = value!;
                         });
                       }),
                   Text(
-                   LanguageClass.isEnglish? 'Accept payment policy':'قبول سياسة الدفع',
+                    LanguageClass.isEnglish
+                        ? 'Accept reservation policy'
+                        : 'قبول سياسة الحجز',
                     style: TextStyle(color: Colors.white, fontSize: 14),
                   )
                 ],
@@ -750,7 +830,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Constants.customButton(
-                      text:LanguageClass.isEnglish? "Reservation":"حجز",
+                      text: LanguageClass.isEnglish ? "Reservation" : "حجز",
                       color:
                           accept ? AppColors.primaryColor : AppColors.darkGrey),
                 )),
