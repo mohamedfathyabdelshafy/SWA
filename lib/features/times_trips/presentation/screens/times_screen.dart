@@ -71,6 +71,20 @@ class _TimesScreenState extends State<TimesScreen> {
                               return InkWell(
                                 onTap: () {
                                   CacheHelper.setDataToSharedPref(
+                                      key: 'numberTrip',
+                                      value: widget.tripList[index].tripNumber);
+                                  CacheHelper.setDataToSharedPref(
+                                      key: 'elite',
+                                      value:
+                                          widget.tripList[index].serviceType);
+                                  CacheHelper.setDataToSharedPref(
+                                      key: 'accessBusTime',
+                                      value:
+                                          widget.tripList[index].accessBusTime);
+                                  CacheHelper.setDataToSharedPref(
+                                      key: 'lineName',
+                                      value: widget.tripList[index].lineName);
+                                  CacheHelper.setDataToSharedPref(
                                       key: 'tripOneId',
                                       value:
                                           widget.tripList[index].tripId ?? 0);
@@ -114,16 +128,14 @@ class _TimesScreenState extends State<TimesScreen> {
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: AppColors.white,
-                                                  fontSize: 20)),
+                                                  fontSize: 16)),
                                         ],
                                       ),
                                       Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          Text(
-                                              widget.tripList[index].lineName
-                                                  .toString(),
+                                          Text(widget.tripList[index].lineName!,
                                               style: TextStyle(
                                                   color: AppColors.white,
                                                   fontSize: 20)),
@@ -152,7 +164,9 @@ class _TimesScreenState extends State<TimesScreen> {
                                           Row(
                                             children: [
                                               Text(
-                                                widget.tripList[index].to!,
+                                                widget.tripList[index]
+                                                    .accessBusTime!
+                                                    .substring(0, 5),
                                                 style: TextStyle(
                                                     color: AppColors.white,
                                                     fontSize: 12),
@@ -160,11 +174,11 @@ class _TimesScreenState extends State<TimesScreen> {
                                             ],
                                           ),
                                           Text(
-                                              "${widget.tripList[index].price!.toString()}.LE",
+                                              "${widget.tripList[index].price!.round().toString()} LE",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: AppColors.primaryColor,
-                                                  fontSize: 20,
+                                                  fontSize: 16,
                                                   fontFamily: "bold")),
                                         ],
                                       ),

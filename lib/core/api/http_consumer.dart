@@ -6,6 +6,7 @@ import 'package:swa/core/api/api_consumer.dart';
 import 'package:swa/core/api/status_code.dart';
 import 'package:swa/core/error/exceptions.dart';
 import 'package:swa/core/utils/app_strings.dart';
+import 'package:swa/core/utils/language.dart';
 
 class HttpConsumer implements ApiConsumer {
   final http.Client client;
@@ -18,7 +19,10 @@ class HttpConsumer implements ApiConsumer {
     try {
       final response = await client.get(
         Uri.parse(path),
-        headers: {"APIKey": "546548dwfdfsd3f4sdfhgat52"},
+        headers: {"APIKey": "546548dwfdfsd3f4sdfhgat52",
+          "Accept-Language":LanguageClass.isEnglish?"en":"ar"
+
+        },
         // headers: await _getToken()
       );
       return _handleResponseErrors(response);
@@ -35,6 +39,8 @@ class HttpConsumer implements ApiConsumer {
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       "APIKey": "546548dwfdfsd3f4sdfhgat52",
+      "Accept-Language":LanguageClass.isEnglish?"en":"ar"
+
     };
 
     //Map<String, dynamic>
@@ -126,4 +132,28 @@ class HttpConsumer implements ApiConsumer {
     //   return <String, String>{};
     // }
   }
+
+  @override
+  Future put(String path, {body, Map<String, dynamic>? queryParameters})async {
+    Map<String, String> headers = {
+      "APIKey": "546548dwfdfsd3f4sdfhgat52",
+    };
+
+    //Map<String, dynamic>
+    try {
+      final response = await client.put(
+        Uri.parse(path),
+        body: body,
+        headers: headers,
+        // headers: await _getToken()
+      );
+      return _handleResponseErrors(response);
+    } on TimeoutException catch (error) {
+      throw FetchDataException(error.toString());
+    } on Exception catch (error) {
+      throw NoInternetConnectionException(error.toString());
+    }
+  }
+
+
 }

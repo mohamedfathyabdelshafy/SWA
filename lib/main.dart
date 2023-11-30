@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:swa/bloc_observer.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_strings.dart';
+import 'package:swa/core/utils/language.dart';
 import 'package:swa/features/change_password/change_password_injection_container.dart';
 import 'package:swa/features/forgot_password/forgot_password_injection_container.dart';
 import 'package:swa/features/home/home_injection_container.dart';
@@ -32,12 +33,22 @@ Future<void> main() async {
   await eWalletDependencyInjectionInit(); //For initializing E-Wallet
   await TimesTripInjectionInit();
   await TicketHistoryInjectionInit();
+  await dependencyInjectionInit(); //For initializing network info and shared preferences
   await CacheHelper.init();
+  LanguageClass.isEnglish =
+      await CacheHelper.getDataToSharedPref(key: 'language') ?? true;
   await CacheHelper.deleteDataToSharedPref(key: 'tripOneId');
   await CacheHelper.deleteDataToSharedPref(key: 'tripRoundId');
   await CacheHelper.deleteDataToSharedPref(key: 'countSeats');
   await CacheHelper.deleteDataToSharedPref(key: 'countSeats2');
-  await dependencyInjectionInit(); //For initializing network info and shared preferences
+  await CacheHelper.deleteDataToSharedPref(key: 'numberTrip');
+  await CacheHelper.deleteDataToSharedPref(key: "elite");
+  await CacheHelper.deleteDataToSharedPref(key: "accessBusTime");
+  await CacheHelper.deleteDataToSharedPref(key: "lineName");
+  await CacheHelper.deleteDataToSharedPref(key: 'numberTrip2');
+  await CacheHelper.deleteDataToSharedPref(key: "elite2");
+  await CacheHelper.deleteDataToSharedPref(key: "accessBusTime2");
+  await CacheHelper.deleteDataToSharedPref(key: "lineName2");
   runApp(const MyApp());
   Bloc.observer = AppBlocObserver();
 }

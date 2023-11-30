@@ -70,7 +70,7 @@ TextEditingController oldPassController =TextEditingController();
                     return null;
                   },
                   color:Colors.white.withOpacity(0.2),
-                  labelText: "Enter your old Password",
+                  labelText: "Old Password",
                 ),
                 SizedBox(height: 15,),
                 CustomizedField(

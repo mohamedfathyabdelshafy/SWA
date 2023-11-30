@@ -30,8 +30,6 @@ class SeatLayoutWidget extends StatelessWidget {
                 children: [
                   ...List<int>.generate(stateModel.cols, (colI) => colI)
                       .map<SeatWidget>((colI) {
-                    print(
-                        "sdfhjg ${stateModel.currentSeats[rowI][colI].seatState}  ${stateModel.currentSeats[rowI][colI].seatBusID}");
                     return SeatWidget(
                       model: SeatModel(
                         // seatState: stateModel.currentSeats[rowI][colI].getSeatState,

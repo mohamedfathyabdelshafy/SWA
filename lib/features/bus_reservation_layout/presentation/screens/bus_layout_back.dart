@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/widgets/icon_back.dart';
 import 'package:swa/features/bus_reservation_layout/data/repo/bus_reservation_repo.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/PLOH/bus_layout_reservation_cubit.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/screens/reservation_ticket.dart';
+import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
+import 'package:swa/features/times_trips/presentation/PLOH/times_trips_cubit.dart';
 import '../../../../core/local_cache_helper.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/constants.dart';
@@ -77,7 +80,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
         leading: iconBack(context),
         backgroundColor: Colors.black,
         title: Text(
-          "Select seats",
+          LanguageClass.isEnglish ? "Select seats" : "حدد كراسيك",
           style: TextStyle(
               color: AppColors.white, fontSize: 34, fontFamily: "regular"),
         ),
@@ -147,8 +150,8 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                     Expanded(
                       child: Column(
                         children: [
-                          const Text(
-                            'Available',
+                          Text(
+                            LanguageClass.isEnglish ? 'Available' : 'المتاح',
                             style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: "regular",
@@ -167,8 +170,8 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          const Text(
-                            'Selected',
+                          Text(
+                            LanguageClass.isEnglish ? 'Selected' : 'تم تحديده',
                             style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: "regular",
@@ -183,8 +186,10 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          const Text(
-                            'Unavailable',
+                          Text(
+                            LanguageClass.isEnglish
+                                ? 'Unavailable'
+                                : 'غير متاح',
                             style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: "regular",
@@ -210,22 +215,35 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
 
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) {
-                                    return ReservationTicket(
-                                      price: widget.price,
-                                      countSeates: countSeats,
-                                      busId: busSeatsModel!
-                                          .busSeatDetails!.busDetails!.busID!,
-                                      tripTypeId: "2",
-                                      from: widget.from,
-                                      to: widget.to,
-                                      oneTripId: busSeatsModel!
-                                          .busSeatDetails!.tripId!,
-                                      countSeats1: widget.cachCountSeats1,
-                                      countSeats2: cachCountSeats2,
-                                      user: widget.user,
-                                    );
-                                  }),
+                                  MaterialPageRoute(
+                                      builder: (context) => MultiBlocProvider(
+                                              providers: [
+                                                BlocProvider<LoginCubit>(
+                                                    create: (context) =>
+                                                        sl<LoginCubit>()),
+                                                BlocProvider<TimesTripsCubit>(
+                                                  create: (context) =>
+                                                      TimesTripsCubit(),
+                                                )
+                                              ],
+                                              // Replace with your actual cubit creation logic
+                                              child: ReservationTicket(
+                                                price: widget.price,
+                                                countSeates: countSeats,
+                                                busId: busSeatsModel!
+                                                    .busSeatDetails!
+                                                    .busDetails!
+                                                    .busID!,
+                                                tripTypeId: "2",
+                                                from: widget.from,
+                                                to: widget.to,
+                                                oneTripId: busSeatsModel!
+                                                    .busSeatDetails!.tripId!,
+                                                countSeats1:
+                                                    widget.cachCountSeats1,
+                                                countSeats2: cachCountSeats2,
+                                                user: widget.user,
+                                              ))),
                                 );
                               },
                               child: Padding(
@@ -239,7 +257,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      "choose seats",
+                                      LanguageClass.isEnglish ? "Save" : "تم",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontFamily: "bold",
@@ -269,13 +287,13 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                                   )),
                             ),
                             Positioned(
-                              top: sizeHeight * .10 * .45,
+                              top: sizeHeight * .23 - 80,
                               right: 51,
                               bottom: 0,
                               child: SizedBox(
                                 height: sizeHeight * .55,
                                 child: SeatLayoutWidget(
-                                  seatHeight: sizeHeight * .047,
+                                  seatHeight: sizeHeight * .040,
                                   onSeatStateChanged:
                                       (rowI, colI, seatState, seat) {
                                     if (seatState == SeatState.selected) {

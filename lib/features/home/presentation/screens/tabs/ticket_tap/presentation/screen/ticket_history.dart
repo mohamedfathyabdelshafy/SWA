@@ -35,7 +35,9 @@ class _TicketHistoryState extends State<TicketHistory> {
     responseTicketHistoryModel =
         await ticketRepo.getTicketHistory(customerId: 3);
     print("========${responseTicketHistoryModel!.message![1].price}");
-    setState(() {});
+    if (this.mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -44,15 +46,14 @@ class _TicketHistoryState extends State<TicketHistory> {
     double sizeWidth = context.width;
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        leading: iconBack(context),
-        backgroundColor: Colors.black,
-      ),
       body: SizedBox(
         height: sizeHeight * 0.9,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            SizedBox(
+              height: sizeHeight * 0.1,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 45),
               child: Text(

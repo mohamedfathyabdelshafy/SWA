@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -20,7 +19,6 @@ class SeatWidget extends StatefulWidget {
     Key? key,
     required this.model,
     required this.onSeatStateChanged,
-
     required this.seatHeight,
   }) : super(key: key);
 
@@ -31,8 +29,8 @@ class SeatWidget extends StatefulWidget {
 class _SeatWidgetState extends State<SeatWidget> {
   int rowI = 0;
   int colI = 0;
-List<num> countSeats=[];
-List<SeatDetails> selectedSeats = []; // Add this line
+  List<num> countSeats = [];
+  List<SeatDetails> selectedSeats = []; // Add this line
 
   @override
   void initState() {
@@ -49,13 +47,13 @@ List<SeatDetails> selectedSeats = []; // Add this line
         height: widget.seatHeight,
         child: InkWell(
           onTap: () {
-            if(widget.model.seat.seatState == SeatState.empty){
+            if (widget.model.seat.seatState == SeatState.empty) {
               return;
-            }else {
+            } else {
               countSeats.add(widget.model.seat.seatBusID!);
               print("widget.model.seat.seatBusID${countSeats}");
-              print("GestureDetector ${widget.model.seat.seatState}  ${widget
-                  .model.seat.seatBusID}");
+              print(
+                  "GestureDetector ${widget.model.seat.seatState}  ${widget.model.seat.seatBusID}");
 
               setState(() {
                 if (widget.model.seat.seatState == SeatState.selected) {
@@ -65,9 +63,8 @@ List<SeatDetails> selectedSeats = []; // Add this line
                   widget.model.seat.seatState = SeatState.selected;
                   selectedSeats.add(widget.model.seat);
                 }
-                widget.onSeatStateChanged(
-                    rowI, colI, widget.model.seat.seatState!,
-                    widget.model.seat);
+                widget.onSeatStateChanged(rowI, colI,
+                    widget.model.seat.seatState!, widget.model.seat);
               });
             }
           },
@@ -83,18 +80,15 @@ List<SeatDetails> selectedSeats = []; // Add this line
                           _getSvgPath(widget.model.seat.seatState!),
                           height: 30,
                           width: 40,
-                          color:
-                          widget.model.seat.seatState==SeatState.sold
-                              ?
-                          Colors.grey
-                              :
-                          widget.model.seat.seatState==SeatState.available
-                              ?
-                          AppColors.primaryColor
-                              :
-                          widget.model.seat.seatState==SeatState.selected
-                              ?
-                          Color(0xff5332F7):null,
+                          color: widget.model.seat.seatState == SeatState.sold
+                              ? Colors.grey
+                              : widget.model.seat.seatState ==
+                                      SeatState.available
+                                  ? AppColors.primaryColor
+                                  : widget.model.seat.seatState ==
+                                          SeatState.selected
+                                      ? Color(0xff5332F7)
+                                      : null,
                           fit: BoxFit.cover,
                         ),
                       ),
