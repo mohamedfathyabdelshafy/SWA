@@ -5,6 +5,7 @@ import 'package:swa/core/usecases/usecase.dart';
 import 'package:swa/features/sign_in/domain/entities/user_response.dart';
 import 'package:swa/features/sign_in/domain/use_cases/get_user_data.dart';
 import 'package:swa/features/sign_in/domain/use_cases/login.dart';
+import 'package:swa/features/sign_in/presentation/cubit/dete_respo.dart';
 
 part 'login_state.dart';
 
@@ -12,27 +13,21 @@ class LoginCubit extends Cubit<LoginState> {
   final UserLogin userLoginUseCase;
   final GetUserDataUseCase getUserDataUseCase;
 
-  LoginCubit({required this.userLoginUseCase, required this.getUserDataUseCase}) : super(LoginInitial());
+  LoginCubit({required this.userLoginUseCase, required this.getUserDataUseCase})
+      : super(LoginInitial());
 
   Future<void> userLogin(UserLoginParams params) async {
     emit(LoginLoadingState());
     Either<Failure, UserResponse> response = await userLoginUseCase(params);
-    emit(
-      response.fold(
-        (failure) => LoginErrorState(error: failure),
-        (userResponse) => UserLoginLoadedState(userResponse: userResponse)
-      )
-    );
+    emit(response.fold((failure) => LoginErrorState(error: failure),
+        (userResponse) => UserLoginLoadedState(userResponse: userResponse)));
   }
 
   Future<void> getUserData() async {
-    Either<Failure, UserResponse> response = await getUserDataUseCase(NoParams());
-    emit(
-      response.fold(
-        (failure) => LoginErrorState(error: failure),
-        (userResponse) => UserLoginLoadedState(userResponse: userResponse)
-      )
-    );
+    Either<Failure, UserResponse> response =
+        await getUserDataUseCase(NoParams());
+    emit(response.fold((failure) => LoginErrorState(error: failure),
+        (userResponse) => UserLoginLoadedState(userResponse: userResponse)));
   }
 
   // Future<void> clearApplicantData() async {
@@ -54,5 +49,4 @@ class LoginCubit extends Cubit<LoginState> {
   //     )
   //   );
   // }
-
 }

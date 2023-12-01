@@ -4,5 +4,6 @@ import 'package:swa/features/sign_up/domain/entities/message_response.dart';
 import 'package:swa/features/sign_up/domain/use_cases/register.dart';
 
 abstract class RegisterRepository {
-  Future<Either<Failure, MessageResponse>> registerUser(UserRegisterParams params);
+  Future<Either<Failure, MessageResponse>> registerUser(
+      UserRegisterParams params);
 }

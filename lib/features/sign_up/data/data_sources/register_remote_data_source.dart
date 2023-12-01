@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:swa/core/api/api_consumer.dart';
 import 'package:swa/core/api/end_points.dart';
 import 'package:http/http.dart' as http;
@@ -34,11 +35,15 @@ class RegisterRemoteDataSourceImpl implements RegisterRemoteDataSource {
     });
     request.headers.addAll(headers);
 
+    print(' body ' + request.body);
+
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonResponse =
           jsonDecode(await response.stream.bytesToString());
+
+      print(jsonResponse);
       return MessageResponseModel.fromJson(jsonResponse);
     } else {
       print(response.reasonPhrase);

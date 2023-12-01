@@ -19,6 +19,7 @@ import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/features/times_trips/presentation/PLOH/times_trips_cubit.dart';
 import 'package:swa/features/times_trips/presentation/PLOH/times_trips_states.dart';
 import 'package:swa/features/times_trips/presentation/screens/times_screen.dart';
+import 'package:swa/main.dart';
 
 class MyHome extends StatefulWidget {
   const MyHome({super.key});
@@ -198,6 +199,7 @@ class _MyHomeState extends State<MyHome> {
                                                   builder: (context) {
                                             return MyAccountScreen(
                                               user: _user!,
+                                              loginLocalDataSource: sl(),
                                             );
                                           }));
                                         },
