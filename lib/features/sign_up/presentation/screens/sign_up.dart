@@ -38,7 +38,7 @@ class SignUpScreen extends StatelessWidget {
                 children: [
                   SizedBox(height: context.height * 0.05),
                   InkWell(
-                    onTap: (){
+                    onTap: () {
                       Navigator.pop(context);
                     },
                     child: Icon(
@@ -57,47 +57,49 @@ class SignUpScreen extends StatelessWidget {
                           "Sign Up",
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: HexColor('#F7F8F9'),
-                            fontSize: 35
-                          ),
+                              fontWeight: FontWeight.bold,
+                              color: HexColor('#F7F8F9'),
+                              fontSize: 35),
                         ),
                         // SizedBox(height:context.height *0.03 ,),
-                        SizedBox(height: context.height * 0.25,),
+                        SizedBox(
+                          height: context.height * 0.25,
+                        ),
                         CustomizedField(
                           colorText: AppColors.greyLight,
                           controller: nameController,
-                          validator: (validator){
-                            if(validator == null || validator.isEmpty) {
+                          validator: (validator) {
+                            if (validator == null || validator.isEmpty) {
                               return "Enter name";
                             }
                             return null;
                           },
-                          color:Colors.black.withOpacity(0.5),
+                          color: Colors.black.withOpacity(0.5),
                           labelText: "Full Name",
                         ),
                         CustomizedField(
                           colorText: AppColors.greyLight,
-                          controller: mobileController ,
+                          controller: mobileController,
                           keyboardType: TextInputType.number,
                           maxLength: 11,
-                          validator: (validator){
-                            if(validator == null || validator.isEmpty) {
+                          validator: (validator) {
+                            if (validator == null || validator.isEmpty) {
                               return "Enter name";
                             }
                             return null;
                           },
-                          color:Colors.black.withOpacity(0.5),
+                          color: Colors.black.withOpacity(0.5),
                           labelText: "Phone Number",
                         ),
                         CustomizedField(
                           colorText: AppColors.greyLight,
                           controller: emailController,
-                          validator: (validator){
-                            if(validator == null || validator.isEmpty) {
+                          validator: (validator) {
+                            if (validator == null || validator.isEmpty) {
                               return "Enter Email";
                             }
-                            String pattern = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+                            String pattern =
+                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
                             RegExp regex = RegExp(pattern);
                             if (!regex.hasMatch(validator)) {
                               return "Your Email is invalid";
@@ -107,20 +109,19 @@ class SignUpScreen extends StatelessWidget {
                           },
                           color: Colors.black.withOpacity(0.5),
                           labelText: "Email",
-
                         ),
                         CustomizedField(
                           isPassword: true,
                           obscureText: true,
                           colorText: AppColors.greyLight,
                           controller: passwordController,
-                          validator: (validator){
-                            if(validator == null || validator.isEmpty) {
+                          validator: (validator) {
+                            if (validator == null || validator.isEmpty) {
                               return "Enter your password";
                             }
                             return null;
                           },
-                          color:Colors.black.withOpacity(0.5),
+                          color: Colors.black.withOpacity(0.5),
                           labelText: "Enter Your Password(min 8 characters)",
                         ),
                         CustomizedField(
@@ -128,49 +129,62 @@ class SignUpScreen extends StatelessWidget {
                           obscureText: true,
                           colorText: AppColors.greyLight,
                           controller: rePasswordController,
-                          validator: (validator){
-                            if(validator == null || validator.isEmpty) {
+                          validator: (validator) {
+                            if (validator == null || validator.isEmpty) {
                               return "Confirm your password";
                             }
                             return null;
                           },
-                          color:Colors.black.withOpacity(0.5),
+                          color: Colors.black.withOpacity(0.5),
                           labelText: "Confirm Your Password",
                         ),
                         BlocListener(
                           bloc: BlocProvider.of<RegisterCubit>(context),
                           listener: (context, state) {
-                            if(state is RegisterLoadingState){
+                            if (state is RegisterLoadingState) {
                               Constants.showLoadingDialog(context);
-                            }else if (state is UserRegisterLoadedState) {
+                            } else if (state is UserRegisterLoadedState) {
                               Constants.hideLoadingDialog(context);
-                              Navigator.pushReplacementNamed(context, Routes.signInRoute);
-                            }else if (state is RegisterErrorState) {
+                              Constants.showDefaultSnackBar(
+                                  context: context,
+                                  text:
+                                      state.messageResponse.massage.toString());
+
+                              Navigator.pushReplacementNamed(
+                                  context, Routes.signInRoute);
+                            } else if (state is RegisterErrorState) {
                               Constants.hideLoadingDialog(context);
-                              Constants.showDefaultSnackBar(context: context, text: state.error.toString());
+                              Constants.showDefaultSnackBar(
+                                  context: context,
+                                  text: state.error.toString());
                             }
                           },
                           child: InkWell(
-                            onTap: (){
-                              if(formKey.currentState!.validate()) {
-                                BlocProvider.of<RegisterCubit>(context).registerUser(UserRegisterParams(name: nameController.text, mobile: mobileController.text, email: emailController.text, password: passwordController.text, userType: "Customer"));
+                            onTap: () {
+                              if (formKey.currentState!.validate()) {
+                                BlocProvider.of<RegisterCubit>(context)
+                                    .registerUser(UserRegisterParams(
+                                        name: nameController.text,
+                                        mobile: mobileController.text,
+                                        email: emailController.text,
+                                        password: passwordController.text,
+                                        userType: "Customer"));
                               }
                             },
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 20,vertical:20),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 20),
                               //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
-                              decoration:BoxDecoration(
+                              decoration: BoxDecoration(
                                   color: AppColors.primaryColor,
-                                  borderRadius: BorderRadius.circular(10)
-                              ) ,
+                                  borderRadius: BorderRadius.circular(10)),
                               child: Center(
                                 child: Text(
                                   "Sign Up",
                                   style: TextStyle(
                                       color: AppColors.white,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 22
-                                  ),
+                                      fontSize: 22),
                                 ),
                               ),
                             ),

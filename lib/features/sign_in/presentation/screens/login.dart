@@ -9,7 +9,6 @@ import 'package:swa/core/widgets/customized_field.dart';
 import 'package:swa/features/sign_in/domain/use_cases/login.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 
-
 class LoginScreen extends StatelessWidget {
   final TextEditingController userNameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -29,7 +28,7 @@ class LoginScreen extends StatelessWidget {
           key: formKey,
           child: SingleChildScrollView(
             child: SizedBox(
-              height: sizeHeight * 0.9,
+              height: sizeHeight,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -65,12 +64,12 @@ class LoginScreen extends StatelessWidget {
                           CustomizedField(
                               colorText: Colors.white,
                               obscureText: false,
-                              color : AppColors.lightBink,
-                              hintText:"Enter Username or Phone Number",
+                              color: AppColors.lightBink,
+                              hintText: "Enter Username or Phone Number",
                               controller: userNameController,
-                              validator: (value){
-                                if(value == null ||value.isEmpty ){
-                                  return  "Enter UserName";
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Enter UserName";
                                 }
                                 return null;
                               }),
@@ -78,12 +77,12 @@ class LoginScreen extends StatelessWidget {
                               colorText: Colors.white,
                               isPassword: true,
                               obscureText: true,
-                              color : AppColors.lightBink,
+                              color: AppColors.lightBink,
                               hintText: "Enter Password",
                               controller: passwordController,
-                              validator: (value){
-                                if(value == null ||value.isEmpty ){
-                                  return  "Enter password";
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Enter password";
                                 }
                                 return null;
                               }),
@@ -94,43 +93,48 @@ class LoginScreen extends StatelessWidget {
                   BlocListener(
                     bloc: BlocProvider.of<LoginCubit>(context),
                     listener: (context, state) {
-                      if(state is LoginLoadingState){
+                      if (state is LoginLoadingState) {
                         Constants.showLoadingDialog(context);
-                      }else if (state is UserLoginLoadedState) {
+                      } else if (state is UserLoginLoadedState) {
                         Constants.hideLoadingDialog(context);
-                        if(state.userResponse.status == 'failed') {
-                          Constants.showDefaultSnackBar(context: context, text: state.userResponse.massage.toString());
-                        }else {
-                          Navigator.pushReplacementNamed(context, Routes.initialRoute);
+                        if (state.userResponse.status == 'failed') {
+                          Constants.showDefaultSnackBar(
+                              context: context,
+                              text: state.userResponse.massage.toString());
+                        } else {
+                          Navigator.pushReplacementNamed(
+                              context, Routes.initialRoute);
                         }
-                      }else if (state is LoginErrorState) {
+                      } else if (state is LoginErrorState) {
                         Constants.hideLoadingDialog(context);
-                        Constants.showDefaultSnackBar(context: context, text: state.error.toString());
+                        Constants.showDefaultSnackBar(
+                            context: context, text: state.error.toString());
                       }
                     },
                     child: InkWell(
-                        onTap: (){
-                          if(formKey.currentState!.validate()) {
-                            BlocProvider.of<LoginCubit>(context).userLogin(UserLoginParams(username: userNameController.text, password: passwordController.text));
+                        onTap: () {
+                          if (formKey.currentState!.validate()) {
+                            BlocProvider.of<LoginCubit>(context).userLogin(
+                                UserLoginParams(
+                                    username: userNameController.text,
+                                    password: passwordController.text));
                           }
                         },
-                        child: Constants.customButton(text: "Login")
-                    ),
+                        child: Constants.customButton(text: "Login")),
                   ),
                   TextButton(
-                    onPressed: (){
-                      // Navigator.push(context, MaterialPageRoute(builder: (context){return ForgetPasswordScreen();}));
-                      Navigator.pushNamed(context, Routes.forgotPasswordRoute);
-                    },
-                    child: Text(
-                      "Forget Password ?",
-                      style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.normal,
-                          color: AppColors.white
-                      ),
-                    )
-                  ),
+                      onPressed: () {
+                        // Navigator.push(context, MaterialPageRoute(builder: (context){return ForgetPasswordScreen();}));
+                        Navigator.pushNamed(
+                            context, Routes.forgotPasswordRoute);
+                      },
+                      child: Text(
+                        "Forget Password ?",
+                        style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.normal,
+                            color: AppColors.white),
+                      )),
                   const Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -144,11 +148,11 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       TextButton(
-                        onPressed: (){
+                        onPressed: () {
                           // Navigator.push(context, MaterialPageRoute(builder: (context){return SignUpScreen();}));
                           Navigator.pushNamed(context, Routes.signUpRoute);
                         },
-                        child:  Text(
+                        child: Text(
                           "Sign UP",
                           style: TextStyle(
                             color: AppColors.yellow,
@@ -159,7 +163,9 @@ class LoginScreen extends StatelessWidget {
                       )
                     ],
                   ),
-                  const SizedBox(height: 50,)
+                  const SizedBox(
+                    height: 50,
+                  )
                 ],
               ),
             ),
@@ -169,5 +175,3 @@ class LoginScreen extends StatelessWidget {
     );
   }
 }
-
-
