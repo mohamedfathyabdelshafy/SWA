@@ -32,6 +32,6 @@ class LoginLocalDataSourceImpl implements LoginLocalDataSource{
 
   @override
   Future<void> clearUserData() {
-    return sharedPreferences.setString(AppStrings.cachedUserLoginData, '');
+    return sharedPreferences.remove(AppStrings.cachedUserLoginData);
   }
 }

@@ -4,9 +4,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/more_screen.dart';
 import 'package:swa/features/home/presentation/screens/tabs/my_home.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/presentation/screen/ticket_history.dart';
 import 'package:swa/features/payment/wallet/presentation/screens/my_wallet.dart';
+import 'package:swa/features/sign_in/data/data_sources/login_local_data_source.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 
@@ -45,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
       const MyHome(),
       TicketHistory(),
       MyCredit(user: _user),
+      const MoreScreen(),
     ];
     return BlocListener(
       bloc: BlocProvider.of<LoginCubit>(context),
@@ -63,11 +66,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: BottomNavigationBar(
               onTap: (index) {
-                if (index != 3) {
                   setState(() {
                     currentIndex = index;
                   });
-                }
               },
               currentIndex: currentIndex,
               showUnselectedLabels: true,

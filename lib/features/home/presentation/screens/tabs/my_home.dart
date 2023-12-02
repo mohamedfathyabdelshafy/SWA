@@ -19,6 +19,7 @@ import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/features/times_trips/presentation/PLOH/times_trips_cubit.dart';
 import 'package:swa/features/times_trips/presentation/PLOH/times_trips_states.dart';
 import 'package:swa/features/times_trips/presentation/screens/times_screen.dart';
+import 'package:swa/main.dart';
 
 class MyHome extends StatefulWidget {
   const MyHome({super.key});
@@ -126,7 +127,7 @@ class _MyHomeState extends State<MyHome> {
                                               LanguageClass.isEnglish
                                                   ? "ع"
                                                   : "En",
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   color: Colors.white),
                                             ),
                                           ),
@@ -184,7 +185,7 @@ class _MyHomeState extends State<MyHome> {
                                               LanguageClass.isEnglish
                                                   ? "ع"
                                                   : "En",
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   color: Colors.white),
                                             ),
                                           ),
@@ -197,6 +198,7 @@ class _MyHomeState extends State<MyHome> {
                                               MaterialPageRoute(
                                                   builder: (context) {
                                             return MyAccountScreen(
+                                              loginLocalDataSource: sl(),
                                               user: _user!,
                                             );
                                           }));
@@ -212,7 +214,7 @@ class _MyHomeState extends State<MyHome> {
                                           child: Center(
                                             child: Text(
                                               _user!.name!,
-                                              style: TextStyle(
+                                              style:const TextStyle(
                                                   color: Colors.white),
                                             ),
                                           ),
@@ -320,7 +322,7 @@ class _MyHomeState extends State<MyHome> {
                           ),
                           Text(
                             LanguageClass.isEnglish ? "From" : "من",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
+                            style: const TextStyle(color: Colors.white, fontSize: 20),
                             textAlign: LanguageClass.isEnglish
                                 ? TextAlign.left
                                 : TextAlign.right,
@@ -358,8 +360,6 @@ class _MyHomeState extends State<MyHome> {
                                     _fromCityName = result['_fromCityName'];
                                   });
                                 }
-                                print("bassnt nasralla2 ");
-
                                 // Widget _fromStationsListWidget = ListView.builder(
                                 //   scrollDirection: Axis.vertical,
                                 //   shrinkWrap: true,
@@ -432,7 +432,7 @@ class _MyHomeState extends State<MyHome> {
                                             : 'تحديد'
                                         : _fromCityName)),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Padding(
@@ -440,7 +440,7 @@ class _MyHomeState extends State<MyHome> {
                             child: Text(
                               LanguageClass.isEnglish ? "To" : "الي",
                               style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
+                                  const TextStyle(color: Colors.white, fontSize: 20),
                               textAlign: LanguageClass.isEnglish
                                   ? TextAlign.left
                                   : TextAlign.right,
@@ -644,7 +644,7 @@ class _MyHomeState extends State<MyHome> {
                                           ),
                                         ],
                                       ),
-                                tripTypeId == "2" ? const Spacer() : SizedBox(),
+                                tripTypeId == "2" ? const Spacer() : const SizedBox(),
                                 tripTypeId == "2"
                                     ? Column(
                                         children: [
@@ -688,7 +688,7 @@ class _MyHomeState extends State<MyHome> {
                               ],
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 25,
                           ),
                           BlocListener<TimesTripsCubit, TimesTripsStates>(
@@ -702,9 +702,7 @@ class _MyHomeState extends State<MyHome> {
                                     [];
                                 Constants.hideLoadingDialog(context);
 
-                                if (state.timesTripsResponse.message!.tripList!
-                                        .length >
-                                    0) {
+                                if (state.timesTripsResponse.message!.tripList!.isNotEmpty) {
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
                                     return TimesScreen(

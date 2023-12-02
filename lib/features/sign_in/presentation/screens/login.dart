@@ -33,7 +33,28 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: context.height * 0.15),
+                  SizedBox(height: context.height * 0.05),
+
+                  Row(
+                    children: [
+                      const Spacer(),
+                      TextButton(
+                          onPressed: (){
+                            // Navigator.push(context, MaterialPageRoute(builder: (context){return ForgetPasswordScreen();}));
+                            Navigator.pushNamed(context, Routes.initialRoute);
+                          },
+                          child: Text(
+                            "Skip",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.normal,
+                                color: AppColors.white
+                            ),
+                          )
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: context.height * 0.05),
                   SvgPicture.asset("assets/images/Swa Logo.svg"),
                   SizedBox(height: context.height * 0.15),
                   SizedBox(

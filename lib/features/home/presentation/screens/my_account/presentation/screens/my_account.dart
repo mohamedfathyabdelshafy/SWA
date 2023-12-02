@@ -1,20 +1,25 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
-import 'package:swa/core/utils/constants.dart';
 import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/change_password/presentation/PLOH/change_password_cubit.dart';
 import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/change_password/presentation/screen/change_password.dart';
 import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/personal_info/presentation/PLOH/personal_info_cubit.dart';
 import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/personal_info/presentation/screen/personal_info.dart';
+import 'package:swa/features/sign_in/data/data_sources/login_local_data_source.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 
 class MyAccountScreen extends StatelessWidget {
-   MyAccountScreen({super.key,required this.user});
+   MyAccountScreen({super.key,required this.user,required this.loginLocalDataSource});
   User user;
-  @override
+   final LoginLocalDataSource loginLocalDataSource;
+
+   @override
   Widget build(BuildContext context) {
-    print("_user${user?.customerId??0}");
+    if (kDebugMode) {
+      print("_user${user.customerId??0}");
+    }
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -72,10 +77,15 @@ class MyAccountScreen extends StatelessWidget {
                 const SizedBox(height: 17,),
                 InkWell(
                     onTap: (){
-                      Navigator.pushNamed(
+                      loginLocalDataSource.clearUserData();
+                      Navigator.pushNamedAndRemoveUntil(
                         context,
                         Routes.signInRoute,
-                      );                    },
+                            (route) => false,
+                      );
+
+                      },
+
                     child: customText("Logout")),
               ],
             ),
@@ -88,7 +98,6 @@ class MyAccountScreen extends StatelessWidget {
       ),
     );
   }
-
 
   Widget customText(text){
     return Text(

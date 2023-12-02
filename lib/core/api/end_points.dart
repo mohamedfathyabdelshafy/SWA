@@ -14,4 +14,6 @@ class EndPoints {
   static const String reservation = '${baseUrl}Reservation/AddReservation';
   static const String personalEdit = '${baseUrl}Customer/EditCustomer';
   static const String chargecard = '${baseUrl}Fawry/CardPayment';
+  static const String aboutUs = '${baseUrl}Settings/AboutUs';
+
 }

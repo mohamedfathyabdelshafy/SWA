@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
@@ -77,15 +78,20 @@ class _MyCreditState extends State<MyCredit> {
 
               InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BlocProvider<ReservationCubit>(
-                        create: (context) => ReservationCubit(),
-                        child: SelectPaymentScreen(user: widget.user),
+                  if(widget.user != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            BlocProvider<ReservationCubit>(
+                              create: (context) => ReservationCubit(),
+                              child: SelectPaymentScreen(user: widget.user),
+                            ),
                       ),
-                    ),
-                  );
+                    );
+                  }else{
+                    Navigator.pushNamed(context, Routes.signInRoute);
+                  }
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
