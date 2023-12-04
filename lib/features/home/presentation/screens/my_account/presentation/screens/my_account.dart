@@ -98,9 +98,10 @@ class MyAccountScreen extends StatelessWidget {
                     onTap: () {
                       loginLocalDataSource.clearUserData();
 
-                      Navigator.pushNamed(
+                      Navigator.pushNamedAndRemoveUntil(
                         context,
                         Routes.signInRoute,
+                            (Route<dynamic> route) => false,
                       );
                     },
                     child: customText("Logout")),
@@ -109,11 +110,62 @@ class MyAccountScreen extends StatelessWidget {
                 ),
                 InkWell(
                     onTap: () {
-                      userdelete.deleteuserfun(user.customerId!);
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            backgroundColor: AppColors.darkPurple,
+                            title: Text("Delete Account",style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: "bold",
+                              color: AppColors.primaryColor
+                            ),),
+                            content: Text("Are you sure you want to delete your account?",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontFamily: "regular",
 
-                      Navigator.pushNamed(
-                        context,
-                        Routes.signInRoute,
+                            ),),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Close the dialog
+                                },
+                                child: Text("Cancel",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: AppColors.primaryColor,
+                                    fontFamily: "bold",
+
+                                  ),),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Close the dialog
+                                  userdelete.deleteuserfun(user.customerId!);
+                                  loginLocalDataSource.clearUserData();
+                                  Navigator.pushNamedAndRemoveUntil(
+                                    context,
+                                    Routes.signInRoute,
+                                        (Route<dynamic> route) => false,
+
+                                  );
+                                },
+                                child: Text("OK",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: AppColors.primaryColor,
+                                    fontFamily: "bold",
+
+                                  ),),
+                              ),
+                            ],
+                          );
+                        },
                       );
                     },
                     child: customText("Delete account")),

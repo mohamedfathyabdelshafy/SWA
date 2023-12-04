@@ -50,48 +50,60 @@ get();
         ),
       ),
       body:
-           Column(
+           BlocBuilder(
+             bloc: BlocProvider.of<MoreCubit>(context),
+             builder: (context,state){
+               if(state is LoadingAboutUs){
+                 return  Center(
+                   child: CircularProgressIndicator(color: AppColors.primaryColor,),
+                 );
+               }else{
+                 return Column(
 
-            children: [
-              Stack(
-                children: [
-                  SizedBox(
-                    width:
-                    double.infinity, // Take the full width of the screen
-                    child: Image.asset(
-                      "assets/images/oranaa.agency_85935_luxor_landscape_and_sky_with_ballons_on_sky_e8ecb03c-2e93-4118-abed-39447bd055c9.png",
-                      fit: BoxFit.cover,
-                      // Maintain the aspect ratio
-                    ),
-                  ),
+                   children: [
+                     Stack(
+                       children: [
+                         SizedBox(
+                           width:
+                           double.infinity, // Take the full width of the screen
+                           child: Image.asset(
+                             "assets/images/oranaa.agency_85935_luxor_landscape_and_sky_with_ballons_on_sky_e8ecb03c-2e93-4118-abed-39447bd055c9.png",
+                             fit: BoxFit.cover,
+                             // Maintain the aspect ratio
+                           ),
+                         ),
 
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: sizeHeight * 0.1,
-                      ),
-                      Center(
-                        child: SvgPicture.asset(
-                          "assets/images/Swa Logo.svg",
-                          height: sizeHeight * 0.06,
-                          width: sizeWidth * 0.06,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 15),
-                child: Text(
-                  aboutUsResponse.message?.description??"",
-                  style: TextStyle(
-                      color: AppColors.white,
-                      fontSize: 20,
-                      fontFamily: "regular"),
-                ),
-              ),
-            ],
+                         Column(
+                           children: [
+                             SizedBox(
+                               height: sizeHeight * 0.1,
+                             ),
+                             Center(
+                               child: SvgPicture.asset(
+                                 "assets/images/Swa Logo.svg",
+                                 height: sizeHeight * 0.06,
+                                 width: sizeWidth * 0.06,
+                               ),
+                             ),
+                           ],
+                         ),
+                       ],
+                     ),
+                     Padding(
+                       padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 15),
+                       child: Text(
+                         aboutUsResponse.message?.description??"",
+                         style: TextStyle(
+                             color: AppColors.white,
+                             fontSize: 20,
+                             fontFamily: "regular"),
+                       ),
+                     ),
+                   ],
+                 );
+               }
+             },
+
            )
           );
 

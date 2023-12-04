@@ -13,7 +13,7 @@ class UserRegisterLoadedState extends RegisterState {
 }
 //Error States
 class RegisterErrorState extends RegisterState {
-  final Object error;
+  final String error;
   RegisterErrorState({required this.error});
   Object get props => error;
 }

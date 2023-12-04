@@ -8,8 +8,7 @@ class MoreCubit extends Cubit<MoreStates>{
   MoreCubit():super(InitialMoreStates());
   MoreRepo moreRepo = MoreRepo(sl());
 
-  Future<AboutUsResponse?> getTicketHistory(
-      int customerId
+  Future<AboutUsResponse?> getAboutUs(
       ) async {
     try{
       emit(LoadingAboutUs());

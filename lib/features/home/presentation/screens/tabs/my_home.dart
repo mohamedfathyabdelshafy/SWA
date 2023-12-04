@@ -118,6 +118,13 @@ class _MyHomeState extends State<MyHome> {
                                           height: sizeHeight * 0.05,
                                           width: sizeWidth * 0.1,
                                           decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                offset: const Offset(0, 5),
+                                                blurRadius: 5,
+                                                color:AppColors.darkPurple.withOpacity(1),
+                                              )
+                                            ],
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                             color: AppColors.darkPurple,
@@ -143,6 +150,13 @@ class _MyHomeState extends State<MyHome> {
                                           height: sizeHeight * 0.05,
                                           width: sizeWidth * 0.3,
                                           decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                offset: const Offset(0, 5),
+                                                blurRadius: 5,
+                                                color:AppColors.darkPurple.withOpacity(1),
+                                              )
+                                            ],
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                             color: AppColors.darkPurple,
@@ -176,6 +190,13 @@ class _MyHomeState extends State<MyHome> {
                                           height: sizeHeight * 0.05,
                                           width: sizeWidth * 0.1,
                                           decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                offset: const Offset(0, 5),
+                                                blurRadius: 5,
+                                                color:AppColors.darkPurple.withOpacity(1),
+                                              )
+                                            ],
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                             color: AppColors.darkPurple,
@@ -200,7 +221,6 @@ class _MyHomeState extends State<MyHome> {
                                             return MyAccountScreen(
                                               loginLocalDataSource: sl(),
                                               user: _user!,
-                                              loginLocalDataSource: sl(),
                                             );
                                           }));
                                         },
@@ -208,16 +228,36 @@ class _MyHomeState extends State<MyHome> {
                                           height: sizeHeight * 0.05,
                                           width: sizeWidth * 0.3,
                                           decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  offset: const Offset(0, 5),
+                                                  blurRadius: 5,
+                                                  color:AppColors.darkPurple.withOpacity(1),
+                                                )
+                                              ],
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                             color: AppColors.darkPurple,
                                           ),
-                                          child: Center(
-                                            child: Text(
-                                              _user!.name!,
-                                              style:const TextStyle(
-                                                  color: Colors.white),
-                                            ),
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.person,
+                                                color: AppColors.white,
+                                                size: 25,
+                                              ),
+                                              SizedBox(width: 5,),
+                                              Text(
+                                                _user!.name!,
+                                                style:const TextStyle(
+                                                    color: Colors.white,
+                                                  fontFamily: "bold",
+                                                  fontSize: 20
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),

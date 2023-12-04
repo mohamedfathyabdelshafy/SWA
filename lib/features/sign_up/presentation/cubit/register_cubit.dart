@@ -16,10 +16,22 @@ class RegisterCubit extends Cubit<RegisterState> {
     Either<Failure, MessageResponse> response = await registerUserUseCase(params);
     emit(
       response.fold(
-        (failure) => RegisterErrorState(error: failure),
-        (messageResponse) => UserRegisterLoadedState(messageResponse: messageResponse)
-      )
+            (failure) => RegisterErrorState(error: failure.toString()),
+            (messageResponse) {
+          if (messageResponse.status == 'failed') {
+            return RegisterErrorState(error: messageResponse.massage);
+          } else {
+            return UserRegisterLoadedState(messageResponse: messageResponse);
+          }
+        },
+      ),
     );
   }
 
 }
+// emit(
+// response.fold(
+// (failure) => RegisterErrorState(error: failure),
+// (messageResponse) => UserRegisterLoadedState(messageResponse: messageResponse)
+// )
+// );
