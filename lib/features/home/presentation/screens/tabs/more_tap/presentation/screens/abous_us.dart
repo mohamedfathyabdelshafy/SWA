@@ -89,14 +89,18 @@ get();
                          ),
                        ],
                      ),
-                     Padding(
-                       padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 15),
-                       child: Text(
-                         aboutUsResponse.message?.description??"",
-                         style: TextStyle(
-                             color: AppColors.white,
-                             fontSize: 20,
-                             fontFamily: "regular"),
+                     Expanded(
+                       child: SingleChildScrollView(
+                         child: Padding(
+                           padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 15),
+                           child: Text(
+                             aboutUsResponse.message?.description??"",
+                             style: TextStyle(
+                                 color: AppColors.white,
+                                 fontSize: 20,
+                                 fontFamily: "regular",),
+                           ),
+                         ),
                        ),
                      ),
                    ],

@@ -19,12 +19,12 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<Either<Failure, HomeMessageResponse>> getFromStationsData(NoParams params) async {
     //In case there's connection
-    try {
+    //  try {
       final getFromStations = await homeRemoteDataSource.getFromStations(params);
       return Right(getFromStations);
-    } on ServerException catch(error){
-      return Left(ServerFailure(error.toString()));
-    }
+    // } on ServerException catch(error){
+    //   return Left(ServerFailure(error.toString()));
+    // }
   }
 
   @override

@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         body: screens[currentIndex],
         bottomNavigationBar: SizedBox(
-          height: sizeHeight * 0.1,
+          height: sizeHeight * 0.14,
           child: Theme(
             data: Theme.of(context).copyWith(
               canvasColor: AppColors.darkPurple,
