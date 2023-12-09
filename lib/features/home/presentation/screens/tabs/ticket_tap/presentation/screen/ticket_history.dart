@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:swa/core/utils/app_colors.dart';
+import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/widgets/icon_back.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/Container_Widget.dart';
@@ -12,7 +13,7 @@ import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/main.dart';
 
 class TicketHistory extends StatefulWidget {
-  TicketHistory({super.key, this.user});
+  TicketHistory({super.key, required this.user});
   User? user;
   @override
   State<TicketHistory> createState() => _TicketHistoryState();
@@ -57,14 +58,14 @@ class _TicketHistoryState extends State<TicketHistory> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 45),
               child: Text(
-                "Your Tickets",
+                LanguageClass.isEnglish?"Your Tickets":"تذاكارك",
                 style: TextStyle(
                     color: AppColors.white,
                     fontSize: 34,
                     fontFamily: "regular"),
               ),
             ),
-            Expanded(
+            responseTicketHistoryModel?.message != null?Expanded(
               child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: responseTicketHistoryModel?.message?.length,
@@ -380,7 +381,7 @@ class _TicketHistoryState extends State<TicketHistory> {
                       ),
                     );
                   }),
-            ),
+            ):Container(),
           ],
         ),
       ),
