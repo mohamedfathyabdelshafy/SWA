@@ -27,7 +27,8 @@ get();
     super.initState();
   }
  void get()async{
-    aboutUsResponse = (await moreRepo.getAboutUs())!;
+   await BlocProvider.of<MoreCubit>(context).getStations();
+   aboutUsResponse = (await moreRepo.getAboutUs())!;
     setState(() {
 
     });
@@ -49,8 +50,7 @@ get();
               fontFamily: "bold"),
         ),
       ),
-      body:
-           BlocBuilder(
+      body: BlocBuilder(
              bloc: BlocProvider.of<MoreCubit>(context),
              builder: (context,state){
                if(state is LoadingAboutUs){

@@ -2,30 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swa/core/utils/app_strings.dart';
 import 'package:swa/core/utils/constants.dart';
-import 'package:swa/features/bus_reservation_layout/presentation/PLOH/bus_layout_reservation_cubit.dart';
-import 'package:swa/features/change_password/presentation/cubit/new_password_cubit.dart';
-import 'package:swa/features/create_passcode/presentation/pages/create_passcode.dart';
 import 'package:swa/features/done_login/presentation/pages/done_login.dart';
 import 'package:swa/features/forgot_password/presentation/cubit/forgot_password_cubit.dart';
 import 'package:swa/features/forgot_password/presentation/screens/forgot_password.dart';
 import 'package:swa/features/home/presentation/cubit/home_cubit.dart';
 import 'package:swa/features/home/presentation/screens/home.dart';
-import 'package:swa/features/change_password/presentation/screens/new_password.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/presentation/PLOH/ticket_history_cubit.dart';
-import 'package:swa/features/payment/electronic_wallet/presentation/cubit/eWallet_cubit.dart';
-import 'package:swa/features/payment/electronic_wallet/presentation/screens/electronic_screens.dart';
 import 'package:swa/features/payment/fawry/presentation/cubit/fawry_cubit.dart';
 import 'package:swa/features/payment/fawry/presentation/screens/fawry.dart';
 import 'package:swa/features/payment/fawry2/presentation/PLOH/fawry_Reservation_cubit.dart';
-import 'package:swa/features/payment/wallet/presentation/screens/my_wallet.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/features/sign_in/presentation/screens/login.dart';
 import 'package:swa/features/sign_up/presentation/cubit/register_cubit.dart';
 import 'package:swa/features/sign_up/presentation/screens/sign_up.dart';
 import 'package:swa/features/times_trips/presentation/PLOH/times_trips_cubit.dart';
-import 'package:swa/features/times_trips/presentation/screens/times_screen.dart';
 import 'package:swa/main.dart';
-import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
 
 class Routes {
   static const String initialRoute = '/';
@@ -83,15 +74,15 @@ class AppRoute {
           ),
         );
       case Routes.newPasswordRoute:
-        return MaterialPageRoute(
-            builder: (context) => MultiBlocProvider(providers: [
-                  BlocProvider<LoginCubit>(
-                    create: (context) => sl<LoginCubit>(),
-                  ),
-                  BlocProvider<NewPasswordCubit>(
-                    create: (context) => sl<NewPasswordCubit>(),
-                  ),
-                ], child: const NewPasswordScreen()));
+        // return MaterialPageRoute(
+        //     builder: (context) => MultiBlocProvider(providers: [
+        //           BlocProvider<LoginCubit>(
+        //             create: (context) => sl<LoginCubit>(),
+        //           ),
+        //           BlocProvider<NewPasswordCubit>(
+        //             create: (context) => sl<NewPasswordCubit>(),
+        //           ),
+        //         ], child: const NewPasswordScreen()));
       case Routes.forgotPasswordRoute:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
@@ -99,11 +90,11 @@ class AppRoute {
             child: const ForgetPasswordScreen(),
           ),
         );
-      case Routes.createPasscode:
-        return MaterialPageRoute(
-            builder: (context) => CreatePasscodeFormScreen());
-      // case Routes.myWalletScreen:
-      //   return MaterialPageRoute(builder: (context) => const MyCredit());
+      // case Routes.createPasscode:
+      //   return MaterialPageRoute(
+      //       builder: (context) => CreatePasscodeFormScreen());
+      // // case Routes.myWalletScreen:
+      // //   return MaterialPageRoute(builder: (context) => const MyCredit());
       case Routes.fawryPaymentScreen:
         return MaterialPageRoute(
             builder: (context) => MultiBlocProvider(providers: [

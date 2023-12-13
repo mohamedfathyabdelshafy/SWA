@@ -10,6 +10,8 @@ import 'package:swa/core/widgets/customized_field.dart';
 import 'package:swa/features/forgot_password/domain/use_cases/forgot_password.dart';
 import 'package:swa/features/forgot_password/presentation/cubit/forgot_password_cubit.dart';
 
+import '../../../create_passcode/presentation/pages/create_passcode.dart';
+
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({Key? key}) : super(key: key);
 
@@ -106,7 +108,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         if(state.messageResponse.status == 'failed') {
                           Constants.showDefaultSnackBar(context: context, text: state.messageResponse.massage.toString());
                         }else {
-                          Navigator.pushNamed(context, Routes.createPasscode);
+                          Navigator.push(context, MaterialPageRoute(builder: (context){
+                            return CreatePasscodeFormScreen(
+                              userId: state.messageResponse.massage!,
+                            );
+                          }));
                         }
                       }else if (state is ForgotPasswordErrorState) {
                         Constants.hideLoadingDialog(context);

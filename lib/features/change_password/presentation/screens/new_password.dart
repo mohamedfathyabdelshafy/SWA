@@ -15,8 +15,9 @@ import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 
 
 class NewPasswordScreen extends StatefulWidget {
-  const NewPasswordScreen({Key? key}) : super(key: key);
-
+   NewPasswordScreen({Key? key,required this.code,required this.userId}) : super(key: key);
+String code;
+String userId;
   @override
   State<NewPasswordScreen> createState() => _NewPasswordScreenState();
 }
@@ -116,7 +117,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                           Constants.showLoadingDialog(context);
                         }else if (state is NewPasswordLoadedState) {
                           Constants.hideLoadingDialog(context);
-                          // Navigator.pushNamed(context, Routes.doneLoginRoute);
+                          Navigator.pushNamed(context, Routes.doneLoginRoute);
                         }else if (state is NewPasswordErrorState) {
                           Constants.hideLoadingDialog(context);
                           Constants.showDefaultSnackBar(context: context, text: state.error.toString());
@@ -126,9 +127,9 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                           onTap: (){
                             if(formKey.currentState!.validate()) {
                               ///Change old password to code
-                              // BlocProvider.of<NewPasswordCubit>(context).newPassword(
-                              //   NewPasswordParams(oldPass: oldPassController.text, newPass: newPassController.text, userId: _user!.userId!.toString())
-                              // );
+                              BlocProvider.of<NewPasswordCubit>(context).newPassword(
+                                NewPasswordParams(oldPass: widget.code, newPass: newPassController.text, userId: widget.userId)
+                              );
                             }
                           },
                           child: Constants.customButton(text: LanguageClass.isEnglish?"Done":"تم")

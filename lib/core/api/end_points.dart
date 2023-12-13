@@ -16,5 +16,8 @@ class EndPoints {
   static const String personalEdit = '${baseUrl}Customer/EditCustomer';
   static const String chargecard = '${baseUrl}Fawry/CardPayment';
   static const String aboutUs = '${baseUrl}Settings/AboutUs';
+  static const String stations = '${baseUrl}Stations/SationListFromCityRepeated';
+  static const String busClass = '${baseUrl}Bus/BusServiceClasses';
+  static const String lines = '${baseUrl}Lines/Lines';
 
 }

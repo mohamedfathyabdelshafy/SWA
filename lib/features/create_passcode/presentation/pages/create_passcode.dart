@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
@@ -8,16 +9,22 @@ import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/widgets/customized_field.dart';
 import 'package:swa/features/create_passcode/presentation/widgets/pin_code_text_field.dart';
 
+import '../../../../main.dart';
+import '../../../change_password/presentation/cubit/new_password_cubit.dart';
+import '../../../change_password/presentation/screens/new_password.dart';
+import '../../../sign_in/presentation/cubit/login_cubit.dart';
+
 class CreatePasscodeFormScreen extends StatelessWidget {
   final TextEditingController passController = TextEditingController();
   // final TextEditingController pin2Controller = TextEditingController();
   // final TextEditingController pin3Controller = TextEditingController();
   // final TextEditingController pin4Controller = TextEditingController();
 
-  CreatePasscodeFormScreen({Key? key}) : super(key: key);
-
+  CreatePasscodeFormScreen({Key? key,required this.userId}) : super(key: key);
+String userId;
   @override
   Widget build(BuildContext context) {
+    print("userId$userId");
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       body: Directionality(
@@ -78,8 +85,20 @@ class CreatePasscodeFormScreen extends StatelessWidget {
                 // pinRowInputs(context),
                 InkWell(
                   onTap: (){
-                    // Navigator.push(context, MaterialPageRoute(builder: (context){return NewPasswordScreen();}));
-                    Navigator.pushNamed(context, Routes.newPasswordRoute);
+                    // Navigator.push(context, MaterialPageRoute(builder: (context){return NewPasswordScreen();}));\
+                    Navigator.push(context,MaterialPageRoute(
+                        builder: (context) => MultiBlocProvider(providers: [
+                          BlocProvider<LoginCubit>(
+                            create: (context) => sl<LoginCubit>(),
+                          ),
+                          BlocProvider<NewPasswordCubit>(
+                            create: (context) => sl<NewPasswordCubit>(),
+                          ),
+                        ], child:  NewPasswordScreen(
+                          code: passController.text,
+                          userId: userId,
+                        ))));
+
                   },
                   child: Constants.customButton(text:LanguageClass.isEnglish? "Create New Password":"انشاء كلمة مرور جديدة")
                 )

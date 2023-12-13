@@ -31,7 +31,7 @@ class DoneLoginScreen extends StatelessWidget {
             SizedBox( height: context.height * 0.15),
             InkWell(
               onTap: (){
-                Navigator.pushNamed(context, Routes.initialRoute);
+                Navigator.pushNamed(context, Routes.signInRoute);
               },
               child: Constants.customButton(text: "Login")
             ),
