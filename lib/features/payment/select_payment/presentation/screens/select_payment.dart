@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/features/payment/electronic_wallet/presentation/cubit/eWallet_cubit.dart';
@@ -12,10 +13,6 @@ import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/main.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
 import 'package:swa/select_payment2/presentation/credit_card/presentation/screens/chargeCard_screen.dart';
-import 'package:swa/select_payment2/presentation/credit_card/presentation/screens/credit_card_pay_viewd.dart';
-import 'package:swa/select_payment2/presentation/screens/fawry.dart';
-
-import '../../../fawry2/presentation/PLOH/fawry_Reservation_cubit.dart';
 
 class SelectPaymentScreen extends StatefulWidget {
   SelectPaymentScreen({super.key, this.user});
@@ -40,6 +37,11 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
             size: 34,
           ),
         ),
+        actions: [  IconButton(onPressed: (){
+          Navigator.pushNamed(context, Routes.initialRoute
+          );
+        }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
+        ],
         elevation: 0,
         backgroundColor: Colors.black,
       ),
@@ -163,7 +165,7 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
                         BlocProvider<EWalletCubit>(
                           create: (context) => sl<EWalletCubit>(),
                         ),
-                      ], child: ElectronicScreen()),
+                      ], child:const ElectronicScreen()),
                     ),
                   );
                 },

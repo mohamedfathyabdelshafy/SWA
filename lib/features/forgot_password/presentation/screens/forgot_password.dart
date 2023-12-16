@@ -7,9 +7,13 @@ import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/widgets/customized_field.dart';
+import 'package:swa/features/change_password/presentation/cubit/new_password_cubit.dart';
+import 'package:swa/features/change_password/presentation/screens/new_password.dart';
 import 'package:swa/features/forgot_password/domain/use_cases/forgot_password.dart';
 import 'package:swa/features/forgot_password/presentation/cubit/forgot_password_cubit.dart';
+import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 
+import '../../../../main.dart';
 import '../../../create_passcode/presentation/pages/create_passcode.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
@@ -108,11 +112,17 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         if(state.messageResponse.status == 'failed') {
                           Constants.showDefaultSnackBar(context: context, text: state.messageResponse.massage.toString());
                         }else {
-                          Navigator.push(context, MaterialPageRoute(builder: (context){
-                            return CreatePasscodeFormScreen(
-                              userId: state.messageResponse.massage!,
-                            );
-                          }));
+                          Navigator.push(context,MaterialPageRoute(
+                        builder: (context) => MultiBlocProvider(providers: [
+                          BlocProvider<LoginCubit>(
+                            create: (context) => sl<LoginCubit>(),
+                          ),
+                          BlocProvider<NewPasswordCubit>(
+                            create: (context) => sl<NewPasswordCubit>(),
+                          ),
+                        ], child:  NewPasswordScreen(
+                            userId: state.messageResponse.massage!,
+                        ))));
                         }
                       }else if (state is ForgotPasswordErrorState) {
                         Constants.hideLoadingDialog(context);

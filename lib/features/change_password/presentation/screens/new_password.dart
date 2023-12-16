@@ -15,8 +15,7 @@ import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 
 
 class NewPasswordScreen extends StatefulWidget {
-   NewPasswordScreen({Key? key,required this.code,required this.userId}) : super(key: key);
-String code;
+   NewPasswordScreen({Key? key,required this.userId}) : super(key: key);
 String userId;
   @override
   State<NewPasswordScreen> createState() => _NewPasswordScreenState();
@@ -26,6 +25,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController newPassController = TextEditingController();
   final TextEditingController REnewPassController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
 
   User? _user;
 
@@ -72,9 +72,23 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                     SvgPicture.asset("assets/images/Swa Logo.svg"),
                     SizedBox(height:context.height * 0.15),
                     SizedBox(
-                      height: context.height*0.22,
+                      height: context.height*0.30,
                       child: Column(
                         children: [
+                          CustomizedField(
+                            isPassword: false,
+                            obscureText: false,
+                            colorText: AppColors.greyLight,
+                            controller:passController ,
+                            validator: (validator){
+                              if (validator == null || validator.isEmpty) {
+                                return LanguageClass.isEnglish ? " Enter the code" : "ادخل الكود";
+                              }
+                              return null;
+                            },
+                            color:Colors.white.withOpacity(0.2),
+                            labelText: LanguageClass.isEnglish?"Code":"الكود",
+                          ),
                           CustomizedField(
                               colorText: Colors.white,
                               isPassword: true,
@@ -128,7 +142,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                             if(formKey.currentState!.validate()) {
                               ///Change old password to code
                               BlocProvider.of<NewPasswordCubit>(context).newPassword(
-                                NewPasswordParams(oldPass: widget.code, newPass: newPassController.text, userId: widget.userId)
+                                NewPasswordParams(oldPass: passController.text, newPass: newPassController.text, userId: widget.userId)
                               );
                             }
                           },

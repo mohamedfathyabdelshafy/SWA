@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swa/core/utils/app_strings.dart';
 import 'package:swa/core/utils/constants.dart';
+import 'package:swa/features/change_password/presentation/cubit/new_password_cubit.dart';
+import 'package:swa/features/change_password/presentation/screens/new_password.dart';
 import 'package:swa/features/done_login/presentation/pages/done_login.dart';
 import 'package:swa/features/forgot_password/presentation/cubit/forgot_password_cubit.dart';
 import 'package:swa/features/forgot_password/presentation/screens/forgot_password.dart';

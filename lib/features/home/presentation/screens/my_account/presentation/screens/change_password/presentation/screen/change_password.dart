@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
@@ -31,6 +32,11 @@ TextEditingController oldPassController =TextEditingController();
             size: 34,
           ),
         ),
+        actions: [  IconButton(onPressed: (){
+          Navigator.pushNamed(context, Routes.initialRoute
+          );
+        }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
+        ],
         elevation: 0,
         backgroundColor: Colors.black,
       ),
@@ -63,8 +69,8 @@ TextEditingController oldPassController =TextEditingController();
                   ),
                   SizedBox(height: 15,),
                   CustomizedField(
-                    isPassword: false,
-                    obscureText: false,
+                    isPassword: true,
+                    obscureText: true,
                     colorText: AppColors.greyLight,
                     controller:oldPassController ,
                     validator: (validator){
@@ -78,8 +84,8 @@ TextEditingController oldPassController =TextEditingController();
                   ),
                   SizedBox(height: 15,),
                   CustomizedField(
-                    isPassword: false,
-                    obscureText: false,
+                    isPassword: true,
+                    obscureText: true,
                     colorText: AppColors.greyLight,
                     controller:newPassController ,
                     validator: (validator){
@@ -93,8 +99,8 @@ TextEditingController oldPassController =TextEditingController();
                   ),
                   SizedBox(height: 15,),
                   CustomizedField(
-                    isPassword: false,
-                    obscureText: false,
+                    isPassword: true,
+                    obscureText: true,
                     colorText: AppColors.greyLight,
                     controller:confirmPassController ,
                     validator: (validator){

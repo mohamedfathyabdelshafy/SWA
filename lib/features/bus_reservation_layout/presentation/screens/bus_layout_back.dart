@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/widgets/icon_back.dart';
 import 'package:swa/features/bus_reservation_layout/data/repo/bus_reservation_repo.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/PLOH/bus_layout_reservation_cubit.dart';
+import 'package:swa/features/bus_reservation_layout/presentation/PLOH/bus_layout_reservation_states.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/screens/reservation_ticket.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/features/times_trips/presentation/PLOH/times_trips_cubit.dart';
@@ -51,6 +53,8 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
   @override
   void initState() {
     print("tripTypeId${widget.triTypeId}}");
+    BlocProvider.of<BusLayoutCubit>(context).getBusSeats(tripId: widget.tripId);
+
     // busLayoutRepo?.getBusSeatsData();
     get();
     super.initState();
@@ -84,8 +88,19 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
           style: TextStyle(
               color: AppColors.white, fontSize: 34, fontFamily: "regular"),
         ),
+        actions: [  IconButton(onPressed: (){
+          Navigator.pushNamed(context, Routes.initialRoute
+          );
+        }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
+        ],
       ),
-      body: SingleChildScrollView(
+      body: BlocBuilder<BusLayoutCubit,ReservationState>(
+        builder: (context,state){
+      if(state is BusSeatsLoadingState){
+        return  Center(
+          child: CircularProgressIndicator(color: AppColors.primaryColor,),
+        );}
+      return SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -161,7 +176,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                             padding: EdgeInsets.zero,
                             child: Text(
                               busSeatsModel?.busSeatDetails?.emptySeats
-                                      .toString() ??
+                                  .toString() ??
                                   "",
                               style: TextStyle(
                                   fontSize: 60,
@@ -206,7 +221,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                               onTap: () {
                                 cachCountSeats2 =
                                     CacheHelper.getDataToSharedPref(
-                                            key: 'countSeats2')
+                                        key: 'countSeats2')
                                         ?.map((e) => int.tryParse(e) ?? 0)
                                         .toList();
                                 print("countSeats3Bassant$cachCountSeats2");
@@ -217,33 +232,33 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => MultiBlocProvider(
-                                              providers: [
-                                                BlocProvider<LoginCubit>(
-                                                    create: (context) =>
-                                                        sl<LoginCubit>()),
-                                                BlocProvider<TimesTripsCubit>(
-                                                  create: (context) =>
-                                                      TimesTripsCubit(),
-                                                )
-                                              ],
-                                              // Replace with your actual cubit creation logic
-                                              child: ReservationTicket(
-                                                price: widget.price,
-                                                countSeates: countSeats,
-                                                busId: busSeatsModel!
-                                                    .busSeatDetails!
-                                                    .busDetails!
-                                                    .busID!,
-                                                tripTypeId: "2",
-                                                from: widget.from,
-                                                to: widget.to,
-                                                oneTripId: busSeatsModel!
-                                                    .busSeatDetails!.tripId!,
-                                                countSeats1:
-                                                    widget.cachCountSeats1,
-                                                countSeats2: cachCountSeats2,
-                                                user: widget.user,
-                                              ))),
+                                          providers: [
+                                            BlocProvider<LoginCubit>(
+                                                create: (context) =>
+                                                    sl<LoginCubit>()),
+                                            BlocProvider<TimesTripsCubit>(
+                                              create: (context) =>
+                                                  TimesTripsCubit(),
+                                            )
+                                          ],
+                                          // Replace with your actual cubit creation logic
+                                          child: ReservationTicket(
+                                            price: widget.price,
+                                            countSeates: countSeats,
+                                            busId: busSeatsModel!
+                                                .busSeatDetails!
+                                                .busDetails!
+                                                .busID!,
+                                            tripTypeId: "2",
+                                            from: widget.from,
+                                            to: widget.to,
+                                            oneTripId: busSeatsModel!
+                                                .busSeatDetails!.tripId!,
+                                            countSeats1:
+                                            widget.cachCountSeats1,
+                                            countSeats2: cachCountSeats2,
+                                            user: widget.user,
+                                          ))),
                                 );
                               },
                               child: Padding(
@@ -277,7 +292,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                           children: [
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 27),
+                              const EdgeInsets.symmetric(horizontal: 27),
                               child: SizedBox(
                                   width: 240,
                                   height: sizeHeight * .23,
@@ -353,25 +368,25 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                                   },
                                   stateModel: SeatLayoutStateModel(
                                     rows: busSeatsModel?.busSeatDetails
-                                            ?.busDetails?.rowList?.length ??
+                                        ?.busDetails?.rowList?.length ??
                                         0,
                                     cols: busSeatsModel?.busSeatDetails
-                                            ?.busDetails?.totalColumn ??
+                                        ?.busDetails?.totalColumn ??
                                         5,
                                     seatSvgSize: 35,
                                     pathSelectedSeat:
-                                        'assets/images/unavailable_sets.svg',
+                                    'assets/images/unavailable_sets.svg',
                                     pathDisabledSeat:
-                                        'assets/images/unavailable_seats.svg',
+                                    'assets/images/unavailable_seats.svg',
                                     pathSoldSeat:
-                                        'assets/images/unavailable_seats.svg',
+                                    'assets/images/unavailable_seats.svg',
                                     pathUnSelectedSeat:
-                                        'assets/images/unavailable_seats.svg',
+                                    'assets/images/unavailable_seats.svg',
                                     currentSeats: List.generate(
                                       busSeatsModel?.busSeatDetails?.busDetails
-                                              ?.rowList?.length ??
+                                          ?.rowList?.length ??
                                           0, // Number of rows based on totalSeats
-                                      (row) => busSeatsModel!.busSeatDetails!
+                                          (row) => busSeatsModel!.busSeatDetails!
                                           .busDetails!.rowList![row].seats,
                                     ),
                                   ),
@@ -406,6 +421,9 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
             // )
           ],
         ),
+      );
+        },
+
       ),
     );
   }

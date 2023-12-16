@@ -13,6 +13,7 @@ import 'package:swa/select_payment2/presentation/screens/fawry.dart';
 
 import '../../../../../core/local_cache_helper.dart';
 import '../../../../../core/utils/constants.dart';
+import '../../../config/routes/app_routes.dart';
 class SelectPaymentScreen2 extends StatefulWidget {
    SelectPaymentScreen2({super.key,this.user});
   User? user;
@@ -40,6 +41,11 @@ class _SelectPaymentScreen2State extends State<SelectPaymentScreen2> {
         ),
         elevation: 0,
         backgroundColor: Colors.black,
+        actions: [  IconButton(onPressed: (){
+          Navigator.pushNamed(context, Routes.initialRoute
+          );
+        }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
+        ],
       ),
       body: Directionality(
         textDirection: LanguageClass.isEnglish?TextDirection.ltr:TextDirection.rtl,

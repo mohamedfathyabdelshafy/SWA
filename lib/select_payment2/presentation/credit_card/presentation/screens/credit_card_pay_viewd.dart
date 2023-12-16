@@ -95,6 +95,11 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
               color: AppColors.primaryColor,
               size: 32,
             )),
+        actions: [  IconButton(onPressed: (){
+          Navigator.pushNamed(context, Routes.initialRoute
+          );
+        }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
+        ],
       ),
       body: Form(
         key: formKey,

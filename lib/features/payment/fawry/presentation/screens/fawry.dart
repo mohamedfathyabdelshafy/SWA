@@ -58,6 +58,11 @@ class _FawryScreenState extends State<FawryScreen> {
             size: 34,
           ),
         ),
+        actions: [  IconButton(onPressed: (){
+          Navigator.pushNamed(context, Routes.initialRoute
+          );
+        }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
+        ],
       ),
       body: Directionality(
         textDirection:

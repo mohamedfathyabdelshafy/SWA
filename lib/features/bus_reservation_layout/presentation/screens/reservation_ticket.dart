@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swa/core/local_cache_helper.dart';
+import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/Container_Widget.dart';
@@ -9,6 +10,9 @@ import 'package:swa/features/bus_reservation_layout/presentation/widgets/text_wi
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
 import 'package:swa/select_payment2/presentation/screens/select_payment.dart';
 import '../../../../config/routes/app_routes.dart';
+import '../../../../core/utils/app_colors.dart';
+import '../../../../core/utils/app_colors.dart';
+import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../core/widgets/icon_back.dart';
@@ -87,6 +91,11 @@ class _ReservationTicketState extends State<ReservationTicket> {
       appBar: AppBar(
         leading: iconBack(context),
         backgroundColor: Colors.black,
+        actions: [  IconButton(onPressed: (){
+          Navigator.pushNamed(context, Routes.initialRoute
+          );
+        }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
+        ],
       ),
       body: Directionality(
         textDirection:
@@ -734,13 +743,21 @@ class _ReservationTicketState extends State<ReservationTicket> {
                               margin: EdgeInsets.all(50),
                               child: Container(
                                 padding: EdgeInsets.all(15),
-                                color: Colors.white,
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(color: Colors.white)
+                                ),
                                 child: Material(
-                                  color: Colors.white,
-                                  child: ListView(
-                                    children: [
-                                      Text(
-                                        ''' 1-التاكد من تاريخ و ميعاد واتجاه الرحله مسؤليه الراكب.
+                                  color: Colors.black,
+                                  child: Scrollbar(
+                                    thumbVisibility: true,
+                                    child: ListView(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(15),
+                                          child: Text(
+                                            ''' 1-التاكد من تاريخ و ميعاد واتجاه الرحله مسؤليه الراكب.
                               
 2-الاطفال فوق 4 سنوات تذكرة كامله ولايوجد نصف تذكرة
                               
@@ -761,22 +778,48 @@ class _ReservationTicketState extends State<ReservationTicket> {
 10- الحجز والشكاوي من خلال موقعنا www.Swa.com للاستعلام
                               
 11- تعديل او الغاء التذكرة يتم في مكتب الاصدار فقط''',
-                                        textAlign: TextAlign.right,
-                                        textDirection: TextDirection.rtl,
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      ElevatedButton(
-                                          onPressed: () {
+                                            textAlign: TextAlign.right,
+                                            textDirection: TextDirection.rtl,
+                                            style: TextStyle(
+                                                color: AppColors.primaryColor, fontSize: 16),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        InkWell(
+                                          onTap: (){
                                             Navigator.pop(context);
                                           },
-                                          child: Text(LanguageClass.isEnglish
-                                              ? "Done"
-                                              : 'تم'))
-                                    ],
+                                          child: Container(
+                                            margin: EdgeInsets.symmetric(horizontal: 30),
+                                            padding: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(15),
+                                              color: AppColors.primaryColor,
+                                            ),
+                                                  child: Center(
+                                                    child: Text(LanguageClass.isEnglish
+                                                        ? "Done"
+                                                        : 'تم',
+                                                    style: TextStyle(color: Colors.white),),
+                                                  )
+                                          ),
+                                        )
+                                        // Padding(
+                                        //   padding: const EdgeInsets.symmetric(horizontal: 40),
+                                        //   child: ElevatedButton(
+                                        //
+                                        //       onPressed: () {
+                                        //         Navigator.pop(context);
+                                        //       },
+                                        //       child: Text(LanguageClass.isEnglish
+                                        //           ? "Done"
+                                        //           : 'تم',
+                                        //       style: TextStyle(color: Colors.black),)),
+                                        // )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
