@@ -148,7 +148,7 @@ class _MyHomeState extends State<MyHome> {
                                         },
                                         child: Container(
                                           height: sizeHeight * 0.05,
-                                          // width: sizeWidth * 0.3,
+                                          width: sizeWidth * 0.3,
                                           decoration: BoxDecoration(
                                             boxShadow: [
                                               BoxShadow(

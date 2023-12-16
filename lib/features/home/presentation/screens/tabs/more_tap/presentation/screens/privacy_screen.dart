@@ -3,33 +3,34 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
-import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/bus_classes_model.dart';
-import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/stations_model.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/privacy_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/repo/more_repo.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/PLOH/more_cubit.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/PLOH/more_states.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/abous_us.dart';
 import 'package:swa/main.dart';
 
-class BusClasses extends StatefulWidget {
-   BusClasses({super.key});
+class PrivacyScreen extends StatefulWidget {
+  const PrivacyScreen({super.key});
 
   @override
-  State<BusClasses> createState() => _BusClassesState();
+  State<PrivacyScreen> createState() => _PrivacyScreenState();
 }
 
-class _BusClassesState extends State<BusClasses> {
+class _PrivacyScreenState extends State<PrivacyScreen> {
   MoreRepo moreRepo = MoreRepo(sl());
-  BusClassesModel  busClasses  =BusClassesModel();
+  PrivacyModel  privacyModel  =PrivacyModel();
   @override
   void initState() {
     get();
     super.initState();
   }
   void get()async{
-    await BlocProvider.of<MoreCubit>(context).getBusClass();
-    busClasses = (await moreRepo.getBusClasses())!;
+    await BlocProvider.of<MoreCubit>(context).getPrivacy();
+
+    privacyModel = (await moreRepo.getPrinacy())!;
     setState(() {
+
     });
   }
 
@@ -43,7 +44,7 @@ class _BusClassesState extends State<BusClasses> {
         appBar: AppBar(backgroundColor: AppColors.primaryColor,
           centerTitle: true,
           title: Text(
-            LanguageClass.isEnglish? "Bus Classes":"انواع الاتوبيس",
+            LanguageClass.isEnglish? "Privacy":"سياسة الخصوصية",
             style: TextStyle(
                 color: AppColors.white,
                 fontSize: 34,
@@ -53,8 +54,8 @@ class _BusClassesState extends State<BusClasses> {
         backgroundColor: Colors.black,
         body: BlocBuilder(
           bloc: BlocProvider.of<MoreCubit>(context),
-          builder: (context,state){
-            if(state is LoadingBussClass){
+          builder: (context,state)  {
+            if(state is LoadingFAQ){
               return  Center(
                 child: CircularProgressIndicator(color: AppColors.primaryColor,),
               );
@@ -74,18 +75,26 @@ class _BusClassesState extends State<BusClasses> {
                           return Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 15, vertical: 25),
-                            child: Row(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  busClasses.message![index].title??"",
+                                  privacyModel.message![index].title!,
+                                  style: TextStyle(
+                                      color: AppColors.white,
+                                      fontFamily: "bold",
+                                      fontSize: 22
+                                  ),
+                                ),
+                                Text(
+                                  privacyModel.message![index].description!,
                                   style: TextStyle(
                                       color: AppColors.white,
                                       fontFamily: "regular",
                                       fontSize: 18
                                   ),
                                 ),
-                                Spacer(),
-                                Icon(Icons.arrow_forward_ios_outlined,color: Colors.white,)
+
                               ],
                             ),
                           );
@@ -96,13 +105,12 @@ class _BusClassesState extends State<BusClasses> {
                             thickness: 1,
                           );
                         },
-                        itemCount: busClasses.message?.length??0),
+                        itemCount: privacyModel.message?.length??0),
                   )
                 ],
               ),
-
-
             );
+
           },
 
         ),

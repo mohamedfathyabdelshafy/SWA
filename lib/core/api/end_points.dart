@@ -19,5 +19,9 @@ class EndPoints {
   static const String stations = '${baseUrl}Stations/SationListFromCityRepeated';
   static const String busClass = '${baseUrl}Bus/BusServiceClasses';
   static const String lines = '${baseUrl}Lines/Lines';
+  static const String termsAndCondition = '${baseUrl}Settings/TermsAndConditionsList';
+  static const String FAQ = '${baseUrl}Settings/FAQ';
+  static const String privacy = '${baseUrl}Settings/PrivacyPolicyList';
+  static const String sendEmail = '${baseUrl}Settings/SubmitContactUsMessage';
 
 }

@@ -4,10 +4,14 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/PLOH/more_cubit.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/FAQ_screen.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/abous_us.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/bus_class.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/contact_us.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/lines_screen.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/privacy_screen.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/stations_screen.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/terms_and_conditions_terms.dart';
 
 class MoreScreen extends StatelessWidget {
   const MoreScreen({super.key});
@@ -22,7 +26,7 @@ class MoreScreen extends StatelessWidget {
         appBar: AppBar(backgroundColor: AppColors.primaryColor,
         centerTitle: true,
         title: Text(
-          "More",
+          LanguageClass.isEnglish? "More":"المزيد",
           style: TextStyle(
               color: AppColors.white,
               fontSize: 34,
@@ -64,11 +68,39 @@ class MoreScreen extends StatelessWidget {
                                   child: BusClasses());
                             }));
                           }
+                          else if(index==3){
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return BlocProvider<MoreCubit>(
+                                  create:(context) => MoreCubit() ,
+                                  child: FAQScreen());
+                            }));
+                          }
                           else if(index==4){
                             Navigator.push(context, MaterialPageRoute(builder: (context){
                               return BlocProvider<MoreCubit>(
                                   create:(context) => MoreCubit() ,
                                   child: AboutUsScreen());
+                            }));
+                          }
+                          else if(index==5){
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return BlocProvider<MoreCubit>(
+                                  create:(context) => MoreCubit() ,
+                                  child: PrivacyScreen());
+                            }));
+                          }
+                          else if(index==6){
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return BlocProvider<MoreCubit>(
+                                  create:(context) => MoreCubit() ,
+                                  child: TermsConditionsScreen());
+                            }));
+                          }
+                          else if(index==7){
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return BlocProvider<MoreCubit>(
+                                  create:(context) => MoreCubit() ,
+                                  child: ContactUs());
                             }));
                           }
                         },
@@ -83,7 +115,8 @@ class MoreScreen extends StatelessWidget {
                                               index==3?LanguageClass.isEnglish?"FAQ":"اسئله شائعة":
                                                   index==4?LanguageClass.isEnglish?"About Us":"معلومات عنا":
                                                       index==5?LanguageClass.isEnglish?"Privacy policy":"سياسة الخصوصية":
-                                                      LanguageClass.isEnglish?"Terms And Conditions":"الأحكام والشروط",
+                                                        index == 6?LanguageClass.isEnglish?"Terms And Conditions":"الأحكام والشروط":
+                                                          LanguageClass.isEnglish?"Contact us":"تواصل معنا",
                                 style: TextStyle(
                                   color: AppColors.white,
                                   fontFamily: "regular",
@@ -103,7 +136,7 @@ class MoreScreen extends StatelessWidget {
                         thickness: 1,
                       );
                     },
-                    itemCount:7 ),
+                    itemCount:8 ),
               )
             ],
           ),

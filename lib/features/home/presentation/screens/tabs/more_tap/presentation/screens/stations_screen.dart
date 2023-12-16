@@ -44,7 +44,7 @@ get();
         appBar: AppBar(backgroundColor: AppColors.primaryColor,
           centerTitle: true,
           title: Text(
-            "Stations",
+            LanguageClass.isEnglish? "Stations":"المحطات",
             style: TextStyle(
                 color: AppColors.white,
                 fontSize: 34,

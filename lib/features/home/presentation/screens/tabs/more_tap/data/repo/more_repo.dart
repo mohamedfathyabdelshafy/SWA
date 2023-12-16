@@ -3,10 +3,14 @@ import 'dart:developer';
 
 import 'package:swa/core/api/api_consumer.dart';
 import 'package:swa/core/api/end_points.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/FAQ_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/abou_us_response.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/bus_classes_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/lines_model.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/privacy_model.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/send_message_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/stations_model.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/terms_and_condition_model.dart';
 
 class MoreRepo{
   final ApiConsumer apiConsumer;
@@ -55,5 +59,59 @@ class MoreRepo{
     var decode = json.decode(res.body);
     LinesModel linesModel = LinesModel.fromJson(decode);
     return linesModel;
+  }
+
+  Future<TermsAndConditionModel?> getTermsCondition()async{
+
+    final res = await apiConsumer.get(
+        EndPoints.termsAndCondition
+    );
+    log("TermsCondition"+res.body);
+    var decode = json.decode(res.body);
+    TermsAndConditionModel termsAndConditionModel = TermsAndConditionModel.fromJson(decode);
+    return termsAndConditionModel;
+  }
+
+
+  Future<FaqModel?> getFAQ()async{
+
+    final res = await apiConsumer.get(
+        EndPoints.FAQ
+    );
+    log("TermsCondition"+res.body);
+    var decode = json.decode(res.body);
+    FaqModel faqModel = FaqModel.fromJson(decode);
+    return faqModel;
+  }
+  Future<PrivacyModel?> getPrinacy()async{
+
+    final res = await apiConsumer.get(
+        EndPoints.privacy
+    );
+    log("Privacy"+res.body);
+    var decode = json.decode(res.body);
+    PrivacyModel privacyModel = PrivacyModel.fromJson(decode);
+    return privacyModel;
+  }
+
+
+  Future<SendMessageModel?> sendMessage({
+    required String name,
+    required String email,
+    required String message
+})async{
+
+    final res = await apiConsumer.post(
+        EndPoints.sendEmail,
+      body: jsonEncode({
+        "Name":name,
+        "Email":email,
+        "Message":message
+      })
+    );
+    log("Privacy"+res.body);
+    var decode = json.decode(res.body);
+    SendMessageModel sendMessageModel = SendMessageModel.fromJson(decode);
+    return sendMessageModel;
   }
 }

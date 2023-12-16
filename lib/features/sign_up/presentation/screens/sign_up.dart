@@ -147,16 +147,18 @@ class SignUpScreen extends StatelessWidget {
                             listener: (context, state) {
                               if (state is RegisterLoadingState) {
                                 Constants.showLoadingDialog(context);
-                              } else if (state is UserRegisterLoadedState) {
+                              }
+                              else if (state is UserRegisterLoadedState) {
                                 Constants.hideLoadingDialog(context);
                                 Constants.showDefaultSnackBar(
                                     context: context,
                                     text:
-                                        state.messageResponse.massage.toString());
+                                        state.messageResponse.massage.toString(),color: Colors.green);
 
                                 Navigator.pushReplacementNamed(
                                     context, Routes.signInRoute);
-                              } else if (state is RegisterErrorState) {
+                              }
+                              else if (state is RegisterErrorState) {
                                 Constants.hideLoadingDialog(context);
                                 Constants.showDefaultSnackBar(
                                     context: context,

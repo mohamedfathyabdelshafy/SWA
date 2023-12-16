@@ -45,7 +45,7 @@ class _LinesScreenState extends State<LinesScreen> {
         appBar: AppBar(backgroundColor: AppColors.primaryColor,
           centerTitle: true,
           title: Text(
-            "Routes",
+            LanguageClass.isEnglish?  "Routes":"الخطوط",
             style: TextStyle(
                 color: AppColors.white,
                 fontSize: 34,
@@ -95,7 +95,7 @@ class _LinesScreenState extends State<LinesScreen> {
                                         linesModel.message![index].name??"",
                                         style: TextStyle(
                                             fontFamily: "regular",
-                                            fontSize: 30,
+                                            fontSize: 18,
                                             color: Colors.white),
                                       )
                                     ],
@@ -155,7 +155,7 @@ class _LinesScreenState extends State<LinesScreen> {
                                     ),
                                     Spacer(),
                                     Text(
-                                      "230.5",
+                                      linesModel.message![index].startsFrom.toString(),
                                       style: TextStyle(
                                         color: AppColors.white,
                                         fontSize: 25,

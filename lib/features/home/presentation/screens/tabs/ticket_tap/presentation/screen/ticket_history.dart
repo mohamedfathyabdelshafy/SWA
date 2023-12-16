@@ -34,8 +34,7 @@ class _TicketHistoryState extends State<TicketHistory> {
 
   get() async {
     responseTicketHistoryModel =
-        await ticketRepo.getTicketHistory(customerId: 3);
-    print("========${responseTicketHistoryModel!.message![1].price}");
+        await ticketRepo.getTicketHistory(customerId: widget.user?.customerId??0);
     if (this.mounted) {
       setState(() {});
     }

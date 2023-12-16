@@ -35,14 +35,19 @@ class Constants{
       textDirection: (textDirection != null) ? textDirection : TextDirection.ltr,
     );
   }
-  static void showDefaultSnackBar({required BuildContext context, required String text, VoidCallback? onPress, bool? showDuration}) {
+  static void showDefaultSnackBar(
+      {required BuildContext context,
+      required String text,
+      VoidCallback? onPress,
+      bool? showDuration,
+      Color? color}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: AppColors.blackColor,
         content: Text(
           text,
           style: TextStyle(
-              color: AppColors.primaryColor,
+              color: color??AppColors.primaryColor,
               fontSize: (Device.get().isTablet) ? Theme.of(context).textTheme.headline5!.fontSize : Theme.of(context).textTheme.subtitle1!.fontSize,
               fontWeight: FontWeight.bold
           ),
