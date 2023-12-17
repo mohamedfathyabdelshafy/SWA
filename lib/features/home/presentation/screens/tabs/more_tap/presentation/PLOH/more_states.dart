@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/FAQ_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/abou_us_response.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/bus_classes_model.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/bus_images_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/lines_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/privacy_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/send_message_model.dart';
@@ -164,6 +165,24 @@ class ErrorSendMessage extends MoreStates {
   String msg;
 
   ErrorSendMessage({required this.msg});
+
+  @override
+  List<Object?> get props => [];
+}
+
+class LoadingBusImage extends MoreStates{
+  @override
+  List<Object?> get props => [];
+}
+class LoadedBusImage extends MoreStates{
+  BusImagesModel busImagesModel;
+  LoadedBusImage ({required this.busImagesModel});
+  @override
+  List<Object?> get props => [];
+}
+class ErrorBusImage extends MoreStates {
+  String msg;
+  ErrorBusImage({required this.msg});
 
   @override
   List<Object?> get props => [];

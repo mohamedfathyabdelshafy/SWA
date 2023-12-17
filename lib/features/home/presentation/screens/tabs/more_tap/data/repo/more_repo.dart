@@ -6,6 +6,7 @@ import 'package:swa/core/api/end_points.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/FAQ_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/abou_us_response.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/bus_classes_model.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/bus_images_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/lines_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/privacy_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/send_message_model.dart';
@@ -93,6 +94,20 @@ class MoreRepo{
     PrivacyModel privacyModel = PrivacyModel.fromJson(decode);
     return privacyModel;
   }
+
+  Future<BusImagesModel?> getBusImages({
+    required String typeClass
+})async{
+
+    final res = await apiConsumer.get(
+       "${EndPoints.baseUrl}Bus/ServiceTypeImage?serviceTypeId=$typeClass"
+    );
+    log("busImages"+res.body);
+    var decode = json.decode(res.body);
+    BusImagesModel busImagesModel = BusImagesModel.fromJson(decode);
+    return busImagesModel;
+  }
+
 
 
   Future<SendMessageModel?> sendMessage({

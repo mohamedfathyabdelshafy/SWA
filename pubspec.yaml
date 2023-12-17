@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
+  carousel_slider: ^4.2.1
   intl: ^0.17.0
   #  webview_flutter: ^3.0.0
   cool_alert: ^1.0.3

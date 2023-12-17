@@ -107,6 +107,23 @@ class MoreCubit extends Cubit<MoreStates> {
   }
 
 
+  Future<AboutUsResponse?> getBusImage(
+  {
+    required String typeClass
+  }) async {
+    try {
+      emit(LoadingBusImage());
+
+      final res = await moreRepo.getBusImages(typeClass: typeClass);
+      if (res != null) {
+        emit(LoadedBusImage(busImagesModel: res));
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+
   Future<AboutUsResponse?> sendMessage({
     required String name,
     required String email,

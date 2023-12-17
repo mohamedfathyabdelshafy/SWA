@@ -9,6 +9,7 @@ import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/repo/m
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/PLOH/more_cubit.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/PLOH/more_states.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/abous_us.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/bus_Images_screen.dart';
 import 'package:swa/main.dart';
 
 class BusClasses extends StatefulWidget {
@@ -71,22 +72,31 @@ class _BusClassesState extends State<BusClasses> {
                     height: sizeHeight * 0.8,
                     child: ListView.separated(
                         itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 25),
-                            child: Row(
-                              children: [
-                                Text(
-                                  busClasses.message![index].title??"",
-                                  style: TextStyle(
-                                      color: AppColors.white,
-                                      fontFamily: "regular",
-                                      fontSize: 18
+                          return InkWell(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                                return BlocProvider(
+                                    create: (context) => MoreCubit(),
+                                    child: BusImageClasses(typeClasses: busClasses.message![index].id.toString(),));
+                              }));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 25),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    busClasses.message![index].title??"",
+                                    style: TextStyle(
+                                        color: AppColors.white,
+                                        fontFamily: "regular",
+                                        fontSize: 18
+                                    ),
                                   ),
-                                ),
-                                Spacer(),
-                                Icon(Icons.arrow_forward_ios_outlined,color: Colors.white,)
-                              ],
+                                  Spacer(),
+                                  Icon(Icons.arrow_forward_ios_outlined,color: Colors.white,)
+                                ],
+                              ),
                             ),
                           );
                         },
