@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/screens/bus_layout.dart';
+import 'package:swa/features/home/presentation/screens/tabs/my_home.dart';
 import '../../../../core/local_cache_helper.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../bus_reservation_layout/presentation/PLOH/bus_layout_reservation_cubit.dart';
@@ -32,11 +34,13 @@ class _TimesScreenState extends State<TimesScreen> {
     double sizeWidth = context.width;
 
     return Scaffold(
+
       body: Container(
         color: Colors.black,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+
             Stack(
               children: [
                 SizedBox(
@@ -53,9 +57,30 @@ class _TimesScreenState extends State<TimesScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      SizedBox(
-                        height: sizeHeight * 0.10,
+                      Padding(
+                        padding:  EdgeInsets.symmetric(horizontal: sizeHeight * 0.02,vertical:sizeHeight * 0.03),
+                        child: Row(
+                          children: [
+                            InkWell(
+                              onTap: (){
+                                Navigator.pop(context);
+                              },
+                              child: Icon(
+                                Icons.arrow_back,
+                                color: AppColors.white,
+                                size: 34,
+                              ),
+                            ),
+                            Spacer(),
+                            IconButton(onPressed: (){
+                              Navigator.pushNamed(context, Routes.initialRoute
+                              );
+                            }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
+
+                          ],
+                        ),
                       ),
+
                       SvgPicture.asset(
                         "assets/images/Swa Logo.svg",
                         height: sizeHeight * 0.06,
@@ -93,14 +118,17 @@ class _TimesScreenState extends State<TimesScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) {
-                                      return BusLayoutScreen(
-                                        to: widget.tripList[index].to ?? "",
-                                        from: widget.tripList[index].from ?? "",
-                                        triTypeId: widget.tripTypeId,
-                                        tripListBack: widget.tripListBack,
-                                        price: widget.tripList[index].price!,
-                                        user: widget.user,
-                                        tripId: widget.tripList[index].tripId!,
+                                      return BlocProvider(
+                                        create: (context) => BusLayoutCubit(),
+                                        child: BusLayoutScreen(
+                                          to: widget.tripList[index].to ?? "",
+                                          from: widget.tripList[index].from ?? "",
+                                          triTypeId: widget.tripTypeId,
+                                          tripListBack: widget.tripListBack,
+                                          price: widget.tripList[index].price!,
+                                          user: widget.user,
+                                          tripId: widget.tripList[index].tripId!,
+                                        ),
                                       );
                                     }),
                                   );
@@ -199,3 +227,5 @@ class _TimesScreenState extends State<TimesScreen> {
     );
   }
 }
+
+

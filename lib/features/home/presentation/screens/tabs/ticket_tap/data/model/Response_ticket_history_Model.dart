@@ -4,15 +4,19 @@ class ResponseTicketHistoryModel {
       this.message, 
       this.balance, 
       this.object, 
-      this.obj,});
+      this.obj,
+  this.errorMassage});
 
   ResponseTicketHistoryModel.fromJson(dynamic json) {
     status = json['status'];
+    if( json['status'] == "success"){
     if (json['message'] != null) {
       message = [];
       json['message'].forEach((v) {
         message?.add(Message.fromJson(v));
       });
+    }}else{
+      errorMassage = json['message'];
     }
     balance = json['balance'];
     object = json['Object'];
@@ -20,6 +24,7 @@ class ResponseTicketHistoryModel {
   }
   String? status;
   List<Message>? message;
+  String? errorMassage;
   dynamic balance;
   dynamic object;
   dynamic obj;

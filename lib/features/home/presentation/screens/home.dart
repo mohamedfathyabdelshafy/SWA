@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double sizeHeight = context.height;
     List<Widget> screens = [
       const MyHome(),
-      TicketHistory(),
+      TicketHistory(user: _user),
       MyCredit(user: _user),
       const MoreScreen(),
     ];

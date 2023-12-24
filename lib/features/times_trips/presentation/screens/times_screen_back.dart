@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/features/bus_reservation_layout/presentation/PLOH/bus_layout_reservation_cubit.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/screens/bus_layout_back.dart';
+import 'package:swa/features/home/presentation/screens/tabs/my_home.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/features/times_trips/presentation/PLOH/times_trips_cubit.dart';
 import 'package:swa/main.dart';
+import '../../../../config/routes/app_routes.dart';
 import '../../../../core/local_cache_helper.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../sign_in/domain/entities/user.dart';
@@ -44,6 +47,7 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
           children: [
             Stack(
               children: [
+
                 SizedBox(
                   width: double.infinity, // Take the full width of the screen
                   child: Image.asset(
@@ -58,8 +62,28 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      SizedBox(
-                        height: sizeHeight * 0.10,
+                      Padding(
+                        padding:  EdgeInsets.symmetric(horizontal: sizeHeight * 0.02,vertical:sizeHeight * 0.03),
+                        child: Row(
+                          children: [
+                            InkWell(
+                              onTap: (){
+                                Navigator.pop(context);
+                              },
+                              child: Icon(
+                                Icons.arrow_back,
+                                color: AppColors.white,
+                                size: 34,
+                              ),
+                            ),
+                            Spacer(),
+                            IconButton(onPressed: (){
+                              Navigator.pushNamed(context, Routes.initialRoute
+                              );
+                            }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
+
+                          ],
+                        ),
                       ),
                       SvgPicture.asset(
                         "assets/images/Swa Logo.svg",
@@ -113,6 +137,9 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                                   BlocProvider<TimesTripsCubit>(
                                                     create: (context) =>
                                                         TimesTripsCubit(),
+                                                  ),
+                                                  BlocProvider<BusLayoutCubit>(
+                                                    create: (context) => BusLayoutCubit(),
                                                   )
                                                 ],
                                                 // Replace with your actual cubit creation logic
@@ -214,7 +241,7 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: AppColors.primaryColor,
-                                                  fontSize: 18,
+                                                  fontSize: 16,
                                                   fontFamily: "bold")),
                                         ],
                                       ),

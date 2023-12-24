@@ -50,6 +50,11 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
             size: 34,
           ),
         ),
+        actions: [  IconButton(onPressed: (){
+          Navigator.pushNamed(context, Routes.initialRoute
+          );
+        }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
+        ],
       ),
       body: Directionality(
         textDirection: LanguageClass.isEnglish?TextDirection.ltr:TextDirection.rtl,

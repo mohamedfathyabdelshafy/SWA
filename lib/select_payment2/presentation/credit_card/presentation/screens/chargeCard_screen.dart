@@ -996,6 +996,11 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
             color: Colors.white,
           ),
         ),
+        actions: [  IconButton(onPressed: (){
+          Navigator.pushNamed(context, Routes.initialRoute
+          );
+        }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
+        ],
       ),
       body: SafeArea(
         child: WillPopScope(

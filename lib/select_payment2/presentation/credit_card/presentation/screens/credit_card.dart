@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
@@ -44,6 +45,11 @@ class _AddCreditCardState extends State<AddCreditCard> {
             size: 34,
           ),
         ),
+        actions: [  IconButton(onPressed: (){
+          Navigator.pushNamed(context, Routes.initialRoute
+          );
+        }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
+        ],
       ),
       body:Directionality(
         textDirection: LanguageClass.isEnglish?TextDirection.ltr:TextDirection.rtl,

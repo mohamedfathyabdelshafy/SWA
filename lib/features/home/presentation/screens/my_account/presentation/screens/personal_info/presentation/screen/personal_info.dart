@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
+import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/widgets/customized_field.dart';
 import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/personal_info/data/model/personal_info_response.dart';
 import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/personal_info/data/repo/personal_info_repo.dart';
@@ -54,79 +56,88 @@ get();
             size: 34,
           ),
         ),
+        actions: [  IconButton(onPressed: (){
+          Navigator.pushNamed(context, Routes.initialRoute
+          );
+        }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
+        ],
         elevation: 0,
         backgroundColor: Colors.black,
       ),
-      body:  Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              "Personal Information" ,
-              style: TextStyle(color: AppColors.white,fontSize: 34,fontFamily: "bold"),
-            ),
-            SizedBox(height: 15,),
-            CustomizedField(
-              isPassword: false,
-              obscureText: false,
-              colorText: AppColors.greyLight,
-              controller:nameController ,
-              validator: (validator){},
-              color:Colors.white.withOpacity(0.2),
-              labelText: "Name",
-            ),
-           const SizedBox(height: 15,),
-            CustomizedField(
-              isPassword: false,
-              obscureText: false,
-              colorText: AppColors.greyLight,
-              controller:emailController ,
-              validator: (validator){},
-              color:Colors.white.withOpacity(0.2),
-              labelText: "Mobile",
-            ),
-            const SizedBox(height: 15,),
-            CustomizedField(
-              isPassword: false,
-              obscureText: false,
-              colorText: AppColors.greyLight,
-              controller:mobilController ,
-              validator: (validator){},
-              color:Colors.white.withOpacity(0.2),
-              labelText: "Email",
-            ),
-            Spacer(),
-            BlocListener<PersonalInfoCubit,PersonalInfoStates>(
-              listener: (contex,state){
-                if(state is PersonalInfoLoading){
-                  Constants.showLoadingDialog(context);
-                }if(state is PersonalInfoLoaded){
-                  Constants.hideLoadingDialog(context);
-                  Constants.showDefaultSnackBar(context: context, text: state.personalInfoResponse.message!);
-                }if(state is PersonalInfoError ){
-                  Constants.hideLoadingDialog(context);
-                  Constants.showDefaultSnackBar(context: context, text: state.msg);
-
-                }
-              },
-              child: InkWell(
-                onTap: (){
-                BlocProvider.of<PersonalInfoCubit>(context).getPersonalInfoEdit(
-                    customerId: widget.user.customerId!,
-                    name: nameController.text,
-                    mobile: mobilController.text,
-                    email: emailController.text,
-                  userLoginId: widget.user.userId!
-                );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Constants.customButton(text: "Save",color: AppColors.primaryColor),
-                ),
+      body:  Directionality(
+        textDirection:
+        LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                LanguageClass.isEnglish?"Personal Information":"معلومات شخصية" ,
+                style: TextStyle(color: AppColors.white,fontSize: 34,fontFamily: "bold"),
               ),
-            )
-          ],
+              SizedBox(height: 15,),
+              CustomizedField(
+                isPassword: false,
+                obscureText: false,
+                colorText: AppColors.greyLight,
+                controller:nameController ,
+                validator: (validator){},
+                color:Colors.white.withOpacity(0.2),
+                labelText: LanguageClass.isEnglish?"Name":"الاسم",
+              ),
+             const SizedBox(height: 15,),
+              CustomizedField(
+                isPassword: false,
+                obscureText: false,
+                colorText: AppColors.greyLight,
+                controller:emailController ,
+                validator: (validator){},
+                color:Colors.white.withOpacity(0.2),
+                labelText: LanguageClass.isEnglish?"Mobile":"موبيل",
+              ),
+              const SizedBox(height: 15,),
+              CustomizedField(
+                isPassword: false,
+                obscureText: false,
+                colorText: AppColors.greyLight,
+                controller:mobilController ,
+                validator: (validator){},
+                color:Colors.white.withOpacity(0.2),
+                labelText: LanguageClass.isEnglish?"Email":"الايميل",
+              ),
+              Spacer(),
+              BlocListener<PersonalInfoCubit,PersonalInfoStates>(
+                listener: (contex,state){
+                  if(state is PersonalInfoLoading){
+                    Constants.showLoadingDialog(context);
+                  }if(state is PersonalInfoLoaded){
+                    Constants.hideLoadingDialog(context);
+                    Constants.showDefaultSnackBar(context: context, text: state.personalInfoResponse.message!);
+                  }if(state is PersonalInfoError ){
+                    Constants.hideLoadingDialog(context);
+                    Constants.showDefaultSnackBar(context: context, text: state.msg);
+
+                  }
+                },
+                child: InkWell(
+                  onTap: (){
+                  BlocProvider.of<PersonalInfoCubit>(context).getPersonalInfoEdit(
+                      customerId: widget.user.customerId!,
+                      name: nameController.text,
+                      mobile: mobilController.text,
+                      email: emailController.text,
+                    userLoginId: widget.user.userId!
+                  );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    child: Constants.customButton(text:LanguageClass.isEnglish? "Save":"حفظ",color: AppColors.primaryColor),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

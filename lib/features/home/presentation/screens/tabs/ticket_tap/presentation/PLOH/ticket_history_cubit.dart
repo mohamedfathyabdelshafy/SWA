@@ -9,17 +9,16 @@ class TicketCubit extends Cubit<TicketStates>{
   TicketCubit():super(InitialTicketHistory());
   TicketRepo ticketRepo = TicketRepo(sl());
 
-  Future<ResponseTicketHistoryModel?> getTicketHistory(
-      int customerId
-      ) async {
+  Future<ResponseTicketHistoryModel?> getTicketHistory({required int customerId}) async {
     try{
       emit(LoadingTicketHistory());
 
       final res = await ticketRepo.getTicketHistory(customerId: customerId);
-      if(res != null) {
+      if(res!.status == "success") {
+        emit(LoadedTicketHistory(responseTicketHistoryModel: res));
+      }else {
+        emit(ErrorTicketHistory(msg:res.errorMassage!));
       }
-        emit(ErrorTicketHistory(msg: "SomeThing went wrong please try again"));
-
     }catch(e){
       print(e.toString());
     }

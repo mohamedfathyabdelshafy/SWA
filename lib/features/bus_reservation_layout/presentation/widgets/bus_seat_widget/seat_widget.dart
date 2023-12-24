@@ -59,12 +59,17 @@ class _SeatWidgetState extends State<SeatWidget> {
                 if (widget.model.seat.seatState == SeatState.selected) {
                   widget.model.seat.seatState = SeatState.available;
                   selectedSeats.remove(widget.model.seat);
-                } else {
+                }
+                else if(widget.model.seat.seatState ==SeatState.sold){
+                }
+
+                else {
                   widget.model.seat.seatState = SeatState.selected;
                   selectedSeats.add(widget.model.seat);
                 }
                 widget.onSeatStateChanged(rowI, colI,
                     widget.model.seat.seatState!, widget.model.seat);
+
               });
             }
           },
@@ -87,7 +92,10 @@ class _SeatWidgetState extends State<SeatWidget> {
                                   ? AppColors.primaryColor
                                   : widget.model.seat.seatState ==
                                           SeatState.selected
-                                      ? Color(0xff5332F7)
+                                      ? Color(0xff5332F7):
+                          widget.model.seat.seatState ==
+                              SeatState.sold
+                              ? Colors.grey
                                       : null,
                           fit: BoxFit.cover,
                         ),

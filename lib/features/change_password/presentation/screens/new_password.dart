@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
+import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/widgets/customized_field.dart';
 import 'package:swa/features/change_password/domain/use_cases/new_password.dart';
@@ -14,8 +15,8 @@ import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 
 
 class NewPasswordScreen extends StatefulWidget {
-  const NewPasswordScreen({Key? key}) : super(key: key);
-
+   NewPasswordScreen({Key? key,required this.userId}) : super(key: key);
+String userId;
   @override
   State<NewPasswordScreen> createState() => _NewPasswordScreenState();
 }
@@ -23,6 +24,9 @@ class NewPasswordScreen extends StatefulWidget {
 class _NewPasswordScreenState extends State<NewPasswordScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController newPassController = TextEditingController();
+  final TextEditingController REnewPassController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
+
   User? _user;
 
   @override
@@ -55,77 +59,99 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
             }
           },
 
-          child: Form(
-            key: formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(height:context.height * 0.15),
-                SvgPicture.asset("assets/images/Swa Logo.svg"),
-                SizedBox(height:context.height * 0.15),
-                SizedBox(
-                  height: context.height*0.22,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        CustomizedField(
-                            colorText: Colors.white,
-                            isPassword: true,
-                            obscureText: true,
-                            color :AppColors.lightBink,
-                            hintText: "Enter new password",
-                            controller: newPassController,
-                            validator: (value){
-                              if(value == null ||value.isEmpty ){
-                                return  "Enter new password";
+          child: Directionality(
+            textDirection:
+            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+            child: Form(
+              key: formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(height:context.height * 0.15),
+                    SvgPicture.asset("assets/images/Swa Logo.svg"),
+                    SizedBox(height:context.height * 0.15),
+                    SizedBox(
+                      height: context.height*0.30,
+                      child: Column(
+                        children: [
+                          CustomizedField(
+                            isPassword: false,
+                            obscureText: false,
+                            colorText: AppColors.greyLight,
+                            controller:passController ,
+                            validator: (validator){
+                              if (validator == null || validator.isEmpty) {
+                                return LanguageClass.isEnglish ? " Enter the code" : "ادخل الكود";
                               }
                               return null;
-                            }
-                        ),
-                        CustomizedField(
-                            colorText: Colors.white,
-                            isPassword: true,
-                            obscureText: true,
-                            color :AppColors.lightBink,
-                            hintText: "ReEnter new password",
-                            controller: newPassController,
-                            validator: (value){
-                              if(value == null ||value.isEmpty ){
-                                return  "ReEnter new password";
+                            },
+                            color:Colors.white.withOpacity(0.2),
+                            labelText: LanguageClass.isEnglish?"Code":"الكود",
+                          ),
+                          CustomizedField(
+                              colorText: Colors.white,
+                              isPassword: true,
+                              obscureText: true,
+                              color :AppColors.lightBink,
+                              hintText: LanguageClass.isEnglish?"Enter new password":
+                              "ادخل كلمة المرور الجديدة",
+                              controller: newPassController,
+                              validator: (value){
+                                if(value == null ||value.isEmpty ){
+                                  return  LanguageClass.isEnglish?"Enter new password":
+                                  " ادخال كلمة المرور";
+                                }
+                                return null;
                               }
-                              return null;
-                            }
-                        ),
-                      ],
+                          ),
+                          CustomizedField(
+                              colorText: Colors.white,
+                              isPassword: true,
+                              obscureText: true,
+                              color :AppColors.lightBink,
+                              hintText: LanguageClass.isEnglish?"ReEnter new password":
+                              "اعادة ادخال كلمة المرور",
+                              controller: REnewPassController,
+                              validator: (value){
+                                if(value == null ||value.isEmpty ){
+                                  return  LanguageClass.isEnglish?"ReEnter new password":
+                                  "اعادة ادخال كلمة المرور الجديدة";
+                                }
+                                return null;
+                              }
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-                BlocListener(
-                  bloc: BlocProvider.of<NewPasswordCubit>(context),
-                  listener: (context, state) {
-                    if(state is NewPasswordLoadingState){
-                      Constants.showLoadingDialog(context);
-                    }else if (state is NewPasswordLoadedState) {
-                      Constants.hideLoadingDialog(context);
-                      // Navigator.pushNamed(context, Routes.doneLoginRoute);
-                    }else if (state is NewPasswordErrorState) {
-                      Constants.hideLoadingDialog(context);
-                      Constants.showDefaultSnackBar(context: context, text: state.error.toString());
-                    }
-                  },
-                  child: InkWell(
-                      onTap: (){
-                        if(formKey.currentState!.validate()) {
-                          ///Change old password to code
-                          // BlocProvider.of<NewPasswordCubit>(context).newPassword(
-                          //   NewPasswordParams(oldPass: oldPassController.text, newPass: newPassController.text, userId: _user!.userId!.toString())
-                          // );
+                    BlocListener(
+                      bloc: BlocProvider.of<NewPasswordCubit>(context),
+                      listener: (context, state) {
+                        if(state is NewPasswordLoadingState){
+                          Constants.showLoadingDialog(context);
+                        }else if (state is NewPasswordLoadedState) {
+                          Constants.hideLoadingDialog(context);
+                          Navigator.pushNamed(context, Routes.doneLoginRoute);
+                        }else if (state is NewPasswordErrorState) {
+                          Constants.hideLoadingDialog(context);
+                          Constants.showDefaultSnackBar(context: context, text: state.error.toString());
                         }
                       },
-                      child: Constants.customButton(text: "Done")
-                  ),
+                      child: InkWell(
+                          onTap: (){
+                            if(formKey.currentState!.validate()) {
+                              ///Change old password to code
+                              BlocProvider.of<NewPasswordCubit>(context).newPassword(
+                                NewPasswordParams(oldPass: passController.text, newPass: newPassController.text, userId: widget.userId)
+                              );
+                            }
+                          },
+                          child: Constants.customButton(text: LanguageClass.isEnglish?"Done":"تم")
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

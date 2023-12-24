@@ -33,7 +33,8 @@ Future<void> main() async {
   await eWalletDependencyInjectionInit(); //For initializing E-Wallet
   await TimesTripInjectionInit();
   await TicketHistoryInjectionInit();
-  await dependencyInjectionInit(); //For initializing network info and shared preferences
+  await dependencyInjectionInit();
+  //For initializing network info and shared preferences
   await CacheHelper.init();
   LanguageClass.isEnglish =
       await CacheHelper.getDataToSharedPref(key: 'language') ?? true;
