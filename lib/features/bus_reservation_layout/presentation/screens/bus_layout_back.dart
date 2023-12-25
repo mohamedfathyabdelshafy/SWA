@@ -373,6 +373,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                                     cols: busSeatsModel?.busSeatDetails
                                         ?.busDetails?.totalColumn ??
                                         5,
+
                                     seatSvgSize: 35,
                                     pathSelectedSeat:
                                     'assets/images/unavailable_sets.svg',

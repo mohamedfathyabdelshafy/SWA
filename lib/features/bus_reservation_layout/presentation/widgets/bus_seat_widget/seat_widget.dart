@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/bus_seat_widget/seat_layout_model.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/bus_seat_widget/seat_model.dart';
 
 import '../../../data/models/BusSeatsModel.dart';
-import '../../PLOH/bus_layout_reservation_cubit.dart';
 
 class SeatWidget extends StatefulWidget {
   final SeatModel model;
@@ -49,6 +47,8 @@ class _SeatWidgetState extends State<SeatWidget> {
           onTap: () {
             if (widget.model.seat.seatState == SeatState.empty) {
               return;
+            } else if (widget.model.seat.seatState == SeatState.sold) {
+              print("do nothing");
             } else {
               countSeats.add(widget.model.seat.seatBusID!);
               print("widget.model.seat.seatBusID${countSeats}");
@@ -59,17 +59,12 @@ class _SeatWidgetState extends State<SeatWidget> {
                 if (widget.model.seat.seatState == SeatState.selected) {
                   widget.model.seat.seatState = SeatState.available;
                   selectedSeats.remove(widget.model.seat);
-                }
-                else if(widget.model.seat.seatState ==SeatState.sold){
-                }
-
-                else {
+                } else {
                   widget.model.seat.seatState = SeatState.selected;
                   selectedSeats.add(widget.model.seat);
                 }
                 widget.onSeatStateChanged(rowI, colI,
                     widget.model.seat.seatState!, widget.model.seat);
-
               });
             }
           },
@@ -92,11 +87,11 @@ class _SeatWidgetState extends State<SeatWidget> {
                                   ? AppColors.primaryColor
                                   : widget.model.seat.seatState ==
                                           SeatState.selected
-                                      ? Color(0xff5332F7):
-                          widget.model.seat.seatState ==
-                              SeatState.sold
-                              ? Colors.grey
-                                      : null,
+                                      ? Color(0xff5332F7)
+                                      : widget.model.seat.seatState ==
+                                              SeatState.sold
+                                          ? Colors.grey
+                                          : null,
                           fit: BoxFit.cover,
                         ),
                       ),

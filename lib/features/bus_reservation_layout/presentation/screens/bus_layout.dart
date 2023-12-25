@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:sizer/sizer.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
@@ -13,7 +10,6 @@ import 'package:swa/features/bus_reservation_layout/presentation/PLOH/bus_layout
 import 'package:swa/features/bus_reservation_layout/presentation/PLOH/bus_layout_reservation_states.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/screens/reservation_ticket.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
-import 'package:swa/features/times_trips/presentation/screens/times_screen.dart';
 
 import '../../../../core/local_cache_helper.dart';
 import '../../../../core/utils/app_colors.dart';
@@ -66,12 +62,33 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
   }
 
   void get() async {
-    print("ttttttttttttt${widget.tripId}");
+    print("DDttttttttttttt${widget.tripId}");
     busLayoutRepo.getBusSeatsData(tripId: widget.tripId).then((value) async {
       busSeatsModel = await value;
+
       if (busSeatsModel != null) {
         unavailable = await busSeatsModel!.busSeatDetails!.totalSeats! -
             busSeatsModel!.busSeatDetails!.emptySeats!;
+
+        for (int i = 0;
+            i < busSeatsModel!.busSeatDetails!.busDetails!.totalRow!;
+            i++) {
+          for (int j = 0;
+              j <
+                  busSeatsModel!
+                      .busSeatDetails!.busDetails!.rowList![i].seats.length;
+              j++) {
+            print(
+                "fffffff fff ff ${busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j].seatNo}");
+            if (busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j]
+                    .isReserved ==
+                true) {
+              busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j]
+                  .seatState = SeatState.sold;
+            }
+          }
+        }
+
         setState(() {});
       }
     });
@@ -90,23 +107,29 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
         leading: iconBack(context),
         backgroundColor: Colors.black,
         title: Text(
-          LanguageClass.isEnglish?"Select seats":"حدد كراسيك",
+          LanguageClass.isEnglish ? "Select seats" : "حدد كراسيك",
           style: TextStyle(
               color: AppColors.white, fontSize: 34, fontFamily: "regular"),
         ),
         actions: [
-          IconButton(onPressed: (){
-            Navigator.pushNamed(context, Routes.initialRoute
-            );
-          }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
-
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.initialRoute);
+              },
+              icon: Icon(
+                Icons.home_outlined,
+                color: AppColors.white,
+                size: 35,
+              ))
         ],
       ),
-      body: BlocBuilder<BusLayoutCubit,ReservationState>(
-        builder: (context, state){
-          if(state is BusSeatsLoadingState){
-            return  Center(
-                child: CircularProgressIndicator(color: AppColors.primaryColor,),
+      body: BlocBuilder<BusLayoutCubit, ReservationState>(
+        builder: (context, state) {
+          if (state is BusSeatsLoadingState) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: AppColors.primaryColor,
+              ),
             );
           }
           return Column(
@@ -127,8 +150,8 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                         Container(
                           height: 50,
                           width: 4,
-                          margin:
-                          const EdgeInsetsDirectional.symmetric(horizontal: 12),
+                          margin: const EdgeInsetsDirectional.symmetric(
+                              horizontal: 12),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             gradient: LinearGradient(
@@ -165,10 +188,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                 height: 10,
               ),
               Container(
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height - 180,
+                height: MediaQuery.of(context).size.height - 180,
                 child: Row(
                   children: [
                     Expanded(
@@ -186,7 +206,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                             padding: EdgeInsets.zero,
                             child: Text(
                               busSeatsModel?.busSeatDetails?.emptySeats
-                                  .toString() ??
+                                      .toString() ??
                                   "",
                               style: TextStyle(
                                   fontSize: 45,
@@ -232,15 +252,12 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                           ),
                           InkWell(
                             onTap: () {
-                              cachCountSeats =
-                                  CacheHelper.getDataToSharedPref(
+                              cachCountSeats = CacheHelper.getDataToSharedPref(
                                       key: 'countSeats')
-                                      ?.map((e) => int.tryParse(e) ?? 0)
-                                      .toList();
+                                  ?.map((e) => int.tryParse(e) ?? 0)
+                                  .toList();
                               print("countSeats2Bassant$cachCountSeats");
-                              if (countSeats == null ||
-                                  countSeatesNum == null ||
-                                  busSeatsModel == null) {
+                              if (busSeatsModel == null) {
                                 Constants.showDefaultSnackBar(
                                     context: context,
                                     text: LanguageClass.isEnglish
@@ -276,8 +293,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            MultiBlocProvider(
+                                        builder: (context) => MultiBlocProvider(
                                                 providers: [
                                                   BlocProvider<LoginCubit>(
                                                       create: (context) =>
@@ -292,7 +308,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                                   price: widget.price,
                                                   countSeats: cachCountSeats!,
                                                   tripListBack:
-                                                  widget.tripListBack!,
+                                                      widget.tripListBack!,
                                                   tripTypeId: widget.triTypeId,
                                                   user: widget.user,
                                                 ))),
@@ -331,8 +347,8 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                         child: Stack(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 27),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 27),
                               child: Container(
                                   width: 240,
                                   height: sizeHeight * .23,
@@ -350,7 +366,11 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                   seatHeight: sizeHeight * .040,
                                   onSeatStateChanged:
                                       (rowI, colI, seatState, seat) {
+                                    print("set $seat");
+                                    print("seatstate $seatState");
+                                    print("rowI ${rowI}, column1 ${colI}");
                                     if (seatState == SeatState.selected) {
+                                      print("I am here");
                                       countSeats.add(busSeatsModel!
                                           .busSeatDetails!
                                           .busDetails!
@@ -364,6 +384,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
 
                                       setState(() {});
                                     } else {
+                                      print("I am there");
                                       selectedSeats = null;
                                       busSeatsModel
                                           ?.busSeatDetails
@@ -380,55 +401,29 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                       countSeatesNum = countSeats.length;
                                       setState(() {});
                                     }
-
-                                    // if (seatState == SeatState.selected) {
-                                    //   selectedSeats = seat;
-                                    //   busSeatsModel?.busSeatDetails?.busDetails?.rowList
-                                    //       ?.forEach((element) {
-                                    //     element.seats.forEach((element) {
-                                    //       if (element.seatBusID != seat.seatBusID &&
-                                    //           element.seatState == SeatState.selected) {
-                                    //         print("kjbnljkblnkn");
-                                    //         element.seatState =
-                                    //             SeatState.available;
-                                    //       }
-                                    //     });
-                                    //   });
-                                    // } else {
-                                    //   selectedSeats = null;
-                                    //   busSeatsModel?.busSeatDetails?.busDetails?.rowList?[rowI]
-                                    //       .seats[colI]
-                                    //       .seatState =
-                                    //       SeatState.available;
-                                    //   // selectedSeats.remove(SeatNumber(rowI: rowI, colI: colI));
-                                    // }
-                                    // setState(() {});
                                   },
                                   stateModel: SeatLayoutStateModel(
                                     rows: busSeatsModel?.busSeatDetails
-                                        ?.busDetails
-                                        ?.rowList?.length ??
+                                            ?.busDetails?.rowList?.length ??
                                         0,
                                     cols: busSeatsModel?.busSeatDetails
-                                        ?.busDetails
-                                        ?.totalColumn ??
+                                            ?.busDetails?.totalColumn ??
                                         5,
                                     seatSvgSize: 35,
                                     pathSelectedSeat:
-                                    'assets/images/unavailable_seats.svg',
+                                        'assets/images/unavailable_seats.svg',
                                     pathDisabledSeat:
-                                    'assets/images/unavailable_seats.svg',
+                                        'assets/images/unavailable_seats.svg',
                                     pathSoldSeat:
-                                    'assets/images/unavailable_seats.svg',
+                                        'assets/images/disabled_seats.svg',
                                     pathUnSelectedSeat:
-                                    'assets/images/unavailable_seats.svg',
+                                        'assets/images/unavailable_seats.svg',
                                     currentSeats: List.generate(
                                       busSeatsModel?.busSeatDetails?.busDetails
-                                          ?.rowList?.length ??
+                                              ?.rowList?.length ??
                                           0,
                                       // Number of rows based on totalSeats
-                                          (row) =>
-                                      busSeatsModel!.busSeatDetails!
+                                      (row) => busSeatsModel!.busSeatDetails!
                                           .busDetails!.rowList![row].seats,
                                     ),
                                   ),
