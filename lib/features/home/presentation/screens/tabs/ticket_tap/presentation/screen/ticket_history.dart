@@ -3,10 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:swa/core/utils/app_colors.dart';
-import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
-import 'package:swa/core/widgets/icon_back.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/Container_Widget.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/text_widget.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/data/model/Response_ticket_history_Model.dart';
@@ -37,11 +35,10 @@ class _TicketHistoryState extends State<TicketHistory> {
   }
 
   get() async {
-    BlocProvider.of<TicketCubit>(context).getTicketHistory(customerId:widget.user?.customerId??0);
-    responseTicketHistoryModel = await ticketRepo.getTicketHistory(customerId: widget.user?.customerId??0);
-    if (this.mounted) {
-      setState(() {});
-    }
+    BlocProvider.of<TicketCubit>(context)
+        .getTicketHistory(customerId: widget.user?.customerId ?? 0);
+    responseTicketHistoryModel = await ticketRepo.getTicketHistory(
+        customerId: widget.user?.customerId ?? 0);
   }
 
   @override
@@ -50,30 +47,36 @@ class _TicketHistoryState extends State<TicketHistory> {
     double sizeWidth = context.width;
     return Scaffold(
       backgroundColor: Colors.black,
-      body: BlocBuilder<TicketCubit,TicketStates>(
-        builder: (context ,state){
-          if(state is LoadingTicketHistory){
-            return  Center(
-              child: CircularProgressIndicator(color: AppColors.primaryColor,),);
-          }else if( state is ErrorTicketHistory){
-           return Column(
-             crossAxisAlignment: CrossAxisAlignment.stretch,
-             children: [
-               SizedBox(height:sizeHeight *0.1 ,),
-               Container(
-                 child:Center(
-                   child: Text(
-                     LanguageClass.isEnglish?"No Tickets":"لا يوجد تزاكر",
-                     style:  TextStyle(
-                         color: AppColors.white,
-                         fontSize: 34,
-                         fontFamily: "regular"),
-                   ),
-                 ),),
-             ],
-           );
-          }else{
-            return  SizedBox(
+      body: BlocBuilder<TicketCubit, TicketStates>(
+        builder: (context, state) {
+          if (state is LoadingTicketHistory) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: AppColors.primaryColor,
+              ),
+            );
+          } else if (state is ErrorTicketHistory) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(
+                  height: sizeHeight * 0.1,
+                ),
+                Container(
+                  child: Center(
+                    child: Text(
+                      LanguageClass.isEnglish ? "No Tickets" : "لا يوجد تزاكر",
+                      style: TextStyle(
+                          color: AppColors.white,
+                          fontSize: 34,
+                          fontFamily: "regular"),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return SizedBox(
               height: sizeHeight * 0.9,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -84,7 +87,7 @@ class _TicketHistoryState extends State<TicketHistory> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 45),
                     child: Text(
-                      LanguageClass.isEnglish?"Your Tickets":"تذاكارك",
+                      LanguageClass.isEnglish ? "Your Tickets" : "تذاكارك",
                       style: TextStyle(
                           color: AppColors.white,
                           fontSize: 34,
@@ -98,7 +101,8 @@ class _TicketHistoryState extends State<TicketHistory> {
                         itemBuilder: (context, index) {
                           print(
                               "responseTicketHistoryModel?.message?.length${responseTicketHistoryModel?.message?.length}");
-                          final ticket = responseTicketHistoryModel?.message![index];
+                          final ticket =
+                              responseTicketHistoryModel?.message![index];
                           return SizedBox(
                             height: sizeHeight * 0.8,
                             child: Column(
@@ -113,15 +117,16 @@ class _TicketHistoryState extends State<TicketHistory> {
                                           height: sizeHeight * 0.63,
                                           width: sizeWidth * 0.8,
                                           decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(20),
-                                              border:
-                                              Border.all(color: Colors.white)),
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              border: Border.all(
+                                                  color: Colors.white)),
                                           child: Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 15),
                                             child: Column(
                                               crossAxisAlignment:
-                                              CrossAxisAlignment.stretch,
+                                                  CrossAxisAlignment.stretch,
                                               children: [
                                                 const Padding(
                                                   padding: EdgeInsets.symmetric(
@@ -135,30 +140,36 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                   ),
                                                 ),
                                                 Padding(
-                                                  padding: const EdgeInsets.symmetric(
-                                                      horizontal: 15, vertical: 5),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 15,
+                                                      vertical: 5),
                                                   child: Row(
                                                     children: [
                                                       Text(
                                                         "#${ticket?.tripNumber?.toString()}" ??
                                                             "",
                                                         style: TextStyle(
-                                                            fontFamily: "regular",
+                                                            fontFamily:
+                                                                "regular",
                                                             fontSize: 15,
-                                                            color: Colors.white),
+                                                            color:
+                                                                Colors.white),
                                                       ),
                                                       SizedBox(
                                                         width: sizeWidth * 0.05,
                                                       ),
                                                       Container(
-                                                        padding: const EdgeInsets
-                                                            .symmetric(
-                                                            horizontal: 10),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 10),
                                                         width: sizeWidth * 0.45,
                                                         decoration: BoxDecoration(
                                                             borderRadius:
-                                                            BorderRadius.circular(
-                                                                15),
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15),
                                                             color: AppColors
                                                                 .primaryColor),
                                                         child: Text(
@@ -166,7 +177,8 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                           style: TextStyle(
                                                             color: Colors.white,
                                                             fontSize: 18,
-                                                            fontFamily: "regular",
+                                                            fontFamily:
+                                                                "regular",
                                                           ),
                                                         ),
                                                       ),
@@ -174,8 +186,10 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                   ),
                                                 ),
                                                 Padding(
-                                                  padding: const EdgeInsets.symmetric(
-                                                      horizontal: 25, vertical: 5),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 25,
+                                                      vertical: 5),
                                                   child: Row(
                                                     children: [
                                                       SvgPicture.asset(
@@ -184,15 +198,33 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                         width: sizeWidth * 0.05,
                                                       ),
                                                       Text(
-                                                        DateFormat('d/M/y, hh:mm a')
-                                                            .format(ticket
-                                                            ?.reservationDate ??
-                                                            DateTime.now()),
+                                                        ticket?.tripDate != null
+                                                            ? DateFormat(
+                                                                    "yyyy-MMM-dd")
+                                                                .format(ticket!
+                                                                    .tripDate!)
+                                                            : "",
                                                         style: TextStyle(
-                                                            fontFamily: "regular",
+                                                            fontFamily:
+                                                                "regular",
                                                             fontSize: 15,
-                                                            color: Colors.white),
-                                                      )
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                      SizedBox(
+                                                        width: sizeWidth * 0.04,
+                                                      ),
+                                                      Text(
+                                                        ticket?.accessBusTime
+                                                                .toString() ??
+                                                            "",
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                "regular",
+                                                            fontSize: 15,
+                                                            color:
+                                                                Colors.white),
+                                                      ),
                                                     ],
                                                   ),
                                                 ),
@@ -212,18 +244,24 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                   // ),
                                                 ),
                                                 Padding(
-                                                  padding: const EdgeInsets.symmetric(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
                                                       horizontal: 15),
                                                   child: Row(
                                                     children: [
                                                       Container(
-                                                        height: sizeHeight * 0.018,
-                                                        width: sizeHeight * 0.018,
+                                                        height:
+                                                            sizeHeight * 0.018,
+                                                        width:
+                                                            sizeHeight * 0.018,
                                                         decoration: BoxDecoration(
-                                                            shape: BoxShape.circle,
-                                                            color: Colors.transparent,
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            color: Colors
+                                                                .transparent,
                                                             border: Border.all(
-                                                                color: Colors.white)),
+                                                                color: Colors
+                                                                    .white)),
                                                       ),
                                                       SizedBox(
                                                         width: sizeWidth * 0.02,
@@ -236,17 +274,22 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                   ),
                                                 ),
                                                 Padding(
-                                                  padding: const EdgeInsets.symmetric(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
                                                       horizontal: 10),
                                                   child: Row(
                                                     children: [
                                                       Expanded(
                                                         child: Padding(
-                                                          padding: const EdgeInsets
-                                                              .symmetric(
-                                                              horizontal: 5),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal:
+                                                                      5),
                                                           child: TextWidget(
-                                                            text: ticket?.from ?? "",
+                                                            text:
+                                                                ticket?.from ??
+                                                                    "",
                                                             fontSize: 18,
                                                           ),
                                                         ),
@@ -255,21 +298,25 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                   ),
                                                 ),
                                                 Padding(
-                                                  padding: const EdgeInsets.symmetric(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
                                                       horizontal: 18),
                                                   child: Row(
                                                     children: [
                                                       ContainerWidget(
-                                                        color: AppColors.primaryColor,
+                                                        color: AppColors
+                                                            .primaryColor,
                                                         height: 0.013,
                                                       ),
                                                       SizedBox(
-                                                        width: sizeWidth * 0.005,
+                                                        width:
+                                                            sizeWidth * 0.005,
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets
-                                                            .symmetric(
-                                                            horizontal: 12),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 12),
                                                         child: TextWidget(
                                                           text: "",
                                                           fontSize: 15,
@@ -282,12 +329,14 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                   height: sizeHeight * 0.015,
                                                 ),
                                                 Padding(
-                                                  padding: const EdgeInsets.symmetric(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
                                                       horizontal: 18),
                                                   child: Row(
                                                     children: [
                                                       ContainerWidget(
-                                                        color: AppColors.primaryColor,
+                                                        color: AppColors
+                                                            .primaryColor,
                                                         height: 0.013,
                                                       ),
                                                     ],
@@ -297,23 +346,26 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                   height: sizeHeight * 0.015,
                                                 ),
                                                 Padding(
-                                                  padding: const EdgeInsets.symmetric(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
                                                       horizontal: 15),
                                                   child: Row(
                                                     children: [
                                                       ContainerWidget(
-                                                        color: AppColors.primaryColor,
+                                                        color: AppColors
+                                                            .primaryColor,
                                                         height: 0.025,
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets
-                                                            .symmetric(
-                                                            horizontal: 12),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 12),
                                                         child: TextWidget(
                                                           text: "To",
                                                           fontSize: 15,
-                                                          color:
-                                                          AppColors.primaryColor,
+                                                          color: AppColors
+                                                              .primaryColor,
                                                         ),
                                                       )
                                                     ],
@@ -322,8 +374,8 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                 Row(
                                                   children: [
                                                     Padding(
-                                                      padding:
-                                                      const EdgeInsets.symmetric(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
                                                           horizontal: 15),
                                                       child: TextWidget(
                                                         text: ticket?.to ?? "",
@@ -336,19 +388,21 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                   height: sizeHeight * 0.05,
                                                   child: ListView.builder(
                                                       scrollDirection:
-                                                      Axis.horizontal,
+                                                          Axis.horizontal,
                                                       itemCount: 0,
-                                                      itemBuilder: (context, index) {
+                                                      itemBuilder:
+                                                          (context, index) {
                                                         return Padding(
                                                           padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
+                                                              const EdgeInsets
+                                                                  .all(8.0),
                                                           child: Row(
                                                             children: [
                                                               Container(
                                                                 child: Stack(
                                                                   children: [
-                                                                    SvgPicture.asset(
+                                                                    SvgPicture
+                                                                        .asset(
                                                                       "assets/images/unavailable_seats.svg",
                                                                       color: AppColors
                                                                           .primaryColor,
@@ -379,7 +433,8 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                   // ),
                                                 ),
                                                 Padding(
-                                                  padding: const EdgeInsets.all(5),
+                                                  padding:
+                                                      const EdgeInsets.all(5),
                                                   child: Row(
                                                     children: [
                                                       Spacer(),
@@ -412,7 +467,6 @@ class _TicketHistoryState extends State<TicketHistory> {
               ),
             );
           }
-
         },
       ),
     );

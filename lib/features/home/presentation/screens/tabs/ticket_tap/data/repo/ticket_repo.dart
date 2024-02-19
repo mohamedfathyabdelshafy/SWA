@@ -9,19 +9,14 @@ class TicketRepo {
   final ApiConsumer apiConsumer;
   TicketRepo(this.apiConsumer);
 
-
   Future<ResponseTicketHistoryModel?> getTicketHistory(
-  {
-    required int customerId
-}
-      ) async{
+      {required int customerId}) async {
     final response = await apiConsumer.get(
-        "http://testapi.swabus.com/api/Customer/CustomerReservationsHistory?customerId=$customerId"
-    );
+        "${EndPoints.baseUrl}Customer/CustomerReservationsHistory?customerId=$customerId");
     log('ticketHistory response ' + response.body);
     var decodedResponse = json.decode(response.body);
-    ResponseTicketHistoryModel responseTicketHistoryModel = ResponseTicketHistoryModel.fromJson(decodedResponse);
+    ResponseTicketHistoryModel responseTicketHistoryModel =
+        ResponseTicketHistoryModel.fromJson(decodedResponse);
     return responseTicketHistoryModel;
   }
-
 }

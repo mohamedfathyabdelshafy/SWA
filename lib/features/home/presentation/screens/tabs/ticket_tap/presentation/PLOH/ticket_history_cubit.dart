@@ -5,21 +5,22 @@ import 'package:swa/main.dart';
 
 import 'ticket_history_state.dart';
 
-class TicketCubit extends Cubit<TicketStates>{
-  TicketCubit():super(InitialTicketHistory());
+class TicketCubit extends Cubit<TicketStates> {
+  TicketCubit() : super(InitialTicketHistory());
   TicketRepo ticketRepo = TicketRepo(sl());
 
-  Future<ResponseTicketHistoryModel?> getTicketHistory({required int customerId}) async {
-    try{
+  Future<ResponseTicketHistoryModel?> getTicketHistory(
+      {required int customerId}) async {
+    try {
       emit(LoadingTicketHistory());
 
       final res = await ticketRepo.getTicketHistory(customerId: customerId);
-      if(res!.status == "success") {
-        emit(LoadedTicketHistory(responseTicketHistoryModel: res));
-      }else {
-        emit(ErrorTicketHistory(msg:res.errorMassage!));
+      if (res?.status == "success") {
+        emit(LoadedTicketHistory(responseTicketHistoryModel: res!));
+      } else {
+        emit(ErrorTicketHistory(msg: res?.errorMassage ?? ""));
       }
-    }catch(e){
+    } catch (e) {
       print(e.toString());
     }
   }

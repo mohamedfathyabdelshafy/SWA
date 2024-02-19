@@ -1,21 +1,22 @@
 class ResponseTicketHistoryModel {
-  ResponseTicketHistoryModel({
-      this.status, 
-      this.message, 
-      this.balance, 
-      this.object, 
+  ResponseTicketHistoryModel(
+      {this.status,
+      this.message,
+      this.balance,
+      this.object,
       this.obj,
-  this.errorMassage});
+      this.errorMassage});
 
   ResponseTicketHistoryModel.fromJson(dynamic json) {
     status = json['status'];
-    if( json['status'] == "success"){
-    if (json['message'] != null) {
-      message = [];
-      json['message'].forEach((v) {
-        message?.add(Message.fromJson(v));
-      });
-    }}else{
+    if (json['status'] == "success") {
+      if (json['message'] != null) {
+        message = [];
+        json['message'].forEach((v) {
+          message?.add(Message.fromJson(v));
+        });
+      }
+    } else {
       errorMassage = json['message'];
     }
     balance = json['balance'];
@@ -40,33 +41,33 @@ class ResponseTicketHistoryModel {
     map['Obj'] = obj;
     return map;
   }
-
 }
 
 class Message {
   Message({
-      this.seatBusNo, 
-      this.reservationID, 
-      this.tripID, 
-      this.lineName, 
-      this.busID, 
-      this.plateNo, 
-      this.status, 
-      this.from, 
-      this.to, 
-      this.creationDate, 
-      this.price, 
-      this.seatNo, 
-      this.seatNumberReserved, 
-      this.ticketNumber, 
-      this.tripNumber, 
-      this.fromStationID, 
-      this.toStationID, 
-      this.tripDate, 
-      this.accessBusTime, 
-      this.tripType, 
-      this.statusName, 
-      this.reservationDate,});
+    this.seatBusNo,
+    this.reservationID,
+    this.tripID,
+    this.lineName,
+    this.busID,
+    this.plateNo,
+    this.status,
+    this.from,
+    this.to,
+    this.creationDate,
+    this.price,
+    this.seatNo,
+    this.seatNumberReserved,
+    this.ticketNumber,
+    this.tripNumber,
+    this.fromStationID,
+    this.toStationID,
+    this.tripDate,
+    this.accessBusTime,
+    this.tripType,
+    this.statusName,
+    this.reservationDate,
+  });
 
   Message.fromJson(dynamic json) {
     seatBusNo = json['SeatBusNo'];
@@ -86,11 +87,14 @@ class Message {
     tripNumber = json['TripNumber'];
     fromStationID = json['FromStationID'];
     toStationID = json['ToStationID'];
-    tripDate = json['TripDate'];
+    tripDate =
+        json['TripDate'] != null ? DateTime.parse(json['TripDate']) : null;
     accessBusTime = json['AccessBusTime'];
     tripType = json['TripType'];
     statusName = json['StatusName'];
-    reservationDate = json['ReservationDate'] != null ? DateTime.parse(json["ReservationDate"]) : null;
+    reservationDate = json['ReservationDate'] != null
+        ? DateTime.parse(json["ReservationDate"])
+        : null;
   }
   int? seatBusNo;
   int? reservationID;
@@ -109,7 +113,7 @@ class Message {
   int? tripNumber;
   int? fromStationID;
   int? toStationID;
-  String? tripDate;
+  DateTime? tripDate;
   String? accessBusTime;
   String? tripType;
   String? statusName;
@@ -141,5 +145,4 @@ class Message {
     map['ReservationDate'] = reservationDate;
     return map;
   }
-
 }
