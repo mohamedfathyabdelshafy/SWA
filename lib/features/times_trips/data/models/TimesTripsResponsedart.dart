@@ -1,17 +1,14 @@
-class TimesTripsResponse{
-  TimesTripsResponse({
-      this.status, 
-      this.message, 
-  });
+class TimesTripsResponse {
+  TimesTripsResponse({this.status, this.message, this.failureMessage});
 
   TimesTripsResponse.fromJson(dynamic json) {
     status = json['status'];
-    message = json['message'] != null ? Message.fromJson(json['message']) : null;
-
+    message =
+        json['message'] != null ? Message.fromJson(json['message']) : null;
   }
   String? status;
   Message? message;
-
+  String? failureMessage;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -21,19 +18,19 @@ class TimesTripsResponse{
     }
     return map;
   }
-
 }
 
 class Message {
   Message({
-      this.tripList, 
-      this.tripListBack, 
-      this.fromStationIDGo, 
-      this.toStationIDGo, 
-      this.tripDateGo, 
-      this.fromStationIDBack, 
-      this.toStationIDBack, 
-      this.tripDateBack,});
+    this.tripList,
+    this.tripListBack,
+    this.fromStationIDGo,
+    this.toStationIDGo,
+    this.tripDateGo,
+    this.fromStationIDBack,
+    this.toStationIDBack,
+    this.tripDateBack,
+  });
 
   Message.fromJson(dynamic json) {
     if (json['TripList'] != null) {
@@ -80,54 +77,53 @@ class Message {
     map['TripDateBack'] = tripDateBack;
     return map;
   }
-
 }
 
 class TripListBack {
   TripListBack({
-      this.tripId, 
-      this.accessBusTime, 
-      this.busId, 
-      this.busModel, 
-      this.busType, 
-      this.driverId, 
-      this.createdBy, 
-      this.creationDate, 
-      this.updatedBy, 
-      this.updateDate, 
-      this.isDeleted, 
-      this.isStartedByDriver, 
-      this.isEndedByDriver, 
-      this.startTime, 
-      this.endTime, 
-      this.tripTypeId, 
-      this.lineId, 
-      this.organizationId, 
-      this.accessDate, 
-      this.isActive, 
-      this.busSupervisorId, 
-      this.busSupervisorManagerId, 
-      this.officeID, 
-      this.isMoved, 
-      this.moveTime, 
-      this.confirmFromDriver, 
-      this.applyNoofDays, 
-      this.plateNo, 
-      this.tripType, 
-      this.lineName, 
-      this.maxStationOrder, 
-      this.maxCityOrder, 
-      this.from, 
-      this.to, 
-      this.day, 
-      this.serviceTypeID, 
-      this.serviceType, 
-      this.emptySeat, 
-      this.price, 
-
-      this.tripNumber, 
-      this.priceAfterDiscount, 
-      this.isArabic,});
+    this.tripId,
+    this.accessBusTime,
+    this.busId,
+    this.busModel,
+    this.busType,
+    this.driverId,
+    this.createdBy,
+    this.creationDate,
+    this.updatedBy,
+    this.updateDate,
+    this.isDeleted,
+    this.isStartedByDriver,
+    this.isEndedByDriver,
+    this.startTime,
+    this.endTime,
+    this.tripTypeId,
+    this.lineId,
+    this.organizationId,
+    this.accessDate,
+    this.isActive,
+    this.busSupervisorId,
+    this.busSupervisorManagerId,
+    this.officeID,
+    this.isMoved,
+    this.moveTime,
+    this.confirmFromDriver,
+    this.applyNoofDays,
+    this.plateNo,
+    this.tripType,
+    this.lineName,
+    this.maxStationOrder,
+    this.maxCityOrder,
+    this.from,
+    this.to,
+    this.day,
+    this.serviceTypeID,
+    this.serviceType,
+    this.emptySeat,
+    this.price,
+    this.tripNumber,
+    this.priceAfterDiscount,
+    this.isArabic,
+  });
 
   TripListBack.fromJson(dynamic json) {
     tripId = json['TripId'];
@@ -262,57 +258,57 @@ class TripListBack {
     map['IsArabic'] = isArabic;
     return map;
   }
-
 }
 
 class TripList {
   TripList({
-      this.tripId, 
-      this.accessBusTime, 
-      this.busId, 
-      this.busModel, 
-      this.busType, 
-      this.driverId, 
-      this.createdBy, 
-      this.creationDate, 
-      this.updatedBy, 
-      this.updateDate, 
-      this.isDeleted, 
-      this.isStartedByDriver, 
-      this.isEndedByDriver, 
-      this.startTime, 
-      this.endTime, 
-      this.tripTypeId, 
-      this.lineId, 
-      this.organizationId, 
-      this.accessDate, 
-      this.isActive, 
-      this.busSupervisorId, 
-      this.busSupervisorManagerId, 
-      this.officeID, 
-      this.isMoved, 
-      this.moveTime, 
-      this.confirmFromDriver, 
-      this.applyNoofDays, 
-      this.plateNo, 
-      this.tripType, 
-      this.lineName, 
-      this.maxStationOrder, 
-      this.maxCityOrder, 
-      this.from, 
-      this.to, 
-      this.day, 
-      this.serviceTypeID, 
-      this.serviceType, 
-      this.emptySeat, 
-      this.price, 
-      this.busList, 
-      this.tripTypeList, 
-      this.lineList, 
-      this.serviceList, 
-      this.tripNumber, 
-      this.priceAfterDiscount, 
-      this.isArabic,});
+    this.tripId,
+    this.accessBusTime,
+    this.busId,
+    this.busModel,
+    this.busType,
+    this.driverId,
+    this.createdBy,
+    this.creationDate,
+    this.updatedBy,
+    this.updateDate,
+    this.isDeleted,
+    this.isStartedByDriver,
+    this.isEndedByDriver,
+    this.startTime,
+    this.endTime,
+    this.tripTypeId,
+    this.lineId,
+    this.organizationId,
+    this.accessDate,
+    this.isActive,
+    this.busSupervisorId,
+    this.busSupervisorManagerId,
+    this.officeID,
+    this.isMoved,
+    this.moveTime,
+    this.confirmFromDriver,
+    this.applyNoofDays,
+    this.plateNo,
+    this.tripType,
+    this.lineName,
+    this.maxStationOrder,
+    this.maxCityOrder,
+    this.from,
+    this.to,
+    this.day,
+    this.serviceTypeID,
+    this.serviceType,
+    this.emptySeat,
+    this.price,
+    this.busList,
+    this.tripTypeList,
+    this.lineList,
+    this.serviceList,
+    this.tripNumber,
+    this.priceAfterDiscount,
+    this.isArabic,
+  });
 
   TripList.fromJson(dynamic json) {
     tripId = json['TripId'];
@@ -451,5 +447,4 @@ class TripList {
     map['IsArabic'] = isArabic;
     return map;
   }
-
 }
