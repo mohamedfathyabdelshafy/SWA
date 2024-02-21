@@ -5,6 +5,7 @@ import 'package:swa/bloc_observer.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_strings.dart';
 import 'package:swa/core/utils/language.dart';
+import 'package:swa/features/app_info/app_info_injection_container.dart';
 import 'package:swa/features/change_password/change_password_injection_container.dart';
 import 'package:swa/features/forgot_password/forgot_password_injection_container.dart';
 import 'package:swa/features/home/home_injection_container.dart';
@@ -26,6 +27,7 @@ Future<void> main() async {
   ///Authorization Screens
   await loginDependencyInjectionInit(); //For initializing login
   await registerDependencyInjectionInit(); //For initializing register
+  await appInfoDependencyInjectionContainerInit();
   await forgotPasswordDependencyInjectionInit(); //For initializing forgot password
   await changePasswordDependencyInjectionInit(); //For initializing change password
   await homeDependencyInjectionInit(); //For initializing Home

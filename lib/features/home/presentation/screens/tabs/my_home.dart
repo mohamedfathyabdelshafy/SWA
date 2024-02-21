@@ -122,7 +122,8 @@ class _MyHomeState extends State<MyHome> {
                                               BoxShadow(
                                                 offset: const Offset(0, 5),
                                                 blurRadius: 5,
-                                                color:AppColors.darkPurple.withOpacity(1),
+                                                color: AppColors.darkPurple
+                                                    .withOpacity(1),
                                               )
                                             ],
                                             borderRadius:
@@ -154,7 +155,8 @@ class _MyHomeState extends State<MyHome> {
                                               BoxShadow(
                                                 offset: const Offset(0, 5),
                                                 blurRadius: 5,
-                                                color:AppColors.darkPurple.withOpacity(1),
+                                                color: AppColors.darkPurple
+                                                    .withOpacity(1),
                                               )
                                             ],
                                             borderRadius:
@@ -194,7 +196,8 @@ class _MyHomeState extends State<MyHome> {
                                               BoxShadow(
                                                 offset: const Offset(0, 5),
                                                 blurRadius: 5,
-                                                color:AppColors.darkPurple.withOpacity(1),
+                                                color: AppColors.darkPurple
+                                                    .withOpacity(1),
                                               )
                                             ],
                                             borderRadius:
@@ -226,37 +229,42 @@ class _MyHomeState extends State<MyHome> {
                                         },
                                         child: Container(
                                           height: sizeHeight * 0.05,
-                                          padding: EdgeInsets.symmetric(horizontal: 10),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10),
                                           // width: sizeWidth * 0.3,
                                           decoration: BoxDecoration(
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  offset: const Offset(0, 5),
-                                                  blurRadius: 5,
-                                                  color:AppColors.darkPurple.withOpacity(1),
-                                                )
-                                              ],
+                                            boxShadow: [
+                                              BoxShadow(
+                                                offset: const Offset(0, 5),
+                                                blurRadius: 5,
+                                                color: AppColors.darkPurple
+                                                    .withOpacity(1),
+                                              )
+                                            ],
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                             color: AppColors.darkPurple,
                                           ),
                                           child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
                                               Icon(
                                                 Icons.person,
                                                 color: AppColors.white,
                                                 size: 25,
                                               ),
-                                              SizedBox(width: 5,),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
                                               Text(
                                                 _user!.name!,
-                                                style:const TextStyle(
+                                                style: const TextStyle(
                                                     color: Colors.white,
-                                                  fontFamily: "bold",
-                                                  fontSize: 20
-                                                ),
+                                                    fontFamily: "bold",
+                                                    fontSize: 20),
                                               ),
                                             ],
                                           ),
@@ -321,7 +329,7 @@ class _MyHomeState extends State<MyHome> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  print("userId=======${_user!.userId!}");
+                                  // print("userId=======${_user!.userId!}");
                                   tripTypeId = "2";
                                   setState(() {
                                     print("tripTypeId");
@@ -364,7 +372,8 @@ class _MyHomeState extends State<MyHome> {
                           ),
                           Text(
                             LanguageClass.isEnglish ? "From" : "من",
-                            style: const TextStyle(color: Colors.white, fontSize: 20),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 20),
                             textAlign: LanguageClass.isEnglish
                                 ? TextAlign.left
                                 : TextAlign.right,
@@ -481,8 +490,8 @@ class _MyHomeState extends State<MyHome> {
                             padding: EdgeInsets.zero,
                             child: Text(
                               LanguageClass.isEnglish ? "To" : "الي",
-                              style:
-                                  const TextStyle(color: Colors.white, fontSize: 20),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 20),
                               textAlign: LanguageClass.isEnglish
                                   ? TextAlign.left
                                   : TextAlign.right,
@@ -520,59 +529,6 @@ class _MyHomeState extends State<MyHome> {
                                     _toCityName = result['_toCityName'];
                                   });
                                 }
-
-                                // Widget _toStationsListWidget = ListView.builder(
-                                //   scrollDirection: Axis.vertical,
-                                //   shrinkWrap: true,
-                                //   itemCount: _toStations!.length,
-                                //   itemBuilder: (context, index) {
-                                //     String cityName = _toStations![index].cityName;
-                                //     List<StationList> stationsList = _toStations![index].stationList;
-                                //     return stationsList.isNotEmpty ? Material(
-                                //       child: ExpansionTile(
-                                //         backgroundColor: Colors.grey[200],
-                                //         iconColor: AppColors.primaryColor,
-                                //         title: Text(
-                                //           cityName,
-                                //           style: const TextStyle(
-                                //               color: Colors.black,
-                                //               fontWeight: FontWeight.bold
-                                //           ),
-                                //         ),
-                                //         children: [
-                                //           ListView.builder(
-                                //             shrinkWrap: true,
-                                //             physics: const ClampingScrollPhysics(),//NeverScrollableScrollPhysics(),
-                                //             scrollDirection: Axis.vertical,
-                                //             itemCount: stationsList.length,
-                                //             itemBuilder: (context, index) {
-                                //               return ListTile(
-                                //                 onTap: () {
-                                //                   setState(() {
-                                //                     _toStationId = stationsList[index].stationId;
-                                //                     _toCityName = stationsList[index].stationName;
-                                //                   });
-                                //                   Navigator.of(context).pop();
-                                //                 },
-                                //                 leading: IconButton(
-                                //                   icon: Icon(
-                                //                     Icons.arrow_forward_ios_outlined,
-                                //                     size: 20,
-                                //                     color: AppColors.primaryColor,
-                                //                   ),
-                                //                   onPressed: () {
-                                //                   },
-                                //                 ),
-                                //                 title: Text(stationsList[index].stationName),
-                                //               );
-                                //             },
-                                //           ),
-                                //         ],
-                                //       ),
-                                //     ) : const SizedBox(width: 60,);
-                                //   },
-                                // );
-                                // Constants.showListDialog(context, 'To Stations', _toStationsListWidget);
                               } else if (state is GetToStationsListErrorState) {
                                 Constants.hideLoadingDialog(context);
                                 Constants.showDefaultSnackBar(
@@ -686,7 +642,9 @@ class _MyHomeState extends State<MyHome> {
                                           ),
                                         ],
                                       ),
-                                tripTypeId == "2" ? const Spacer() : const SizedBox(),
+                                tripTypeId == "2"
+                                    ? const Spacer()
+                                    : const SizedBox(),
                                 tripTypeId == "2"
                                     ? Column(
                                         children: [
@@ -744,7 +702,8 @@ class _MyHomeState extends State<MyHome> {
                                     [];
                                 Constants.hideLoadingDialog(context);
 
-                                if (state.timesTripsResponse.message!.tripList!.isNotEmpty) {
+                                if (state.timesTripsResponse.message!.tripList!
+                                    .isNotEmpty) {
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
                                     return TimesScreen(

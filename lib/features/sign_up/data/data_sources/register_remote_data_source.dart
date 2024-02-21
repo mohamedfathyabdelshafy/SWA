@@ -1,12 +1,8 @@
 import 'dart:convert';
-import 'dart:math';
+
+import 'package:http/http.dart' as http;
 import 'package:swa/core/api/api_consumer.dart';
 import 'package:swa/core/api/end_points.dart';
-import 'package:http/http.dart' as http;
-
-import 'package:swa/features/sign_in/data/models/user_model.dart';
-import 'package:swa/features/sign_in/data/models/user_response_model.dart';
-import 'package:swa/features/sign_in/domain/use_cases/login.dart';
 import 'package:swa/features/sign_up/data/models/message_response_model.dart';
 import 'package:swa/features/sign_up/domain/use_cases/register.dart';
 
@@ -31,7 +27,9 @@ class RegisterRemoteDataSourceImpl implements RegisterRemoteDataSource {
       "Mobile": params.mobile,
       "Email": params.email,
       "Password": params.password,
-      "UserType": params.userType
+      "UserType": params.userType,
+      "CountryID": params.countryId,
+      "CityID": params.cityId,
     });
     request.headers.addAll(headers);
 

@@ -5,7 +5,7 @@ import 'package:swa/core/usecases/usecase.dart';
 import 'package:swa/features/sign_up/domain/entities/message_response.dart';
 import 'package:swa/features/sign_up/domain/repositories/register_repository.dart';
 
-class RegisterUser implements UseCase<MessageResponse, UserRegisterParams>{
+class RegisterUser implements UseCase<MessageResponse, UserRegisterParams> {
   final RegisterRepository registerRepository;
   RegisterUser({required this.registerRepository});
 
@@ -15,14 +15,24 @@ class RegisterUser implements UseCase<MessageResponse, UserRegisterParams>{
   }
 }
 
-class UserRegisterParams extends Equatable{
+class UserRegisterParams extends Equatable {
   final String name;
   final String mobile;
   final String email;
   final String password;
   final String userType;
-  const UserRegisterParams({required this.name, required this.mobile, required this.email, required this.password, required this.userType});
+  final int countryId;
+  final int cityId;
+  const UserRegisterParams(
+      {required this.name,
+      required this.mobile,
+      required this.email,
+      required this.password,
+      required this.userType,
+      required this.countryId,
+      required this.cityId});
 
   @override
-  List<Object?> get props => [name, mobile, email, password, userType];
+  List<Object?> get props =>
+      [name, mobile, email, password, userType, cityId, countryId];
 }

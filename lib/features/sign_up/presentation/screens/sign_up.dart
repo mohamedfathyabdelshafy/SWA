@@ -7,18 +7,44 @@ import 'package:swa/core/utils/hex_color.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/widgets/customized_field.dart';
+import 'package:swa/features/app_info/domain/entities/city.dart';
+import 'package:swa/features/app_info/domain/entities/country.dart';
+import 'package:swa/features/app_info/presentation/cubit/get_available_countries/get_available_countries_cubit.dart';
+import 'package:swa/features/app_info/presentation/cubit/get_available_country_cities_cubit/get_available_country_cities_cubit.dart';
 import 'package:swa/features/sign_up/domain/use_cases/register.dart';
 import 'package:swa/features/sign_up/presentation/cubit/register_cubit.dart';
+import 'package:swa/features/sign_up/presentation/screens/component/city_drop_down_button.dart';
+import 'package:swa/features/sign_up/presentation/screens/component/country_drop_down_button.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
+  SignUpScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   final TextEditingController nameController = TextEditingController();
+
   final TextEditingController mobileController = TextEditingController();
+
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+
   final TextEditingController rePasswordController = TextEditingController();
 
-  SignUpScreen({Key? key}) : super(key: key);
+  Country? _selectedCountry;
+  City? _selectedCity;
+
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<GetAvailableCountriesCubit>(context)
+        .getAvailableCountries();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +52,7 @@ class SignUpScreen extends StatelessWidget {
       backgroundColor: AppColors.white,
       body: Directionality(
         textDirection:
-        LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
         child: Stack(
           children: [
             Image.asset(
@@ -58,7 +84,7 @@ class SignUpScreen extends StatelessWidget {
                         children: [
                           SizedBox(height: context.height * 0.01),
                           Text(
-                            LanguageClass.isEnglish?"Sign Up":"انشاء حساب",
+                            LanguageClass.isEnglish ? "Sign Up" : "انشاء حساب",
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -67,19 +93,23 @@ class SignUpScreen extends StatelessWidget {
                           ),
                           // SizedBox(height:context.height *0.03 ,),
                           SizedBox(
-                            height: context.height * 0.25,
+                            height: context.height * 0.08,
                           ),
                           CustomizedField(
                             colorText: AppColors.greyLight,
                             controller: nameController,
                             validator: (validator) {
                               if (validator == null || validator.isEmpty) {
-                                return LanguageClass.isEnglish?"Enter name":"ادخل الاسم";
+                                return LanguageClass.isEnglish
+                                    ? "Enter name"
+                                    : "ادخل الاسم";
                               }
                               return null;
                             },
                             color: Colors.black.withOpacity(0.5),
-                            labelText: LanguageClass.isEnglish?"Full Name":"الاسم كامل",
+                            labelText: LanguageClass.isEnglish
+                                ? "Full Name"
+                                : "الاسم كامل",
                           ),
                           CustomizedField(
                             colorText: AppColors.greyLight,
@@ -88,25 +118,33 @@ class SignUpScreen extends StatelessWidget {
                             maxLength: 11,
                             validator: (validator) {
                               if (validator == null || validator.isEmpty) {
-                                return LanguageClass.isEnglish?"Enter phone":"ادخل الموبيل";
+                                return LanguageClass.isEnglish
+                                    ? "Enter phone"
+                                    : "ادخل الموبيل";
                               }
                               return null;
                             },
                             color: Colors.black.withOpacity(0.5),
-                            labelText: LanguageClass.isEnglish?"Phone Number":"ادخل الرقم",
+                            labelText: LanguageClass.isEnglish
+                                ? "Phone Number"
+                                : "ادخل الرقم",
                           ),
                           CustomizedField(
                             colorText: AppColors.greyLight,
                             controller: emailController,
                             validator: (validator) {
                               if (validator == null || validator.isEmpty) {
-                                return LanguageClass.isEnglish?"Enter Email":"ادخل الايميل";
+                                return LanguageClass.isEnglish
+                                    ? "Enter Email"
+                                    : "ادخل الايميل";
                               }
                               String pattern =
                                   r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
                               RegExp regex = RegExp(pattern);
                               if (!regex.hasMatch(validator)) {
-                                return LanguageClass.isEnglish?"Your Email is invalid":"هذا الايميل غير صالح";
+                                return LanguageClass.isEnglish
+                                    ? "Your Email is invalid"
+                                    : "هذا الايميل غير صالح";
                               } else {
                                 return null;
                               }
@@ -114,6 +152,51 @@ class SignUpScreen extends StatelessWidget {
                             color: Colors.black.withOpacity(0.5),
                             labelText: "Email",
                           ),
+                          BlocBuilder<GetAvailableCountriesCubit,
+                                  GetAvailableCountriesCubitState>(
+                              builder: (context, state) {
+                            return state is GetAvailableCountriesLoadedState
+                                ? CountryDropDownTextFieldButton(
+                                    countries: state.countries,
+                                    hintText:
+                                        _selectedCountry?.countryName != null
+                                            ? _selectedCountry!.countryName
+                                            : LanguageClass.isEnglish
+                                                ? "Enter your country"
+                                                : "ادخل الدولة",
+                                    onSelect: (country) {
+                                      setState(() {
+                                        _selectedCountry = country;
+                                        _selectedCity = null;
+                                      });
+                                      BlocProvider.of<
+                                                  GetAvailableCountryCitiesCubit>(
+                                              context)
+                                          .getAvailableCountries(
+                                              _selectedCountry!.countryId);
+                                    },
+                                  )
+                                : const SizedBox(height: 0.0, width: 0.0);
+                          }),
+                          BlocBuilder<GetAvailableCountryCitiesCubit,
+                                  GetAvailableCountryCitiesCubitState>(
+                              builder: (context, state) {
+                            return state is GetAvailableCountryCitiesLoadedState
+                                ? CityDropDownTextFieldButton(
+                                    countries: state.countryCities,
+                                    hintText: _selectedCity?.cityName != null
+                                        ? _selectedCity!.cityName
+                                        : LanguageClass.isEnglish
+                                            ? "Enter your city"
+                                            : "ادخل المدينة",
+                                    onSelect: (city) {
+                                      setState(() {
+                                        _selectedCity = city;
+                                      });
+                                    },
+                                  )
+                                : const SizedBox(height: 0.0, width: 0.0);
+                          }),
                           CustomizedField(
                             isPassword: true,
                             obscureText: true,
@@ -121,12 +204,16 @@ class SignUpScreen extends StatelessWidget {
                             controller: passwordController,
                             validator: (validator) {
                               if (validator == null || validator.isEmpty) {
-                                return LanguageClass.isEnglish?"Enter your password":"ادخل كلمة المرور";
+                                return LanguageClass.isEnglish
+                                    ? "Enter your password"
+                                    : "ادخل كلمة المرور";
                               }
                               return null;
                             },
                             color: Colors.black.withOpacity(0.5),
-                            labelText: LanguageClass.isEnglish?"Enter Your Password(min 8 characters)":"ادخل كلمة المرور لا تقل عن 8 احرف",
+                            labelText: LanguageClass.isEnglish
+                                ? "Enter Your Password(min 8 characters)"
+                                : "ادخل كلمة المرور لا تقل عن 8 احرف",
                           ),
                           CustomizedField(
                             isPassword: true,
@@ -135,30 +222,33 @@ class SignUpScreen extends StatelessWidget {
                             controller: rePasswordController,
                             validator: (validator) {
                               if (validator == null || validator.isEmpty) {
-                                return LanguageClass.isEnglish? "Confirm your password":"اعادة ادخال كلمة المرور";
+                                return LanguageClass.isEnglish
+                                    ? "Confirm your password"
+                                    : "اعادة ادخال كلمة المرور";
                               }
                               return null;
                             },
                             color: Colors.black.withOpacity(0.5),
-                            labelText: LanguageClass.isEnglish?"Confirm Your Password":"موافقة كلمة المرور",
+                            labelText: LanguageClass.isEnglish
+                                ? "Confirm Your Password"
+                                : "موافقة كلمة المرور",
                           ),
                           BlocListener(
                             bloc: BlocProvider.of<RegisterCubit>(context),
                             listener: (context, state) {
                               if (state is RegisterLoadingState) {
                                 Constants.showLoadingDialog(context);
-                              }
-                              else if (state is UserRegisterLoadedState) {
+                              } else if (state is UserRegisterLoadedState) {
                                 Constants.hideLoadingDialog(context);
                                 Constants.showDefaultSnackBar(
                                     context: context,
-                                    text:
-                                        state.messageResponse.massage.toString(),color: Colors.green);
+                                    text: state.messageResponse.massage
+                                        .toString(),
+                                    color: Colors.green);
 
                                 Navigator.pushReplacementNamed(
                                     context, Routes.signInRoute);
-                              }
-                              else if (state is RegisterErrorState) {
+                              } else if (state is RegisterErrorState) {
                                 Constants.hideLoadingDialog(context);
                                 Constants.showDefaultSnackBar(
                                     context: context,
@@ -168,13 +258,30 @@ class SignUpScreen extends StatelessWidget {
                             child: InkWell(
                               onTap: () {
                                 if (formKey.currentState!.validate()) {
+                                  if (_selectedCountry == null) {
+                                    Constants.hideLoadingDialog(context);
+                                    Constants.showDefaultSnackBar(
+                                        context: context,
+                                        text: "Select your country..");
+                                    return;
+                                  }
+                                  if (_selectedCity == null) {
+                                    Constants.hideLoadingDialog(context);
+                                    Constants.showDefaultSnackBar(
+                                        context: context,
+                                        text: "Select your city..");
+                                    return;
+                                  }
                                   BlocProvider.of<RegisterCubit>(context)
                                       .registerUser(UserRegisterParams(
-                                          name: nameController.text,
-                                          mobile: mobileController.text,
-                                          email: emailController.text,
-                                          password: passwordController.text,
-                                          userType: "Customer"));
+                                    name: nameController.text,
+                                    mobile: mobileController.text,
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                    userType: "Customer",
+                                    countryId: _selectedCountry!.countryId,
+                                    cityId: _selectedCity!.cityId,
+                                  ));
                                 }
                               },
                               child: Container(
@@ -186,7 +293,9 @@ class SignUpScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(10)),
                                 child: Center(
                                   child: Text(
-                                    LanguageClass.isEnglish?"Sign Up":"انشاء الحساب",
+                                    LanguageClass.isEnglish
+                                        ? "Sign Up"
+                                        : "انشاء الحساب",
                                     style: TextStyle(
                                         color: AppColors.white,
                                         fontWeight: FontWeight.bold,

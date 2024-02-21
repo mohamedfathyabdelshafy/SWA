@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swa/core/utils/app_strings.dart';
 import 'package:swa/core/utils/constants.dart';
-import 'package:swa/features/change_password/presentation/cubit/new_password_cubit.dart';
-import 'package:swa/features/change_password/presentation/screens/new_password.dart';
+import 'package:swa/features/app_info/presentation/cubit/get_available_countries/get_available_countries_cubit.dart';
+import 'package:swa/features/app_info/presentation/cubit/get_available_country_cities_cubit/get_available_country_cities_cubit.dart';
 import 'package:swa/features/done_login/presentation/pages/done_login.dart';
 import 'package:swa/features/forgot_password/presentation/cubit/forgot_password_cubit.dart';
 import 'package:swa/features/forgot_password/presentation/screens/forgot_password.dart';
@@ -70,21 +70,27 @@ class AppRoute {
         return MaterialPageRoute(builder: (context) => const DoneLoginScreen());
       case Routes.signUpRoute:
         return MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (context) => sl<RegisterCubit>(),
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => sl<RegisterCubit>()),
+              BlocProvider<GetAvailableCountriesCubit>(
+                  create: (context) => sl<GetAvailableCountriesCubit>()),
+              BlocProvider<GetAvailableCountryCitiesCubit>(
+                  create: (context) => sl<GetAvailableCountryCitiesCubit>()),
+            ],
             child: SignUpScreen(),
           ),
         );
       case Routes.newPasswordRoute:
-        // return MaterialPageRoute(
-        //     builder: (context) => MultiBlocProvider(providers: [
-        //           BlocProvider<LoginCubit>(
-        //             create: (context) => sl<LoginCubit>(),
-        //           ),
-        //           BlocProvider<NewPasswordCubit>(
-        //             create: (context) => sl<NewPasswordCubit>(),
-        //           ),
-        //         ], child: const NewPasswordScreen()));
+      // return MaterialPageRoute(
+      //     builder: (context) => MultiBlocProvider(providers: [
+      //           BlocProvider<LoginCubit>(
+      //             create: (context) => sl<LoginCubit>(),
+      //           ),
+      //           BlocProvider<NewPasswordCubit>(
+      //             create: (context) => sl<NewPasswordCubit>(),
+      //           ),
+      //         ], child: const NewPasswordScreen()));
       case Routes.forgotPasswordRoute:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
