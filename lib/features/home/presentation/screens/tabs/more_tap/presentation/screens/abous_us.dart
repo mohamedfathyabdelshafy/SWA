@@ -40,16 +40,7 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
       textDirection:
           LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
-          backgroundColor: Colors.black,
-          appBar: AppBar(
-            centerTitle: true,
-            backgroundColor: AppColors.blackColor,
-            title: Text(
-              LanguageClass.isEnglish ? "ABOUT US" : "معلومات عنا",
-              style: TextStyle(
-                  color: AppColors.white, fontSize: 30, fontFamily: "bold"),
-            ),
-          ),
+          backgroundColor: Colors.white,
           body: BlocBuilder(
             bloc: BlocProvider.of<MoreCubit>(context),
             builder: (context, state) {
@@ -60,47 +51,74 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                   ),
                 );
               } else {
-                return Column(
-                  children: [
-                    Stack(
-                      children: [
-                        SizedBox(
-                          width: double
-                              .infinity, // Take the full width of the screen
-                          child: Image.asset(
-                            "assets/images/oranaa.agency_85935_luxor_landscape_and_sky_with_ballons_on_sky_e8ecb03c-2e93-4118-abed-39447bd055c9.png",
-                            fit: BoxFit.cover,
-                            // Maintain the aspect ratio
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: sizeHeight * 0.08,
+                      ),
+                      Container(
+                        alignment: LanguageClass.isEnglish
+                            ? Alignment.topLeft
+                            : Alignment.topRight,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Icon(
+                            Icons.arrow_back_rounded,
+                            color: AppColors.primaryColor,
+                            size: 35,
                           ),
                         ),
-                        Column(
-                          children: [
-                            SizedBox(
-                              height: sizeHeight * 0.1,
-                            ),
-                            Center(
-                              child: SvgPicture.asset(
-                                "assets/images/Swa Logo.svg",
-                                height: sizeHeight * 0.06,
-                                width: sizeWidth * 0.06,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 15),
-                      child: Text(
-                        aboutUsResponse.message?.description ?? "",
-                        style: TextStyle(
-                            color: AppColors.white,
-                            fontSize: 20,
-                            fontFamily: "regular"),
                       ),
-                    ),
-                  ],
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          LanguageClass.isEnglish ? "About" : "معلومات عنا",
+                          style: TextStyle(
+                              color: AppColors.blackColor,
+                              fontSize: 38,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: "roman"),
+                        ),
+                      ),
+                      SizedBox(
+                        height: sizeHeight * 0.01,
+                      ),
+                      Container(
+                        height: 90,
+                        alignment: Alignment.center,
+                        child: Image.asset('assets/images/applogo.png'),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: ListView(
+                            shrinkWrap: true,
+                            children: [
+                              Text(
+                                aboutUsResponse.message?.description ?? "",
+                                style: TextStyle(
+                                    color: AppColors.blackColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: "roman"),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 );
               }
             },

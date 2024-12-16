@@ -1,14 +1,16 @@
 class PersonalInfoResponse {
   PersonalInfoResponse({
-      this.status, 
-      this.personalInfo,
-      this.balance, 
-      this.object, 
-      this.obj,});
+    this.status,
+    this.personalInfo,
+    this.balance,
+    this.object,
+    this.obj,
+  });
 
   PersonalInfoResponse.fromJson(dynamic json) {
     status = json['status'];
-    personalInfo = json['message'] != null ? PersonalInfo.fromJson(json['message']) : null;
+    personalInfo =
+        json['message'] != null ? PersonalInfo.fromJson(json['message']) : null;
     balance = json['balance'];
     object = json['Object'];
     obj = json['Obj'];
@@ -30,20 +32,24 @@ class PersonalInfoResponse {
     map['Obj'] = obj;
     return map;
   }
-
 }
 
 class PersonalInfo {
-  PersonalInfo({
-      this.customerID, 
-      this.name, 
-      this.mobile, 
-      this.mobile2, 
-      this.email, 
-      this.userLogInID, 
-      this.phone, 
-      this.address, 
-      this.walletBalance,});
+  PersonalInfo(
+      {this.customerID,
+      this.name,
+      this.mobile,
+      this.mobile2,
+      this.email,
+      this.userLogInID,
+      this.phone,
+      this.address,
+      this.walletBalance,
+      this.cityId,
+      this.countryId,
+      this.cityName,
+      this.countryName,
+      this.customerCode});
 
   PersonalInfo.fromJson(dynamic json) {
     customerID = json['CustomerID'];
@@ -55,6 +61,11 @@ class PersonalInfo {
     phone = json['Phone'];
     address = json['Address'];
     walletBalance = json['WalletBalance'];
+    customerCode = json["CustomerCode"];
+    countryId = json["CountryID"];
+    cityId = json["CityID"];
+    countryName = json["CountryName"];
+    cityName = json["CityName"];
   }
   int? customerID;
   String? name;
@@ -65,6 +76,12 @@ class PersonalInfo {
   dynamic phone;
   dynamic address;
   dynamic walletBalance;
+  dynamic customerCode;
+
+  int? countryId;
+  int? cityId;
+  String? countryName;
+  String? cityName;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -79,5 +96,4 @@ class PersonalInfo {
     map['WalletBalance'] = walletBalance;
     return map;
   }
-
 }

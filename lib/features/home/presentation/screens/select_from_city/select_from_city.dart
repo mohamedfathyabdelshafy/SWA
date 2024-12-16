@@ -9,131 +9,190 @@ import '../../../domain/entities/cities_stations.dart';
 import '../../../domain/entities/station_list.dart';
 
 class SelectFromCity extends StatefulWidget {
-   SelectFromCity({super.key,required this.fromStations});
-List fromStations;
+  SelectFromCity({super.key, required this.fromStations});
+  List fromStations;
 
   @override
   State<SelectFromCity> createState() => _SelectFromCityState();
 }
 
 class _SelectFromCityState extends State<SelectFromCity> {
-
   List<CitiesStations>? _toStations;
 
   ///To be changed by selected station id
   int? _fromStationId;
 
-  String _fromCityName = LanguageClass.isEnglish?"Select":"تحديد";
-int isTabbed = 0;
+  String _fromCityName = LanguageClass.isEnglish ? "Select" : "تحديد";
+  int isTabbed = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: iconBack(context),
         elevation: 0,
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Directionality(
-          textDirection: LanguageClass.isEnglish?TextDirection.ltr:TextDirection.rtl,
+          textDirection:
+              LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-               LanguageClass.isEnglish? "Select City":"حدد المدينة",
-                style: TextStyle(color: AppColors.white,fontSize: 34,fontFamily:"black"),
+                LanguageClass.isEnglish ? "Select City" : "حدد المدينة",
+                style: TextStyle(
+                    color: AppColors.blackColor,
+                    fontSize: 38,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: "roman"),
               ),
-              SizedBox(height: 15,),
+              SizedBox(
+                height: 15,
+              ),
               Expanded(
                 child: ListView.separated(
-                  separatorBuilder: (context,index){
-                    return Divider(color: Color(0xff707070),);
+                  separatorBuilder: (context, index) {
+                    return Divider(
+                      color: Color(0xffE0E0E0),
+                    );
                   },
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount: widget.fromStations.length,
                   itemBuilder: (context, index) {
                     String cityName = widget.fromStations[index].cityName;
-                    List<StationList> stationsList = widget.fromStations[index].stationList;
-                    return stationsList.isNotEmpty ? Material(
-                      child: Container(
-                        color: Colors.black,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            InkWell(
-                              onTap: (){
-                                setState(() {
-                                  isTabbed = index;
-                                  print("istabbed$isTabbed");
-                                });
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(20),
-                                height: MediaQuery.of(context).size.height *0.080,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color:isTabbed == index? AppColors.primaryColor:Colors.black,
-
-                                ),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      cityName,
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        fontSize: 18
+                    List<StationList> stationsList =
+                        widget.fromStations[index].stationList;
+                    return stationsList.isNotEmpty
+                        ? Material(
+                            child: Container(
+                              color: Colors.white,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        isTabbed == index
+                                            ? isTabbed = -1
+                                            : isTabbed = index;
+                                        print("istabbed$isTabbed");
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.all(0),
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: Colors.white,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            cityName,
+                                            style: TextStyle(
+                                                color: isTabbed == index
+                                                    ? AppColors.primaryColor
+                                                    : Color(0xffA3A3A3),
+                                                fontFamily: 'roman',
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    Spacer(),
-                                    Icon(Icons.keyboard_arrow_down,color: AppColors.primaryColor,size: 20,)
-                                  ],
-                                ),
+                                  ),
+                                  isTabbed == index
+                                      ? Container(
+                                          color: Colors.white,
+                                          child: ListView.separated(
+                                            separatorBuilder: (context, index) {
+                                              return Container();
+                                            },
+                                            shrinkWrap: true,
+                                            physics:
+                                                const ClampingScrollPhysics(), //NeverScrollableScrollPhysics(),
+                                            scrollDirection: Axis.vertical,
+                                            itemCount: stationsList.length,
+                                            itemBuilder: (context, index) {
+                                              return ListTile(
+                                                dense: true,
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                        vertical: 0,
+                                                        horizontal: 10),
+                                                onTap: () {
+                                                  setState(() {
+                                                    _fromStationId =
+                                                        stationsList[index]
+                                                            .stationId;
+                                                    _fromCityName =
+                                                        stationsList[index]
+                                                            .stationName;
+                                                  });
+                                                  Navigator.of(context).pop({
+                                                    '_fromStationId':
+                                                        _fromStationId,
+                                                    '_fromCityName':
+                                                        _fromCityName,
+                                                  });
+                                                },
+                                                title: Row(
+                                                  children: [
+                                                    Flexible(
+                                                      fit: FlexFit.loose,
+                                                      child: Container(
+                                                        padding:
+                                                            EdgeInsets.all(10),
+                                                        decoration: BoxDecoration(
+                                                            boxShadow: [
+                                                              BoxShadow(
+                                                                  color: AppColors
+                                                                      .lightBink,
+                                                                  offset:
+                                                                      Offset(
+                                                                          0, 0),
+                                                                  spreadRadius:
+                                                                      0,
+                                                                  blurRadius:
+                                                                      15)
+                                                            ],
+                                                            color: AppColors
+                                                                .primaryColor,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        12)),
+                                                        child: Text(
+                                                          stationsList[index]
+                                                              .stationName,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontFamily:
+                                                                  "roman",
+                                                              fontSize: 18),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        )
+                                      : SizedBox(),
+                                ],
                               ),
                             ),
-                            isTabbed == index?Container(
-                              color: Colors.black,
-                              child: ListView.separated(
-                                separatorBuilder: (context,index){
-                                  return Divider(color: Color(0xff707070),);
-                                },
-                                shrinkWrap: true,
-                                physics: const ClampingScrollPhysics(),//NeverScrollableScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                itemCount: stationsList.length,
-                                itemBuilder: (context, index) {
-                                  return ListTile(
-                                    onTap: (){
-                                      setState(() {
-                                        _fromStationId = stationsList[index].stationId;
-                                        _fromCityName = stationsList[index].stationName;
-                                      });
-                                      Navigator.of(context).pop({
-                                        '_fromStationId': _fromStationId,
-                                        '_fromCityName': _fromCityName,
-                                      });
-
-                                    },
-
-                                    title: Text(stationsList[index].stationName,
-                                      style: TextStyle(
-                                          color: AppColors.primaryColor,
-                                          fontFamily: "regular",
-                                          fontSize: 18
-                                      ),),
-                                  );
-                                },
-                              ),
-                            ):SizedBox(),
-                          ],
-                        ),
-                      ),
-                    ) : const SizedBox(width: 60,);
+                          )
+                        : const SizedBox(
+                            width: 60,
+                          );
                   },
                 ),
               ),

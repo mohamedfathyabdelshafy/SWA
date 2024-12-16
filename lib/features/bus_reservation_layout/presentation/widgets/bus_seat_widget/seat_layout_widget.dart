@@ -23,10 +23,11 @@ class SeatLayoutWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.65,
-      child: Column(children: [
+      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         ...List<int>.generate(stateModel.rows, (rowI) => rowI)
             .map<Row>(
               (rowI) => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ...List<int>.generate(stateModel.cols, (colI) => colI)
                       .map<SeatWidget>((colI) {

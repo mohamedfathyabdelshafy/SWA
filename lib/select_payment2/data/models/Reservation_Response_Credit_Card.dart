@@ -3,35 +3,30 @@ class ReservationResponseCreditCard {
     this.status,
     this.message,
     this.balance,
+    this.errormessage,
     this.object,
     this.obj,
   });
 
   ReservationResponseCreditCard.fromJson(dynamic json) {
     status = json['status'];
-    message =
-        json['message'] != null ? Message.fromJson(json['message']) : null;
+
+    if (status == 'success') {
+      message =
+          json['message'] != null ? Message.fromJson(json['message']) : null;
+    } else {
+      errormessage = json['message'];
+    }
     balance = json['balance'];
     object = json['Object'];
     obj = json['Obj'];
   }
   String? status;
   Message? message;
+  String? errormessage;
   dynamic balance;
   dynamic object;
   dynamic obj;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['status'] = status;
-    if (message != null) {
-      map['message'] = message?.toJson();
-    }
-    map['balance'] = balance;
-    map['Object'] = object;
-    map['Obj'] = obj;
-    return map;
-  }
 }
 
 class Message {

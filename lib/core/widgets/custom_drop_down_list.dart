@@ -22,16 +22,16 @@ class _CustomDropDownListState extends State<CustomDropDownList> {
         width: double.infinity,
         // color: Colors.red,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            const SizedBox(height: 20),
             DropdownButton<String>(
               hint: Text(
                 widget.hint!,
                 style: TextStyle(
-                  color: AppColors.white,
-                ),
+                    color: AppColors.blackColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500),
               ),
               isExpanded: true,
               iconSize: 20,
@@ -39,23 +39,24 @@ class _CustomDropDownListState extends State<CustomDropDownList> {
               iconEnabledColor: AppColors.primaryColor,
               iconDisabledColor: AppColors.primaryColor,
               value: selectedValue,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18
-              ),
+              style: const TextStyle(color: Colors.white, fontSize: 18),
               onChanged: (String? newValue) {
                 setState(() {
                   selectedValue = newValue!;
                 });
               },
               items: widget.items?.map((value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value,style: TextStyle(
-                    color: AppColors.white,
-                  ),),
-                );
-              }).toList()??[],
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: TextStyle(
+                          color: AppColors.blackColor,
+                        ),
+                      ),
+                    );
+                  }).toList() ??
+                  [],
             ),
           ],
         ),

@@ -8,6 +8,7 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/widgets/Timer_widget.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
 import '../PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
@@ -42,9 +43,9 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
         barrierDismissible: true,
         context: context,
         confirmBtnText: "ok",
-        title: isError ? 'error' : 'success',
+        title: isError ? 'error' : '',
         lottieAsset:
-            isError ? 'assets/json/error.json' : 'assets/json/done.json',
+            isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
         type: isError ? CoolAlertType.error : CoolAlertType.success,
         loopAnimation: false,
         backgroundColor: isError ? Colors.red : Colors.white,
@@ -61,56 +62,62 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
     double sizeHeight = context.height;
 
     return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.black,
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back,
-            color: AppColors.primaryColor,
-            size: 34,
-          ),
-        ),
-        actions: [  IconButton(onPressed: (){
-          Navigator.pushNamed(context, Routes.initialRoute
-          );
-        }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
-        ],
-      ),
+      backgroundColor: Colors.white,
       body: Directionality(
-        textDirection: LanguageClass.isEnglish?TextDirection.ltr:TextDirection.rtl,
-
+        textDirection:
+            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
         child: Padding(
-          padding: const EdgeInsets.all(30),
+          padding: const EdgeInsets.symmetric(horizontal: 30),
           child: SingleChildScrollView(
+            padding: EdgeInsets.zero,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  height: sizeHeight * 0.08,
+                ),
                 Row(
-                  children:  [
-                    Text(
-                      LanguageClass.isEnglish?'Fawry':'فوري',
-                      style: TextStyle(
-                          color: Colors.white, fontSize: 30, fontFamily: "bold"),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      alignment: LanguageClass.isEnglish
+                          ? Alignment.topLeft
+                          : Alignment.topRight,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          color: AppColors.primaryColor,
+                          size: 35,
+                        ),
+                      ),
                     ),
+                    Timerwidget()
                   ],
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 10,
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    LanguageClass.isEnglish ? 'Fawry' : 'فوري',
+                    style: TextStyle(
+                        color: AppColors.blackColor,
+                        fontSize: 38,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "roman"),
+                  ),
                 ),
                 SizedBox(
+                  height: sizeHeight * 0.01,
+                ),
+
+                SizedBox(
                   height: MediaQuery.of(context).size.height * 0.7,
-                  // BlocListener(
-                  //   bloc: BlocProvider.of<LoginCubit>(context),
-                  //   listener: (context, state) {
-                  //     if (state is UserLoginLoadedState) {
-                  //       _user = state.userResponse.user;
-                  //     }
-                  //   },
                   child: Form(
                     key: formKey,
                     child: Column(
@@ -128,38 +135,48 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                             const SizedBox(
                               width: 5,
                             ),
-                            Container(
-                                height: sizeHeight * 0.07,
-                                width: 300,
-                                //    padding:
-                                //    const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
-                                decoration: const BoxDecoration(
-                                    // color: Colors.red
-                                    // border: Border.all(
-                                    //   color: AppColors.blue,
-                                    //   width: 0.3,
-                                    // ),
+                            Expanded(
+                              child: Container(
 
-                                    ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Text(
-                                      LanguageClass.isEnglish?"amount":"القيمة",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontFamily: "bold",
-                                          color: AppColors.greyLight),
-                                    ),
-                                    Text(
-                                      price.toString(),
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontFamily: "bold",
-                                          color: AppColors.primaryColor),
-                                    )
-                                  ],
-                                )),
+                                  //    padding:
+                                  //    const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
+                                  decoration: const BoxDecoration(
+                                      // color: Colors.red
+                                      // border: Border.all(
+                                      //   color: AppColors.blue,
+                                      //   width: 0.3,
+                                      // ),
+
+                                      ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(
+                                        LanguageClass.isEnglish
+                                            ? "amount"
+                                            : "القيمة",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontFamily: "bold",
+                                            color: AppColors.greyLight),
+                                      ),
+                                      Text(
+                                        Routes.resrvedtrips.length == 2
+                                            ? (Routes.resrvedtrips[0].price! +
+                                                    Routes
+                                                        .resrvedtrips[1].price!)
+                                                .toString()
+                                            : Routes.resrvedtrips[0].price
+                                                .toString(),
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontFamily: "bold",
+                                            color: AppColors.primaryColor),
+                                      )
+                                    ],
+                                  )),
+                            ),
                           ],
                         ),
                         const Spacer(),
@@ -171,106 +188,132 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                             } else if (state is LoadedElectronicWalletState) {
                               Constants.hideLoadingDialog(context);
                               // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
-                              showDoneConfirmationDialog(context, isError: false,
-                                  callback: () {
-                                Navigator.pop(context);
-                                Navigator.pushNamed(context, Routes.initialRoute);
-                              },
-                                  body: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                           Text(
-                                            LanguageClass.isEnglish?'Amount: ':"القيمة",
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          Text(price.toString())
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Text(
-                                            'Reference Number: ',
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                InkWell(
-                                                  onTap: () async {
-                                                    Constants.showDefaultSnackBar(
-                                                        context: context,
-                                                        text:
-                                                            'Reference Number copied');
-                                                    await Clipboard.setData(
-                                                        ClipboardData(
-                                                            text: state
-                                                                .reservationResponseElectronicModel
-                                                                .message!
-                                                                .referenceNumber
-                                                                .toString()));
-                                                  },
-                                                  child: Container(
-                                                      width: 15,
-                                                      height: 15,
-                                                      child: Icon(
-                                                        Icons.copy_outlined,
-                                                        size: 14,
-                                                      )),
+                              showDoneConfirmationDialog(
+                                context,
+                                isError: false,
+                                callback: () {
+                                  Navigator.pop(context);
+                                  Navigator.pushNamedAndRemoveUntil(context,
+                                      Routes.initialRoute, (route) => false);
+                                },
+                                body: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          LanguageClass.isEnglish
+                                              ? 'Amount: '
+                                              : "القيمة",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        Text(
+                                          Routes.resrvedtrips.length == 2
+                                              ? (Routes.resrvedtrips[0].price! +
+                                                      Routes.resrvedtrips[1]
+                                                          .price!)
+                                                  .toString()
+                                              : Routes.resrvedtrips[0].price
+                                                  .toString(),
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text(
+                                          'Reference Number: ',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        Expanded(
+                                          child: Row(
+                                            children: [
+                                              InkWell(
+                                                onTap: () async {
+                                                  Constants.showDefaultSnackBar(
+                                                      context: context,
+                                                      text:
+                                                          'Reference Number copied');
+                                                  await Clipboard.setData(
+                                                      ClipboardData(
+                                                          text: state
+                                                              .reservationResponseElectronicModel
+                                                              .message!
+                                                              .referenceNumber
+                                                              .toString()));
+                                                },
+                                                child: Container(
+                                                    width: 15,
+                                                    height: 15,
+                                                    child: Icon(
+                                                      Icons.copy_outlined,
+                                                      size: 14,
+                                                    )),
+                                              ),
+                                              Expanded(
+                                                child: Text(
+                                                  state
+                                                      .reservationResponseElectronicModel
+                                                      .message!
+                                                      .referenceNumber
+                                                      .toString(),
+                                                  textAlign: TextAlign.end,
                                                 ),
-                                                Expanded(
-                                                  child: Text(
-                                                    state
-                                                        .reservationResponseElectronicModel
-                                                        .message!
-                                                        .referenceNumber
-                                                        .toString(),
-                                                    textAlign: TextAlign.end,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  message:
-                                      "You will get a notification by applying your wallet \n In order to agree to pay");
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                  ],
+                                ),
+                                message: state
+                                    .reservationResponseElectronicModel.text
+                                    .toString(),
+                              );
                             } else if (state is ErrorElectronicWalletState) {
                               Constants.hideLoadingDialog(context);
                               Constants.showDefaultSnackBar(
-                                  context: context, text: state.error.toString());
+                                  context: context,
+                                  text: state.error.toString());
+                            } else if (state is ErrorMyWalletState) {
+                              Constants.hideLoadingDialog(context);
+                              Constants.showDefaultSnackBar(
+                                  context: context,
+                                  text: state.error.toString());
                             }
                           },
                           child: InkWell(
                             onTap: () {
                               final tripOneId = CacheHelper.getDataToSharedPref(
                                   key: 'tripOneId');
-                              final tripRoundId = CacheHelper.getDataToSharedPref(
-                                  key: 'tripRoundId');
+                              final tripRoundId =
+                                  CacheHelper.getDataToSharedPref(
+                                      key: 'tripRoundId');
                               final selectedDayTo =
                                   CacheHelper.getDataToSharedPref(
                                       key: 'selectedDayTo');
                               final selectedDayFrom =
                                   CacheHelper.getDataToSharedPref(
                                       key: 'selectedDayFrom');
-                              final toStationId = CacheHelper.getDataToSharedPref(
-                                  key: 'toStationId');
+                              final toStationId =
+                                  CacheHelper.getDataToSharedPref(
+                                      key: 'toStationId');
                               final fromStationId =
                                   CacheHelper.getDataToSharedPref(
                                       key: 'fromStationId');
@@ -297,24 +340,18 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                               // if(_user != null && formKey.currentState!.validate()) {
                               BlocProvider.of<ReservationCubit>(context)
                                   .addReservationFawry(
-                                      seatIdsOneTrip: seatIdsOneTrip,
-                                      custId: widget.user.customerId!,
-                                      oneTripID: tripOneId.toString(),
-                                      paymentMethodID: 2,
-                                      paymentTypeID: 68,
-                                      seatIdsRoundTrip: seatIdsRoundTrip ?? [],
-                                      roundTripID: tripRoundId ?? "",
-                                      amount: price.toStringAsFixed(2).toString(),
-                                      fromStationID: fromStationId,
-                                      toStationId: toStationId,
-                                      tripDateGo: selectedDayFrom,
-                                      tripDateBack: selectedDayTo);
+                                custId: widget.user.customerId!,
+                                paymentMethodID: 2,
+                                paymentTypeID: 68,
+                              );
                               //}
                             },
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 30),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
                               child: Constants.customButton(
-                                text:  LanguageClass.isEnglish?"Charge":"شحن",
+                                text:
+                                    LanguageClass.isEnglish ? "Charge" : "شحن",
                                 color: AppColors.primaryColor,
                               ),
                             ),

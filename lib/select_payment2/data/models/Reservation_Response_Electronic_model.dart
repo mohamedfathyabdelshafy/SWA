@@ -1,23 +1,34 @@
 class ReservationResponseElectronicModel {
   ReservationResponseElectronicModel({
-      this.status, 
-      this.message, 
-      this.balance, 
-      this.object, 
-      this.obj,});
+    this.status,
+    this.message,
+    this.errormessage,
+    this.balance,
+    this.object,
+    this.obj,
+  });
 
   ReservationResponseElectronicModel.fromJson(dynamic json) {
     status = json['status'];
-    message = json['message'] != null ? Message.fromJson(json['message']) : null;
+
+    if (json['status'] == 'success') {
+      message = Message.fromJson(json['message']);
+    } else {
+      errormessage = json['message'];
+    }
+
     balance = json['balance'];
     object = json['Object'];
     obj = json['Obj'];
+    text = json['Text'] ?? '';
   }
   String? status;
   Message? message;
+  String? errormessage;
   dynamic balance;
   dynamic object;
   dynamic obj;
+  dynamic text;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -28,20 +39,21 @@ class ReservationResponseElectronicModel {
     map['balance'] = balance;
     map['Object'] = object;
     map['Obj'] = obj;
+    map['Text'] = text;
     return map;
   }
-
 }
 
 class Message {
   Message({
-      this.type, 
-      this.referenceNumber, 
-      this.merchantRefNumber, 
-      this.orderStatus, 
-      this.statusCode, 
-      this.statusDescription, 
-      this.nextAction,});
+    this.type,
+    this.referenceNumber,
+    this.merchantRefNumber,
+    this.orderStatus,
+    this.statusCode,
+    this.statusDescription,
+    this.nextAction,
+  });
 
   Message.fromJson(dynamic json) {
     type = json['type'];
@@ -71,5 +83,4 @@ class Message {
     map['nextAction'] = nextAction;
     return map;
   }
-
 }

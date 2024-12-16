@@ -65,7 +65,7 @@ android {
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 
@@ -76,4 +76,9 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+
+      implementation 'com.google.firebase:firebase-analytics'
+    implementation platform('com.google.firebase:firebase-bom:32.1.1')
+}
+apply plugin: 'com.google.gms.google-services'

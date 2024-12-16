@@ -19,13 +19,21 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>2.0.8</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>We will need to make use of your Camera.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We will need to make use of your location to present relevant information about offers around you.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>We will need to make use of your location to present relevant information about offers around you.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We will need to make use of your location to present relevant information about offers around you.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

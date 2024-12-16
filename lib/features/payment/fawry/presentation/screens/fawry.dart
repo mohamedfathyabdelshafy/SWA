@@ -44,26 +44,7 @@ class _FawryScreenState extends State<FawryScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.black,
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back,
-            color: AppColors.primaryColor,
-            size: 34,
-          ),
-        ),
-        actions: [  IconButton(onPressed: (){
-          Navigator.pushNamed(context, Routes.initialRoute
-          );
-        }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
-        ],
-      ),
+      backgroundColor: Colors.white,
       body: Directionality(
         textDirection:
             LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
@@ -74,22 +55,43 @@ class _FawryScreenState extends State<FawryScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      LanguageClass.isEnglish ? 'Fawry' : "فوري",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontFamily: "bold"),
+                SizedBox(
+                  height: sizeHeight * 0.08,
+                ),
+                Container(
+                  alignment: LanguageClass.isEnglish
+                      ? Alignment.topLeft
+                      : Alignment.topRight,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Icon(
+                      Icons.arrow_back_rounded,
+                      color: AppColors.primaryColor,
+                      size: 35,
                     ),
-                  ],
+                  ),
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 10,
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    LanguageClass.isEnglish ? 'Fawry' : 'فوري',
+                    style: TextStyle(
+                        color: AppColors.blackColor,
+                        fontSize: 38,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "roman"),
+                  ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.7,
+                  height: sizeHeight * 0.01,
+                ),
+
+                Expanded(
                   child: BlocListener(
                     bloc: BlocProvider.of<LoginCubit>(context),
                     listener: (context, state) {
@@ -114,59 +116,64 @@ class _FawryScreenState extends State<FawryScreen> {
                               const SizedBox(
                                 width: 5,
                               ),
-                              Container(
-                                height: 40,
-                                width: 300,
-                                //    padding:
-                                //    const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
-                                decoration: const BoxDecoration(
-                                    // color: Colors.red
-                                    // border: Border.all(
-                                    //   color: AppColors.blue,
-                                    //   width: 0.3,
-                                    // ),
+                              Expanded(
+                                child: Container(
+                                  height: 40,
+                                  //    padding:
+                                  //    const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
+                                  decoration: const BoxDecoration(
+                                      // color: Colors.red
+                                      // border: Border.all(
+                                      //   color: AppColors.blue,
+                                      //   width: 0.3,
+                                      // ),
 
+                                      ),
+                                  child: TextFormField(
+                                    autofocus: true,
+                                    style: fontStyle(
+                                        color: AppColors.blackColor,
+                                        fontSize: 16),
+                                    cursorColor: AppColors.blue,
+                                    controller: amountController,
+                                    inputFormatters: [NumericTextFormatter()],
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: LanguageClass.isEnglish
+                                          ? 'Amount'
+                                          : "القيمة",
+                                      errorStyle: fontStyle(
+                                        color: Colors.red,
+                                        fontSize: 11,
+                                      ),
+                                      hintStyle: fontStyle(
+                                          color: AppColors.greyLight,
+                                          fontSize: 15,
+                                          fontFamily: FontFamily.bold),
+                                      labelStyle: fontStyle(
+                                          color: AppColors.grey,
+                                          fontSize: 12,
+                                          fontFamily: FontFamily.bold),
                                     ),
-                                child: TextFormField(
-                                  autofocus: true,
-                                  style: fontStyle(
-                                      color: AppColors.white, fontSize: 16),
-                                  cursorColor: AppColors.blue,
-                                  controller: amountController,
-                                  inputFormatters: [NumericTextFormatter()],
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: LanguageClass.isEnglish
-                                        ? 'Amount'
-                                        : "القيمة",
-                                    errorStyle: fontStyle(
-                                      color: Colors.red,
-                                      fontSize: 11,
-                                    ),
-                                    hintStyle: fontStyle(
-                                        color: AppColors.greyLight,
-                                        fontSize: 15,
-                                        fontFamily: FontFamily.bold),
-                                    labelStyle: fontStyle(
-                                        color: AppColors.grey,
-                                        fontSize: 12,
-                                        fontFamily: FontFamily.bold),
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return LanguageClass.isEnglish
+                                            ? 'This Field is Required'
+                                            : "هذا مطلوب";
+                                      } else {
+                                        return null;
+                                      }
+                                    },
                                   ),
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return LanguageClass.isEnglish
-                                          ? 'This Field is Required'
-                                          : "هذا مطلوب";
-                                    } else {
-                                      return null;
-                                    }
-                                  },
                                 ),
                               ),
                             ],
                           ),
-                          const Spacer(),
+
+                          SizedBox(
+                            height: 50,
+                          ),
                           BlocListener(
                             bloc: BlocProvider.of<ReservationCubit>(context),
                             listener: (context, state) {
@@ -178,8 +185,8 @@ class _FawryScreenState extends State<FawryScreen> {
                                 showDoneConfirmationDialog(context,
                                     isError: false, callback: () {
                                   Navigator.pop(context);
-                                  Navigator.pushNamed(
-                                      context, Routes.initialRoute);
+                                  Navigator.pushNamedAndRemoveUntil(context,
+                                      Routes.initialRoute, (route) => false);
                                 },
                                     body: Column(
                                       mainAxisSize: MainAxisSize.min,
@@ -257,9 +264,9 @@ class _FawryScreenState extends State<FawryScreen> {
                                         )
                                       ],
                                     ),
-                                    message: LanguageClass.isEnglish
-                                        ? "You will get a notification by applying your wallet \n In order to agree to pay"
-                                        : "سيصلك إشعار بتطبيق محفظتك \n من أجل الموافقة على الدفع ");
+                                    message: state
+                                        .reservationResponseElectronicModel
+                                        .text!);
                               } else if (state is ErrorElectronicWalletState) {
                                 Constants.hideLoadingDialog(context);
                                 Constants.showDefaultSnackBar(
@@ -286,6 +293,7 @@ class _FawryScreenState extends State<FawryScreen> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 30),
                                 child: Constants.customButton(
+                                  borderradias: 41,
                                   text: LanguageClass.isEnglish
                                       ? "Chargee"
                                       : "شحن",
@@ -318,9 +326,9 @@ class _FawryScreenState extends State<FawryScreen> {
         barrierDismissible: true,
         context: context,
         confirmBtnText: "ok",
-        title: isError ? 'error' : 'success',
+        title: isError ? 'error' : '',
         lottieAsset:
-            isError ? 'assets/json/error.json' : 'assets/json/done.json',
+            isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
         type: isError ? CoolAlertType.error : CoolAlertType.success,
         loopAnimation: false,
         backgroundColor: isError ? Colors.red : Colors.white,

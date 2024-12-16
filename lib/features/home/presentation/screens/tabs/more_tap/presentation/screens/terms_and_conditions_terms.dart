@@ -18,19 +18,18 @@ class TermsConditionsScreen extends StatefulWidget {
 
 class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
   MoreRepo moreRepo = MoreRepo(sl());
-  TermsAndConditionModel  termsAndConditionModel  =TermsAndConditionModel();
+  TermsAndConditionModel termsAndConditionModel = TermsAndConditionModel();
   @override
   void initState() {
     get();
     super.initState();
   }
-  void get()async{
+
+  void get() async {
     await BlocProvider.of<MoreCubit>(context).getTermsAndCondition();
 
     termsAndConditionModel = (await moreRepo.getTermsCondition())!;
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
@@ -38,25 +37,18 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
     double sizeHeight = context.height;
     double sizeWidth = context.width;
     return Directionality(
-      textDirection: LanguageClass.isEnglish?TextDirection.ltr:TextDirection.rtl,
+      textDirection:
+          LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(backgroundColor: AppColors.primaryColor,
-          centerTitle: true,
-          title: Text(
-            LanguageClass.isEnglish? "Terms And Conditions":"الأحكام والشروط",
-            style: TextStyle(
-                color: AppColors.white,
-                fontSize: 25,
-                fontFamily: "bold"),
-          ),
-        ),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
         body: BlocBuilder(
           bloc: BlocProvider.of<MoreCubit>(context),
-          builder: (context,state)  {
-            if(state is LoadingTermsAndCondition){
-              return  Center(
-                child: CircularProgressIndicator(color: AppColors.primaryColor,),
+          builder: (context, state) {
+            if (state is LoadingTermsAndCondition) {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryColor,
+                ),
               );
             }
             return Padding(
@@ -65,53 +57,83 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(
-                    height: sizeHeight * 0.05,
+                    height: sizeHeight * 0.08,
+                  ),
+                  Container(
+                    alignment: LanguageClass.isEnglish
+                        ? Alignment.topLeft
+                        : Alignment.topRight,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        color: AppColors.primaryColor,
+                        size: 35,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      LanguageClass.isEnglish
+                          ? "Terms And Conditions"
+                          : "الأحكام والشروط",
+                      style: TextStyle(
+                          color: AppColors.blackColor,
+                          fontSize: 38,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: "roman"),
+                    ),
                   ),
                   SizedBox(
-                    height: sizeHeight * 0.8,
+                    height: sizeHeight * 0.01,
+                  ),
+                  Expanded(
                     child: ListView.separated(
+                        padding: EdgeInsets.zero,
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 25),
+                                horizontal: 15, vertical: 10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
                                   termsAndConditionModel.message![index].title!,
                                   style: TextStyle(
-                                      color: AppColors.white,
+                                      color: AppColors.blackColor,
                                       fontFamily: "bold",
-                                      fontSize: 20
-                                  ),
+                                      fontSize: 20),
                                 ),
                                 Text(
-                                  termsAndConditionModel.message![index].description!,
+                                  termsAndConditionModel
+                                      .message![index].description!,
                                   style: TextStyle(
-                                      color: AppColors.white,
+                                      color: AppColors.blackColor,
                                       fontFamily: "regular",
-                                      fontSize: 15
-                                  ),
+                                      fontSize: 15),
                                 ),
-
                               ],
                             ),
                           );
                         },
                         separatorBuilder: (context, index) {
                           return Divider(
-                            color: AppColors.white,
+                            color: AppColors.greyLight,
                             thickness: 1,
                           );
                         },
-                        itemCount: termsAndConditionModel.message?.length??0),
+                        itemCount: termsAndConditionModel.message?.length ?? 0),
                   )
                 ],
               ),
             );
-
           },
-
         ),
       ),
     );

@@ -21,7 +21,7 @@ class RegisterRemoteDataSourceImpl implements RegisterRemoteDataSource {
       'APIKey': '546548dwfdfsd3f4sdfhgat52'
     };
     var request = http.Request(
-        'POST', Uri.parse('${EndPoints.baseUrl}/Customer/AddCustomer'));
+        'POST', Uri.parse('${EndPoints.baseUrl}Customer/AddCustomer'));
     request.body = json.encode({
       "Name": params.name,
       "Mobile": params.mobile,

@@ -25,16 +25,17 @@ class SeatLayoutStateModel extends Equatable {
 
   @override
   List<Object?> get props => [
-    rows,
-    cols,
-    seatSvgSize,
-    currentSeats,
-    pathUnSelectedSeat,
-    pathSelectedSeat,
-    pathSoldSeat,
-    pathDisabledSeat,
-  ];
+        rows,
+        cols,
+        seatSvgSize,
+        currentSeats,
+        pathUnSelectedSeat,
+        pathSelectedSeat,
+        pathSoldSeat,
+        pathDisabledSeat,
+      ];
 }
+
 /// current state of a seat
 enum SeatState {
   /// current user selected this seat
@@ -43,6 +44,7 @@ enum SeatState {
   /// current user has not selected this seat yet,
   /// but it is available to be booked
   available,
+  booked,
 
   /// this seat is already sold to other user
   sold,

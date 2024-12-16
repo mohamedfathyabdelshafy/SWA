@@ -8,6 +8,7 @@ import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/widgets/customized_field.dart';
 import 'package:swa/features/change_password/presentation/cubit/new_password_cubit.dart';
+import 'package:swa/features/change_password/presentation/screens/code_screen.dart';
 import 'package:swa/features/change_password/presentation/screens/new_password.dart';
 import 'package:swa/features/forgot_password/domain/use_cases/forgot_password.dart';
 import 'package:swa/features/forgot_password/presentation/cubit/forgot_password_cubit.dart';
@@ -35,108 +36,149 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double sizeHeight = context.height;
+    double sizeWidth = context.width;
     return Scaffold(
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor: AppColors.white,
       body: Directionality(
         textDirection:
-        LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 35),
+            padding: EdgeInsets.symmetric(horizontal: sizeWidth / 10),
             child: Form(
               key: formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox( height: context.height * 0.05),
-                  Row(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Icon(
-                          Icons.arrow_back,
-                          color: AppColors.white,
-                          size: 35,
-                        ),
+                  SizedBox(height: context.height * 0.05),
+                  Container(
+                    alignment: LanguageClass.isEnglish
+                        ? Alignment.topLeft
+                        : Alignment.topRight,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        color: AppColors.primaryColor,
+                        size: 35,
                       ),
-                    ],
-                  ),
-                  SizedBox( height: context.height * 0.15),
-                  SvgPicture.asset("assets/images/Swa Logo.svg"),
-                  SizedBox( height: context.height * 0.09),
-                  Text(
-                    LanguageClass.isEnglish?"Forgot Password":"نسيت كلمه المرور",
-                    style: TextStyle(
-                        color: AppColors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 21
                     ),
                   ),
-                  const SizedBox(height: 20,),
+                  SizedBox(height: context.height * 0.08),
+                  Image.asset("assets/images/applogo.png"),
+                  SizedBox(height: context.height * 0.1),
                   Text(
-                    LanguageClass.isEnglish?"Please enter your retested email to send the custom Regain code via email":
-                    " الرجاء إدخال بريدك الإلكتروني المعاد اختباره لإرسال الرمز المخصص عبر البريد الإلكتروني ",
+                    LanguageClass.isEnglish
+                        ? "Forgot Password"
+                        : "نسيت كلمه المرور",
                     style: TextStyle(
-                      color: AppColors.white,
-                      fontSize: 17,
+                        color: AppColors.blackColor,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'bold',
+                        fontSize: 24),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    LanguageClass.isEnglish
+                        ? "Please enter your retested email to send the custom Regain code via email"
+                        : " الرجاء إدخال بريدك الإلكتروني المعاد اختباره لإرسال الرمز المخصص عبر البريد الإلكتروني ",
+                    style: TextStyle(
+                      color: Color(0xffA3A3A3),
+                      fontSize: 13,
+                      fontFamily: 'regular',
                       fontWeight: FontWeight.normal,
                     ),
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 40,
+                  ),
                   CustomizedField(
-                    colorText: Colors.white,
-                    color :AppColors.lightBink,hintText: LanguageClass.isEnglish?"Enter Email":"ادخل الايميل",
+                    colorText: Colors.black,
+                    borderradias: 33,
+                    isPassword: false,
+                    obscureText: false,
+                    color: Color(0xffDDDDDD),
+                    hintText: LanguageClass.isEnglish
+                        ? "Enter Email"
+                        : "ادخل الايميل",
                     controller: emailController,
-                    validator: (validator){
-                      if(validator == null || validator.isEmpty) {
-                        return LanguageClass.isEnglish? "Enter Email":"ادخل الايميل";
+                    validator: (validator) {
+                      if (validator == null || validator.isEmpty) {
+                        return LanguageClass.isEnglish
+                            ? "Enter Email"
+                            : "ادخل الايميل";
                       }
-                      String pattern = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+                      String pattern =
+                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
                       RegExp regex = RegExp(pattern);
                       if (!regex.hasMatch(validator)) {
-                        return LanguageClass.isEnglish?"Your Email is invalid":"ايميلك غير صحيح";
+                        return LanguageClass.isEnglish
+                            ? "Your Email is invalid"
+                            : "ايميلك غير صحيح";
                       } else {
                         return null;
                       }
                     },
                   ),
+                  SizedBox(
+                    height: 25,
+                  ),
                   BlocListener(
                     bloc: BlocProvider.of<ForgotPasswordCubit>(context),
                     listener: (context, state) {
-                      if(state is ForgotPasswordLoadingState){
+                      if (state is ForgotPasswordLoadingState) {
                         Constants.showLoadingDialog(context);
-                      }else if (state is ForgotPasswordLoadedState) {
+                      } else if (state is ForgotPasswordLoadedState) {
                         Constants.hideLoadingDialog(context);
-                        if(state.messageResponse.status == 'failed') {
-                          Constants.showDefaultSnackBar(context: context, text: state.messageResponse.massage.toString());
-                        }else {
-                          Navigator.push(context,MaterialPageRoute(
-                        builder: (context) => MultiBlocProvider(providers: [
-                          BlocProvider<LoginCubit>(
-                            create: (context) => sl<LoginCubit>(),
-                          ),
-                          BlocProvider<NewPasswordCubit>(
-                            create: (context) => sl<NewPasswordCubit>(),
-                          ),
-                        ], child:  NewPasswordScreen(
-                            userId: state.messageResponse.massage!,
-                        ))));
+                        if (state.messageResponse.status == 'failed') {
+                          Constants.showDefaultSnackBar(
+                              context: context,
+                              text: state.messageResponse.massage.toString());
+                        } else if (state.messageResponse.status == 'success') {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MultiBlocProvider(
+                                          providers: [
+                                            BlocProvider<LoginCubit>(
+                                              create: (context) =>
+                                                  sl<LoginCubit>(),
+                                            ),
+                                            BlocProvider<NewPasswordCubit>(
+                                              create: (context) =>
+                                                  sl<NewPasswordCubit>(),
+                                            ),
+                                          ],
+                                          child: CodeScreen(
+                                            userId:
+                                                state.messageResponse.massage!,
+                                          ))));
                         }
-                      }else if (state is ForgotPasswordErrorState) {
+                      } else if (state is ForgotPasswordErrorState) {
                         Constants.hideLoadingDialog(context);
-                        Constants.showDefaultSnackBar(context: context, text: state.error.toString());
+                        Constants.showDefaultSnackBar(
+                            context: context, text: state.error.toString());
                       }
                     },
                     child: InkWell(
-                        onTap: (){
-                          if(formKey.currentState!.validate()) {
-                            BlocProvider.of<ForgotPasswordCubit>(context).forgotPassword(ForgotPasswordParams(email: emailController.text));
+                        onTap: () {
+                          if (formKey.currentState!.validate()) {
+                            BlocProvider.of<ForgotPasswordCubit>(context)
+                                .forgotPassword(ForgotPasswordParams(
+                                    email: emailController.text));
                           }
                         },
-                        child: Constants.customButton(text:LanguageClass.isEnglish? "Send Code":"ارسال الكود")
-                    ),
+                        child: Constants.customButton(
+                            borderradias: 41,
+                            color: AppColors.primaryColor,
+                            text: LanguageClass.isEnglish
+                                ? "Send Code"
+                                : "ارسال الكود")),
                   )
                 ],
               ),

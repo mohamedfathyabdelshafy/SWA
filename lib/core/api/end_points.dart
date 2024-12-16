@@ -13,6 +13,9 @@ class EndPoints {
   static const String timesTrips = '${baseUrl}Trip/GetTrips';
   static const String busLayout = '${baseUrl}Trip/GetSingleTripDetails';
   static const String reservation = '${baseUrl}Reservation/AddReservation';
+  static const String paypackage = '${baseUrl}Package/SubscribePackage';
+  static const String checkpromocode = '${baseUrl}Reservation/CheckPromoCode';
+
   static const String personalEdit = '${baseUrl}Customer/EditCustomer';
   static const String chargecard = '${baseUrl}Fawry/CardPayment';
   static const String aboutUs = '${baseUrl}Settings/AboutUs';
@@ -25,4 +28,8 @@ class EndPoints {
   static const String FAQ = '${baseUrl}Settings/FAQ';
   static const String privacy = '${baseUrl}Settings/PrivacyPolicyList';
   static const String sendEmail = '${baseUrl}Settings/SubmitContactUsMessage';
+
+  static const String huaweiVersion = "1.0.9";
+  static const String playStoreVersion = "1.0.9";
+  static const String iosVersion = "2.0.8";
 }

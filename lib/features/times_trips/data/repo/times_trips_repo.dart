@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
+
+import 'package:swa/core/local_cache_helper.dart';
 
 import '../../../../core/api/api_consumer.dart';
 import '../../../../core/api/end_points.dart';
@@ -14,16 +17,24 @@ class TimesTripsRepo {
       required String ToStationID,
       required String DateGo,
       required String DateBack}) async {
+    var countryid = CacheHelper.getDataToSharedPref(
+      key: 'countryid',
+    );
     var response = await apiConsumer.post(EndPoints.timesTrips,
         body: jsonEncode({
           "TripType": TripType,
-          "FromStationID": FromStationID,
-          "ToStationID": ToStationID,
+          "FromStationIDGo": FromStationID,
+          "ToStationIDGo": ToStationID,
+          "FromStationIDBack": ToStationID,
+          "ToStationIDBack": FromStationID,
           "DateGo": DateGo,
-          "DateBack": DateBack
+          "DateBack": DateBack,
+          "countryID": countryid
         }));
     var decodedResponse = json.decode(response.body);
-    print("responsedd $decodedResponse");
+    print("request ${response.request.body}");
+
+    log("responsedd $decodedResponse");
 
     if (decodedResponse['status'] != "failed") {
       TimesTripsResponse timesTripsResponse =

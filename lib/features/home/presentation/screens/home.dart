@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
@@ -50,76 +52,99 @@ class _HomeScreenState extends State<HomeScreen> {
       const MoreScreen(),
     ];
     return BlocListener(
-      bloc: BlocProvider.of<LoginCubit>(context),
-      listener: (context, state) {
-        if (state is UserLoginLoadedState) {
-          _user = state.userResponse.user;
-        }
-      },
-      child: Scaffold(
-        body: screens[currentIndex],
-        bottomNavigationBar: SizedBox(
-          height: sizeHeight * 0.14,
-          child: Theme(
-            data: Theme.of(context).copyWith(
-              canvasColor: AppColors.darkPurple,
-            ),
-            child: BottomNavigationBar(
-              onTap: (index) {
-                  setState(() {
-                    currentIndex = index;
-                  });
-              },
-              currentIndex: currentIndex,
-              showUnselectedLabels: true,
-              showSelectedLabels: true,
-              selectedItemColor: AppColors
-                  .primaryColor, // Color for the selected tab icon and label
-              unselectedItemColor: AppColors.darkGrey,
-              selectedLabelStyle: TextStyle(color: AppColors.primaryColor),
-              items: [
-                BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      "assets/images/Icon awesome-bus.svg",
-                      color: currentIndex == 0
-                          ? AppColors.primaryColor
-                          : AppColors.darkGrey,
+        bloc: BlocProvider.of<LoginCubit>(context),
+        listener: (context, state) {
+          if (state is UserLoginLoadedState) {
+            _user = state.userResponse.user;
+
+            Routes.customerid = state.userResponse.user!.customerId;
+          }
+        },
+        child: Scaffold(
+          body: screens[currentIndex],
+          bottomNavigationBar: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(41),
+                    color: Color(0xffFF5D4B)),
+                child: SalomonBottomBar(
+                  currentIndex: currentIndex,
+                  selectedColorOpacity: 1,
+                  unselectedItemColor: Colors.white,
+                  onTap: (i) => setState(() => currentIndex = i),
+                  items: [
+                    /// Home
+                    SalomonBottomBarItem(
+                      icon: SvgPicture.asset(
+                        "assets/images/Icon awesome-bus.svg",
+                        color: currentIndex == 0
+                            ? AppColors.primaryColor
+                            : AppColors.white,
+                      ),
+                      title: Text(
+                        LanguageClass.isEnglish ? "Book Now" : "حجز الان",
+                        style: TextStyle(color: Colors.black, fontSize: 13),
+                      ),
+                      selectedColor: Colors.white,
                     ),
-                    label:  LanguageClass.isEnglish?"Book Now":"حجز الان"),
-                BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      "assets/images/Icon awesome-ticket-alt.svg",
-                      color: currentIndex == 1
-                          ? AppColors.primaryColor
-                          : AppColors.darkGrey,
+
+                    /// Likes
+                    SalomonBottomBarItem(
+                      icon: SvgPicture.asset(
+                        "assets/images/Icon awesome-ticket-alt.svg",
+                        color: currentIndex == 1
+                            ? AppColors.primaryColor
+                            : AppColors.white,
+                      ),
+                      title: Text(
+                        LanguageClass.isEnglish ? "Ticket" : "تذكرة",
+                        style: TextStyle(color: Colors.black, fontSize: 13),
+                      ),
+                      selectedColor: Colors.white,
                     ),
-                    label:  LanguageClass.isEnglish?"Ticket":"تذكرة"),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.wallet,
-                    color: currentIndex == 2
-                        ? AppColors.primaryColor
-                        : AppColors.darkGrey,
-                  ),
-                  label:  LanguageClass.isEnglish?"My wallet":"محفظتي",
-                ),
-                BottomNavigationBarItem(
-                    icon: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset(
+
+                    /// Search
+                    SalomonBottomBarItem(
+                      icon: Icon(
+                        Icons.wallet,
+                        color: currentIndex == 2
+                            ? AppColors.primaryColor
+                            : AppColors.white,
+                      ),
+                      title: Text(
+                        LanguageClass.isEnglish ? "My wallet" : "محفظتي",
+                        style: TextStyle(color: Colors.black, fontSize: 13),
+                      ),
+                      selectedColor: Colors.white,
+                    ),
+
+                    /// Profile
+                    SalomonBottomBarItem(
+                      icon: SvgPicture.asset(
                         "assets/images/Group 175.svg",
                         color: currentIndex == 3
                             ? AppColors.primaryColor
-                            : AppColors.darkGrey,
+                            : AppColors.white,
                       ),
+                      title: Text(
+                        LanguageClass.isEnglish ? "More" : "المزيد",
+                        style: TextStyle(color: Colors.black, fontSize: 13),
+                      ),
+                      selectedColor: Colors.white,
                     ),
-                    label:  LanguageClass.isEnglish?"More":"المزيد"),
-              ],
-            ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              )
+            ],
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   void showMyDatePicker(DateTime selectedDay) async {

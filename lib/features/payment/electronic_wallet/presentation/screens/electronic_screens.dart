@@ -6,6 +6,7 @@ import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
+import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/payment/electronic_wallet/domain/use_cases/ewallet_use_case.dart';
 import 'package:swa/features/payment/electronic_wallet/presentation/cubit/eWallet_cubit.dart';
@@ -36,54 +37,56 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double sizeHeight = context.height;
+
     return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.black,
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back,
-            color: AppColors.primaryColor,
-            size: 34,
-          ),
-        ),
-        actions: [  IconButton(onPressed: (){
-          Navigator.pushNamed(context, Routes.initialRoute
-          );
-        }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
-        ],
-      ),
+      backgroundColor: Colors.white,
       body: Directionality(
         textDirection:
             LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(25),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
               children: [
-                const SizedBox(
-                  height: 5,
+                SizedBox(
+                  height: sizeHeight * 0.08,
                 ),
-                Row(
-                  children: [
-                    Text(
-                      LanguageClass.isEnglish
-                          ? 'Electronic wallet'
-                          : 'محفظة الاكترونية',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontFamily: "bold"),
+                Container(
+                  alignment: LanguageClass.isEnglish
+                      ? Alignment.topLeft
+                      : Alignment.topRight,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Icon(
+                      Icons.arrow_back_rounded,
+                      color: AppColors.primaryColor,
+                      size: 35,
                     ),
-                  ],
+                  ),
                 ),
                 const SizedBox(
-                  height: 50,
+                  height: 10,
                 ),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    LanguageClass.isEnglish
+                        ? 'Electronic wallet'
+                        : 'محفظة الاكترونية',
+                    style: TextStyle(
+                        color: AppColors.blackColor,
+                        fontSize: 38,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "roman"),
+                  ),
+                ),
+                SizedBox(
+                  height: sizeHeight * 0.01,
+                ),
+
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.65,
                   child: BlocListener(
@@ -105,59 +108,61 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                 decoration: const BoxDecoration(
                                     color: Color(0xff47A9EB)),
                               ),
-                              Container(
-                                height: 70,
-                                width: 300,
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 2, horizontal: 18),
-                                decoration: const BoxDecoration(
-                                    //color: AppColors.yellow
-                                    // border: Border.all(
-                                    //   color: AppColors.blue,
-                                    //   width: 0.3,
-                                    // ),
-                                    // borderRadius:
-                                    // const BorderRadius.all(Radius.circular(10))
+                              Expanded(
+                                child: Container(
+                                  height: 70,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 2, horizontal: 18),
+                                  decoration: const BoxDecoration(
+                                      //color: AppColors.yellow
+                                      // border: Border.all(
+                                      //   color: AppColors.blue,
+                                      //   width: 0.3,
+                                      // ),
+                                      // borderRadius:
+                                      // const BorderRadius.all(Radius.circular(10))
+                                      ),
+                                  child: TextFormField(
+                                    maxLength: 11,
+                                    autofocus: true,
+                                    style: fontStyle(
+                                        color: AppColors.blackColor,
+                                        fontSize: 16),
+                                    cursorColor: AppColors.blue,
+                                    controller: phoneController,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp("[0-9]"))
+                                    ],
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: LanguageClass.isEnglish
+                                          ? 'Phone Number'
+                                          : 'رقم التليفون',
+                                      errorStyle: fontStyle(
+                                        color: Colors.red,
+                                        fontSize: 11,
+                                      ),
+                                      hintStyle: fontStyle(
+                                          color: AppColors.greyLight,
+                                          fontSize: 15,
+                                          fontFamily: FontFamily.bold),
+                                      labelStyle: fontStyle(
+                                          color: AppColors.grey,
+                                          fontSize: 12,
+                                          fontFamily: FontFamily.bold),
                                     ),
-                                child: TextFormField(
-                                  maxLength: 11,
-                                  autofocus: true,
-                                  style: fontStyle(
-                                      color: AppColors.white, fontSize: 16),
-                                  cursorColor: AppColors.blue,
-                                  controller: phoneController,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp("[0-9]"))
-                                  ],
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: LanguageClass.isEnglish
-                                        ? 'Phone Number'
-                                        : 'رقم التليفون',
-                                    errorStyle: fontStyle(
-                                      color: Colors.red,
-                                      fontSize: 11,
-                                    ),
-                                    hintStyle: fontStyle(
-                                        color: AppColors.greyLight,
-                                        fontSize: 15,
-                                        fontFamily: FontFamily.bold),
-                                    labelStyle: fontStyle(
-                                        color: AppColors.grey,
-                                        fontSize: 12,
-                                        fontFamily: FontFamily.bold),
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return LanguageClass.isEnglish
+                                            ? 'This Field is Required'
+                                            : 'هذا مطلوب';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
                                   ),
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return LanguageClass.isEnglish
-                                          ? 'This Field is Required'
-                                          : 'هذا مطلوب';
-                                    } else {
-                                      return null;
-                                    }
-                                  },
                                 ),
                               ),
                             ],
@@ -173,55 +178,59 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                 decoration: const BoxDecoration(
                                     color: Color(0xffD865A4)),
                               ),
-                              Container(
-                                height: 50,
-                                width: 300,
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 2, horizontal: 18),
-                                decoration: const BoxDecoration(
-                                    // border: Border.all(
-                                    //   color: AppColors.blue,
-                                    //   width: 0.3,
-                                    // ),
-                                    // borderRadius:
-                                    // const BorderRadius.all(Radius.circular(10))
+                              Expanded(
+                                child: Container(
+                                  height: 50,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 2, horizontal: 18),
+                                  decoration: const BoxDecoration(
+                                      // border: Border.all(
+                                      //   color: AppColors.blue,
+                                      //   width: 0.3,
+                                      // ),
+                                      // borderRadius:
+                                      // const BorderRadius.all(Radius.circular(10))
+                                      ),
+                                  child: TextFormField(
+                                    autofocus: true,
+                                    style: fontStyle(
+                                        color: AppColors.blackColor,
+                                        fontSize: 16),
+                                    cursorColor: AppColors.blue,
+                                    controller: amountController,
+                                    inputFormatters: [NumericTextFormatter()],
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'Amount',
+                                      errorStyle: fontStyle(
+                                        color: Colors.red,
+                                        fontSize: 11,
+                                      ),
+                                      hintStyle: fontStyle(
+                                          color: AppColors.greyLight,
+                                          fontSize: 15,
+                                          fontFamily: FontFamily.bold),
+                                      labelStyle: fontStyle(
+                                          color: AppColors.grey,
+                                          fontSize: 12,
+                                          fontFamily: FontFamily.bold),
                                     ),
-                                child: TextFormField(
-                                  autofocus: true,
-                                  style: fontStyle(
-                                      color: AppColors.white, fontSize: 16),
-                                  cursorColor: AppColors.blue,
-                                  controller: amountController,
-                                  inputFormatters: [NumericTextFormatter()],
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: 'Amount',
-                                    errorStyle: fontStyle(
-                                      color: Colors.red,
-                                      fontSize: 11,
-                                    ),
-                                    hintStyle: fontStyle(
-                                        color: AppColors.greyLight,
-                                        fontSize: 15,
-                                        fontFamily: FontFamily.bold),
-                                    labelStyle: fontStyle(
-                                        color: AppColors.grey,
-                                        fontSize: 12,
-                                        fontFamily: FontFamily.bold),
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'This Field is Required';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
                                   ),
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'This Field is Required';
-                                    } else {
-                                      return null;
-                                    }
-                                  },
                                 ),
                               ),
                             ],
                           ),
-                          const Spacer(),
+                          SizedBox(
+                            height: 50,
+                          ),
                           BlocListener(
                             bloc: BlocProvider.of<EWalletCubit>(context),
                             listener: (context, state) {
@@ -231,90 +240,92 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                 Constants.hideLoadingDialog(context);
 
                                 // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
-                                showDoneConfirmationDialog(context,
-                                    isError: false, callback: () {
-                                  Navigator.pop(context);
-                                  Navigator.pushNamed(
-                                      context, Routes.initialRoute);
-                                },
-                                    body: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              LanguageClass.isEnglish
-                                                  ? 'Amount: '
-                                                  : "القيمة",
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                            Text(amountController.text
-                                                .toString())
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text(
-                                              'Reference Number: ',
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                            Expanded(
-                                              child: Row(
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () async {
-                                                      Constants.showDefaultSnackBar(
-                                                          context: context,
-                                                          text:
-                                                              'Reference Number copied');
-                                                      await Clipboard.setData(
-                                                          ClipboardData(
-                                                              text: state
-                                                                  .paymentMessageResponse
-                                                                  .paymentMessage!
-                                                                  .referenceNumber
-                                                                  .toString()));
-                                                    },
-                                                    child: Container(
-                                                        width: 15,
-                                                        height: 15,
-                                                        child: Icon(
-                                                          Icons.copy_outlined,
-                                                          size: 14,
-                                                        )),
+                                showDoneConfirmationDialog(
+                                  context,
+                                  isError: false,
+                                  callback: () {
+                                    Navigator.pop(context);
+                                    Navigator.pushNamedAndRemoveUntil(context,
+                                        Routes.initialRoute, (route) => false);
+                                  },
+                                  body: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            LanguageClass.isEnglish
+                                                ? 'Amount: '
+                                                : "القيمة",
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          Text(amountController.text.toString())
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text(
+                                            'Reference Number: ',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                InkWell(
+                                                  onTap: () async {
+                                                    Constants.showDefaultSnackBar(
+                                                        context: context,
+                                                        text:
+                                                            'Reference Number copied');
+                                                    await Clipboard.setData(
+                                                        ClipboardData(
+                                                            text: state
+                                                                .paymentMessageResponse
+                                                                .paymentMessage!
+                                                                .referenceNumber
+                                                                .toString()));
+                                                  },
+                                                  child: Container(
+                                                      width: 15,
+                                                      height: 15,
+                                                      child: Icon(
+                                                        Icons.copy_outlined,
+                                                        size: 14,
+                                                      )),
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                    state
+                                                        .paymentMessageResponse
+                                                        .paymentMessage!
+                                                        .referenceNumber
+                                                        .toString(),
+                                                    textAlign: TextAlign.end,
                                                   ),
-                                                  Expanded(
-                                                    child: Text(
-                                                      state
-                                                          .paymentMessageResponse
-                                                          .paymentMessage!
-                                                          .referenceNumber
-                                                          .toString(),
-                                                      textAlign: TextAlign.end,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                    message:
-                                        "You will get a notification by applying your wallet \n In order to agree to pay");
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  message: state.paymentMessageResponse.text!
+                                      .toString(),
+                                );
                               } else if (state is EWalletErrorState) {
                                 Constants.hideLoadingDialog(context);
                                 Constants.showDefaultSnackBar(
@@ -339,6 +350,7 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                   horizontal: 30,
                                 ),
                                 child: Constants.customButton(
+                                  borderradias: 41,
                                   text: LanguageClass.isEnglish
                                       ? "Charge"
                                       : "شحن",
@@ -370,9 +382,9 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
         barrierDismissible: true,
         context: context,
         confirmBtnText: "ok",
-        title: isError ? 'error' : 'success',
+        title: isError ? 'error' : '',
         lottieAsset:
-            isError ? 'assets/json/error.json' : 'assets/json/done.json',
+            isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
         type: isError ? CoolAlertType.error : CoolAlertType.success,
         loopAnimation: false,
         backgroundColor: isError ? Colors.red : Colors.white,

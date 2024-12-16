@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,6 +58,7 @@ class _chargeCardState extends State<chargeCard> {
     print(jsonData.runtimeType);
     print(jsonData);
     print("EEeeeeeeeeeeeeeeeeeeeeeeeee");
+    widget.index = 0;
 
     if (jsonData != null && jsonData is String) {
       cards = json
@@ -84,7 +86,7 @@ class _chargeCardState extends State<chargeCard> {
     double sizeHeight = context.height;
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -99,8 +101,8 @@ class _chargeCardState extends State<chargeCard> {
             )),
       ),
       body: Directionality(
-        textDirection: LanguageClass.isEnglish?TextDirection.ltr:TextDirection.rtl,
-
+        textDirection:
+            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
         child: Form(
           key: formKey,
           child: SizedBox(
@@ -119,9 +121,9 @@ class _chargeCardState extends State<chargeCard> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  LanguageClass.isEnglish?'Payment':"الدفع",
+                                  LanguageClass.isEnglish ? 'Payment' : "الدفع",
                                   style: TextStyle(
-                                      color: AppColors.white,
+                                      color: AppColors.blackColor,
                                       fontSize: 30,
                                       fontFamily: "bold"),
                                 ),
@@ -144,229 +146,236 @@ class _chargeCardState extends State<chargeCard> {
                                         width: 5,
                                       ),
                                       (widget.index >= 0 && cards.isNotEmpty)
-                                          ? InkWell(
-                                              onTap: () {
-                                                showModalBottomSheet(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              30),
-                                                      child: Container(
-                                                        height: 270,
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                             LanguageClass.isEnglish? 'Choose Card':'اختر كارت ',
-                                                              style: TextStyle(
-                                                                  fontSize: 15,
-                                                                  fontFamily:
-                                                                      "bold",
-                                                                  color: AppColors
-                                                                      .blackColor),
-                                                            ),
-                                                            const SizedBox(
-                                                              height: 5,
-                                                            ),
-                                                            Divider(
-                                                                thickness: 0.5,
-                                                                color: AppColors
-                                                                    .grey),
-                                                            Column(
-                                                              children: List<
-                                                                      Widget>.generate(
-                                                                  cards.length,
-                                                                  (index) {
-                                                                return Column(
-                                                                  children: [
-                                                                    InkWell(
-                                                                      onTap: () {
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                        setState(
+                                          ? Expanded(
+                                              child: InkWell(
+                                                onTap: () {
+                                                  showModalBottomSheet(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(30),
+                                                        child: Container(
+                                                          height: 270,
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                LanguageClass
+                                                                        .isEnglish
+                                                                    ? 'Choose Card'
+                                                                    : 'اختر كارت ',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontFamily:
+                                                                        "bold",
+                                                                    color: AppColors
+                                                                        .blackColor),
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Divider(
+                                                                  thickness:
+                                                                      0.5,
+                                                                  color:
+                                                                      AppColors
+                                                                          .grey),
+                                                              Column(
+                                                                children: List<
+                                                                        Widget>.generate(
+                                                                    cards
+                                                                        .length,
+                                                                    (index) {
+                                                                  return Column(
+                                                                    children: [
+                                                                      InkWell(
+                                                                        onTap:
                                                                             () {
-                                                                          widget.index =
-                                                                              index;
-                                                                        });
-                                                                      },
-                                                                      child: Row(
-                                                                        children: [
-                                                                          Checkbox(
-                                                                            value: widget.index == index
-                                                                                ? true
-                                                                                : false,
-                                                                            activeColor:
-                                                                                Colors.yellow,
-                                                                            shape:
-                                                                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-                                                                            onChanged:
-                                                                                (value) {},
-                                                                          ),
-                                                                          Image
-                                                                              .asset(
-                                                                            'assets/images/master_card.png',
-                                                                            height:
-                                                                                11,
-                                                                            width:
-                                                                                17,
-                                                                            fit: BoxFit
-                                                                                .fitWidth,
-                                                                          ),
-                                                                          Text(
-                                                                            "XXXX-XXXX-XXXX-${cards[index].cardNumber!.substring(cards[index].cardNumber!.length - 4)}",
-                                                                            style:
-                                                                                TextStyle(
-                                                                              fontSize:
-                                                                                  20,
-                                                                              fontFamily:
-                                                                                  "regular",
-                                                                              color:
-                                                                                  Colors.black,
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                          setState(
+                                                                              () {
+                                                                            widget.index =
+                                                                                index;
+                                                                          });
+                                                                        },
+                                                                        child:
+                                                                            Row(
+                                                                          children: [
+                                                                            Checkbox(
+                                                                              value: widget.index == index ? true : false,
+                                                                              activeColor: Colors.yellow,
+                                                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+                                                                              onChanged: (value) {},
                                                                             ),
-                                                                          ),
-                                                                          Spacer(),
-                                                                          InkWell(
-                                                                            onTap:
-                                                                                () {
-                                                                              setState(() {
-                                                                                if (index >= 0 && index < cards.length) {
-                                                                                  cards.removeAt(index);
-                                                                                }
-                                                                                // cards.removeAt(index);
+                                                                            Image.asset(
+                                                                              'assets/images/master_card.png',
+                                                                              height: 11,
+                                                                              width: 17,
+                                                                              fit: BoxFit.fitWidth,
+                                                                            ),
+                                                                            Text(
+                                                                              "XXXX-XXXX-XXXX-${cards[index].cardNumber!.substring(cards[index].cardNumber!.length - 4)}",
+                                                                              style: TextStyle(
+                                                                                fontSize: 20,
+                                                                                fontFamily: "regular",
+                                                                                color: Colors.black,
+                                                                              ),
+                                                                            ),
+                                                                            Spacer(),
+                                                                            InkWell(
+                                                                              onTap: () {
+                                                                                setState(() {
+                                                                                  if (index >= 0 && index < cards.length) {
+                                                                                    cards.removeAt(index);
+                                                                                  }
+                                                                                  // cards.removeAt(index);
+                                                                                  CacheHelper.setDataToSharedPref(
+                                                                                    key: "cards",
+                                                                                    value: json.encode(
+                                                                                      cards.map((e) => e.toJson()).toList(),
+                                                                                    ),
+                                                                                  );
+                                                                                  Navigator.pop(context);
+                                                                                  //  Navigator.pop(context);
+                                                                                });
                                                                                 CacheHelper.setDataToSharedPref(
                                                                                   key: "cards",
                                                                                   value: json.encode(
                                                                                     cards.map((e) => e.toJson()).toList(),
                                                                                   ),
                                                                                 );
-                                                                                Navigator.pop(context);
-                                                                                //  Navigator.pop(context);
-                                                                              });
-                                                                              CacheHelper.setDataToSharedPref(
-                                                                                key: "cards",
-                                                                                value: json.encode(
-                                                                                  cards.map((e) => e.toJson()).toList(),
-                                                                                ),
-                                                                              );
-                                                                            },
-                                                                            child:
-                                                                                Icon(Icons.delete),
-                                                                          )
-                                                                        ],
+                                                                              },
+                                                                              child: Icon(Icons.delete),
+                                                                            )
+                                                                          ],
+                                                                        ),
                                                                       ),
-                                                                    ),
-                                                                  ],
-                                                                );
-                                                              }),
-                                                            ),
-                                                            Divider(
-                                                                thickness: 0.5,
-                                                                color: AppColors
-                                                                    .grey),
-                                                            Row(
-                                                              children: [
-                                                                SizedBox(
-                                                                  width:
-                                                                      sizeWidth *
-                                                                          0.03,
-                                                                ),
-                                                                Container(
-                                                                    decoration: BoxDecoration(
-                                                                        shape: BoxShape
-                                                                            .circle,
-                                                                        color: AppColors
-                                                                            .grey),
-                                                                    child:
-                                                                        const Icon(
-                                                                      Icons.add,
-                                                                      color: Colors
-                                                                          .lightGreen,
-                                                                      size: 20,
-                                                                    )),
-                                                                SizedBox(
-                                                                  width:
-                                                                      sizeWidth *
-                                                                          0.03,
-                                                                ),
-                                                                InkWell(
-                                                                  onTap:
-                                                                      () async {
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                    final card =
-                                                                        await Navigator
-                                                                            .push<
-                                                                                CardModel>(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) {
-                                                                          return const AddCreditCard();
-                                                                        },
-                                                                      ),
-                                                                    );
-                                                                    if (card
-                                                                        is CardModel) {
-                                                                      cards.add(
-                                                                          card);
-                                                                      setState(
-                                                                          () {});
-                                                                    }
-                                                                  },
-                                                                  child: Text(
-                                                                    LanguageClass.isEnglish?'Add New Card':'اضافة كارت جديد',
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            15.45,
-                                                                        fontFamily:
-                                                                            "bold",
-                                                                        color: AppColors
-                                                                            .blackColor),
+                                                                    ],
+                                                                  );
+                                                                }),
+                                                              ),
+                                                              Divider(
+                                                                  thickness:
+                                                                      0.5,
+                                                                  color:
+                                                                      AppColors
+                                                                          .grey),
+                                                              Row(
+                                                                children: [
+                                                                  SizedBox(
+                                                                    width:
+                                                                        sizeWidth *
+                                                                            0.03,
                                                                   ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ],
+                                                                  Container(
+                                                                      decoration: BoxDecoration(
+                                                                          shape: BoxShape
+                                                                              .circle,
+                                                                          color: AppColors
+                                                                              .grey),
+                                                                      child:
+                                                                          const Icon(
+                                                                        Icons
+                                                                            .add,
+                                                                        color: Colors
+                                                                            .lightGreen,
+                                                                        size:
+                                                                            20,
+                                                                      )),
+                                                                  SizedBox(
+                                                                    width:
+                                                                        sizeWidth *
+                                                                            0.03,
+                                                                  ),
+                                                                  InkWell(
+                                                                    onTap:
+                                                                        () async {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      final card =
+                                                                          await Navigator.push<
+                                                                              CardModel>(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                          builder:
+                                                                              (context) {
+                                                                            return const AddCreditCard();
+                                                                          },
+                                                                        ),
+                                                                      );
+                                                                      if (card
+                                                                          is CardModel) {
+                                                                        cards.add(
+                                                                            card);
+                                                                        setState(
+                                                                            () {});
+                                                                      }
+                                                                    },
+                                                                    child: Text(
+                                                                      LanguageClass
+                                                                              .isEnglish
+                                                                          ? 'Add New Card'
+                                                                          : 'اضافة كارت جديد',
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              15.45,
+                                                                          fontFamily:
+                                                                              "bold",
+                                                                          color:
+                                                                              AppColors.blackColor),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
                                                         ),
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        (widget.index >= 0 &&
+                                                                widget.index <
+                                                                    cards
+                                                                        .length)
+                                                            ? "XXXX-XXXX-XXXX-${cards[widget.index].cardNumber!.substring(cards[widget.index].cardNumber!.length - 4)}"
+                                                            : "Choose Card",
+                                                        style: const TextStyle(
+                                                            fontSize: 18,
+                                                            fontFamily:
+                                                                "regular",
+                                                            color:
+                                                                Colors.black),
                                                       ),
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    (widget.index >= 0 &&
-                                                            widget.index <
-                                                                cards.length)
-                                                        ? "XXXX-XXXX-XXXX-${cards[widget.index].cardNumber!.substring(cards[widget.index].cardNumber!.length - 4)}"
-                                                        : "Choose Card",
-                                                    style: const TextStyle(
-                                                        fontSize: 20,
-                                                        fontFamily: "regular",
-                                                        color: Colors.black),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 15,
-                                                  ),
-                                                  const Icon(
-                                                    Icons
-                                                        .keyboard_arrow_down_outlined,
-                                                    size: 30,
-                                                  )
-                                                ],
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    const Icon(
+                                                      Icons
+                                                          .keyboard_arrow_down_outlined,
+                                                      size: 30,
+                                                    )
+                                                  ],
+                                                ),
                                               ),
                                             )
                                           : InkWell(
                                               onTap: () async {
                                                 //Navigator.pop(context);
-                                                final card = await Navigator.push<
-                                                    CardModel>(
+                                                final card = await Navigator
+                                                    .push<CardModel>(
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) {
@@ -380,11 +389,14 @@ class _chargeCardState extends State<chargeCard> {
                                                 }
                                               },
                                               child: Text(
-                                                LanguageClass.isEnglish?'Add credit Card':"اضافة كارت جديد",
+                                                LanguageClass.isEnglish
+                                                    ? 'Add credit Card'
+                                                    : "اضافة كارت جديد",
                                                 style: TextStyle(
                                                     fontSize: 15.45,
                                                     fontFamily: "bold",
-                                                    color: AppColors.blackColor),
+                                                    color:
+                                                        AppColors.blackColor),
                                               ),
                                             )
                                     ],
@@ -398,7 +410,9 @@ class _chargeCardState extends State<chargeCard> {
                                         height: 20,
                                         width: 1,
                                         color: const Color(0xff47A9EB),
-                                        hint:LanguageClass.isEnglish? 'CVV':'رقم السري',
+                                        hint: LanguageClass.isEnglish
+                                            ? 'CVV'
+                                            : 'رقم السري',
                                         textInputType: TextInputType.number,
                                         onChange: (value) {
                                           setState(() {
@@ -425,102 +439,89 @@ class _chargeCardState extends State<chargeCard> {
                                             decoration: const BoxDecoration(
                                                 color: Color(0xffD865A4)),
                                           ),
-                                          Container(
-                                              height: sizeHeight * 0.07,
-                                              width: 300,
-                                              padding: const EdgeInsets.symmetric(
-                                                  vertical: 2, horizontal: 18),
-                                              decoration: const BoxDecoration(
-                                                  // border: Border.all(
-                                                  //   color: AppColors.blue,
-                                                  //   width: 0.3,
-                                                  // ),
-                                                  // borderRadius:
-                                                  // const BorderRadius.all(Radius.circular(10))
-                                                  ),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.stretch,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Container(
-                                                        height: 40,
-                                                        width:
-                                                            MediaQuery.of(context)
-                                                                    .size
-                                                                    .width -
-                                                                150,
-                                                        //    padding:
-                                                        //    const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
-                                                        decoration: const BoxDecoration(
-                                                            // color: Colors.red
-                                                            // border: Border.all(
-                                                            //   color: AppColors.blue,
-                                                            //   width: 0.3,
-                                                            // ),
+                                          Expanded(
+                                            child: Container(
+                                                height: sizeHeight * 0.07,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 2,
+                                                        horizontal: 18),
+                                                decoration: const BoxDecoration(
+                                                    // border: Border.all(
+                                                    //   color: AppColors.blue,
+                                                    //   width: 0.3,
+                                                    // ),
+                                                    // borderRadius:
+                                                    // const BorderRadius.all(Radius.circular(10))
+                                                    ),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      //    padding:
+                                                      //    const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
 
-                                                            ),
-                                                        child: TextFormField(
-                                                          autofocus: true,
-                                                          style: fontStyle(
-                                                              color:
-                                                                  AppColors.white,
-                                                              fontSize: 16),
-                                                          cursorColor:
-                                                              AppColors.blue,
-                                                          controller:
-                                                              amountController,
-                                                          inputFormatters: [
-                                                            NumericTextFormatter()
-                                                          ],
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                InputBorder.none,
-                                                            hintText: LanguageClass.isEnglish?'Amount':'القيمة',
-                                                            errorStyle: fontStyle(
-                                                              color: Colors.red,
-                                                              fontSize: 11,
-                                                            ),
-                                                            hintStyle: fontStyle(
-                                                                color: AppColors
-                                                                    .greyLight,
-                                                                fontSize: 15,
-                                                                fontFamily:
-                                                                    FontFamily
-                                                                        .bold),
-                                                            labelStyle: fontStyle(
-                                                                color: AppColors
-                                                                    .grey,
-                                                                fontSize: 12,
-                                                                fontFamily:
-                                                                    FontFamily
-                                                                        .bold),
+                                                      child: TextFormField(
+                                                        autofocus: true,
+                                                        style: fontStyle(
+                                                            color: AppColors
+                                                                .blackColor,
+                                                            fontSize: 16),
+                                                        cursorColor:
+                                                            AppColors.blue,
+                                                        controller:
+                                                            amountController,
+                                                        keyboardType:
+                                                            TextInputType
+                                                                .number,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          border:
+                                                              InputBorder.none,
+                                                          hintText:
+                                                              LanguageClass
+                                                                      .isEnglish
+                                                                  ? 'Amount'
+                                                                  : 'القيمة',
+                                                          errorStyle: fontStyle(
+                                                            color: Colors.red,
+                                                            fontSize: 11,
                                                           ),
-                                                          validator: (value) {
-                                                            if (value!.isEmpty) {
-                                                              return 'This Field is Required';
-                                                            } else {
-                                                              return null;
-                                                            }
-                                                          },
+                                                          hintStyle: fontStyle(
+                                                              color: AppColors
+                                                                  .greyLight,
+                                                              fontSize: 15,
+                                                              fontFamily:
+                                                                  FontFamily
+                                                                      .bold),
+                                                          labelStyle: fontStyle(
+                                                              color: AppColors
+                                                                  .grey,
+                                                              fontSize: 12,
+                                                              fontFamily:
+                                                                  FontFamily
+                                                                      .bold),
                                                         ),
+                                                        validator: (value) {
+                                                          if (value!.isEmpty) {
+                                                            return 'This Field is Required';
+                                                          } else {
+                                                            return null;
+                                                          }
+                                                        },
                                                       ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )),
+                                                    ),
+                                                  ],
+                                                )),
+                                          ),
                                         ],
                                       )
                                     : const SizedBox(),
-                                const Spacer(),
+                                const SizedBox(
+                                  height: 50,
+                                ),
                                 BlocListener(
-                                  bloc:
-                                      BlocProvider.of<ReservationCubit>(context),
+                                  bloc: BlocProvider.of<ReservationCubit>(
+                                      context),
                                   listener: (context, state) {
                                     if (state is LoadingCreditCardState) {
                                       Constants.showLoadingDialog(context);
@@ -529,13 +530,15 @@ class _chargeCardState extends State<chargeCard> {
 
                                       showDoneConfirmationDialog(context,
                                           callbackTitle: "Go to OTP",
-                                          message: 'Complete the payment process',
+                                          message:
+                                              'Complete the payment process',
                                           callback: () {
                                         Navigator.pop(context);
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (_) => ConfirmPayWebView(
+                                                builder: (_) =>
+                                                    ConfirmPayWebView(
                                                       webViewLink: state
                                                           .reservationResponseCreditCard
                                                           .message!
@@ -657,92 +660,113 @@ class _chargeCardState extends State<chargeCard> {
                                     }
                                   },
                                   child: InkWell(
-                                    onTap: () {
-                                      print(cards[widget.index]
-                                          .cardNumber!
-                                          .toString()
-                                          .replaceAll(" ", ""));
-                                      if (formKey.currentState!.validate()) {
-                                        final tripOneId =
-                                            CacheHelper.getDataToSharedPref(
-                                                key: 'tripOneId');
-                                        final tripRoundId =
-                                            CacheHelper.getDataToSharedPref(
-                                                key: 'tripRoundId');
-                                        final selectedDayTo =
-                                            CacheHelper.getDataToSharedPref(
-                                                key: 'selectedDayTo');
-                                        final selectedDayFrom =
-                                            CacheHelper.getDataToSharedPref(
-                                                key: 'selectedDayFrom');
-                                        final toStationId =
-                                            CacheHelper.getDataToSharedPref(
-                                                key: 'toStationId');
-                                        final fromStationId =
-                                            CacheHelper.getDataToSharedPref(
-                                                key: 'fromStationId');
-                                        final seatIdsOneTrip =
-                                            CacheHelper.getDataToSharedPref(
-                                                    key: 'countSeats')
-                                                ?.map((e) => int.tryParse(e) ?? 0)
-                                                .toList();
-                                        final seatIdsRoundTrip =
-                                            CacheHelper.getDataToSharedPref(
-                                                    key: 'countSeats2')
-                                                ?.map((e) => int.tryParse(e) ?? 0)
-                                                .toList();
-                                        final price =
-                                            CacheHelper.getDataToSharedPref(
-                                                key: 'price');
+                                    onTap: cards.isNotEmpty
+                                        ? () {
+                                            if (widget.index < 0) {
+                                              Constants.showDefaultSnackBar(
+                                                  color: Colors.red,
+                                                  context: context,
+                                                  text: 'Select card');
+                                            } else {
+                                              print(cards[widget.index]
+                                                  .cardNumber!
+                                                  .toString()
+                                                  .replaceAll(" ", ""));
+                                              if (formKey.currentState!
+                                                  .validate()) {
+                                                final tripOneId = CacheHelper
+                                                    .getDataToSharedPref(
+                                                        key: 'tripOneId');
+                                                final tripRoundId = CacheHelper
+                                                    .getDataToSharedPref(
+                                                        key: 'tripRoundId');
+                                                final selectedDayTo = CacheHelper
+                                                    .getDataToSharedPref(
+                                                        key: 'selectedDayTo');
+                                                final selectedDayFrom = CacheHelper
+                                                    .getDataToSharedPref(
+                                                        key: 'selectedDayFrom');
+                                                final toStationId = CacheHelper
+                                                    .getDataToSharedPref(
+                                                        key: 'toStationId');
+                                                final fromStationId = CacheHelper
+                                                    .getDataToSharedPref(
+                                                        key: 'fromStationId');
+                                                final seatIdsOneTrip = CacheHelper
+                                                        .getDataToSharedPref(
+                                                            key: 'countSeats')
+                                                    ?.map((e) =>
+                                                        int.tryParse(e) ?? 0)
+                                                    .toList();
+                                                final seatIdsRoundTrip =
+                                                    CacheHelper
+                                                            .getDataToSharedPref(
+                                                                key:
+                                                                    'countSeats2')
+                                                        ?.map((e) =>
+                                                            int.tryParse(e) ??
+                                                            0)
+                                                        .toList();
+                                                final price = CacheHelper
+                                                    .getDataToSharedPref(
+                                                        key: 'price');
 
-                                        print(cards[widget.index]
-                                            .month!
-                                            .substring(0, 2)
-                                            .toString());
+                                                print(cards[widget.index]
+                                                    .month!
+                                                    .substring(0, 2)
+                                                    .toString());
 
-                                        print(cards[widget.index]
-                                            .month!
-                                            .substring(
-                                              3,
-                                            )
-                                            .toString());
+                                                print(cards[widget.index]
+                                                    .month!
+                                                    .substring(
+                                                      3,
+                                                    )
+                                                    .toString());
 
-                                        double amount =
-                                            double.parse(amountController.text);
+                                                double amount = double.parse(
+                                                    amountController.text);
 
-                                        print(
-                                            "tripOneId${tripOneId}==tripOneId${tripRoundId}=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price");
-                                        print(
-                                            "tripOneId${selectedDayTo}==tripOneId${selectedDayFrom}=====${toStationId}===${fromStationId}==$price");
+                                                print(
+                                                    "tripOneId${tripOneId}==tripOneId${tripRoundId}=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price");
+                                                print(
+                                                    "tripOneId${selectedDayTo}==tripOneId${selectedDayFrom}=====${toStationId}===${fromStationId}==$price");
 
-                                        print(
-                                            "tripOneId${tripOneId}==tripOneId${tripRoundId}=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price==");
+                                                print(
+                                                    "tripOneId${tripOneId}==tripOneId${tripRoundId}=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price==");
 
-                                        // if(_user != null && formKey.currentState!.validate()) {
-                                        BlocProvider.of<ReservationCubit>(context)
-                                            .chargebycard(
-                                          custId: widget.user.customerId!,
-                                          amount: amount
-                                              .toStringAsFixed(2)
-                                              .toString(),
-                                          cvv: cvv.toString(),
-                                          cardNumber: cards[widget.index]
-                                              .cardNumber!
-                                              .toString()
-                                              .replaceAll(" ", ""),
-                                          cardExpiryYear: cards[widget.index]
-                                              .month!
-                                              .substring(
-                                                3,
-                                              )
-                                              .toString(),
-                                          cardExpiryMonth: cards[widget.index]
-                                              .month!
-                                              .substring(0, 2)
-                                              .toString(),
-                                        );
-                                      }
-                                    },
+                                                // if(_user != null && formKey.currentState!.validate()) {
+                                                BlocProvider.of<
+                                                            ReservationCubit>(
+                                                        context)
+                                                    .chargebycard(
+                                                  custId:
+                                                      widget.user.customerId!,
+                                                  amount: amount
+                                                      .toStringAsFixed(2)
+                                                      .toString(),
+                                                  cvv: cvv.toString(),
+                                                  cardNumber:
+                                                      cards[widget.index]
+                                                          .cardNumber!
+                                                          .toString()
+                                                          .replaceAll(" ", ""),
+                                                  cardExpiryYear:
+                                                      cards[widget.index]
+                                                          .month!
+                                                          .substring(
+                                                            3,
+                                                          )
+                                                          .toString(),
+                                                  cardExpiryMonth:
+                                                      cards[widget.index]
+                                                          .month!
+                                                          .substring(0, 2)
+                                                          .toString(),
+                                                );
+                                              }
+                                            }
+                                          }
+                                        : () {},
                                     child: Padding(
                                       padding: const EdgeInsets.all(25),
                                       child: Container(
@@ -758,11 +782,13 @@ class _chargeCardState extends State<chargeCard> {
                                               color: AppColors.primaryColor,
                                               borderRadius:
                                                   BorderRadius.circular(15)),
-                                          child:  Center(
+                                          child: Center(
                                             child: Padding(
                                               padding: EdgeInsets.all(8.0),
                                               child: Text(
-                                                LanguageClass.isEnglish?'Charge':'شحن',
+                                                LanguageClass.isEnglish
+                                                    ? 'Charge'
+                                                    : 'شحن',
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 20,
@@ -834,7 +860,7 @@ class PayField extends StatelessWidget {
           child: TextFormField(
               controller: ctr,
               keyboardType: textInputType,
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.black),
               // style: fontStyle(color: MyColors.blue, fontSize: 14),
               // cursorColor: MyColors.blue,
               decoration: InputDecoration(
@@ -933,7 +959,7 @@ Future<dynamic> showDoneConfirmationDialog(BuildContext context,
 
 class ConfirmPayWebView extends StatefulWidget {
   final String webViewLink;
-  const ConfirmPayWebView({
+  ConfirmPayWebView({
     Key? key,
     required this.webViewLink,
   }) : super(key: key);
@@ -943,38 +969,7 @@ class ConfirmPayWebView extends StatefulWidget {
 }
 
 class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
-  WebViewController controller = WebViewController()
-    ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    ..setBackgroundColor(const Color(0x00000000))
-    ..setNavigationDelegate(
-      NavigationDelegate(
-        onProgress: (int progress) {
-          // Update loading bar.
-        },
-        onPageStarted: (String url) {},
-        onPageFinished: (String url) {},
-        onWebResourceError: (WebResourceError error) {},
-        onNavigationRequest: (NavigationRequest request) async {
-          if (request.url
-              .startsWith('https://www.atfawry.com/atfawry/plugin/3ds/')) {
-            await Future.delayed(const Duration(seconds: 2), () {
-              Navigator.pop(NavHelper().navigatorKey.currentContext!);
-
-              Navigator.pushNamed(NavHelper().navigatorKey.currentContext!,
-                  Routes.initialRoute);
-              showDoneConfirmationDialog(
-                  NavHelper().navigatorKey.currentContext!,
-                  message: 'Payment completed successfully', callback: () {
-                Navigator.pop(NavHelper().navigatorKey.currentContext!);
-              });
-            });
-
-            return NavigationDecision.prevent;
-          }
-          return NavigationDecision.navigate;
-        },
-      ),
-    );
+  WebViewController controller = WebViewController();
   @override
   void initState() {
     controller.loadRequest(Uri.parse(widget.webViewLink));
@@ -996,20 +991,84 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
             color: Colors.white,
           ),
         ),
-        actions: [  IconButton(onPressed: (){
-          Navigator.pushNamed(context, Routes.initialRoute
-          );
-        }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, Routes.initialRoute, (route) => false);
+              },
+              icon: Icon(
+                Icons.home_outlined,
+                color: AppColors.white,
+                size: 35,
+              ))
         ],
       ),
       body: SafeArea(
         child: WillPopScope(
           onWillPop: () {
-            Navigator.pushNamed(
-                NavHelper().navigatorKey.currentContext!, Routes.initialRoute);
+            Navigator.pushNamedAndRemoveUntil(
+                NavHelper().navigatorKey.currentContext!,
+                Routes.initialRoute,
+                (route) => false);
+
             return Future.value(false);
           },
-          child: WebViewWidget(controller: controller),
+          child: WebViewWidget(
+              controller: controller
+                ..setJavaScriptMode(JavaScriptMode.unrestricted)
+                ..setBackgroundColor(const Color(0x00000000))
+                ..setNavigationDelegate(
+                  NavigationDelegate(
+                    onProgress: (int progress) {
+                      // Update loading bar.
+                    },
+                    onPageStarted: (String url) {},
+                    onPageFinished: (String url) {},
+                    onWebResourceError: (WebResourceError error) {},
+                    onNavigationRequest: (NavigationRequest request) async {
+                      log(request.url);
+                      if (request.url.contains('825151')) {
+                        await Future.delayed(const Duration(seconds: 2), () {
+                          showDoneConfirmationDialog(context,
+                              isError: true,
+                              callbackTitle: LanguageClass.isEnglish
+                                  ? 'Payment Error'
+                                  : 'حدث خطاء اثنا الدفع',
+                              message: LanguageClass.isEnglish
+                                  ? 'Payment Error'
+                                  : 'حدث خطاء اثنا الدفع', callback: () {
+                            Navigator.pop(
+                              context,
+                            );
+                            Navigator.pop(
+                              context,
+                            );
+                          });
+                        });
+
+                        return NavigationDecision.prevent;
+                      } else if (request.url
+                          .startsWith('https://swabus.com/Home/FawryCharge')) {
+                        await Future.delayed(const Duration(seconds: 2), () {
+                          showDoneConfirmationDialog(context,
+                              message: LanguageClass.isEnglish
+                                  ? 'Payment completed successfully'
+                                  : 'تم عملية الدفع بنجاح', callback: () {
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              Routes.initialRoute,
+                              (r) => false,
+                            );
+                          });
+                        });
+
+                        return NavigationDecision.prevent;
+                      }
+                      return NavigationDecision.navigate;
+                    },
+                  ),
+                )),
         ),
       ),
     );

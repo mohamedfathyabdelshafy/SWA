@@ -9,23 +9,17 @@ class PaymentMessageResponse extends Equatable {
   final dynamic object;
   final dynamic obj;
 
-  const PaymentMessageResponse({
-    this.message,
-    this.status,
-    this.paymentMessage,
-    this.balance,
-    this.object,
-    this.obj,
-  });
+  final dynamic text;
 
+  const PaymentMessageResponse(
+      {this.message,
+      this.status,
+      this.paymentMessage,
+      this.balance,
+      this.object,
+      this.obj,
+      this.text});
 
   @override
-  List<Object?> get props => [
-    message,
-    status,
-    balance,
-    object,
-    obj,
-  ];
+  List<Object?> get props => [message, status, balance, object, obj, text];
 }
-

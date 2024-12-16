@@ -14,25 +14,27 @@ import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentatio
 import 'package:swa/main.dart';
 
 class BusImageClasses extends StatefulWidget {
-  BusImageClasses({super.key,required this.typeClasses});
-String typeClasses;
+  BusImageClasses({super.key, required this.typeClasses, required this.id});
+  String typeClasses;
+  String id;
+
   @override
   State<BusImageClasses> createState() => _BusImageClassesState();
 }
 
 class _BusImageClassesState extends State<BusImageClasses> {
   MoreRepo moreRepo = MoreRepo(sl());
-  BusImagesModel  busImageClasses  = BusImagesModel();
+  BusImagesModel busImageClasses = BusImagesModel();
   @override
   void initState() {
     get();
     super.initState();
   }
-  void get()async{
-    await BlocProvider.of<MoreCubit>(context).getBusImage(typeClass: widget.typeClasses);
-    busImageClasses = (await moreRepo.getBusImages(typeClass: widget.typeClasses))!;
-    setState(() {
-    });
+
+  void get() async {
+    await BlocProvider.of<MoreCubit>(context).getBusImage(typeClass: widget.id);
+    busImageClasses = (await moreRepo.getBusImages(typeClass: widget.id))!;
+    setState(() {});
   }
 
   @override
@@ -40,35 +42,80 @@ class _BusImageClassesState extends State<BusImageClasses> {
     double sizeHeight = context.height;
     double sizeWidth = context.width;
     return Directionality(
-      textDirection: LanguageClass.isEnglish?TextDirection.ltr:TextDirection.rtl,
+      textDirection:
+          LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(backgroundColor: AppColors.primaryColor,
-          centerTitle: true,
-          title: Text(
-            LanguageClass.isEnglish? "Bus Classes":"انواع الاتوبيس",
-            style: TextStyle(
-                color: AppColors.white,
-                fontSize: 34,
-                fontFamily: "bold"),
-          ),
-        ),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
         body: BlocBuilder(
           bloc: BlocProvider.of<MoreCubit>(context),
-          builder: (context,state){
-            if(state is LoadingBusImage){
-              return  Center(
-                child: CircularProgressIndicator(color: AppColors.primaryColor,),
+          builder: (context, state) {
+            if (state is LoadingBusImage) {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryColor,
+                ),
               );
             }
-            return CarouselWidget(items: [
-              ...List<Widget>.generate(
-               busImageClasses.message?.imagePaths?.length??0,
-                    (index) => Image.network( busImageClasses.message?.imagePaths?[index]??"https://www.wanderu.com/blog/wp-content/uploads/2016/10/limoliner-seats-1280x852.jpg"),
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: sizeHeight * 0.08,
+                  ),
+                  Container(
+                    alignment: LanguageClass.isEnglish
+                        ? Alignment.topLeft
+                        : Alignment.topRight,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        color: AppColors.primaryColor,
+                        size: 35,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      widget.typeClasses,
+                      style: TextStyle(
+                          color: AppColors.blackColor,
+                          fontSize: 38,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "roman"),
+                    ),
+                  ),
+                  SizedBox(
+                    height: sizeHeight * 0.1,
+                  ),
+                  CarouselWidget(items: [
+                    ...List<Widget>.generate(
+                      busImageClasses.message?.imagePaths?.length ?? 0,
+                      (index) => Container(
+                        alignment: Alignment.center,
+                        width: double.infinity,
+                        height: 300,
+                        child: Image.network(
+                          busImageClasses.message?.imagePaths?[index] ??
+                              "https://www.wanderu.com/blog/wp-content/uploads/2016/10/limoliner-seats-1280x852.jpg",
+                          height: 300,
+                        ),
+                      ),
+                    ),
+                  ]),
+                ],
               ),
-            ]);
+            );
           },
-
         ),
       ),
     );

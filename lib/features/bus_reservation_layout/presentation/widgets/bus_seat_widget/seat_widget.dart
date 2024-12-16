@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sizer/sizer.dart';
 import 'package:swa/core/utils/app_colors.dart';
+import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/bus_seat_widget/seat_layout_model.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/bus_seat_widget/seat_model.dart';
 
@@ -36,18 +40,26 @@ class _SeatWidgetState extends State<SeatWidget> {
     // seatState = widget.model.seat.seatState;
     rowI = widget.model.rowI;
     colI = widget.model.colI;
+
+    log('atttt' + widget.model.rowI.toString());
   }
 
   @override
   Widget build(BuildContext context) {
+    double sizeWidth = context.width;
+
     if (widget.model.seat.seatState != null) {
       return SizedBox(
-        height: widget.seatHeight,
+        height: widget.model.seatLayoutStateModel.rows < 7
+            ? (widget.seatHeight + 25)
+            : widget.seatHeight,
         child: InkWell(
           onTap: () {
             if (widget.model.seat.seatState == SeatState.empty) {
               return;
             } else if (widget.model.seat.seatState == SeatState.sold) {
+              print("do nothing");
+            } else if (widget.model.seat.seatState == SeatState.booked) {
               print("do nothing");
             } else {
               countSeats.add(widget.model.seat.seatBusID!);
@@ -71,15 +83,15 @@ class _SeatWidgetState extends State<SeatWidget> {
           child: widget.model.seat.seatState != SeatState.empty
               ? Container(
                   height: 17,
-                  width: 27,
+                  width: rowI < 7 ? sizeWidth / 10 : sizeWidth / 11,
                   margin: const EdgeInsets.only(left: 2, right: 2, bottom: 7),
                   child: Stack(
                     children: [
                       Center(
                         child: SvgPicture.asset(
                           _getSvgPath(widget.model.seat.seatState!),
-                          height: 30,
-                          width: 40,
+                          height: widget.seatHeight,
+                          width: rowI < 7 ? sizeWidth / 10 : sizeWidth / 11,
                           color: widget.model.seat.seatState == SeatState.sold
                               ? Colors.grey
                               : widget.model.seat.seatState ==
@@ -89,19 +101,30 @@ class _SeatWidgetState extends State<SeatWidget> {
                                           SeatState.selected
                                       ? Color(0xff5332F7)
                                       : widget.model.seat.seatState ==
-                                              SeatState.sold
-                                          ? Colors.grey
-                                          : null,
+                                              SeatState.booked
+                                          ? Colors.amber
+                                          : widget.model.seat.seatState ==
+                                                  SeatState.sold
+                                              ? Colors.grey
+                                              : null,
                           fit: BoxFit.cover,
                         ),
                       ),
-                      Center(child: Text(widget.model.text))
+                      Center(
+                          child: Text(
+                        widget.model.text,
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontFamily: 'roman',
+                            color: Colors.black),
+                      ))
                     ],
                   ),
                 )
-              : SizedBox(
-                  height: widget.seatHeight * .1,
-                  width: 30,
+              : Container(
+                  height: 17,
+                  width: sizeWidth / 11,
+                  margin: const EdgeInsets.only(left: 2, right: 2, bottom: 7),
                 ),
         ),
       );

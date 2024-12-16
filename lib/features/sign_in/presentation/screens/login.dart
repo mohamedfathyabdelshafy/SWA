@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,86 +17,100 @@ class LoginScreen extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  LoginScreen({Key? key}) : super(key: key);
+  bool? isback = false;
+
+  LoginScreen({
+    Key? key,
+    this.isback,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double sizeHeight = context.height;
     double sizeWidth = context.width;
     return Scaffold(
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor: Colors.white,
       body: Directionality(
         textDirection:
-        LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 35),
+          padding: EdgeInsets.symmetric(horizontal: sizeWidth / 10),
           child: Form(
             key: formKey,
             child: SingleChildScrollView(
               child: SizedBox(
                 height: sizeHeight,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                child: ListView(
+                  padding: EdgeInsets.zero,
                   children: [
-                    SizedBox(height: context.height * 0.05),
-
+                    SizedBox(
+                      height: 30,
+                    ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        const Spacer(),
                         TextButton(
-                            onPressed: (){
+                            onPressed: () {
                               // Navigator.push(context, MaterialPageRoute(builder: (context){return ForgetPasswordScreen();}));
-                              Navigator.pushNamed(context, Routes.initialRoute);
+                              Navigator.pushNamedAndRemoveUntil(context,
+                                  Routes.initialRoute, (route) => false);
                             },
                             child: Text(
-                              LanguageClass.isEnglish?"Skip":"تخطي",
+                              LanguageClass.isEnglish ? "Skip" : "تخطي",
                               style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 16,
+                                  fontFamily: 'roman',
                                   fontWeight: FontWeight.normal,
-                                  color: AppColors.white
-                              ),
-                            )
-                        ),
+                                  color: AppColors.primaryColor),
+                            )),
                       ],
                     ),
                     SizedBox(height: context.height * 0.05),
-                    SvgPicture.asset("assets/images/Swa Logo.svg"),
-                    SizedBox(height: context.height * 0.15),
+                    Image.asset("assets/images/applogo.png"),
+                    SizedBox(height: context.height * 0.1),
                     SizedBox(
-                      height: context.height * 0.22,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            CustomizedField(
-                                colorText: Colors.white,
-                                obscureText: false,
-                                color: AppColors.lightBink,
-                                hintText: LanguageClass.isEnglish?"Enter your email":
-                                "ادخل الايمل",
-                                controller: userNameController,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return "Enter UserName";
-                                  }
-                                  return null;
-                                }),
-                            CustomizedField(
-                                colorText: Colors.white,
-                                isPassword: true,
-                                obscureText: true,
-                                color: AppColors.lightBink,
-                                hintText: LanguageClass.isEnglish?"Enter Password":
-                                "ادخل كلمه المرور",
-                                controller: passwordController,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return LanguageClass.isEnglish?"Enter Password":
-                                    "ادخل كلمه المرور";
-                                  }
-                                  return null;
-                                }),
-                          ],
-                        ),
+                      child: Column(
+                        children: [
+                          CustomizedField(
+                              colorText: Colors.black,
+                              borderradias: 33,
+                              obscureText: false,
+                              color: Color(0xffDDDDDD),
+                              hintText: LanguageClass.isEnglish
+                                  ? "Enter your email or phone"
+                                  : " ادخل الايميل او التليفون",
+                              controller: userNameController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Enter UserName";
+                                }
+                                return null;
+                              }),
+                          SizedBox(
+                            height: 19,
+                          ),
+                          CustomizedField(
+                              colorText: Colors.black,
+                              borderradias: 33,
+                              isPassword: true,
+                              obscureText: true,
+                              color: Color(0xffDDDDDD),
+                              hintText: LanguageClass.isEnglish
+                                  ? "Enter Password"
+                                  : "ادخل كلمه المرور",
+                              controller: passwordController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return LanguageClass.isEnglish
+                                      ? "Enter Password"
+                                      : "ادخل كلمه المرور";
+                                }
+                                return null;
+                              }),
+                          SizedBox(
+                            height: 19,
+                          ),
+                        ],
                       ),
                     ),
                     BlocListener(
@@ -109,8 +125,16 @@ class LoginScreen extends StatelessWidget {
                                 context: context,
                                 text: state.userResponse.massage.toString());
                           } else {
-                            Navigator.pushReplacementNamed(
-                                context, Routes.initialRoute);
+                            Routes.user = state.userResponse.user;
+                            if (isback == true) {
+                              Navigator.pop(context);
+                            } else {
+                              Navigator.pushNamedAndRemoveUntil(context,
+                                  Routes.initialRoute, (route) => false);
+                            }
+
+                            Routes.customerid =
+                                state.userResponse.user!.customerId;
                           }
                         } else if (state is LoginErrorState) {
                           Constants.hideLoadingDialog(context);
@@ -127,8 +151,11 @@ class LoginScreen extends StatelessWidget {
                                       password: passwordController.text));
                             }
                           },
-                          child: Constants.customButton(text:LanguageClass.isEnglish? "Login":
-                          "دخول")),
+                          child: Constants.customButton(
+                              borderradias: 41,
+                              color: AppColors.primaryColor,
+                              text:
+                                  LanguageClass.isEnglish ? "Login" : "دخول")),
                     ),
                     TextButton(
                         onPressed: () {
@@ -137,35 +164,40 @@ class LoginScreen extends StatelessWidget {
                               context, Routes.forgotPasswordRoute);
                         },
                         child: Text(
-                          LanguageClass.isEnglish?"Forget Password ?":"نسيت كلمه المرور",
+                          LanguageClass.isEnglish
+                              ? "Forget Password ?"
+                              : "نسيت كلمه المرور",
                           style: TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.normal,
-                              color: AppColors.white),
+                              fontFamily: 'regular',
+                              color: AppColors.primaryColor),
                         )),
-                    const Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          LanguageClass.isEnglish? "Don’t have an account? ":"لا امتلك حساب؟",
+                          LanguageClass.isEnglish
+                              ? "Don’t have an account? "
+                              : "لا امتلك حساب؟",
                           style: TextStyle(
-                            color: AppColors.white,
+                            color: Color(0xffA3A3A3),
                             fontSize: 17,
+                            fontFamily: 'black',
                             fontWeight: FontWeight.normal,
                           ),
                         ),
                         TextButton(
                           onPressed: () {
                             // Navigator.push(context, MaterialPageRoute(builder: (context){return SignUpScreen();}));
-                            Navigator.pushNamed(context, Routes.signUpRoute);
+                            Navigator.pushNamed(context, Routes.EmailRoute);
                           },
                           child: Text(
-                            LanguageClass.isEnglish?"Sign UP":
-                            "انشاء حساب",
+                            LanguageClass.isEnglish ? "Sign UP" : "انشاء حساب",
                             style: TextStyle(
-                              color: AppColors.yellow,
+                              color: AppColors.primaryColor,
                               fontSize: 17,
+                              fontFamily: 'regular',
                               fontWeight: FontWeight.normal,
                             ),
                           ),
@@ -173,7 +205,7 @@ class LoginScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(
-                      height: 50,
+                      height: 40,
                     )
                   ],
                 ),

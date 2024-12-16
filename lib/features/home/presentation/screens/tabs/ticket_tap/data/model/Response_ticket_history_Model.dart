@@ -29,57 +29,49 @@ class ResponseTicketHistoryModel {
   dynamic balance;
   dynamic object;
   dynamic obj;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['status'] = status;
-    if (message != null) {
-      map['message'] = message?.map((v) => v.toJson()).toList();
-    }
-    map['balance'] = balance;
-    map['Object'] = object;
-    map['Obj'] = obj;
-    return map;
-  }
 }
 
 class Message {
-  Message({
-    this.seatBusNo,
-    this.reservationID,
-    this.tripID,
-    this.lineName,
-    this.busID,
-    this.plateNo,
-    this.status,
-    this.from,
-    this.to,
-    this.creationDate,
-    this.price,
-    this.seatNo,
-    this.seatNumberReserved,
-    this.ticketNumber,
-    this.tripNumber,
-    this.fromStationID,
-    this.toStationID,
-    this.tripDate,
-    this.accessBusTime,
-    this.tripType,
-    this.statusName,
-    this.reservationDate,
-  });
+  Message(
+      {this.seatBusNo,
+      this.reservationId,
+      this.tripId,
+      this.lineName,
+      this.busId,
+      this.plateNo,
+      this.status,
+      this.from,
+      this.to,
+      this.creationDate,
+      this.price,
+      this.seatNo,
+      this.seatNumberReserved,
+      this.ticketNumber,
+      this.tripNumber,
+      this.fromStationID,
+      this.toStationID,
+      this.tripDate,
+      this.accessBusTime,
+      this.tripType,
+      this.seatNoList,
+      this.statusName,
+      this.isPaid,
+      this.reservationDate,
+      this.CanEditOrCancel,
+      this.servecietype});
 
   Message.fromJson(dynamic json) {
     seatBusNo = json['SeatBusNo'];
-    reservationID = json['ReservationID'];
-    tripID = json['TripID'];
+    reservationId = json['ReservationID'];
+    tripId = json['TripID'];
     lineName = json['LineName'];
-    busID = json['BusID'];
+    busId = json['BusID'];
+    seatNoList = json['SeatNoList'];
     plateNo = json['PlateNo'];
     status = json['Status'];
     from = json['From'];
     to = json['To'];
-    creationDate = json['CreationDate'];
+    creationDate = DateTime.parse(json["CreationDate"]);
     price = json['Price'];
     seatNo = json['SeatNo'];
     seatNumberReserved = json['SeatNumberReserved'];
@@ -87,28 +79,30 @@ class Message {
     tripNumber = json['TripNumber'];
     fromStationID = json['FromStationID'];
     toStationID = json['ToStationID'];
-    tripDate =
-        json['TripDate'] != null ? DateTime.parse(json['TripDate']) : null;
+    servecietype = json['ServiceType'] ?? '';
+    tripDate = DateTime.parse(json["TripDate"]);
     accessBusTime = json['AccessBusTime'];
     tripType = json['TripType'];
     statusName = json['StatusName'];
-    reservationDate = json['ReservationDate'] != null
-        ? DateTime.parse(json["ReservationDate"])
-        : null;
+    reservationDate = DateTime.parse(json["ReservationDate"]);
+    isPaid = json["IsPaid"];
+    CanEditOrCancel = json['CanEditOrCancel'];
   }
-  int? seatBusNo;
-  int? reservationID;
-  int? tripID;
+  String? phoneNumber;
+  String? customerName;
+  dynamic seatBusNo;
+  int? reservationId;
+  int? tripId;
   String? lineName;
-  int? busID;
+  int? busId;
   String? plateNo;
-  dynamic status;
+  int? status;
   String? from;
   String? to;
-  String? creationDate;
+  DateTime? creationDate;
   double? price;
-  int? seatNo;
-  int? seatNumberReserved;
+  dynamic seatNo;
+  dynamic seatNumberReserved;
   int? ticketNumber;
   int? tripNumber;
   int? fromStationID;
@@ -118,31 +112,9 @@ class Message {
   String? tripType;
   String? statusName;
   DateTime? reservationDate;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['SeatBusNo'] = seatBusNo;
-    map['ReservationID'] = reservationID;
-    map['TripID'] = tripID;
-    map['LineName'] = lineName;
-    map['BusID'] = busID;
-    map['PlateNo'] = plateNo;
-    map['Status'] = status;
-    map['From'] = from;
-    map['To'] = to;
-    map['CreationDate'] = creationDate;
-    map['Price'] = price;
-    map['SeatNo'] = seatNo;
-    map['SeatNumberReserved'] = seatNumberReserved;
-    map['TicketNumber'] = ticketNumber;
-    map['TripNumber'] = tripNumber;
-    map['FromStationID'] = fromStationID;
-    map['ToStationID'] = toStationID;
-    map['TripDate'] = tripDate;
-    map['AccessBusTime'] = accessBusTime;
-    map['TripType'] = tripType;
-    map['StatusName'] = statusName;
-    map['ReservationDate'] = reservationDate;
-    return map;
-  }
+  List? seatNoList;
+  int? countryId;
+  String? servecietype;
+  bool? isPaid;
+  bool? CanEditOrCancel;
 }

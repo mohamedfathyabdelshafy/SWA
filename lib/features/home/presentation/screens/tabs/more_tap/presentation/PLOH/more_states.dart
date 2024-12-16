@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/Acess_point_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/FAQ_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/abou_us_response.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/bus_classes_model.dart';
@@ -9,23 +10,26 @@ import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/stations_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/terms_and_condition_model.dart';
 
-abstract class MoreStates extends Equatable{
-}
-class InitialMoreStates extends MoreStates{
+abstract class MoreStates extends Equatable {}
+
+class InitialMoreStates extends MoreStates {
   @override
   List<Object?> get props => [];
 }
-class LoadingAboutUs extends MoreStates{
+
+class LoadingAboutUs extends MoreStates {
   @override
   List<Object?> get props => [];
 }
-class LoadedAboutUs  extends MoreStates{
+
+class LoadedAboutUs extends MoreStates {
   AboutUsResponse aboutUsResponse;
-  LoadedAboutUs ({required this.aboutUsResponse});
+  LoadedAboutUs({required this.aboutUsResponse});
   @override
   List<Object?> get props => [];
 }
-class ErrorAboutUs  extends MoreStates {
+
+class ErrorAboutUs extends MoreStates {
   String msg;
 
   ErrorAboutUs({required this.msg});
@@ -34,16 +38,18 @@ class ErrorAboutUs  extends MoreStates {
   List<Object?> get props => [];
 }
 
-class LoadingStations extends MoreStates{
+class LoadingStations extends MoreStates {
   @override
   List<Object?> get props => [];
 }
-class LoadedStations  extends MoreStates{
+
+class LoadedStations extends MoreStates {
   StationsModel stationsModel;
-  LoadedStations ({required this.stationsModel});
+  LoadedStations({required this.stationsModel});
   @override
   List<Object?> get props => [];
 }
+
 class ErrorStations extends MoreStates {
   String msg;
 
@@ -53,16 +59,18 @@ class ErrorStations extends MoreStates {
   List<Object?> get props => [];
 }
 
-class LoadingBussClass extends MoreStates{
+class LoadingBussClass extends MoreStates {
   @override
   List<Object?> get props => [];
 }
-class LoadedBussClass  extends MoreStates{
+
+class LoadedBussClass extends MoreStates {
   BusClassesModel busClassesModel;
-  LoadedBussClass ({required this.busClassesModel});
+  LoadedBussClass({required this.busClassesModel});
   @override
   List<Object?> get props => [];
 }
+
 class ErrorBussClass extends MoreStates {
   String msg;
 
@@ -72,17 +80,25 @@ class ErrorBussClass extends MoreStates {
   List<Object?> get props => [];
 }
 
+class LoadingLines extends MoreStates {
+  @override
+  List<Object?> get props => [];
+}
 
-class LoadingLines extends MoreStates{
-  @override
-  List<Object?> get props => [];
-}
-class LoadedLines  extends MoreStates{
+class LoadedLines extends MoreStates {
   LinesModel linesModel;
-  LoadedLines ({required this.linesModel});
+  LoadedLines({required this.linesModel});
   @override
   List<Object?> get props => [];
 }
+
+class Loadedpoints extends MoreStates {
+  Accesspontmodel linesModel;
+  Loadedpoints({required this.linesModel});
+  @override
+  List<Object?> get props => [];
+}
+
 class ErrorLines extends MoreStates {
   String msg;
 
@@ -92,16 +108,18 @@ class ErrorLines extends MoreStates {
   List<Object?> get props => [];
 }
 
-class LoadingTermsAndCondition extends MoreStates{
+class LoadingTermsAndCondition extends MoreStates {
   @override
   List<Object?> get props => [];
 }
-class LoadedTermsAndCondition  extends MoreStates{
+
+class LoadedTermsAndCondition extends MoreStates {
   TermsAndConditionModel termsAndConditionModel;
-  LoadedTermsAndCondition ({required this.termsAndConditionModel});
+  LoadedTermsAndCondition({required this.termsAndConditionModel});
   @override
   List<Object?> get props => [];
 }
+
 class ErrorTermsAndCondition extends MoreStates {
   String msg;
 
@@ -111,16 +129,18 @@ class ErrorTermsAndCondition extends MoreStates {
   List<Object?> get props => [];
 }
 
-class LoadingFAQ extends MoreStates{
+class LoadingFAQ extends MoreStates {
   @override
   List<Object?> get props => [];
 }
-class LoadedFAQ  extends MoreStates{
+
+class LoadedFAQ extends MoreStates {
   FaqModel faqModel;
-  LoadedFAQ ({required this.faqModel});
+  LoadedFAQ({required this.faqModel});
   @override
   List<Object?> get props => [];
 }
+
 class ErrorFAQ extends MoreStates {
   String msg;
 
@@ -130,17 +150,18 @@ class ErrorFAQ extends MoreStates {
   List<Object?> get props => [];
 }
 
+class LoadingPrivacy extends MoreStates {
+  @override
+  List<Object?> get props => [];
+}
 
-class LoadingPrivacy extends MoreStates{
-  @override
-  List<Object?> get props => [];
-}
-class LoadedPrivacy  extends MoreStates{
+class LoadedPrivacy extends MoreStates {
   PrivacyModel privacyModel;
-  LoadedPrivacy ({required this.privacyModel});
+  LoadedPrivacy({required this.privacyModel});
   @override
   List<Object?> get props => [];
 }
+
 class ErrorPrivacy extends MoreStates {
   String msg;
 
@@ -150,17 +171,18 @@ class ErrorPrivacy extends MoreStates {
   List<Object?> get props => [];
 }
 
+class LoadingSendMessage extends MoreStates {
+  @override
+  List<Object?> get props => [];
+}
 
-class LoadingSendMessage extends MoreStates{
-  @override
-  List<Object?> get props => [];
-}
-class LoadedSendMessage extends MoreStates{
+class LoadedSendMessage extends MoreStates {
   SendMessageModel sendMessageModel;
-  LoadedSendMessage ({required this.sendMessageModel});
+  LoadedSendMessage({required this.sendMessageModel});
   @override
   List<Object?> get props => [];
 }
+
 class ErrorSendMessage extends MoreStates {
   String msg;
 
@@ -170,16 +192,18 @@ class ErrorSendMessage extends MoreStates {
   List<Object?> get props => [];
 }
 
-class LoadingBusImage extends MoreStates{
+class LoadingBusImage extends MoreStates {
   @override
   List<Object?> get props => [];
 }
-class LoadedBusImage extends MoreStates{
+
+class LoadedBusImage extends MoreStates {
   BusImagesModel busImagesModel;
-  LoadedBusImage ({required this.busImagesModel});
+  LoadedBusImage({required this.busImagesModel});
   @override
   List<Object?> get props => [];
 }
+
 class ErrorBusImage extends MoreStates {
   String msg;
   ErrorBusImage({required this.msg});

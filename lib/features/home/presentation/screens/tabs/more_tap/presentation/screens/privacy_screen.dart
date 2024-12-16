@@ -19,19 +19,18 @@ class PrivacyScreen extends StatefulWidget {
 
 class _PrivacyScreenState extends State<PrivacyScreen> {
   MoreRepo moreRepo = MoreRepo(sl());
-  PrivacyModel  privacyModel  =PrivacyModel();
+  PrivacyModel privacyModel = PrivacyModel();
   @override
   void initState() {
     get();
     super.initState();
   }
-  void get()async{
+
+  void get() async {
     await BlocProvider.of<MoreCubit>(context).getPrivacy();
 
     privacyModel = (await moreRepo.getPrinacy())!;
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
@@ -39,25 +38,18 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
     double sizeHeight = context.height;
     double sizeWidth = context.width;
     return Directionality(
-      textDirection: LanguageClass.isEnglish?TextDirection.ltr:TextDirection.rtl,
+      textDirection:
+          LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(backgroundColor: AppColors.primaryColor,
-          centerTitle: true,
-          title: Text(
-            LanguageClass.isEnglish? "Privacy":"سياسة الخصوصية",
-            style: TextStyle(
-                color: AppColors.white,
-                fontSize: 34,
-                fontFamily: "bold"),
-          ),
-        ),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
         body: BlocBuilder(
           bloc: BlocProvider.of<MoreCubit>(context),
-          builder: (context,state)  {
-            if(state is LoadingFAQ){
-              return  Center(
-                child: CircularProgressIndicator(color: AppColors.primaryColor,),
+          builder: (context, state) {
+            if (state is LoadingFAQ) {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryColor,
+                ),
               );
             }
             return Padding(
@@ -66,53 +58,80 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(
-                    height: sizeHeight * 0.05,
+                    height: sizeHeight * 0.08,
+                  ),
+                  Container(
+                    alignment: LanguageClass.isEnglish
+                        ? Alignment.topLeft
+                        : Alignment.topRight,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        color: AppColors.primaryColor,
+                        size: 35,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      LanguageClass.isEnglish ? "Privacy" : "سياسة الخصوصية",
+                      style: TextStyle(
+                          color: AppColors.blackColor,
+                          fontSize: 38,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: "roman"),
+                    ),
                   ),
                   SizedBox(
-                    height: sizeHeight * 0.8,
+                    height: sizeHeight * 0.01,
+                  ),
+                  Expanded(
                     child: ListView.separated(
+                        padding: EdgeInsets.zero,
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 25),
+                                horizontal: 20, vertical: 10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
                                   privacyModel.message![index].title!,
                                   style: TextStyle(
-                                      color: AppColors.white,
+                                      color: AppColors.blackColor,
                                       fontFamily: "bold",
-                                      fontSize: 22
-                                  ),
+                                      fontSize: 22),
                                 ),
                                 Text(
                                   privacyModel.message![index].description!,
                                   style: TextStyle(
-                                      color: AppColors.white,
+                                      color: AppColors.blackColor,
                                       fontFamily: "regular",
-                                      fontSize: 18
-                                  ),
+                                      fontSize: 18),
                                 ),
-
                               ],
                             ),
                           );
                         },
                         separatorBuilder: (context, index) {
                           return Divider(
-                            color: AppColors.white,
+                            color: AppColors.greyLight,
                             thickness: 1,
                           );
                         },
-                        itemCount: privacyModel.message?.length??0),
+                        itemCount: privacyModel.message?.length ?? 0),
                   )
                 ],
               ),
             );
-
           },
-
         ),
       ),
     );

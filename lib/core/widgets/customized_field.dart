@@ -8,12 +8,42 @@ class CustomizedField extends StatefulWidget {
   final TextInputType? keyboardType;
   bool obscureText;
   final bool isPassword;
+  final bool readonly;
+
   final Color color;
   final String? labelText;
   final Color colorText;
-  final int? maxLength;
+  final Color? bordercolor;
+  final Color? labelcolor;
 
-  CustomizedField({Key? key, this.hintText, required this.controller, required this.validator, this.keyboardType, this.obscureText = false, this.isPassword = false, required this.color, this.labelText, required this.colorText, this.maxLength,}) : super(key: key);
+  double? borderradias;
+  final int? maxLength;
+  final bool? expanded;
+
+  final ontap;
+
+  final onchange;
+
+  CustomizedField({
+    Key? key,
+    this.hintText,
+    this.onchange,
+    this.borderradias,
+    this.ontap,
+    this.labelcolor,
+    this.expanded,
+    required this.controller,
+    required this.validator,
+    this.keyboardType,
+    this.obscureText = false,
+    this.readonly = false,
+    this.isPassword = false,
+    required this.color,
+    this.labelText,
+    required this.colorText,
+    this.maxLength,
+    this.bordercolor,
+  }) : super(key: key);
 
   @override
   State<CustomizedField> createState() => _CustomizedFieldState();
@@ -25,44 +55,74 @@ class _CustomizedFieldState extends State<CustomizedField> {
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          margin: const EdgeInsets.symmetric(vertical: 5),
+          height: 70,
+          alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: widget.color,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            color: Colors.white,
+            borderRadius:
+                BorderRadius.all(Radius.circular(widget.borderradias ?? 0)),
           ),
           child: TextFormField(
             maxLength: widget.maxLength,
+            readOnly: widget.readonly,
+            expands: widget.expanded ?? false,
+            onChanged: (v) {
+              widget.onchange == null ? () {} : widget.onchange(v);
+            },
+
+            onTap: widget.ontap ?? () {}, // and this
+
             controller: widget.controller,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+
             obscureText: widget.obscureText,
             keyboardType: widget.keyboardType,
             validator: widget.validator,
+
             style: TextStyle(color: widget.colorText, fontSize: 18),
-            cursorColor: AppColors.white,
+            cursorColor: Color(0xffA2A2A2),
             decoration: InputDecoration(
-              suffixIcon: widget.isPassword ? IconButton(
-                icon: Icon(
-                  widget.obscureText ? Icons.visibility_off : Icons.visibility,
-                  color: AppColors.yellow,
-                ),
-                onPressed: () {
-                  setState(() {
-                    widget.obscureText = !widget.obscureText;
-                  });
-                },
-              ) : null,
+              fillColor: widget.color,
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(widget.borderradias ?? 0),
+                  borderSide: BorderSide(
+                      color: widget.bordercolor ?? Colors.white, width: 0)),
+              disabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(widget.borderradias ?? 0),
+                  borderSide: BorderSide(color: Colors.white, width: 0)),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(widget.borderradias ?? 0),
+                  borderSide: BorderSide(color: Colors.white, width: 0)),
+              filled: true,
+              contentPadding:
+                  EdgeInsets.symmetric(horizontal: 15, vertical: 25),
+              suffixIcon: widget.isPassword
+                  ? IconButton(
+                      icon: Icon(
+                        widget.obscureText
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Color(0xff898989),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          widget.obscureText = !widget.obscureText;
+                        });
+                      },
+                    )
+                  : null,
               labelText: widget.labelText,
               labelStyle: TextStyle(
-                color: AppColors.white,
+                color: widget.labelcolor ?? AppColors.blackColor,
                 fontSize: 16,
-                fontWeight: FontWeight.bold,
+                fontFamily: 'black',
               ),
               hintText: widget.hintText,
               errorStyle: const TextStyle(fontSize: 10),
-              border: InputBorder.none,
               hintStyle: TextStyle(
-                color: AppColors.white,
-                fontSize: 13,
+                color: Color(0xffA2A2A2),
+                fontFamily: 'black',
+                fontSize: 14,
                 fontWeight: FontWeight.normal,
               ),
             ),

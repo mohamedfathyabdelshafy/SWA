@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "368531622652",
+    "project_id": "swa-buss",
+    "storage_bucket": "swa-buss.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368531622652:android:138867dc962e5b786ba579",
+        "android_client_info": {
+          "package_name": "com.swa.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBD7K-jT3YgVM5yN7f7eyCKYXOXlWlPX8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

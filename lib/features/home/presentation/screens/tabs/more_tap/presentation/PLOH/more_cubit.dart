@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/abou_us_response.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/lines_model.dart';
@@ -6,7 +8,7 @@ import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentatio
 import 'package:swa/main.dart';
 
 class MoreCubit extends Cubit<MoreStates> {
-  MoreCubit() :super(InitialMoreStates());
+  MoreCubit() : super(InitialMoreStates());
   MoreRepo moreRepo = MoreRepo(sl());
 
   Future<AboutUsResponse?> getAboutUs() async {
@@ -18,12 +20,10 @@ class MoreCubit extends Cubit<MoreStates> {
         emit(LoadedAboutUs(aboutUsResponse: res));
       }
       // emit(ErrorAboutUs(msg: "SomeThing went wrong please try again"));
-
     } catch (e) {
       print(e.toString());
     }
   }
-
 
   Future<AboutUsResponse?> getStations() async {
     try {
@@ -51,6 +51,19 @@ class MoreCubit extends Cubit<MoreStates> {
     }
   }
 
+  Future<LinesModel?> getpoints({required String lineid}) async {
+    try {
+      emit(LoadingLines());
+
+      final res = await moreRepo.getPoints(lineid: lineid);
+      if (res != null) {
+        emit(Loadedpoints(linesModel: res));
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   Future<AboutUsResponse?> getBusClass() async {
     try {
       emit(LoadingBussClass());
@@ -63,7 +76,6 @@ class MoreCubit extends Cubit<MoreStates> {
       print(e.toString());
     }
   }
-
 
   Future<AboutUsResponse?> getTermsAndCondition() async {
     try {
@@ -78,7 +90,6 @@ class MoreCubit extends Cubit<MoreStates> {
     }
   }
 
-
   Future<AboutUsResponse?> getFAQ() async {
     try {
       emit(LoadingFAQ());
@@ -91,7 +102,6 @@ class MoreCubit extends Cubit<MoreStates> {
       print(e.toString());
     }
   }
-
 
   Future<AboutUsResponse?> getPrivacy() async {
     try {
@@ -106,11 +116,7 @@ class MoreCubit extends Cubit<MoreStates> {
     }
   }
 
-
-  Future<AboutUsResponse?> getBusImage(
-  {
-    required String typeClass
-  }) async {
+  Future<AboutUsResponse?> getBusImage({required String typeClass}) async {
     try {
       emit(LoadingBusImage());
 
@@ -123,12 +129,10 @@ class MoreCubit extends Cubit<MoreStates> {
     }
   }
 
-
-  Future<AboutUsResponse?> sendMessage({
-    required String name,
-    required String email,
-    required String message
-}) async {
+  Future<AboutUsResponse?> sendMessage(
+      {required String name,
+      required String email,
+      required String message}) async {
     try {
       emit(LoadingSendMessage());
 
@@ -137,9 +141,10 @@ class MoreCubit extends Cubit<MoreStates> {
         email: email,
         message: message,
       );
+
       if (res!.status == "success") {
         emit(LoadedSendMessage(sendMessageModel: res));
-      }else{
+      } else {
         emit(ErrorSendMessage(msg: res.message!));
       }
     } catch (e) {

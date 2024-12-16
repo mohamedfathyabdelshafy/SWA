@@ -13,10 +13,12 @@ import 'package:swa/features/sign_in/data/models/user_model.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 
-
 class NewPasswordScreen extends StatefulWidget {
-   NewPasswordScreen({Key? key,required this.userId}) : super(key: key);
-String userId;
+  NewPasswordScreen({Key? key, required this.userId, required this.code})
+      : super(key: key);
+  String userId;
+  String code;
+
   @override
   State<NewPasswordScreen> createState() => _NewPasswordScreenState();
 }
@@ -25,7 +27,6 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController newPassController = TextEditingController();
   final TextEditingController REnewPassController = TextEditingController();
-  final TextEditingController passController = TextEditingController();
 
   User? _user;
 
@@ -37,7 +38,6 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
     super.initState();
   }
 
-
   @override
   void dispose() {
     newPassController.dispose();
@@ -46,110 +46,113 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double sizeHeight = context.height;
+    double sizeWidth = context.width;
     return Scaffold(
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor: AppColors.white,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 35),
+        padding: EdgeInsets.symmetric(horizontal: sizeWidth / 10),
         child: BlocListener(
-
           bloc: BlocProvider.of<LoginCubit>(context),
           listener: (context, state) {
             if (state is UserLoginLoadedState) {
               _user = state.userResponse.user;
             }
           },
-
           child: Directionality(
             textDirection:
-            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+                LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
             child: Form(
               key: formKey,
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(height:context.height * 0.15),
-                    SvgPicture.asset("assets/images/Swa Logo.svg"),
-                    SizedBox(height:context.height * 0.15),
-                    SizedBox(
-                      height: context.height*0.30,
-                      child: Column(
+                child: SizedBox(
+                  height: sizeHeight,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(height: context.height * 0.05),
+                      SizedBox(height: context.height * 0.08),
+                      Image.asset("assets/images/applogo.png"),
+                      SizedBox(height: context.height * 0.1),
+                      Column(
                         children: [
                           CustomizedField(
-                            isPassword: false,
-                            obscureText: false,
-                            colorText: AppColors.greyLight,
-                            controller:passController ,
-                            validator: (validator){
-                              if (validator == null || validator.isEmpty) {
-                                return LanguageClass.isEnglish ? " Enter the code" : "ادخل الكود";
-                              }
-                              return null;
-                            },
-                            color:Colors.white.withOpacity(0.2),
-                            labelText: LanguageClass.isEnglish?"Code":"الكود",
-                          ),
-                          CustomizedField(
-                              colorText: Colors.white,
+                              colorText: Color(0xffA2A2A2),
+                              borderradias: 33,
                               isPassword: true,
                               obscureText: true,
-                              color :AppColors.lightBink,
-                              hintText: LanguageClass.isEnglish?"Enter new password":
-                              "ادخل كلمة المرور الجديدة",
+                              color: Color(0xffDDDDDD),
+                              hintText: LanguageClass.isEnglish
+                                  ? "Enter new password"
+                                  : "ادخل كلمة المرور الجديدة",
                               controller: newPassController,
-                              validator: (value){
-                                if(value == null ||value.isEmpty ){
-                                  return  LanguageClass.isEnglish?"Enter new password":
-                                  " ادخال كلمة المرور";
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return LanguageClass.isEnglish
+                                      ? "Enter new password"
+                                      : " ادخال كلمة المرور";
                                 }
                                 return null;
-                              }
+                              }),
+                          SizedBox(
+                            height: 19,
                           ),
                           CustomizedField(
-                              colorText: Colors.white,
+                              colorText: Color(0xffA2A2A2),
+                              borderradias: 33,
                               isPassword: true,
                               obscureText: true,
-                              color :AppColors.lightBink,
-                              hintText: LanguageClass.isEnglish?"ReEnter new password":
-                              "اعادة ادخال كلمة المرور",
+                              color: Color(0xffDDDDDD),
+                              hintText: LanguageClass.isEnglish
+                                  ? "ReEnter new password"
+                                  : "اعادة ادخال كلمة المرور",
                               controller: REnewPassController,
-                              validator: (value){
-                                if(value == null ||value.isEmpty ){
-                                  return  LanguageClass.isEnglish?"ReEnter new password":
-                                  "اعادة ادخال كلمة المرور الجديدة";
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return LanguageClass.isEnglish
+                                      ? "Re-enter New Password"
+                                      : "اعادة ادخال كلمة المرور الجديدة";
                                 }
                                 return null;
-                              }
-                          ),
+                              }),
                         ],
                       ),
-                    ),
-                    BlocListener(
-                      bloc: BlocProvider.of<NewPasswordCubit>(context),
-                      listener: (context, state) {
-                        if(state is NewPasswordLoadingState){
-                          Constants.showLoadingDialog(context);
-                        }else if (state is NewPasswordLoadedState) {
-                          Constants.hideLoadingDialog(context);
-                          Navigator.pushNamed(context, Routes.doneLoginRoute);
-                        }else if (state is NewPasswordErrorState) {
-                          Constants.hideLoadingDialog(context);
-                          Constants.showDefaultSnackBar(context: context, text: state.error.toString());
-                        }
-                      },
-                      child: InkWell(
-                          onTap: (){
-                            if(formKey.currentState!.validate()) {
-                              ///Change old password to code
-                              BlocProvider.of<NewPasswordCubit>(context).newPassword(
-                                NewPasswordParams(oldPass: passController.text, newPass: newPassController.text, userId: widget.userId)
-                              );
-                            }
-                          },
-                          child: Constants.customButton(text: LanguageClass.isEnglish?"Done":"تم")
+                      const Spacer(),
+                      BlocListener(
+                        bloc: BlocProvider.of<NewPasswordCubit>(context),
+                        listener: (context, state) {
+                          if (state is NewPasswordLoadingState) {
+                            Constants.showLoadingDialog(context);
+                          } else if (state is NewPasswordLoadedState) {
+                            Constants.hideLoadingDialog(context);
+                            Navigator.pushNamed(context, Routes.doneLoginRoute);
+                          } else if (state is NewPasswordErrorState) {
+                            Constants.hideLoadingDialog(context);
+                            Constants.showDefaultSnackBar(
+                                context: context, text: state.error.toString());
+                          }
+                        },
+                        child: InkWell(
+                            onTap: () {
+                              if (formKey.currentState!.validate()) {
+                                ///Change old password to code
+                                BlocProvider.of<NewPasswordCubit>(context)
+                                    .newPassword(NewPasswordParams(
+                                        oldPass: widget.code,
+                                        newPass: newPassController.text,
+                                        userId: widget.userId));
+                              }
+                            },
+                            child: Constants.customButton(
+                                borderradias: 41,
+                                color: AppColors.primaryColor,
+                                text: LanguageClass.isEnglish ? "Done" : "تم")),
                       ),
-                    ),
-                  ],
+                      const SizedBox(
+                        height: 50,
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -159,4 +162,3 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
     );
   }
 }
-

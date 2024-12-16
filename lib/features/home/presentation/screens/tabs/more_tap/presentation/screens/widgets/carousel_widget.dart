@@ -1,10 +1,12 @@
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
+import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/Ads_model.dart';
 
 class CarouselWidget extends StatefulWidget {
   final List<Widget> items;
-  const CarouselWidget({required this.items,Key? key}) : super(key: key);
+  const CarouselWidget({required this.items, Key? key}) : super(key: key);
 
   @override
   State<CarouselWidget> createState() => _CarouselWidgetState();
@@ -13,29 +15,31 @@ class CarouselWidget extends StatefulWidget {
 class _CarouselWidgetState extends State<CarouselWidget> {
   @override
   Widget build(BuildContext context) {
+    double sizeHeight = context.height;
+
     return Column(
       children: [
         CarouselSlider(
             items: widget.items,
             options: CarouselOptions(
-              height: 111,
-              aspectRatio: 16/9,
+              aspectRatio: 1,
               viewportFraction: 1,
               initialPage: 0,
               enableInfiniteScroll: true,
               reverse: false,
               autoPlay: true,
               autoPlayInterval: const Duration(seconds: 3),
-              autoPlayAnimationDuration: const Duration(milliseconds: 800),
+              autoPlayAnimationDuration: const Duration(milliseconds: 1200),
               autoPlayCurve: Curves.fastOutSlowIn,
               enlargeCenterPage: true,
-              enlargeFactor: 0.3,
-              onPageChanged: (index,reason){
+              padEnds: false,
+              enlargeFactor: 0,
+              height: sizeHeight * 0.38,
+              onPageChanged: (index, reason) {
                 // CarouselCubit.get(context).changeIndex(index);
               },
               scrollDirection: Axis.horizontal,
-            )
-        ),
+            )),
         // const SizedBox(height: 8,),
         // BlocBuilder<CarouselCubit, CarouselState>(
         //   builder: (context, state) {
@@ -68,4 +72,19 @@ class _CarouselWidgetState extends State<CarouselWidget> {
       ],
     );
   }
+}
+
+Widget contentAdvertisment(Advertisement advertisement, double sizeHeight) {
+  return Container(
+      padding: EdgeInsets.zero,
+      alignment: Alignment.center,
+      width: double.infinity,
+      height: sizeHeight * 0.38,
+      child: Image.network(
+        advertisement.icon,
+        fit: BoxFit.fill,
+        height: sizeHeight * 0.38,
+        width: double.infinity,
+        alignment: Alignment.center,
+      ));
 }

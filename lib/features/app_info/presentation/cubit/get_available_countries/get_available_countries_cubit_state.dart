@@ -15,6 +15,13 @@ class GetAvailableCountriesLoadedState extends GetAvailableCountriesCubitState {
   List<Object> get props => [countries];
 }
 
+class Getadsstate extends GetAvailableCountriesCubitState {
+  final List<String> addimages;
+
+  Getadsstate({required this.addimages});
+  List<Object> get props => [addimages];
+}
+
 class GetAvailableCountriesErrorState extends GetAvailableCountriesCubitState {
   final String error;
   GetAvailableCountriesErrorState({required this.error});

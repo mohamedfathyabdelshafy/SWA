@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
+import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/features/payment/electronic_wallet/presentation/cubit/eWallet_cubit.dart';
 import 'package:swa/features/payment/electronic_wallet/presentation/screens/electronic_screens.dart';
 import 'package:swa/features/payment/fawry/presentation/cubit/fawry_cubit.dart';
@@ -24,29 +25,12 @@ class SelectPaymentScreen extends StatefulWidget {
 class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
   @override
   Widget build(BuildContext context) {
+    double sizeHeight = context.height;
+
     return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back,
-            color: AppColors.primaryColor,
-            size: 34,
-          ),
-        ),
-        actions: [  IconButton(onPressed: (){
-          Navigator.pushNamed(context, Routes.initialRoute
-          );
-        }, icon: Icon(Icons.home_outlined,color: AppColors.white,size: 35,))
-        ],
-        elevation: 0,
-        backgroundColor: Colors.black,
-      ),
+      backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Directionality(
           textDirection:
               LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
@@ -54,135 +38,167 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                LanguageClass.isEnglish ? "Select payment" : "حدد طريقة الدفع",
-                style: TextStyle(
-                    color: AppColors.white, fontSize: 34, fontFamily: "bold"),
-              ),
-              const SizedBox(
-                height: 37,
-              ),
-              const SizedBox(
-                height: 17,
-              ),
-              InkWell(
-                onTap: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BlocProvider<ReservationCubit>(
-                          create: (context) => ReservationCubit(),
-                          child: chargeCard(
-                            user: widget.user!,
-                            index: 1,
-                          )),
-                    ),
-                  );
-                },
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/visa.png',
-                      height: 50,
-                      width: 45,
-                      fit: BoxFit.fitWidth,
-                    ),
-                    Image.asset(
-                      'assets/images/master_card.png',
-                      height: 50,
-                      width: 45,
-                      fit: BoxFit.fitWidth,
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    customText(LanguageClass.isEnglish
-                        ? "Debit or credit card"
-                        : "بطاقة الخصم او الائتمان")
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 17,
+              SizedBox(
+                height: sizeHeight * 0.08,
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MultiBlocProvider(
-                        providers: [
-                          BlocProvider<LoginCubit>(
-                            create: (context) => sl<LoginCubit>(),
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, Routes.initialRoute, (route) => false);
+                },
+                child: Icon(
+                  Icons.arrow_back_rounded,
+                  color: AppColors.primaryColor,
+                  size: 35,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  LanguageClass.isEnglish
+                      ? "Select payment"
+                      : "حدد طريقة الدفع",
+                  style: TextStyle(
+                      color: AppColors.blackColor,
+                      fontSize: 38,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: "roman"),
+                ),
+              ),
+              SizedBox(
+                height: sizeHeight * 0.05,
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    InkWell(
+                      onTap: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                BlocProvider<ReservationCubit>(
+                                    create: (context) => ReservationCubit(),
+                                    child: chargeCard(
+                                      user: widget.user!,
+                                      index: 1,
+                                    )),
                           ),
-                          BlocProvider<FawryCubit>(
-                            create: (context) => sl<FawryCubit>(),
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/visa.png',
+                            height: 50,
+                            width: 45,
+                            fit: BoxFit.fitWidth,
                           ),
-                          BlocProvider<ReservationCubit>(
-                            create: (context) => ReservationCubit(),
+                          Image.asset(
+                            'assets/images/master_card.png',
+                            height: 50,
+                            width: 45,
+                            fit: BoxFit.fitWidth,
                           ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          customText(LanguageClass.isEnglish
+                              ? "Debit or credit card"
+                              : "بطاقة الخصم او الائتمان")
                         ],
-                        child: FawryScreen(),
-                      ),
-                    ),
-                  );
-                },
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                          color: AppColors.yellow2,
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: const Color(0xff4587FF))),
-                      child: SvgPicture.asset(
-                        'assets/images/Group 97.svg',
-                        // height: 60,
-                        // width: 100,
-                        fit: BoxFit.fitWidth,
                       ),
                     ),
                     const SizedBox(
-                      width: 5,
+                      height: 17,
                     ),
-                    customText(
-                        LanguageClass.isEnglish ? "Pay Fawry" : "مدفوعات فوري")
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 17,
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MultiBlocProvider(providers: [
-                        BlocProvider<LoginCubit>(
-                          create: (context) => sl<LoginCubit>(),
-                        ),
-                        BlocProvider<EWalletCubit>(
-                          create: (context) => sl<EWalletCubit>(),
-                        ),
-                      ], child:const ElectronicScreen()),
-                    ),
-                  );
-                },
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/icons8-open-wallet-78.png',
-                      height: 40,
-                      width: 40,
-                      fit: BoxFit.fitWidth,
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MultiBlocProvider(
+                              providers: [
+                                BlocProvider<LoginCubit>(
+                                  create: (context) => sl<LoginCubit>(),
+                                ),
+                                BlocProvider<FawryCubit>(
+                                  create: (context) => sl<FawryCubit>(),
+                                ),
+                                BlocProvider<ReservationCubit>(
+                                  create: (context) => ReservationCubit(),
+                                ),
+                              ],
+                              child: FawryScreen(),
+                            ),
+                          ),
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                color: AppColors.yellow2,
+                                borderRadius: BorderRadius.circular(5),
+                                border:
+                                    Border.all(color: const Color(0xff4587FF))),
+                            child: SvgPicture.asset(
+                              'assets/images/Group 97.svg',
+                              // height: 60,
+                              // width: 100,
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          customText(LanguageClass.isEnglish
+                              ? "Pay Fawry"
+                              : "مدفوعات فوري")
+                        ],
+                      ),
                     ),
                     const SizedBox(
-                      width: 10,
+                      height: 17,
                     ),
-                    customText(LanguageClass.isEnglish
-                        ? "Electronic wallet"
-                        : "المحفظة الاكترونية")
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MultiBlocProvider(providers: [
+                              BlocProvider<LoginCubit>(
+                                create: (context) => sl<LoginCubit>(),
+                              ),
+                              BlocProvider<EWalletCubit>(
+                                create: (context) => sl<EWalletCubit>(),
+                              ),
+                            ], child: const ElectronicScreen()),
+                          ),
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/icons8-open-wallet-78.png',
+                            height: 40,
+                            width: 40,
+                            fit: BoxFit.fitWidth,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          customText(LanguageClass.isEnglish
+                              ? "Electronic wallet"
+                              : "المحفظة الاكترونية")
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -197,7 +213,7 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
     return Text(
       text,
       style: const TextStyle(
-          color: Colors.white, fontSize: 21, fontFamily: "regular"),
+          color: Colors.black, fontSize: 21, fontFamily: "regular"),
     );
   }
 }
