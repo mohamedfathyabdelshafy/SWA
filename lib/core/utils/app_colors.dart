@@ -16,4 +16,5 @@ abstract class AppColors {
   static Color darkGrey = HexColor('#6F6B70');
   static Color blue = HexColor('#2A3244');
   static Color umragold = HexColor('#ECB95A');
+  static Color lightgold = HexColor('#FFF8EA');
 }

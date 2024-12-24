@@ -68,7 +68,9 @@ class _FawryScreenState extends State<FawryScreen> {
                     },
                     child: Icon(
                       Icons.arrow_back_rounded,
-                      color: AppColors.primaryColor,
+                      color: Routes.isomra
+                          ? AppColors.umragold
+                          : AppColors.primaryColor,
                       size: 35,
                     ),
                   ),
@@ -185,8 +187,9 @@ class _FawryScreenState extends State<FawryScreen> {
                                 showDoneConfirmationDialog(context,
                                     isError: false, callback: () {
                                   Navigator.pop(context);
-                                  Navigator.pushNamedAndRemoveUntil(context,
-                                      Routes.initialRoute, (route) => false);
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context, Routes.home, (route) => false,
+                                      arguments: Routes.isomra);
                                 },
                                     body: Column(
                                       mainAxisSize: MainAxisSize.min,
@@ -297,7 +300,9 @@ class _FawryScreenState extends State<FawryScreen> {
                                   text: LanguageClass.isEnglish
                                       ? "Chargee"
                                       : "شحن",
-                                  color: AppColors.primaryColor,
+                                  color: Routes.isomra
+                                      ? AppColors.umragold
+                                      : AppColors.primaryColor,
                                 ),
                               ),
                             ),

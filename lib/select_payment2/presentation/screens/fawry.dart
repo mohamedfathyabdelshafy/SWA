@@ -193,8 +193,9 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                                 isError: false,
                                 callback: () {
                                   Navigator.pop(context);
-                                  Navigator.pushNamedAndRemoveUntil(context,
-                                      Routes.initialRoute, (route) => false);
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context, Routes.home, (route) => false,
+                                      arguments: Routes.isomra);
                                 },
                                 body: Column(
                                   mainAxisSize: MainAxisSize.min,

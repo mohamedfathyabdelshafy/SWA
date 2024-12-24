@@ -62,7 +62,9 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                     },
                     child: Icon(
                       Icons.arrow_back_rounded,
-                      color: AppColors.primaryColor,
+                      color: Routes.isomra
+                          ? AppColors.umragold
+                          : AppColors.primaryColor,
                       size: 35,
                     ),
                   ),
@@ -245,8 +247,9 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                   isError: false,
                                   callback: () {
                                     Navigator.pop(context);
-                                    Navigator.pushNamedAndRemoveUntil(context,
-                                        Routes.initialRoute, (route) => false);
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context, Routes.home, (route) => false,
+                                        arguments: Routes.isomra);
                                   },
                                   body: Column(
                                     mainAxisSize: MainAxisSize.min,
@@ -354,7 +357,9 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                   text: LanguageClass.isEnglish
                                       ? "Charge"
                                       : "شحن",
-                                  color: AppColors.primaryColor,
+                                  color: Routes.isomra
+                                      ? AppColors.umragold
+                                      : AppColors.primaryColor,
                                 ),
                               ),
                             ),

@@ -233,7 +233,8 @@ class _packagePaymentScreenState extends State<packagePaymentScreen> {
                               text: state
                                   .reservationResponseMyWalletModel!.message!);
                           Navigator.pushNamedAndRemoveUntil(
-                              context, Routes.initialRoute, (route) => false);
+                              context, Routes.home, (route) => false,
+                              arguments: Routes.isomra);
                         } else if (state
                                 .reservationResponseMyWalletModel?.status ==
                             'failed') {

@@ -76,7 +76,8 @@ class _TimerwidgetState extends State<Timerwidget> {
               onConfirmBtnTap: () {
                 Navigator.pop(context);
                 Navigator.pushNamedAndRemoveUntil(
-                    context, Routes.initialRoute, (route) => false);
+                    context, Routes.home, (route) => false,
+                    arguments: Routes.isomra);
 
                 Reservationtimer.stoptimer();
               });

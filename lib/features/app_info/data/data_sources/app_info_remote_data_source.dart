@@ -32,7 +32,7 @@ class AppInfoRemoteDataSourceImpl implements AppInfoRemoteDataSource {
     http.StreamedResponse response = await request.send();
     Map<String, dynamic> jsonResponse =
         jsonDecode(await response.stream.bytesToString());
-    print(jsonResponse);
+    print('countries $jsonResponse');
 
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == "success") {

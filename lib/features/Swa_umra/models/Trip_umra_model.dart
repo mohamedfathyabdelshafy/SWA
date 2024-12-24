@@ -9,7 +9,7 @@ TripUmramodel tripUmramodelFromJson(String str) =>
 
 class TripUmramodel {
   String? status;
-  Message? message;
+  Messageumra? message;
   String? errormessage;
 
   dynamic balance;
@@ -30,7 +30,7 @@ class TripUmramodel {
   TripUmramodel.fromJson(Map<String, dynamic> json) {
     status = json["status"];
     if (json['status'] == 'success') {
-      message = Message.fromJson(json["message"]);
+      message = Messageumra.fromJson(json["message"]);
     } else {
       errormessage = json['message'];
     }
@@ -41,14 +41,14 @@ class TripUmramodel {
   }
 }
 
-class Message {
+class Messageumra {
   List<ListElement>? list;
 
-  Message({
+  Messageumra({
     this.list,
   });
 
-  factory Message.fromJson(Map<String, dynamic> json) => Message(
+  factory Messageumra.fromJson(Map<String, dynamic> json) => Messageumra(
         list: List<ListElement>.from(
             json["List"].map((x) => ListElement.fromJson(x))),
       );

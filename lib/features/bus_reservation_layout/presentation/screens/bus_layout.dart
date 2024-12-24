@@ -666,8 +666,9 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                             Navigator.pop(context);
                                             Navigator.pushNamedAndRemoveUntil(
                                                 context,
-                                                Routes.initialRoute,
-                                                (route) => false);
+                                                Routes.home,
+                                                (route) => false,
+                                                arguments: Routes.isomra);
                                           },
                                         );
                                         if (Reservationtimer

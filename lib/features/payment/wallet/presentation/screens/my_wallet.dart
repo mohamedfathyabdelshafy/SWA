@@ -75,11 +75,14 @@ class _MyCreditState extends State<MyCredit> {
                 child: InkWell(
                   onTap: () {
                     Navigator.pushNamedAndRemoveUntil(
-                        context, Routes.initialRoute, (route) => false);
+                        context, Routes.home, (route) => false,
+                        arguments: Routes.isomra);
                   },
                   child: Icon(
                     Icons.arrow_back_rounded,
-                    color: AppColors.primaryColor,
+                    color: Routes.isomra
+                        ? AppColors.umragold
+                        : AppColors.primaryColor,
                     size: 35,
                   ),
                 ),
@@ -110,7 +113,9 @@ class _MyCreditState extends State<MyCredit> {
                       },
                       child: Icon(
                         Icons.refresh,
-                        color: AppColors.primaryColor,
+                        color: Routes.isomra
+                            ? AppColors.umragold
+                            : AppColors.primaryColor,
                       ),
                     )
                   ],
@@ -178,7 +183,9 @@ class _MyCreditState extends State<MyCredit> {
                               horizontal: 20, vertical: 10),
                           //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
                           decoration: BoxDecoration(
-                              color: AppColors.primaryColor,
+                              color: Routes.isomra
+                                  ? AppColors.umragold
+                                  : AppColors.primaryColor,
                               borderRadius: BorderRadius.circular(41)),
                           child: Center(
                             child: Text(

@@ -56,7 +56,8 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                   child: InkWell(
                     onTap: () {
                       Navigator.pushNamedAndRemoveUntil(
-                          context, Routes.initialRoute, (route) => false);
+                          context, Routes.home, (route) => false,
+                          arguments: Routes.isomra);
                     },
                     child: Icon(
                       Icons.arrow_back_rounded,
@@ -271,8 +272,9 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                                             Navigator.pop(context);
                                             Navigator.pushNamedAndRemoveUntil(
                                                 context,
-                                                Routes.initialRoute,
-                                                (route) => false);
+                                                Routes.home,
+                                                (route) => false,
+                                                arguments: Routes.isomra);
                                           },
                                           child: Container(
                                             // padding: const EdgeInsets.symmetric(horizontal: 20,vertical:20),

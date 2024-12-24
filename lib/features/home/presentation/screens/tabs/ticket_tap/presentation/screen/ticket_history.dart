@@ -414,7 +414,9 @@ class _TicketHistoryState extends State<TicketHistory> {
             if (state is LoadingTicketHistory) {
               return Center(
                 child: CircularProgressIndicator(
-                  color: AppColors.primaryColor,
+                  color: Routes.isomra
+                      ? AppColors.umragold
+                      : AppColors.primaryColor,
                 ),
               );
             } else if (state is ErrorTicketHistory) {
@@ -437,11 +439,14 @@ class _TicketHistoryState extends State<TicketHistory> {
                       child: InkWell(
                         onTap: () {
                           Navigator.pushNamedAndRemoveUntil(
-                              context, Routes.initialRoute, (route) => false);
+                              context, Routes.home, (route) => false,
+                              arguments: Routes.isomra);
                         },
                         child: Icon(
                           Icons.arrow_back_rounded,
-                          color: AppColors.primaryColor,
+                          color: Routes.isomra
+                              ? AppColors.umragold
+                              : AppColors.primaryColor,
                           size: 35,
                         ),
                       ),
@@ -500,11 +505,14 @@ class _TicketHistoryState extends State<TicketHistory> {
                       child: InkWell(
                         onTap: () {
                           Navigator.pushNamedAndRemoveUntil(
-                              context, Routes.initialRoute, (route) => false);
+                              context, Routes.home, (route) => false,
+                              arguments: Routes.isomra);
                         },
                         child: Icon(
                           Icons.arrow_back_rounded,
-                          color: AppColors.primaryColor,
+                          color: Routes.isomra
+                              ? AppColors.umragold
+                              : AppColors.primaryColor,
                           size: 35,
                         ),
                       ),

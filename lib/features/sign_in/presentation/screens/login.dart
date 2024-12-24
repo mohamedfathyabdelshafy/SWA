@@ -52,8 +52,9 @@ class LoginScreen extends StatelessWidget {
                         TextButton(
                             onPressed: () {
                               // Navigator.push(context, MaterialPageRoute(builder: (context){return ForgetPasswordScreen();}));
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  Routes.initialRoute, (route) => false);
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, Routes.home, (route) => false,
+                                  arguments: Routes.isomra);
                             },
                             child: Text(
                               LanguageClass.isEnglish ? "Skip" : "تخطي",
@@ -129,8 +130,9 @@ class LoginScreen extends StatelessWidget {
                             if (isback == true) {
                               Navigator.pop(context);
                             } else {
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  Routes.initialRoute, (route) => false);
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, Routes.home, (route) => false,
+                                  arguments: Routes.isomra);
                             }
 
                             Routes.customerid =

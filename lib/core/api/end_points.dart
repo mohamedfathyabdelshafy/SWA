@@ -13,6 +13,9 @@ class EndPoints {
   static const String timesTrips = '${baseUrl}Trip/GetTrips';
   static const String busLayout = '${baseUrl}Trip/GetSingleTripDetails';
   static const String reservation = '${baseUrl}Reservation/AddReservation';
+
+  static const String reservationUmra = '${baseUrl}TripUmra/AddReservation';
+
   static const String paypackage = '${baseUrl}Package/SubscribePackage';
   static const String checkpromocode = '${baseUrl}Reservation/CheckPromoCode';
 

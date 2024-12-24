@@ -249,8 +249,9 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                               showDoneConfirmationDialog(context,
                                   isError: false, callback: () {
                                 Navigator.pop(context);
-                                Navigator.pushNamedAndRemoveUntil(context,
-                                    Routes.initialRoute, (route) => false);
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, Routes.home, (route) => false,
+                                    arguments: Routes.isomra);
                               },
                                   body: Column(
                                     mainAxisSize: MainAxisSize.min,

@@ -21,18 +21,18 @@ class LinesScreen extends StatefulWidget {
 
 class _LinesScreenState extends State<LinesScreen> {
   MoreRepo moreRepo = MoreRepo(sl());
-  LinesModel  linesModel  =LinesModel();
+  LinesModel linesModel = LinesModel();
   @override
   void initState() {
     get();
     super.initState();
   }
-  void get()async{
+
+  void get() async {
     await BlocProvider.of<MoreCubit>(context).getLines();
     linesModel = (await moreRepo.getLines())!;
     print("linesModel${linesModel.message![0].tripTypeId}");
-    setState(() {
-    });
+    setState(() {});
   }
 
   @override
@@ -40,25 +40,27 @@ class _LinesScreenState extends State<LinesScreen> {
     double sizeHeight = context.height;
     double sizeWidth = context.width;
     return Directionality(
-      textDirection: LanguageClass.isEnglish?TextDirection.ltr:TextDirection.rtl,
+      textDirection:
+          LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(backgroundColor: AppColors.primaryColor,
+        appBar: AppBar(
+          backgroundColor: AppColors.primaryColor,
           centerTitle: true,
           title: Text(
-            LanguageClass.isEnglish?  "Routes":"الخطوط",
+            LanguageClass.isEnglish ? "Routes" : "الخطوط",
             style: TextStyle(
-                color: AppColors.white,
-                fontSize: 34,
-                fontFamily: "bold"),
+                color: AppColors.white, fontSize: 34, fontFamily: "bold"),
           ),
         ),
         backgroundColor: Colors.black,
         body: BlocBuilder(
           bloc: BlocProvider.of<MoreCubit>(context),
-          builder: (context,state){
-            if(state is LoadingLines){
-              return  Center(
-                child: CircularProgressIndicator(color: AppColors.primaryColor,),
+          builder: (context, state) {
+            if (state is LoadingLines) {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryColor,
+                ),
               );
             }
             return Padding(
@@ -84,15 +86,14 @@ class _LinesScreenState extends State<LinesScreen> {
                                   Row(
                                     children: [
                                       SvgPicture.asset(
-                                          "assets/images/Icon awesome-bus-alt.svg",
-                                        height: sizeHeight * 0.06 ,
-
+                                        "assets/images/Icon awesome-bus-alt.svg",
+                                        height: sizeHeight * 0.06,
                                       ),
                                       SizedBox(
                                         width: sizeWidth * 0.05,
                                       ),
                                       Text(
-                                        linesModel.message![index].name??"",
+                                        linesModel.message![index].name ?? "",
                                         style: TextStyle(
                                             fontFamily: "regular",
                                             fontSize: 18,
@@ -104,19 +105,24 @@ class _LinesScreenState extends State<LinesScreen> {
                                     children: [
                                       Spacer(),
                                       InkWell(
-                                        onTap: (){
-                                          Navigator.pushNamedAndRemoveUntil(context, Routes.initialRoute,
-                                                (Route<dynamic> route) => false,
-                                          );
+                                        onTap: () {
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              Routes.home,
+                                              (route) => false,
+                                              arguments: Routes.isomra);
                                         },
                                         child: Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 8),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 8),
                                           decoration: BoxDecoration(
-                                            color: Colors.green,
-                                            borderRadius: BorderRadius.circular(20)
-                                          ),
+                                              color: Colors.green,
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
                                           child: Text(
-                                            LanguageClass.isEnglish?"Book Now":"احجز الان",
+                                            LanguageClass.isEnglish
+                                                ? "Book Now"
+                                                : "احجز الان",
                                             style: TextStyle(
                                               color: AppColors.white,
                                               fontSize: 20,
@@ -129,7 +135,6 @@ class _LinesScreenState extends State<LinesScreen> {
                                   )
                                 ],
                               ),
-
                             ),
                           );
                         },
@@ -140,13 +145,15 @@ class _LinesScreenState extends State<LinesScreen> {
                               Container(
                                 padding: EdgeInsets.all(15),
                                 decoration: BoxDecoration(
-                                    color: AppColors.primaryColor,
-                                    // borderRadius: BorderRadius.circular(20)
+                                  color: AppColors.primaryColor,
+                                  // borderRadius: BorderRadius.circular(20)
                                 ),
                                 child: Row(
                                   children: [
                                     Text(
-                                      LanguageClass.isEnglish?"Starts From":"يبدا من",
+                                      LanguageClass.isEnglish
+                                          ? "Starts From"
+                                          : "يبدا من",
                                       style: TextStyle(
                                         color: AppColors.white,
                                         fontSize: 20,
@@ -155,7 +162,8 @@ class _LinesScreenState extends State<LinesScreen> {
                                     ),
                                     Spacer(),
                                     Text(
-                                      linesModel.message![index].startsFrom.toString(),
+                                      linesModel.message![index].startsFrom
+                                          .toString(),
                                       style: TextStyle(
                                         color: AppColors.white,
                                         fontSize: 25,
@@ -168,15 +176,12 @@ class _LinesScreenState extends State<LinesScreen> {
                             ],
                           );
                         },
-                        itemCount: linesModel.message?.length??0),
+                        itemCount: linesModel.message?.length ?? 0),
                   )
                 ],
               ),
-
-
             );
           },
-
         ),
       ),
     );

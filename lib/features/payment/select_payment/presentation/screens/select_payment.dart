@@ -44,11 +44,14 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
               InkWell(
                 onTap: () {
                   Navigator.pushNamedAndRemoveUntil(
-                      context, Routes.initialRoute, (route) => false);
+                      context, Routes.home, (route) => false,
+                      arguments: Routes.isomra);
                 },
                 child: Icon(
                   Icons.arrow_back_rounded,
-                  color: AppColors.primaryColor,
+                  color: Routes.isomra
+                      ? AppColors.umragold
+                      : AppColors.primaryColor,
                   size: 35,
                 ),
               ),

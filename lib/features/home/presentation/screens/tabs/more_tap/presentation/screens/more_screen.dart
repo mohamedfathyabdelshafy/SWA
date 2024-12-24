@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/app_colors.dart';
@@ -53,11 +54,14 @@ class MoreScreen extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       Navigator.pushNamedAndRemoveUntil(
-                          context, Routes.initialRoute, (route) => false);
+                          context, Routes.home, (route) => false,
+                          arguments: Routes.isomra);
                     },
                     child: Icon(
                       Icons.arrow_back_rounded,
-                      color: AppColors.primaryColor,
+                      color: Routes.isomra
+                          ? AppColors.umragold
+                          : AppColors.primaryColor,
                       size: 35,
                     ),
                   ),
@@ -81,8 +85,10 @@ class MoreScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: ListView.separated(
+                      physics: ScrollPhysics(),
                       padding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                      reverse: false,
                       itemBuilder: (context, index) {
                         return index == 9
                             ? BlocBuilder<GetAvailableCountriesCubit,
@@ -229,7 +235,7 @@ class MoreScreen extends StatelessWidget {
                                                                                   });
                                                                                   Routes.curruncy = state.countries[index].curruncy;
 
-                                                                                  Navigator.pushNamedAndRemoveUntil(context, Routes.initialRoute, (route) => false);
+                                                                                  Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false, arguments: Routes.isomra);
                                                                                 },
                                                                                 child: Container(
                                                                                   width: double.infinity,
@@ -292,31 +298,33 @@ class MoreScreen extends StatelessWidget {
                                           ),
                                         ),
                                       )
-                                    : Row(
-                                        children: [
-                                          Container(
-                                            width: 25,
-                                            child: Image.network(
-                                              Routes.countryflag!,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            Routes.country!,
-                                            style: TextStyle(
-                                                color: AppColors.blackColor,
-                                                fontFamily: "regular",
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 21),
-                                          )
-                                        ],
-                                      );
+                                    : Routes.countryflag == null
+                                        ? Container()
+                                        : Row(
+                                            children: [
+                                              Container(
+                                                width: 25,
+                                                child: Image.network(
+                                                  Routes.countryflag!,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                Routes.country!,
+                                                style: TextStyle(
+                                                    color: AppColors.blackColor,
+                                                    fontFamily: "regular",
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 21),
+                                              )
+                                            ],
+                                          );
                               })
                             : InkWell(
                                 onTap: () {
-                                  if (index == 0) {
+                                  if (index == 10) {
                                     Navigator.push(context,
                                         MaterialPageRoute(builder: (context) {
                                       return BlocProvider<MoreCubit>(
@@ -390,62 +398,91 @@ class MoreScreen extends StatelessWidget {
                                     CacheHelper.setDataToSharedPref(
                                         key: 'language',
                                         value: LanguageClass.isEnglish);
-                                    Navigator.pushNamedAndRemoveUntil(context,
-                                        Routes.initialRoute, (route) => false);
-                                  } else if (index == 10) {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                SelectUmratypeScreen()));
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context, Routes.home, (route) => false,
+                                        arguments: Routes.isomra);
+                                  } else if (index == 0) {
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context, Routes.home, (route) => false,
+                                        arguments: !Routes.isomra);
+                                    Routes.isomra = !Routes.isomra;
                                   }
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 0, vertical: 10),
-                                  child: index == 10
-                                      ? Container(
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                LanguageClass.isEnglish
-                                                    ? "Swa Umrah"
-                                                    : "سوا عمرة",
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 18,
-                                                    fontFamily: "meduim"),
+                                  child: index == 0
+                                      ? Routes.isomra
+                                          ? Container(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    LanguageClass.isEnglish
+                                                        ? "Swa Bus"
+                                                        : "سوا  باص",
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 18,
+                                                        fontFamily: "meduim"),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Container(
+                                                      width: 40,
+                                                      alignment:
+                                                          Alignment.center,
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              5),
+                                                      decoration: BoxDecoration(
+                                                        color: AppColors.white,
+                                                      ),
+                                                      child: SvgPicture.asset(
+                                                          'assets/images/Icon awesome-bus-alt.svg')),
+                                                ],
                                               ),
-                                              SizedBox(
-                                                width: 10,
+                                            )
+                                          : Container(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    LanguageClass.isEnglish
+                                                        ? "Swa Umrah"
+                                                        : "سوا عمرة",
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 18,
+                                                        fontFamily: "meduim"),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Container(
+                                                      height: 30,
+                                                      alignment:
+                                                          Alignment.center,
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              5),
+                                                      decoration: BoxDecoration(
+                                                        color: AppColors.white,
+                                                      ),
+                                                      child: Image.asset(
+                                                          'assets/images/umrah.png')),
+                                                ],
                                               ),
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.all(15),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  color: AppColors.yellow2,
-                                                ),
-                                                child: Text(
-                                                  "New",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14.sp,
-                                                      color: AppColors
-                                                          .primaryColor),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
+                                            )
                                       : Text(
-                                          index == 0
+                                          index == 10
                                               ? LanguageClass.isEnglish
                                                   ? "Lines"
                                                   : "خطوط"

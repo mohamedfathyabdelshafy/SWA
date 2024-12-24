@@ -12,6 +12,7 @@ import 'package:swa/features/home/presentation/cubit/home_cubit.dart';
 import 'package:swa/features/home/presentation/screens/Update_screen/update_screen.dart';
 import 'package:swa/features/home/presentation/screens/home.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
+import 'package:swa/features/home/presentation/screens/tabs/select_app_screen.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/presentation/PLOH/ticket_history_cubit.dart';
 import 'package:swa/features/payment/fawry/presentation/cubit/fawry_cubit.dart';
 import 'package:swa/features/payment/fawry/presentation/screens/fawry.dart';
@@ -29,6 +30,8 @@ import 'package:swa/select_payment2/data/models/trip_reservartion_model.dart';
 
 class Routes {
   static const String initialRoute = '/';
+  static const String home = 'home';
+
   static const String signInRoute = '/signIn';
   static const String doneLoginRoute = '/doneLogin';
   static const String signUpRoute = '/signUp';
@@ -65,6 +68,8 @@ class Routes {
   static bool ispercentage = false;
 
   static String PromoCodeID = '';
+  static bool isomra = false;
+
   static String? PackageID, PackagePriceID;
 
   static List<TripReservationList> resrvedtrips = [];
@@ -96,7 +101,37 @@ class AppRoute {
                       create: (context) => sl<TimesTripsCubit>()),
                   BlocProvider<TicketCubit>(
                       create: (context) => sl<TicketCubit>()),
-                ], child: const HomeScreen()));
+                ], child: const SelectappScreen()));
+
+      case Routes.home:
+        bool isomra = settings.arguments as bool;
+        return MaterialPageRoute(
+            builder: (context) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider<LoginCubit>(
+                        create: (context) => sl<LoginCubit>(),
+                      ),
+                      BlocProvider<PackagesBloc>(
+                        create: (context) => PackagesBloc(),
+                      ),
+                      BlocProvider<FawryReservation>(
+                        create: (context) => sl<FawryReservation>(),
+                      ),
+                      BlocProvider<GetAvailableCountriesCubit>(
+                        create: (context) => sl<GetAvailableCountriesCubit>(),
+                      ),
+                      BlocProvider<HomeCubit>(
+                        create: (context) => sl<HomeCubit>(),
+                      ),
+                      BlocProvider<TimesTripsCubit>(
+                          create: (context) => sl<TimesTripsCubit>()),
+                      BlocProvider<TicketCubit>(
+                          create: (context) => sl<TicketCubit>()),
+                    ],
+                    child: HomeScreen(
+                      isumra: isomra,
+                    )));
+
       case Routes.signInRoute:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(

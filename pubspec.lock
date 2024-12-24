@@ -69,10 +69,10 @@ packages:
     dependency: "direct main"
     description:
       name: carousel_slider
-      sha256: "9c695cc963bf1d04a47bd6021f68befce8970bcd61d24938e1fb0918cf5d9c42"
+      sha256: "7b006ec356205054af5beaef62e2221160ea36b90fb70a35e4deacd49d0349ae"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.1"
+    version: "5.0.0"
   characters:
     dependency: transitive
     description:
@@ -153,6 +153,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.10.1"
+  dotted_line:
+    dependency: "direct main"
+    description:
+      name: dotted_line
+      sha256: "41e3d655939559815daa1370fc1e07673a205fa628cf40ce3af45d90029a77b6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.3"
   dropdown_textfield:
     dependency: "direct main"
     description:
@@ -464,6 +472,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.7"
+  indexed:
+    dependency: "direct main"
+    description:
+      name: indexed
+      sha256: "3509a2a7ad1dbd7280da377661129e0b0a2f5e8d6d75f10400f07397f95324df"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.8"
   injectable:
     dependency: "direct main"
     description:

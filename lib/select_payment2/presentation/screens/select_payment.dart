@@ -127,7 +127,8 @@ class _SelectPaymentScreen2State extends State<SelectPaymentScreen2> {
                         if (state.reservationResponseMyWalletModel.status ==
                             'success') {
                           Navigator.pushNamedAndRemoveUntil(
-                              context, Routes.initialRoute, (route) => false);
+                              context, Routes.home, (route) => false,
+                              arguments: Routes.isomra);
                         }
                       }
                       if (state is ErrorMyWalletState) {

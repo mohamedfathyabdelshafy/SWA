@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:swa/core/api/api_consumer.dart';
 import 'package:swa/core/api/end_points.dart';
+import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/personal_info/data/model/personal_info_edit_response.dart';
 import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/personal_info/data/model/personal_info_response.dart';
 
@@ -11,8 +12,11 @@ class PersonalInfoRepo {
 
   Future<PersonalInfoResponse?> getPersonalInfo(
       {required int customerId}) async {
-    var res = await apiConsumer
-        .get("${EndPoints.baseUrl}Customer/Details?customerID=$customerId");
+    var countryid = CacheHelper.getDataToSharedPref(
+      key: 'countryid',
+    );
+    var res = await apiConsumer.get(
+        "${EndPoints.baseUrl}Customer/Details?customerID=$customerId&countryID=$countryid");
     var decode = jsonDecode(res.body);
 
     PersonalInfoResponse personalInfoResponse =

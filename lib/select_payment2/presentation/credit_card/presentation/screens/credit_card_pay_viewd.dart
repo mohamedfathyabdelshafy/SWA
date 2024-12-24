@@ -979,7 +979,8 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
           IconButton(
               onPressed: () {
                 Navigator.pushNamedAndRemoveUntil(
-                    context, Routes.initialRoute, (route) => false);
+                    context, Routes.home, (route) => false,
+                    arguments: Routes.isomra);
               },
               icon: Icon(
                 Icons.home_outlined,
@@ -1040,10 +1041,8 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
                                   ? 'Payment completed successfully'
                                   : 'تم عملية الدفع بنجاح', callback: () {
                             Navigator.pushNamedAndRemoveUntil(
-                              context,
-                              Routes.initialRoute,
-                              (r) => false,
-                            );
+                                context, Routes.home, (route) => false,
+                                arguments: Routes.isomra);
                           });
                         });
 
