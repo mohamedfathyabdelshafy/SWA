@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 
 import '../../../../core/utils/app_colors.dart';
 
@@ -20,16 +21,26 @@ class TripDetails extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.date_range_outlined,color: AppColors.white,size: 16,),
-                    SizedBox(width: sizeWidth * 0.01,),
-                    Text("Zagazig",
-                      style: TextStyle(color: AppColors.white,fontSize:12 ),)
+                    Icon(
+                      Icons.date_range_outlined,
+                      color: AppColors.white,
+                      size: 16,
+                    ),
+                    SizedBox(
+                      width: sizeWidth * 0.01,
+                    ),
+                    Text(
+                      "Zagazig",
+                      style: fontStyle(color: AppColors.white, fontSize: 12),
+                    )
                   ],
                 ),
-                Text(
-                    "10:00 AM",
+                Text("10:00 AM",
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: AppColors.white,fontSize: 20 )),
+                    style: fontStyle(
+                        color: AppColors.white,
+                        fontFamily: FontFamily.medium,
+                        fontSize: 20)),
               ],
             ),
             const Spacer(),
@@ -37,18 +48,24 @@ class TripDetails extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.date_range_outlined,color: AppColors.white,size: 16,),
-                    SizedBox(width: sizeWidth * 0.01,),
-                    Text("Ein Sokhna",
-                      style: TextStyle(color: AppColors.white,fontSize:12 ),)
+                    Icon(
+                      Icons.date_range_outlined,
+                      color: AppColors.white,
+                      size: 16,
+                    ),
+                    SizedBox(
+                      width: sizeWidth * 0.01,
+                    ),
+                    Text(
+                      "Ein Sokhna",
+                      style: fontStyle(color: AppColors.white, fontSize: 12),
+                    )
                   ],
                 ),
                 InkWell(
-
-                  child: Text(
-                      "01:20 AM",
+                  child: Text("01:20 AM",
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: AppColors.white,fontSize: 20 )),
+                      style: fontStyle(color: AppColors.white, fontSize: 20)),
                 ),
               ],
             ),

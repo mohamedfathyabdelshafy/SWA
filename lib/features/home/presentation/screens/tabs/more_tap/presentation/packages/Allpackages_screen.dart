@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/lines_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/repo/more_repo.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/PLOH/more_cubit.dart';
@@ -83,11 +85,11 @@ class _packagesScreenState extends State<packagesScreen> {
                       margin: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
                         LanguageClass.isEnglish ? "Packages" : "الباقات",
-                        style: TextStyle(
+                        style: fontStyle(
                             color: AppColors.blackColor,
-                            fontSize: 38,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: "roman"),
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: FontFamily.bold),
                       ),
                     ),
                     SizedBox(
@@ -108,10 +110,10 @@ class _packagesScreenState extends State<packagesScreen> {
                                     state.activePackagemodel!.message!
                                             .packageName ??
                                         ' ',
-                                    style: TextStyle(
+                                    style: fontStyle(
                                         color: Colors.white,
-                                        fontSize: 20,
-                                        fontFamily: 'meduim'),
+                                        fontSize: 18.sp,
+                                        fontFamily: FontFamily.medium),
                                   ),
                                   SizedBox(
                                     height: 15,
@@ -125,19 +127,19 @@ class _packagesScreenState extends State<packagesScreen> {
                                         LanguageClass.isEnglish
                                             ? 'Available Trips : '
                                             : ' الرحلات المتاحة: ',
-                                        style: TextStyle(
+                                        style: fontStyle(
                                             color: Colors.white,
-                                            fontSize: 16,
-                                            fontFamily: 'meduim'),
+                                            fontSize: 16.sp,
+                                            fontFamily: FontFamily.medium),
                                       ),
                                       Text(
                                         state.activePackagemodel!.message!
                                             .remaingTrip
                                             .toString(),
-                                        style: TextStyle(
+                                        style: fontStyle(
                                             color: Colors.white,
-                                            fontSize: 15,
-                                            fontFamily: 'meduim'),
+                                            fontSize: 14.sp,
+                                            fontFamily: FontFamily.medium),
                                       ),
                                     ],
                                   ),
@@ -167,10 +169,10 @@ class _packagesScreenState extends State<packagesScreen> {
                                     LanguageClass.isEnglish
                                         ? "Add Package"
                                         : 'أضف باقة',
-                                    style: TextStyle(
+                                    style: fontStyle(
                                         color: AppColors.white,
-                                        fontSize: 16,
-                                        fontFamily: "bold")),
+                                        fontSize: 16.sp,
+                                        fontFamily: FontFamily.bold)),
                               ),
                             ),
                           ),

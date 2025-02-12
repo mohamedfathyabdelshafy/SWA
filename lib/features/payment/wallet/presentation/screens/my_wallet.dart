@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
+import 'package:swa/core/utils/Navigaton_bottombar.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
@@ -40,12 +42,14 @@ class _MyCreditState extends State<MyCredit> {
   }
 
   void get() async {
-    myWalletResponseModel =
-        await myWalletRepo.getMyWallet(customerId: widget.user!.customerId!);
-    print(widget.user!.customerId!);
+    if (widget.user != null) {
+      myWalletResponseModel =
+          await myWalletRepo.getMyWallet(customerId: widget.user!.customerId!);
+      print(widget.user!.customerId!);
 
-    if (mounted) {
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     }
   }
 
@@ -98,11 +102,11 @@ class _MyCreditState extends State<MyCredit> {
                   children: [
                     Text(
                       LanguageClass.isEnglish ? "My wallet" : "محفظتي",
-                      style: TextStyle(
+                      style: fontStyle(
                           color: AppColors.blackColor,
-                          fontSize: 38,
+                          fontSize: 24.sp,
                           fontWeight: FontWeight.w500,
-                          fontFamily: "roman"),
+                          fontFamily: FontFamily.bold),
                     ),
                     SizedBox(
                       width: 10,
@@ -130,20 +134,22 @@ class _MyCreditState extends State<MyCredit> {
                 child: Text(
                   LanguageClass.isEnglish ? "Your Credit" : "رصيدك ",
                   textAlign: TextAlign.start,
-                  style: TextStyle(
+                  style: fontStyle(
                       fontSize: 21,
                       color: Color(0xffA3A3A3),
-                      fontFamily: 'roman'),
+                      fontFamily: FontFamily.medium),
                 ),
               ),
 
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 40),
                 child: Text(
-                  myWalletResponseModel?.message?.toString() ?? "",
-                  style: TextStyle(
+                  widget.user != null
+                      ? "${myWalletResponseModel?.message?.toString()} ${Routes.curruncy}"
+                      : "--",
+                  style: fontStyle(
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'bold',
+                      fontFamily: FontFamily.bold,
                       fontSize: 38,
                       color: AppColors.blackColor),
                 ),
@@ -152,61 +158,57 @@ class _MyCreditState extends State<MyCredit> {
                 height: 30,
               ),
 
-              countryid == 3
-                  ? SizedBox()
-                  : InkWell(
-                      onTap: () {
-                        if (widget.user != null) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  BlocProvider<ReservationCubit>(
-                                create: (context) => ReservationCubit(),
-                                child: SelectPaymentScreen(user: widget.user),
-                              ),
-                            ),
-                          ).then((value) {
-                            get();
-                          });
-                        } else {
-                          Navigator.pushNamed(
-                              context, arguments: 'wallet', Routes.signInRoute);
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 40),
-
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
-                          decoration: BoxDecoration(
-                              color: Routes.isomra
-                                  ? AppColors.umragold
-                                  : AppColors.primaryColor,
-                              borderRadius: BorderRadius.circular(41)),
-                          child: Center(
-                            child: Text(
-                              LanguageClass.isEnglish
-                                  ? "Add Credit"
-                                  : "شحن محفظتي",
-                              style: TextStyle(
-                                  color: AppColors.white,
-                                  fontFamily: 'bold',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 22),
-                            ),
-                          ),
+              InkWell(
+                onTap: () {
+                  if (widget.user != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BlocProvider<ReservationCubit>(
+                          create: (context) => ReservationCubit(),
+                          child: SelectPaymentScreen(user: widget.user),
                         ),
                       ),
-                    )
+                    ).then((value) {
+                      get();
+                    });
+                  } else {
+                    Navigator.pushNamed(
+                        context, arguments: 'wallet', Routes.signInRoute);
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 40),
+
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
+                    decoration: BoxDecoration(
+                        color: Routes.isomra
+                            ? AppColors.umragold
+                            : AppColors.primaryColor,
+                        borderRadius: BorderRadius.circular(41)),
+                    child: Center(
+                      child: Text(
+                        LanguageClass.isEnglish ? "Add Credit" : "شحن محفظتي",
+                        style: fontStyle(
+                            color: AppColors.white,
+                            fontFamily: FontFamily.bold,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22),
+                      ),
+                    ),
+                  ),
+                ),
+              )
               //Spacer(flex: 7,)
             ],
           ),
         ),
       ),
+      bottomNavigationBar: Navigationbottombar(currentIndex: 2),
     );
   }
 }

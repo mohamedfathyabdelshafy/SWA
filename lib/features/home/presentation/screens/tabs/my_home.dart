@@ -2,21 +2,27 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:jhijri_picker/_src/_jWidgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
 import 'package:geolocator/geolocator.dart' as geo;
 import 'package:badges/badges.dart' as badges;
+import 'package:swa/core/utils/Navigaton_bottombar.dart';
+import 'package:intl/intl.dart' as intl;
 
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/location.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/custom_drop_down_list.dart';
 import 'package:swa/core/widgets/timer.dart';
+import 'package:swa/features/Swa_umra/models/umra_detail.dart';
 import 'package:swa/features/app_info/data/data_sources/app_info_remote_data_source.dart';
 import 'package:swa/features/app_info/data/models/country_model.dart';
 import 'package:swa/features/app_info/domain/entities/country.dart';
@@ -45,10 +51,14 @@ import 'package:swa/features/times_trips/presentation/PLOH/times_trips_cubit.dar
 import 'package:swa/features/times_trips/presentation/PLOH/times_trips_states.dart';
 import 'package:swa/features/times_trips/presentation/screens/times_screen.dart';
 import 'package:swa/main.dart';
+import 'package:jhijri/jHijri.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 class MyHome extends StatefulWidget {
-  const MyHome({super.key});
+  MyHome({
+    super.key,
+  });
 
   @override
   State<MyHome> createState() => _MyHomeState();
@@ -57,8 +67,6 @@ class MyHome extends StatefulWidget {
 class _MyHomeState extends State<MyHome> {
   bool isTabbed = false;
   int currentIndex = 0;
-  DateTime selectedDayFrom = DateTime.now();
-  DateTime selectedDayTo = DateTime.now().add(Duration(days: 1));
   List<CitiesStations>? _fromStations;
   List<CitiesStations>? _toStations;
   List<dynamic> tripList = [];
@@ -72,6 +80,17 @@ class _MyHomeState extends State<MyHome> {
 
   List<Country> countries = [];
   Country? dropdownvalue;
+
+  DateTime? date;
+
+  String selectedDatefrom =
+      intl.DateFormat('yyyy-MM-dd').format(DateTime.now()).toString();
+
+  String selectedDateto = intl.DateFormat('yyyy-MM-dd')
+      .format(DateTime.now().add(Duration(days: 1)))
+      .toString();
+
+  bool ishijiri = false;
 
   ///Getting if user is logged in or not
   User? _user;
@@ -113,8 +132,6 @@ class _MyHomeState extends State<MyHome> {
   void initState() {
     Future.delayed(const Duration(seconds: 0)).then((_) async {
       BlocProvider.of<LoginCubit>(context).getUserData();
-      BlocProvider.of<GetAvailableCountriesCubit>(context)
-          .getAvailableCountries();
 
       setState(() {});
     });
@@ -246,101 +263,7 @@ class _MyHomeState extends State<MyHome> {
           ),
           BlocListener(
               bloc: BlocProvider.of<GetAvailableCountriesCubit>(context),
-              listener: (context, state) async {
-                if (state is GetAvailableCountriesLoadedState) {
-                  var countryid = CacheHelper.getDataToSharedPref(
-                    key: 'countryid',
-                  );
-
-                  Routes.countryflag = CacheHelper.getDataToSharedPref(
-                    key: 'countryflag',
-                  );
-
-                  countries = state.countries;
-
-                  setState(() {});
-
-                  if (await Permission.location.isDenied && countryid == null ||
-                      await Permission.location.isPermanentlyDenied &&
-                          countryid == null) {
-                    List list2 = state.countries.where((element) {
-                      final title = element.Code;
-
-                      final searc = 'EG';
-                      return title.contains(searc);
-                    }).toList();
-
-                    if (list2.isEmpty) {
-                      list2 = [
-                        Country(
-                            countryId: 1,
-                            countryName: "Egypt",
-                            Code: "1",
-                            Flag:
-                                "https://swabus.com/Content/Dashboard/LTR/assets/img/Egypt.png",
-                            curruncy: "EGP")
-                      ];
-                    }
-                    setState(() {});
-
-                    CacheHelper.setDataToSharedPref(
-                        key: 'countryid', value: list2[0].countryId ?? '1');
-                    CacheHelper.setDataToSharedPref(
-                        key: 'countryflag', value: list2[0].Flag);
-                    Routes.countryflag = list2[0].Flag;
-                    Routes.countryflag = list2[0].Flag;
-                    Routes.curruncy = list2[0].curruncy;
-                    Routes.country = list2[0].countryName;
-
-                    dropdownvalue = list2[0];
-
-                    print('A777777a' + countryid.toString());
-                  } else if (countryid == null || Routes.countryflag == null) {
-                    await determinePosition();
-
-                    List list2 = state.countries.where((element) {
-                      final title = element.Code;
-
-                      final searc = Routes.countryname;
-                      return title.contains(searc);
-                    }).toList();
-
-                    if (list2.isEmpty) {
-                      list2 = [
-                        Country(
-                            countryId: 1,
-                            countryName: "Egypt",
-                            Code: "1",
-                            Flag:
-                                "https://swabus.com/Content/Dashboard/LTR/assets/img/Egypt.png",
-                            curruncy: "EGP")
-                      ];
-                    }
-                    setState(() {});
-
-                    CacheHelper.setDataToSharedPref(
-                        key: 'countryid', value: list2[0].countryId ?? '1');
-                    CacheHelper.setDataToSharedPref(
-                        key: 'countryflag', value: list2[0].Flag);
-                    Routes.countryflag = list2[0].Flag;
-                    Routes.countryflag = list2[0].Flag;
-                    Routes.curruncy = list2[0].curruncy;
-                    Routes.country = list2[0].countryName;
-
-                    dropdownvalue = list2[0];
-                  } else {
-                    final list2 = state.countries.where((element) {
-                      final title = element.countryId.toString();
-
-                      final searc = countryid.toString();
-                      return title.contains(searc);
-                    }).toList();
-                    dropdownvalue = list2[0];
-                    Routes.curruncy = list2[0].curruncy;
-                    Routes.country = list2[0].countryName;
-                  }
-                }
-              }),
+              listener: (context, state) async {}),
         ],
         child: Directionality(
           textDirection:
@@ -362,14 +285,16 @@ class _MyHomeState extends State<MyHome> {
                             height: sizeHeight * 0.38,
                             width: double.infinity,
                             alignment: Alignment.center,
-                            child: CarouselWidget(items: [
-                              ...List<Widget>.generate(
-                                state.adsModel!.message!.length ?? 0,
-                                (index) => contentAdvertisment(
-                                    state.adsModel!.message![index],
-                                    sizeHeight),
-                              ),
-                            ]),
+                            child: state.adsModel?.status == 'success'
+                                ? CarouselWidget(items: [
+                                    ...List<Widget>.generate(
+                                      state.adsModel!.message!.length ?? 0,
+                                      (index) => contentAdvertisment(
+                                          state.adsModel!.message![index],
+                                          sizeHeight),
+                                    ),
+                                  ])
+                                : SizedBox(),
                           );
                         },
                       ),
@@ -386,6 +311,20 @@ class _MyHomeState extends State<MyHome> {
                               children: [
                                 Row(
                                   children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            Routes.initialRoute,
+                                            (route) => false);
+                                      },
+                                      child: Icon(
+                                        Icons.arrow_back_rounded,
+                                        color: AppColors.white,
+                                        size: 25,
+                                      ),
+                                    ),
+                                    5.horizontalSpace,
                                     Container(
                                       width: sizeWidth * 0.18,
                                       alignment: Alignment.center,
@@ -429,7 +368,10 @@ class _MyHomeState extends State<MyHome> {
                                                           child: badges.Badge(
                                                             badgeContent: Text(
                                                               count.toString(),
-                                                              style: TextStyle(
+                                                              style: fontStyle(
+                                                                  fontFamily:
+                                                                      FontFamily
+                                                                          .medium,
                                                                   color: Colors
                                                                       .white,
                                                                   fontSize: 14),
@@ -479,10 +421,11 @@ class _MyHomeState extends State<MyHome> {
                                                     LanguageClass.isEnglish
                                                         ? "Login"
                                                         : 'دخول',
-                                                    style: TextStyle(
+                                                    style: fontStyle(
                                                         color: Colors.black,
                                                         fontSize: 14,
-                                                        fontFamily: 'regular'),
+                                                        fontFamily:
+                                                            FontFamily.medium),
                                                   ),
                                                 ],
                                               ),
@@ -525,11 +468,11 @@ class _MyHomeState extends State<MyHome> {
                                                       Routes.user!.name!,
                                                       overflow:
                                                           TextOverflow.ellipsis,
-                                                      style: const TextStyle(
+                                                      style: fontStyle(
                                                           color: Colors.black,
                                                           fontSize: 12,
-                                                          fontFamily:
-                                                              'regular'),
+                                                          fontFamily: FontFamily
+                                                              .medium),
                                                     ),
                                                   ),
                                                 ],
@@ -586,12 +529,12 @@ class _MyHomeState extends State<MyHome> {
                                       LanguageClass.isEnglish
                                           ? "One way"
                                           : "ذهاب فقط",
-                                      style: TextStyle(
+                                      style: fontStyle(
                                           color: tripTypeId == "1"
                                               ? AppColors.primaryColor
                                               : Color(0xffdddddd),
                                           fontSize: 18,
-                                          fontFamily: 'regular',
+                                          fontFamily: FontFamily.medium,
                                           fontWeight: FontWeight.w500),
                                     )
                                   ],
@@ -628,12 +571,12 @@ class _MyHomeState extends State<MyHome> {
                                       LanguageClass.isEnglish
                                           ? "Round Trip"
                                           : "ذهاب وعوده",
-                                      style: TextStyle(
+                                      style: fontStyle(
                                           color: tripTypeId == "2"
                                               ? AppColors.primaryColor
                                               : Color(0xffdddddd),
                                           fontSize: 18,
-                                          fontFamily: 'regular',
+                                          fontFamily: FontFamily.medium,
                                           fontWeight: FontWeight.w500),
                                     )
                                   ],
@@ -688,8 +631,10 @@ class _MyHomeState extends State<MyHome> {
                                 children: [
                                   Text(
                                     LanguageClass.isEnglish ? "From" : "من",
-                                    style: const TextStyle(
-                                        color: Colors.black, fontSize: 16),
+                                    style: fontStyle(
+                                        fontFamily: FontFamily.medium,
+                                        color: Colors.black,
+                                        fontSize: 16),
                                     textAlign: LanguageClass.isEnglish
                                         ? TextAlign.left
                                         : TextAlign.right,
@@ -748,7 +693,7 @@ class _MyHomeState extends State<MyHome> {
                                         //         iconColor: AppColors.primaryColor,
                                         //         title: Text(
                                         //           cityName,
-                                        //           style: const TextStyle(
+                                        //           style: const fontStyle(
                                         //               color: Colors.black,
                                         //               fontWeight: FontWeight.bold
                                         //           ),
@@ -811,8 +756,10 @@ class _MyHomeState extends State<MyHome> {
                                     padding: EdgeInsets.zero,
                                     child: Text(
                                       LanguageClass.isEnglish ? "To" : "الي",
-                                      style: const TextStyle(
-                                          color: Colors.black, fontSize: 16),
+                                      style: fontStyle(
+                                          fontFamily: FontFamily.medium,
+                                          color: Colors.black,
+                                          fontSize: 16),
                                       textAlign: LanguageClass.isEnglish
                                           ? TextAlign.left
                                           : TextAlign.right,
@@ -897,10 +844,35 @@ class _MyHomeState extends State<MyHome> {
                               tripTypeId == "1"
                                   ? InkWell(
                                       onTap: () {
-                                        showMyDatePicker(selectedDayFrom);
-                                        setState(() {
-                                          selectedDayFrom;
-                                        });
+                                        customdatepicker(
+                                            context: context,
+                                            hijiri: ishijiri,
+                                            onchange: (hdate) {
+                                              date = hdate.date;
+                                              hdate.jhijri.fDisplay =
+                                                  DisplayFormat.YYYYMMDD;
+
+                                              ishijiri
+                                                  ? selectedDatefrom =
+                                                      hdate.jhijri.toString()
+                                                  : selectedDatefrom =
+                                                      intl.DateFormat(
+                                                              'yyyy-MM-dd')
+                                                          .format(date!)
+                                                          .toString();
+                                              ishijiri
+                                                  ? selectedDateto =
+                                                      hdate.jhijri.toString()
+                                                  : selectedDateto =
+                                                      intl.DateFormat(
+                                                              'yyyy-MM-dd')
+                                                          .format(date!)
+                                                          .toString();
+
+                                              setState(() {});
+                                              Navigator.pop(context);
+                                            });
+                                        // showMyDatePicker(selectedDayFrom);
                                       },
                                       child: Row(
                                         mainAxisAlignment:
@@ -922,7 +894,7 @@ class _MyHomeState extends State<MyHome> {
                                                     LanguageClass.isEnglish
                                                         ? "DEPART ON"
                                                         : "تغادر من",
-                                                    style: TextStyle(
+                                                    style: fontStyle(
                                                         color: AppColors
                                                             .blackColor,
                                                         fontSize: 12),
@@ -930,10 +902,9 @@ class _MyHomeState extends State<MyHome> {
                                                 ],
                                               ),
                                               InkWell(
-                                                child: Text(
-                                                    "${selectedDayFrom.day}/${selectedDayFrom.month}/${selectedDayFrom.year}",
+                                                child: Text(selectedDatefrom,
                                                     textAlign: TextAlign.center,
-                                                    style: TextStyle(
+                                                    style: fontStyle(
                                                         color: AppColors
                                                             .blackColor,
                                                         fontSize: 20)),
@@ -952,10 +923,27 @@ class _MyHomeState extends State<MyHome> {
                                         Expanded(
                                           child: InkWell(
                                             onTap: () {
-                                              showMyDatePicker(selectedDayFrom);
-                                              setState(() {
-                                                selectedDayFrom;
-                                              });
+                                              customdatepicker(
+                                                  context: context,
+                                                  hijiri: ishijiri,
+                                                  onchange: (hdate) {
+                                                    date = hdate.date;
+                                                    hdate.jhijri.fDisplay =
+                                                        DisplayFormat.YYYYMMDD;
+
+                                                    ishijiri
+                                                        ? selectedDatefrom =
+                                                            hdate.jhijri
+                                                                .toString()
+                                                        : selectedDatefrom =
+                                                            intl.DateFormat(
+                                                                    'yyyy-MM-dd')
+                                                                .format(date!)
+                                                                .toString();
+
+                                                    setState(() {});
+                                                    Navigator.pop(context);
+                                                  });
                                             },
                                             child: Column(
                                               mainAxisAlignment:
@@ -982,7 +970,7 @@ class _MyHomeState extends State<MyHome> {
                                                       LanguageClass.isEnglish
                                                           ? "DEPART ON GO"
                                                           : " تغادر من ذهاب",
-                                                      style: TextStyle(
+                                                      style: fontStyle(
                                                           color: AppColors
                                                               .blackColor,
                                                           fontSize: 12),
@@ -990,11 +978,10 @@ class _MyHomeState extends State<MyHome> {
                                                   ],
                                                 ),
                                                 InkWell(
-                                                  child: Text(
-                                                      "${selectedDayFrom.day}/${selectedDayFrom.month}/${selectedDayFrom.year}",
+                                                  child: Text(selectedDatefrom,
                                                       textAlign:
                                                           TextAlign.center,
-                                                      style: TextStyle(
+                                                      style: fontStyle(
                                                           color: AppColors
                                                               .blackColor,
                                                           fontSize: 16)),
@@ -1009,10 +996,27 @@ class _MyHomeState extends State<MyHome> {
                                         Expanded(
                                           child: InkWell(
                                             onTap: () {
-                                              showMyDatePicker(selectedDayTo);
-                                              setState(() {
-                                                selectedDayTo;
-                                              });
+                                              customdatepicker(
+                                                  context: context,
+                                                  hijiri: ishijiri,
+                                                  onchange: (hdate) {
+                                                    date = hdate.date;
+                                                    hdate.jhijri.fDisplay =
+                                                        DisplayFormat.YYYYMMDD;
+
+                                                    ishijiri
+                                                        ? selectedDateto = hdate
+                                                            .jhijri
+                                                            .toString()
+                                                        : selectedDateto =
+                                                            intl.DateFormat(
+                                                                    'yyyy-MM-dd')
+                                                                .format(date!)
+                                                                .toString();
+
+                                                    setState(() {});
+                                                    Navigator.pop(context);
+                                                  });
                                             },
                                             child: Column(
                                               mainAxisAlignment:
@@ -1039,7 +1043,7 @@ class _MyHomeState extends State<MyHome> {
                                                       LanguageClass.isEnglish
                                                           ? "DEPART ON BACK"
                                                           : " تغادر من عودة",
-                                                      style: TextStyle(
+                                                      style: fontStyle(
                                                           color: AppColors
                                                               .blackColor,
                                                           fontSize: 12),
@@ -1047,11 +1051,10 @@ class _MyHomeState extends State<MyHome> {
                                                   ],
                                                 ),
                                                 InkWell(
-                                                  child: Text(
-                                                      "${selectedDayTo.day}/${selectedDayTo.month}/${selectedDayTo.year}",
+                                                  child: Text(selectedDateto,
                                                       textAlign:
                                                           TextAlign.center,
-                                                      style: TextStyle(
+                                                      style: fontStyle(
                                                           color: AppColors
                                                               .blackColor,
                                                           fontSize: 16)),
@@ -1127,7 +1130,7 @@ class _MyHomeState extends State<MyHome> {
                                       } else {
                                         print(
                                             "tripTypeIdBassant    ${_fromStationId.toString()}  ${_toStationId.toString()}"
-                                            "  ${selectedDayFrom.toString()}  ${selectedDayTo.toString()}");
+                                            "  ${selectedDatefrom.toString()}  ${selectedDateto.toString()}");
                                         CacheHelper.setDataToSharedPref(
                                             key: 'fromStationId',
                                             value: _fromStationId.toString());
@@ -1136,11 +1139,14 @@ class _MyHomeState extends State<MyHome> {
                                             value: _toStationId.toString());
                                         CacheHelper.setDataToSharedPref(
                                             key: 'selectedDayTo',
-                                            value: selectedDayTo.toString());
+                                            value: selectedDateto.toString());
                                         CacheHelper.setDataToSharedPref(
                                             key: 'selectedDayFrom',
-                                            value: selectedDayFrom.toString());
+                                            value: selectedDatefrom.toString());
                                         print("===}======");
+
+                                        UmraDetails.dateTypeID =
+                                            ishijiri ? 112 : 113;
                                         BlocProvider.of<TimesTripsCubit>(
                                                 context)
                                             .getTimes(
@@ -1148,8 +1154,8 @@ class _MyHomeState extends State<MyHome> {
                                           fromStationID:
                                               _fromStationId.toString(),
                                           toStationID: _toStationId.toString(),
-                                          dateGo: selectedDayFrom.toString(),
-                                          dateBack: selectedDayTo.toString(),
+                                          dateGo: selectedDatefrom.toString(),
+                                          dateBack: selectedDateto.toString(),
                                         );
                                       }
                                     },
@@ -1167,7 +1173,7 @@ class _MyHomeState extends State<MyHome> {
                                           LanguageClass.isEnglish
                                               ? "Search Bus"
                                               : "بحث عن الاتوبيس",
-                                          style: TextStyle(
+                                          style: fontStyle(
                                               color: AppColors.white,
                                               fontWeight: FontWeight.normal,
                                               fontSize: 20),
@@ -1189,6 +1195,11 @@ class _MyHomeState extends State<MyHome> {
           ),
         ),
       ),
+      bottomNavigationBar: UmraDetails.isbusforumra
+          ? SizedBox()
+          : Navigationbottombar(
+              currentIndex: 0,
+            ),
     );
   }
 
@@ -1211,13 +1222,78 @@ class _MyHomeState extends State<MyHome> {
     );
 
     if (newSelectedDay != null) {
-      setState(() {
-        if (selectedDay == selectedDayFrom) {
-          selectedDayFrom = newSelectedDay;
-        } else if (selectedDay == selectedDayTo) {
-          selectedDayTo = newSelectedDay;
-        }
-      });
+      // setState(() {
+      //   if (selectedDay == selectedDayFrom) {
+      //     selectedDayFrom = newSelectedDay;
+      //   } else if (selectedDay == selectedDayTo) {
+      //     selectedDayTo = newSelectedDay;
+      //   }
+      // });
     }
+  }
+
+  Future customdatepicker(
+      {required BuildContext context,
+      required bool hijiri,
+      required onchange(JPickerValue date)}) async {
+    return showGlobalDatePicker(
+      context: context,
+      headerTitle: Container(
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 20.h),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+        ),
+        child: InkWell(
+            onTap: () {
+              Navigator.pop(context);
+              ishijiri = !ishijiri;
+              customdatepicker(
+                context: context,
+                hijiri: ishijiri,
+                onchange: onchange,
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  hijiri
+                      ? LanguageClass.isEnglish
+                          ? 'Hijri'
+                          : 'هجري'
+                      : LanguageClass.isEnglish
+                          ? 'Gregorian'
+                          : "ميلادي",
+                  style: fontStyle(
+                      height: 1.2,
+                      fontFamily: FontFamily.medium,
+                      fontSize: 14.sp,
+                      color: AppColors.blackColor),
+                ),
+                5.horizontalSpace,
+                Icon(
+                  Icons.change_circle_rounded,
+                  color: AppColors.primaryColor,
+                  size: 20,
+                )
+              ],
+            )),
+      ),
+      selectedDate: JDateModel(jhijri: JHijri.now(), dateTime: DateTime.now()),
+      pickerMode: DatePickerMode.day,
+      pickerTheme: Theme.of(context),
+      textDirection: TextDirection.ltr,
+      buttons: Container(),
+      locale: LanguageClass.isEnglish ? Locale("en", "US") : Locale("ar", ""),
+      pickerType: hijiri ? PickerType.JHijri : PickerType.JNormal,
+      onChange: onchange,
+      primaryColor: AppColors.primaryColor,
+      calendarTextColor: Colors.black,
+      backgroundColor: Colors.white,
+      borderRadius: const Radius.circular(0),
+      buttonTextColor: Colors.white,
+    );
   }
 }

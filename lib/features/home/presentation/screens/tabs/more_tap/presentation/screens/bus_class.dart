@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/bus_classes_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/stations_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/repo/more_repo.dart';
@@ -49,7 +52,9 @@ class _BusClassesState extends State<BusClasses> {
             if (state is LoadingBussClass) {
               return Center(
                 child: CircularProgressIndicator(
-                  color: AppColors.primaryColor,
+                  color: Routes.isomra
+                      ? AppColors.umragold
+                      : AppColors.primaryColor,
                 ),
               );
             }
@@ -71,7 +76,9 @@ class _BusClassesState extends State<BusClasses> {
                       },
                       child: Icon(
                         Icons.arrow_back_rounded,
-                        color: AppColors.primaryColor,
+                        color: Routes.isomra
+                            ? AppColors.umragold
+                            : AppColors.primaryColor,
                         size: 35,
                       ),
                     ),
@@ -85,11 +92,11 @@ class _BusClassesState extends State<BusClasses> {
                       LanguageClass.isEnglish
                           ? "Bus Classes"
                           : "انواع الاتوبيس",
-                      style: TextStyle(
+                      style: fontStyle(
                           color: AppColors.blackColor,
-                          fontSize: 38,
+                          fontSize: 24.sp,
                           fontWeight: FontWeight.w500,
-                          fontFamily: "roman"),
+                          fontFamily: FontFamily.bold),
                     ),
                   ),
                   SizedBox(
@@ -120,10 +127,10 @@ class _BusClassesState extends State<BusClasses> {
                                 children: [
                                   Text(
                                     busClasses.message![index].title ?? "",
-                                    style: TextStyle(
+                                    style: fontStyle(
                                         color: AppColors.blackColor,
-                                        fontFamily: "regular",
-                                        fontSize: 18),
+                                        fontFamily: FontFamily.medium,
+                                        fontSize: 18.sp),
                                   ),
                                   Spacer(),
                                   Icon(

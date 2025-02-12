@@ -14,9 +14,9 @@ import 'package:swa/features/Swa_umra/models/umra_detail.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 
 class FawryUmraScreen extends StatefulWidget {
-  FawryUmraScreen({
-    super.key,
-  });
+  int? umrahReservationID;
+
+  FawryUmraScreen({super.key, this.umrahReservationID});
 
   @override
   State<FawryUmraScreen> createState() => _FawryUmraScreenState();
@@ -31,7 +31,9 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
   void initState() {
     super.initState();
 
-    amountController.text = UmraDetails.afterdiscount.toString();
+    amountController.text = widget.umrahReservationID != null
+        ? UmraDetails.differentPrice.toString()
+        : UmraDetails.afterdiscount.toString();
   }
 
   @override
@@ -49,7 +51,8 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
             if (state.reservationResponseElectronicModel?.status == 'success') {
               Constants.hideLoadingDialog(context);
               // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
-              showDoneConfirmationDialog(context, isError: false, callback: () {
+              showDoneConfirmationfawryDialog(context, isError: false,
+                  callback: () {
                 Navigator.popUntil(context, (route) => route.isFirst);
               },
                   body: Column(
@@ -63,7 +66,7 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
                         children: [
                           Text(
                             LanguageClass.isEnglish ? 'Amount: ' : "القيمة",
-                            style: TextStyle(
+                            style: fontStyle(
                                 color: Colors.black,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600),
@@ -74,11 +77,12 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             'Reference Number: ',
-                            style: TextStyle(
+                            style: fontStyle(
                                 color: Colors.black,
                                 fontSize: 14,
+                                fontFamily: FontFamily.medium,
                                 fontWeight: FontWeight.w600),
                           ),
                           Expanded(
@@ -171,9 +175,9 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
                                 : Alignment.topRight,
                             child: Text(
                               LanguageClass.isEnglish ? 'Fawry' : 'فوري',
-                              style: TextStyle(
+                              style: fontStyle(
                                   fontSize: 24.sp,
-                                  fontFamily: 'bold',
+                                  fontFamily: FontFamily.bold,
                                   fontWeight: FontWeight.w500),
                             )),
 
@@ -262,9 +266,18 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      _umraBloc.add(FawrypayEvent(
-                                          PaymentMethodID: 2,
-                                          paymentTypeID: 68));
+                                      Navigator.pop(context, true);
+                                      // if (widget.umrahReservationID != null) {
+                                      //   _umraBloc.add(FawryEditEvent(
+                                      //       PaymentMethodID: 2,
+                                      //       umrareservationid:
+                                      //           widget.umrahReservationID,
+                                      //       paymentTypeID: 68));
+                                      // } else {
+                                      //   _umraBloc.add(FawrypayEvent(
+                                      //       PaymentMethodID: 2,
+                                      //       paymentTypeID: 68));
+                                      // }
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -294,24 +307,24 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
       ),
     );
   }
+}
 
-  Future<dynamic> showDoneConfirmationDialog(BuildContext context,
-      {required String message,
-      bool isError = false,
-      Widget? body,
-      required Function callback}) async {
-    return CoolAlert.show(
-        barrierDismissible: true,
-        context: context,
-        confirmBtnText: "ok",
-        title: isError ? 'error' : '',
-        lottieAsset:
-            isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
-        type: isError ? CoolAlertType.error : CoolAlertType.success,
-        loopAnimation: false,
-        backgroundColor: isError ? Colors.red : Colors.white,
-        text: message,
-        widget: body,
-        onConfirmBtnTap: callback());
-  }
+Future<dynamic> showDoneConfirmationfawryDialog(BuildContext context,
+    {required String message,
+    bool isError = false,
+    Widget? body,
+    required Function callback}) async {
+  return CoolAlert.show(
+      barrierDismissible: true,
+      context: context,
+      confirmBtnText: "ok",
+      title: isError ? 'error' : '',
+      lottieAsset:
+          isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
+      type: isError ? CoolAlertType.error : CoolAlertType.success,
+      loopAnimation: false,
+      backgroundColor: isError ? Colors.red : Colors.white,
+      text: message,
+      widget: body,
+      onConfirmBtnTap: callback());
 }

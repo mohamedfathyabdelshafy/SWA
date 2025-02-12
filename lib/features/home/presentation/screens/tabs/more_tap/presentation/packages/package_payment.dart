@@ -8,6 +8,7 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/payment_packages/Electronic_wallet.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/payment_packages/cardpayment_packages.dart';
@@ -72,11 +73,11 @@ class _packagePaymentScreenState extends State<packagePaymentScreen> {
                   LanguageClass.isEnglish
                       ? "Select payment"
                       : "حدد طريقة الدفع",
-                  style: TextStyle(
+                  style: fontStyle(
                       color: AppColors.blackColor,
                       fontSize: 38,
                       fontWeight: FontWeight.w600,
-                      fontFamily: "roman"),
+                      fontFamily: FontFamily.medium),
                 ),
               ),
               SizedBox(
@@ -310,8 +311,8 @@ class _packagePaymentScreenState extends State<packagePaymentScreen> {
   Widget customText(text) {
     return Text(
       text,
-      style: const TextStyle(
-          color: Colors.black, fontSize: 21, fontFamily: "regular"),
+      style: fontStyle(
+          color: Colors.black, fontSize: 21, fontFamily: FontFamily.medium),
     );
   }
 }

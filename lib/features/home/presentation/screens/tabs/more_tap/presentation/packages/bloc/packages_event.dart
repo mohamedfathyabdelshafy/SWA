@@ -119,3 +119,5 @@ class PackageelectronicEvent extends PackagesEvent {
 }
 
 class checkversionevent extends PackagesEvent {}
+
+class selectappevent extends PackagesEvent {}

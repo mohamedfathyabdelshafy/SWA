@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sizer/sizer.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/bus_seat_widget/seat_layout_model.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/bus_seat_widget/seat_model.dart';
 
@@ -83,7 +84,7 @@ class _SeatWidgetState extends State<SeatWidget> {
           child: widget.model.seat.seatState != SeatState.empty
               ? Container(
                   height: 17,
-                  width: rowI < 7 ? sizeWidth / 10 : sizeWidth / 11,
+                  width: rowI < 7 ? sizeWidth / 11 : sizeWidth / 12,
                   margin: const EdgeInsets.only(left: 2, right: 2, bottom: 7),
                   child: Stack(
                     children: [
@@ -113,10 +114,10 @@ class _SeatWidgetState extends State<SeatWidget> {
                       Center(
                           child: Text(
                         widget.model.text,
-                        style: TextStyle(
+                        style: fontStyle(
                             fontSize: 13,
-                            fontFamily: 'roman',
-                            color: Colors.black),
+                            fontFamily: FontFamily.bold,
+                            color: Colors.white),
                       ))
                     ],
                   ),

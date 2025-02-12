@@ -31,7 +31,7 @@ class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
   }
 
   Future updatefcm(int id) async {
-    String fcmtoken = await FirebaseMessaging.instance.getToken() ?? "";
+    String fcmtoken = await FirebaseMessaging.instance.getToken() ?? " ";
 
     final response = await apiConsumer.get(
       '${EndPoints.baseUrl}Customer/UpdateFCM?CustomerID=$id&token=$fcmtoken',

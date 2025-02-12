@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/terms_and_condition_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/repo/more_repo.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/PLOH/more_cubit.dart';
@@ -47,7 +49,9 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
             if (state is LoadingTermsAndCondition) {
               return Center(
                 child: CircularProgressIndicator(
-                  color: AppColors.primaryColor,
+                  color: Routes.isomra
+                      ? AppColors.umragold
+                      : AppColors.primaryColor,
                 ),
               );
             }
@@ -69,7 +73,9 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
                       },
                       child: Icon(
                         Icons.arrow_back_rounded,
-                        color: AppColors.primaryColor,
+                        color: Routes.isomra
+                            ? AppColors.umragold
+                            : AppColors.primaryColor,
                         size: 35,
                       ),
                     ),
@@ -83,11 +89,11 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
                       LanguageClass.isEnglish
                           ? "Terms And Conditions"
                           : "الأحكام والشروط",
-                      style: TextStyle(
+                      style: fontStyle(
                           color: AppColors.blackColor,
                           fontSize: 38,
                           fontWeight: FontWeight.w600,
-                          fontFamily: "roman"),
+                          fontFamily: FontFamily.medium),
                     ),
                   ),
                   SizedBox(
@@ -105,17 +111,17 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
                               children: [
                                 Text(
                                   termsAndConditionModel.message![index].title!,
-                                  style: TextStyle(
+                                  style: fontStyle(
                                       color: AppColors.blackColor,
-                                      fontFamily: "bold",
+                                      fontFamily: FontFamily.bold,
                                       fontSize: 20),
                                 ),
                                 Text(
                                   termsAndConditionModel
                                       .message![index].description!,
-                                  style: TextStyle(
+                                  style: fontStyle(
                                       color: AppColors.blackColor,
-                                      fontFamily: "regular",
+                                      fontFamily: FontFamily.regular,
                                       fontSize: 15),
                                 ),
                               ],

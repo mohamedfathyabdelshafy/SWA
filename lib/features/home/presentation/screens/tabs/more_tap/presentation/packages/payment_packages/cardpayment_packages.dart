@@ -9,6 +9,7 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/icon_back.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
@@ -134,11 +135,11 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                     const EdgeInsets.symmetric(horizontal: 20),
                                 child: Text(
                                   LanguageClass.isEnglish ? "payment" : "الدفع",
-                                  style: TextStyle(
+                                  style: fontStyle(
                                       color: AppColors.blackColor,
                                       fontSize: 38,
                                       fontWeight: FontWeight.w600,
-                                      fontFamily: "roman"),
+                                      fontFamily: FontFamily.medium),
                                 ),
                               ),
                               SizedBox(
@@ -184,10 +185,11 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                                                     .isEnglish
                                                                 ? 'Choose Card'
                                                                 : "اختر كارت",
-                                                            style: TextStyle(
+                                                            style: fontStyle(
                                                                 fontSize: 15,
                                                                 fontFamily:
-                                                                    "bold",
+                                                                    FontFamily
+                                                                        .bold,
                                                                 color: AppColors
                                                                     .blackColor),
                                                           ),
@@ -241,11 +243,11 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                                                         Text(
                                                                           "XXXX-XXXX-XXXX-${cards[index].cardNumber!.substring(cards[index].cardNumber!.length - 4)}",
                                                                           style:
-                                                                              TextStyle(
+                                                                              fontStyle(
                                                                             fontSize:
                                                                                 20,
                                                                             fontFamily:
-                                                                                "regular",
+                                                                                FontFamily.regular,
                                                                             color:
                                                                                 Colors.black,
                                                                           ),
@@ -344,11 +346,12 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                                                           .isEnglish
                                                                       ? 'Add New Card'
                                                                       : "اضافة كارت جديد",
-                                                                  style: TextStyle(
+                                                                  style: fontStyle(
                                                                       fontSize:
                                                                           15.45,
                                                                       fontFamily:
-                                                                          "bold",
+                                                                          FontFamily
+                                                                              .bold,
                                                                       color: AppColors
                                                                           .blackColor),
                                                                 ),
@@ -370,9 +373,10 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                                               cards.length)
                                                       ? "XXXX-XXXX-XXXX-${cards[widget.index].cardNumber!.substring(cards[widget.index].cardNumber!.length - 4)}"
                                                       : "Choose Card",
-                                                  style: const TextStyle(
+                                                  style: fontStyle(
                                                       fontSize: 18,
-                                                      fontFamily: "regular",
+                                                      fontFamily:
+                                                          FontFamily.regular,
                                                       color: Colors.black),
                                                 ),
                                                 const SizedBox(
@@ -407,9 +411,9 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                               LanguageClass.isEnglish
                                                   ? 'Add credit Card'
                                                   : "اضافة كارت جديد",
-                                              style: TextStyle(
+                                              style: fontStyle(
                                                   fontSize: 15.45,
-                                                  fontFamily: "bold",
+                                                  fontFamily: FontFamily.bold,
                                                   color: AppColors.blackColor),
                                             ),
                                           )
@@ -475,17 +479,19 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                                     LanguageClass.isEnglish
                                                         ? "amount"
                                                         : "القيمة",
-                                                    style: TextStyle(
+                                                    style: fontStyle(
                                                         fontSize: 15,
-                                                        fontFamily: "bold",
+                                                        fontFamily:
+                                                            FontFamily.bold,
                                                         color: AppColors
                                                             .greyLight),
                                                   ),
                                                   Text(
                                                     Routes.Amount,
-                                                    style: TextStyle(
+                                                    style: fontStyle(
                                                         fontSize: 18,
-                                                        fontFamily: "bold",
+                                                        fontFamily:
+                                                            FontFamily.bold,
                                                         color: AppColors
                                                             .blackColor),
                                                   )
@@ -510,8 +516,6 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                         callbackTitle: "Go to OTP",
                                         message: 'Complete the payment process',
                                         callback: () {
-                                      Navigator.pop(context);
-
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -654,11 +658,11 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                               LanguageClass.isEnglish
                                                   ? 'pay'
                                                   : "دفع",
-                                              style: TextStyle(
+                                              style: fontStyle(
                                                   color: Colors.white,
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.bold,
-                                                  fontFamily: "bold"),
+                                                  fontFamily: FontFamily.bold),
                                             ),
                                           ),
                                         ),
@@ -724,7 +728,7 @@ class PayField extends StatelessWidget {
           child: TextFormField(
               controller: ctr,
               keyboardType: textInputType,
-              style: TextStyle(color: Colors.black),
+              style: fontStyle(color: Colors.black),
               // style: fontStyle(color: MyColors.blue, fontSize: 14),
               // cursorColor: MyColors.blue,
               decoration: InputDecoration(
@@ -732,10 +736,14 @@ class PayField extends StatelessWidget {
 
                 border: InputBorder.none,
                 // errorStyle: fontStyle(color: Colors.red, fontSize: 12),
-                hintStyle: TextStyle(
-                    color: AppColors.grey, fontSize: 12, fontFamily: "bold"),
-                labelStyle: TextStyle(
-                    color: AppColors.grey, fontSize: 12, fontFamily: "bold"),
+                hintStyle: fontStyle(
+                    color: AppColors.grey,
+                    fontSize: 12,
+                    fontFamily: FontFamily.bold),
+                labelStyle: fontStyle(
+                    color: AppColors.grey,
+                    fontSize: 12,
+                    fontFamily: FontFamily.bold),
                 // contentPadding: const EdgeInsets.symmetric(
                 //   horizontal: 10,
                 //   vertical: 5,
@@ -783,9 +791,7 @@ Future<dynamic> showDoneConfirmationDialog(BuildContext context,
       loopAnimation: false,
       backgroundColor: isError ? Colors.red : Colors.white,
       text: message,
-      onConfirmBtnTap: () {
-        callback();
-      });
+      onConfirmBtnTap: callback());
 }
 
 // void showWebViewDialog(BuildContext context, String? url) {

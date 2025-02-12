@@ -11,30 +11,34 @@ class DoneLoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor:
+          Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 35),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox( height: context.height * 0.15),
+            SizedBox(height: context.height * 0.15),
             SvgPicture.asset("assets/images/Swa Logo.svg"),
-            SizedBox( height: context.height * 0.15),
+            SizedBox(height: context.height * 0.15),
             Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: AppColors.yellow,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(Icons.check,size: 40,color: AppColors.primaryColor,)
-            ),
-            SizedBox( height: context.height * 0.15),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColors.yellow,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.check,
+                  size: 40,
+                  color: AppColors.primaryColor,
+                )),
+            SizedBox(height: context.height * 0.15),
             InkWell(
-              onTap: (){
-                Navigator.pushNamed(context, Routes.signInRoute);
-              },
-              child: Constants.customButton(text: "Login")
-            ),
+                onTap: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, Routes.signInRoute, (r) => false);
+                },
+                child: Constants.customButton(text: "Login")),
           ],
         ),
       ),

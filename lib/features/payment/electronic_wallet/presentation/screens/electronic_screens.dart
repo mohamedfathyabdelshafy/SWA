@@ -78,11 +78,11 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                     LanguageClass.isEnglish
                         ? 'Electronic wallet'
                         : 'محفظة الاكترونية',
-                    style: TextStyle(
+                    style: fontStyle(
                         color: AppColors.blackColor,
                         fontSize: 38,
                         fontWeight: FontWeight.w600,
-                        fontFamily: "roman"),
+                        fontFamily: FontFamily.medium),
                   ),
                 ),
                 SizedBox(
@@ -265,7 +265,7 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                             LanguageClass.isEnglish
                                                 ? 'Amount: '
                                                 : "القيمة",
-                                            style: TextStyle(
+                                            style: fontStyle(
                                                 color: Colors.black,
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600),
@@ -277,11 +277,12 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          const Text(
+                                          Text(
                                             'Reference Number: ',
-                                            style: TextStyle(
+                                            style: fontStyle(
                                                 color: Colors.black,
                                                 fontSize: 14,
+                                                fontFamily: FontFamily.medium,
                                                 fontWeight: FontWeight.w600),
                                           ),
                                           Expanded(

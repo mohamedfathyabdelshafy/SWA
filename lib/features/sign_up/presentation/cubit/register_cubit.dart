@@ -1,6 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swa/core/error/failures.dart';
+import 'package:swa/features/bus_reservation_layout/data/models/documentType_model.dart';
+import 'package:swa/features/bus_reservation_layout/data/models/id_textfield_model.dart';
+import 'package:swa/features/bus_reservation_layout/data/models/phoneCode_model.dart';
 import 'package:swa/features/sign_up/data/data_sources/register_remote_data_source.dart';
 import 'package:swa/features/sign_up/domain/entities/message_response.dart';
 import 'package:swa/features/sign_up/domain/use_cases/register.dart';
@@ -43,6 +46,49 @@ class RegisterCubit extends Cubit<RegisterState> {
       emit(EmailsendState(message: res.status));
     } else {
       emit(RegisterErrorState(error: res.message ?? ""));
+    }
+  }
+
+  Future<void> GetIdentificationType({String? countryid}) async {
+    var res = await ticketRepo.getidType(country: countryid);
+
+    if (res is IdentificationTypeModel) {
+      if (res.status == "success") {
+        emit(DocumenttypeState(documentTypeModel: res));
+      } else {
+        emit(RegisterErrorState(error: res.errormessage ?? ""));
+      }
+    } else {
+      emit(RegisterErrorState(error: res ?? ""));
+    }
+  }
+
+  Future<void> getphonecode() async {
+    var res = await ticketRepo.getRetalcode();
+
+    if (res is PhonecountrycodeModel) {
+      if (res.status == "success") {
+        emit(phonecodeState(phonecountrycodeModel: res));
+      } else {
+        emit(RegisterErrorState(error: res.errormessage ?? ""));
+      }
+    } else {
+      emit(RegisterErrorState(error: res ?? ""));
+    }
+  }
+
+  Future<void> getidtextfield({String? countryid, String? iDTypeid}) async {
+    var res =
+        await ticketRepo.gettextfieldid(country: countryid, id: iDTypeid!);
+
+    if (res is Idtextfieldmodel) {
+      if (res.status == "success") {
+        emit(TextfiedidState(idtextfieldmodel: res));
+      } else {
+        emit(RegisterErrorState(error: res.errormessage ?? ""));
+      }
+    } else {
+      emit(RegisterErrorState(error: res ?? ""));
     }
   }
 

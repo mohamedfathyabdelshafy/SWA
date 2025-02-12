@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:swa/core/api/api_consumer.dart';
 import 'package:swa/core/api/end_points.dart';
 import 'package:swa/core/error/exceptions.dart';
+import 'package:swa/core/utils/language.dart';
 import 'package:swa/features/app_info/data/models/city_model.dart';
 import 'package:swa/features/app_info/data/models/country_model.dart';
 
@@ -20,7 +21,8 @@ class AppInfoRemoteDataSourceImpl implements AppInfoRemoteDataSource {
   Future<List<CountryModel>> getAvailableCountries() async {
     var headers = {
       'Content-Type': 'application/json',
-      'APIKey': '546548dwfdfsd3f4sdfhgat52'
+      'APIKey': '546548dwfdfsd3f4sdfhgat52',
+      "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
     };
     var request = http.Request(
         'GET', Uri.parse('${EndPoints.baseUrl}Country/GetCountry'));
@@ -48,19 +50,18 @@ class AppInfoRemoteDataSourceImpl implements AppInfoRemoteDataSource {
   Future<List<CityModel>> getAvailableCountryCities(int countryId) async {
     var headers = {
       'Content-Type': 'application/json',
-      'APIKey': '546548dwfdfsd3f4sdfhgat52'
+      'APIKey': '546548dwfdfsd3f4sdfhgat52',
+      "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
     };
     var request = http.Request('GET',
         Uri.parse('${EndPoints.baseUrl}City/GetCity?countryID=$countryId'));
 
     request.headers.addAll(headers);
 
-    print(' body ' + request.body);
-
     http.StreamedResponse response = await request.send();
     Map<String, dynamic> jsonResponse =
         jsonDecode(await response.stream.bytesToString());
-    print(jsonResponse);
+    print("city $jsonResponse");
 
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == "success") {

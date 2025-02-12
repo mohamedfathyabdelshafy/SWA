@@ -8,6 +8,7 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
@@ -98,11 +99,11 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     LanguageClass.isEnglish ? 'Fawry' : 'فوري',
-                    style: TextStyle(
+                    style: fontStyle(
                         color: AppColors.blackColor,
-                        fontSize: 38,
+                        fontSize: 24,
                         fontWeight: FontWeight.w600,
-                        fontFamily: "roman"),
+                        fontFamily: FontFamily.medium),
                   ),
                 ),
                 SizedBox(
@@ -156,16 +157,16 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
                                         LanguageClass.isEnglish
                                             ? "amount"
                                             : "القيمة",
-                                        style: TextStyle(
+                                        style: fontStyle(
                                             fontSize: 15,
-                                            fontFamily: "bold",
+                                            fontFamily: FontFamily.bold,
                                             color: AppColors.greyLight),
                                       ),
                                       Text(
                                         Routes.Amount.toString(),
-                                        style: TextStyle(
+                                        style: fontStyle(
                                             fontSize: 18,
-                                            fontFamily: "bold",
+                                            fontFamily: FontFamily.bold,
                                             color: AppColors.primaryColor),
                                       )
                                     ],
@@ -205,7 +206,7 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
                                             LanguageClass.isEnglish
                                                 ? 'Amount: '
                                                 : "القيمة",
-                                            style: TextStyle(
+                                            style: fontStyle(
                                                 color: Colors.black,
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600),
@@ -217,11 +218,12 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          const Text(
+                                          Text(
                                             'Reference Number: ',
-                                            style: TextStyle(
+                                            style: fontStyle(
                                                 color: Colors.black,
                                                 fontSize: 14,
+                                                fontFamily: FontFamily.medium,
                                                 fontWeight: FontWeight.w600),
                                           ),
                                           Expanded(

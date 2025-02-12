@@ -6,16 +6,16 @@ import 'package:swa/core/api/http_consumer.dart';
 import 'package:swa/core/network/network_info.dart';
 import 'package:swa/main.dart';
 
-
 Future<void> dependencyInjectionInit() async {
   //! Core
-  sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(connectionChecker: InternetConnectionChecker()));
-  sl.registerLazySingleton<ApiConsumer>(() => HttpConsumer(client: sl(), sharedPreferences: sl()));
+  sl.registerLazySingleton<NetworkInfo>(() =>
+      NetworkInfoImpl(connectionChecker: InternetConnectionChecker.instance));
+  sl.registerLazySingleton<ApiConsumer>(
+      () => HttpConsumer(client: sl(), sharedPreferences: sl()));
 
   //! External
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
-  sl.registerLazySingleton(() => InternetConnectionChecker());
+  sl.registerLazySingleton(() => InternetConnectionChecker.instance);
   sl.registerLazySingleton(() => http.Client());
-
 }

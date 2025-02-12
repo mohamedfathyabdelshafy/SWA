@@ -75,11 +75,11 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                     LanguageClass.isEnglish
                         ? 'Electronic wallet'
                         : "المحفظة الاكترونية",
-                    style: TextStyle(
+                    style: fontStyle(
                         color: AppColors.blackColor,
                         fontSize: 38,
                         fontWeight: FontWeight.w500,
-                        fontFamily: "roman"),
+                        fontFamily: FontFamily.medium),
                   ),
                 ),
                 SizedBox(
@@ -187,16 +187,16 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                                         LanguageClass.isEnglish
                                             ? "amount"
                                             : "القيمة",
-                                        style: TextStyle(
+                                        style: fontStyle(
                                             fontSize: 15,
-                                            fontFamily: "bold",
+                                            fontFamily: FontFamily.bold,
                                             color: AppColors.greyLight),
                                       ),
                                       Text(
                                         Routes.Amount,
-                                        style: TextStyle(
+                                        style: fontStyle(
                                             fontSize: 18,
-                                            fontFamily: "bold",
+                                            fontFamily: FontFamily.bold,
                                             color: AppColors.primaryColor),
                                       )
                                     ],
@@ -234,7 +234,7 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                                             : "سيصلك إشعار بتطبيق محفظتك \n من أجل الموافقة على الدفع"),
                                       ],
                                     ),
-                                    titleTextStyle: const TextStyle(
+                                    titleTextStyle: fontStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,
                                         fontSize: 20),
@@ -288,7 +288,7 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                                                 LanguageClass.isEnglish
                                                     ? 'OK'
                                                     : "موافقة",
-                                                style: TextStyle(
+                                                style: fontStyle(
                                                     color: AppColors.white,
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 22),

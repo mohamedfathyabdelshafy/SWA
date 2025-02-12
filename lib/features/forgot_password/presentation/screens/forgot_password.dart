@@ -6,6 +6,7 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/customized_field.dart';
 import 'package:swa/features/change_password/presentation/cubit/new_password_cubit.dart';
 import 'package:swa/features/change_password/presentation/screens/code_screen.dart';
@@ -62,22 +63,26 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       },
                       child: Icon(
                         Icons.arrow_back_rounded,
-                        color: AppColors.primaryColor,
+                        color: Routes.isomra
+                            ? AppColors.umragold
+                            : AppColors.primaryColor,
                         size: 35,
                       ),
                     ),
                   ),
                   SizedBox(height: context.height * 0.08),
-                  Image.asset("assets/images/applogo.png"),
+                  Image.asset(Routes.isomra
+                      ? 'assets/images/swaumra.png'
+                      : "assets/images/applogo.png"),
                   SizedBox(height: context.height * 0.1),
                   Text(
                     LanguageClass.isEnglish
                         ? "Forgot Password"
                         : "نسيت كلمه المرور",
-                    style: TextStyle(
+                    style: fontStyle(
                         color: AppColors.blackColor,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'bold',
+                        fontFamily: FontFamily.bold,
                         fontSize: 24),
                   ),
                   const SizedBox(
@@ -87,10 +92,10 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     LanguageClass.isEnglish
                         ? "Please enter your retested email to send the custom Regain code via email"
                         : " الرجاء إدخال بريدك الإلكتروني المعاد اختباره لإرسال الرمز المخصص عبر البريد الإلكتروني ",
-                    style: TextStyle(
+                    style: fontStyle(
                       color: Color(0xffA3A3A3),
                       fontSize: 13,
-                      fontFamily: 'regular',
+                      fontFamily: FontFamily.regular,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -175,7 +180,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         },
                         child: Constants.customButton(
                             borderradias: 41,
-                            color: AppColors.primaryColor,
+                            color: Routes.isomra
+                                ? AppColors.umragold
+                                : AppColors.primaryColor,
                             text: LanguageClass.isEnglish
                                 ? "Send Code"
                                 : "ارسال الكود")),

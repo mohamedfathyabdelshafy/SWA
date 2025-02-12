@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:swa/core/utils/app_colors.dart';
+import 'package:swa/core/utils/styles.dart';
 
 class CustomizedField extends StatefulWidget {
   final String? hintText;
@@ -15,7 +17,7 @@ class CustomizedField extends StatefulWidget {
   final Color colorText;
   final Color? bordercolor;
   final Color? labelcolor;
-
+  Widget? prefixIcon;
   double? borderradias;
   final int? maxLength;
   final bool? expanded;
@@ -40,6 +42,7 @@ class CustomizedField extends StatefulWidget {
     this.isPassword = false,
     required this.color,
     this.labelText,
+    this.prefixIcon,
     required this.colorText,
     this.maxLength,
     this.bordercolor,
@@ -55,7 +58,6 @@ class _CustomizedFieldState extends State<CustomizedField> {
     return Column(
       children: [
         Container(
-          height: 70,
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -79,7 +81,11 @@ class _CustomizedFieldState extends State<CustomizedField> {
             keyboardType: widget.keyboardType,
             validator: widget.validator,
 
-            style: TextStyle(color: widget.colorText, fontSize: 18),
+            style: fontStyle(
+                color: widget.colorText,
+                fontSize: 18.sp,
+                fontFamily: FontFamily.medium,
+                fontWeight: FontWeight.w500),
             cursorColor: Color(0xffA2A2A2),
             decoration: InputDecoration(
               fillColor: widget.color,
@@ -112,17 +118,23 @@ class _CustomizedFieldState extends State<CustomizedField> {
                     )
                   : null,
               labelText: widget.labelText,
-              labelStyle: TextStyle(
+              labelStyle: fontStyle(
                 color: widget.labelcolor ?? AppColors.blackColor,
                 fontSize: 16,
-                fontFamily: 'black',
+                fontFamily: FontFamily.bold,
               ),
+              prefixIcon: widget.prefixIcon,
               hintText: widget.hintText,
-              errorStyle: const TextStyle(fontSize: 10),
-              hintStyle: TextStyle(
+              errorStyle: fontStyle(
+                  fontSize: 10.sp,
+                  fontFamily: FontFamily.regular,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.red),
+              hintStyle: fontStyle(
                 color: Color(0xffA2A2A2),
-                fontFamily: 'black',
-                fontSize: 14,
+                fontFamily: FontFamily.medium,
+                height: 1.2,
+                fontSize: 14.sp,
                 fontWeight: FontWeight.normal,
               ),
             ),

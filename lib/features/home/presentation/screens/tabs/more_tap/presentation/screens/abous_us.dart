@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/abou_us_response.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/repo/more_repo.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/PLOH/more_cubit.dart';
@@ -72,7 +75,9 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                           },
                           child: Icon(
                             Icons.arrow_back_rounded,
-                            color: AppColors.primaryColor,
+                            color: Routes.isomra
+                                ? AppColors.umragold
+                                : AppColors.primaryColor,
                             size: 35,
                           ),
                         ),
@@ -83,12 +88,12 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
-                          LanguageClass.isEnglish ? "About" : "معلومات عنا",
-                          style: TextStyle(
+                          LanguageClass.isEnglish ? "About us" : "من نحن",
+                          style: fontStyle(
                               color: AppColors.blackColor,
-                              fontSize: 38,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: "roman"),
+                              fontSize: 24.sp,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: FontFamily.bold),
                         ),
                       ),
                       SizedBox(
@@ -107,11 +112,11 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                             children: [
                               Text(
                                 aboutUsResponse.message?.description ?? "",
-                                style: TextStyle(
+                                style: fontStyle(
                                     color: AppColors.blackColor,
-                                    fontSize: 14,
+                                    fontSize: 14.sp,
                                     fontWeight: FontWeight.w600,
-                                    fontFamily: "roman"),
+                                    fontFamily: FontFamily.medium),
                               ),
                             ],
                           ),

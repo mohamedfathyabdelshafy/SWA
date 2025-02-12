@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swa/core/utils/app_strings.dart';
 import 'package:swa/core/utils/constants.dart';
+import 'package:swa/features/Swa_umra/Screens/Select_type.dart';
+import 'package:swa/features/Swa_umra/Screens/Umra_booked_ticket.dart';
 import 'package:swa/features/app_info/presentation/cubit/get_available_countries/get_available_countries_cubit.dart';
 import 'package:swa/features/app_info/presentation/cubit/get_available_country_cities_cubit/get_available_country_cities_cubit.dart';
 import 'package:swa/features/change_password/presentation/screens/code_screen.dart';
@@ -12,6 +14,7 @@ import 'package:swa/features/home/presentation/cubit/home_cubit.dart';
 import 'package:swa/features/home/presentation/screens/Update_screen/update_screen.dart';
 import 'package:swa/features/home/presentation/screens/home.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
+import 'package:swa/features/home/presentation/screens/tabs/my_home.dart';
 import 'package:swa/features/home/presentation/screens/tabs/select_app_screen.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/presentation/PLOH/ticket_history_cubit.dart';
 import 'package:swa/features/payment/fawry/presentation/cubit/fawry_cubit.dart';
@@ -42,6 +45,8 @@ class Routes {
   static const String forgotPasswordRoute = '/forgotPassword';
   static const String createPasscode = '/createPasscode';
   static const String updateapp = '/updateapp';
+
+  static const String umraticket = '/umraticket';
 
   ///Payment Screens
   static const String myWalletScreen = '/myCredit';
@@ -101,36 +106,32 @@ class AppRoute {
                       create: (context) => sl<TimesTripsCubit>()),
                   BlocProvider<TicketCubit>(
                       create: (context) => sl<TicketCubit>()),
-                ], child: const SelectappScreen()));
+                ], child: SelectappScreen()));
 
       case Routes.home:
         bool isomra = settings.arguments as bool;
         return MaterialPageRoute(
-            builder: (context) => MultiBlocProvider(
-                    providers: [
-                      BlocProvider<LoginCubit>(
-                        create: (context) => sl<LoginCubit>(),
-                      ),
-                      BlocProvider<PackagesBloc>(
-                        create: (context) => PackagesBloc(),
-                      ),
-                      BlocProvider<FawryReservation>(
-                        create: (context) => sl<FawryReservation>(),
-                      ),
-                      BlocProvider<GetAvailableCountriesCubit>(
-                        create: (context) => sl<GetAvailableCountriesCubit>(),
-                      ),
-                      BlocProvider<HomeCubit>(
-                        create: (context) => sl<HomeCubit>(),
-                      ),
-                      BlocProvider<TimesTripsCubit>(
-                          create: (context) => sl<TimesTripsCubit>()),
-                      BlocProvider<TicketCubit>(
-                          create: (context) => sl<TicketCubit>()),
-                    ],
-                    child: HomeScreen(
-                      isumra: isomra,
-                    )));
+            builder: (context) => MultiBlocProvider(providers: [
+                  BlocProvider<LoginCubit>(
+                    create: (context) => sl<LoginCubit>(),
+                  ),
+                  BlocProvider<PackagesBloc>(
+                    create: (context) => PackagesBloc(),
+                  ),
+                  BlocProvider<FawryReservation>(
+                    create: (context) => sl<FawryReservation>(),
+                  ),
+                  BlocProvider<GetAvailableCountriesCubit>(
+                    create: (context) => sl<GetAvailableCountriesCubit>(),
+                  ),
+                  BlocProvider<HomeCubit>(
+                    create: (context) => sl<HomeCubit>(),
+                  ),
+                  BlocProvider<TimesTripsCubit>(
+                      create: (context) => sl<TimesTripsCubit>()),
+                  BlocProvider<TicketCubit>(
+                      create: (context) => sl<TicketCubit>()),
+                ], child: isomra ? SelectUmratypeScreen() : MyHome()));
 
       case Routes.signInRoute:
         return MaterialPageRoute(
@@ -154,6 +155,30 @@ class AppRoute {
             child: SignUpScreen(),
           ),
         );
+
+      case Routes.umraticket:
+        return MaterialPageRoute(
+            builder: (context) => MultiBlocProvider(providers: [
+                  BlocProvider<LoginCubit>(
+                    create: (context) => sl<LoginCubit>(),
+                  ),
+                  BlocProvider<PackagesBloc>(
+                    create: (context) => PackagesBloc(),
+                  ),
+                  BlocProvider<FawryReservation>(
+                    create: (context) => sl<FawryReservation>(),
+                  ),
+                  BlocProvider<GetAvailableCountriesCubit>(
+                    create: (context) => sl<GetAvailableCountriesCubit>(),
+                  ),
+                  BlocProvider<HomeCubit>(
+                    create: (context) => sl<HomeCubit>(),
+                  ),
+                  BlocProvider<TimesTripsCubit>(
+                      create: (context) => sl<TimesTripsCubit>()),
+                  BlocProvider<TicketCubit>(
+                      create: (context) => sl<TicketCubit>()),
+                ], child: UmraBookedScreen()));
 
       case Routes.EmailRoute:
         return MaterialPageRoute(

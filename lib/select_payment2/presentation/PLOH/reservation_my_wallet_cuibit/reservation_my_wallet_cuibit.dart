@@ -140,11 +140,15 @@ class ReservationCubit extends Cubit<ReservationStates> {
     required String cvv,
     required String cardExpiryMonth,
     required String promocodeid,
+    required String curruncy,
+    required double totalamount,
   }) async {
     try {
       emit(LoadingCreditCardState());
       final res = await reservationRepo.addReservationCreditCard(
           custId: custId,
+          curruncy: curruncy,
+          totalamount: totalamount,
           paymentTypeID: paymentTypeID,
           trips: Routes.resrvedtrips,
           paymentMethodID: paymentMethodID,
@@ -170,11 +174,13 @@ class ReservationCubit extends Cubit<ReservationStates> {
     required String cardExpiryYear,
     required String cvv,
     required String cardExpiryMonth,
+    required String curruncy,
   }) async {
     try {
       emit(LoadingCreditCardState());
       final res = await reservationRepo.chargeusingcard(
           custId: custId,
+          curruncy: curruncy,
           amount: amount,
           cardExpiryMonth: cardExpiryMonth,
           cardExpiryYear: cardExpiryYear,

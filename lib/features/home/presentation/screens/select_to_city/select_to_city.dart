@@ -41,11 +41,11 @@ class _SelectToCityState extends State<SelectToCity> {
             children: [
               Text(
                 LanguageClass.isEnglish ? "Select City" : "حدد المدينة",
-                style: TextStyle(
+                style: fontStyle(
                     color: AppColors.blackColor,
                     fontSize: 38,
                     fontWeight: FontWeight.w500,
-                    fontFamily: "roman"),
+                    fontFamily: FontFamily.medium),
               ),
               SizedBox(
                 height: 15,
@@ -91,11 +91,11 @@ class _SelectToCityState extends State<SelectToCity> {
                                         children: [
                                           Text(
                                             cityName,
-                                            style: TextStyle(
+                                            style: fontStyle(
                                                 color: isTabbed == index
                                                     ? AppColors.primaryColor
                                                     : Color(0xffA3A3A3),
-                                                fontFamily: 'roman',
+                                                fontFamily: FontFamily.bold,
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 18),
                                           ),
@@ -165,11 +165,12 @@ class _SelectToCityState extends State<SelectToCity> {
                                                         child: Text(
                                                           stationsList[index]
                                                               .stationName,
-                                                          style: TextStyle(
+                                                          style: fontStyle(
                                                               color:
                                                                   Colors.white,
                                                               fontFamily:
-                                                                  "roman",
+                                                                  FontFamily
+                                                                      .medium,
                                                               fontSize: 18),
                                                         ),
                                                       ),

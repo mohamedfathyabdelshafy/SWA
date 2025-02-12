@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/api/api_consumer.dart';
 import 'package:swa/core/api/end_points.dart';
 import 'package:swa/core/local_cache_helper.dart';
@@ -14,7 +15,7 @@ class MyWalletRepo {
       key: 'countryid',
     );
     final res = await apiConsumer.get(
-      "${EndPoints.baseUrl}Customer/GetWalletBalance?customerid=$customerId&countryID=$countryid",
+      "${EndPoints.baseUrl}Customer/GetWalletBalance?customerid=$customerId&countryID=$countryid&toCurrency=${Routes.curruncy}",
     );
     log("mywallet" + res.body);
     var decode = jsonDecode(res.body);

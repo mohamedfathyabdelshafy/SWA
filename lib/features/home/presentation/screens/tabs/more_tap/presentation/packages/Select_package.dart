@@ -7,6 +7,7 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/package_payment.dart';
 
@@ -154,11 +155,11 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                     LanguageClass.isEnglish
                                         ? "Select City"
                                         : "اختر مدينة",
-                                    style: TextStyle(
+                                    style: fontStyle(
                                         color: AppColors.blackColor,
                                         fontSize: 28,
                                         fontWeight: FontWeight.w600,
-                                        fontFamily: "meduim"),
+                                        fontFamily: FontFamily.medium),
                                   ),
                                 ),
                                 SizedBox(
@@ -189,8 +190,9 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                                     horizontal: 10),
                                                 child: Text(
                                                   item![index].cityName!,
-                                                  style: TextStyle(
-                                                      fontFamily: "meduim",
+                                                  style: fontStyle(
+                                                      fontFamily:
+                                                          FontFamily.medium,
                                                       color: taped2 == index
                                                           ? AppColors
                                                               .primaryColor
@@ -265,9 +267,10 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                                                   .stationList![
                                                                       index2]
                                                                   .stationName!,
-                                                              style: TextStyle(
+                                                              style: fontStyle(
                                                                   fontFamily:
-                                                                      "roman",
+                                                                      FontFamily
+                                                                          .medium,
                                                                   color: Color(
                                                                       0xffA3A3A3),
                                                                   fontSize: 15),
@@ -344,11 +347,11 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                           margin: const EdgeInsets.symmetric(horizontal: 20),
                           child: Text(
                             LanguageClass.isEnglish ? "Packages" : "الباقات",
-                            style: TextStyle(
+                            style: fontStyle(
                                 color: AppColors.blackColor,
                                 fontSize: 38,
                                 fontWeight: FontWeight.w600,
-                                fontFamily: "roman"),
+                                fontFamily: FontFamily.medium),
                           ),
                         ),
                         SizedBox(
@@ -390,14 +393,14 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                           LanguageClass.isEnglish
                                               ? 'From'
                                               : "من",
-                                          style: TextStyle(
+                                          style: fontStyle(
                                               color: Color(0xff969696),
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
                                           Stationfrom,
-                                          style: TextStyle(
+                                          style: fontStyle(
                                               color: Color(0xff969696),
                                               fontSize: 14,
                                               fontWeight: FontWeight.normal),
@@ -471,14 +474,14 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                           LanguageClass.isEnglish
                                               ? 'To'
                                               : " الي",
-                                          style: TextStyle(
+                                          style: fontStyle(
                                               color: Color(0xff969696),
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
                                           stationto,
-                                          style: TextStyle(
+                                          style: fontStyle(
                                               color: Color(0xff969696),
                                               fontSize: 14,
                                               fontWeight: FontWeight.normal),
@@ -558,14 +561,14 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                           LanguageClass.isEnglish
                                               ? 'Select Package'
                                               : "اختر الباقة",
-                                          style: TextStyle(
+                                          style: fontStyle(
                                               color: Color(0xff969696),
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
                                           packagname,
-                                          style: TextStyle(
+                                          style: fontStyle(
                                               color: Color(0xff969696),
                                               fontSize: 14,
                                               fontWeight: FontWeight.normal),
@@ -615,8 +618,9 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                                 child: Text(
                                                   state.packagemodel!
                                                       .errormessage!,
-                                                  style: TextStyle(
-                                                      fontFamily: "regular",
+                                                  style: fontStyle(
+                                                      fontFamily:
+                                                          FontFamily.regular,
                                                       color: Colors.black,
                                                       fontSize: 15),
                                                 ),
@@ -650,9 +654,10 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                                           child: Text(
                                                             item![index]
                                                                 .packageName!,
-                                                            style: TextStyle(
+                                                            style: fontStyle(
                                                                 fontFamily:
-                                                                    "regular",
+                                                                    FontFamily
+                                                                        .regular,
                                                                 color: Colors
                                                                     .black,
                                                                 fontSize: 15),
@@ -664,9 +669,10 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                                                     .isEnglish
                                                                 ? "${item![index].tripCount!} trips"
                                                                 : "${item![index].tripCount!} رحلات",
-                                                            style: TextStyle(
+                                                            style: fontStyle(
                                                                 fontFamily:
-                                                                    "regular",
+                                                                    FontFamily
+                                                                        .regular,
                                                                 color: Colors
                                                                     .black,
                                                                 fontSize: 15),
@@ -675,9 +681,10 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                                         Container(
                                                           child: Text(
                                                             " ${item![index].packagePrice.toString()} ${Routes.curruncy}",
-                                                            style: TextStyle(
+                                                            style: fontStyle(
                                                                 fontFamily:
-                                                                    "regular",
+                                                                    FontFamily
+                                                                        .regular,
                                                                 color: Colors
                                                                     .black,
                                                                 fontSize: 15),
@@ -720,7 +727,7 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                         ? 'Total Price'
                                         : "السعر الكلي",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                    style: fontStyle(
                                         color: Colors.black,
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold),
@@ -728,7 +735,7 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                   Text(
                                     "${packageprice} ${Routes.curruncy}",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                    style: fontStyle(
                                         color: Colors.black,
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold),
@@ -755,13 +762,13 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                   ]),
                               child: TextField(
                                 controller: _promocodetext,
-                                style: TextStyle(
+                                style: fontStyle(
                                     color: Color(0xff969696),
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold),
                                 decoration: InputDecoration(
                                   hintText: 'I have a Promocode !',
-                                  hintStyle: TextStyle(
+                                  hintStyle: fontStyle(
                                       color: Color(0xff969696),
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold),
@@ -818,7 +825,7 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                         LanguageClass.isEnglish
                                             ? 'Redeem'
                                             : "تطبيق",
-                                        style: TextStyle(
+                                        style: fontStyle(
                                             color: Colors.white,
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold),
@@ -844,7 +851,7 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                         ? 'Disscount'
                                         : "خصم",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                    style: fontStyle(
                                         color: Colors.black,
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold),
@@ -852,7 +859,7 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                   Text(
                                     "${discount} ${ispersentage ? '%' : Routes.curruncy}",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                    style: fontStyle(
                                         color: AppColors.primaryColor,
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold),
@@ -876,7 +883,7 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                         ? 'Total Price'
                                         : "السعر الكلي",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                    style: fontStyle(
                                         color: Colors.black,
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold),
@@ -884,7 +891,7 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                   Text(
                                     "${afterdiscount} ${Routes.curruncy}",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                    style: fontStyle(
                                         color: AppColors.blackColor,
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold),
@@ -904,12 +911,12 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
 //                               children: [
 //                                 Text(
 //                                   LanguageClass.isEnglish ? 'Disscount' : "خصم",
-//                                   style: TextStyle(
+//                                   style: fontStyle(
 //                                       color: Colors.black, fontSize: 14),
 //                                 ),
 //                                 Text(
 //                                   discount,
-//                                   style: TextStyle(
+//                                   style: fontStyle(
 //                                       color: Colors.red, fontSize: 14),
 //                                 )
 //                               ],
@@ -939,12 +946,12 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
 //                                   LanguageClass.isEnglish
 //                                       ? 'Total Price'
 //                                       : "السعر الكلي",
-//                                   style: TextStyle(
+//                                   style: fontStyle(
 //                                       color: Colors.black, fontSize: 14),
 //                                 ),
 //                                 Text(
 //                                   afterdiscount,
-//                                   style: TextStyle(
+//                                   style: fontStyle(
 //                                       color: Colors.black,
 //                                       fontSize: 14,
 //                                       fontWeight: FontWeight.bold),
@@ -1003,7 +1010,7 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                                   ),
                                                   Text(
                                                     packagname,
-                                                    style: TextStyle(
+                                                    style: fontStyle(
                                                         fontSize: 16,
                                                         color: Colors.black,
                                                         fontWeight:
@@ -1026,7 +1033,7 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                                         LanguageClass.isEnglish
                                                             ? TextDirection.ltr
                                                             : TextDirection.rtl,
-                                                    style: TextStyle(
+                                                    style: fontStyle(
                                                         color: Colors.black,
                                                         fontSize: 20,
                                                         fontWeight:
@@ -1061,11 +1068,12 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                                         LanguageClass.isEnglish
                                                             ? TextDirection.ltr
                                                             : TextDirection.rtl,
-                                                    style: TextStyle(
+                                                    style: fontStyle(
                                                         color:
                                                             Color(0xff818181),
                                                         fontSize: 14,
-                                                        fontFamily: "regular"),
+                                                        fontFamily:
+                                                            FontFamily.regular),
                                                   ),
                                                   SizedBox(
                                                     height: 20,
@@ -1078,10 +1086,11 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                                         LanguageClass.isEnglish
                                                             ? TextDirection.ltr
                                                             : TextDirection.rtl,
-                                                    style: TextStyle(
+                                                    style: fontStyle(
                                                         color: Colors.black,
                                                         fontSize: 20,
-                                                        fontFamily: "bold"),
+                                                        fontFamily:
+                                                            FontFamily.bold),
                                                   ),
                                                   SizedBox(
                                                     height: 20,
@@ -1100,11 +1109,12 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                                         LanguageClass.isEnglish
                                                             ? TextDirection.ltr
                                                             : TextDirection.rtl,
-                                                    style: TextStyle(
+                                                    style: fontStyle(
                                                         color:
                                                             Color(0xff818181),
                                                         fontSize: 14,
-                                                        fontFamily: "regular"),
+                                                        fontFamily:
+                                                            FontFamily.regular),
                                                   ),
                                                   SizedBox(
                                                     height: 20,
@@ -1117,10 +1127,11 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                                         LanguageClass.isEnglish
                                                             ? TextDirection.ltr
                                                             : TextDirection.rtl,
-                                                    style: TextStyle(
+                                                    style: fontStyle(
                                                         color: Colors.black,
                                                         fontSize: 20,
-                                                        fontFamily: "bold"),
+                                                        fontFamily:
+                                                            FontFamily.bold),
                                                   ),
                                                   SizedBox(
                                                     height: 20,
@@ -1139,11 +1150,12 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                                         LanguageClass.isEnglish
                                                             ? TextDirection.ltr
                                                             : TextDirection.rtl,
-                                                    style: TextStyle(
+                                                    style: fontStyle(
                                                         color:
                                                             Color(0xff818181),
                                                         fontSize: 14,
-                                                        fontFamily: "regular"),
+                                                        fontFamily:
+                                                            FontFamily.regular),
                                                   ),
                                                   SizedBox(
                                                     height: 20,
@@ -1186,10 +1198,12 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                                         LanguageClass.isEnglish
                                                             ? 'Agree and save'
                                                             : 'موافقة وحفظ',
-                                                        style: TextStyle(
+                                                        style: fontStyle(
                                                             color: Colors.white,
                                                             fontSize: 24,
-                                                            fontFamily: "bold"),
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .bold),
                                                       ),
                                                     ),
                                                   )
@@ -1221,7 +1235,7 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                   LanguageClass.isEnglish
                                       ? 'Subscribe'
                                       : "اشتراك",
-                                  style: TextStyle(
+                                  style: fontStyle(
                                       color: Colors.white,
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold),

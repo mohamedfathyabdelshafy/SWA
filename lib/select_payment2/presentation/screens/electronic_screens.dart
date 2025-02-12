@@ -2,6 +2,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
@@ -102,11 +103,11 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                     LanguageClass.isEnglish
                         ? 'Electronic wallet'
                         : "المحفظة الاكترونية",
-                    style: TextStyle(
+                    style: fontStyle(
                         color: AppColors.blackColor,
-                        fontSize: 38,
+                        fontSize: 24.sp,
                         fontWeight: FontWeight.w500,
-                        fontFamily: "roman"),
+                        fontFamily: FontFamily.bold),
                   ),
                 ),
                 SizedBox(
@@ -214,9 +215,9 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                                         LanguageClass.isEnglish
                                             ? "amount"
                                             : "القيمة",
-                                        style: TextStyle(
+                                        style: fontStyle(
                                             fontSize: 15,
-                                            fontFamily: "bold",
+                                            fontFamily: FontFamily.bold,
                                             color: AppColors.greyLight),
                                       ),
                                       Text(
@@ -227,9 +228,9 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                                                 .toString()
                                             : Routes.resrvedtrips[0].price
                                                 .toString(),
-                                        style: TextStyle(
+                                        style: fontStyle(
                                             fontSize: 18,
-                                            fontFamily: "bold",
+                                            fontFamily: FontFamily.bold,
                                             color: AppColors.primaryColor),
                                       )
                                     ],
@@ -267,7 +268,7 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                                             LanguageClass.isEnglish
                                                 ? 'Amount: '
                                                 : "القيمة",
-                                            style: TextStyle(
+                                            style: fontStyle(
                                                 color: Colors.black,
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600),
@@ -288,11 +289,12 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          const Text(
+                                          Text(
                                             'Reference Number: ',
-                                            style: TextStyle(
+                                            style: fontStyle(
                                                 color: Colors.black,
                                                 fontSize: 14,
+                                                fontFamily: FontFamily.bold,
                                                 fontWeight: FontWeight.w600),
                                           ),
                                           Expanded(

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/FAQ_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/stations_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/terms_and_condition_model.dart';
@@ -50,7 +53,9 @@ class _FAQScreenState extends State<FAQScreen> {
             if (state is LoadingFAQ) {
               return Center(
                 child: CircularProgressIndicator(
-                  color: AppColors.primaryColor,
+                  color: Routes.isomra
+                      ? AppColors.umragold
+                      : AppColors.primaryColor,
                 ),
               );
             }
@@ -72,7 +77,9 @@ class _FAQScreenState extends State<FAQScreen> {
                       },
                       child: Icon(
                         Icons.arrow_back_rounded,
-                        color: AppColors.primaryColor,
+                        color: Routes.isomra
+                            ? AppColors.umragold
+                            : AppColors.primaryColor,
                         size: 35,
                       ),
                     ),
@@ -84,11 +91,11 @@ class _FAQScreenState extends State<FAQScreen> {
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
                       LanguageClass.isEnglish ? "FAQ" : "اساله شائعة",
-                      style: TextStyle(
+                      style: fontStyle(
                           color: AppColors.blackColor,
-                          fontSize: 38,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: "roman"),
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: FontFamily.bold),
                     ),
                   ),
                   SizedBox(
@@ -106,17 +113,17 @@ class _FAQScreenState extends State<FAQScreen> {
                               children: [
                                 Text(
                                   faqModel.message![index].question!,
-                                  style: TextStyle(
+                                  style: fontStyle(
                                       color: AppColors.blackColor,
-                                      fontFamily: "bold",
-                                      fontSize: 22),
+                                      fontFamily: FontFamily.bold,
+                                      fontSize: 20.sp),
                                 ),
                                 Text(
                                   faqModel.message![index].answer!,
-                                  style: TextStyle(
+                                  style: fontStyle(
                                       color: AppColors.blackColor,
-                                      fontFamily: "regular",
-                                      fontSize: 18),
+                                      fontFamily: FontFamily.regular,
+                                      fontSize: 18.sp),
                                 ),
                               ],
                             ),

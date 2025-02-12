@@ -2,6 +2,7 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services"
 }
 
 def localProperties = new Properties()
@@ -33,7 +34,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace "com.swa.app"
     compileSdkVersion 34
-    ndkVersion flutter.ndkVersion
+    ndkVersion "27.0.12077973"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -78,7 +79,7 @@ flutter {
 
 dependencies {
 
-      implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-analytics'
     implementation platform('com.google.firebase:firebase-bom:32.1.1')
 }
 apply plugin: 'com.google.gms.google-services'

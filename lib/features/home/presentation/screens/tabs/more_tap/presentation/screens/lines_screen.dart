@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/lines_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/repo/more_repo.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/PLOH/more_cubit.dart';
@@ -44,12 +45,15 @@ class _LinesScreenState extends State<LinesScreen> {
           LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor:
+              Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
           centerTitle: true,
           title: Text(
             LanguageClass.isEnglish ? "Routes" : "الخطوط",
-            style: TextStyle(
-                color: AppColors.white, fontSize: 34, fontFamily: "bold"),
+            style: fontStyle(
+                color: AppColors.white,
+                fontSize: 34,
+                fontFamily: FontFamily.bold),
           ),
         ),
         backgroundColor: Colors.black,
@@ -59,7 +63,9 @@ class _LinesScreenState extends State<LinesScreen> {
             if (state is LoadingLines) {
               return Center(
                 child: CircularProgressIndicator(
-                  color: AppColors.primaryColor,
+                  color: Routes.isomra
+                      ? AppColors.umragold
+                      : AppColors.primaryColor,
                 ),
               );
             }
@@ -94,8 +100,8 @@ class _LinesScreenState extends State<LinesScreen> {
                                       ),
                                       Text(
                                         linesModel.message![index].name ?? "",
-                                        style: TextStyle(
-                                            fontFamily: "regular",
+                                        style: fontStyle(
+                                            fontFamily: FontFamily.regular,
                                             fontSize: 18,
                                             color: Colors.white),
                                       )
@@ -123,10 +129,10 @@ class _LinesScreenState extends State<LinesScreen> {
                                             LanguageClass.isEnglish
                                                 ? "Book Now"
                                                 : "احجز الان",
-                                            style: TextStyle(
+                                            style: fontStyle(
                                               color: AppColors.white,
                                               fontSize: 20,
-                                              fontFamily: "bold",
+                                              fontFamily: FontFamily.bold,
                                             ),
                                           ),
                                         ),
@@ -145,7 +151,9 @@ class _LinesScreenState extends State<LinesScreen> {
                               Container(
                                 padding: EdgeInsets.all(15),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primaryColor,
+                                  color: Routes.isomra
+                                      ? AppColors.umragold
+                                      : AppColors.primaryColor,
                                   // borderRadius: BorderRadius.circular(20)
                                 ),
                                 child: Row(
@@ -154,20 +162,20 @@ class _LinesScreenState extends State<LinesScreen> {
                                       LanguageClass.isEnglish
                                           ? "Starts From"
                                           : "يبدا من",
-                                      style: TextStyle(
+                                      style: fontStyle(
                                         color: AppColors.white,
                                         fontSize: 20,
-                                        fontFamily: "bold",
+                                        fontFamily: FontFamily.bold,
                                       ),
                                     ),
                                     Spacer(),
                                     Text(
                                       linesModel.message![index].startsFrom
                                           .toString(),
-                                      style: TextStyle(
+                                      style: fontStyle(
                                         color: AppColors.white,
                                         fontSize: 25,
-                                        fontFamily: "bold",
+                                        fontFamily: FontFamily.bold,
                                       ),
                                     ),
                                   ],

@@ -5,6 +5,7 @@ class PackagesState {
   AdvModel? advModel;
   StationfromModel? stationfromModel;
   AdsModel? adsModel;
+  Selectappmodel? selectappmodel;
 
   String? updateversion;
   Packagemodel? packagemodel;
@@ -19,6 +20,7 @@ class PackagesState {
       this.reservationResponseElectronicModel,
       this.stationfromModel,
       this.advModel,
+      this.selectappmodel,
       this.adsModel,
       this.reservationResponseMyWalletModel,
       this.promocodemodel,
@@ -52,6 +54,7 @@ class PackagesState {
       {bool? isloading,
       AdvModel? advModel,
       String? updateversion,
+      Selectappmodel? selectappmodel,
       Promocodemodel? promocodemodel,
       AdsModel? adsModel,
       ReservationResponseElectronicModel? reservationResponseElectronicModel,
@@ -63,6 +66,7 @@ class PackagesState {
     return PackagesState(
         isloading: isloading,
         advModel: advModel,
+        selectappmodel: selectappmodel,
         updateversion: updateversion,
         adsModel: adsModel ?? this.adsModel,
         reservationResponseElectronicModel: reservationResponseElectronicModel,

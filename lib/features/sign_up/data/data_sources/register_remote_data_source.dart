@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:swa/core/api/api_consumer.dart';
 import 'package:swa/core/api/end_points.dart';
+import 'package:swa/core/utils/language.dart';
 import 'package:swa/features/sign_up/data/models/message_response_model.dart';
 import 'package:swa/features/sign_up/domain/use_cases/register.dart';
 
@@ -18,7 +19,8 @@ class RegisterRemoteDataSourceImpl implements RegisterRemoteDataSource {
   Future<MessageResponseModel> registerUser(UserRegisterParams params) async {
     var headers = {
       'Content-Type': 'application/json',
-      'APIKey': '546548dwfdfsd3f4sdfhgat52'
+      'APIKey': '546548dwfdfsd3f4sdfhgat52',
+      "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
     };
     var request = http.Request(
         'POST', Uri.parse('${EndPoints.baseUrl}Customer/AddCustomer'));
@@ -30,6 +32,8 @@ class RegisterRemoteDataSourceImpl implements RegisterRemoteDataSource {
       "UserType": params.userType,
       "CountryID": params.countryId,
       "CityID": params.cityId,
+      "IdentificationNumber": params.identificationNumber,
+      "IndentificationtypeID": params.indentificationtypeID
     });
     request.headers.addAll(headers);
 

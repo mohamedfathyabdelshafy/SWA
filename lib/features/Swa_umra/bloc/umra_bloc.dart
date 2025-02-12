@@ -1,9 +1,16 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:swa/features/Swa_umra/models/City_umra_model.dart';
+import 'package:swa/features/Swa_umra/models/Transportaion_list_model.dart';
 import 'package:swa/features/Swa_umra/models/Trip_umra_model.dart';
-import 'package:swa/features/Swa_umra/models/campain_list_model.dart';
+import 'package:swa/features/Swa_umra/models/Umra_tickets_model.dart';
+import 'package:swa/features/Swa_umra/models/accomidation_model.dart';
+import 'package:swa/features/Swa_umra/models/campainlistmodel.dart';
+import 'package:swa/features/Swa_umra/models/packages_list_model.dart';
 import 'package:swa/features/Swa_umra/models/campain_model.dart';
+import 'package:swa/features/Swa_umra/models/page_model.dart';
+import 'package:swa/features/Swa_umra/models/payment_type_model.dart';
+import 'package:swa/features/Swa_umra/models/programs_model.dart';
 import 'package:swa/features/Swa_umra/models/seats_model.dart';
 import 'package:swa/features/Swa_umra/repository/Umra_repository.dart';
 import 'package:swa/features/app_info/data/models/city_model.dart';
@@ -42,12 +49,23 @@ class UmraBloc extends Bloc<UmraEvent, UmraState> {
       emit(state.update(isloading: false, campainModel: response));
     });
 
-    on<GetcampaginsListEvent>((event, emit) async {
+    on<GetPackageListEvent>((event, emit) async {
       emit(state.update(isloading: true));
 
-      final response =
-          await umraRepos.getcampaginlist(city: event.city, date: event.date);
-      emit(state.update(isloading: false, triplistmodel: response));
+      final response = await umraRepos.getpackageslist(
+          city: event.city,
+          umrahReservationID: event.reservationid,
+          date: event.date,
+          typeid: event.typeid,
+          campainid: event.campianID!);
+      emit(state.update(isloading: false, packagesModel: response));
+    });
+
+    on<GetCompainListEvent>((event, emit) async {
+      emit(state.update(isloading: true));
+
+      final response = await umraRepos.Getcampainlist();
+      emit(state.update(isloading: false, campainlistmodel: response));
     });
 
     on<GetSeatsEvent>((event, emit) async {
@@ -89,10 +107,37 @@ class UmraBloc extends Bloc<UmraEvent, UmraState> {
           isloading: false, reservationResponseMyWalletModel: response));
     });
 
+    on<EditReservationEvent>((event, emit) async {
+      emit(state.update(isloading: true));
+
+      final response = await umraRepos.Edditreservation(
+          paymentMethodID: event.paymentMethodID,
+          paymentTypeID: event.paymentTypeID,
+          resrvationid: event.reservationID,
+          paymentid: event.paymentid);
+      emit(state.update(
+          isloading: false, reservationResponseMyWalletModel: response));
+    });
+
     on<cardpaymentEvent>((event, emit) async {
       emit(state.update(isloading: true));
 
       final response = await umraRepos.addReservationCardpay(
+          paymentTypeID: event.paymentTypeID,
+          PaymentMethodID: event.PaymentMethodID,
+          cardExpiryMonth: event.cardExpiryMonth,
+          cardExpiryYear: event.cardExpiryYear,
+          cardNumber: event.cardNumber,
+          cvv: event.cvv);
+      emit(state.update(
+          isloading: false, reservationResponseCreditCard: response));
+    });
+
+    on<cardEditReservationEvent>((event, emit) async {
+      emit(state.update(isloading: true));
+
+      final response = await umraRepos.editreservationcard(
+          umrareservationid: event.umrareservationid!,
           paymentTypeID: event.paymentTypeID,
           PaymentMethodID: event.PaymentMethodID,
           cardExpiryMonth: event.cardExpiryMonth,
@@ -114,6 +159,18 @@ class UmraBloc extends Bloc<UmraEvent, UmraState> {
           isloading: false, reservationResponseElectronicModel: response));
     });
 
+    on<FawryEditEvent>((event, emit) async {
+      emit(state.update(isloading: true));
+
+      final response = await umraRepos.fawryEdit(
+        umrahReservationID: event.umrareservationid!,
+        paymentTypeID: event.paymentTypeID,
+        PaymentMethodID: event.PaymentMethodID,
+      );
+      emit(state.update(
+          isloading: false, reservationResponseElectronicModel: response));
+    });
+
     on<ElectronicwalletEvent>((event, emit) async {
       emit(state.update(isloading: true));
 
@@ -125,12 +182,93 @@ class UmraBloc extends Bloc<UmraEvent, UmraState> {
           isloading: false, reservationResponseElectronicModel: response));
     });
 
+    on<EditElectronicwalletEvent>((event, emit) async {
+      emit(state.update(isloading: true));
+
+      final response = await umraRepos.Editellectronicwallet(
+          paymentTypeID: event.paymentTypeID,
+          umrareservationid: event.umrahReservationID!,
+          PaymentMethodID: event.PaymentMethodID,
+          phone: event.phone);
+      emit(state.update(
+          isloading: false, reservationResponseElectronicModel: response));
+    });
+
     on<Getpolicyevent>((event, emit) async {
       emit(state.update(isloading: true));
 
-      final response = await umraRepos.getpolicy();
+      final response = await umraRepos.getpolicy(type: event.type);
       if (response is Policyticketmodel) {
         emit(state.update(isloading: false, policyticketmodel: response));
+      }
+    });
+
+    on<CancelReservationEvent>((event, emit) async {
+      emit(state.update(isloading: true));
+
+      final response =
+          await umraRepos.cancelumraTicket(reservationID: event.reservationID);
+      if (response is SendMessageModel) {
+        emit(state.update(isloading: false, cancelrespnce: response));
+      }
+    });
+
+    on<GetPageListEvent>((event, emit) async {
+      emit(state.update(isloading: true));
+
+      final response = await umraRepos.GetPageList();
+      if (response is Pagelistmodel) {
+        emit(state.update(isloading: false, pagelistmodel: response));
+      }
+    });
+
+    on<GetTransportationEvent>((event, emit) async {
+      emit(state.update(isloading: true));
+
+      final response = await umraRepos.getTransportation(
+          tripUmrahID: event.tripUmrahID, reservationID: event.reservationID);
+      if (response is TransportationListModel) {
+        emit(state.update(isloading: false, transportationListModel: response));
+      }
+    });
+
+    on<GetAccommodationEvent>((event, emit) async {
+      emit(state.update(isloading: true));
+
+      final response = await umraRepos.getAccomidation(
+          tripUmrahID: event.tripUmrahID,
+          umrahReservationID: event.umrahReservationID);
+      if (response is AccomidationModel) {
+        emit(state.update(isloading: false, accomidationModel: response));
+      }
+    });
+
+    on<GetprogramsEvent>((event, emit) async {
+      emit(state.update(isloading: true));
+
+      final response = await umraRepos.getPrograms(
+          tripUmrahID: event.tripUmrahID,
+          umrahReservationID: event.umrahReservationID);
+      if (response is ProgramsModel) {
+        emit(state.update(isloading: false, programsModel: response));
+      }
+    });
+
+    on<getpaymentstypeEvent>((event, emit) async {
+      emit(state.update(isloading: true));
+
+      final response = await umraRepos.getpayments();
+      if (response is Paymenttypemodel) {
+        emit(state.update(isloading: false, paymenttypemodel: response));
+      }
+    });
+
+    on<GetbookedumraEvent>((event, emit) async {
+      emit(state.update(isloading: true));
+
+      final response = await umraRepos.getbookedumraticket();
+      if (response is UmraTicketsModel) {
+        emit(state.update(isloading: false, umraTicketsModel: response));
       }
     });
   }

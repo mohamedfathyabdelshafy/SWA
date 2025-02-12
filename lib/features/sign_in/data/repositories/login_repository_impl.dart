@@ -14,29 +14,37 @@ class LoginRepositoryImpl implements LoginRepository {
   final LoginLocalDataSource loginLocalDataSource;
   final LoginRemoteDataSource loginRemoteDataSource;
 
-  LoginRepositoryImpl({required this.networkInfo, required this.loginLocalDataSource, required this.loginRemoteDataSource});
+  LoginRepositoryImpl(
+      {required this.networkInfo,
+      required this.loginLocalDataSource,
+      required this.loginRemoteDataSource});
 
   @override
-  Future<Either<Failure, UserResponse>> userLogin(UserLoginParams params) async {
+  Future<Either<Failure, UserResponse>> userLogin(
+      UserLoginParams params) async {
     //In case there's connection
     try {
       final userLogin = await loginRemoteDataSource.userLogin(params);
       //Cache applicant data so that in case there's no network connection we get last cached data
-      loginLocalDataSource.cacheUserData(userLogin);
-      return Right(userLogin);
-    } on ServerException catch(error){
+
+      if (userLogin.status == 'success') {
+        loginLocalDataSource.cacheUserData(userLogin);
+        return Right(userLogin);
+      } else {
+        return Left(ServerFailure(userLogin.massage.toString()));
+      }
+    } on ServerException catch (error) {
       return Left(ServerFailure(error.toString()));
     }
   }
 
   @override
   Future<Either<Failure, UserResponse>> getUserData(NoParams params) async {
-    try{
+    try {
       final applicantData = await loginLocalDataSource.getLastUserLoginData();
       return Right(applicantData);
-    }on CacheException catch(error){
+    } on CacheException catch (error) {
       return Left(CacheFailure(error.toString()));
     }
   }
-
 }

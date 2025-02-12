@@ -19,9 +19,9 @@ class HttpConsumer implements ApiConsumer {
     try {
       final response = await client.get(
         Uri.parse(path),
-        headers: {"APIKey": "546548dwfdfsd3f4sdfhgat52",
-          "Accept-Language":LanguageClass.isEnglish?"en":"ar"
-
+        headers: {
+          "APIKey": "546548dwfdfsd3f4sdfhgat52",
+          "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
         },
         // headers: await _getToken()
       );
@@ -39,8 +39,7 @@ class HttpConsumer implements ApiConsumer {
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       "APIKey": "546548dwfdfsd3f4sdfhgat52",
-      "Accept-Language":LanguageClass.isEnglish?"en":"ar"
-
+      "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
     };
 
     //Map<String, dynamic>
@@ -134,9 +133,10 @@ class HttpConsumer implements ApiConsumer {
   }
 
   @override
-  Future put(String path, {body, Map<String, dynamic>? queryParameters})async {
+  Future put(String path, {body, Map<String, dynamic>? queryParameters}) async {
     Map<String, String> headers = {
       "APIKey": "546548dwfdfsd3f4sdfhgat52",
+      "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
     };
 
     //Map<String, dynamic>
@@ -154,6 +154,4 @@ class HttpConsumer implements ApiConsumer {
       throw NoInternetConnectionException(error.toString());
     }
   }
-
-
 }

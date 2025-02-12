@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/api/end_points.dart';
 import 'package:swa/core/local_cache_helper.dart';
+import 'package:swa/features/Swa_umra/models/umra_detail.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/BusSeatsEditModel.dart';
 import 'package:swa/features/forgot_password/data/models/message_response_model.dart';
 
@@ -34,7 +35,7 @@ class BusLayoutRepo {
       key: 'countryid',
     );
     var response = await apiConsumer.get(
-        "${EndPoints.baseUrl}Trip/GetCustomerTripDetails?customerID=${Routes.customerid}&reservationID=$reservationID&countryID=$countryid");
+        "${EndPoints.baseUrl}Trip/GetCustomerTripDetails?customerID=${Routes.customerid}&reservationID=$reservationID&countryID=$countryid&dateTypeID=${UmraDetails.dateTypeID}&toCurrency=${Routes.curruncy}");
 
     log('ReservationData response ' + response.body);
 
@@ -61,7 +62,9 @@ class BusLayoutRepo {
           "reservationID": reservationID,
           "totalPrice": totalprice,
           "seatPrice": price,
-          "countryID": countryid
+          "countryID": countryid,
+          "dateTypeID": countryid == 1 ? 113 : 112,
+          "toCurrency": Routes.curruncy
         }),
         "${EndPoints.baseUrl}Reservation/EditReservation");
     log('ReservationData request ' + response.request.toString());

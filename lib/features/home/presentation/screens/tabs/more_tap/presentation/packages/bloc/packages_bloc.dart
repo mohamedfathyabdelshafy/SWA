@@ -8,6 +8,7 @@ import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/features/home/data/models/Ads_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/ActivePackage_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/Ads_model.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/Select_appmodel.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/packages_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/promocode_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/station_from_model.dart';
@@ -158,6 +159,12 @@ class PackagesBloc extends Bloc<PackagesEvent, PackagesState> {
         final res = await _packagesRespo.checkversion();
 
         emit(state.update(isloading: false, updateversion: res));
+      } else if (event is selectappevent) {
+        emit(state.update(isloading: true));
+
+        final res = await _packagesRespo.selectapp();
+
+        emit(state.update(isloading: false, selectappmodel: res));
       }
     });
   }

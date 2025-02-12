@@ -6,6 +6,7 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 
 import 'package:swa/features/sign_up/presentation/cubit/register_cubit.dart';
 
@@ -57,10 +58,10 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                             LanguageClass.isEnglish
                                 ? "Enter Code"
                                 : "ادخل الكود",
-                            style: TextStyle(
+                            style: fontStyle(
                                 color: AppColors.blackColor,
                                 fontWeight: FontWeight.bold,
-                                fontFamily: 'bold',
+                                fontFamily: FontFamily.bold,
                                 fontSize: 24),
                           ),
                           const SizedBox(
@@ -71,18 +72,19 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                             child: PinCodeTextField(
                               appContext: context,
 
-                              pastedTextStyle: const TextStyle(
-                                  color: Color(0xffDDDDDD),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  fontFamily: 'pop'),
+                              pastedTextStyle: fontStyle(
+                                color: Color(0xffDDDDDD),
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontFamily.bold,
+                                fontSize: 14,
+                              ),
                               length: 4,
                               obscureText: false,
-                              textStyle: const TextStyle(
+                              textStyle: fontStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14,
-                                  fontFamily: 'pop'),
+                                  fontFamily: FontFamily.bold),
 
                               blinkWhenObscuring: true,
                               backgroundColor: Colors.transparent,
@@ -162,7 +164,9 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                           },
                           child: Constants.customButton(
                               borderradias: 41,
-                              color: AppColors.primaryColor,
+                              color: Routes.isomra
+                                  ? AppColors.umragold
+                                  : AppColors.primaryColor,
                               text: LanguageClass.isEnglish
                                   ? "Enter code"
                                   : "ادخل الرمز")),

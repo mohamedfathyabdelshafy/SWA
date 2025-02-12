@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
+import 'package:swa/features/Swa_umra/models/umra_detail.dart';
 
 import '../../../../core/api/api_consumer.dart';
 import '../../../../core/api/end_points.dart';
@@ -28,6 +30,8 @@ class TimesTripsRepo {
           "FromStationIDBack": ToStationID,
           "ToStationIDBack": FromStationID,
           "DateGo": DateGo,
+          "DateTypeID": UmraDetails.dateTypeID,
+          "toCurrency": Routes.curruncy,
           "DateBack": DateBack,
           "countryID": countryid
         }));

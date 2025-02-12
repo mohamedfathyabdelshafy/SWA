@@ -16,6 +16,8 @@ class EndPoints {
 
   static const String reservationUmra = '${baseUrl}TripUmra/AddReservation';
 
+  static const String editreservation = '${baseUrl}TripUmra/EditReservation';
+
   static const String paypackage = '${baseUrl}Package/SubscribePackage';
   static const String checkpromocode = '${baseUrl}Reservation/CheckPromoCode';
 
@@ -32,7 +34,7 @@ class EndPoints {
   static const String privacy = '${baseUrl}Settings/PrivacyPolicyList';
   static const String sendEmail = '${baseUrl}Settings/SubmitContactUsMessage';
 
-  static const String huaweiVersion = "1.0.9";
-  static const String playStoreVersion = "1.0.9";
-  static const String iosVersion = "2.0.8";
+  static const String huaweiVersion = "1.2.2";
+  static const String playStoreVersion = "1.2.2";
+  static const String iosVersion = "2.0.9";
 }

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/app_colors.dart';
@@ -10,8 +11,10 @@ import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_respo.dart';
 import 'package:swa/features/payment/fawry/presentation/screens/fawry.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
+import 'package:swa/select_payment2/data/models/Curruncy_model.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
 import 'package:swa/select_payment2/presentation/credit_card/presentation/navigation_helper.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -67,7 +70,25 @@ class _chargeCardState extends State<chargeCard> {
           .toList();
     }
     print("cached cards ${cards}");
+    getwalllet();
+    selectedcurruncy = Routes.curruncy!;
+
     super.initState();
+  }
+
+  Curruncylist? curruncylist;
+  String selectedcurruncy = '';
+
+  getwalllet() async {
+    var responce = await PackagesRespo().GetallCurrency();
+
+    Constants.showLoadingDialog(context);
+
+    if (responce is Curruncylist) {
+      curruncylist = responce;
+
+      Constants.hideLoadingDialog(context);
+    }
   }
 
   @override
@@ -123,10 +144,10 @@ class _chargeCardState extends State<chargeCard> {
                               children: [
                                 Text(
                                   LanguageClass.isEnglish ? 'Payment' : "الدفع",
-                                  style: TextStyle(
+                                  style: fontStyle(
                                       color: AppColors.blackColor,
                                       fontSize: 30,
-                                      fontFamily: "bold"),
+                                      fontFamily: FontFamily.bold),
                                 ),
                                 const SizedBox(height: 40),
                                 Container(
@@ -170,11 +191,12 @@ class _chargeCardState extends State<chargeCard> {
                                                                         .isEnglish
                                                                     ? 'Choose Card'
                                                                     : 'اختر كارت ',
-                                                                style: TextStyle(
+                                                                style: fontStyle(
                                                                     fontSize:
                                                                         15,
                                                                     fontFamily:
-                                                                        "bold",
+                                                                        FontFamily
+                                                                            .bold,
                                                                     color: AppColors
                                                                         .blackColor),
                                                               ),
@@ -223,9 +245,9 @@ class _chargeCardState extends State<chargeCard> {
                                                                             ),
                                                                             Text(
                                                                               "XXXX-XXXX-XXXX-${cards[index].cardNumber!.substring(cards[index].cardNumber!.length - 4)}",
-                                                                              style: TextStyle(
+                                                                              style: fontStyle(
                                                                                 fontSize: 20,
-                                                                                fontFamily: "regular",
+                                                                                fontFamily: FontFamily.regular,
                                                                                 color: Colors.black,
                                                                               ),
                                                                             ),
@@ -324,11 +346,11 @@ class _chargeCardState extends State<chargeCard> {
                                                                               .isEnglish
                                                                           ? 'Add New Card'
                                                                           : 'اضافة كارت جديد',
-                                                                      style: TextStyle(
+                                                                      style: fontStyle(
                                                                           fontSize:
                                                                               15.45,
-                                                                          fontFamily:
-                                                                              "bold",
+                                                                          fontFamily: FontFamily
+                                                                              .bold,
                                                                           color:
                                                                               AppColors.blackColor),
                                                                     ),
@@ -352,10 +374,11 @@ class _chargeCardState extends State<chargeCard> {
                                                                         .length)
                                                             ? "XXXX-XXXX-XXXX-${cards[widget.index].cardNumber!.substring(cards[widget.index].cardNumber!.length - 4)}"
                                                             : "Choose Card",
-                                                        style: const TextStyle(
+                                                        style: fontStyle(
                                                             fontSize: 18,
                                                             fontFamily:
-                                                                "regular",
+                                                                FontFamily
+                                                                    .regular,
                                                             color:
                                                                 Colors.black),
                                                       ),
@@ -393,9 +416,9 @@ class _chargeCardState extends State<chargeCard> {
                                                 LanguageClass.isEnglish
                                                     ? 'Add credit Card'
                                                     : "اضافة كارت جديد",
-                                                style: TextStyle(
+                                                style: fontStyle(
                                                     fontSize: 15.45,
-                                                    fontFamily: "bold",
+                                                    fontFamily: FontFamily.bold,
                                                     color:
                                                         AppColors.blackColor),
                                               ),
@@ -456,8 +479,12 @@ class _chargeCardState extends State<chargeCard> {
                                                     // const BorderRadius.all(Radius.circular(10))
                                                     ),
                                                 child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
                                                   children: [
-                                                    Expanded(
+                                                    Flexible(
                                                       //    padding:
                                                       //    const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
 
@@ -511,6 +538,170 @@ class _chargeCardState extends State<chargeCard> {
                                                         },
                                                       ),
                                                     ),
+                                                    4.horizontalSpace,
+                                                    2.horizontalSpace,
+                                                    InkWell(
+                                                      onTap: () {
+                                                        showModalBottomSheet(
+                                                            context: context,
+                                                            isDismissible: true,
+                                                            enableDrag: true,
+                                                            isScrollControlled:
+                                                                true,
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            barrierColor: Colors
+                                                                .black
+                                                                .withOpacity(
+                                                                    0.5),
+                                                            useRootNavigator:
+                                                                true,
+                                                            builder: (context) {
+                                                              return StatefulBuilder(builder:
+                                                                  (buildContext,
+                                                                      StateSetter
+                                                                          setStater /*You can rename this!*/) {
+                                                                return Padding(
+                                                                  padding: EdgeInsets.only(
+                                                                      bottom: MediaQuery.of(
+                                                                              context)
+                                                                          .viewInsets
+                                                                          .bottom),
+                                                                  child:
+                                                                      GestureDetector(
+                                                                    onTap: () {
+                                                                      FocusScope.of(
+                                                                              context)
+                                                                          .requestFocus(
+                                                                              new FocusNode());
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      width: double
+                                                                          .infinity,
+                                                                      height: MediaQuery.of(context)
+                                                                              .size
+                                                                              .height *
+                                                                          0.7,
+                                                                      decoration: BoxDecoration(
+                                                                          color: Colors
+                                                                              .white,
+                                                                          borderRadius: BorderRadius.only(
+                                                                              topLeft: Radius.circular(24),
+                                                                              topRight: Radius.circular(24))),
+                                                                      padding: EdgeInsets.symmetric(
+                                                                          horizontal:
+                                                                              16.w),
+                                                                      child:
+                                                                          Column(
+                                                                        mainAxisSize:
+                                                                            MainAxisSize.min,
+                                                                        children: [
+                                                                          Container(
+                                                                            alignment:
+                                                                                Alignment.center,
+                                                                            child:
+                                                                                Container(
+                                                                              margin: EdgeInsets.symmetric(vertical: 3),
+                                                                              height: 6,
+                                                                              width: 64.w,
+                                                                              decoration: BoxDecoration(color: AppColors.grey, borderRadius: BorderRadius.circular(5)),
+                                                                            ),
+                                                                          ),
+                                                                          24.verticalSpace,
+                                                                          Flexible(
+                                                                            child:
+                                                                                ListView.builder(
+                                                                              itemCount: curruncylist!.message!.length,
+                                                                              padding: EdgeInsets.symmetric(horizontal: 5),
+                                                                              shrinkWrap: true,
+                                                                              physics: ScrollPhysics(),
+                                                                              itemBuilder: (BuildContext context, int index2) {
+                                                                                return InkWell(
+                                                                                  onTap: () {
+                                                                                    setState(() {
+                                                                                      amountController.text = '';
+                                                                                      selectedcurruncy = curruncylist!.message![index2].symbol!;
+                                                                                    });
+                                                                                    Navigator.pop(context);
+                                                                                  },
+                                                                                  child: Container(
+                                                                                    decoration: BoxDecoration(
+                                                                                        border: Border(
+                                                                                            bottom: BorderSide(
+                                                                                      color: AppColors.grey,
+                                                                                    ))),
+                                                                                    child: Row(
+                                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                      children: [
+                                                                                        Expanded(
+                                                                                          child: Column(
+                                                                                            mainAxisAlignment: MainAxisAlignment.start,
+                                                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                            children: [
+                                                                                              Container(
+                                                                                                margin: EdgeInsets.symmetric(vertical: 5),
+                                                                                                child: FittedBox(fit: BoxFit.scaleDown, child: Text(curruncylist!.message![index2].name!, style: fontStyle(fontSize: 16, fontFamily: FontFamily.bold, fontWeight: FontWeight.w500, color: Colors.black))),
+                                                                                              ),
+                                                                                              Container(
+                                                                                                child: Text(curruncylist!.message![index2].symbol!, style: fontStyle(fontSize: 14, fontFamily: FontFamily.bold, fontWeight: FontWeight.w400, color: Colors.black54)),
+                                                                                              ),
+                                                                                            ],
+                                                                                          ),
+                                                                                        ),
+                                                                                        Icon(
+                                                                                          Icons.arrow_forward_ios_rounded,
+                                                                                          color: AppColors.umragold,
+                                                                                          size: 15,
+                                                                                        )
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                );
+                                                                              },
+                                                                            ),
+                                                                          ),
+                                                                          16.verticalSpace,
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              });
+                                                            });
+                                                      },
+                                                      child: Container(
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              selectedcurruncy,
+                                                              style: fontStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontFamily:
+                                                                      FontFamily
+                                                                          .bold),
+                                                            ),
+                                                            4.horizontalSpace,
+                                                            Icon(
+                                                              Icons
+                                                                  .arrow_drop_down_rounded,
+                                                              color: AppColors
+                                                                  .umragold,
+                                                              size: 20,
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    )
                                                   ],
                                                 )),
                                           ),
@@ -577,7 +768,7 @@ class _chargeCardState extends State<chargeCard> {
                                       //               "You will get a notification by applying your wallet \n In order to agree to pay"),
                                       //         ],
                                       //       ),
-                                      //       titleTextStyle: const TextStyle(
+                                      //       titleTextStyle: const fontStyle(
                                       //           fontWeight: FontWeight.bold,
                                       //           color: Colors.black,
                                       //           fontSize: 20),
@@ -640,7 +831,7 @@ class _chargeCardState extends State<chargeCard> {
                                       //               child: Center(
                                       //                 child: Text(
                                       //                   'OK',
-                                      //                   style: TextStyle(
+                                      //                   style: fontStyle(
                                       //                       color:
                                       //                           AppColors.white,
                                       //                       fontWeight:
@@ -742,6 +933,7 @@ class _chargeCardState extends State<chargeCard> {
                                                     .chargebycard(
                                                   custId:
                                                       widget.user.customerId!,
+                                                  curruncy: selectedcurruncy,
                                                   amount: amount
                                                       .toStringAsFixed(2)
                                                       .toString(),
@@ -792,11 +984,12 @@ class _chargeCardState extends State<chargeCard> {
                                                 LanguageClass.isEnglish
                                                     ? 'Charge'
                                                     : 'شحن',
-                                                style: TextStyle(
+                                                style: fontStyle(
                                                     color: Colors.white,
                                                     fontSize: 20,
                                                     fontWeight: FontWeight.bold,
-                                                    fontFamily: "bold"),
+                                                    fontFamily:
+                                                        FontFamily.bold),
                                               ),
                                             ),
                                           ),
@@ -863,7 +1056,7 @@ class PayField extends StatelessWidget {
           child: TextFormField(
               controller: ctr,
               keyboardType: textInputType,
-              style: TextStyle(color: Colors.black),
+              style: fontStyle(color: Colors.black),
               // style: fontStyle(color: MyColors.blue, fontSize: 14),
               // cursorColor: MyColors.blue,
               decoration: InputDecoration(
@@ -871,10 +1064,14 @@ class PayField extends StatelessWidget {
 
                 border: InputBorder.none,
                 // errorStyle: fontStyle(color: Colors.red, fontSize: 12),
-                hintStyle: TextStyle(
-                    color: AppColors.grey, fontSize: 12, fontFamily: "bold"),
-                labelStyle: TextStyle(
-                    color: AppColors.grey, fontSize: 12, fontFamily: "bold"),
+                hintStyle: fontStyle(
+                    color: AppColors.grey,
+                    fontSize: 12,
+                    fontFamily: FontFamily.bold),
+                labelStyle: fontStyle(
+                    color: AppColors.grey,
+                    fontSize: 12,
+                    fontFamily: FontFamily.bold),
                 // contentPadding: const EdgeInsets.symmetric(
                 //   horizontal: 10,
                 //   vertical: 5,

@@ -8,10 +8,13 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/Swa_umra/Screens/payment/Electronic_Wallet.dart';
 import 'package:swa/features/Swa_umra/Screens/payment/card_payment.dart';
 import 'package:swa/features/Swa_umra/Screens/payment/fawry_screen.dart';
 import 'package:swa/features/Swa_umra/bloc/umra_bloc.dart';
+import 'package:swa/features/Swa_umra/models/umra_detail.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_respo.dart';
 import 'package:swa/features/payment/electronic_wallet/presentation/cubit/eWallet_cubit.dart';
 import 'package:swa/features/payment/electronic_wallet/presentation/screens/electronic_screens.dart';
 import 'package:swa/features/payment/fawry/presentation/cubit/fawry_cubit.dart';
@@ -21,6 +24,7 @@ import 'package:swa/features/payment/wallet/data/repo/my_wallet_repo.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/main.dart';
+import 'package:swa/select_payment2/data/models/Curruncy_model.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
 import 'package:swa/select_payment2/presentation/credit_card/presentation/screens/chargeCard_screen.dart';
 
@@ -47,6 +51,7 @@ class _SelectPaymentUmraScreenState extends State<SelectPaymentUmraScreen> {
   }
 
   double balance = 0;
+  Curruncylist? curruncylist;
 
   getwalllet() async {
     MyWalletResponseModel? wallet =
@@ -54,6 +59,11 @@ class _SelectPaymentUmraScreenState extends State<SelectPaymentUmraScreen> {
     setState(() {
       balance = wallet!.message!;
     });
+
+    var responce = await PackagesRespo().GetallCurrency();
+    if (responce is Curruncylist) {
+      curruncylist = responce;
+    }
   }
 
   @override
@@ -127,9 +137,9 @@ class _SelectPaymentUmraScreenState extends State<SelectPaymentUmraScreen> {
                             LanguageClass.isEnglish
                                 ? "Select payment"
                                 : "حدد طريقة الدفع",
-                            style: TextStyle(
+                            style: fontStyle(
                                 fontSize: 24.sp,
-                                fontFamily: 'bold',
+                                fontFamily: FontFamily.bold,
                                 fontWeight: FontWeight.w500),
                           )),
                       SizedBox(
@@ -177,12 +187,49 @@ class _SelectPaymentUmraScreenState extends State<SelectPaymentUmraScreen> {
                                             width: 2)),
                                     child: Text(
                                       '${balance} ${Routes.curruncy}',
-                                      style: TextStyle(
+                                      style: fontStyle(
                                           color: AppColors.white,
                                           fontSize: 16,
-                                          fontFamily: "black"),
+                                          fontFamily: FontFamily.medium),
                                     ),
                                   ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 17,
+                            ),
+                            InkWell(
+                              onTap: () async {
+                                UmraDetails.curruncy = Routes.curruncy!;
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Umracardpay(
+                                      index: 1,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 23,
+                                    height: 22,
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                        color: AppColors.umragold,
+                                        borderRadius: BorderRadius.circular(4)),
+                                    child: SvgPicture.asset(
+                                        'assets/images/visa.svg'),
+                                  ),
+                                  SizedBox(
+                                    width: 14,
+                                  ),
+                                  customText(LanguageClass.isEnglish
+                                      ? "Pay with Card"
+                                      : "الدفع بالبطاقة")
                                 ],
                               ),
                             ),
@@ -195,44 +242,6 @@ class _SelectPaymentUmraScreenState extends State<SelectPaymentUmraScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      InkWell(
-                                        onTap: () async {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => Umracardpay(
-                                                user: widget.user!,
-                                                index: 1,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              width: 23,
-                                              height: 22,
-                                              alignment: Alignment.center,
-                                              padding: EdgeInsets.all(2),
-                                              decoration: BoxDecoration(
-                                                  color: AppColors.umragold,
-                                                  borderRadius:
-                                                      BorderRadius.circular(4)),
-                                              child: SvgPicture.asset(
-                                                  'assets/images/visa.svg'),
-                                            ),
-                                            SizedBox(
-                                              width: 14,
-                                            ),
-                                            customText(LanguageClass.isEnglish
-                                                ? "Pay with Card"
-                                                : "الدفع بالبطاقة")
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 17,
-                                      ),
                                       InkWell(
                                         onTap: () {
                                           Navigator.push(
@@ -275,7 +284,7 @@ class _SelectPaymentUmraScreenState extends State<SelectPaymentUmraScreen> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  const ElectronicUmraScreen(),
+                                                  ElectronicUmraScreen(),
                                             ),
                                           );
                                         },
@@ -322,11 +331,11 @@ class _SelectPaymentUmraScreenState extends State<SelectPaymentUmraScreen> {
   Widget customText(text) {
     return Text(
       text,
-      style: const TextStyle(
+      style: fontStyle(
           color: Colors.black,
           fontSize: 21,
           fontWeight: FontWeight.w600,
-          fontFamily: "meduim"),
+          fontFamily: FontFamily.medium),
     );
   }
 }

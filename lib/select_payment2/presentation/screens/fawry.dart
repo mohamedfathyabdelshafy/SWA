@@ -2,12 +2,14 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/Timer_widget.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
@@ -105,11 +107,11 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     LanguageClass.isEnglish ? 'Fawry' : 'فوري',
-                    style: TextStyle(
+                    style: fontStyle(
                         color: AppColors.blackColor,
-                        fontSize: 38,
+                        fontSize: 24.sp,
                         fontWeight: FontWeight.w600,
-                        fontFamily: "roman"),
+                        fontFamily: FontFamily.bold),
                   ),
                 ),
                 SizedBox(
@@ -156,9 +158,9 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                                         LanguageClass.isEnglish
                                             ? "amount"
                                             : "القيمة",
-                                        style: TextStyle(
+                                        style: fontStyle(
                                             fontSize: 15,
-                                            fontFamily: "bold",
+                                            fontFamily: FontFamily.bold,
                                             color: AppColors.greyLight),
                                       ),
                                       Text(
@@ -169,9 +171,9 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                                                 .toString()
                                             : Routes.resrvedtrips[0].price
                                                 .toString(),
-                                        style: TextStyle(
+                                        style: fontStyle(
                                             fontSize: 18,
-                                            fontFamily: "bold",
+                                            fontFamily: FontFamily.bold,
                                             color: AppColors.primaryColor),
                                       )
                                     ],
@@ -211,7 +213,7 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                                           LanguageClass.isEnglish
                                               ? 'Amount: '
                                               : "القيمة",
-                                          style: TextStyle(
+                                          style: fontStyle(
                                               color: Colors.black,
                                               fontSize: 14,
                                               fontWeight: FontWeight.w600),
@@ -231,11 +233,12 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Text(
+                                        Text(
                                           'Reference Number: ',
-                                          style: TextStyle(
+                                          style: fontStyle(
                                               color: Colors.black,
                                               fontSize: 14,
+                                              fontFamily: FontFamily.medium,
                                               fontWeight: FontWeight.w600),
                                         ),
                                         Expanded(

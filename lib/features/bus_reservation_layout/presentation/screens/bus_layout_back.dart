@@ -8,13 +8,15 @@ import 'package:intl/intl.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/Timer_widget.dart';
 import 'package:swa/core/widgets/icon_back.dart';
+import 'package:swa/features/Swa_umra/models/umra_detail.dart';
+import 'package:swa/features/Swa_umra/models/umral_trip_model.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/Ticket_class.dart';
 import 'package:swa/features/bus_reservation_layout/data/repo/bus_reservation_repo.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/PLOH/bus_layout_reservation_cubit.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/PLOH/bus_layout_reservation_states.dart';
-import 'package:swa/features/bus_reservation_layout/presentation/screens/Recervation_back_ticket.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/screens/reservation_ticket.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/features/times_trips/presentation/PLOH/times_trips_cubit.dart';
@@ -184,11 +186,12 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                     children: [
                       Text(
                         LanguageClass.isEnglish ? "Select seats" : "حدد كراسيك",
-                        style: TextStyle(
+                        style: fontStyle(
                             color: AppColors.blackColor,
-                            fontSize: 25.sp,
+                            fontSize: 20.sp,
                             fontWeight: FontWeight.w600,
-                            fontFamily: "roman"),
+                            height: 1.2,
+                            fontFamily: FontFamily.medium),
                       ),
                       Timerwidget()
                     ],
@@ -217,18 +220,22 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                                 DateFormat('dd-MM-yyyy')
                                     .format(widget.busdate!)
                                     .toString(),
-                                style: TextStyle(
+                                style: fontStyle(
                                     fontSize: 12.sp,
-                                    fontFamily: "bold",
+                                    fontFamily: FontFamily.bold,
+                                    height: 1,
+                                    fontWeight: FontWeight.w600,
                                     color: Colors.black),
                               ),
                               Text(
                                 DateFormat('hh:mm a')
                                     .format(widget.busdate!)
                                     .toString(),
-                                style: TextStyle(
+                                style: fontStyle(
                                     fontSize: 12.sp,
-                                    fontFamily: "bold",
+                                    fontFamily: FontFamily.bold,
+                                    fontWeight: FontWeight.w600,
+                                    height: 1,
                                     color: Colors.black),
                               ),
                             ],
@@ -256,16 +263,19 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                             children: [
                               Text(
                                 widget.from,
-                                style: TextStyle(
+                                style: fontStyle(
                                     fontSize: 16.sp,
-                                    fontFamily: "bold",
+                                    fontFamily: FontFamily.bold,
+                                    height: 1,
+                                    fontWeight: FontWeight.w600,
                                     color: Colors.black),
                               ),
                               Text(
                                 widget.to,
-                                style: TextStyle(
+                                style: fontStyle(
                                     fontSize: 16.sp,
-                                    fontFamily: "bold",
+                                    fontFamily: FontFamily.bold,
+                                    height: 1.2,
                                     color: Colors.black),
                               ),
                             ],
@@ -284,9 +294,10 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                           children: [
                             Text(
                               LanguageClass.isEnglish ? 'Available' : 'المتاح',
-                              style: TextStyle(
+                              style: fontStyle(
                                   fontSize: 12.sp,
-                                  fontFamily: "meduim",
+                                  fontFamily: FontFamily.medium,
+                                  height: 1.2,
                                   color: Colors.black),
                             ),
                             Padding(
@@ -295,9 +306,10 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                                 busSeatsModel?.busSeatDetails?.emptySeats
                                         .toString() ??
                                     "",
-                                style: TextStyle(
-                                    fontSize: 45.sp,
-                                    fontFamily: 'black',
+                                style: fontStyle(
+                                    fontSize: 30.sp,
+                                    fontFamily: FontFamily.bold,
+                                    height: 1.2,
                                     color: AppColors.primaryColor),
                               ),
                             ),
@@ -306,16 +318,18 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                               LanguageClass.isEnglish
                                   ? 'Selected'
                                   : 'تم تحديده',
-                              style: TextStyle(
+                              style: fontStyle(
                                   fontSize: 12.sp,
-                                  fontFamily: "meduim",
+                                  height: 1,
+                                  fontFamily: FontFamily.medium,
                                   color: Colors.black),
                             ),
                             Text(
                               countSeatesNum.toString(),
-                              style: TextStyle(
-                                fontSize: 45.sp,
-                                fontFamily: "black",
+                              style: fontStyle(
+                                fontSize: 30.sp,
+                                fontFamily: FontFamily.bold,
+                                height: 1.2,
                                 color: Color(0xff5332F7),
                               ),
                             ),
@@ -324,16 +338,18 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                               LanguageClass.isEnglish
                                   ? 'Unavailable'
                                   : 'غير متاح',
-                              style: TextStyle(
+                              style: fontStyle(
                                   fontSize: 12.sp,
-                                  fontFamily: "meduim",
+                                  fontFamily: FontFamily.medium,
+                                  height: 1,
                                   color: Colors.black),
                             ),
                             Text(
                               unavailable.toString(),
-                              style: TextStyle(
-                                  fontSize: 45.sp,
-                                  fontFamily: "black",
+                              style: fontStyle(
+                                  fontSize: 30.sp,
+                                  height: 1.2,
+                                  fontFamily: FontFamily.bold,
                                   color: Colors.grey),
                             ),
                             SizedBox(
@@ -376,35 +392,57 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                                   Ticketreservation.accessBusTime2 =
                                       CacheHelper.getDataToSharedPref(
                                           key: "accessBusTime2");
+
+                                  if (UmraDetails.isbusforumra) {
+                                    UmraDetails.swatransportList!.first
+                                        .fromStationId = null;
+                                    UmraDetails.swatransportList!.first
+                                        .toStationId = null;
+
+                                    UmraDetails.Swabusreservedseats.add(
+                                        TransportationsSeats(
+                                      tripid: widget.tripId,
+                                      seatsnumber: countSeats,
+                                      totalprice:
+                                          countSeats.length * widget.price,
+                                    ));
+                                  }
                                   if (Ticketreservation.Seatsnumbers1.isEmpty) {
                                     Navigator.pop(context);
                                   } else {
                                     if (widget.isedit == true) {
                                       Navigator.pop(context);
                                     } else {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                MultiBlocProvider(
-                                                    providers: [
-                                                      BlocProvider<LoginCubit>(
+                                      if (UmraDetails.isbusforumra) {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      } else {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  MultiBlocProvider(
+                                                      providers: [
+                                                        BlocProvider<
+                                                                LoginCubit>(
+                                                            create: (context) =>
+                                                                sl<LoginCubit>()),
+                                                        BlocProvider<
+                                                            TimesTripsCubit>(
                                                           create: (context) =>
-                                                              sl<LoginCubit>()),
-                                                      BlocProvider<
-                                                          TimesTripsCubit>(
-                                                        create: (context) =>
-                                                            TimesTripsCubit(),
-                                                      )
-                                                    ],
-                                                    // Replace with your actual cubit creation logic
-                                                    child: ReservationTicket(
-                                                      tripTypeId: "2",
-                                                      countSeats2:
-                                                          cachCountSeats2,
-                                                      user: widget.user,
-                                                    ))),
-                                      );
+                                                              TimesTripsCubit(),
+                                                        )
+                                                      ],
+                                                      // Replace with your actual cubit creation logic
+                                                      child: ReservationTicket(
+                                                        tripTypeId: "2",
+                                                        countSeats2:
+                                                            cachCountSeats2,
+                                                        user: widget.user,
+                                                      ))),
+                                        );
+                                      }
                                     }
                                   }
                                 } else {
@@ -426,9 +464,9 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                                 child: Center(
                                   child: Text(
                                     LanguageClass.isEnglish ? "Save" : "تم",
-                                    style: TextStyle(
+                                    style: fontStyle(
                                         color: Colors.white,
-                                        fontFamily: "bold",
+                                        fontFamily: FontFamily.bold,
                                         fontSize: 16.sp),
                                   ),
                                 ),

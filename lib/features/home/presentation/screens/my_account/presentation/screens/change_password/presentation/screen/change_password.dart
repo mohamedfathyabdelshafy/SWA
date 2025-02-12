@@ -5,6 +5,7 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/customized_field.dart';
 import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/change_password/presentation/PLOH/change_password_cubit.dart';
 import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/change_password/presentation/PLOH/change_password_states.dart';
@@ -63,7 +64,9 @@ class ChangePassword extends StatelessWidget {
                       },
                       child: Icon(
                         Icons.arrow_back_rounded,
-                        color: AppColors.primaryColor,
+                        color: Routes.isomra
+                            ? AppColors.umragold
+                            : AppColors.primaryColor,
                         size: 35,
                       ),
                     ),
@@ -77,11 +80,11 @@ class ChangePassword extends StatelessWidget {
                       LanguageClass.isEnglish
                           ? "Change Password"
                           : "تغير كلمة المرور",
-                      style: TextStyle(
+                      style: fontStyle(
                           color: AppColors.blackColor,
                           fontSize: 25,
                           fontWeight: FontWeight.w600,
-                          fontFamily: "roman"),
+                          fontFamily: FontFamily.medium),
                     ),
                   ),
                   SizedBox(
@@ -165,9 +168,12 @@ class ChangePassword extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0),
                       child: Constants.customButton(
-                          borderradias: 41,
-                          text: LanguageClass.isEnglish ? "Save" : "حفظ",
-                          color: AppColors.primaryColor),
+                        borderradias: 41,
+                        text: LanguageClass.isEnglish ? "Save" : "حفظ",
+                        color: Routes.isomra
+                            ? AppColors.umragold
+                            : AppColors.primaryColor,
+                      ),
                     ),
                   )
                 ],

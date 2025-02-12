@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:jhijri_picker/_src/_jWidgets.dart';
+import 'package:swa/core/utils/Navigaton_bottombar.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/Swa_umra/Screens/Trip_list_screen.dart';
 import 'package:swa/features/Swa_umra/bloc/umra_bloc.dart';
 import 'package:swa/features/Swa_umra/models/campain_model.dart';
 import 'package:swa/features/Swa_umra/models/umra_detail.dart';
+import 'package:jhijri/jHijri.dart';
 
 class TripdataScreen extends StatefulWidget {
   String triptype;
-  TripdataScreen({super.key, required this.triptype});
+  int typeid;
+  TripdataScreen({super.key, required this.triptype, required this.typeid});
 
   @override
   State<TripdataScreen> createState() => _TripdataScreenState();
@@ -21,7 +26,13 @@ class TripdataScreen extends StatefulWidget {
 class _TripdataScreenState extends State<TripdataScreen> {
   final UmraBloc _umraBloc = UmraBloc();
 
+  void onApplePayResult(paymentResult) {
+    debugPrint(paymentResult.toString());
+  }
+
   DateTime? date;
+
+  String selectedDate = '';
 
   bool opentap = false;
 
@@ -30,6 +41,13 @@ class _TripdataScreenState extends State<TripdataScreen> {
   String campaginid = '';
 
   String selectcampain = '';
+  bool ishijiri = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,11 +101,11 @@ class _TripdataScreenState extends State<TripdataScreen> {
                                   LanguageClass.isEnglish
                                       ? "Select City"
                                       : "حدد المدينة",
-                                  style: TextStyle(
+                                  style: fontStyle(
                                       color: AppColors.blackColor,
                                       fontSize: 25,
                                       fontWeight: FontWeight.w500,
-                                      fontFamily: "bold"),
+                                      fontFamily: FontFamily.bold),
                                 ),
                               ),
                               SizedBox(
@@ -125,11 +143,11 @@ class _TripdataScreenState extends State<TripdataScreen> {
                                         child: Text(
                                           state.cityUmramodel!.message![index]
                                               .cityName!,
-                                          style: TextStyle(
+                                          style: fontStyle(
                                               color: AppColors.blackColor,
                                               fontSize: 14,
                                               fontWeight: FontWeight.w400,
-                                              fontFamily: "bold"),
+                                              fontFamily: FontFamily.bold),
                                         ),
                                       ),
                                     );
@@ -185,7 +203,7 @@ class _TripdataScreenState extends State<TripdataScreen> {
             //                     LanguageClass.isEnglish
             //                         ? "Select Campaign"
             //                         : "حدد الحملة",
-            //                     style: TextStyle(
+            //                     style: fontStyle(
             //                         color: AppColors.blackColor,
             //                         fontSize: 25,
             //                         fontWeight: FontWeight.w500,
@@ -229,7 +247,7 @@ class _TripdataScreenState extends State<TripdataScreen> {
             //                           child: Text(
             //                             state.campainModel!.message!
             //                                 .list![index].name!,
-            //                             style: TextStyle(
+            //                             style: fontStyle(
             //                                 color: AppColors.blackColor,
             //                                 fontSize: 16,
             //                                 fontWeight: FontWeight.w500,
@@ -258,6 +276,8 @@ class _TripdataScreenState extends State<TripdataScreen> {
                         : TextDirection.rtl,
                     child: Column(
                       children: [
+                        10.verticalSpace,
+
                         Container(
                           margin: const EdgeInsets.only(left: 27, right: 27),
                           alignment: LanguageClass.isEnglish
@@ -283,9 +303,10 @@ class _TripdataScreenState extends State<TripdataScreen> {
                                 : Alignment.topRight,
                             child: Text(
                               widget.triptype,
-                              style: TextStyle(
+                              style: fontStyle(
                                   fontSize: 24.sp,
-                                  fontFamily: 'bold',
+                                  color: Colors.black,
+                                  fontFamily: FontFamily.bold,
                                   fontWeight: FontWeight.w500),
                             )),
 
@@ -311,15 +332,15 @@ class _TripdataScreenState extends State<TripdataScreen> {
                                 Text(
                                   selectcity == ''
                                       ? LanguageClass.isEnglish
-                                          ? 'Select City'
-                                          : 'اختر المدينة'
+                                          ? "From City ( Departs )"
+                                          : "من مدينة ( المغادرة )"
                                       : selectcity,
-                                  style: TextStyle(
+                                  style: fontStyle(
                                       color: selectcity == ''
                                           ? Color(0xff969696)
                                           : Colors.black,
                                       fontWeight: FontWeight.w600,
-                                      fontFamily: 'bold',
+                                      fontFamily: FontFamily.bold,
                                       fontSize: 18),
                                 ),
                                 Icon(
@@ -337,33 +358,45 @@ class _TripdataScreenState extends State<TripdataScreen> {
                         ),
                         InkWell(
                           onTap: () async {
-                            date = await showDatePicker(
+                            customdatepicker(
                               context: context,
-                              builder: (context, child) {
-                                return Theme(
-                                  data: Theme.of(context).copyWith(
-                                    dataTableTheme: DataTableThemeData(
-                                        decoration: BoxDecoration(
-                                            color: Colors.black,
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        dataRowColor: MaterialStatePropertyAll(
-                                            Colors.black)),
-                                    colorScheme: ColorScheme.light(
-                                        primary: AppColors.umragold,
-                                        secondary: AppColors.lightgold),
-                                  ),
-                                  child: child!,
-                                );
+                              hijiri: ishijiri,
+                              onchange: (hdate) {
+                                date = hdate.date;
+                                hdate.jhijri.fDisplay = DisplayFormat.MMDDYYYY;
+
+                                ishijiri
+                                    ? selectedDate = hdate.jhijri.toString()
+                                    : selectedDate =
+                                        intl.DateFormat('MM-dd-yyyy')
+                                            .format(date!)
+                                            .toString();
+                                setState(() {});
+                                Navigator.pop(context);
                               },
-                              initialDate: DateTime.now(),
-                              firstDate:
-                                  DateTime.now().subtract(Duration(days: 300)),
-                              lastDate: DateTime.now().add(
-                                const Duration(days: 365),
-                              ),
                             );
-                            setState(() {});
+
+                            //  await showDatePicker(
+                            //   context: context,
+                            //   builder: (context, child) {
+                            //     return Theme(
+                            //         data: Theme.of(context).copyWith(
+                            //           colorScheme: ColorScheme.light(
+                            //               primary: AppColors.umragold,
+                            //               secondary: AppColors.lightgold),
+                            //         ),
+                            //         child: Transform.scale(
+                            //             scale: 0.8,
+                            //             alignment: Alignment.center,
+                            //             child: child));
+                            //   },
+                            //   initialDate: DateTime.now(),
+                            //   firstDate:
+                            //       DateTime.now().subtract(Duration(days: 300)),
+                            //   lastDate: DateTime.now().add(
+                            //     const Duration(days: 365),
+                            //   ),
+                            // );
                           },
                           child: Container(
                             margin: EdgeInsets.symmetric(horizontal: 33),
@@ -378,19 +411,17 @@ class _TripdataScreenState extends State<TripdataScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  date == null
+                                  selectedDate == ''
                                       ? LanguageClass.isEnglish
                                           ? 'Select Date'
                                           : 'حدد التاريخ'
-                                      : intl.DateFormat('dd-MM-yyyy')
-                                          .format(date!)
-                                          .toString(),
-                                  style: TextStyle(
+                                      : selectedDate,
+                                  style: fontStyle(
                                       color: date == null
                                           ? Color(0xff969696)
                                           : Colors.black,
                                       fontWeight: FontWeight.w600,
-                                      fontFamily: 'bold',
+                                      fontFamily: FontFamily.bold,
                                       fontSize: 18),
                                 ),
                                 Icon(
@@ -428,7 +459,7 @@ class _TripdataScreenState extends State<TripdataScreen> {
                         //                   ? 'Select package'
                         //                   : 'اختر الباقة'
                         //               : selectcampain,
-                        //           style: TextStyle(
+                        //           style: fontStyle(
                         //               color: selectcampain == ''
                         //                   ? Color(0xff969696)
                         //                   : Colors.black,
@@ -483,7 +514,7 @@ class _TripdataScreenState extends State<TripdataScreen> {
                         //               child: Text(
                         //                 state.campainModel!.message!.list![index]
                         //                     .name!,
-                        //                 style: TextStyle(
+                        //                 style: fontStyle(
                         //                     color: AppColors.blackColor,
                         //                     fontSize: 16,
                         //                     fontWeight: FontWeight.w500,
@@ -499,15 +530,18 @@ class _TripdataScreenState extends State<TripdataScreen> {
                         ),
                         InkWell(
                           onTap: () {
-                            if (cityid != '' && date != null) {
+                            if (cityid != '' && selectedDate != '') {
+                              UmraDetails.cityid = cityid;
+                              UmraDetails.tripdate = selectedDate.toString();
+
+                              UmraDetails.dateTypeID = ishijiri ? 112 : 113;
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => TriplistScreen(
                                             city: cityid,
-                                            date: intl.DateFormat('MM-dd-yyyy')
-                                                .format(date!)
-                                                .toString(),
+                                            date: selectedDate,
+                                            typeid: widget.typeid,
                                           )));
                             } else {
                               Constants.showDefaultSnackBar(
@@ -542,9 +576,9 @@ class _TripdataScreenState extends State<TripdataScreen> {
                                 ),
                                 Text(
                                   LanguageClass.isEnglish ? 'Search' : 'بحث',
-                                  style: TextStyle(
+                                  style: fontStyle(
                                     color: Colors.white,
-                                    fontFamily: 'bold',
+                                    fontFamily: FontFamily.bold,
                                     fontSize: 24,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -552,12 +586,80 @@ class _TripdataScreenState extends State<TripdataScreen> {
                               ],
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
                 );
               }),
+        ),
+        bottomNavigationBar: Navigationbottombar(
+          currentIndex: 0,
         ));
+  }
+
+  Future customdatepicker(
+      {required BuildContext context,
+      required bool hijiri,
+      required onchange(JPickerValue date)}) async {
+    return showGlobalDatePicker(
+      context: context,
+      headerTitle: Container(
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 20.h),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+        ),
+        child: InkWell(
+            onTap: () {
+              Navigator.pop(context);
+              ishijiri = !ishijiri;
+              customdatepicker(
+                context: context,
+                hijiri: ishijiri,
+                onchange: onchange,
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  hijiri
+                      ? LanguageClass.isEnglish
+                          ? 'Hijri'
+                          : 'هجري'
+                      : LanguageClass.isEnglish
+                          ? 'Gregorian'
+                          : "ميلادي",
+                  style: fontStyle(
+                      height: 1.2,
+                      fontFamily: FontFamily.medium,
+                      fontSize: 14.sp,
+                      color: AppColors.blackColor),
+                ),
+                5.horizontalSpace,
+                Icon(
+                  Icons.change_circle_rounded,
+                  color: AppColors.umragold,
+                  size: 20,
+                )
+              ],
+            )),
+      ),
+      selectedDate: JDateModel(jhijri: JHijri.now(), dateTime: DateTime.now()),
+      pickerMode: DatePickerMode.day,
+      pickerTheme: Theme.of(context),
+      textDirection: TextDirection.ltr,
+      buttons: Container(),
+      locale: LanguageClass.isEnglish ? Locale("en", "US") : Locale("ar", ""),
+      pickerType: hijiri ? PickerType.JHijri : PickerType.JNormal,
+      onChange: onchange,
+      primaryColor: AppColors.umragold,
+      calendarTextColor: Colors.black,
+      backgroundColor: Colors.white,
+      borderRadius: const Radius.circular(0),
+      buttonTextColor: Colors.white,
+    );
   }
 }

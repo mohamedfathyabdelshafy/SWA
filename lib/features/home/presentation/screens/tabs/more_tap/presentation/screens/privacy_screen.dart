@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/privacy_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/repo/more_repo.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/PLOH/more_cubit.dart';
@@ -48,7 +50,9 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
             if (state is LoadingFAQ) {
               return Center(
                 child: CircularProgressIndicator(
-                  color: AppColors.primaryColor,
+                  color: Routes.isomra
+                      ? AppColors.umragold
+                      : AppColors.primaryColor,
                 ),
               );
             }
@@ -70,7 +74,9 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                       },
                       child: Icon(
                         Icons.arrow_back_rounded,
-                        color: AppColors.primaryColor,
+                        color: Routes.isomra
+                            ? AppColors.umragold
+                            : AppColors.primaryColor,
                         size: 35,
                       ),
                     ),
@@ -82,11 +88,11 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
                       LanguageClass.isEnglish ? "Privacy" : "سياسة الخصوصية",
-                      style: TextStyle(
+                      style: fontStyle(
                           color: AppColors.blackColor,
                           fontSize: 38,
                           fontWeight: FontWeight.w600,
-                          fontFamily: "roman"),
+                          fontFamily: FontFamily.medium),
                     ),
                   ),
                   SizedBox(
@@ -104,16 +110,16 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                               children: [
                                 Text(
                                   privacyModel.message![index].title!,
-                                  style: TextStyle(
+                                  style: fontStyle(
                                       color: AppColors.blackColor,
-                                      fontFamily: "bold",
+                                      fontFamily: FontFamily.bold,
                                       fontSize: 22),
                                 ),
                                 Text(
                                   privacyModel.message![index].description!,
-                                  style: TextStyle(
+                                  style: fontStyle(
                                       color: AppColors.blackColor,
-                                      fontFamily: "regular",
+                                      fontFamily: FontFamily.regular,
                                       fontSize: 18),
                                 ),
                               ],

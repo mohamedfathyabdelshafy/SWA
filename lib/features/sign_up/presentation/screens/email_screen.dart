@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +8,7 @@ import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/hex_color.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/customized_field.dart';
 import 'package:swa/features/app_info/domain/entities/city.dart';
 import 'package:swa/features/app_info/domain/entities/country.dart';
@@ -62,7 +62,9 @@ class _EmailscreenState extends State<Emailscreen> {
                     },
                     child: Icon(
                       Icons.arrow_back,
-                      color: AppColors.primaryColor,
+                      color: Routes.isomra
+                          ? AppColors.umragold
+                          : AppColors.primaryColor,
                       size: 35,
                     ),
                   ),
@@ -78,8 +80,8 @@ class _EmailscreenState extends State<Emailscreen> {
                         Text(
                           LanguageClass.isEnglish ? "Sign Up" : "انشاء حساب",
                           textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontFamily: 'bold',
+                          style: fontStyle(
+                              fontFamily: FontFamily.bold,
                               color: HexColor('#000000'),
                               fontSize: 34),
                         ),
@@ -95,9 +97,9 @@ class _EmailscreenState extends State<Emailscreen> {
                             LanguageClass.isEnglish
                                 ? 'Email'
                                 : 'البريد الالكتروني',
-                            style: TextStyle(
+                            style: fontStyle(
                                 fontSize: 16,
-                                fontFamily: 'regular',
+                                fontFamily: FontFamily.regular,
                                 color: Color(0xff616b80),
                                 fontWeight: FontWeight.normal),
                           ),
@@ -171,14 +173,16 @@ class _EmailscreenState extends State<Emailscreen> {
                                   horizontal: 20, vertical: 20),
                               //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
                               decoration: BoxDecoration(
-                                  color: AppColors.primaryColor,
+                                  color: Routes.isomra
+                                      ? AppColors.umragold
+                                      : AppColors.primaryColor,
                                   borderRadius: BorderRadius.circular(41)),
                               child: Center(
                                 child: Text(
                                   LanguageClass.isEnglish
                                       ? "Sign Up"
                                       : "انشاء الحساب",
-                                  style: TextStyle(
+                                  style: fontStyle(
                                       color: AppColors.white,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 22),

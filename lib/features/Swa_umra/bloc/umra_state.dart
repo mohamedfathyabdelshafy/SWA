@@ -5,32 +5,49 @@ class UmraState {
   TripUmramodel? tripUmramodel;
   CampainModel? campainModel;
   CityUmramodel? cityUmramodel;
-  Triplistmodel? triplistmodel;
+  PackagesModel? packagesModel;
+  Pagelistmodel? pagelistmodel;
   Seatsmodel? seatsmodel;
   Promocodemodel? promocodemodel;
   ReservationResponseMyWalletModel? reservationResponseMyWalletModel;
   ReservationResponseCreditCard? reservationResponseCreditCard;
   ReservationResponseElectronicModel? reservationResponseElectronicModel;
   Policyticketmodel? policyticketmodel;
-
+  Campainlistmodel? campainlistmodel;
   SendMessageModel? sendMessageModel;
+  TransportationListModel? transportationListModel;
+  AccomidationModel? accomidationModel;
+  ProgramsModel? programsModel;
+  Paymenttypemodel? paymenttypemodel;
+  UmraTicketsModel? umraTicketsModel;
+  SendMessageModel? cancelrespnce;
   UmraState(
       {required this.isloading,
+      this.pagelistmodel,
       this.tripUmramodel,
       this.reservationResponseElectronicModel,
       this.cityUmramodel,
       this.promocodemodel,
       this.reservationResponseMyWalletModel,
-      this.triplistmodel,
+      this.packagesModel,
       this.sendMessageModel,
       this.seatsmodel,
       this.reservationResponseCreditCard,
       this.policyticketmodel,
-      this.campainModel});
+      this.campainlistmodel,
+      this.transportationListModel,
+      this.campainModel,
+      this.accomidationModel,
+      this.programsModel,
+      this.paymenttypemodel,
+      this.cancelrespnce,
+      this.umraTicketsModel});
 
   factory UmraState.init() {
     return UmraState(
         isloading: false,
+        pagelistmodel: Pagelistmodel(),
+        campainlistmodel: Campainlistmodel(message: Campainlis(list: [])),
         policyticketmodel: Policyticketmodel(),
         reservationResponseElectronicModel:
             ReservationResponseElectronicModel(),
@@ -48,45 +65,59 @@ class UmraState {
                   totalRow: 0,
                   totalSeats: 0,
                 ))),
-        triplistmodel: Triplistmodel(
-          message: [
-            Campainlist(
-              name: ' ',
-              tripList: [],
-              bgColor: '#ffffff',
-            )
-          ],
-        ),
+        packagesModel: PackagesModel(message: []),
         campainModel: CampainModel(message: Campain(list: [])),
         cityUmramodel: CityUmramodel(message: []),
-        tripUmramodel: TripUmramodel(message: Messageumra(list: [])));
+        tripUmramodel: TripUmramodel(message: Messageumra(list: [])),
+        transportationListModel: TransportationListModel(),
+        accomidationModel: AccomidationModel(),
+        programsModel: ProgramsModel(),
+        paymenttypemodel: Paymenttypemodel(),
+        umraTicketsModel: UmraTicketsModel());
   }
 
-  UmraState update(
-      {required bool isloading,
-      Policyticketmodel? policyticketmodel,
-      ReservationResponseElectronicModel? reservationResponseElectronicModel,
-      ReservationResponseCreditCard? reservationResponseCreditCard,
-      ReservationResponseMyWalletModel? reservationResponseMyWalletModel,
-      Triplistmodel? triplistmodel,
-      TripUmramodel? tripUmramodel,
-      Seatsmodel? seatsmodel,
-      Promocodemodel? promocodemodel,
-      SendMessageModel? sendMessageModel,
-      CampainModel? campainModel,
-      CityUmramodel? cityUmramodel}) {
+  UmraState update({
+    required bool isloading,
+    Pagelistmodel? pagelistmodel,
+    Policyticketmodel? policyticketmodel,
+    ReservationResponseElectronicModel? reservationResponseElectronicModel,
+    ReservationResponseCreditCard? reservationResponseCreditCard,
+    ReservationResponseMyWalletModel? reservationResponseMyWalletModel,
+    PackagesModel? packagesModel,
+    TripUmramodel? tripUmramodel,
+    Campainlistmodel? campainlistmodel,
+    Seatsmodel? seatsmodel,
+    Promocodemodel? promocodemodel,
+    SendMessageModel? sendMessageModel,
+    CampainModel? campainModel,
+    CityUmramodel? cityUmramodel,
+    TransportationListModel? transportationListModel,
+    AccomidationModel? accomidationModel,
+    ProgramsModel? programsModel,
+    Paymenttypemodel? paymenttypemodel,
+    UmraTicketsModel? umraTicketsModel,
+    SendMessageModel? cancelrespnce,
+  }) {
     return UmraState(
         isloading: isloading,
         policyticketmodel: policyticketmodel,
+        pagelistmodel: pagelistmodel,
+        campainlistmodel: campainlistmodel,
         reservationResponseElectronicModel: reservationResponseElectronicModel,
         reservationResponseMyWalletModel: reservationResponseMyWalletModel,
         campainModel: campainModel,
         reservationResponseCreditCard: reservationResponseCreditCard,
         promocodemodel: promocodemodel,
         sendMessageModel: sendMessageModel,
-        seatsmodel: seatsmodel ?? this.seatsmodel,
-        triplistmodel: triplistmodel ?? this.triplistmodel,
+        seatsmodel: seatsmodel,
+        packagesModel: packagesModel ?? this.packagesModel,
         cityUmramodel: cityUmramodel,
-        tripUmramodel: tripUmramodel ?? this.tripUmramodel);
+        tripUmramodel: tripUmramodel ?? this.tripUmramodel,
+        transportationListModel: transportationListModel,
+        accomidationModel: accomidationModel,
+        programsModel: programsModel,
+        paymenttypemodel: paymenttypemodel,
+        cancelrespnce: cancelrespnce,
+        umraTicketsModel: umraTicketsModel);
   }
 }

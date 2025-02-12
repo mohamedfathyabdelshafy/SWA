@@ -72,7 +72,9 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                     children: [
                       SizedBox(height: context.height * 0.05),
                       SizedBox(height: context.height * 0.08),
-                      Image.asset("assets/images/applogo.png"),
+                      Image.asset(Routes.isomra
+                          ? "assets/images/swaumra.png"
+                          : "assets/images/applogo.png"),
                       SizedBox(height: context.height * 0.1),
                       Column(
                         children: [
@@ -125,7 +127,8 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                             Constants.showLoadingDialog(context);
                           } else if (state is NewPasswordLoadedState) {
                             Constants.hideLoadingDialog(context);
-                            Navigator.pushNamed(context, Routes.doneLoginRoute);
+                            Navigator.pushNamedAndRemoveUntil(context,
+                                Routes.doneLoginRoute, (route) => false);
                           } else if (state is NewPasswordErrorState) {
                             Constants.hideLoadingDialog(context);
                             Constants.showDefaultSnackBar(
@@ -145,7 +148,9 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                             },
                             child: Constants.customButton(
                                 borderradias: 41,
-                                color: AppColors.primaryColor,
+                                color: Routes.isomra
+                                    ? AppColors.umragold
+                                    : AppColors.primaryColor,
                                 text: LanguageClass.isEnglish ? "Done" : "تم")),
                       ),
                       const SizedBox(

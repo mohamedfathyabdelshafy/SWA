@@ -42,14 +42,14 @@ class Advertisement {
   int adAppId;
   dynamic textAr;
   dynamic textEn;
-  DateTime displayDateFrom;
-  DateTime displayDateTo;
+  String displayDateFrom;
+  String displayDateTo;
   String filePath;
   bool isDelete;
   String createdBy;
-  DateTime creationDate;
+  String creationDate;
   String updatedBy;
-  DateTime updateDate;
+  String updateDate;
   dynamic linkApi;
   String icon;
 
@@ -70,34 +70,18 @@ class Advertisement {
   });
 
   factory Advertisement.fromJson(Map<String, dynamic> json) => Advertisement(
-        adAppId: json["ADAppID"],
-        textAr: json["TextAr"],
-        textEn: json["TextEn"],
-        displayDateFrom: DateTime.parse(json["DisplayDateFrom"]),
-        displayDateTo: DateTime.parse(json["DisplayDateTo"]),
-        filePath: json["FilePath"],
-        isDelete: json["IsDelete"],
-        createdBy: json["CreatedBy"],
-        creationDate: DateTime.parse(json["CreationDate"]),
-        updatedBy: json["UpdatedBy"],
-        updateDate: DateTime.parse(json["UpdateDate"]),
-        linkApi: json["LinkAPI"],
-        icon: json["Icon"],
+        adAppId: json["ADAppID"] ?? 0,
+        textAr: json["TextAr"] ?? '',
+        textEn: json["TextEn"] ?? '',
+        displayDateFrom: json["DisplayDateFrom"] ?? '',
+        displayDateTo: json["DisplayDateTo"] ?? '',
+        filePath: json["FilePath"] ?? '',
+        isDelete: json["IsDelete"] ?? false,
+        createdBy: json["CreatedBy"] ?? '',
+        creationDate: json["CreationDate"] ?? '',
+        updatedBy: json["UpdatedBy"] ?? '',
+        updateDate: json["UpdateDate"] ?? '',
+        linkApi: json["LinkAPI"] ?? '',
+        icon: json["Icon"] ?? '',
       );
-
-  Map<String, dynamic> toJson() => {
-        "ADAppID": adAppId,
-        "TextAr": textAr,
-        "TextEn": textEn,
-        "DisplayDateFrom": displayDateFrom.toIso8601String(),
-        "DisplayDateTo": displayDateTo.toIso8601String(),
-        "FilePath": filePath,
-        "IsDelete": isDelete,
-        "CreatedBy": createdBy,
-        "CreationDate": creationDate.toIso8601String(),
-        "UpdatedBy": updatedBy,
-        "UpdateDate": updateDate.toIso8601String(),
-        "LinkAPI": linkApi,
-        "Icon": icon,
-      };
 }

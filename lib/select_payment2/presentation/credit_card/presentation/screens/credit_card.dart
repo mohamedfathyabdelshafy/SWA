@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:credit_card_scanner/credit_card_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -25,33 +24,6 @@ class _AddCreditCardState extends State<AddCreditCard> {
   TextEditingController monthController = TextEditingController();
   TextEditingController cvvController = TextEditingController();
   TextEditingController cardHolderController = TextEditingController();
-
-  CardDetails? _cardDetails;
-  CardScanOptions scanOptions = const CardScanOptions(
-    scanCardHolderName: false,
-    // enableDebugLogs: true,
-    validCardsToScanBeforeFinishingScan: 3,
-    enableDebugLogs: true,
-
-    considerPastDatesInExpiryDateScan: false,
-    cardScannerTimeOut: 3,
-    scanExpiryDate: false,
-    possibleCardHolderNamePositions: [
-      CardHolderNameScanPosition.belowCardNumber,
-    ],
-  );
-  Future<void> scanCard() async {
-    final CardDetails? cardDetails = await CardScanner.scanCard(
-      scanOptions: scanOptions,
-    );
-    if (!mounted || cardDetails != null) {
-      setState(() {
-        _cardDetails = cardDetails;
-
-        cardNumberController.text = _cardDetails!.cardNumber;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,11 +63,11 @@ class _AddCreditCardState extends State<AddCreditCard> {
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     LanguageClass.isEnglish ? "Add Card" : "اضافة كارت",
-                    style: TextStyle(
+                    style: fontStyle(
                         color: AppColors.blackColor,
                         fontSize: 38,
                         fontWeight: FontWeight.w500,
-                        fontFamily: "roman"),
+                        fontFamily: FontFamily.medium),
                   ),
                 ),
                 SizedBox(
@@ -112,16 +84,6 @@ class _AddCreditCardState extends State<AddCreditCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        LanguageClass.isEnglish ? "Card Number" : "رقم البطاقة",
-                        style: fontStyle(
-                            fontFamily: FontFamily.regular,
-                            fontSize: 21,
-                            color: Color(0xffA3A3A3)),
-                      ),
-                      const SizedBox(
-                        height: 11,
-                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -135,8 +97,10 @@ class _AddCreditCardState extends State<AddCreditCard> {
                           ),
                           Expanded(
                             child: TextFormField(
-                              style: const TextStyle(
-                                  color: Colors.black, fontSize: 18),
+                              style: fontStyle(
+                                  fontFamily: FontFamily.regular,
+                                  color: Colors.black,
+                                  fontSize: 18),
                               cursorColor: AppColors.blackColor,
                               inputFormatters: [
                                 FilteringTextInputFormatter.digitsOnly,
@@ -194,8 +158,10 @@ class _AddCreditCardState extends State<AddCreditCard> {
                       Expanded(
                         child: TextFormField(
                           keyboardType: TextInputType.number,
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 18),
+                          style: fontStyle(
+                              fontFamily: FontFamily.medium,
+                              color: Colors.black,
+                              fontSize: 18),
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
                             LengthLimitingTextInputFormatter(4),
@@ -231,8 +197,10 @@ class _AddCreditCardState extends State<AddCreditCard> {
                         child: TextFormField(
                           keyboardType: TextInputType.number,
                           maxLength: 3,
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 18),
+                          style: fontStyle(
+                              fontFamily: FontFamily.regular,
+                              color: Colors.black,
+                              fontSize: 18),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return LanguageClass.isEnglish
@@ -285,8 +253,10 @@ class _AddCreditCardState extends State<AddCreditCard> {
                             return null;
                           },
                           controller: cardHolderController,
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 18),
+                          style: fontStyle(
+                              fontFamily: FontFamily.regular,
+                              color: Colors.black,
+                              fontSize: 18),
                           decoration: InputDecoration(
                               border: InputBorder.none,
                               suffixIcon: Icon(
@@ -384,7 +354,7 @@ class _AddCreditCardState extends State<AddCreditCard> {
                       child: Center(
                         child: Text(
                           LanguageClass.isEnglish ? "Save" : "حفظ",
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 22),

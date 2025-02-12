@@ -5,11 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swa/core/local_cache_helper.dart';
+import 'package:swa/core/utils/Navigaton_bottombar.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/Timer_widget.dart';
+import 'package:swa/features/Swa_umra/models/umra_detail.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/BusSeatsModel.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/Ticket_class.dart';
 import 'package:swa/features/bus_reservation_layout/data/repo/bus_reservation_repo.dart';
@@ -224,11 +227,11 @@ class _ReservationTicketState extends State<ReservationTicket> {
                             children: [
                               Text(
                                 LanguageClass.isEnglish ? "Ticket" : "تذكرتك",
-                                style: TextStyle(
+                                style: fontStyle(
                                     color: AppColors.blackColor,
-                                    fontSize: 25,
+                                    fontSize: 25.sp,
                                     fontWeight: FontWeight.w500,
-                                    fontFamily: "black"),
+                                    fontFamily: FontFamily.bold),
                               ),
                               Timerwidget(),
                             ],
@@ -261,7 +264,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                       //   LanguageClass.isEnglish
                                       //       ? "Departure "
                                       //       : "تغادر في",
-                                      //   style: const TextStyle(
+                                      //   style: const fontStyle(
                                       //       color: Colors.white,
                                       //       fontFamily: "bold",
                                       //       fontSize: 23),
@@ -278,9 +281,9 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                             children: [
                                               Text(
                                                 '${DateTime.parse(accessDate).day.toString()}/${DateTime.parse(accessDate).month.toString()}/${DateTime.parse(accessDate).year.toString()}',
-                                                style: const TextStyle(
+                                                style: fontStyle(
                                                     color: Colors.white,
-                                                    fontFamily: "black",
+                                                    fontFamily: FontFamily.bold,
                                                     fontSize: 13),
                                               ),
                                               Text(
@@ -288,10 +291,10 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                     .format(DateTime.parse(
                                                         accessDate))
                                                     .toString(),
-                                                style: const TextStyle(
+                                                style: fontStyle(
                                                     color: Colors.white,
-                                                    fontFamily: "black",
-                                                    fontSize: 13),
+                                                    fontFamily: FontFamily.bold,
+                                                    fontSize: 13.sp),
                                               ),
                                             ],
                                           ),
@@ -325,17 +328,19 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                   LanguageClass.isEnglish
                                                       ? "From"
                                                       : "من",
-                                                  style: const TextStyle(
+                                                  style: fontStyle(
                                                       color: Colors.white,
-                                                      fontFamily: "black",
+                                                      fontFamily:
+                                                          FontFamily.bold,
                                                       fontSize: 12),
                                                 ),
                                                 Text(
                                                   Ticketreservation
                                                       .fromcitystation1,
-                                                  style: TextStyle(
+                                                  style: fontStyle(
                                                       color: Colors.white,
-                                                      fontFamily: "black",
+                                                      fontFamily:
+                                                          FontFamily.bold,
                                                       fontSize: 10.sp),
                                                 ),
                                                 SizedBox(
@@ -345,17 +350,19 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                   LanguageClass.isEnglish
                                                       ? "To"
                                                       : "الي",
-                                                  style: const TextStyle(
+                                                  style: fontStyle(
                                                       color: Colors.white,
-                                                      fontFamily: "black",
+                                                      fontFamily:
+                                                          FontFamily.bold,
                                                       fontSize: 12),
                                                 ),
                                                 Text(
                                                   Ticketreservation
                                                       .tocitystation1,
-                                                  style: TextStyle(
+                                                  style: fontStyle(
                                                       color: Colors.white,
-                                                      fontFamily: "bold",
+                                                      fontFamily:
+                                                          FontFamily.bold,
                                                       fontSize: 10.sp),
                                                 ),
                                               ],
@@ -366,9 +373,9 @@ class _ReservationTicketState extends State<ReservationTicket> {
 
                                       Text(
                                         "${Routes.curruncy} $afterdiscount",
-                                        style: const TextStyle(
+                                        style: fontStyle(
                                             color: Colors.white,
-                                            fontFamily: "black",
+                                            fontFamily: FontFamily.bold,
                                             fontSize: 16),
                                       ),
                                     ],
@@ -395,10 +402,10 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                       ),
                                       Text(
                                         numberTrip.toString(),
-                                        style: const TextStyle(
+                                        style: fontStyle(
                                             color: Colors.white,
-                                            fontFamily: "black",
-                                            fontSize: 14),
+                                            fontFamily: FontFamily.bold,
+                                            fontSize: 14.sp),
                                       ),
                                     ],
                                   ),
@@ -605,10 +612,10 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                         ),
                                         Text(
                                           ' ${Ticketreservation.Seatsnumbers1.length.toString()} ${LanguageClass.isEnglish ? ' Seats' : ' كرسي'}',
-                                          style: TextStyle(
+                                          style: fontStyle(
                                               color: AppColors.white,
-                                              fontFamily: "black",
-                                              fontSize: 14),
+                                              fontFamily: FontFamily.bold,
+                                              fontSize: 14.sp),
                                         )
                                       ],
                                     ),
@@ -689,10 +696,10 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                           LanguageClass.isEnglish
                                               ? 'Edit '
                                               : 'تعديل ',
-                                          style: TextStyle(
+                                          style: fontStyle(
                                             color: AppColors.primaryColor,
-                                            fontFamily: 'black',
-                                            fontSize: 12,
+                                            fontFamily: FontFamily.bold,
+                                            fontSize: 12.sp,
                                           ),
                                         ),
                                       ),
@@ -703,9 +710,9 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                     alignment: Alignment.bottomCenter,
                                     child: Text(
                                       elite,
-                                      style: TextStyle(
-                                          fontFamily: "black",
-                                          fontSize: 15,
+                                      style: fontStyle(
+                                          fontFamily: FontFamily.bold,
+                                          fontSize: 15.sp,
                                           color: Color(0xfff7f8f9)),
                                     ),
                                   ))
@@ -749,10 +756,11 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                   children: [
                                                     Text(
                                                       '${DateTime.parse(accessDate2!).day.toString()}/${DateTime.parse(accessDate2!).month.toString()}/${DateTime.parse(accessDate2!).year.toString()}',
-                                                      style: const TextStyle(
+                                                      style: fontStyle(
                                                           color: Colors.white,
-                                                          fontFamily: "black",
-                                                          fontSize: 13),
+                                                          fontFamily:
+                                                              FontFamily.bold,
+                                                          fontSize: 13.sp),
                                                     ),
                                                     Text(
                                                       intl.DateFormat('hh:mm a')
@@ -760,10 +768,11 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                               DateTime.parse(
                                                                   accessDate2))
                                                           .toString(),
-                                                      style: const TextStyle(
+                                                      style: fontStyle(
                                                           color: Colors.white,
-                                                          fontFamily: "black",
-                                                          fontSize: 13),
+                                                          fontFamily:
+                                                              FontFamily.bold,
+                                                          fontSize: 13.sp),
                                                     ),
                                                   ],
                                                 ),
@@ -801,17 +810,19 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                         LanguageClass.isEnglish
                                                             ? "From"
                                                             : "من",
-                                                        style: const TextStyle(
+                                                        style: fontStyle(
                                                             color: Colors.white,
-                                                            fontFamily: "black",
-                                                            fontSize: 12),
+                                                            fontFamily:
+                                                                FontFamily.bold,
+                                                            fontSize: 12.sp),
                                                       ),
                                                       Text(
                                                         Ticketreservation
                                                             .fromcitystation2,
-                                                        style: TextStyle(
+                                                        style: fontStyle(
                                                             color: Colors.white,
-                                                            fontFamily: "black",
+                                                            fontFamily:
+                                                                FontFamily.bold,
                                                             fontSize: 10.sp),
                                                       ),
                                                       SizedBox(
@@ -821,17 +832,20 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                         LanguageClass.isEnglish
                                                             ? "To"
                                                             : "الي",
-                                                        style: const TextStyle(
+                                                        style: fontStyle(
                                                             color: Colors.white,
-                                                            fontFamily: "black",
-                                                            fontSize: 12),
+                                                            fontFamily:
+                                                                FontFamily.bold,
+                                                            fontSize: 12.sp),
                                                       ),
                                                       Text(
                                                         Ticketreservation
                                                             .tocitystation2,
-                                                        style: TextStyle(
+                                                        style: fontStyle(
                                                             color: Colors.white,
-                                                            fontFamily: "black",
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
                                                             fontSize: 10.sp),
                                                       ),
                                                     ],
@@ -841,10 +855,10 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                             )),
                                             Text(
                                               "${Routes.curruncy} $afterdiscount2",
-                                              style: const TextStyle(
+                                              style: fontStyle(
                                                   color: Colors.white,
-                                                  fontFamily: "black",
-                                                  fontSize: 16),
+                                                  fontFamily: FontFamily.medium,
+                                                  fontSize: 16.sp),
                                             ),
                                           ],
                                         )),
@@ -873,10 +887,10 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                             ),
                                             Text(
                                               numberTrip2.toString(),
-                                              style: const TextStyle(
+                                              style: fontStyle(
                                                   color: Colors.white,
-                                                  fontFamily: "black",
-                                                  fontSize: 14),
+                                                  fontFamily: FontFamily.medium,
+                                                  fontSize: 14.sp),
                                             ),
                                           ],
                                         ),
@@ -1089,10 +1103,11 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                               ),
                                               Text(
                                                 ' ${Ticketreservation.Seatsnumbers2.length.toString()} ${LanguageClass.isEnglish ? ' Seats' : ' كرسي'}',
-                                                style: TextStyle(
+                                                style: fontStyle(
                                                     color: AppColors.white,
-                                                    fontFamily: "black",
-                                                    fontSize: 14),
+                                                    fontFamily:
+                                                        FontFamily.medium,
+                                                    fontSize: 14.sp),
                                               )
                                             ],
                                           ),
@@ -1189,11 +1204,11 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                 LanguageClass.isEnglish
                                                     ? 'Edit '
                                                     : 'تعديل ',
-                                                style: TextStyle(
+                                                style: fontStyle(
                                                   color: AppColors.primaryColor,
                                                   fontWeight: FontWeight.bold,
-                                                  fontFamily: 'black',
-                                                  fontSize: 12,
+                                                  fontFamily: FontFamily.medium,
+                                                  fontSize: 12.sp,
                                                 ),
                                               ),
                                             ),
@@ -1204,8 +1219,8 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                           alignment: Alignment.bottomCenter,
                                           child: Text(
                                             elite2!,
-                                            style: TextStyle(
-                                                fontFamily: "black",
+                                            style: fontStyle(
+                                                fontFamily: FontFamily.medium,
                                                 fontSize: 15,
                                                 color: Color(0xfff7f8f9)),
                                           ),
@@ -1245,9 +1260,10 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                     LanguageClass.isEnglish
                                         ? 'I have a Promocode !'
                                         : 'لدي كود خصم ',
-                                    style: TextStyle(
+                                    style: fontStyle(
                                         color: Colors.white,
                                         fontSize: 16,
+                                        fontFamily: FontFamily.bold,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
@@ -1266,17 +1282,19 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                     ]),
                                 child: TextField(
                                   controller: _promocodetext,
-                                  style: TextStyle(
+                                  style: fontStyle(
                                       color: Color(0xff969696),
                                       fontSize: 14,
+                                      fontFamily: FontFamily.bold,
                                       fontWeight: FontWeight.bold),
                                   decoration: InputDecoration(
                                     hintText: LanguageClass.isEnglish
                                         ? 'Enter Promocode !'
                                         : ' كود الخصم ',
-                                    hintStyle: TextStyle(
+                                    hintStyle: fontStyle(
                                         color: Color(0xff969696),
                                         fontSize: 14,
+                                        fontFamily: FontFamily.bold,
                                         fontWeight: FontWeight.bold),
                                     border: InputBorder.none,
                                     contentPadding: EdgeInsets.symmetric(
@@ -1582,8 +1600,10 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                           LanguageClass.isEnglish
                                               ? 'Apply'
                                               : "تطبيق",
-                                          style: TextStyle(
+                                          style: fontStyle(
                                               color: Colors.white,
+                                              fontFamily: FontFamily.bold,
+                                              height: 1.2,
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold),
                                         ),
@@ -1606,9 +1626,9 @@ class _ReservationTicketState extends State<ReservationTicket> {
                               Text(
                                 LanguageClass.isEnglish ? 'Disscount' : "خصم",
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: fontStyle(
                                     color: Colors.black,
-                                    fontFamily: 'black',
+                                    fontFamily: FontFamily.medium,
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -1620,9 +1640,9 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                         : "$minusdiscount ${Routes.curruncy}"
                                     : "$totaldiscount ${Routes.curruncy}",
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: fontStyle(
                                     color: AppColors.primaryColor,
-                                    fontFamily: 'black',
+                                    fontFamily: FontFamily.medium,
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -1642,9 +1662,9 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                     ? 'Total Price'
                                     : "السعر الكلي",
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: fontStyle(
                                     color: Colors.black,
-                                    fontFamily: 'black',
+                                    fontFamily: FontFamily.medium,
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -1653,9 +1673,9 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                     ? "  ${afterdiscount + afterdiscount2} ${Routes.curruncy}"
                                     : "  $afterdiscount ${Routes.curruncy}",
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: fontStyle(
                                     color: AppColors.blackColor,
-                                    fontFamily: 'black',
+                                    fontFamily: FontFamily.bold,
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -1710,9 +1730,10 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                         LanguageClass.isEnglish
                                                             ? TextDirection.ltr
                                                             : TextDirection.rtl,
-                                                    style: TextStyle(
+                                                    style: fontStyle(
                                                       color: Colors.black,
-                                                      fontFamily: 'black',
+                                                      fontFamily:
+                                                          FontFamily.medium,
                                                       fontSize: 20,
                                                     ),
                                                   ),
@@ -1745,11 +1766,13 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                                       .ltr
                                                                   : TextDirection
                                                                       .rtl,
-                                                          style: TextStyle(
+                                                          style: fontStyle(
                                                             color: Color(
                                                                 0xff818181),
                                                             fontSize: 14,
-                                                            fontFamily: 'black',
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
                                                           ),
                                                         );
                                                       },
@@ -1782,9 +1805,10 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                                     .isEnglish
                                                                 ? "Done"
                                                                 : 'تم',
-                                                            style: TextStyle(
+                                                            style: fontStyle(
                                                                 fontFamily:
-                                                                    'black',
+                                                                    FontFamily
+                                                                        .medium,
                                                                 color: Colors
                                                                     .white),
                                                           ),
@@ -1812,8 +1836,8 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                 LanguageClass.isEnglish
                                     ? 'Accept reservation policy'
                                     : 'قبول سياسة الحجز',
-                                style: TextStyle(
-                                    fontFamily: 'black',
+                                style: fontStyle(
+                                    fontFamily: FontFamily.medium,
                                     color: Colors.black,
                                     fontSize: 14),
                               )
@@ -2198,6 +2222,11 @@ class _ReservationTicketState extends State<ReservationTicket> {
               }
             }),
       ),
+      bottomNavigationBar: UmraDetails.isbusforumra
+          ? SizedBox()
+          : Navigationbottombar(
+              currentIndex: 0,
+            ),
     );
   }
 }

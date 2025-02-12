@@ -18,11 +18,14 @@ class GetAvailableCountriesCubit
     emit(GetAvailableCountriesLoadingState());
     Either<Failure, List<Country>> response =
         await getAvailableCountriesUseCase(NoParams());
-    emit(
-      response.fold(
-        (failure) => GetAvailableCountriesErrorState(error: failure.toString()),
-        (countries) => GetAvailableCountriesLoadedState(countries: countries),
-      ),
-    );
+    if (!isClosed) {
+      emit(
+        response.fold(
+          (failure) =>
+              GetAvailableCountriesErrorState(error: failure.toString()),
+          (countries) => GetAvailableCountriesLoadedState(countries: countries),
+        ),
+      );
+    }
   }
 }

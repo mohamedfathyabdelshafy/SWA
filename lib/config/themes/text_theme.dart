@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 // This uses the MaterialBasedCupertinoThemeData mechs so that
 // we have one base text theme for both Material and Cupertino widgets
 TextTheme myBaseTextTheme = TextTheme(
-  headline3: myHeadline3,
-  headline5: myHeadline5, //Replace the one in main app with headline6
-  headline6: myHeadline6, //Replace the one in main app with headline5
-  subtitle1: mySubtitle1,
-  subtitle2: mySubtitle2,
-  caption: myCaption,
+  headlineSmall: myHeadline3,
+  headlineMedium: myHeadline5, //Replace the one in main app with headline6
+  headlineLarge: myHeadline6, //Replace the one in main app with headline5
+  displaySmall: mySubtitle1,
+  displayLarge: mySubtitle2,
+  displayMedium: myCaption,
 );
 
 TextStyle myHeadline3 = const TextStyle(

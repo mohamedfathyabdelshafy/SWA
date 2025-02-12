@@ -13,9 +13,19 @@ class GetcityEvent extends UmraEvent {}
 
 class GetcampainEvent extends UmraEvent {}
 
-class GetcampaginsListEvent extends UmraEvent {
+class GetPackageListEvent extends UmraEvent {
   String date, city;
-  GetcampaginsListEvent({required this.city, required this.date});
+  int typeid;
+  int? campianID;
+
+  int? reservationid;
+
+  GetPackageListEvent(
+      {required this.city,
+      required this.date,
+      required this.typeid,
+      this.reservationid,
+      this.campianID});
 }
 
 class GetSeatsEvent extends UmraEvent {
@@ -68,10 +78,40 @@ class cardpaymentEvent extends UmraEvent {
       required this.paymentTypeID});
 }
 
+class cardEditReservationEvent extends UmraEvent {
+  int paymentTypeID;
+  int PaymentMethodID;
+  String cardNumber;
+  String cardExpiryYear;
+  String cvv;
+  String cardExpiryMonth;
+  int? umrareservationid;
+
+  cardEditReservationEvent(
+      {required this.PaymentMethodID,
+      required this.cardExpiryMonth,
+      this.umrareservationid,
+      required this.cardExpiryYear,
+      required this.cardNumber,
+      required this.cvv,
+      required this.paymentTypeID});
+}
+
 class FawrypayEvent extends UmraEvent {
   int paymentTypeID;
   int PaymentMethodID;
   FawrypayEvent({required this.PaymentMethodID, required this.paymentTypeID});
+}
+
+class FawryEditEvent extends UmraEvent {
+  int paymentTypeID;
+  int? umrareservationid;
+
+  int PaymentMethodID;
+  FawryEditEvent(
+      {required this.PaymentMethodID,
+      required this.paymentTypeID,
+      this.umrareservationid});
 }
 
 class ElectronicwalletEvent extends UmraEvent {
@@ -84,4 +124,63 @@ class ElectronicwalletEvent extends UmraEvent {
       required this.phone});
 }
 
-class Getpolicyevent extends UmraEvent {}
+class EditElectronicwalletEvent extends UmraEvent {
+  int paymentTypeID;
+  int PaymentMethodID;
+  String phone;
+  int? umrahReservationID;
+
+  EditElectronicwalletEvent(
+      {required this.PaymentMethodID,
+      required this.paymentTypeID,
+      this.umrahReservationID,
+      required this.phone});
+}
+
+class Getpolicyevent extends UmraEvent {
+  String type;
+
+  Getpolicyevent({required this.type});
+}
+
+class GetCompainListEvent extends UmraEvent {}
+
+class GetPageListEvent extends UmraEvent {}
+
+class GetTransportationEvent extends UmraEvent {
+  int tripUmrahID;
+  int? reservationID;
+  GetTransportationEvent({required this.tripUmrahID, this.reservationID});
+}
+
+class GetAccommodationEvent extends UmraEvent {
+  int tripUmrahID;
+  int? umrahReservationID;
+
+  GetAccommodationEvent({required this.tripUmrahID, this.umrahReservationID});
+}
+
+class GetprogramsEvent extends UmraEvent {
+  int tripUmrahID;
+  int? umrahReservationID;
+
+  GetprogramsEvent({required this.tripUmrahID, this.umrahReservationID});
+}
+
+class getpaymentstypeEvent extends UmraEvent {}
+
+class GetbookedumraEvent extends UmraEvent {}
+
+class CancelReservationEvent extends UmraEvent {
+  int reservationID;
+  CancelReservationEvent({required this.reservationID});
+}
+
+class EditReservationEvent extends UmraEvent {
+  int reservationID;
+  int? paymentid;
+  int? paymentTypeID;
+  int? paymentMethodID;
+  EditReservationEvent(
+      {required this.reservationID, this.paymentMethodID, this.paymentTypeID});
+}

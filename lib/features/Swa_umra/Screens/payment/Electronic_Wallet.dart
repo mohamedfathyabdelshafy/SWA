@@ -18,7 +18,8 @@ import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 
 class ElectronicUmraScreen extends StatefulWidget {
-  const ElectronicUmraScreen({super.key});
+  int? umrahReservationID;
+  ElectronicUmraScreen({super.key, this.umrahReservationID});
 
   @override
   State<ElectronicUmraScreen> createState() => _ElectronicUmraScreenState();
@@ -35,7 +36,9 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
   void initState() {
     super.initState();
 
-    amountController.text = UmraDetails.afterdiscount.toString();
+    amountController.text = widget.umrahReservationID != null
+        ? UmraDetails.differentPrice.toString()
+        : UmraDetails.afterdiscount.toString();
   }
 
   @override
@@ -70,7 +73,7 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
                           : "سيصلك إشعار بتطبيق محفظتك \n من أجل الموافقة على الدفع"),
                     ],
                   ),
-                  titleTextStyle: const TextStyle(
+                  titleTextStyle: fontStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                       fontSize: 20),
@@ -113,7 +116,7 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
                           child: Center(
                             child: Text(
                               LanguageClass.isEnglish ? 'OK' : "موافقة",
-                              style: TextStyle(
+                              style: fontStyle(
                                   color: AppColors.white,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 22),
@@ -178,9 +181,9 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
                                 LanguageClass.isEnglish
                                     ? 'Electronic wallet'
                                     : 'محفظة الاكترونية',
-                                style: TextStyle(
+                                style: fontStyle(
                                     fontSize: 24.sp,
-                                    fontFamily: 'bold',
+                                    fontFamily: FontFamily.bold,
                                     fontWeight: FontWeight.w500),
                               )),
 
@@ -338,10 +341,27 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
                                     InkWell(
                                       onTap: () {
                                         if (formKey.currentState!.validate()) {
-                                          _umraBloc.add(ElectronicwalletEvent(
-                                              PaymentMethodID: 5,
-                                              paymentTypeID: 68,
-                                              phone: phoneController.text));
+                                          UmraDetails.phonenumber =
+                                              phoneController.text;
+                                          Navigator.pop(
+                                              context, phoneController.text);
+
+                                          // if (widget.umrahReservationID !=
+                                          //     null) {
+                                          //   _umraBloc.add(
+                                          //       EditElectronicwalletEvent(
+                                          //           PaymentMethodID: 5,
+                                          //           paymentTypeID: 68,
+                                          //           umrahReservationID: widget
+                                          //               .umrahReservationID,
+                                          //           phone:
+                                          //               phoneController.text));
+                                          // } else {
+                                          //   _umraBloc.add(ElectronicwalletEvent(
+                                          //       PaymentMethodID: 5,
+                                          //       paymentTypeID: 68,
+                                          //       phone: phoneController.text));
+                                          // }
                                         }
                                       },
                                       child: Padding(

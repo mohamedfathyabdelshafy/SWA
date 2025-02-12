@@ -10,18 +10,30 @@ class RegisterLoadingState extends RegisterState {}
 class UserRegisterLoadedState extends RegisterState {
   final MessageResponse messageResponse;
   UserRegisterLoadedState({required this.messageResponse});
-  List<Object> get props => [messageResponse];
 }
 
 //Error States
 class RegisterErrorState extends RegisterState {
   final String error;
   RegisterErrorState({required this.error});
-  Object get props => error;
 }
 
 class EmailsendState extends RegisterState {
   final String message;
   EmailsendState({required this.message});
-  Object get props => message;
+}
+
+class DocumenttypeState extends RegisterState {
+  final IdentificationTypeModel documentTypeModel;
+  DocumenttypeState({required this.documentTypeModel});
+}
+
+class TextfiedidState extends RegisterState {
+  final Idtextfieldmodel idtextfieldmodel;
+  TextfiedidState({required this.idtextfieldmodel});
+}
+
+class phonecodeState extends RegisterState {
+  final PhonecountrycodeModel phonecountrycodeModel;
+  phonecodeState({required this.phonecountrycodeModel});
 }

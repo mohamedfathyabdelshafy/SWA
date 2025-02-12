@@ -5,6 +5,7 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/app_info/presentation/cubit/get_available_countries/get_available_countries_cubit.dart';
 import 'package:swa/features/app_info/presentation/cubit/get_available_country_cities_cubit/get_available_country_cities_cubit.dart';
 import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/change_password/presentation/PLOH/change_password_cubit.dart';
@@ -58,7 +59,9 @@ class MyAccountScreen extends StatelessWidget {
                   },
                   child: Icon(
                     Icons.arrow_back_rounded,
-                    color: AppColors.primaryColor,
+                    color: Routes.isomra
+                        ? AppColors.umragold
+                        : AppColors.primaryColor,
                     size: 35,
                   ),
                 ),
@@ -70,11 +73,11 @@ class MyAccountScreen extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   LanguageClass.isEnglish ? "My Account" : "حسابي",
-                  style: TextStyle(
+                  style: fontStyle(
                       color: AppColors.blackColor,
                       fontSize: 38,
                       fontWeight: FontWeight.w600,
-                      fontFamily: "roman"),
+                      fontFamily: FontFamily.medium),
                 ),
               ),
               SizedBox(
@@ -179,19 +182,21 @@ class MyAccountScreen extends StatelessWidget {
                                   LanguageClass.isEnglish
                                       ? "Delete Account"
                                       : "حذف الحساب",
-                                  style: TextStyle(
+                                  style: fontStyle(
                                       fontSize: 20,
-                                      fontFamily: "bold",
-                                      color: AppColors.primaryColor),
+                                      fontFamily: FontFamily.bold,
+                                      color: Routes.isomra
+                                          ? AppColors.umragold
+                                          : AppColors.primaryColor),
                                 ),
                                 content: Text(
                                   LanguageClass.isEnglish
                                       ? "Are you sure you want to delete your account?"
                                       : "هل انت متاكد انك تريد ان تحذف حسابك؟",
-                                  style: TextStyle(
+                                  style: fontStyle(
                                     fontSize: 18,
                                     color: Colors.white,
-                                    fontFamily: "regular",
+                                    fontFamily: FontFamily.medium,
                                   ),
                                 ),
                                 actions: [
@@ -204,10 +209,12 @@ class MyAccountScreen extends StatelessWidget {
                                       LanguageClass.isEnglish
                                           ? "Cancel"
                                           : "الغاء",
-                                      style: TextStyle(
+                                      style: fontStyle(
                                         fontSize: 18,
-                                        color: AppColors.primaryColor,
-                                        fontFamily: "bold",
+                                        color: Routes.isomra
+                                            ? AppColors.umragold
+                                            : AppColors.primaryColor,
+                                        fontFamily: FontFamily.bold,
                                       ),
                                     ),
                                   ),
@@ -226,10 +233,12 @@ class MyAccountScreen extends StatelessWidget {
                                     },
                                     child: Text(
                                       LanguageClass.isEnglish ? "OK" : "موافقة",
-                                      style: TextStyle(
+                                      style: fontStyle(
                                         fontSize: 18,
-                                        color: AppColors.primaryColor,
-                                        fontFamily: "bold",
+                                        color: Routes.isomra
+                                            ? AppColors.umragold
+                                            : AppColors.primaryColor,
+                                        fontFamily: FontFamily.bold,
                                       ),
                                     ),
                                   ),
@@ -255,8 +264,8 @@ class MyAccountScreen extends StatelessWidget {
   Widget customText(text) {
     return Text(
       text,
-      style: const TextStyle(
-          color: Colors.black, fontSize: 18, fontFamily: "meduim"),
+      style: fontStyle(
+          color: Colors.black, fontSize: 18, fontFamily: FontFamily.medium),
     );
   }
 }

@@ -1,9 +1,14 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/customized_field.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/repo/more_repo.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/PLOH/more_cubit.dart';
@@ -74,7 +79,9 @@ class _ContactUsState extends State<ContactUs> {
                       },
                       child: Icon(
                         Icons.arrow_back_rounded,
-                        color: AppColors.primaryColor,
+                        color: Routes.isomra
+                            ? AppColors.umragold
+                            : AppColors.primaryColor,
                         size: 35,
                       ),
                     ),
@@ -86,11 +93,11 @@ class _ContactUsState extends State<ContactUs> {
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
                       LanguageClass.isEnglish ? "Contact Us" : "تواصل معنا",
-                      style: TextStyle(
+                      style: fontStyle(
                           color: AppColors.blackColor,
-                          fontSize: 38,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: "roman"),
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: FontFamily.bold),
                     ),
                   ),
                   SizedBox(
@@ -109,16 +116,19 @@ class _ContactUsState extends State<ContactUs> {
                           padding:
                               EdgeInsets.symmetric(horizontal: 25, vertical: 5),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: AppColors.primaryColor),
+                            borderRadius: BorderRadius.circular(15),
+                            color: Routes.isomra
+                                ? AppColors.umragold
+                                : AppColors.primaryColor,
+                          ),
                           child: Text(
                             LanguageClass.isEnglish
                                 ? "By Email"
                                 : "بواسطة الايميل",
-                            style: TextStyle(
+                            style: fontStyle(
                                 color: AppColors.white,
-                                fontSize: 14,
-                                fontFamily: "bold"),
+                                fontSize: 14.sp,
+                                fontFamily: FontFamily.bold),
                           ),
                         ),
                       ),
@@ -133,14 +143,17 @@ class _ContactUsState extends State<ContactUs> {
                           padding:
                               EdgeInsets.symmetric(horizontal: 25, vertical: 5),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: AppColors.primaryColor),
+                            borderRadius: BorderRadius.circular(15),
+                            color: Routes.isomra
+                                ? AppColors.umragold
+                                : AppColors.primaryColor,
+                          ),
                           child: Text(
                             LanguageClass.isEnglish ? "By Mobile" : "موبيل",
-                            style: TextStyle(
+                            style: fontStyle(
                                 color: AppColors.white,
-                                fontSize: 14,
-                                fontFamily: "bold"),
+                                fontSize: 14.sp,
+                                fontFamily: FontFamily.bold),
                           ),
                         ),
                       ),
@@ -231,25 +244,31 @@ class _ContactUsState extends State<ContactUs> {
                                       }
                                       return null;
                                     },
-                                    style: TextStyle(
-                                        color: Color(0xffD5D5D5), fontSize: 18),
+                                    style: fontStyle(
+                                        color: Color(0xffD5D5D5),
+                                        fontSize: 18.sp,
+                                        fontFamily: FontFamily.medium),
                                     cursorColor: Color(0xffA2A2A2),
                                     decoration: InputDecoration(
                                       contentPadding: EdgeInsets.symmetric(
                                           horizontal: 15, vertical: 10),
-                                      labelStyle: TextStyle(
+                                      labelStyle: fontStyle(
                                         color: AppColors.blackColor,
-                                        fontSize: 16,
+                                        fontSize: 16.sp,
+                                        fontFamily: FontFamily.bold,
                                         fontWeight: FontWeight.bold,
                                       ),
                                       hintText: LanguageClass.isEnglish
                                           ? "Type your message here ..."
                                           : "اكتب رسالتك هنا ...",
-                                      errorStyle: const TextStyle(fontSize: 10),
-                                      hintStyle: TextStyle(
+                                      errorStyle: fontStyle(
+                                          fontSize: 10,
+                                          fontFamily: FontFamily.medium,
+                                          color: Colors.red),
+                                      hintStyle: fontStyle(
                                         color: Color(0xffA2A2A2),
-                                        fontFamily: 'black',
-                                        fontSize: 14,
+                                        fontFamily: FontFamily.bold,
+                                        fontSize: 14.sp,
                                         fontWeight: FontWeight.normal,
                                       ),
                                       filled: true,
@@ -315,7 +334,9 @@ class _ContactUsState extends State<ContactUs> {
                                     },
                                     child: Constants.customButton(
                                         borderradias: 41,
-                                        color: AppColors.primaryColor,
+                                        color: Routes.isomra
+                                            ? AppColors.umragold
+                                            : AppColors.primaryColor,
                                         text: LanguageClass.isEnglish
                                             ? "Send"
                                             : "ارسال"),
@@ -345,10 +366,10 @@ class _ContactUsState extends State<ContactUs> {
                                       LanguageClass.isEnglish
                                           ? "Call Us"
                                           : "اتصل بنا",
-                                      style: const TextStyle(
+                                      style: fontStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 25,
-                                          fontFamily: "bold",
+                                          fontSize: 20.sp,
+                                          fontFamily: FontFamily.bold,
                                           color: Colors.black),
                                     ),
                                     Spacer(),

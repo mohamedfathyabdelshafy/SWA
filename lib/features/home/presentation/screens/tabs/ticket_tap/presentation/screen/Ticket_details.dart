@@ -4,6 +4,7 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/data/model/Ticketdetails_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/data/repo/ticket_repo.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/presentation/PLOH/ticket_history_cubit.dart';
@@ -57,10 +58,10 @@ class _TicketdetailsScreenState extends State<TicketdetailsScreen> {
                       borderRadius: BorderRadius.circular(20)),
                   child: Text(
                     "${widget.ticketdetails.serviceType!}  #${widget.ticketdetails.ticketNumber!}",
-                    style: TextStyle(
+                    style: fontStyle(
                         color: AppColors.white,
                         fontSize: 20,
-                        fontFamily: "bold"),
+                        fontFamily: FontFamily.bold),
                   ),
                 ),
               ),
@@ -83,18 +84,18 @@ class _TicketdetailsScreenState extends State<TicketdetailsScreen> {
                           LanguageClass.isEnglish
                               ? "Customer Name"
                               : "اسم العميل",
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.white,
                               fontSize: 18,
-                              fontFamily: "bold"),
+                              fontFamily: FontFamily.bold),
                         ),
                       ),
                       Text(
                         widget.ticketdetails.customerName!,
-                        style: TextStyle(
+                        style: fontStyle(
                             color: AppColors.white,
                             fontSize: 20,
-                            fontFamily: "regular"),
+                            fontFamily: FontFamily.regular),
                       ),
                     ]),
               ),
@@ -112,18 +113,18 @@ class _TicketdetailsScreenState extends State<TicketdetailsScreen> {
                             borderRadius: BorderRadius.circular(8)),
                         child: Text(
                           LanguageClass.isEnglish ? "Phone" : " دقم الهاتف",
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.white,
                               fontSize: 18,
-                              fontFamily: "bold"),
+                              fontFamily: FontFamily.bold),
                         ),
                       ),
                       Text(
                         widget.ticketdetails.customerPhone!,
-                        style: TextStyle(
+                        style: fontStyle(
                             color: AppColors.white,
                             fontSize: 20,
-                            fontFamily: "regular"),
+                            fontFamily: FontFamily.regular),
                       ),
                     ]),
               ),
@@ -141,20 +142,20 @@ class _TicketdetailsScreenState extends State<TicketdetailsScreen> {
                             borderRadius: BorderRadius.circular(8)),
                         child: Text(
                           LanguageClass.isEnglish ? "From" : " من",
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.white,
                               fontSize: 18,
-                              fontFamily: "bold"),
+                              fontFamily: FontFamily.bold),
                         ),
                       ),
                       Expanded(
                         child: Text(
                           widget.ticketdetails.from!,
                           textAlign: TextAlign.end,
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.white,
                               fontSize: 20,
-                              fontFamily: "regular"),
+                              fontFamily: FontFamily.regular),
                         ),
                       ),
                     ]),
@@ -173,20 +174,20 @@ class _TicketdetailsScreenState extends State<TicketdetailsScreen> {
                             borderRadius: BorderRadius.circular(8)),
                         child: Text(
                           LanguageClass.isEnglish ? "To" : " الي",
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.white,
                               fontSize: 18,
-                              fontFamily: "bold"),
+                              fontFamily: FontFamily.bold),
                         ),
                       ),
                       Expanded(
                         child: Text(
                           widget.ticketdetails.to!,
                           textAlign: TextAlign.end,
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.white,
                               fontSize: 20,
-                              fontFamily: "regular"),
+                              fontFamily: FontFamily.regular),
                         ),
                       ),
                     ]),
@@ -207,20 +208,20 @@ class _TicketdetailsScreenState extends State<TicketdetailsScreen> {
                           LanguageClass.isEnglish
                               ? "Trip date"
                               : " تاريخ الرحلة",
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.white,
                               fontSize: 18,
-                              fontFamily: "bold"),
+                              fontFamily: FontFamily.bold),
                         ),
                       ),
                       Expanded(
                         child: Text(
                           widget.ticketdetails.tripDate!,
                           textAlign: TextAlign.end,
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.white,
                               fontSize: 20,
-                              fontFamily: "regular"),
+                              fontFamily: FontFamily.regular),
                         ),
                       ),
                     ]),
@@ -239,20 +240,20 @@ class _TicketdetailsScreenState extends State<TicketdetailsScreen> {
                             borderRadius: BorderRadius.circular(8)),
                         child: Text(
                           LanguageClass.isEnglish ? "Trip time" : " وقت الرحلة",
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.white,
                               fontSize: 18,
-                              fontFamily: "bold"),
+                              fontFamily: FontFamily.bold),
                         ),
                       ),
                       Expanded(
                         child: Text(
                           widget.ticketdetails.accessBusTime!,
                           textAlign: TextAlign.end,
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.white,
                               fontSize: 20,
-                              fontFamily: "regular"),
+                              fontFamily: FontFamily.regular),
                         ),
                       ),
                     ]),
@@ -273,20 +274,20 @@ class _TicketdetailsScreenState extends State<TicketdetailsScreen> {
                           LanguageClass.isEnglish
                               ? "Seat Numbers"
                               : "رقم الكراسي",
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.white,
                               fontSize: 18,
-                              fontFamily: "bold"),
+                              fontFamily: FontFamily.bold),
                         ),
                       ),
                       Expanded(
                         child: Text(
                           widget.ticketdetails.seatNumbers.toString(),
                           textAlign: TextAlign.end,
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.white,
                               fontSize: 20,
-                              fontFamily: "regular"),
+                              fontFamily: FontFamily.regular),
                         ),
                       ),
                     ]),
@@ -305,20 +306,20 @@ class _TicketdetailsScreenState extends State<TicketdetailsScreen> {
                             borderRadius: BorderRadius.circular(8)),
                         child: Text(
                           LanguageClass.isEnglish ? "Price" : "السعر",
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.white,
                               fontSize: 18,
-                              fontFamily: "bold"),
+                              fontFamily: FontFamily.bold),
                         ),
                       ),
                       Expanded(
                         child: Text(
                           widget.ticketdetails.price.toString(),
                           textAlign: TextAlign.end,
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.white,
                               fontSize: 20,
-                              fontFamily: "regular"),
+                              fontFamily: FontFamily.regular),
                         ),
                       ),
                     ]),
@@ -340,10 +341,10 @@ class _TicketdetailsScreenState extends State<TicketdetailsScreen> {
                         child: Text(
                           LanguageClass.isEnglish ? "Policy" : "الخصوصية",
                           textAlign: TextAlign.end,
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.white,
                               fontSize: 20,
-                              fontFamily: "bold"),
+                              fontFamily: FontFamily.bold),
                         ),
                       ),
                     ),
@@ -363,10 +364,10 @@ class _TicketdetailsScreenState extends State<TicketdetailsScreen> {
                         child: Text(
                           LanguageClass.isEnglish ? "Download" : "تنزيل",
                           textAlign: TextAlign.end,
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.white,
                               fontSize: 20,
-                              fontFamily: "bold"),
+                              fontFamily: FontFamily.bold),
                         ),
                       ),
                     ),

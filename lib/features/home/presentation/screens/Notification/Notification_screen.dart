@@ -4,6 +4,7 @@ import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart' as intil;
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
@@ -90,7 +91,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               },
                               child: Icon(
                                 Icons.arrow_back_rounded,
-                                color: AppColors.primaryColor,
+                                color: Routes.isomra
+                                    ? AppColors.umragold
+                                    : AppColors.primaryColor,
                                 size: 35,
                               ),
                             ),
@@ -107,7 +110,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               style: fontStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
-                                  color: AppColors.primaryColor),
+                                  color: Routes.isomra
+                                      ? AppColors.umragold
+                                      : AppColors.primaryColor),
                             ),
                           ),
                         ],
@@ -121,11 +126,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           LanguageClass.isEnglish
                               ? 'Notifications'
                               : 'الاشعارات',
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.blackColor,
                               fontSize: 38,
                               fontWeight: FontWeight.w500,
-                              fontFamily: "roman"),
+                              fontFamily: FontFamily.medium),
                         ),
                       ),
                       Expanded(
@@ -265,8 +270,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                         .Description ??
                                                     "",
                                                 textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontFamily: 'English_Regular',
+                                                style: fontStyle(
+                                                  fontFamily:
+                                                      FontFamily.regular,
                                                   fontSize: 12,
                                                   color: Colors.black,
                                                   overflow:

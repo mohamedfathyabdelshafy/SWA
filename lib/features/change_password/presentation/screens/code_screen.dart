@@ -7,6 +7,7 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/customized_field.dart';
 import 'package:swa/features/change_password/domain/use_cases/new_password.dart';
 import 'package:swa/features/change_password/presentation/cubit/new_password_cubit.dart';
@@ -79,13 +80,17 @@ class _CodeScreenState extends State<CodeScreen> {
                           },
                           child: Icon(
                             Icons.arrow_back_rounded,
-                            color: AppColors.primaryColor,
+                            color: Routes.isomra
+                                ? AppColors.umragold
+                                : AppColors.primaryColor,
                             size: 35,
                           ),
                         ),
                       ),
                       SizedBox(height: context.height * 0.08),
-                      Image.asset("assets/images/applogo.png"),
+                      Image.asset(Routes.isomra
+                          ? "assets/images/swaumra.png"
+                          : "assets/images/applogo.png"),
                       SizedBox(height: context.height * 0.1),
                       SizedBox(
                         child: Column(
@@ -95,10 +100,10 @@ class _CodeScreenState extends State<CodeScreen> {
                               LanguageClass.isEnglish
                                   ? "Enter Code"
                                   : "ادخل الكود",
-                              style: TextStyle(
+                              style: fontStyle(
                                   color: AppColors.blackColor,
                                   fontWeight: FontWeight.bold,
-                                  fontFamily: 'bold',
+                                  fontFamily: FontFamily.bold,
                                   fontSize: 24),
                             ),
                             const SizedBox(
@@ -106,18 +111,18 @@ class _CodeScreenState extends State<CodeScreen> {
                             ),
                             PinCodeTextField(
                               appContext: context,
-                              pastedTextStyle: const TextStyle(
+                              pastedTextStyle: fontStyle(
                                   color: Color(0xffDDDDDD),
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
-                                  fontFamily: 'pop'),
+                                  fontFamily: FontFamily.bold),
                               length: 4,
                               obscureText: false,
-                              textStyle: const TextStyle(
+                              textStyle: fontStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14,
-                                  fontFamily: 'pop'),
+                                  fontFamily: FontFamily.bold),
 
                               blinkWhenObscuring: true,
                               backgroundColor: Colors.transparent,
@@ -211,7 +216,9 @@ class _CodeScreenState extends State<CodeScreen> {
                             },
                             child: Constants.customButton(
                                 borderradias: 41,
-                                color: AppColors.primaryColor,
+                                color: Routes.isomra
+                                    ? AppColors.umragold
+                                    : AppColors.primaryColor,
                                 text: LanguageClass.isEnglish
                                     ? "Create New Password"
                                     : " إنشاء كلمة مرور جديدة")),

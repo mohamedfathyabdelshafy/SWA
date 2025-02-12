@@ -82,11 +82,11 @@ class _FawryScreenState extends State<FawryScreen> {
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     LanguageClass.isEnglish ? 'Fawry' : 'فوري',
-                    style: TextStyle(
+                    style: fontStyle(
                         color: AppColors.blackColor,
                         fontSize: 38,
                         fontWeight: FontWeight.w600,
-                        fontFamily: "roman"),
+                        fontFamily: FontFamily.medium),
                   ),
                 ),
                 SizedBox(
@@ -205,7 +205,7 @@ class _FawryScreenState extends State<FawryScreen> {
                                               LanguageClass.isEnglish
                                                   ? 'Amount: '
                                                   : "القيمة",
-                                              style: TextStyle(
+                                              style: fontStyle(
                                                   color: Colors.black,
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w600),
@@ -218,11 +218,12 @@ class _FawryScreenState extends State<FawryScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            const Text(
+                                            Text(
                                               'Reference Number: ',
-                                              style: TextStyle(
+                                              style: fontStyle(
                                                   color: Colors.black,
                                                   fontSize: 14,
+                                                  fontFamily: FontFamily.medium,
                                                   fontWeight: FontWeight.w600),
                                             ),
                                             Expanded(

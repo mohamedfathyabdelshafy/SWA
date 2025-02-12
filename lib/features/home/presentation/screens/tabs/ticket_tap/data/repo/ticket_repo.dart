@@ -8,6 +8,9 @@ import 'package:swa/core/api/end_points.dart';
 import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/Reservation_Response_fawry_model.dart';
+import 'package:swa/features/bus_reservation_layout/data/models/documentType_model.dart';
+import 'package:swa/features/bus_reservation_layout/data/models/id_textfield_model.dart';
+import 'package:swa/features/bus_reservation_layout/data/models/phoneCode_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/data/model/Response_ticket_history_Model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/data/model/Ticketdetails_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/data/model/editpolicy_model.dart';
@@ -22,9 +25,9 @@ class TicketRepo {
       key: 'countryid',
     );
     final response = await apiConsumer.get(
-        "${EndPoints.baseUrl}Reservation/ReservationsHistory?customerId=$customerId&countryID=$countryid");
+        "${EndPoints.baseUrl}Reservation/ReservationsHistory?customerId=$customerId&countryID=$countryid&dateTypeID=${countryid == 1 ? 113 : 112}&toCurrency=${Routes.curruncy}");
 
-    log('ticketHistory response ' + response.body);
+    log('ticketHistory response ' + response.request.toString());
     var decodedResponse = json.decode(response.body);
     ResponseTicketHistoryModel responseTicketHistoryModel =
         ResponseTicketHistoryModel.fromJson(decodedResponse);
@@ -32,6 +35,9 @@ class TicketRepo {
   }
 
   Future<TicketdetailsModel?> getTicktdetails({required int tekitid}) async {
+    var countryid = CacheHelper.getDataToSharedPref(
+      key: 'countryid',
+    );
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       "APIKey": "546548dwfdfsd3f4sdfhgat52",
@@ -40,7 +46,7 @@ class TicketRepo {
     var request = http.Request(
         'GET',
         Uri.parse(
-            "${EndPoints.baseUrl}Reservation/TicketDetail?reservationID=$tekitid"));
+            "${EndPoints.baseUrl}Reservation/TicketDetail?reservationID=$tekitid&toCurrency=${Routes.curruncy}&dateTypeID=${countryid == 1 ? 113 : 112}&countryID=$countryid"));
 
     request.headers.addAll(headers);
 
@@ -115,10 +121,99 @@ class TicketRepo {
     }
   }
 
+  Future getidType({String? country}) async {
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      "APIKey": "546548dwfdfsd3f4sdfhgat52",
+      "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
+    };
+
+    var countryid = CacheHelper.getDataToSharedPref(
+      key: 'countryid',
+    );
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            "${EndPoints.baseUrl}Settings/GetIdentificationType?countryID=${country ?? countryid}"));
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var decodedResponse = json.decode(await response.stream.bytesToString());
+
+      log(decodedResponse.toString());
+
+      return IdentificationTypeModel.fromJson(decodedResponse);
+    } else {
+      print(response.reasonPhrase);
+      return response.reasonPhrase;
+    }
+  }
+
+  Future getRetalcode() async {
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      "APIKey": "546548dwfdfsd3f4sdfhgat52",
+      "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
+    };
+
+    var request = http.Request(
+        'GET', Uri.parse("${EndPoints.baseUrl}Settings/GetCountryCodes"));
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var decodedResponse = json.decode(await response.stream.bytesToString());
+
+      log(decodedResponse.toString());
+
+      return PhonecountrycodeModel.fromJson(decodedResponse);
+    } else {
+      print(response.reasonPhrase);
+      return response.reasonPhrase;
+    }
+  }
+
+  Future gettextfieldid({String? country, required String id}) async {
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      "APIKey": "546548dwfdfsd3f4sdfhgat52",
+      "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
+    };
+
+    var countryid = CacheHelper.getDataToSharedPref(
+      key: 'countryid',
+    );
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            "${EndPoints.baseUrl}Settings/GetIdentificationValidationType?identificationTypeID=$id&countryID=${country ?? countryid}"));
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var decodedResponse = json.decode(await response.stream.bytesToString());
+
+      log(decodedResponse.toString());
+
+      return Idtextfieldmodel.fromJson(decodedResponse);
+    } else {
+      print(response.reasonPhrase);
+      return response.reasonPhrase;
+    }
+  }
+
   Future Sendconfirmationcode({required String email}) async {
     var headers = {
       'Content-Type': 'application/json',
-      'APIKey': '546548dwfdfsd3f4sdfhgat52'
+      'APIKey': '546548dwfdfsd3f4sdfhgat52',
+      "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
     };
     var request = http.Request(
         'POST', Uri.parse('${EndPoints.baseUrl}Accounts/sendconfirmationcode'));
@@ -147,7 +242,8 @@ class TicketRepo {
   Future confirmemail({required String otp}) async {
     var headers = {
       'Content-Type': 'application/json',
-      'APIKey': '546548dwfdfsd3f4sdfhgat52'
+      'APIKey': '546548dwfdfsd3f4sdfhgat52',
+      "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
     };
     var request = http.Request(
         'POST', Uri.parse('${EndPoints.baseUrl}Accounts/confirmemail'));

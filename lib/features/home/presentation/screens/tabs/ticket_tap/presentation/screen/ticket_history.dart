@@ -9,11 +9,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:intl/intl.dart' as init;
 import 'package:swa/config/routes/app_routes.dart';
+import 'package:swa/core/utils/Navigaton_bottombar.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
+import 'package:swa/features/Swa_umra/models/umra_detail.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/BusSeatsModel.dart';
 import 'package:swa/features/bus_reservation_layout/data/repo/bus_reservation_repo.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/PLOH/bus_layout_reservation_cubit.dart';
@@ -58,7 +60,6 @@ class _TicketHistoryState extends State<TicketHistory> {
   get() async {
     BlocProvider.of<TicketCubit>(context)
         .getTicketHistory(customerId: widget.user?.customerId ?? 0);
-    await ticketRepo.getTicketHistory(customerId: widget.user?.customerId ?? 0);
   }
 
   cancelticket(int id) async {
@@ -129,7 +130,7 @@ class _TicketHistoryState extends State<TicketHistory> {
                                 textDirection: LanguageClass.isEnglish
                                     ? TextDirection.ltr
                                     : TextDirection.rtl,
-                                style: TextStyle(
+                                style: fontStyle(
                                     color: Colors.black,
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold),
@@ -152,10 +153,10 @@ class _TicketHistoryState extends State<TicketHistory> {
                                         textDirection: LanguageClass.isEnglish
                                             ? TextDirection.ltr
                                             : TextDirection.rtl,
-                                        style: TextStyle(
+                                        style: fontStyle(
                                             color: Color(0xff818181),
                                             fontSize: 14,
-                                            fontFamily: "regular"),
+                                            fontFamily: FontFamily.regular),
                                       ),
                                     );
                                   },
@@ -183,7 +184,7 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                                   .ltr
                                                               : TextDirection
                                                                   .rtl,
-                                                      style: const TextStyle(
+                                                      style: fontStyle(
                                                           color: Colors.black,
                                                           fontSize: 20,
                                                           fontWeight:
@@ -210,10 +211,15 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                                         backgroundColor:
                                                                             AppColors
                                                                                 .primaryColor),
-                                                                    child: Text(LanguageClass
-                                                                            .isEnglish
-                                                                        ? 'Yes'
-                                                                        : 'نعم'))),
+                                                                    child: Text(
+                                                                        LanguageClass.isEnglish
+                                                                            ? 'Yes'
+                                                                            : 'نعم',
+                                                                        style: fontStyle(
+                                                                            color:
+                                                                                AppColors.white,
+                                                                            fontFamily: FontFamily.medium,
+                                                                            fontSize: 14.sp)))),
                                                         SizedBox(
                                                           width: 10,
                                                         ),
@@ -230,12 +236,20 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                                             borderRadius: BorderRadius.circular(
                                                                                 12)),
                                                                         backgroundColor:
-                                                                            AppColors
-                                                                                .blue),
-                                                                    child: Text(LanguageClass
-                                                                            .isEnglish
-                                                                        ? 'No'
-                                                                        : 'لا')))
+                                                                            AppColors.blue),
+                                                                    child: Text(
+                                                                      LanguageClass
+                                                                              .isEnglish
+                                                                          ? 'No'
+                                                                          : 'لا',
+                                                                      style: fontStyle(
+                                                                          color: AppColors
+                                                                              .white,
+                                                                          fontFamily: FontFamily
+                                                                              .medium,
+                                                                          fontSize:
+                                                                              14.sp),
+                                                                    )))
                                                       ],
                                                     ),
                                                   );
@@ -248,9 +262,15 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                           12)),
                                               backgroundColor:
                                                   AppColors.primaryColor),
-                                          child: Text(LanguageClass.isEnglish
-                                              ? 'Cancel ticket'
-                                              : 'إلغاء التذكرة'))),
+                                          child: Text(
+                                            LanguageClass.isEnglish
+                                                ? 'Cancel ticket'
+                                                : 'إلغاء التذكرة',
+                                            style: fontStyle(
+                                                color: AppColors.white,
+                                                fontFamily: FontFamily.medium,
+                                                fontSize: 14.sp),
+                                          ))),
                                   SizedBox(
                                     width: 10,
                                   ),
@@ -289,9 +309,15 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                       BorderRadius.circular(
                                                           12)),
                                               backgroundColor: AppColors.blue),
-                                          child: Text(LanguageClass.isEnglish
-                                              ? 'Edit ticket'
-                                              : 'تعديل التذكرة')))
+                                          child: Text(
+                                            LanguageClass.isEnglish
+                                                ? 'Edit ticket'
+                                                : 'تعديل التذكرة',
+                                            style: fontStyle(
+                                                color: AppColors.white,
+                                                fontFamily: FontFamily.medium,
+                                                fontSize: 14.sp),
+                                          )))
                                 ],
                               )
                             ],
@@ -329,7 +355,7 @@ class _TicketHistoryState extends State<TicketHistory> {
                                 textDirection: LanguageClass.isEnglish
                                     ? TextDirection.ltr
                                     : TextDirection.rtl,
-                                style: TextStyle(
+                                style: fontStyle(
                                     color: Colors.black,
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold),
@@ -350,10 +376,10 @@ class _TicketHistoryState extends State<TicketHistory> {
                                         textDirection: LanguageClass.isEnglish
                                             ? TextDirection.ltr
                                             : TextDirection.rtl,
-                                        style: TextStyle(
+                                        style: fontStyle(
                                             color: Color(0xff818181),
                                             fontSize: 14,
-                                            fontFamily: "regular"),
+                                            fontFamily: FontFamily.regular),
                                       ),
                                     );
                                   },
@@ -378,7 +404,9 @@ class _TicketHistoryState extends State<TicketHistory> {
                                     child: Center(
                                       child: Text(
                                         LanguageClass.isEnglish ? "Done" : 'تم',
-                                        style: const TextStyle(
+                                        style: fontStyle(
+                                            fontFamily: FontFamily.bold,
+                                            fontSize: 14.sp,
                                             color: Colors.white),
                                       ),
                                     )),
@@ -393,7 +421,7 @@ class _TicketHistoryState extends State<TicketHistory> {
                               //       child: Text(LanguageClass.isEnglish
                               //           ? "Done"
                               //           : 'تم',
-                              //       style: TextStyle(color: Colors.black),)),
+                              //       style: fontStyle(color: Colors.black),)),
                               // )
                             ],
                           ),
@@ -464,11 +492,11 @@ class _TicketHistoryState extends State<TicketHistory> {
                         textAlign: LanguageClass.isEnglish
                             ? TextAlign.left
                             : TextAlign.right,
-                        style: TextStyle(
+                        style: fontStyle(
                             color: AppColors.blackColor,
                             fontSize: 25,
                             fontWeight: FontWeight.w500,
-                            fontFamily: "black"),
+                            fontFamily: FontFamily.medium),
                       ),
                     ),
                     const SizedBox(
@@ -480,10 +508,10 @@ class _TicketHistoryState extends State<TicketHistory> {
                           LanguageClass.isEnglish
                               ? "You have no ticket available"
                               : "لا يوجد تزاكر",
-                          style: const TextStyle(
+                          style: fontStyle(
                               color: Color(0xffA3A3A3),
                               fontSize: 21,
-                              fontFamily: "regular"),
+                              fontFamily: FontFamily.regular),
                         ),
                       ),
                     ),
@@ -524,11 +552,11 @@ class _TicketHistoryState extends State<TicketHistory> {
                       margin: const EdgeInsets.symmetric(horizontal: 40),
                       child: Text(
                         LanguageClass.isEnglish ? "Ticket" : "تذاكارك",
-                        style: TextStyle(
+                        style: fontStyle(
                             color: AppColors.blackColor,
                             fontSize: 25,
                             fontWeight: FontWeight.w500,
-                            fontFamily: "black"),
+                            fontFamily: FontFamily.medium),
                       ),
                     ),
                     Expanded(
@@ -576,8 +604,8 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                 60
                                             ? Text(
                                                 '${LanguageClass.isEnglish ? 'Expired' : 'منتهي الصلاحية'}',
-                                                style: TextStyle(
-                                                    fontFamily: "bold",
+                                                style: fontStyle(
+                                                    fontFamily: FontFamily.bold,
                                                     fontSize: 13,
                                                     color: Color(0xfff7f8f9)),
                                               )
@@ -603,22 +631,24 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                     print("Timer finished");
                                                   },
                                                   descriptionTextStyle:
-                                                      TextStyle(
+                                                      fontStyle(
                                                           color:
                                                               AppColors.yellow2,
-                                                          fontFamily: 'black',
+                                                          fontFamily:
+                                                              FontFamily.medium,
                                                           fontSize: 12),
                                                   minutesDescription:
                                                       '${LanguageClass.isEnglish ? 'remaining' : 'للدفع'}',
                                                   secondsDescription:
                                                       '${LanguageClass.isEnglish ? 'to pay' : 'متبقي'}',
                                                   spacerWidth: 0,
-                                                  colonsTextStyle: TextStyle(
+                                                  colonsTextStyle: fontStyle(
                                                       color: Colors.white),
-                                                  timeTextStyle: TextStyle(
+                                                  timeTextStyle: fontStyle(
                                                       color: AppColors.yellow2,
                                                       fontSize: 13,
-                                                      fontFamily: 'black'),
+                                                      fontFamily:
+                                                          FontFamily.medium),
                                                 ),
                                               )
                                         : SizedBox(),
@@ -659,11 +689,12 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                         children: [
                                                           Text(
                                                             '${state.responseTicketHistoryModel.message![index].tripDate!.day.toString()}/${state.responseTicketHistoryModel.message![index].tripDate!.month.toString()}/${state.responseTicketHistoryModel.message![index].tripDate!.year.toString()}',
-                                                            style: const TextStyle(
+                                                            style: fontStyle(
                                                                 color: Colors
                                                                     .white,
                                                                 fontFamily:
-                                                                    "black",
+                                                                    FontFamily
+                                                                        .medium,
                                                                 fontSize: 13),
                                                           ),
                                                           Text(
@@ -675,11 +706,12 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                                         index]
                                                                     .tripDate!)
                                                                 .toString(),
-                                                            style: const TextStyle(
+                                                            style: fontStyle(
                                                                 color: Colors
                                                                     .white,
                                                                 fontFamily:
-                                                                    "black",
+                                                                    FontFamily
+                                                                        .medium,
                                                                 fontSize: 13),
                                                           ),
                                                         ],
@@ -722,11 +754,12 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                                       .isEnglish
                                                                   ? "From"
                                                                   : "من",
-                                                              style: const TextStyle(
+                                                              style: fontStyle(
                                                                   color: Colors
                                                                       .white,
                                                                   fontFamily:
-                                                                      "black",
+                                                                      FontFamily
+                                                                          .medium,
                                                                   fontSize: 12),
                                                             ),
                                                             Text(
@@ -735,11 +768,12 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                                   .message![
                                                                       index]
                                                                   .from!,
-                                                              style: const TextStyle(
+                                                              style: fontStyle(
                                                                   color: Colors
                                                                       .white,
                                                                   fontFamily:
-                                                                      "black",
+                                                                      FontFamily
+                                                                          .medium,
                                                                   fontSize: 12),
                                                             ),
                                                             SizedBox(
@@ -750,11 +784,12 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                                       .isEnglish
                                                                   ? "To"
                                                                   : "الي",
-                                                              style: const TextStyle(
+                                                              style: fontStyle(
                                                                   color: Colors
                                                                       .white,
                                                                   fontFamily:
-                                                                      "black",
+                                                                      FontFamily
+                                                                          .medium,
                                                                   fontSize: 12),
                                                             ),
                                                             Text(
@@ -763,11 +798,12 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                                   .message![
                                                                       index]
                                                                   .to!,
-                                                              style: const TextStyle(
+                                                              style: fontStyle(
                                                                   color: Colors
                                                                       .white,
                                                                   fontFamily:
-                                                                      "black",
+                                                                      FontFamily
+                                                                          .medium,
                                                                   fontSize: 12),
                                                             ),
                                                           ],
@@ -777,9 +813,10 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                   )),
                                                   Text(
                                                     "${Routes.curruncy} ${state.responseTicketHistoryModel.message![index].price}",
-                                                    style: const TextStyle(
+                                                    style: fontStyle(
                                                         color: Colors.white,
-                                                        fontFamily: "black",
+                                                        fontFamily:
+                                                            FontFamily.medium,
                                                         fontSize: 14),
                                                   ),
                                                 ],
@@ -813,9 +850,10 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                         .message![index]
                                                         .tripNumber
                                                         .toString(),
-                                                    style: const TextStyle(
+                                                    style: fontStyle(
                                                         color: Colors.white,
-                                                        fontFamily: "black",
+                                                        fontFamily:
+                                                            FontFamily.medium,
                                                         fontSize: 14),
                                                   ),
                                                 ],
@@ -1053,11 +1091,12 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                                     Container(
                                                                   child: Text(
                                                                     '${state.responseTicketHistoryModel.message![index].seatNoList!.length} ${LanguageClass.isEnglish ? ' Seats' : ' كرسي'}',
-                                                                    style: TextStyle(
+                                                                    style: fontStyle(
                                                                         color: AppColors
                                                                             .white,
                                                                         fontFamily:
-                                                                            "bold",
+                                                                            FontFamily
+                                                                                .bold,
                                                                         fontSize:
                                                                             12),
                                                                   ),
@@ -1083,8 +1122,9 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                             .responseTicketHistoryModel
                                                             .message![index]
                                                             .statusName!,
-                                                        style: TextStyle(
-                                                            fontFamily: "bold",
+                                                        style: fontStyle(
+                                                            fontFamily:
+                                                                FontFamily.bold,
                                                             fontSize: 12,
                                                             color: Color(
                                                                 0xfff7f8f9)),
@@ -1098,9 +1138,10 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                           ? SizedBox()
                                                           : Text(
                                                               '${LanguageClass.isEnglish ? 'Not paid' : 'لم يتم الدفع'}',
-                                                              style: TextStyle(
+                                                              style: fontStyle(
                                                                   fontFamily:
-                                                                      "black",
+                                                                      FontFamily
+                                                                          .medium,
                                                                   fontSize: 12,
                                                                   color: AppColors
                                                                       .yellow2),
@@ -1194,8 +1235,9 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                           .responseTicketHistoryModel
                                                           .message![index]
                                                           .servecietype!,
-                                                      style: TextStyle(
-                                                          fontFamily: "bold",
+                                                      style: fontStyle(
+                                                          fontFamily:
+                                                              FontFamily.bold,
                                                           fontSize: 15,
                                                           color: Color(
                                                               0xfff7f8f9)),
@@ -1247,11 +1289,13 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                             : "الخصوصية",
                                                         textAlign:
                                                             TextAlign.end,
-                                                        style: TextStyle(
+                                                        style: fontStyle(
                                                             color: AppColors
                                                                 .primaryColor,
                                                             fontSize: 20,
-                                                            fontFamily: "bold"),
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .bold),
                                                       ),
                                                     ),
                                                   ),
@@ -1288,11 +1332,13 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                             : "تنزيل",
                                                         textAlign:
                                                             TextAlign.end,
-                                                        style: TextStyle(
+                                                        style: fontStyle(
                                                             color:
                                                                 AppColors.white,
                                                             fontSize: 20,
-                                                            fontFamily: "bold"),
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .bold),
                                                       ),
                                                     ),
                                                   ),
@@ -1349,9 +1395,9 @@ class _TicketHistoryState extends State<TicketHistory> {
                     //                                         horizontal: 15),
                     //                                 child: Text(
                     //                                   "Departure on",
-                    //                                   style: TextStyle(
+                    //                                   style: fontStyle(
                     //                                       color: Colors.white,
-                    //                                       fontFamily: "regular",
+                    //                                       fontFamily:FontFamily.regular,
                     //                                       fontSize: 12),
                     //                                 ),
                     //                               ),
@@ -1365,7 +1411,7 @@ class _TicketHistoryState extends State<TicketHistory> {
                     //                                     Text(
                     //                                       "#${ticket?.tripNumber?.toString()}" ??
                     //                                           "",
-                    //                                       style: TextStyle(
+                    //                                       style: fontStyle(
                     //                                           fontFamily:
                     //                                               "regular",
                     //                                           fontSize: 15,
@@ -1394,7 +1440,7 @@ class _TicketHistoryState extends State<TicketHistory> {
                     //                                       child: Text(
                     //                                         ticket?.servecietype ??
                     //                                             " ",
-                    //                                         style: TextStyle(
+                    //                                         style: fontStyle(
                     //                                           color:
                     //                                               Colors.white,
                     //                                           fontSize: 18,
@@ -1427,7 +1473,7 @@ class _TicketHistoryState extends State<TicketHistory> {
                     //                                               .format(ticket!
                     //                                                   .tripDate!)
                     //                                           : "",
-                    //                                       style: TextStyle(
+                    //                                       style: fontStyle(
                     //                                           fontFamily:
                     //                                               "regular",
                     //                                           fontSize: 15,
@@ -1442,7 +1488,7 @@ class _TicketHistoryState extends State<TicketHistory> {
                     //                                       ticket?.accessBusTime
                     //                                               .toString() ??
                     //                                           "",
-                    //                                       style: TextStyle(
+                    //                                       style: fontStyle(
                     //                                           fontFamily:
                     //                                               "regular",
                     //                                           fontSize: 15,
@@ -1460,10 +1506,10 @@ class _TicketHistoryState extends State<TicketHistory> {
                     //                                 ),
                     //                                 //  child:const  Text(
                     //                                 //   "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ",
-                    //                                 //   style: TextStyle(
+                    //                                 //   style: fontStyle(
                     //                                 //     color: Colors.white,
                     //                                 //     fontSize: 20,
-                    //                                 //     fontFamily: "regular"
+                    //                                 //     fontFamily:FontFamily.regular
                     //                                 //   ),
                     //                                 // ),
                     //                               ),
@@ -1637,9 +1683,9 @@ class _TicketHistoryState extends State<TicketHistory> {
                     //                                                     children: [
                     //                                                       Text(
                     //                                                         ticket!.seatNoList![i].toString(),
-                    //                                                         style: TextStyle(
+                    //                                                         style: fontStyle(
                     //                                                             color: AppColors.primaryColor,
-                    //                                                             fontFamily: "bold",
+                    //                                                             fontFamily:FontFamily.bold,
                     //                                                             fontSize: 12),
                     //                                                       ),
                     //                                                       SvgPicture
@@ -1669,10 +1715,10 @@ class _TicketHistoryState extends State<TicketHistory> {
                     //                                 ),
                     //                                 //  child:const  Text(
                     //                                 //   "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ",
-                    //                                 //   style: TextStyle(
+                    //                                 //   style: fontStyle(
                     //                                 //     color: Colors.white,
                     //                                 //     fontSize: 20,
-                    //                                 //     fontFamily: "regular"
+                    //                                 //     fontFamily:FontFamily.regular
                     //                                 //   ),
                     //                                 // ),
                     //                               ),
@@ -1687,7 +1733,7 @@ class _TicketHistoryState extends State<TicketHistory> {
                     //                                     Text(
                     //                                       ("${Routes.curruncy}  ${ticket?.price ?? 0}")
                     //                                           .toString(),
-                    //                                       style: TextStyle(
+                    //                                       style: fontStyle(
                     //                                           color: AppColors
                     //                                               .primaryColor,
                     //                                           fontFamily:
@@ -1732,7 +1778,7 @@ class _TicketHistoryState extends State<TicketHistory> {
                     //                                             textAlign:
                     //                                                 TextAlign
                     //                                                     .end,
-                    //                                             style: TextStyle(
+                    //                                             style: fontStyle(
                     //                                                 color: AppColors
                     //                                                     .white,
                     //                                                 fontSize:
@@ -1779,7 +1825,7 @@ class _TicketHistoryState extends State<TicketHistory> {
                     //                                             textAlign:
                     //                                                 TextAlign
                     //                                                     .end,
-                    //                                             style: TextStyle(
+                    //                                             style: fontStyle(
                     //                                                 color: AppColors
                     //                                                     .white,
                     //                                                 fontSize:
@@ -1817,6 +1863,7 @@ class _TicketHistoryState extends State<TicketHistory> {
           },
         ),
       ),
+      bottomNavigationBar: Navigationbottombar(currentIndex: 1),
     );
   }
 }

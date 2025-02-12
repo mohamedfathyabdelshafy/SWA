@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/customized_field.dart';
 import 'package:swa/features/app_info/domain/entities/city.dart';
 
@@ -85,7 +87,9 @@ class CityDropDownTextFieldButton extends StatelessWidget {
                                       },
                                       child: Icon(
                                         Icons.arrow_back_rounded,
-                                        color: AppColors.primaryColor,
+                                        color: Routes.isomra
+                                            ? AppColors.umragold
+                                            : AppColors.primaryColor,
                                         size: 35,
                                       ),
                                     ),
@@ -100,11 +104,11 @@ class CityDropDownTextFieldButton extends StatelessWidget {
                                       LanguageClass.isEnglish
                                           ? "Select City"
                                           : "اختر مدينة",
-                                      style: TextStyle(
+                                      style: fontStyle(
                                           color: AppColors.blackColor,
                                           fontSize: 28,
                                           fontWeight: FontWeight.w600,
-                                          fontFamily: "meduim"),
+                                          fontFamily: FontFamily.medium),
                                     ),
                                   ),
                                   SizedBox(
@@ -137,7 +141,9 @@ class CityDropDownTextFieldButton extends StatelessWidget {
                                     hintText: LanguageClass.isEnglish
                                         ? 'Search'
                                         : 'بحث',
-                                    labelcolor: AppColors.primaryColor,
+                                    labelcolor: Routes.isomra
+                                        ? AppColors.umragold
+                                        : AppColors.primaryColor,
                                     obscureText: false,
                                     readonly: false,
                                     color: Color(0xffDDDDDD),
@@ -171,8 +177,9 @@ class CityDropDownTextFieldButton extends StatelessWidget {
                                                       horizontal: 10),
                                                   child: Text(
                                                     searchlist[index].cityName,
-                                                    style: TextStyle(
-                                                        fontFamily: "meduim",
+                                                    style: fontStyle(
+                                                        fontFamily:
+                                                            FontFamily.medium,
                                                         color:
                                                             Color(0xffA3A3A3),
                                                         fontSize: 18),
@@ -197,12 +204,15 @@ class CityDropDownTextFieldButton extends StatelessWidget {
                       });
                     });
               },
-              style: TextStyle(color: Color(0xffA2A2A2), fontSize: 18),
+              style: fontStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontFamily: FontFamily.medium),
               cursorColor: Color(0xffA2A2A2),
               decoration: InputDecoration(
                 contentPadding:
                     EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                labelStyle: TextStyle(
+                labelStyle: fontStyle(
                   color: AppColors.blackColor,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -210,11 +220,11 @@ class CityDropDownTextFieldButton extends StatelessWidget {
                 hintText: LanguageClass.isEnglish
                     ? "Select your city"
                     : "ادخل المدينة",
-                errorStyle: const TextStyle(fontSize: 10),
+                errorStyle: fontStyle(fontSize: 10),
                 border: InputBorder.none,
-                hintStyle: TextStyle(
+                hintStyle: fontStyle(
                   color: Color(0xffA2A2A2),
-                  fontFamily: 'black',
+                  fontFamily: FontFamily.medium,
                   fontSize: 14,
                   fontWeight: FontWeight.normal,
                 ),
@@ -241,7 +251,7 @@ class CityDropDownTextFieldButton extends StatelessWidget {
       //             value: item,
       //             child: Text(
       //               item.cityName,
-      //               style: TextStyle(
+      //               style: fontStyle(
       //                 color: Colors.white,
       //                 fontSize: 13,
       //                 fontWeight: FontWeight.normal,
@@ -251,7 +261,7 @@ class CityDropDownTextFieldButton extends StatelessWidget {
       //         }).toList(),
       //         hint: Text(
       //           hintText,
-      //           style: TextStyle(
+      //           style: fontStyle(
       //             color: Color(0xffA2A2A2),
       //             fontSize: 16,
       //             fontWeight: FontWeight.bold,

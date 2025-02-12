@@ -61,7 +61,7 @@
 //                 Text(
 //                   textAlign: TextAlign.start,
 //                   LanguageClass.isEnglish?"Enter Code":"ادخل الكود",
-//                   style: TextStyle(
+//                   style: fontStyle(
 //                     color: AppColors.yellow,
 //                     fontSize: 20,
 //                     height: 2.000,

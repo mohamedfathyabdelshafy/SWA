@@ -23,6 +23,8 @@ class UserRegisterParams extends Equatable {
   final String userType;
   final int countryId;
   final int cityId;
+  final String identificationNumber;
+  final String indentificationtypeID;
   const UserRegisterParams(
       {required this.name,
       required this.mobile,
@@ -30,9 +32,20 @@ class UserRegisterParams extends Equatable {
       required this.password,
       required this.userType,
       required this.countryId,
+      required this.identificationNumber,
+      required this.indentificationtypeID,
       required this.cityId});
 
   @override
-  List<Object?> get props =>
-      [name, mobile, email, password, userType, cityId, countryId];
+  List<Object?> get props => [
+        name,
+        mobile,
+        email,
+        password,
+        userType,
+        cityId,
+        countryId,
+        identificationNumber,
+        indentificationtypeID
+      ];
 }

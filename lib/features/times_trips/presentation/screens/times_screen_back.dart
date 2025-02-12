@@ -125,46 +125,46 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                   children: [
                                     Text(
                                       LanguageClass.isEnglish ? "From" : "من",
-                                      style: const TextStyle(
+                                      style: fontStyle(
                                           color: Colors.white,
-                                          fontFamily: "roman",
+                                          fontFamily: FontFamily.medium,
                                           fontSize: 12),
                                     ),
                                     Text(
                                       widget.tripListBack[index].fromCityName ??
                                           '',
-                                      style: const TextStyle(
+                                      style: fontStyle(
                                           color: Colors.white,
-                                          fontFamily: "bold",
+                                          fontFamily: FontFamily.bold,
                                           fontSize: 12),
                                     ),
                                     Text(
                                       widget.tripListBack[index].from,
-                                      style: const TextStyle(
+                                      style: fontStyle(
                                           color: Colors.white,
-                                          fontFamily: "roman",
+                                          fontFamily: FontFamily.medium,
                                           fontSize: 12),
                                     ),
                                     Text(
                                       LanguageClass.isEnglish ? "To" : "الي",
-                                      style: const TextStyle(
+                                      style: fontStyle(
                                           color: Colors.white,
-                                          fontFamily: "roman",
+                                          fontFamily: FontFamily.medium,
                                           fontSize: 12),
                                     ),
                                     Text(
                                       widget.tripListBack[index].toCityName ??
                                           '',
-                                      style: const TextStyle(
+                                      style: fontStyle(
                                           color: Colors.white,
-                                          fontFamily: "bold",
+                                          fontFamily: FontFamily.bold,
                                           fontSize: 12),
                                     ),
                                     Text(
                                       widget.tripListBack[index].to,
-                                      style: const TextStyle(
+                                      style: fontStyle(
                                           color: Colors.white,
-                                          fontFamily: "roman",
+                                          fontFamily: FontFamily.medium,
                                           fontSize: 12),
                                     ),
                                   ],
@@ -176,9 +176,9 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                   children: [
                                     Text(
                                       widget.tripListBack[index].lineName,
-                                      style: const TextStyle(
+                                      style: fontStyle(
                                           color: Colors.white,
-                                          fontFamily: "roman",
+                                          fontFamily: FontFamily.medium,
                                           fontSize: 12),
                                     ),
                                     Text(
@@ -186,17 +186,17 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                           .timeOfCustomerStation
                                           .substring(0, 5)
                                           .toString(),
-                                      style: const TextStyle(
+                                      style: fontStyle(
                                           color: Colors.white,
-                                          fontFamily: "bold",
+                                          fontFamily: FontFamily.bold,
                                           fontSize: 14),
                                     ),
                                     Text(
                                       '${widget.tripListBack[index].price.toString()} ${Routes.curruncy}' ??
                                           '',
-                                      style: const TextStyle(
+                                      style: fontStyle(
                                           color: Colors.white,
-                                          fontFamily: "bold",
+                                          fontFamily: FontFamily.bold,
                                           fontSize: 14),
                                     ),
                                     InkWell(
@@ -366,9 +366,9 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                           Text(
                                             '${widget.tripListBack[index].lineCity[index2].cityName}' ??
                                                 '',
-                                            style: TextStyle(
+                                            style: fontStyle(
                                                 color: AppColors.primaryColor,
-                                                fontFamily: "bold",
+                                                fontFamily: FontFamily.bold,
                                                 fontSize: 16),
                                           ),
                                           ElevatedButton(
@@ -466,7 +466,7 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                                                             .isEnglish
                                                                         ? "Access Points"
                                                                         : "نقط التجمع",
-                                                                    style: TextStyle(
+                                                                    style: fontStyle(
                                                                         color: AppColors
                                                                             .blackColor,
                                                                         fontSize:
@@ -475,7 +475,7 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                                                             FontWeight
                                                                                 .w600,
                                                                         fontFamily:
-                                                                            "meduim"),
+                                                                            FontFamily.medium),
                                                                   ),
                                                                 ),
                                                                 SizedBox(
@@ -496,14 +496,14 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                                                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                                                                     child: Text(
                                                                                       '${widget.tripListBack[index].lineCity[index2].lineStationList[index3].stationName}' ?? '',
-                                                                                      style: TextStyle(color: AppColors.primaryColor, fontFamily: "bold", fontSize: 14),
+                                                                                      style: fontStyle(color: AppColors.primaryColor, fontFamily: FontFamily.bold, fontSize: 14),
                                                                                     ),
                                                                                   ),
                                                                                   Container(
                                                                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                                                                     child: Text(
                                                                                       '${widget.tripListBack[index].lineCity[index2].lineStationList[index3].accessTime.substring(0, 5)}' ?? '',
-                                                                                      style: TextStyle(color: AppColors.primaryColor, fontFamily: "bold", fontSize: 14),
+                                                                                      style: fontStyle(color: AppColors.primaryColor, fontFamily: FontFamily.bold, fontSize: 14),
                                                                                     ),
                                                                                   ),
                                                                                 ],
@@ -534,8 +534,8 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                                   });
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              primary: AppColors.primaryColor,
-                                              onPrimary: Colors.white,
+                                              backgroundColor:
+                                                  AppColors.primaryColor,
                                               elevation: 4,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
@@ -548,7 +548,7 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                                   LanguageClass.isEnglish
                                                       ? "Points"
                                                       : "نقط التجمع",
-                                                  style: TextStyle(
+                                                  style: fontStyle(
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: 18,
                                                     color: AppColors.white,

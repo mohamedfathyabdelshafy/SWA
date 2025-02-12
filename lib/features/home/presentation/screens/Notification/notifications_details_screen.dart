@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -41,7 +42,7 @@ class NotificationDetailsScreen extends StatelessWidget {
           icon: Icon(
             Icons.arrow_back,
             size: 25,
-            color: AppColors.primaryColor,
+            color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
           ),
         ),
       ),

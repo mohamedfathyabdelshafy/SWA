@@ -6,6 +6,7 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/customized_field.dart';
 import 'package:swa/features/app_info/domain/entities/city.dart';
 import 'package:swa/features/app_info/domain/entities/country.dart';
@@ -99,7 +100,9 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                   },
                   child: Icon(
                     Icons.arrow_back_rounded,
-                    color: AppColors.primaryColor,
+                    color: Routes.isomra
+                        ? AppColors.umragold
+                        : AppColors.primaryColor,
                     size: 35,
                   ),
                 ),
@@ -113,11 +116,11 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                   LanguageClass.isEnglish
                       ? "Personal Information"
                       : "معلومات شخصية",
-                  style: TextStyle(
+                  style: fontStyle(
                       color: AppColors.blackColor,
                       fontSize: 25,
                       fontWeight: FontWeight.w600,
-                      fontFamily: "roman"),
+                      fontFamily: FontFamily.medium),
                 ),
               ),
               SizedBox(
@@ -131,7 +134,8 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                 },
                 colorText: Colors.black,
                 borderradias: 12,
-                labelcolor: AppColors.primaryColor,
+                labelcolor:
+                    Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                 bordercolor: Colors.black,
                 isPassword: false,
                 obscureText: false,
@@ -150,7 +154,8 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                     changed = true;
                   });
                 },
-                labelcolor: AppColors.primaryColor,
+                labelcolor:
+                    Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                 borderradias: 12,
                 isPassword: false,
                 obscureText: false,
@@ -165,7 +170,8 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               ),
               CustomizedField(
                 colorText: Colors.black,
-                labelcolor: AppColors.primaryColor,
+                labelcolor:
+                    Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                 onchange: (v) {
                   setState(() {
                     changed = true;
@@ -191,7 +197,8 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                     changed = true;
                   });
                 },
-                labelcolor: AppColors.primaryColor,
+                labelcolor:
+                    Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                 borderradias: 12,
                 bordercolor: Colors.black,
                 isPassword: false,
@@ -230,7 +237,9 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       )
                     : CustomizedField(
                         colorText: Colors.black,
-                        labelcolor: AppColors.primaryColor,
+                        labelcolor: Routes.isomra
+                            ? AppColors.umragold
+                            : AppColors.primaryColor,
                         onchange: (v) {
                           setState(() {
                             changed = true;
@@ -283,7 +292,9 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         },
                         borderradias: 12,
                         isPassword: false,
-                        labelcolor: AppColors.primaryColor,
+                        labelcolor: Routes.isomra
+                            ? AppColors.umragold
+                            : AppColors.primaryColor,
                         obscureText: false,
                         readonly: true,
                         color: Color(0xffDDDDDD),
@@ -343,9 +354,12 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 0),
                           child: Constants.customButton(
-                              borderradias: 41,
-                              text: LanguageClass.isEnglish ? "Save" : "حفظ",
-                              color: AppColors.primaryColor),
+                            borderradias: 41,
+                            text: LanguageClass.isEnglish ? "Save" : "حفظ",
+                            color: Routes.isomra
+                                ? AppColors.umragold
+                                : AppColors.primaryColor,
+                          ),
                         ),
                       ),
                     )

@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
+import 'package:swa/features/Swa_umra/models/umra_detail.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/lines_model.dart';
 import 'package:swa/select_payment2/data/models/Reservation_Response_Credit_Card.dart';
 import 'package:swa/select_payment2/data/models/Reservation_Response_Electronic_model.dart';
@@ -62,6 +64,8 @@ class ReservationRepo {
         "PromoCodeID": promoid,
         "PaymentMethodID": null,
         "PaymentTypeID": paymentTypeID,
+        "toCurrency": Routes.curruncy,
+        "dateTypeID": UmraDetails.dateTypeID
       }),
     );
     log('body ' + response.request.body);
@@ -122,6 +126,8 @@ class ReservationRepo {
         "PromoCodeID": promoid,
         "PaymentTypeID": paymentTypeID,
         "PaymentMethodID": paymentMethodID,
+        "toCurrency": Routes.curruncy,
+        "dateTypeID": UmraDetails.dateTypeID,
         "EwalletModel": {
           "customerId": custId,
           "amount": trips.length > 1
@@ -229,6 +235,8 @@ class ReservationRepo {
         "PromoCodeID": promoid,
         "PaymentTypeID": paymentTypeID,
         "PaymentMethodID": paymentMethodID,
+        "toCurrency": Routes.curruncy,
+        "dateTypeID": UmraDetails.dateTypeID,
         "RefNoModel": {
           "CustomerId": custId,
           "Amount": trips.length > 1
@@ -255,6 +263,7 @@ class ReservationRepo {
     required String cardExpiryYear,
     required String cvv,
     required String cardExpiryMonth,
+    required String curruncy,
   }) async {
     print('helloooooo');
     var countryid = CacheHelper.getDataToSharedPref(
@@ -263,6 +272,7 @@ class ReservationRepo {
     final msg = jsonEncode({
       "CustomerId": custId,
       "amount": amount,
+      "currency": curruncy,
       "cardNumber": cardNumber,
       "cardExpiryYear": cardExpiryYear,
       "cardExpiryMonth": cardExpiryMonth,
@@ -293,6 +303,8 @@ class ReservationRepo {
     required String cardExpiryYear,
     required String cvv,
     required String cardExpiryMonth,
+    required double totalamount,
+    required String curruncy,
   }) async {
     print('helloooooo');
     var countryid = CacheHelper.getDataToSharedPref(
@@ -332,11 +344,12 @@ class ReservationRepo {
       "PromoCodeID": promoid,
       "PaymentTypeID": paymentTypeID,
       "PaymentMethodID": paymentMethodID,
+      "currency": curruncy,
+      "toCurrency": Routes.curruncy,
+      "dateTypeID": UmraDetails.dateTypeID,
       "cardPaymentModel": {
         "CustomerId": custId,
-        "amount": trips.length > 1
-            ? (trips[0].price! + trips[1].price!).toStringAsFixed(2)
-            : trips[0].price!.toStringAsFixed(2).toString(),
+        "amount": totalamount.toStringAsFixed(2),
         "cardNumber": cardNumber,
         "cardExpiryYear": cardExpiryYear,
         "cardExpiryMonth": cardExpiryMonth,

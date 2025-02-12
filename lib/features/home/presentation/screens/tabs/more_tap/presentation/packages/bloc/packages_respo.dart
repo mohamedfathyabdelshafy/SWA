@@ -10,12 +10,16 @@ import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/api/api_consumer.dart';
 import 'package:swa/core/api/end_points.dart';
 import 'package:swa/core/local_cache_helper.dart';
+import 'package:swa/core/utils/language.dart';
+import 'package:swa/features/Swa_umra/models/umra_detail.dart';
 import 'package:swa/features/home/data/models/Ads_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/ActivePackage_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/Ads_model.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/Select_appmodel.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/packages_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/station_from_model.dart';
 import 'package:swa/main.dart';
+import 'package:swa/select_payment2/data/models/Curruncy_model.dart';
 import 'package:swa/select_payment2/data/models/Reservation_Response_Credit_Card.dart';
 import 'package:swa/select_payment2/data/models/Reservation_Response_Electronic_model.dart';
 import 'package:swa/select_payment2/data/models/Reservation_response_MyWallet_model.dart';
@@ -86,6 +90,20 @@ class PackagesRespo {
     return linesModel;
   }
 
+  Future selectapp() async {
+    var countryid = CacheHelper.getDataToSharedPref(
+      key: 'countryid',
+    );
+
+    var response = await apiConsumer
+        .get("${EndPoints.baseUrl}Settings/GetMainPage?countryID=$countryid");
+
+    log(" Select app" + response.body);
+    var decode = json.decode(response.body);
+    Selectappmodel linesModel = Selectappmodel.fromJson(decode);
+    return linesModel;
+  }
+
   Future getpackages({required String stationfromid, stationtoid}) async {
     var countryid = CacheHelper.getDataToSharedPref(
       key: 'countryid',
@@ -117,14 +135,15 @@ class PackagesRespo {
 
   Future getads() async {
     var countryid = CacheHelper.getDataToSharedPref(
-      key: 'countryid',
-    );
+          key: 'countryid',
+        ) ??
+        1;
 
     var response = await apiConsumer.get(
-      "${EndPoints.baseUrl}GetAds/GetAds",
+      "${EndPoints.baseUrl}GetAds/GetAds?countryID=$countryid",
     );
 
-    log("responce" + response.body);
+    log("responce adv " + response.body.toString());
     var decode = json.decode(response.body);
     AdsModel linesModel = AdsModel.fromJson(decode);
     return linesModel;
@@ -212,6 +231,8 @@ class PackagesRespo {
         "PromoCodeID": promoid,
         "PromoCode": code,
         "PaymentTypeID": paymentTypeID,
+        "toCurrency": Routes.curruncy,
+        "dateTypeID": UmraDetails.dateTypeID
       }),
     );
     log('body ' + response.request.body);
@@ -236,7 +257,8 @@ class PackagesRespo {
     );
     var headers = {
       'Content-Type': 'application/json',
-      'APIKey': '546548dwfdfsd3f4sdfhgat52'
+      'APIKey': '546548dwfdfsd3f4sdfhgat52',
+      "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
     };
     var request = http.Request(
         'POST',
@@ -289,7 +311,8 @@ class PackagesRespo {
 
     var headers = {
       'Content-Type': 'application/json',
-      'APIKey': '546548dwfdfsd3f4sdfhgat52'
+      'APIKey': '546548dwfdfsd3f4sdfhgat52',
+      "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
     };
     var request = http.Request(
         'POST',
@@ -349,7 +372,8 @@ class PackagesRespo {
 
     var headers = {
       'Content-Type': 'application/json',
-      'APIKey': '546548dwfdfsd3f4sdfhgat52'
+      'APIKey': '546548dwfdfsd3f4sdfhgat52',
+      "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
     };
     var request = http.Request(
         'POST',
@@ -406,7 +430,8 @@ class PackagesRespo {
 
     var headers = {
       'Content-Type': 'application/json',
-      'APIKey': '546548dwfdfsd3f4sdfhgat52'
+      'APIKey': '546548dwfdfsd3f4sdfhgat52',
+      "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
     };
     log('a7a');
 
@@ -445,6 +470,65 @@ class PackagesRespo {
       log(jsonresponse.toString());
 
       return ReservationResponseElectronicModel.fromJson(jsonresponse);
+    } else {
+      log(await response.stream.bytesToString());
+    }
+  }
+
+  Future GetallCurrency() async {
+    var countryid = CacheHelper.getDataToSharedPref(
+      key: 'countryid',
+    );
+
+    var headers = {
+      'Content-Type': 'application/json',
+      'APIKey': '546548dwfdfsd3f4sdfhgat52',
+      "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
+    };
+    log('a7a');
+
+    var request = http.Request(
+        'GET', Uri.parse('${EndPoints.baseUrl}Currency/GetAllCurrency'));
+    request.headers.addAll(headers);
+    log(await request.toString());
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var jsonresponse = jsonDecode(await response.stream.bytesToString());
+      log(jsonresponse.toString());
+
+      return Curruncylist.fromJson(jsonresponse);
+    } else {
+      log(await response.stream.bytesToString());
+    }
+  }
+
+  Future Convertcurrency({String? from, String? to, double? amount}) async {
+    var countryid = CacheHelper.getDataToSharedPref(
+      key: 'countryid',
+    );
+
+    var headers = {
+      'Content-Type': 'application/json',
+      'APIKey': '546548dwfdfsd3f4sdfhgat52',
+      "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
+    };
+
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            '${EndPoints.baseUrl}Currency/GetExchnageRate?fromCurrency=$from&toCurrency=$to&amount=$amount'));
+    request.headers.addAll(headers);
+    log(await request.toString());
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var jsonresponse = jsonDecode(await response.stream.bytesToString());
+      log(jsonresponse.toString());
+
+      return jsonresponse['message'];
     } else {
       log(await response.stream.bytesToString());
     }

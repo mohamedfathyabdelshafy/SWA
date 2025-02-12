@@ -4,11 +4,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:swa/config/routes/app_routes.dart';
+import 'package:swa/core/utils/Navigaton_bottombar.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/timer.dart';
+import 'package:swa/features/Swa_umra/models/Transportaion_list_model.dart';
+import 'package:swa/features/Swa_umra/models/umra_detail.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/Ticket_class.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/screens/bus_layout.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/screens/bus_layout_back.dart';
@@ -93,8 +96,10 @@ class _TimesScreenState extends State<TimesScreen> {
                 LanguageClass.isEnglish ? "Go trips" : "رحلات الذهاب",
                 textAlign:
                     LanguageClass.isEnglish ? TextAlign.left : TextAlign.right,
-                style: TextStyle(
-                    color: Colors.black, fontFamily: "black", fontSize: 16.sp),
+                style: fontStyle(
+                    color: Colors.black,
+                    fontFamily: FontFamily.medium,
+                    fontSize: 16.sp),
               ),
             ),
             Flexible(
@@ -122,16 +127,16 @@ class _TimesScreenState extends State<TimesScreen> {
                                     LanguageClass.isEnglish
                                         ? "Departure "
                                         : "تغادر في",
-                                    style: TextStyle(
+                                    style: fontStyle(
                                         color: Colors.white,
-                                        fontFamily: "bold",
+                                        fontFamily: FontFamily.bold,
                                         fontSize: 18.sp),
                                   ),
                                   Text(
                                     '${DateTime.parse(Ticketreservation.accessDate1).day.toString()}/${DateTime.parse(Ticketreservation.accessDate1).month.toString()}/${DateTime.parse(Ticketreservation.accessDate1).year.toString()}',
-                                    style: TextStyle(
+                                    style: fontStyle(
                                         color: Colors.white,
-                                        fontFamily: "roman",
+                                        fontFamily: FontFamily.medium,
                                         fontSize: 14.sp),
                                   ),
                                   SizedBox(
@@ -167,17 +172,18 @@ class _TimesScreenState extends State<TimesScreen> {
                                                 LanguageClass.isEnglish
                                                     ? "From"
                                                     : "من",
-                                                style: TextStyle(
+                                                style: fontStyle(
                                                     color: Colors.white,
-                                                    fontFamily: "roman",
+                                                    fontFamily:
+                                                        FontFamily.medium,
                                                     fontSize: 12.sp),
                                               ),
                                               Text(
                                                 Ticketreservation
                                                     .fromcitystation1,
-                                                style: TextStyle(
+                                                style: fontStyle(
                                                     color: Colors.white,
-                                                    fontFamily: "bold",
+                                                    fontFamily: FontFamily.bold,
                                                     fontSize: 14.sp),
                                               ),
                                               SizedBox(
@@ -187,17 +193,18 @@ class _TimesScreenState extends State<TimesScreen> {
                                                 LanguageClass.isEnglish
                                                     ? "To"
                                                     : "الي",
-                                                style: TextStyle(
+                                                style: fontStyle(
                                                     color: Colors.white,
-                                                    fontFamily: "roman",
+                                                    fontFamily:
+                                                        FontFamily.medium,
                                                     fontSize: 12.sp),
                                               ),
                                               Text(
                                                 Ticketreservation
                                                     .tocitystation1,
-                                                style: TextStyle(
+                                                style: fontStyle(
                                                     color: Colors.white,
-                                                    fontFamily: "bold",
+                                                    fontFamily: FontFamily.bold,
                                                     fontSize: 14.sp),
                                               ),
                                             ],
@@ -214,9 +221,9 @@ class _TimesScreenState extends State<TimesScreen> {
                                 children: [
                                   Text(
                                     "${Routes.curruncy} ${(Ticketreservation.countSeats1.length * Ticketreservation.priceticket1)}",
-                                    style: TextStyle(
+                                    style: fontStyle(
                                         color: Colors.white,
-                                        fontFamily: "bold",
+                                        fontFamily: FontFamily.bold,
                                         fontSize: 16.sp),
                                   ),
                                   Row(
@@ -237,9 +244,9 @@ class _TimesScreenState extends State<TimesScreen> {
                                       ),
                                       Text(
                                         Ticketreservation.accessBusTime1,
-                                        style: TextStyle(
+                                        style: fontStyle(
                                             color: Colors.white,
-                                            fontFamily: "roman",
+                                            fontFamily: FontFamily.medium,
                                             fontSize: 14.sp),
                                       ),
                                     ],
@@ -262,9 +269,9 @@ class _TimesScreenState extends State<TimesScreen> {
                                       Text(
                                         Ticketreservation.numbertrip1
                                             .toString(),
-                                        style: TextStyle(
+                                        style: fontStyle(
                                             color: Colors.white,
-                                            fontFamily: "roman",
+                                            fontFamily: FontFamily.medium,
                                             fontSize: 14.sp),
                                       ),
                                     ],
@@ -302,10 +309,11 @@ class _TimesScreenState extends State<TimesScreen> {
                                                     child: Container(
                                                       child: Text(
                                                         ' ${Ticketreservation.Seatsnumbers1[i].toString()} ,',
-                                                        style: TextStyle(
+                                                        style: fontStyle(
                                                             color:
                                                                 AppColors.white,
-                                                            fontFamily: "bold",
+                                                            fontFamily:
+                                                                FontFamily.bold,
                                                             fontSize: 12.sp),
                                                       ),
                                                     ),
@@ -391,8 +399,8 @@ class _TimesScreenState extends State<TimesScreen> {
                                     alignment: Alignment.bottomCenter,
                                     child: Text(
                                       Ticketreservation.elite1,
-                                      style: TextStyle(
-                                          fontFamily: "bold",
+                                      style: fontStyle(
+                                          fontFamily: FontFamily.bold,
                                           fontSize: 14.sp,
                                           color: Color(0xfff7f8f9)),
                                     ),
@@ -441,9 +449,9 @@ class _TimesScreenState extends State<TimesScreen> {
                                                   .format(widget.tripList[index]
                                                       .accessDate)
                                                   .toString(),
-                                              style: TextStyle(
+                                              style: fontStyle(
                                                   color: Colors.white,
-                                                  fontFamily: "black",
+                                                  fontFamily: FontFamily.medium,
                                                   fontSize: 13.sp),
                                             ),
                                             Text(
@@ -451,9 +459,9 @@ class _TimesScreenState extends State<TimesScreen> {
                                                   .format(widget.tripList[index]
                                                       .accessDate)
                                                   .toString(),
-                                              style: TextStyle(
+                                              style: fontStyle(
                                                   color: Colors.white,
-                                                  fontFamily: "black",
+                                                  fontFamily: FontFamily.medium,
                                                   fontSize: 13.sp),
                                             ),
                                           ],
@@ -492,16 +500,18 @@ class _TimesScreenState extends State<TimesScreen> {
                                                   LanguageClass.isEnglish
                                                       ? "From"
                                                       : "من",
-                                                  style: TextStyle(
+                                                  style: fontStyle(
                                                       color: Colors.white,
-                                                      fontFamily: "black",
+                                                      fontFamily:
+                                                          FontFamily.medium,
                                                       fontSize: 12.sp),
                                                 ),
                                                 Text(
                                                   widget.tripList[index].from,
-                                                  style: TextStyle(
+                                                  style: fontStyle(
                                                       color: Colors.white,
-                                                      fontFamily: "black",
+                                                      fontFamily:
+                                                          FontFamily.medium,
                                                       fontSize: 12.sp),
                                                 ),
                                                 SizedBox(
@@ -511,16 +521,18 @@ class _TimesScreenState extends State<TimesScreen> {
                                                   LanguageClass.isEnglish
                                                       ? "To"
                                                       : "الي",
-                                                  style: TextStyle(
+                                                  style: fontStyle(
                                                       color: Colors.white,
-                                                      fontFamily: "black",
+                                                      fontFamily:
+                                                          FontFamily.medium,
                                                       fontSize: 12.sp),
                                                 ),
                                                 Text(
                                                   widget.tripList[index].to,
-                                                  style: TextStyle(
+                                                  style: fontStyle(
                                                       color: Colors.white,
-                                                      fontFamily: "black",
+                                                      fontFamily:
+                                                          FontFamily.medium,
                                                       fontSize: 12.sp),
                                                 ),
                                               ],
@@ -539,18 +551,20 @@ class _TimesScreenState extends State<TimesScreen> {
                                                 Text(
                                                   '${widget.tripList[index].price.toString()} ${Routes.curruncy}' ??
                                                       '',
-                                                  style: TextStyle(
+                                                  style: fontStyle(
                                                       color: Colors.white,
-                                                      fontFamily: "black",
+                                                      fontFamily:
+                                                          FontFamily.medium,
                                                       fontSize: 12.sp),
                                                 ),
                                                 Text(
                                                   LanguageClass.isEnglish
                                                       ? 'available ${widget.tripList[index].emptySeat}'
                                                       : 'متاح  ${widget.tripList[index].emptySeat}',
-                                                  style: TextStyle(
+                                                  style: fontStyle(
                                                       color: AppColors.yellow2,
-                                                      fontFamily: "black",
+                                                      fontFamily:
+                                                          FontFamily.medium,
                                                       fontSize: 13.sp),
                                                 ),
                                                 Container(
@@ -715,6 +729,60 @@ class _TimesScreenState extends State<TimesScreen> {
                                                       ).then((value) {
                                                         setState(() {});
                                                       });
+
+                                                      UmraDetails.swatransportList!.add(TransportList(
+                                                          availability: widget
+                                                              .tripList[index]
+                                                              .emptySeat,
+                                                          busId: widget
+                                                              .tripList[index]
+                                                              .busId,
+                                                          from: widget
+                                                              .tripList[index]
+                                                              .fromCityName,
+                                                          fromStationName:
+                                                              widget
+                                                                  .tripList[
+                                                                      index]
+                                                                  .from,
+                                                          to: widget
+                                                              .tripList[index]
+                                                              .toCityName,
+                                                          isActive: true,
+                                                          isDelete: widget
+                                                              .tripList[index]
+                                                              .isDeleted,
+                                                          isAddedTrip: true,
+                                                          lineId: widget
+                                                              .tripList[index]
+                                                              .lineId,
+                                                          notes: '',
+                                                          priceSeat: widget
+                                                              .tripList[index]
+                                                              .price,
+                                                          toStationName: widget
+                                                              .tripList[index]
+                                                              .to,
+                                                          tripDate:
+                                                              '${intl.DateFormat.d('en_US').format(widget.tripList[index].accessDate)}${intl.DateFormat.MMM('en_US').format(widget.tripList[index].accessDate)}',
+                                                          isreserved: false,
+                                                          tripId: widget
+                                                              .tripList[index]
+                                                              .tripId,
+                                                          personCountReserved:
+                                                              0,
+                                                          serviceTypeId: widget
+                                                              .tripList[index]
+                                                              .serviceTypeId,
+                                                          tripTime: widget
+                                                              .tripList[index]
+                                                              .accessBusTime
+                                                              .toString(),
+                                                          fromStationId: null,
+                                                          toStationId: null,
+                                                          tripUmrahTransportationId:
+                                                              null,
+                                                          reservationId: null));
                                                     },
                                                     child: Container(
                                                       padding:
@@ -741,12 +809,13 @@ class _TimesScreenState extends State<TimesScreen> {
                                                         LanguageClass.isEnglish
                                                             ? 'Reserve'
                                                             : 'حجز',
-                                                        style: TextStyle(
+                                                        style: fontStyle(
                                                           color: AppColors
                                                               .primaryColor,
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          fontFamily: 'black',
+                                                          fontFamily:
+                                                              FontFamily.medium,
                                                           fontSize: 10.sp,
                                                         ),
                                                       ),
@@ -790,10 +859,10 @@ class _TimesScreenState extends State<TimesScreen> {
                                               Text(
                                                 '${widget.tripList[index].lineCity[index2].cityName}' ??
                                                     '',
-                                                style: TextStyle(
+                                                style: fontStyle(
                                                     color:
                                                         AppColors.primaryColor,
-                                                    fontFamily: "bold",
+                                                    fontFamily: FontFamily.bold,
                                                     fontSize: 16.sp),
                                               ),
                                               ElevatedButton(
@@ -896,12 +965,12 @@ class _TimesScreenState extends State<TimesScreen> {
                                                                         LanguageClass.isEnglish
                                                                             ? "Access Points"
                                                                             : "نقط التجمع",
-                                                                        style: TextStyle(
+                                                                        style: fontStyle(
                                                                             color:
                                                                                 AppColors.blackColor,
                                                                             fontSize: 28.sp,
                                                                             fontWeight: FontWeight.w600,
-                                                                            fontFamily: "meduim"),
+                                                                            fontFamily: FontFamily.medium),
                                                                       ),
                                                                     ),
                                                                     SizedBox(
@@ -920,14 +989,14 @@ class _TimesScreenState extends State<TimesScreen> {
                                                                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                                                                     child: Text(
                                                                                       '${widget.tripList[index].lineCity[index2].lineStationList[index3].stationName}' ?? '',
-                                                                                      style: TextStyle(color: AppColors.primaryColor, fontFamily: "bold", fontSize: 14.sp),
+                                                                                      style: fontStyle(color: AppColors.primaryColor, fontFamily: FontFamily.bold, fontSize: 14.sp),
                                                                                     ),
                                                                                   ),
                                                                                   Container(
                                                                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                                                                     child: Text(
                                                                                       '${widget.tripList[index].lineCity[index2].lineStationList[index3].accessTime.substring(0, 5)}' ?? '',
-                                                                                      style: TextStyle(color: AppColors.primaryColor, fontFamily: "bold", fontSize: 14.sp),
+                                                                                      style: fontStyle(color: AppColors.primaryColor, fontFamily: FontFamily.bold, fontSize: 14.sp),
                                                                                     ),
                                                                                   ),
                                                                                 ],
@@ -953,9 +1022,8 @@ class _TimesScreenState extends State<TimesScreen> {
                                                       });
                                                 },
                                                 style: ElevatedButton.styleFrom(
-                                                  primary:
+                                                  backgroundColor:
                                                       AppColors.primaryColor,
-                                                  onPrimary: Colors.white,
                                                   elevation: 4,
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
@@ -969,7 +1037,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                                       LanguageClass.isEnglish
                                                           ? "Points"
                                                           : "نقط التجمع",
-                                                      style: TextStyle(
+                                                      style: fontStyle(
                                                         fontWeight:
                                                             FontWeight.w600,
                                                         fontSize: 18.sp,
@@ -1006,9 +1074,9 @@ class _TimesScreenState extends State<TimesScreen> {
                       textAlign: LanguageClass.isEnglish
                           ? TextAlign.left
                           : TextAlign.right,
-                      style: TextStyle(
+                      style: fontStyle(
                           color: Colors.black,
-                          fontFamily: "black",
+                          fontFamily: FontFamily.medium,
                           fontSize: 16.sp),
                     ),
                   )
@@ -1041,16 +1109,16 @@ class _TimesScreenState extends State<TimesScreen> {
                                           LanguageClass.isEnglish
                                               ? "Departure "
                                               : "تغادر في",
-                                          style: TextStyle(
+                                          style: fontStyle(
                                               color: Colors.white,
-                                              fontFamily: "bold",
+                                              fontFamily: FontFamily.bold,
                                               fontSize: 18.sp),
                                         ),
                                         Text(
                                           '${DateTime.parse(Ticketreservation.accessDate2).day.toString()}/${DateTime.parse(Ticketreservation.accessDate2).month.toString()}/${DateTime.parse(Ticketreservation.accessDate2).year.toString()}',
-                                          style: TextStyle(
+                                          style: fontStyle(
                                               color: Colors.white,
-                                              fontFamily: "roman",
+                                              fontFamily: FontFamily.medium,
                                               fontSize: 14.sp),
                                         ),
                                         SizedBox(
@@ -1087,17 +1155,19 @@ class _TimesScreenState extends State<TimesScreen> {
                                                   LanguageClass.isEnglish
                                                       ? "From"
                                                       : "من",
-                                                  style: TextStyle(
+                                                  style: fontStyle(
                                                       color: Colors.white,
-                                                      fontFamily: "roman",
+                                                      fontFamily:
+                                                          FontFamily.medium,
                                                       fontSize: 12.sp),
                                                 ),
                                                 Text(
                                                   Ticketreservation
                                                       .fromcitystation2,
-                                                  style: TextStyle(
+                                                  style: fontStyle(
                                                       color: Colors.white,
-                                                      fontFamily: "bold",
+                                                      fontFamily:
+                                                          FontFamily.bold,
                                                       fontSize: 16.sp),
                                                 ),
                                                 SizedBox(
@@ -1107,17 +1177,19 @@ class _TimesScreenState extends State<TimesScreen> {
                                                   LanguageClass.isEnglish
                                                       ? "To"
                                                       : "الي",
-                                                  style: TextStyle(
+                                                  style: fontStyle(
                                                       color: Colors.white,
-                                                      fontFamily: "roman",
+                                                      fontFamily:
+                                                          FontFamily.medium,
                                                       fontSize: 12.sp),
                                                 ),
                                                 Text(
                                                   Ticketreservation
                                                       .tocitystation2,
-                                                  style: TextStyle(
+                                                  style: fontStyle(
                                                       color: Colors.white,
-                                                      fontFamily: "bold",
+                                                      fontFamily:
+                                                          FontFamily.bold,
                                                       fontSize: 16.sp),
                                                 ),
                                               ],
@@ -1133,9 +1205,9 @@ class _TimesScreenState extends State<TimesScreen> {
                                   children: [
                                     Text(
                                       "${Routes.curruncy} ${Ticketreservation.countSeats2.length * Ticketreservation.priceticket2}",
-                                      style: TextStyle(
+                                      style: fontStyle(
                                           color: Colors.white,
-                                          fontFamily: "bold",
+                                          fontFamily: FontFamily.bold,
                                           fontSize: 16.sp),
                                     ),
                                     Row(
@@ -1156,9 +1228,9 @@ class _TimesScreenState extends State<TimesScreen> {
                                         ),
                                         Text(
                                           Ticketreservation.accessBusTime2,
-                                          style: TextStyle(
+                                          style: fontStyle(
                                               color: Colors.white,
-                                              fontFamily: "roman",
+                                              fontFamily: FontFamily.medium,
                                               fontSize: 14.sp),
                                         ),
                                       ],
@@ -1181,9 +1253,9 @@ class _TimesScreenState extends State<TimesScreen> {
                                         Text(
                                           Ticketreservation.numbertrip2
                                               .toString(),
-                                          style: TextStyle(
+                                          style: fontStyle(
                                               color: Colors.white,
-                                              fontFamily: "roman",
+                                              fontFamily: FontFamily.medium,
                                               fontSize: 14.sp),
                                         ),
                                       ],
@@ -1222,11 +1294,12 @@ class _TimesScreenState extends State<TimesScreen> {
                                                       child: Container(
                                                         child: Text(
                                                           ' ${Ticketreservation.Seatsnumbers2[i].toString()} ,',
-                                                          style: TextStyle(
+                                                          style: fontStyle(
                                                               color: AppColors
                                                                   .white,
                                                               fontFamily:
-                                                                  "bold",
+                                                                  FontFamily
+                                                                      .bold,
                                                               fontSize: 12.sp),
                                                         ),
                                                       ),
@@ -1331,8 +1404,8 @@ class _TimesScreenState extends State<TimesScreen> {
                                       alignment: Alignment.bottomCenter,
                                       child: Text(
                                         Ticketreservation.elite2,
-                                        style: TextStyle(
-                                            fontFamily: "bold",
+                                        style: fontStyle(
+                                            fontFamily: FontFamily.bold,
                                             fontSize: 15.sp,
                                             color: Color(0xfff7f8f9)),
                                       ),
@@ -1387,9 +1460,10 @@ class _TimesScreenState extends State<TimesScreen> {
                                                                   index]
                                                               .accessDate)
                                                           .toString(),
-                                                      style: TextStyle(
+                                                      style: fontStyle(
                                                           color: Colors.white,
-                                                          fontFamily: "black",
+                                                          fontFamily:
+                                                              FontFamily.medium,
                                                           fontSize: 13.sp),
                                                     ),
                                                     Text(
@@ -1399,9 +1473,10 @@ class _TimesScreenState extends State<TimesScreen> {
                                                                   index]
                                                               .accessDate)
                                                           .toString(),
-                                                      style: TextStyle(
+                                                      style: fontStyle(
                                                           color: Colors.white,
-                                                          fontFamily: "black",
+                                                          fontFamily:
+                                                              FontFamily.medium,
                                                           fontSize: 14.sp),
                                                     ),
                                                   ]),
@@ -1443,9 +1518,11 @@ class _TimesScreenState extends State<TimesScreen> {
                                                         LanguageClass.isEnglish
                                                             ? "From"
                                                             : "من",
-                                                        style: TextStyle(
+                                                        style: fontStyle(
                                                             color: Colors.white,
-                                                            fontFamily: "black",
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
                                                             fontSize: 12.sp),
                                                       ),
                                                       Text(
@@ -1453,18 +1530,22 @@ class _TimesScreenState extends State<TimesScreen> {
                                                             .tripListBack![
                                                                 index]
                                                             .from,
-                                                        style: TextStyle(
+                                                        style: fontStyle(
                                                             color: Colors.white,
-                                                            fontFamily: "black",
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
                                                             fontSize: 12.sp),
                                                       ),
                                                       Text(
                                                         LanguageClass.isEnglish
                                                             ? "To"
                                                             : "الي",
-                                                        style: TextStyle(
+                                                        style: fontStyle(
                                                             color: Colors.white,
-                                                            fontFamily: "black",
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
                                                             fontSize: 12.sp),
                                                       ),
                                                       Text(
@@ -1472,9 +1553,11 @@ class _TimesScreenState extends State<TimesScreen> {
                                                             .tripListBack![
                                                                 index]
                                                             .to,
-                                                        style: TextStyle(
+                                                        style: fontStyle(
                                                             color: Colors.white,
-                                                            fontFamily: "black",
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
                                                             fontSize: 12.sp),
                                                       ),
                                                     ],
@@ -1495,19 +1578,23 @@ class _TimesScreenState extends State<TimesScreen> {
                                                       Text(
                                                         '${widget.tripListBack![index].price.toString()} ${Routes.curruncy}' ??
                                                             '',
-                                                        style: TextStyle(
+                                                        style: fontStyle(
                                                             color: Colors.white,
-                                                            fontFamily: "black",
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
                                                             fontSize: 12.sp),
                                                       ),
                                                       Text(
                                                         LanguageClass.isEnglish
                                                             ? 'available ${widget.tripListBack![index].emptySeat ?? ''}'
                                                             : 'متاح ${widget.tripListBack![index].emptySeat ?? ''}',
-                                                        style: TextStyle(
+                                                        style: fontStyle(
                                                             color: AppColors
                                                                 .yellow2,
-                                                            fontFamily: "black",
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
                                                             fontSize: 12.sp),
                                                       ),
                                                       Container(
@@ -1593,6 +1680,59 @@ class _TimesScreenState extends State<TimesScreen> {
                                                                         .busId ??
                                                                     0);
 
+                                                            UmraDetails.swatransportList!.add(TransportList(
+                                                                availability: widget
+                                                                    .tripListBack![
+                                                                        index]
+                                                                    .emptySeat,
+                                                                busId: widget
+                                                                    .tripListBack![
+                                                                        index]
+                                                                    .busId,
+                                                                from: widget
+                                                                    .tripListBack![
+                                                                        index]
+                                                                    .fromCityName,
+                                                                fromStationName:
+                                                                    widget
+                                                                        .tripListBack![
+                                                                            index]
+                                                                        .from,
+                                                                to: widget
+                                                                    .tripListBack![
+                                                                        index]
+                                                                    .toCityName,
+                                                                isActive: true,
+                                                                isDelete: widget
+                                                                    .tripListBack![
+                                                                        index]
+                                                                    .isDeleted,
+                                                                isAddedTrip:
+                                                                    true,
+                                                                lineId: widget
+                                                                    .tripListBack![
+                                                                        index]
+                                                                    .lineId,
+                                                                notes: '',
+                                                                priceSeat: widget
+                                                                    .tripListBack![
+                                                                        index]
+                                                                    .price,
+                                                                toStationName:
+                                                                    widget
+                                                                        .tripListBack![index]
+                                                                        .to,
+                                                                tripDate: '${intl.DateFormat.d('en_US').format(widget.tripListBack![index].accessDate)}${intl.DateFormat.MMM('en_US').format(widget.tripListBack![index].accessDate)}',
+                                                                isreserved: false,
+                                                                tripId: widget.tripListBack![index].tripId,
+                                                                personCountReserved: 0,
+                                                                serviceTypeId: widget.tripListBack![index].serviceTypeId,
+                                                                tripTime: widget.tripListBack![index].accessBusTime.toString(),
+                                                                fromStationId: null,
+                                                                toStationId: null,
+                                                                tripUmrahTransportationId: null,
+                                                                reservationId: null));
+
                                                             Navigator.push(
                                                               context,
                                                               MaterialPageRoute(
@@ -1665,14 +1805,15 @@ class _TimesScreenState extends State<TimesScreen> {
                                                                       .isEnglish
                                                                   ? 'Reserve'
                                                                   : 'حجز',
-                                                              style: TextStyle(
+                                                              style: fontStyle(
                                                                 color: AppColors
                                                                     .primaryColor,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
                                                                 fontFamily:
-                                                                    'black',
+                                                                    FontFamily
+                                                                        .medium,
                                                                 fontSize: 10.sp,
                                                               ),
                                                             ),
@@ -1720,10 +1861,11 @@ class _TimesScreenState extends State<TimesScreen> {
                                                     Text(
                                                       '${widget.tripListBack![index].lineCity[index2].cityName}' ??
                                                           '',
-                                                      style: TextStyle(
+                                                      style: fontStyle(
                                                           color: AppColors
                                                               .primaryColor,
-                                                          fontFamily: "bold",
+                                                          fontFamily:
+                                                              FontFamily.bold,
                                                           fontSize: 16.sp),
                                                     ),
                                                     ElevatedButton(
@@ -1809,7 +1951,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                                                             child:
                                                                                 Text(
                                                                               LanguageClass.isEnglish ? "Access Points" : "نقط التجمع",
-                                                                              style: TextStyle(color: AppColors.blackColor, fontSize: 28.sp, fontWeight: FontWeight.w600, fontFamily: "meduim"),
+                                                                              style: fontStyle(color: AppColors.blackColor, fontSize: 28.sp, fontWeight: FontWeight.w600, fontFamily: FontFamily.medium),
                                                                             ),
                                                                           ),
                                                                           SizedBox(
@@ -1828,14 +1970,14 @@ class _TimesScreenState extends State<TimesScreen> {
                                                                                           padding: EdgeInsets.symmetric(horizontal: 10),
                                                                                           child: Text(
                                                                                             '${widget.tripListBack![index].lineCity[index2].lineStationList[index3].stationName}' ?? '',
-                                                                                            style: TextStyle(color: AppColors.primaryColor, fontFamily: "bold", fontSize: 14.sp),
+                                                                                            style: fontStyle(color: AppColors.primaryColor, fontFamily: FontFamily.bold, fontSize: 14.sp),
                                                                                           ),
                                                                                         ),
                                                                                         Container(
                                                                                           padding: EdgeInsets.symmetric(horizontal: 10),
                                                                                           child: Text(
                                                                                             '${widget.tripListBack![index].lineCity[index2].lineStationList[index3].accessTime.substring(0, 5)}' ?? '',
-                                                                                            style: TextStyle(color: AppColors.primaryColor, fontFamily: "bold", fontSize: 14.sp),
+                                                                                            style: fontStyle(color: AppColors.primaryColor, fontFamily: FontFamily.bold, fontSize: 14.sp),
                                                                                           ),
                                                                                         ),
                                                                                       ],
@@ -1862,9 +2004,9 @@ class _TimesScreenState extends State<TimesScreen> {
                                                       },
                                                       style: ElevatedButton
                                                           .styleFrom(
-                                                        primary: AppColors
-                                                            .primaryColor,
-                                                        onPrimary: Colors.white,
+                                                        backgroundColor:
+                                                            AppColors
+                                                                .primaryColor,
                                                         elevation: 4,
                                                         shape:
                                                             RoundedRectangleBorder(
@@ -1881,7 +2023,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                                                     .isEnglish
                                                                 ? "Points"
                                                                 : "نقط التجمع",
-                                                            style: TextStyle(
+                                                            style: fontStyle(
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w600,
@@ -1944,7 +2086,7 @@ class _TimesScreenState extends State<TimesScreen> {
                       child: Center(
                         child: Text(
                           LanguageClass.isEnglish ? "Continue" : "استمر",
-                          style: TextStyle(
+                          style: fontStyle(
                               color: AppColors.white,
                               fontWeight: FontWeight.normal,
                               fontSize: 20.sp),
@@ -1956,6 +2098,11 @@ class _TimesScreenState extends State<TimesScreen> {
           ],
         ),
       ),
+      bottomNavigationBar: UmraDetails.isbusforumra
+          ? SizedBox()
+          : Navigationbottombar(
+              currentIndex: 0,
+            ),
     );
   }
 }

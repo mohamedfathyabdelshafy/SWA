@@ -8,6 +8,7 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/customized_field.dart';
 import 'package:swa/features/sign_in/domain/use_cases/login.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
@@ -58,16 +59,20 @@ class LoginScreen extends StatelessWidget {
                             },
                             child: Text(
                               LanguageClass.isEnglish ? "Skip" : "تخطي",
-                              style: TextStyle(
+                              style: fontStyle(
                                   fontSize: 16,
-                                  fontFamily: 'roman',
+                                  fontFamily: FontFamily.medium,
                                   fontWeight: FontWeight.normal,
-                                  color: AppColors.primaryColor),
+                                  color: Routes.isomra
+                                      ? AppColors.umragold
+                                      : AppColors.primaryColor),
                             )),
                       ],
                     ),
                     SizedBox(height: context.height * 0.05),
-                    Image.asset("assets/images/applogo.png"),
+                    Image.asset(Routes.isomra
+                        ? "assets/images/swaumra.png"
+                        : "assets/images/applogo.png"),
                     SizedBox(height: context.height * 0.1),
                     SizedBox(
                       child: Column(
@@ -155,7 +160,9 @@ class LoginScreen extends StatelessWidget {
                           },
                           child: Constants.customButton(
                               borderradias: 41,
-                              color: AppColors.primaryColor,
+                              color: Routes.isomra
+                                  ? AppColors.umragold
+                                  : AppColors.primaryColor,
                               text:
                                   LanguageClass.isEnglish ? "Login" : "دخول")),
                     ),
@@ -169,11 +176,13 @@ class LoginScreen extends StatelessWidget {
                           LanguageClass.isEnglish
                               ? "Forget Password ?"
                               : "نسيت كلمه المرور",
-                          style: TextStyle(
+                          style: fontStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.normal,
-                              fontFamily: 'regular',
-                              color: AppColors.primaryColor),
+                              fontFamily: FontFamily.regular,
+                              color: Routes.isomra
+                                  ? AppColors.umragold
+                                  : AppColors.primaryColor),
                         )),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -182,10 +191,10 @@ class LoginScreen extends StatelessWidget {
                           LanguageClass.isEnglish
                               ? "Don’t have an account? "
                               : "لا امتلك حساب؟",
-                          style: TextStyle(
+                          style: fontStyle(
                             color: Color(0xffA3A3A3),
                             fontSize: 17,
-                            fontFamily: 'black',
+                            fontFamily: FontFamily.medium,
                             fontWeight: FontWeight.normal,
                           ),
                         ),
@@ -196,10 +205,12 @@ class LoginScreen extends StatelessWidget {
                           },
                           child: Text(
                             LanguageClass.isEnglish ? "Sign UP" : "انشاء حساب",
-                            style: TextStyle(
-                              color: AppColors.primaryColor,
+                            style: fontStyle(
+                              color: Routes.isomra
+                                  ? AppColors.umragold
+                                  : AppColors.primaryColor,
                               fontSize: 17,
-                              fontFamily: 'regular',
+                              fontFamily: FontFamily.regular,
                               fontWeight: FontWeight.normal,
                             ),
                           ),

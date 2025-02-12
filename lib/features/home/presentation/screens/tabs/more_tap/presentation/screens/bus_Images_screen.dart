@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/bus_classes_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/bus_images_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/stations_model.dart';
@@ -52,7 +55,9 @@ class _BusImageClassesState extends State<BusImageClasses> {
             if (state is LoadingBusImage) {
               return Center(
                 child: CircularProgressIndicator(
-                  color: AppColors.primaryColor,
+                  color: Routes.isomra
+                      ? AppColors.umragold
+                      : AppColors.primaryColor,
                 ),
               );
             }
@@ -75,7 +80,9 @@ class _BusImageClassesState extends State<BusImageClasses> {
                       },
                       child: Icon(
                         Icons.arrow_back_rounded,
-                        color: AppColors.primaryColor,
+                        color: Routes.isomra
+                            ? AppColors.umragold
+                            : AppColors.primaryColor,
                         size: 35,
                       ),
                     ),
@@ -87,11 +94,11 @@ class _BusImageClassesState extends State<BusImageClasses> {
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
                       widget.typeClasses,
-                      style: TextStyle(
+                      style: fontStyle(
                           color: AppColors.blackColor,
-                          fontSize: 38,
+                          fontSize: 24.sp,
                           fontWeight: FontWeight.w500,
-                          fontFamily: "roman"),
+                          fontFamily: FontFamily.bold),
                     ),
                   ),
                   SizedBox(

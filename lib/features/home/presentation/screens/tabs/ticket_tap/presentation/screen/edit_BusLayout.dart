@@ -10,6 +10,7 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/icon_back.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/BusSeatsEditModel.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/BusSeatsModel.dart';
@@ -174,11 +175,11 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
                       LanguageClass.isEnglish ? "Select seats" : "حدد كراسيك",
-                      style: TextStyle(
+                      style: fontStyle(
                           color: AppColors.blackColor,
                           fontSize: 25,
                           fontWeight: FontWeight.w600,
-                          fontFamily: "roman"),
+                          fontFamily: FontFamily.medium),
                     ),
                   ),
                   Container(
@@ -215,16 +216,16 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                               children: [
                                 Text(
                                   widget.from,
-                                  style: const TextStyle(
+                                  style: fontStyle(
                                       fontSize: 16,
-                                      fontFamily: "bold",
+                                      fontFamily: FontFamily.bold,
                                       color: Colors.black),
                                 ),
                                 Text(
                                   widget.to,
-                                  style: const TextStyle(
+                                  style: fontStyle(
                                       fontSize: 16,
-                                      fontFamily: "bold",
+                                      fontFamily: FontFamily.bold,
                                       color: Colors.black),
                                 ),
                               ],
@@ -247,9 +248,9 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                 LanguageClass.isEnglish
                                     ? 'Available'
                                     : 'المتاح',
-                                style: TextStyle(
+                                style: fontStyle(
                                     fontSize: 20,
-                                    fontFamily: "regular",
+                                    fontFamily: FontFamily.regular,
                                     color: Colors.black),
                               ),
                               Padding(
@@ -258,9 +259,9 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                   busSeatsModel?.message.emptySeats
                                           .toString() ??
                                       " ",
-                                  style: TextStyle(
+                                  style: fontStyle(
                                       fontSize: 45,
-                                      fontFamily: 'black',
+                                      fontFamily: FontFamily.medium,
                                       color: AppColors.primaryColor),
                                 ),
                               ),
@@ -269,16 +270,16 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                 LanguageClass.isEnglish
                                     ? 'Selected'
                                     : 'تم تحديده',
-                                style: TextStyle(
+                                style: fontStyle(
                                     fontSize: 20,
-                                    fontFamily: "regular",
+                                    fontFamily: FontFamily.regular,
                                     color: Colors.black),
                               ),
                               Text(
                                 Seatsnumbers.length.toString(),
-                                style: const TextStyle(
+                                style: fontStyle(
                                   fontSize: 45,
-                                  fontFamily: "black",
+                                  fontFamily: FontFamily.medium,
                                   color: Color(0xff5332F7),
                                 ),
                               ),
@@ -287,16 +288,16 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                 LanguageClass.isEnglish
                                     ? 'Unavailable'
                                     : 'غير متاح',
-                                style: TextStyle(
+                                style: fontStyle(
                                     fontSize: 20,
-                                    fontFamily: "regular",
+                                    fontFamily: FontFamily.regular,
                                     color: Colors.black),
                               ),
                               Text(
                                 unavailable.toString(),
-                                style: const TextStyle(
+                                style: fontStyle(
                                     fontSize: 45,
-                                    fontFamily: "black",
+                                    fontFamily: FontFamily.medium,
                                     color: Colors.grey),
                               ),
                               SizedBox(
@@ -332,9 +333,9 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                   child: Center(
                                     child: Text(
                                       LanguageClass.isEnglish ? "Save" : "تم",
-                                      style: TextStyle(
+                                      style: fontStyle(
                                           color: Colors.white,
-                                          fontFamily: "bold",
+                                          fontFamily: FontFamily.bold,
                                           fontSize: 18),
                                     ),
                                   ),
@@ -347,7 +348,7 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                           ),
                         ),
                         Expanded(
-                          flex: 2,
+                          flex: 3,
                           child: SizedBox(
                             height: sizeHeight * 0.75,
                             child: Stack(
@@ -370,7 +371,7 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                   bottom: 0,
                                   child: SizedBox(
                                     child: SeatLayoutWidget(
-                                      seatHeight: sizeHeight * .036,
+                                      seatHeight: sizeHeight * .030,
                                       onSeatStateChanged:
                                           (rowI, colI, seatState, seat) {
                                         print("set ");

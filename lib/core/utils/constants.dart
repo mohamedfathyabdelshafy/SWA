@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
+import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
+import 'package:swa/core/utils/styles.dart';
 
 class Constants {
   static Widget customButton(
       {required String text, Color? color, double? borderradias}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
       decoration: BoxDecoration(
           color: color ?? AppColors.darkRed,
@@ -14,9 +16,9 @@ class Constants {
       child: Center(
         child: Text(
           text,
-          style: TextStyle(
+          style: fontStyle(
               color: AppColors.white,
-              fontWeight: FontWeight.bold,
+              fontFamily: FontFamily.bold,
               fontSize: 22),
         ),
       ),
@@ -33,13 +35,13 @@ class Constants {
       TextDirection? textDirection}) {
     return Text(
       text,
-      style: TextStyle(
+      style: fontStyle(
           color: (color != null) ? color : AppColors.blackColor,
           fontSize: (fontSize != null)
               ? fontSize
               : (Device.get().isTablet)
-                  ? Theme.of(context).textTheme.headline6!.fontSize
-                  : Theme.of(context).textTheme.subtitle2!.fontSize,
+                  ? Theme.of(context).textTheme.labelLarge!.fontSize!
+                  : Theme.of(context).textTheme.labelMedium!.fontSize!,
           decoration: textDecoration),
       maxLines: (maxLines != null) ? maxLines : 1,
       textDirection:
@@ -58,11 +60,12 @@ class Constants {
         backgroundColor: AppColors.blackColor,
         content: Text(
           text,
-          style: TextStyle(
+          style: fontStyle(
               color: color ?? AppColors.primaryColor,
               fontSize: (Device.get().isTablet)
-                  ? Theme.of(context).textTheme.headline5!.fontSize
-                  : Theme.of(context).textTheme.subtitle1!.fontSize,
+                  ? Theme.of(context).textTheme.labelLarge!.fontSize!
+                  : Theme.of(context).textTheme.labelMedium!.fontSize!,
+              fontFamily: FontFamily.bold,
               fontWeight: FontWeight.bold),
         ),
         duration: (showDuration == null)
@@ -84,7 +87,8 @@ class Constants {
             height: 80,
             padding: const EdgeInsets.all(12.0),
             child: CircularProgressIndicator(
-              color: AppColors.primaryColor,
+              color:
+                  Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
             ),
           ),
         ),
@@ -121,12 +125,13 @@ class Constants {
                       Material(
                         child: ListTile(
                           title: Text(dialogName,
-                              style: TextStyle(
+                              style: fontStyle(
                                   color: AppColors.primaryColor,
                                   fontSize: Theme.of(context)
                                       .textTheme
-                                      .headline6!
-                                      .fontSize,
+                                      .labelMedium!
+                                      .fontSize!,
+                                  fontFamily: FontFamily.bold,
                                   fontWeight: FontWeight.bold)),
                         ),
                       ),

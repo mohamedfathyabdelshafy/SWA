@@ -9,7 +9,7 @@ import 'package:swa/bloc_observer.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_strings.dart';
 import 'package:swa/core/utils/language.dart';
-import 'package:swa/core/utils/location.dart';
+import 'package:swa/core/utils/notifcation_services.dart';
 import 'package:swa/features/app_info/app_info_injection_container.dart';
 import 'package:swa/features/change_password/change_password_injection_container.dart';
 import 'package:swa/features/forgot_password/forgot_password_injection_container.dart';
@@ -21,6 +21,7 @@ import 'package:swa/features/sign_in/signin_injection_container.dart';
 import 'package:swa/features/sign_up/signup_injection_container.dart';
 import 'package:swa/injection_container.dart';
 import 'package:swa/select_payment2/presentation/credit_card/presentation/navigation_helper.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'core/local_cache_helper.dart';
 import 'package:geolocator/geolocator.dart' as geo;
@@ -43,6 +44,8 @@ Future<void> main() async {
           await Permission.location.isPermanentlyDenied) {}
     }
   });
+
+  FirebaseNotificationService().setUp();
 
   ///Authorization Screens
   await loginDependencyInjectionInit(); //For initializing login
@@ -94,6 +97,8 @@ class MyApp extends StatelessWidget {
         // Use builder only if you need to use library outside ScreenUtilInit context
         builder: (_, child) {
           return MaterialApp(
+            localizationsDelegates: [GlobalMaterialLocalizations.delegate],
+            supportedLocales: [const Locale('en'), const Locale('ar')],
             title: AppStrings.appName,
             navigatorKey: NavHelper().navigatorKey,
             debugShowCheckedModeBanner: false,
