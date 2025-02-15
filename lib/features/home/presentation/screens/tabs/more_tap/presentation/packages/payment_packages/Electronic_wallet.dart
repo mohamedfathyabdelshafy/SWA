@@ -245,22 +245,52 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(LanguageClass.isEnglish
-                                                ? 'Amount: '
-                                                : "القيمة"),
-                                            Text(Routes.Amount.toString())
+                                            Text(
+                                              LanguageClass.isEnglish
+                                                  ? 'Amount: '
+                                                  : "القيمة",
+                                              style: fontStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 14,
+                                                  fontFamily: FontFamily.medium,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            Text(
+                                              Routes.Amount.toString(),
+                                              style: fontStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 14,
+                                                  fontFamily: FontFamily.medium,
+                                                  fontWeight: FontWeight.w600),
+                                            )
                                           ],
                                         ),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            const Text('Reference Number: '),
-                                            Text(state
-                                                .reservationResponseElectronicModel!
-                                                .message!
-                                                .referenceNumber
-                                                .toString())
+                                            Text(
+                                              LanguageClass.isEnglish
+                                                  ? 'Reference Number: '
+                                                  : ': رقم المرجعي',
+                                              style: fontStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 14,
+                                                  fontFamily: FontFamily.medium,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            Text(
+                                              state
+                                                  .reservationResponseElectronicModel!
+                                                  .message!
+                                                  .referenceNumber
+                                                  .toString(),
+                                              style: fontStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 14,
+                                                  fontFamily: FontFamily.medium,
+                                                  fontWeight: FontWeight.w600),
+                                            )
                                           ],
                                         )
                                       ],

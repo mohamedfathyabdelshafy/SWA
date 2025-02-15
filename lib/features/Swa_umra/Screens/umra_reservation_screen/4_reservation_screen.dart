@@ -251,9 +251,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                           Icons.check_circle,
                           color: Colors.green,
                         ),
-                        Text(LanguageClass.isEnglish
-                            ? "You will get a notification by applying your wallet \n In order to agree to pay"
-                            : "سيصلك إشعار بتطبيق محفظتك \n من أجل الموافقة على الدفع"),
+                        Text(state.reservationResponseElectronicModel!.text!),
                       ],
                     ),
                     titleTextStyle: fontStyle(
@@ -267,21 +265,49 @@ class _ReservationScreenState extends State<ReservationScreen>
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(LanguageClass.isEnglish
-                                ? 'Amount: '
-                                : "القيمة"),
-                            Text(UmraDetails.afterdiscount
-                                .toStringAsFixed(2)
-                                .toString())
+                            Text(
+                              LanguageClass.isEnglish ? 'Amount: ' : "القيمة",
+                              style: fontStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontFamily: FontFamily.bold,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            Text(
+                              UmraDetails.afterdiscount
+                                  .toStringAsFixed(2)
+                                  .toString(),
+                              style: fontStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontFamily: FontFamily.bold,
+                                  fontWeight: FontWeight.w600),
+                            )
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text('Reference Number: '),
-                            Text(state.reservationResponseElectronicModel!
-                                .message!.referenceNumber
-                                .toString())
+                            Text(
+                              LanguageClass.isEnglish
+                                  ? 'Reference Number: '
+                                  : ': رقم المرجعي',
+                              style: fontStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontFamily: FontFamily.bold,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            Text(
+                              state.reservationResponseElectronicModel!.message!
+                                  .referenceNumber
+                                  .toString(),
+                              style: fontStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontFamily: FontFamily.bold,
+                                  fontWeight: FontWeight.w600),
+                            )
                           ],
                         )
                       ],
@@ -319,7 +345,7 @@ class _ReservationScreenState extends State<ReservationScreen>
               );
             } else if (state.reservationResponseElectronicModel?.status ==
                 'success') {
-              showDoneConfirmationfawryDialog(context, isError: false,
+              Constants.showDoneConfirmationDialog(context, isError: false,
                   callback: () {
                 Navigator.pushNamedAndRemoveUntil(
                   context,

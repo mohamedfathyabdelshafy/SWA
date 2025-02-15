@@ -55,77 +55,86 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
           if (state.reservationResponseElectronicModel?.status == 'success') {
             Constants.hideLoadingDialog(context);
             // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
-
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Column(
+            Constants.showDoneConfirmationDialog(
+              context,
+              isError: false,
+              callback: () {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, Routes.home, (route) => false,
+                    arguments: Routes.isomra);
+              },
+              body: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
-                        Icons.check_circle,
-                        color: Colors.green,
+                      Text(
+                        LanguageClass.isEnglish ? 'Amount: ' : "القيمة",
+                        style: fontStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600),
                       ),
-                      Text(LanguageClass.isEnglish
-                          ? "You will get a notification by applying your wallet \n In order to agree to pay"
-                          : "سيصلك إشعار بتطبيق محفظتك \n من أجل الموافقة على الدفع"),
+                      Text(amountController.text.toString())
                     ],
                   ),
-                  titleTextStyle: fontStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontSize: 20),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(LanguageClass.isEnglish ? 'Amount: ' : "القيمة"),
-                          Text(UmraDetails.afterdiscount.toString())
-                        ],
+                      Text(
+                        LanguageClass.isEnglish
+                            ? 'Reference Number: '
+                            : ': رقم المرجعي',
+                        style: fontStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontFamily: FontFamily.medium,
+                            fontWeight: FontWeight.w600),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Reference Number: '),
-                          Text(state.reservationResponseElectronicModel!
-                              .message!.referenceNumber
-                              .toString())
-                        ],
+                      Expanded(
+                        child: Row(
+                          children: [
+                            InkWell(
+                              onTap: () async {
+                                Constants.showDefaultSnackBar(
+                                    context: context,
+                                    text: 'Reference Number copied');
+                                await Clipboard.setData(ClipboardData(
+                                    text: state
+                                        .reservationResponseElectronicModel!
+                                        .message!
+                                        .referenceNumber
+                                        .toString()));
+                              },
+                              child: Container(
+                                  width: 15,
+                                  height: 15,
+                                  child: Icon(
+                                    Icons.copy_outlined,
+                                    size: 14,
+                                  )),
+                            ),
+                            Expanded(
+                              child: Text(
+                                state.reservationResponseElectronicModel!
+                                    .message!.referenceNumber
+                                    .toString(),
+                                textAlign: TextAlign.end,
+                              ),
+                            ),
+                          ],
+                        ),
                       )
                     ],
-                  ),
-                  actionsOverflowButtonSpacing: 20,
-                  actions: [
-                    ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, Routes.home, (route) => false,
-                              arguments: Routes.isomra);
-                        },
-                        child: Container(
-                          // padding: const EdgeInsets.symmetric(horizontal: 20,vertical:20),
-                          // margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
-                          decoration: BoxDecoration(
-                              // color: color ?? AppColors.darkRed,
-                              borderRadius: BorderRadius.circular(100)),
-                          child: Center(
-                            child: Text(
-                              LanguageClass.isEnglish ? 'OK' : "موافقة",
-                              style: fontStyle(
-                                  color: AppColors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 22),
-                            ),
-                          ),
-                        )),
-                  ],
-                );
-              },
+                  )
+                ],
+              ),
+              message:
+                  state.reservationResponseElectronicModel!.text!.toString(),
             );
           } else if (state.reservationResponseElectronicModel?.status ==
               'failed') {
@@ -390,27 +399,5 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
         ),
       ),
     );
-  }
-
-  Future<dynamic> showDoneConfirmationDialog(BuildContext context,
-      {required String message,
-      bool isError = false,
-      Widget? body,
-      required Function callback}) async {
-    return CoolAlert.show(
-        barrierDismissible: true,
-        context: context,
-        confirmBtnText: "ok",
-        title: isError ? 'error' : '',
-        lottieAsset:
-            isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
-        type: isError ? CoolAlertType.error : CoolAlertType.success,
-        loopAnimation: false,
-        backgroundColor: isError ? Colors.red : Colors.white,
-        text: message,
-        widget: body,
-        onConfirmBtnTap: () {
-          callback();
-        });
   }
 }

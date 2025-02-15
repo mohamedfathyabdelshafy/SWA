@@ -51,7 +51,7 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
             if (state.reservationResponseElectronicModel?.status == 'success') {
               Constants.hideLoadingDialog(context);
               // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
-              showDoneConfirmationfawryDialog(context, isError: false,
+              Constants.showDoneConfirmationDialog(context, isError: false,
                   callback: () {
                 Navigator.popUntil(context, (route) => route.isFirst);
               },
@@ -71,14 +71,23 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600),
                           ),
-                          Text(UmraDetails.afterdiscount.toString())
+                          Text(
+                            UmraDetails.afterdiscount.toString(),
+                            style: fontStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontFamily: FontFamily.medium,
+                                fontWeight: FontWeight.w600),
+                          )
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Reference Number: ',
+                            LanguageClass.isEnglish
+                                ? 'Reference Number: '
+                                : ': رقم المرجعي',
                             style: fontStyle(
                                 color: Colors.black,
                                 fontSize: 14,
@@ -114,6 +123,11 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
                                         .message!.referenceNumber
                                         .toString(),
                                     textAlign: TextAlign.end,
+                                    style: fontStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontFamily: FontFamily.medium,
+                                        fontWeight: FontWeight.w600),
                                   ),
                                 ),
                               ],
@@ -123,8 +137,7 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
                       )
                     ],
                   ),
-                  message:
-                      "You will get a notification by applying your wallet \n In order to agree to pay");
+                  message: state.reservationResponseElectronicModel!.text);
             } else if (state.reservationResponseElectronicModel?.status ==
                 'failed') {
               Constants.hideLoadingDialog(context);
@@ -307,24 +320,4 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
       ),
     );
   }
-}
-
-Future<dynamic> showDoneConfirmationfawryDialog(BuildContext context,
-    {required String message,
-    bool isError = false,
-    Widget? body,
-    required Function callback}) async {
-  return CoolAlert.show(
-      barrierDismissible: true,
-      context: context,
-      confirmBtnText: "ok",
-      title: isError ? 'error' : '',
-      lottieAsset:
-          isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
-      type: isError ? CoolAlertType.error : CoolAlertType.success,
-      loopAnimation: false,
-      backgroundColor: isError ? Colors.red : Colors.white,
-      text: message,
-      widget: body,
-      onConfirmBtnTap: callback());
 }

@@ -29,28 +29,6 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
   TextEditingController phoneController = TextEditingController();
   User? _user;
 
-  Future<dynamic> showDoneConfirmationDialog(BuildContext context,
-      {required String message,
-      bool isError = false,
-      Widget? body,
-      required Function callback}) async {
-    return CoolAlert.show(
-        barrierDismissible: true,
-        context: context,
-        confirmBtnText: "ok",
-        title: isError ? 'error' : '',
-        lottieAsset:
-            isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
-        type: isError ? CoolAlertType.error : CoolAlertType.success,
-        loopAnimation: false,
-        backgroundColor: isError ? Colors.red : Colors.white,
-        text: message,
-        widget: body,
-        onConfirmBtnTap: () {
-          callback();
-        });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -247,9 +225,8 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                             } else if (state is LoadedElectronicWalletState) {
                               Constants.hideLoadingDialog(context);
                               // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
-                              showDoneConfirmationDialog(context,
+                              Constants.showDoneConfirmationDialog(context,
                                   isError: false, callback: () {
-                                Navigator.pop(context);
                                 Navigator.pushNamedAndRemoveUntil(
                                     context, Routes.home, (route) => false,
                                     arguments: Routes.isomra);
@@ -282,6 +259,11 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                                                     .toString()
                                                 : Routes.resrvedtrips[0].price
                                                     .toString(),
+                                            style: fontStyle(
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                                fontFamily: FontFamily.medium,
+                                                fontWeight: FontWeight.w400),
                                           )
                                         ],
                                       ),
@@ -290,7 +272,9 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            'Reference Number: ',
+                                            LanguageClass.isEnglish
+                                                ? 'Reference Number: '
+                                                : ': رقم المرجعي',
                                             style: fontStyle(
                                                 color: Colors.black,
                                                 fontSize: 14,
@@ -330,6 +314,13 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                                                         .referenceNumber
                                                         .toString(),
                                                     textAlign: TextAlign.end,
+                                                    style: fontStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 14,
+                                                        fontFamily:
+                                                            FontFamily.regular,
+                                                        fontWeight:
+                                                            FontWeight.w400),
                                                   ),
                                                 ),
                                               ],

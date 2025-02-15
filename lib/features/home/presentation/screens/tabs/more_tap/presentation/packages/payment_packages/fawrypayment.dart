@@ -2,6 +2,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/app_colors.dart';
@@ -33,28 +34,6 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
     //   BlocProvider.of<LoginCubit>(context).getUserData();
     // });
     super.initState();
-  }
-
-  Future<dynamic> showDoneConfirmationDialog(BuildContext context,
-      {required String message,
-      bool isError = false,
-      Widget? body,
-      required Function callback}) async {
-    return CoolAlert.show(
-        barrierDismissible: true,
-        context: context,
-        confirmBtnText: "ok",
-        title: isError ? 'error' : 'success',
-        lottieAsset:
-            isError ? 'assets/json/error.json' : 'assets/json/done.json',
-        type: isError ? CoolAlertType.error : CoolAlertType.success,
-        loopAnimation: false,
-        backgroundColor: isError ? Colors.red : Colors.white,
-        text: message,
-        widget: body,
-        onConfirmBtnTap: () {
-          callback();
-        });
   }
 
   TextEditingController amountController = TextEditingController();
@@ -185,9 +164,8 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
                                 'success') {
                               Constants.hideLoadingDialog(context);
                               // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
-                              showDoneConfirmationDialog(context,
+                              Constants.showDoneConfirmationDialog(context,
                                   isError: false, callback: () {
-                                Navigator.pop(context);
                                 Navigator.pushNamedAndRemoveUntil(
                                     context, Routes.home, (route) => false,
                                     arguments: Routes.isomra);
@@ -211,7 +189,14 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600),
                                           ),
-                                          Text(price.toString())
+                                          Text(
+                                            price.toString(),
+                                            style: fontStyle(
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                                fontFamily: FontFamily.medium,
+                                                fontWeight: FontWeight.w600),
+                                          )
                                         ],
                                       ),
                                       Row(
@@ -219,7 +204,9 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            'Reference Number: ',
+                                            LanguageClass.isEnglish
+                                                ? 'Reference Number: '
+                                                : 'رقم المرجع:',
                                             style: fontStyle(
                                                 color: Colors.black,
                                                 fontSize: 14,
@@ -259,6 +246,13 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
                                                         .referenceNumber
                                                         .toString(),
                                                     textAlign: TextAlign.end,
+                                                    style: fontStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 14.sp,
+                                                        fontFamily:
+                                                            FontFamily.medium,
+                                                        fontWeight:
+                                                            FontWeight.w600),
                                                   ),
                                                 ),
                                               ],

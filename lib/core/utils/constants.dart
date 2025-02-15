@@ -1,10 +1,33 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/styles.dart';
+import 'package:swa/select_payment2/presentation/credit_card/presentation/navigation_helper.dart';
 
 class Constants {
+  static Future<dynamic> showDoneConfirmationDialog(BuildContext context,
+      {required String message,
+      bool isError = false,
+      Widget? body,
+      required Function callback}) async {
+    return CoolAlert.show(
+        barrierDismissible: true,
+        context: context,
+        type: CoolAlertType.custom,
+        confirmBtnText: "ok",
+        title: isError ? 'error' : '',
+        lottieAsset:
+            isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
+        loopAnimation: false,
+        backgroundColor: isError ? Colors.red : Colors.white,
+        text: message,
+        widget: body,
+        onConfirmBtnTap: callback());
+  }
+
   static Widget customButton(
       {required String text, Color? color, double? borderradias}) {
     return Container(
@@ -55,23 +78,14 @@ class Constants {
       VoidCallback? onPress,
       bool? showDuration,
       Color? color}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: AppColors.blackColor,
-        content: Text(
-          text,
-          style: fontStyle(
-              color: color ?? AppColors.primaryColor,
-              fontSize: (Device.get().isTablet)
-                  ? Theme.of(context).textTheme.labelLarge!.fontSize!
-                  : Theme.of(context).textTheme.labelMedium!.fontSize!,
-              fontFamily: FontFamily.bold,
-              fontWeight: FontWeight.bold),
-        ),
-        duration: (showDuration == null)
-            ? const Duration(seconds: 2)
-            : const Duration(seconds: 4),
-      ),
+    Fluttertoast.showToast(
+      msg: text,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: color ?? Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0,
     );
   }
 

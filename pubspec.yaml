@@ -53,6 +53,7 @@ dependencies:
   flutter_localization: ^0.3.1
   intl: ^0.19.0
   scroll_loop_auto_scroll: ^0.0.5
+  fluttertoast: ^8.2.12
 book_my_seat:
 dev_dependencies:
   flutter_test:

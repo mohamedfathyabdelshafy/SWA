@@ -513,8 +513,12 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                           ?.status ==
                                       'success') {
                                     showDoneConfirmationDialog(context,
-                                        callbackTitle: "Go to OTP",
-                                        message: 'Complete the payment process',
+                                        callbackTitle: LanguageClass.isEnglish
+                                            ? "Go to OTP"
+                                            : 'ادخل الرمز',
+                                        message: LanguageClass.isEnglish
+                                            ? 'Complete the payment process'
+                                            : 'قم باستكمال عملية الدفع',
                                         callback: () {
                                       Navigator.push(
                                           context,

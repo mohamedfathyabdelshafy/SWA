@@ -11,6 +11,7 @@ import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/Timer_widget.dart';
 import 'package:swa/core/widgets/icon_back.dart';
+import 'package:swa/core/widgets/timer.dart';
 import 'package:swa/features/Swa_umra/models/umra_detail.dart';
 import 'package:swa/features/Swa_umra/models/umral_trip_model.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/Ticket_class.dart';
@@ -65,6 +66,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
   BusLayoutRepo busLayoutRepo = BusLayoutRepo(apiConsumer: (sl()));
   int unavailable = 0;
   int seatheight = 1;
+  bool showtimer = false;
 
   BusLayoutCubit _busLayoutCubit = new BusLayoutCubit();
 
@@ -79,6 +81,9 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
     print("tripTypeId${widget.triTypeId}}");
     BlocProvider.of<BusLayoutCubit>(context).getBusSeats(tripId: widget.tripId);
 
+    if (Reservationtimer.start != 120) {
+      showtimer = true;
+    }
     // busLayoutRepo?.getBusSeatsData();
     get();
     super.initState();
@@ -193,7 +198,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                             height: 1.2,
                             fontFamily: FontFamily.medium),
                       ),
-                      Timerwidget()
+                      showtimer || widget.isedit ? Timerwidget() : SizedBox()
                     ],
                   ),
                 ),
@@ -568,6 +573,29 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
                                     print("rowI ${rowI}, column1 ${colI}");
                                     if (seatState == SeatState.selected) {
                                       print("I am here");
+                                      print(Reservationtimer.start.toString());
+
+                                      if (Reservationtimer.start == 120) {
+                                        showtimer = true;
+                                        Reservationtimer.start = 120;
+
+                                        Reservationtimer.startTimer(
+                                          context,
+                                          () {
+                                            Navigator.pushNamedAndRemoveUntil(
+                                                context,
+                                                Routes.home,
+                                                (route) => false,
+                                                arguments: Routes.isomra);
+                                          },
+                                        );
+
+                                        if (Reservationtimer
+                                                .controller.isStarted ==
+                                            ValueNotifier<bool>(false)) {
+                                          Reservationtimer.controller.start();
+                                        }
+                                      }
 
                                       _busLayoutCubit.seathold(
                                           seatid: busSeatsModel!

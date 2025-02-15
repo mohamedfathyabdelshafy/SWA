@@ -128,7 +128,6 @@ class _MyCreditState extends State<MyCredit> {
               SizedBox(
                 height: sizeHeight * 0.1,
               ),
-
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 40),
                 child: Text(
@@ -140,7 +139,6 @@ class _MyCreditState extends State<MyCredit> {
                       fontFamily: FontFamily.medium),
                 ),
               ),
-
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 40),
                 child: Text(
@@ -157,7 +155,6 @@ class _MyCreditState extends State<MyCredit> {
               SizedBox(
                 height: 30,
               ),
-
               InkWell(
                 onTap: () {
                   if (widget.user != null) {
@@ -203,7 +200,6 @@ class _MyCreditState extends State<MyCredit> {
                   ),
                 ),
               )
-              //Spacer(flex: 7,)
             ],
           ),
         ),

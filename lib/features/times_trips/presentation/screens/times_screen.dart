@@ -47,6 +47,15 @@ class _TimesScreenState extends State<TimesScreen> {
   int selectedback = -1;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Reservationtimer.stoptimer();
+
+    Reservationtimer.start = 120;
+  }
+
+  @override
   Widget build(BuildContext context) {
     double sizeHeight = context.height;
     double sizeWidth = context.width;

@@ -184,9 +184,8 @@ class _FawryScreenState extends State<FawryScreen> {
                               } else if (state is LoadedElectronicWalletState) {
                                 Constants.hideLoadingDialog(context);
                                 // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
-                                showDoneConfirmationDialog(context,
+                                Constants.showDoneConfirmationDialog(context,
                                     isError: false, callback: () {
-                                  Navigator.pop(context);
                                   Navigator.pushNamedAndRemoveUntil(
                                       context, Routes.home, (route) => false,
                                       arguments: Routes.isomra);
@@ -210,8 +209,14 @@ class _FawryScreenState extends State<FawryScreen> {
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w600),
                                             ),
-                                            Text(amountController.text
-                                                .toString())
+                                            Text(
+                                              amountController.text.toString(),
+                                              style: fontStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 14,
+                                                  fontFamily: FontFamily.medium,
+                                                  fontWeight: FontWeight.w600),
+                                            )
                                           ],
                                         ),
                                         Row(
@@ -219,7 +224,9 @@ class _FawryScreenState extends State<FawryScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              'Reference Number: ',
+                                              LanguageClass.isEnglish
+                                                  ? 'Reference Number: '
+                                                  : ': رقم المرجعي',
                                               style: fontStyle(
                                                   color: Colors.black,
                                                   fontSize: 14,
@@ -259,6 +266,13 @@ class _FawryScreenState extends State<FawryScreen> {
                                                           .referenceNumber
                                                           .toString(),
                                                       textAlign: TextAlign.end,
+                                                      style: fontStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 14,
+                                                          fontFamily:
+                                                              FontFamily.medium,
+                                                          fontWeight:
+                                                              FontWeight.w400),
                                                     ),
                                                   ),
                                                 ],
@@ -321,28 +335,6 @@ class _FawryScreenState extends State<FawryScreen> {
         ),
       ),
     );
-  }
-
-  Future<dynamic> showDoneConfirmationDialog(BuildContext context,
-      {required String message,
-      bool isError = false,
-      Widget? body,
-      required Function callback}) async {
-    return CoolAlert.show(
-        barrierDismissible: true,
-        context: context,
-        confirmBtnText: "ok",
-        title: isError ? 'error' : '',
-        lottieAsset:
-            isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
-        type: isError ? CoolAlertType.error : CoolAlertType.success,
-        loopAnimation: false,
-        backgroundColor: isError ? Colors.red : Colors.white,
-        text: message,
-        widget: body,
-        onConfirmBtnTap: () {
-          callback();
-        });
   }
 }
 

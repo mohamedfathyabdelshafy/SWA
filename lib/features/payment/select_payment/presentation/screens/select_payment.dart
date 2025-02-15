@@ -124,9 +124,11 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
                           const SizedBox(
                             width: 5,
                           ),
-                          customText(LanguageClass.isEnglish
-                              ? "Debit or credit card"
-                              : "بطاقة الخصم او الائتمان")
+                          Expanded(
+                            child: customText(LanguageClass.isEnglish
+                                ? "Debit or credit card"
+                                : "بطاقة الخصم او الائتمان"),
+                          )
                         ],
                       ),
                     ),

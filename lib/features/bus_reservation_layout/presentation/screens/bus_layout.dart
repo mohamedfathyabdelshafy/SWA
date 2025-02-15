@@ -90,6 +90,10 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
     BlocProvider.of<BusLayoutCubit>(context).getBusSeats(tripId: widget.tripId);
     // busLayoutRepo?.getBusSeatsData();
     get();
+
+    if (Reservationtimer.start != 120) {
+      showtimer = true;
+    }
     super.initState();
   }
 
@@ -698,7 +702,8 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                     if (seatState == SeatState.selected) {
                                       print("I am here");
 
-                                      if (countSeats.length < 1) {
+                                      if (countSeats.length < 1 &&
+                                          Reservationtimer.start == 120) {
                                         Constants.showDefaultSnackBar(
                                             color: Colors.red,
                                             context: context,
@@ -721,7 +726,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                         );
                                         if (Reservationtimer
                                                 .controller.isStarted ==
-                                            false) {
+                                            ValueNotifier<bool>(false)) {
                                           Reservationtimer.controller.start();
                                         }
 

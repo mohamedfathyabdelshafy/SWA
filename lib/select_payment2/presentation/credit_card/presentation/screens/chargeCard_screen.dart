@@ -725,7 +725,6 @@ class _chargeCardState extends State<chargeCard> {
                                           message:
                                               'Complete the payment process',
                                           callback: () {
-                                        Navigator.pop(context);
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -1119,9 +1118,7 @@ Future<dynamic> showDoneConfirmationDialog(BuildContext context,
       loopAnimation: false,
       backgroundColor: isError ? Colors.red : Colors.white,
       text: message,
-      onConfirmBtnTap: () {
-        callback();
-      });
+      onConfirmBtnTap: callback());
 }
 
 // void showWebViewDialog(BuildContext context, String? url) {
