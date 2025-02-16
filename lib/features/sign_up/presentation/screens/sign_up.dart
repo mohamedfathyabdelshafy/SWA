@@ -188,12 +188,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 hintText: '',
                                 controller: nameController,
                                 validator: (validator) {
-                                  if (validator == null || validator.isEmpty) {
-                                    return LanguageClass.isEnglish
-                                        ? "Enter name"
-                                        : "ادخل الاسم";
-                                  }
-                                  return null;
+                                  return RegExp(r'^[a-zA-Z\u0600-\u06FF]+$')
+                                          .hasMatch(validator ?? '')
+                                      ? null
+                                      : LanguageClass.isEnglish
+                                          ? "Enter a valid name"
+                                          : "ادخل الاسم الصحيح";
                                 },
                               ),
                               SizedBox(
@@ -220,179 +220,187 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 borderradias: 33,
                                 isPassword: false,
                                 obscureText: false,
-                                prefixIcon: InkWell(
-                                  onTap: () {
-                                    showModalBottomSheet(
-                                        context: context,
-                                        isDismissible: true,
-                                        enableDrag: true,
-                                        isScrollControlled: true,
-                                        backgroundColor: Colors.transparent,
-                                        barrierColor:
-                                            Colors.black.withOpacity(0.5),
-                                        useRootNavigator: true,
-                                        builder: (context) {
-                                          return StatefulBuilder(builder:
-                                              (buildContext,
-                                                  StateSetter
-                                                      setStater /*You can rename this!*/) {
-                                            return Padding(
-                                              padding: EdgeInsets.only(
-                                                  bottom: MediaQuery.of(context)
-                                                      .viewInsets
-                                                      .bottom),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  FocusScope.of(context)
-                                                      .requestFocus(
-                                                          new FocusNode());
-                                                },
-                                                child: Container(
-                                                  width: double.infinity,
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.7,
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                              topLeft: Radius
-                                                                  .circular(24),
-                                                              topRight: Radius
-                                                                  .circular(
-                                                                      24))),
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 16.w),
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: Container(
-                                                          margin: EdgeInsets
-                                                              .symmetric(
-                                                                  vertical: 3),
-                                                          height: 6,
-                                                          width: 64.w,
-                                                          decoration: BoxDecoration(
-                                                              color: AppColors
-                                                                  .grey,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5)),
+                                prefixIcon: Container(
+                                  margin: EdgeInsetsDirectional.only(end: 10),
+                                  child: InkWell(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                          context: context,
+                                          isDismissible: true,
+                                          enableDrag: true,
+                                          isScrollControlled: true,
+                                          backgroundColor: Colors.transparent,
+                                          barrierColor:
+                                              Colors.black.withOpacity(0.5),
+                                          useRootNavigator: true,
+                                          builder: (context) {
+                                            return StatefulBuilder(builder:
+                                                (buildContext,
+                                                    StateSetter
+                                                        setStater /*You can rename this!*/) {
+                                              return Padding(
+                                                padding: EdgeInsets.only(
+                                                    bottom:
+                                                        MediaQuery.of(context)
+                                                            .viewInsets
+                                                            .bottom),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    FocusScope.of(context)
+                                                        .requestFocus(
+                                                            new FocusNode());
+                                                  },
+                                                  child: Container(
+                                                    width: double.infinity,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.7,
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        24),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        24))),
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 16.w),
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Container(
+                                                            margin: EdgeInsets
+                                                                .symmetric(
+                                                                    vertical:
+                                                                        3),
+                                                            height: 6,
+                                                            width: 64.w,
+                                                            decoration: BoxDecoration(
+                                                                color: AppColors
+                                                                    .grey,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5)),
+                                                          ),
                                                         ),
-                                                      ),
-                                                      24.verticalSpace,
-                                                      Flexible(
-                                                        child: ListView.builder(
-                                                          itemCount:
-                                                              phonecountrycodeModel
-                                                                  .codelist!
-                                                                  .length,
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal:
-                                                                      5),
-                                                          shrinkWrap: true,
-                                                          physics:
-                                                              ScrollPhysics(),
-                                                          itemBuilder:
-                                                              (BuildContext
-                                                                      context,
-                                                                  int index2) {
-                                                            return InkWell(
-                                                              onTap: () {
-                                                                setState(() {
-                                                                  selectedcode =
-                                                                      phonecountrycodeModel
-                                                                          .codelist![
-                                                                              index2]
-                                                                          .code!;
-                                                                });
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                              child: Container(
-                                                                decoration: BoxDecoration(
-                                                                    border: Border(
-                                                                        bottom: BorderSide(
-                                                                  color:
-                                                                      AppColors
-                                                                          .grey,
-                                                                ))),
-                                                                child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
-                                                                  children: [
-                                                                    Expanded(
-                                                                      child:
-                                                                          Column(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.start,
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.start,
-                                                                        children: [
-                                                                          Container(
-                                                                            margin:
-                                                                                EdgeInsets.symmetric(vertical: 5),
-                                                                            child:
-                                                                                FittedBox(fit: BoxFit.scaleDown, child: Text(phonecountrycodeModel.codelist![index2].name!, style: fontStyle(fontSize: 16, fontFamily: FontFamily.bold, fontWeight: FontWeight.w500, color: Colors.black))),
-                                                                          ),
-                                                                          Container(
-                                                                            child:
-                                                                                Text(phonecountrycodeModel.codelist![index2].code!, style: fontStyle(fontSize: 14, fontFamily: FontFamily.bold, fontWeight: FontWeight.w400, color: Colors.black54)),
-                                                                          ),
-                                                                        ],
+                                                        24.verticalSpace,
+                                                        Flexible(
+                                                          child:
+                                                              ListView.builder(
+                                                            itemCount:
+                                                                phonecountrycodeModel
+                                                                    .codelist!
+                                                                    .length,
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        5),
+                                                            shrinkWrap: true,
+                                                            physics:
+                                                                ScrollPhysics(),
+                                                            itemBuilder:
+                                                                (BuildContext
+                                                                        context,
+                                                                    int index2) {
+                                                              return InkWell(
+                                                                onTap: () {
+                                                                  setState(() {
+                                                                    selectedcode = phonecountrycodeModel
+                                                                        .codelist![
+                                                                            index2]
+                                                                        .code!;
+                                                                  });
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                child:
+                                                                    Container(
+                                                                  decoration: BoxDecoration(
+                                                                      border: Border(
+                                                                          bottom: BorderSide(
+                                                                    color:
+                                                                        AppColors
+                                                                            .grey,
+                                                                  ))),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Expanded(
+                                                                        child:
+                                                                            Column(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.start,
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.start,
+                                                                          children: [
+                                                                            Container(
+                                                                              margin: EdgeInsets.symmetric(vertical: 5),
+                                                                              child: FittedBox(fit: BoxFit.scaleDown, child: Text(phonecountrycodeModel.codelist![index2].name!, style: fontStyle(fontSize: 16, fontFamily: FontFamily.bold, fontWeight: FontWeight.w500, color: Colors.black))),
+                                                                            ),
+                                                                            Container(
+                                                                              child: Text(phonecountrycodeModel.codelist![index2].code!, style: fontStyle(fontSize: 14, fontFamily: FontFamily.bold, fontWeight: FontWeight.w400, color: Colors.black54)),
+                                                                            ),
+                                                                          ],
+                                                                        ),
                                                                       ),
-                                                                    ),
-                                                                    Icon(
-                                                                      Icons
-                                                                          .arrow_forward_ios_rounded,
-                                                                      color: AppColors
-                                                                          .umragold,
-                                                                      size: 15,
-                                                                    )
-                                                                  ],
+                                                                      Icon(
+                                                                        Icons
+                                                                            .arrow_forward_ios_rounded,
+                                                                        color: AppColors
+                                                                            .umragold,
+                                                                        size:
+                                                                            15,
+                                                                      )
+                                                                    ],
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                            );
-                                                          },
+                                                              );
+                                                            },
+                                                          ),
                                                         ),
-                                                      ),
-                                                      16.verticalSpace,
-                                                    ],
+                                                        16.verticalSpace,
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            );
+                                              );
+                                            });
                                           });
-                                        });
-                                  },
-                                  child: Container(
-                                    width: 100.w,
-                                    height: 70,
-                                    margin: EdgeInsets.symmetric(horizontal: 0),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        color: Routes.isomra
-                                            ? AppColors.umragold
-                                            : AppColors.primaryColor,
-                                        borderRadius:
-                                            BorderRadius.circular(33)),
-                                    child: Text(
-                                      selectedcode,
-                                      style: fontStyle(
-                                          color: Colors.black,
-                                          fontFamily: FontFamily.bold,
-                                          fontSize: 16.sp),
+                                    },
+                                    child: Container(
+                                      width: 80.w,
+                                      height: 70,
+                                      padding:
+                                          EdgeInsetsDirectional.only(end: 10),
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          color: Routes.isomra
+                                              ? AppColors.umragold
+                                              : AppColors.primaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(33)),
+                                      child: Text(
+                                        selectedcode,
+                                        style: fontStyle(
+                                            color: Colors.black,
+                                            fontFamily: FontFamily.bold,
+                                            fontSize: 16.sp),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -405,6 +413,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     return LanguageClass.isEnglish
                                         ? "Enter phone"
                                         : "ادخل الموبيل";
+                                  } else if (validator.length < 10 ||
+                                      validator.length > 10 ||
+                                      int.tryParse(validator) == null) {
+                                    return LanguageClass.isEnglish
+                                        ? "Enter a valid phone number"
+                                        : "ادخل رقم الموبيل الصحيح";
                                   }
                                   return null;
                                 },
@@ -778,10 +792,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 validator: (validator) {
                                   if (validator == null || validator.isEmpty) {
                                     return LanguageClass.isEnglish
-                                        ? " your password"
-                                        : " ادخال كلمة المرور";
+                                        ? " Enter password"
+                                        : "  ادخل كلمة المرور";
+                                  } else if (validator.length > 8 &&
+                                      !validator.contains(' ')) {
+                                    return null;
                                   }
-                                  return null;
+                                  return LanguageClass.isEnglish
+                                      ? " Invalid password"
+                                      : " كلمة مرور غير صالحة";
                                 },
                                 hintText: '',
                               ),
@@ -813,10 +832,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 color: Color(0xffDDDDDD),
                                 controller: rePasswordController,
                                 validator: (validator) {
-                                  if (validator == null || validator.isEmpty) {
+                                  if (validator != passwordController.text) {
                                     return LanguageClass.isEnglish
-                                        ? "Confirm your password"
-                                        : "اعادة ادخال كلمة المرور";
+                                        ? "Passwords do not match"
+                                        : "كلمتا المرور غير متطابقتان";
                                   }
                                   return null;
                                 },

@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:swa/core/api/api_consumer.dart';
 import 'package:swa/core/api/status_code.dart';
 import 'package:swa/core/error/exceptions.dart';
-import 'package:swa/core/utils/app_strings.dart';
 import 'package:swa/core/utils/language.dart';
 
 class HttpConsumer implements ApiConsumer {

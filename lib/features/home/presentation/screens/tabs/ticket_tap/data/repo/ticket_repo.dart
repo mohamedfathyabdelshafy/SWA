@@ -46,7 +46,7 @@ class TicketRepo {
     var request = http.Request(
         'GET',
         Uri.parse(
-            "${EndPoints.baseUrl}Reservation/TicketDetail?reservationID=$tekitid&toCurrency=${Routes.curruncy}&dateTypeID=${countryid == 1 ? 113 : 112}&countryID=$countryid"));
+            "${EndPoints.baseUrl}Reservation/TicketDetail?reservationID=$tekitid&toCurrency=${Routes.curruncy ?? ""}&dateTypeID=${countryid == 1 ? 113 : 112}&countryID=$countryid"));
 
     request.headers.addAll(headers);
 

@@ -1,3 +1,5 @@
+import 'package:html_unescape/html_unescape.dart';
+
 class AccomidationModel {
   AccomidationModel({
     this.status,
@@ -68,6 +70,8 @@ class Accomidationdetails {
   final bool? isArabic;
 
   factory Accomidationdetails.fromJson(Map<String, dynamic> json) {
+    var unescape = HtmlUnescape();
+
     return Accomidationdetails(
       numberNights: json["NumberNights"],
       cityName: json["CityName"],
@@ -75,7 +79,8 @@ class Accomidationdetails {
       hotelId: json["HotelID"],
       description: json["Description"] == null
           ? []
-          : List<String>.from(json["Description"]!.map((x) => x)),
+          : List<String>.from(
+              json["Description"]!.map((x) => unescape.convert(x))),
       price: json["Price"],
       roomTypeList: json["RoomTypeList"] == null
           ? []

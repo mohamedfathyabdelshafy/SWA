@@ -466,6 +466,8 @@ class _MyHomeState extends State<MyHome> {
                                                   Expanded(
                                                     child: Text(
                                                       Routes.user!.name!,
+                                                      textAlign:
+                                                          TextAlign.center,
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                       style: fontStyle(
@@ -875,8 +877,6 @@ class _MyHomeState extends State<MyHome> {
                                         // showMyDatePicker(selectedDayFrom);
                                       },
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
                                         children: [
                                           Column(
                                             children: [
@@ -895,9 +895,11 @@ class _MyHomeState extends State<MyHome> {
                                                         ? "DEPART ON"
                                                         : "تغادر من",
                                                     style: fontStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
                                                         color: AppColors
                                                             .blackColor,
-                                                        fontSize: 12),
+                                                        fontSize: 8),
                                                   )
                                                 ],
                                               ),
@@ -907,7 +909,7 @@ class _MyHomeState extends State<MyHome> {
                                                     style: fontStyle(
                                                         color: AppColors
                                                             .blackColor,
-                                                        fontSize: 20)),
+                                                        fontSize: 10)),
                                               ),
                                             ],
                                           ),
@@ -971,9 +973,11 @@ class _MyHomeState extends State<MyHome> {
                                                           ? "DEPART ON GO"
                                                           : " تغادر من ذهاب",
                                                       style: fontStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                           color: AppColors
                                                               .blackColor,
-                                                          fontSize: 12),
+                                                          fontSize: 8),
                                                     )
                                                   ],
                                                 ),
@@ -984,7 +988,7 @@ class _MyHomeState extends State<MyHome> {
                                                       style: fontStyle(
                                                           color: AppColors
                                                               .blackColor,
-                                                          fontSize: 16)),
+                                                          fontSize: 10)),
                                                 ),
                                               ],
                                             ),
@@ -1044,9 +1048,11 @@ class _MyHomeState extends State<MyHome> {
                                                           ? "DEPART ON BACK"
                                                           : " تغادر من عودة",
                                                       style: fontStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                           color: AppColors
                                                               .blackColor,
-                                                          fontSize: 12),
+                                                          fontSize: 8),
                                                     )
                                                   ],
                                                 ),
@@ -1057,7 +1063,7 @@ class _MyHomeState extends State<MyHome> {
                                                       style: fontStyle(
                                                           color: AppColors
                                                               .blackColor,
-                                                          fontSize: 16)),
+                                                          fontSize: 10)),
                                                 ),
                                               ],
                                             ),

@@ -104,57 +104,47 @@ class _PointScreensState extends State<PointScreens> {
                   ),
                   Expanded(
                     child: ListView.separated(
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 25),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      linesModel
-                                          .message!.cityList![index].cityName!,
-                                      style: fontStyle(
-                                          color: AppColors.blackColor,
-                                          fontFamily: FontFamily.medium,
-                                          fontSize: 14.sp),
-                                    ),
-                                    Spacer(),
-                                    Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Routes.isomra
-                                          ? AppColors.umragold
-                                          : AppColors.primaryColor,
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                ListView.builder(
-                                  itemCount: linesModel.message!
-                                      .cityList![index]!.stationList!.length,
-                                  shrinkWrap: true,
-                                  itemBuilder:
-                                      (BuildContext context, int index2) {
-                                    return Container(
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 10),
-                                      child: Text(
-                                        linesModel.message!.cityList![index]!
-                                            .stationList![index2].stationName!,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ExpansionTile(
+                            collapsedIconColor: Routes.isomra
+                                ? AppColors.umragold
+                                : AppColors.primaryColor,
+                            iconColor: Routes.isomra
+                                ? AppColors.umragold
+                                : AppColors.primaryColor,
+                            title: Text(
+                              linesModel.message!.cityList![index].cityName!,
+                              style: fontStyle(
+                                  color: AppColors.blackColor,
+                                  fontFamily: FontFamily.medium,
+                                  fontSize: 14.sp),
+                            ),
+                            children: linesModel
+                                .message!.cityList![index].stationList!
+                                .map((e) => ListTile(
+                                      title: Text(
+                                        e.stationName!,
                                         style: fontStyle(
                                             color: AppColors.blackColor,
-                                            fontFamily: FontFamily.regular,
-                                            fontSize: 13.sp),
+                                            fontSize: 13.sp,
+                                            fontFamily: FontFamily.regular),
                                       ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
+                                    ))
+                                .toList(),
                           );
+
+                          // Container(
+                          //   margin: EdgeInsets.symmetric(
+                          //       horizontal: 20, vertical: 10),
+                          //   child: Text(
+                          //     linesModel.message!.cityList![index]!
+                          //         .stationList![index2].stationName!,
+                          //     style: fontStyle(
+                          //         color: AppColors.blackColor,
+                          //         fontFamily: FontFamily.regular,
+                          //         fontSize: 13.sp),
+                          //   ),
+                          // );
                         },
                         separatorBuilder: (context, index) {
                           return Divider(

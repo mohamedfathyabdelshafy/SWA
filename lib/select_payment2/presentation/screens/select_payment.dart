@@ -187,7 +187,7 @@ class _SelectPaymentScreen2State extends State<SelectPaymentScreen2> {
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
                               child: Text(
-                                '${balance} ${Routes.curruncy}',
+                                '${balance} ${Routes.curruncy ?? ""}',
                                 style: fontStyle(
                                     color: AppColors.white,
                                     fontSize: 12,

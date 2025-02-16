@@ -192,7 +192,7 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                           fontSize: 14),
                                     ),
                                     Text(
-                                      '${widget.tripListBack[index].price.toString()} ${Routes.curruncy}' ??
+                                      '${widget.tripListBack[index].price.toString()} ${Routes.curruncy ?? ""}' ??
                                           '',
                                       style: fontStyle(
                                           color: Colors.white,

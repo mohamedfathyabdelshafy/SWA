@@ -191,12 +191,15 @@ class _NavigationbottombarState extends State<Navigationbottombar> {
                           : AppColors.primaryColor
                       : AppColors.white,
                 ),
-                title: Text(
-                  LanguageClass.isEnglish ? "Book Now" : "حجز الان",
-                  style: fontStyle(
-                      color: Colors.black,
-                      fontSize: 13,
-                      fontFamily: FontFamily.bold),
+                title: Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Text(
+                    LanguageClass.isEnglish ? "Book Now" : "حجز الان",
+                    style: fontStyle(
+                        color: Colors.black,
+                        fontSize: 13,
+                        fontFamily: FontFamily.bold),
+                  ),
                 ),
                 selectedColor: Colors.white,
               ),

@@ -32,7 +32,7 @@ class _CustomDropDownListState extends State<CustomDropDownList> {
                 widget.hint!,
                 style: fontStyle(
                     color: AppColors.blackColor,
-                    fontSize: 20.sp,
+                    fontSize: 14.sp,
                     fontFamily: FontFamily.medium,
                     fontWeight: FontWeight.w500),
               ),
@@ -44,7 +44,7 @@ class _CustomDropDownListState extends State<CustomDropDownList> {
               value: selectedValue,
               style: fontStyle(
                   color: Colors.white,
-                  fontSize: 18.sp,
+                  fontSize: 14.sp,
                   height: 1.2,
                   fontFamily: FontFamily.medium),
               onChanged: (String? newValue) {

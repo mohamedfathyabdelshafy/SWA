@@ -44,10 +44,11 @@ class PackagesBloc extends Bloc<PackagesEvent, PackagesState> {
             state.update(isloading: false, stationfromModel: stationfromModel));
       } else if (event is packagesEvent) {
         emit(state.update(isloading: true));
+        log("rr1 : ");
 
         Packagemodel stationfromModel = await _packagesRespo.getpackages(
             stationtoid: event.stationtoid, stationfromid: event.stationfromid);
-
+        log("rr: $stationfromModel");
         emit(state.update(isloading: false, packagemodel: stationfromModel));
       } else if (event is GetactivepackageEvent) {
         emit(state.update(isloading: true));

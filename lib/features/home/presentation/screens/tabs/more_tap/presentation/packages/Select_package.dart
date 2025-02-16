@@ -11,16 +11,16 @@ import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/package_payment.dart';
 
-class selectpackageScreen extends StatefulWidget {
-  selectpackageScreen({
+class SelectPackageScreen extends StatefulWidget {
+  SelectPackageScreen({
     super.key,
   });
 
   @override
-  State<selectpackageScreen> createState() => _selectpackageScreenState();
+  State<SelectPackageScreen> createState() => _SelectPackageScreenState();
 }
 
-class _selectpackageScreenState extends State<selectpackageScreen> {
+class _SelectPackageScreenState extends State<SelectPackageScreen> {
   TextEditingController _promocodetext = new TextEditingController(text: '');
   List<TextEditingController> _controllers = [];
 
@@ -98,6 +98,11 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                   color: Colors.red,
                   context: context,
                   text: state.promocodemodel!.errormessage!);
+            } else if (state.packagemodel?.status == 'failed') {
+              Constants.showDefaultSnackBar(
+                  color: Colors.red,
+                  context: context,
+                  text: state.packagemodel!.errormessage!);
             }
             if (state.stationfromModel?.status == 'success') {
               showGeneralDialog(
@@ -367,7 +372,8 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 5),
+                                    horizontal: 24,
+                                    vertical: Stationfrom.isEmpty ? 10 : 5),
                                 decoration: BoxDecoration(
                                     color: Color(0xffDEDEDE),
                                     borderRadius: BorderRadius.circular(33),
@@ -385,7 +391,7 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                   children: [
                                     Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
@@ -398,13 +404,16 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text(
-                                          Stationfrom,
-                                          style: fontStyle(
-                                              color: Color(0xff969696),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.normal),
-                                        )
+                                        Stationfrom.isEmpty
+                                            ? Container()
+                                            : Text(
+                                                Stationfrom,
+                                                style: fontStyle(
+                                                    color: Color(0xff969696),
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.normal),
+                                              )
                                       ],
                                     ),
                                     Stationfrom == ''
@@ -448,7 +457,8 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 5),
+                                    horizontal: 24,
+                                    vertical: stationto.isEmpty ? 10 : 5),
                                 decoration: BoxDecoration(
                                     color: Color(0xffDEDEDE),
                                     borderRadius: BorderRadius.circular(33),
@@ -466,7 +476,7 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                   children: [
                                     Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
@@ -479,13 +489,16 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text(
-                                          stationto,
-                                          style: fontStyle(
-                                              color: Color(0xff969696),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.normal),
-                                        )
+                                        stationto.isEmpty
+                                            ? Container()
+                                            : Text(
+                                                stationto,
+                                                style: fontStyle(
+                                                    color: Color(0xff969696),
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.normal),
+                                              )
                                       ],
                                     ),
                                     stationto == ''
@@ -531,10 +544,13 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 5),
+                                    horizontal: 24,
+                                    vertical: packagname.isEmpty ? 10 : 5),
                                 decoration: BoxDecoration(
                                     color: Color(0xffDEDEDE),
-                                    borderRadius: taped == 3
+                                    borderRadius: taped == 3 &&
+                                            state.packagemodel?.status !=
+                                                'failed'
                                         ? BorderRadius.only(
                                             topLeft: Radius.circular(33),
                                             topRight: Radius.circular(33))
@@ -553,7 +569,7 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                   children: [
                                     Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
@@ -566,13 +582,16 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text(
-                                          packagname,
-                                          style: fontStyle(
-                                              color: Color(0xff969696),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.normal),
-                                        )
+                                        packagname.isEmpty
+                                            ? Container()
+                                            : Text(
+                                                packagname,
+                                                style: fontStyle(
+                                                    color: Color(0xff969696),
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.normal),
+                                              )
                                       ],
                                     ),
                                     packagname == ''
@@ -600,110 +619,125 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                           size: 50.0,
                                         ),
                                       )
-                                    : Container(
-                                        margin:
-                                            EdgeInsets.symmetric(horizontal: 0),
-                                        decoration: BoxDecoration(
-                                            color: Color(0xffDEDEDE),
-                                            borderRadius: BorderRadius.only(
-                                                bottomLeft: Radius.circular(20),
-                                                bottomRight:
-                                                    Radius.circular(20))),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 5, vertical: 5),
-                                        height: 100,
-                                        width: double.infinity,
-                                        child: state.packagemodel!.message == []
-                                            ? Container(
-                                                child: Text(
-                                                  state.packagemodel!
-                                                      .errormessage!,
-                                                  style: fontStyle(
-                                                      fontFamily:
-                                                          FontFamily.regular,
-                                                      color: Colors.black,
-                                                      fontSize: 15),
-                                                ),
-                                              )
-                                            : ListView.separated(
-                                                itemBuilder: (context, index) {
-                                                  final item = state
-                                                      .packagemodel!.message;
-                                                  return InkWell(
-                                                    onTap: () {
-                                                      packagname = item[index]
-                                                          .packageName!;
-                                                      packageprice = item[index]
-                                                          .packagePrice
-                                                          .toString()!;
-
-                                                      afterdiscount =
-                                                          packageprice;
-                                                      packageID = item[index]
-                                                          .packageId!
-                                                          .toString();
-                                                      taped = -1;
-                                                      setState(() {});
-                                                    },
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Container(
-                                                          child: Text(
-                                                            item![index]
-                                                                .packageName!,
-                                                            style: fontStyle(
-                                                                fontFamily:
-                                                                    FontFamily
-                                                                        .regular,
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize: 15),
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          child: Text(
-                                                            LanguageClass
-                                                                    .isEnglish
-                                                                ? "${item![index].tripCount!} trips"
-                                                                : "${item![index].tripCount!} رحلات",
-                                                            style: fontStyle(
-                                                                fontFamily:
-                                                                    FontFamily
-                                                                        .regular,
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize: 15),
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          child: Text(
-                                                            " ${item![index].packagePrice.toString()} ${Routes.curruncy}",
-                                                            style: fontStyle(
-                                                                fontFamily:
-                                                                    FontFamily
-                                                                        .regular,
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize: 15),
-                                                          ),
-                                                        ),
-                                                      ],
+                                    : state.packagemodel?.status == 'failed'
+                                        ? Container()
+                                        : Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 0),
+                                            decoration: BoxDecoration(
+                                                color: Color(0xffDEDEDE),
+                                                borderRadius: BorderRadius.only(
+                                                    bottomLeft:
+                                                        Radius.circular(20),
+                                                    bottomRight:
+                                                        Radius.circular(20))),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 5, vertical: 5),
+                                            height: 100,
+                                            width: double.infinity,
+                                            child: state.packagemodel!
+                                                        .message ==
+                                                    []
+                                                ? Container(
+                                                    child: Text(
+                                                      state.packagemodel!
+                                                          .errormessage!,
+                                                      style: fontStyle(
+                                                          fontFamily: FontFamily
+                                                              .regular,
+                                                          color: Colors.black,
+                                                          fontSize: 15),
                                                     ),
-                                                  );
-                                                },
-                                                separatorBuilder:
-                                                    (context, index) {
-                                                  return Divider(
-                                                    color: Colors.black,
-                                                  );
-                                                },
-                                                itemCount: state.packagemodel!
-                                                        .message?.length ??
-                                                    0),
-                                      )
+                                                  )
+                                                : ListView.separated(
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      final item = state
+                                                          .packagemodel!
+                                                          .message;
+                                                      return InkWell(
+                                                        onTap: () {
+                                                          packagname =
+                                                              item[index]
+                                                                  .packageName!;
+                                                          packageprice =
+                                                              item[index]
+                                                                  .packagePrice
+                                                                  .toString()!;
+
+                                                          afterdiscount =
+                                                              packageprice;
+                                                          packageID =
+                                                              item[index]
+                                                                  .packageId!
+                                                                  .toString();
+                                                          taped = -1;
+                                                          setState(() {});
+                                                        },
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Container(
+                                                              child: Text(
+                                                                item![index]
+                                                                    .packageName!,
+                                                                style: fontStyle(
+                                                                    fontFamily:
+                                                                        FontFamily
+                                                                            .regular,
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        15),
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              child: Text(
+                                                                LanguageClass
+                                                                        .isEnglish
+                                                                    ? "${item![index].tripCount!} trips"
+                                                                    : "${item![index].tripCount!} رحلات",
+                                                                style: fontStyle(
+                                                                    fontFamily:
+                                                                        FontFamily
+                                                                            .regular,
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        15),
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              child: Text(
+                                                                " ${item![index].packagePrice.toString()} ${Routes.curruncy ?? ""}",
+                                                                style: fontStyle(
+                                                                    fontFamily:
+                                                                        FontFamily
+                                                                            .regular,
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        15),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                    separatorBuilder:
+                                                        (context, index) {
+                                                      return Divider(
+                                                        color: Colors.black,
+                                                      );
+                                                    },
+                                                    itemCount: state
+                                                            .packagemodel!
+                                                            .message
+                                                            ?.length ??
+                                                        0),
+                                          )
                                 : Container(),
 
                             SizedBox(
@@ -733,7 +767,7 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    "${packageprice} ${Routes.curruncy}",
+                                    "${packageprice} ${Routes.curruncy ?? ""}",
                                     textAlign: TextAlign.center,
                                     style: fontStyle(
                                         color: Colors.black,
@@ -889,7 +923,7 @@ class _selectpackageScreenState extends State<selectpackageScreen> {
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    "${afterdiscount} ${Routes.curruncy}",
+                                    "${afterdiscount} ${Routes.curruncy ?? ""}",
                                     textAlign: TextAlign.center,
                                     style: fontStyle(
                                         color: AppColors.blackColor,

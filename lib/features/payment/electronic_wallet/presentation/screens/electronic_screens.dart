@@ -1,5 +1,6 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swa/config/routes/app_routes.dart';
@@ -35,7 +36,6 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
     super.initState();
   }
 
-  @override
   Widget build(BuildContext context) {
     double sizeHeight = context.height;
 
@@ -114,16 +114,8 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                 child: Container(
                                   height: 70,
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: 2, horizontal: 18),
-                                  decoration: const BoxDecoration(
-                                      //color: AppColors.yellow
-                                      // border: Border.all(
-                                      //   color: AppColors.blue,
-                                      //   width: 0.3,
-                                      // ),
-                                      // borderRadius:
-                                      // const BorderRadius.all(Radius.circular(10))
-                                      ),
+                                      vertical: 20, horizontal: 18),
+                                  decoration: const BoxDecoration(),
                                   child: TextFormField(
                                     maxLength: 11,
                                     autofocus: true,
@@ -156,13 +148,15 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                           fontFamily: FontFamily.bold),
                                     ),
                                     validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return LanguageClass.isEnglish
-                                            ? 'This Field is Required'
-                                            : 'هذا مطلوب';
-                                      } else {
-                                        return null;
-                                      }
+                                      return value!.isEmpty
+                                          ? LanguageClass.isEnglish
+                                              ? 'This Field is Required'
+                                              : 'هذا مطلوب'
+                                          : value.length < 11
+                                              ? LanguageClass.isEnglish
+                                                  ? 'Phone Number must be 11 digits'
+                                                  : 'رقم التليفون يجب ان يكون 11 رقم'
+                                              : null;
                                     },
                                   ),
                                 ),
@@ -219,11 +213,13 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                           fontFamily: FontFamily.bold),
                                     ),
                                     validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'This Field is Required';
-                                      } else {
-                                        return null;
-                                      }
+                                      final isNaN = double.tryParse(value!);
+                                      return value!.isEmpty
+                                          ? 'This Field is Required'
+                                          : isNaN == null ||
+                                                  int.parse(value) <= 0
+                                              ? 'Please Enter a Valid Number'
+                                              : null;
                                     },
                                   ),
                                 ),
@@ -246,10 +242,17 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                   context,
                                   isError: false,
                                   callback: () {
-                                    Navigator.pop(context);
-                                    Navigator.pushNamedAndRemoveUntil(
-                                        context, Routes.home, (route) => false,
-                                        arguments: Routes.isomra);
+                                    //post frame callback
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      if (context.mounted) {
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            Routes.home,
+                                            (route) => false,
+                                            arguments: Routes.isomra);
+                                      }
+                                    });
                                   },
                                   body: Column(
                                     mainAxisSize: MainAxisSize.min,

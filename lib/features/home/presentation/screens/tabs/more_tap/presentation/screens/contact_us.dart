@@ -176,9 +176,10 @@ class _ContactUsState extends State<ContactUs> {
                                   obscureText: false,
                                   color: Color(0xffF7F8F9),
                                   hintText: LanguageClass.isEnglish ? "" : "",
+                                  labelcolor: Color(0xffA2A2A2),
                                   labelText: LanguageClass.isEnglish
                                       ? ""
-                                          "name"
+                                          "Name"
                                       : "اسمك ",
                                   controller: nameController,
                                   validator: (validator) {
@@ -195,9 +196,16 @@ class _ContactUsState extends State<ContactUs> {
                                   height: 8,
                                 ),
                                 CustomizedField(
+                                  hintStyle: fontStyle(
+                                    color: Color(0xffA2A2A2),
+                                    fontFamily: FontFamily.bold,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.normal,
+                                  ),
                                   colorText: Color(0xffD5D5D5),
                                   borderradias: 10,
                                   isPassword: false,
+                                  labelcolor: Color(0xffA2A2A2),
                                   obscureText: false,
                                   color: Color(0xffF7F8F9),
                                   hintText: LanguageClass.isEnglish

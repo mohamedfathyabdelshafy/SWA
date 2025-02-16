@@ -285,7 +285,7 @@ class _UmraBookedScreenState extends State<UmraBookedScreen> {
                             ? Alignment.topLeft
                             : Alignment.topRight,
                         child: Text(
-                          LanguageClass.isEnglish ? 'Booking' : 'الحجز',
+                          LanguageClass.isEnglish ? 'Tickets' : 'التذاكر',
                           style: fontStyle(
                               color: AppColors.blackColor,
                               fontSize: 24.sp,
@@ -296,21 +296,26 @@ class _UmraBookedScreenState extends State<UmraBookedScreen> {
                       SizedBox(
                         height: sizeHeight * 0.05,
                       ),
-                      Expanded(
-                        child: umraTickets.message!.result!.bookingList!.isEmpty
-                            ? Center(
-                                child: Text(
-                                  LanguageClass.isEnglish
-                                      ? 'No Booked Tickets'
-                                      : 'لا يوجد تذاكر محجوزة',
-                                  style: fontStyle(
-                                    color: Colors.black,
-                                    fontSize: 18.sp,
-                                    fontFamily: FontFamily.medium,
+                      umraTickets.message!.result!.bookingList!.isEmpty
+                          ? Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    LanguageClass.isEnglish
+                                        ? 'No Booked Tickets'
+                                        : 'لا يوجد تذاكر محجوزة',
+                                    style: fontStyle(
+                                      color: Colors.black,
+                                      fontSize: 18.sp,
+                                      fontFamily: FontFamily.medium,
+                                    ),
                                   ),
-                                ),
-                              )
-                            : ListView(
+                                ],
+                              ),
+                            )
+                          : Expanded(
+                              child: ListView(
                                 reverse: false,
                                 shrinkWrap: true,
                                 physics: ScrollPhysics(),
@@ -1158,7 +1163,7 @@ class _UmraBookedScreenState extends State<UmraBookedScreen> {
                                   ),
                                 ],
                               ),
-                      )
+                            )
                     ],
                   ),
                 );

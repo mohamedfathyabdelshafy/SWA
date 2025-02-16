@@ -209,8 +209,8 @@ class _TransportationScreenState extends State<TransportationScreen> {
                                           fit: BoxFit.scaleDown,
                                           child: Text(
                                             isSuggested
-                                                ? '${selectedseats.length * transportSuggestedList![suggestedindex].priceSeat} ${Routes.curruncy}'
-                                                : '${selectedseats.length * transportList![inn].priceSeat} ${Routes.curruncy}',
+                                                ? '${selectedseats.length * transportSuggestedList![suggestedindex].priceSeat} ${Routes.curruncy ?? ""}'
+                                                : '${selectedseats.length * transportList![inn].priceSeat} ${Routes.curruncy ?? ""}',
                                             style: fontStyle(
                                               color: Colors.black,
                                               fontFamily: FontFamily.regular,
@@ -621,99 +621,96 @@ class _TransportationScreenState extends State<TransportationScreen> {
                                                   index: index,
                                                   key: UniqueKey(),
                                                   child: InkWell(
-                                                    onTap: () {},
-                                                    child: AnimatedContainer(
-                                                      padding: EdgeInsets.only(
-                                                          left:
-                                                              selectedpackage ==
-                                                                      index
-                                                                  ? 30
-                                                                  : 5,
-                                                          right: 5),
-                                                      margin: EdgeInsets.only(
-                                                          left: index * 80),
-                                                      decoration: BoxDecoration(
-                                                          boxShadow:
-                                                              selectedpackage ==
-                                                                      index
-                                                                  ? [
-                                                                      BoxShadow(
-                                                                          offset: Offset(4,
-                                                                              0),
-                                                                          color: Colors.black.withOpacity(
-                                                                              0.4),
-                                                                          blurRadius:
-                                                                              4,
-                                                                          spreadRadius:
-                                                                              0)
-                                                                    ]
-                                                                  : [
-                                                                      BoxShadow(
-                                                                          offset: Offset(4,
-                                                                              0),
-                                                                          color: Colors.black.withOpacity(
-                                                                              0.2),
-                                                                          blurRadius:
-                                                                              2,
-                                                                          spreadRadius:
-                                                                              0)
-                                                                    ],
-                                                          color: HexColor(
-                                                              listcampains![
+                                                      onTap: () {},
+                                                      child: AnimatedContainer(
+                                                        padding: EdgeInsets.only(
+                                                            left: selectedpackage ==
+                                                                        index &&
+                                                                    index != 0
+                                                                ? 30
+                                                                : 5,
+                                                            right: index ==
+                                                                    listcampains!
+                                                                            .length -
+                                                                        1
+                                                                ? 15
+                                                                : 5),
+                                                        margin: EdgeInsets.only(
+                                                            left: index * 80),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                boxShadow:
+                                                                    selectedpackage ==
+                                                                            index
+                                                                        ? [
+                                                                            BoxShadow(
+                                                                                offset: Offset(4, 0),
+                                                                                color: Colors.black.withOpacity(0.4),
+                                                                                blurRadius: 4,
+                                                                                spreadRadius: 0)
+                                                                          ]
+                                                                        : [
+                                                                            BoxShadow(
+                                                                                offset: Offset(4, 0),
+                                                                                color: Colors.black.withOpacity(0.2),
+                                                                                blurRadius: 2,
+                                                                                spreadRadius: 0)
+                                                                          ],
+                                                                color: HexColor(
+                                                                    listcampains![index]
+                                                                            .bgColor ??
+                                                                        '#AEAEAE'),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            13)),
+                                                        width:
+                                                            selectedpackage ==
+                                                                    index
+                                                                ? 148
+                                                                : 100,
+                                                        height: 47,
+                                                        duration: Duration(
+                                                            microseconds: 100),
+                                                        curve: Curves.linear,
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Expanded(
+                                                              child: FittedBox(
+                                                                fit: BoxFit
+                                                                    .fitWidth,
+                                                                child: Text(
+                                                                  listcampains![
                                                                           index]
-                                                                      .bgColor ??
-                                                                  '#AEAEAE'),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      13)),
-                                                      width: selectedpackage ==
-                                                              index
-                                                          ? 148
-                                                          : 100,
-                                                      height: 47,
-                                                      duration: Duration(
-                                                          microseconds: 100),
-                                                      curve: Curves.linear,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Expanded(
-                                                            child: FittedBox(
-                                                              fit: BoxFit
-                                                                  .fitWidth,
-                                                              child: Text(
-                                                                listcampains![
-                                                                        index]
-                                                                    .name!,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style: fontStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontFamily:
-                                                                        FontFamily
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        18),
+                                                                      .name!,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  style: fontStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontFamily:
+                                                                          FontFamily
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          18),
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
+                                                          ],
+                                                        ),
+                                                      )),
                                                 )).toList()),
                                   ],
                                 )),
@@ -1031,7 +1028,7 @@ class _TransportationScreenState extends State<TransportationScreen> {
                                                                         .asset(
                                                                             'assets/images/seats.svg'),
                                                                   ),
-                                                                  7.horizontalSpace,
+                                                                  10.horizontalSpace,
                                                                   reservedseats
                                                                           .firstWhere(
                                                                               (element) {
@@ -1058,8 +1055,8 @@ class _TransportationScreenState extends State<TransportationScreen> {
                                                                   Text(
                                                                     LanguageClass
                                                                             .isEnglish
-                                                                        ? 'Seats'
-                                                                        : 'مقاعد',
+                                                                        ? ' Seats '
+                                                                        : ' مقاعد ',
                                                                     style: fontStyle(
                                                                         color: Colors
                                                                             .black,
@@ -1074,77 +1071,80 @@ class _TransportationScreenState extends State<TransportationScreen> {
                                                                 ],
                                                               ),
                                                             ),
-                                                            18.horizontalSpace,
-                                                            Expanded(
-                                                              child: Transform
-                                                                  .flip(
-                                                                flipX: index
-                                                                    .isEven,
-                                                                child: Row(
-                                                                  children: [
-                                                                    Expanded(
-                                                                      child: transportList![index].from ==
-                                                                              null
-                                                                          ? const SizedBox()
-                                                                          : Transform
-                                                                              .flip(
-                                                                              flipX: index.isEven,
-                                                                              child: Container(
-                                                                                height: 20.h,
-                                                                                child: ListView(
-                                                                                  scrollDirection: Axis.horizontal,
-                                                                                  shrinkWrap: true,
-                                                                                  physics: ScrollPhysics(),
-                                                                                  padding: EdgeInsets.zero,
-                                                                                  children: [
-                                                                                    Text(
-                                                                                      transportList![index].from!,
-                                                                                      textAlign: TextAlign.center,
-                                                                                      style: fontStyle(color: Colors.black, fontSize: 14.sp, fontWeight: FontWeight.w500, fontFamily: FontFamily.medium),
-                                                                                    ),
-                                                                                  ],
+                                                            Spacer(),
+                                                            Transform.flip(
+                                                              flipX:
+                                                                  index.isEven,
+                                                              child: Row(
+                                                                children: [
+                                                                  transportList![index]
+                                                                              .from ==
+                                                                          null
+                                                                      ? const SizedBox()
+                                                                      : Transform
+                                                                          .flip(
+                                                                          flipX:
+                                                                              index.isEven,
+                                                                          child:
+                                                                              Container(
+                                                                            height:
+                                                                                22.h,
+                                                                            child:
+                                                                                ListView(
+                                                                              scrollDirection: Axis.horizontal,
+                                                                              shrinkWrap: true,
+                                                                              physics: ScrollPhysics(),
+                                                                              padding: EdgeInsets.zero,
+                                                                              children: [
+                                                                                Text(
+                                                                                  transportList![index].from!,
+                                                                                  textAlign: TextAlign.center,
+                                                                                  style: fontStyle(color: Colors.black, fontSize: 14.sp, fontWeight: FontWeight.w500, fontFamily: FontFamily.medium),
                                                                                 ),
-                                                                              ),
+                                                                              ],
                                                                             ),
-                                                                    ),
-                                                                    16.horizontalSpace,
-                                                                    Container(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
-                                                                      child: Image
-                                                                          .asset(
-                                                                              'assets/images/longarrow.png'),
-                                                                    ),
-                                                                    16.horizontalSpace,
-                                                                    Expanded(
-                                                                      child: transportList![index].to ==
-                                                                              null
-                                                                          ? const SizedBox()
-                                                                          : Transform
-                                                                              .flip(
-                                                                              flipX: index.isEven,
-                                                                              child: Container(
-                                                                                height: 20.h,
-                                                                                child: ListView(
-                                                                                  scrollDirection: Axis.horizontal,
-                                                                                  shrinkWrap: true,
-                                                                                  children: [
-                                                                                    Text(
-                                                                                      transportList![index].to!,
-                                                                                      textAlign: TextAlign.center,
-                                                                                      style: fontStyle(color: Colors.black, fontSize: 14.sp, fontWeight: FontWeight.w500, fontFamily: FontFamily.medium),
-                                                                                    ),
-                                                                                  ],
+                                                                          ),
+                                                                        ),
+                                                                  16.horizontalSpace,
+                                                                  Container(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Image
+                                                                        .asset(
+                                                                            'assets/images/longarrow.png'),
+                                                                  ),
+                                                                  16.horizontalSpace,
+                                                                  transportList![index]
+                                                                              .to ==
+                                                                          null
+                                                                      ? const SizedBox()
+                                                                      : Transform
+                                                                          .flip(
+                                                                          flipX:
+                                                                              index.isEven,
+                                                                          child:
+                                                                              Container(
+                                                                            height:
+                                                                                20.h,
+                                                                            child:
+                                                                                ListView(
+                                                                              scrollDirection: Axis.horizontal,
+                                                                              shrinkWrap: true,
+                                                                              children: [
+                                                                                Text(
+                                                                                  transportList![index].to!,
+                                                                                  textAlign: TextAlign.center,
+                                                                                  style: fontStyle(color: Colors.black, fontSize: 14.sp, fontWeight: FontWeight.w500, fontFamily: FontFamily.medium),
                                                                                 ),
-                                                                              ),
+                                                                              ],
                                                                             ),
-                                                                    ),
-                                                                  ],
-                                                                ),
+                                                                          ),
+                                                                        ),
+                                                                ],
                                                               ),
                                                             ),
-                                                            16.horizontalSpace,
+                                                            10.horizontalSpace,
                                                             Text(
                                                               transportList![
                                                                       index]
@@ -1185,7 +1185,7 @@ class _TransportationScreenState extends State<TransportationScreen> {
                                                 horizontal: 20.w),
                                             child: Container(
                                               child: Text(
-                                                "${reservedseats.length > 0 ? reservedseats.map((item) => item.totalprice).reduce((a, b) => a + b) : '0.0'} ${Routes.curruncy}",
+                                                "${reservedseats.length > 0 ? reservedseats.map((item) => item.totalprice).reduce((a, b) => a + b) : '0.0'} ${Routes.curruncy ?? ""}",
                                                 style: fontStyle(
                                                     color: Colors.black,
                                                     fontSize: 17.sp,
@@ -1576,7 +1576,7 @@ class _TransportationScreenState extends State<TransportationScreen> {
                                         fit: BoxFit.scaleDown,
                                         child: Text(
                                           LanguageClass.isEnglish
-                                              ? "previous"
+                                              ? "Previous"
                                               : 'السابق',
                                           style: fontStyle(
                                               fontFamily: FontFamily.bold,

@@ -87,6 +87,8 @@ class FirebaseNotificationService {
     } else {
       fcmToken = await FirebaseMessaging.instance.getToken();
     }
+    // ignore: prefer_interpolation_to_compose_strings
+    log(" fcmToken " + fcmToken!);
     if (fcmToken != null) {}
   }
 

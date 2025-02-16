@@ -142,99 +142,96 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                                   index: index,
                                                   key: UniqueKey(),
                                                   child: InkWell(
-                                                    onTap: () {},
-                                                    child: AnimatedContainer(
-                                                      padding: EdgeInsets.only(
-                                                          left:
-                                                              selectedpackage ==
-                                                                      index
-                                                                  ? 30
-                                                                  : 5,
-                                                          right: 5),
-                                                      margin: EdgeInsets.only(
-                                                          left: index * 80),
-                                                      decoration: BoxDecoration(
-                                                          boxShadow:
-                                                              selectedpackage ==
-                                                                      index
-                                                                  ? [
-                                                                      BoxShadow(
-                                                                          offset: Offset(4,
-                                                                              0),
-                                                                          color: Colors.black.withOpacity(
-                                                                              0.4),
-                                                                          blurRadius:
-                                                                              4,
-                                                                          spreadRadius:
-                                                                              0)
-                                                                    ]
-                                                                  : [
-                                                                      BoxShadow(
-                                                                          offset: Offset(4,
-                                                                              0),
-                                                                          color: Colors.black.withOpacity(
-                                                                              0.2),
-                                                                          blurRadius:
-                                                                              2,
-                                                                          spreadRadius:
-                                                                              0)
-                                                                    ],
-                                                          color: HexColor(
-                                                              listcampains![
+                                                      onTap: () {},
+                                                      child: AnimatedContainer(
+                                                        padding: EdgeInsets.only(
+                                                            left: selectedpackage ==
+                                                                        index &&
+                                                                    index != 0
+                                                                ? 30
+                                                                : 5,
+                                                            right: index ==
+                                                                    listcampains!
+                                                                            .length -
+                                                                        1
+                                                                ? 15
+                                                                : 5),
+                                                        margin: EdgeInsets.only(
+                                                            left: index * 80),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                boxShadow:
+                                                                    selectedpackage ==
+                                                                            index
+                                                                        ? [
+                                                                            BoxShadow(
+                                                                                offset: Offset(4, 0),
+                                                                                color: Colors.black.withOpacity(0.4),
+                                                                                blurRadius: 4,
+                                                                                spreadRadius: 0)
+                                                                          ]
+                                                                        : [
+                                                                            BoxShadow(
+                                                                                offset: Offset(4, 0),
+                                                                                color: Colors.black.withOpacity(0.2),
+                                                                                blurRadius: 2,
+                                                                                spreadRadius: 0)
+                                                                          ],
+                                                                color: HexColor(
+                                                                    listcampains![index]
+                                                                            .bgColor ??
+                                                                        '#AEAEAE'),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            13)),
+                                                        width:
+                                                            selectedpackage ==
+                                                                    index
+                                                                ? 148
+                                                                : 100,
+                                                        height: 47,
+                                                        duration: Duration(
+                                                            microseconds: 100),
+                                                        curve: Curves.linear,
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Expanded(
+                                                              child: FittedBox(
+                                                                fit: BoxFit
+                                                                    .fitWidth,
+                                                                child: Text(
+                                                                  listcampains![
                                                                           index]
-                                                                      .bgColor ??
-                                                                  '#AEAEAE'),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      13)),
-                                                      width: selectedpackage ==
-                                                              index
-                                                          ? 148
-                                                          : 100,
-                                                      height: 47,
-                                                      duration: Duration(
-                                                          microseconds: 100),
-                                                      curve: Curves.linear,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Expanded(
-                                                            child: FittedBox(
-                                                              fit: BoxFit
-                                                                  .fitWidth,
-                                                              child: Text(
-                                                                listcampains![
-                                                                        index]
-                                                                    .name!,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style: fontStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontFamily:
-                                                                        FontFamily
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        18),
+                                                                      .name!,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  style: fontStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontFamily:
+                                                                          FontFamily
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          18),
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
+                                                          ],
+                                                        ),
+                                                      )),
                                                 )).toList()),
                                   ],
                                 )),
@@ -485,16 +482,19 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                               ),
                             ),
                             10.verticalSpace,
-                            programsModel?.message == null
-                                ? Center(
-                                    child: Text(
-                                      LanguageClass.isEnglish
-                                          ? 'No Programs'
-                                          : 'لا يوجد برامج',
-                                      style: fontStyle(
-                                          color: Colors.black,
-                                          fontSize: 16.sp,
-                                          fontFamily: FontFamily.medium),
+                            programsModel?.message == null ||
+                                    programsModel!.message!.isEmpty
+                                ? Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        LanguageClass.isEnglish
+                                            ? 'There are currently no programs'
+                                            : 'لا يوجد برامج حالياً',
+                                        style: fontStyle(
+                                            color: Colors.black,
+                                            fontSize: 16.sp,
+                                            fontFamily: FontFamily.medium),
+                                      ),
                                     ),
                                   )
                                 : Expanded(
@@ -610,7 +610,7 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                                         ),
                                                       ),
                                                       Text(
-                                                        "${programsModel!.message![index].price} ${Routes.curruncy}",
+                                                        "${programsModel!.message![index].price} ${Routes.curruncy ?? ""}",
                                                         style: fontStyle(
                                                           fontSize: 14.sp,
                                                           color: Colors.black,
@@ -852,7 +852,7 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                         fit: BoxFit.scaleDown,
                                         child: Text(
                                           LanguageClass.isEnglish
-                                              ? "previous"
+                                              ? "Previous"
                                               : 'السابق',
                                           style: fontStyle(
                                               fontFamily: FontFamily.bold,

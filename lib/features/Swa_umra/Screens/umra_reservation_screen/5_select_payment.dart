@@ -239,7 +239,7 @@ class _SelectPaymentumraState extends State<SelectPaymentumra> {
                                                 .hasWalletBalance!) ...[
                                               20.horizontalSpace,
                                               Text(
-                                                '$balance ${Routes.curruncy}',
+                                                '$balance ${Routes.curruncy ?? ""}',
                                                 style: fontStyle(
                                                     color: Color(0xff23c956),
                                                     fontSize: 10.sp,

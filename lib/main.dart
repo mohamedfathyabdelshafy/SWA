@@ -2,7 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geolocator/geolocator.dart' as geo;
 import 'package:get_it/get_it.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:swa/bloc_observer.dart';
@@ -21,11 +23,8 @@ import 'package:swa/features/sign_in/signin_injection_container.dart';
 import 'package:swa/features/sign_up/signup_injection_container.dart';
 import 'package:swa/injection_container.dart';
 import 'package:swa/select_payment2/presentation/credit_card/presentation/navigation_helper.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'core/local_cache_helper.dart';
-import 'package:geolocator/geolocator.dart' as geo;
-
 import 'features/times_trips/times_trips_injection_container.dart';
 
 final sl = GetIt.instance;
@@ -102,6 +101,24 @@ class MyApp extends StatelessWidget {
             title: AppStrings.appName,
             navigatorKey: NavHelper().navigatorKey,
             debugShowCheckedModeBanner: false,
+            // home:
+            // MultiBlocProvider(providers: [
+            //   BlocProvider<RegisterCubit>(
+            //     create: (context) => sl<RegisterCubit>(),
+            //   ),
+            //   BlocProvider<GetAvailableCountriesCubit>(
+            //     create: (context) => sl<GetAvailableCountriesCubit>(),
+            //   ),
+            //   BlocProvider<GetAvailableCountryCitiesCubit>(
+            //     create: (context) => sl<GetAvailableCountryCitiesCubit>(),
+            //   ),
+            // ], child: SignUpScreen()),
+
+            // home: TriplistScreen(
+            //   city: "801",
+            //   date: "02-15-2025",
+            //   typeid: 1,
+            // ),
             initialRoute: '/',
             onGenerateRoute: AppRoute.onGenerateRoute,
           );

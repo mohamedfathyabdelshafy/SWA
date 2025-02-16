@@ -21,6 +21,7 @@ class CustomizedField extends StatefulWidget {
   double? borderradias;
   final int? maxLength;
   final bool? expanded;
+  final TextStyle? hintStyle;
 
   final ontap;
 
@@ -34,6 +35,7 @@ class CustomizedField extends StatefulWidget {
     this.ontap,
     this.labelcolor,
     this.expanded,
+    this.hintStyle,
     required this.controller,
     required this.validator,
     this.keyboardType,
@@ -130,13 +132,14 @@ class _CustomizedFieldState extends State<CustomizedField> {
                   fontFamily: FontFamily.regular,
                   fontWeight: FontWeight.w500,
                   color: Colors.red),
-              hintStyle: fontStyle(
-                color: Color(0xffA2A2A2),
-                fontFamily: FontFamily.medium,
-                height: 1.2,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.normal,
-              ),
+              hintStyle: widget.hintStyle ??
+                  fontStyle(
+                    color: Color(0xffA2A2A2),
+                    fontFamily: FontFamily.medium,
+                    height: 1.2,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.normal,
+                  ),
             ),
           ),
         ),

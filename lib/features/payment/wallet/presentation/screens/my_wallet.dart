@@ -145,7 +145,7 @@ class _MyCreditState extends State<MyCredit> {
                 margin: const EdgeInsets.symmetric(horizontal: 40),
                 child: Text(
                   widget.user != null
-                      ? "${myWalletResponseModel?.message?.toString()} ${Routes.curruncy}"
+                      ? "${myWalletResponseModel?.message?.toString()} ${Routes.curruncy ?? ""}"
                       : "--",
                   style: fontStyle(
                       fontWeight: FontWeight.bold,

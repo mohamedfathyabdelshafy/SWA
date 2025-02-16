@@ -812,7 +812,7 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                     ],
                                                   )),
                                                   Text(
-                                                    "${Routes.curruncy} ${state.responseTicketHistoryModel.message![index].price}",
+                                                    "${Routes.curruncy ?? ""} ${state.responseTicketHistoryModel.message![index].price}",
                                                     style: fontStyle(
                                                         color: Colors.white,
                                                         fontFamily:
@@ -1731,7 +1731,7 @@ class _TicketHistoryState extends State<TicketHistory> {
                     //                                           .spaceBetween,
                     //                                   children: [
                     //                                     Text(
-                    //                                       ("${Routes.curruncy}  ${ticket?.price ?? 0}")
+                    //                                       ("${Routes.curruncy??""}  ${ticket?.price ?? 0}")
                     //                                           .toString(),
                     //                                       style: fontStyle(
                     //                                           color: AppColors

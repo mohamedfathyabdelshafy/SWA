@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/Navigaton_bottombar.dart';
-import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
@@ -16,15 +14,13 @@ import 'package:swa/features/bus_reservation_layout/data/models/Ticket_class.dar
 import 'package:swa/features/bus_reservation_layout/presentation/screens/bus_layout.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/screens/bus_layout_back.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/screens/reservation_ticket.dart';
-import 'package:swa/features/home/presentation/screens/tabs/my_home.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
-import 'package:swa/features/sign_in/presentation/screens/login.dart';
 import 'package:swa/features/times_trips/presentation/PLOH/times_trips_cubit.dart';
 import 'package:swa/main.dart';
+
 import '../../../../core/local_cache_helper.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../bus_reservation_layout/presentation/PLOH/bus_layout_reservation_cubit.dart';
-import '../../../sign_in/domain/entities/user.dart';
 import '../../data/models/TimesTripsResponsedart.dart';
 
 // ignore: must_be_immutable
@@ -220,7 +216,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    "${Routes.curruncy} ${(Ticketreservation.countSeats1.length * Ticketreservation.priceticket1)}",
+                                    "${Routes.curruncy ?? ""} ${(Ticketreservation.countSeats1.length * Ticketreservation.priceticket1)}",
                                     style: fontStyle(
                                         color: Colors.white,
                                         fontFamily: FontFamily.bold,
@@ -549,8 +545,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                                   CrossAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                  '${widget.tripList[index].price.toString()} ${Routes.curruncy}' ??
-                                                      '',
+                                                  '${widget.tripList[index].price.toString()} ${Routes.curruncy ?? ""}',
                                                   style: fontStyle(
                                                       color: Colors.white,
                                                       fontFamily:
@@ -1204,7 +1199,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      "${Routes.curruncy} ${Ticketreservation.countSeats2.length * Ticketreservation.priceticket2}",
+                                      "${Routes.curruncy ?? ""} ${Ticketreservation.countSeats2.length * Ticketreservation.priceticket2}",
                                       style: fontStyle(
                                           color: Colors.white,
                                           fontFamily: FontFamily.bold,
@@ -1576,7 +1571,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                                         CrossAxisAlignment.end,
                                                     children: [
                                                       Text(
-                                                        '${widget.tripListBack![index].price.toString()} ${Routes.curruncy}' ??
+                                                        '${widget.tripListBack![index].price.toString()} ${Routes.curruncy ?? ""}' ??
                                                             '',
                                                         style: fontStyle(
                                                             color: Colors.white,

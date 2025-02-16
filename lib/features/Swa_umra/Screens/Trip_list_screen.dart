@@ -175,10 +175,11 @@ class _TriplistScreenState extends State<TriplistScreen> {
                                 ],
                               ),
                             ),
+                            10.verticalSpace,
                             Container(
                                 margin: EdgeInsets.only(
-                                    left: LanguageClass.isEnglish ? 55 : 0,
-                                    right: LanguageClass.isEnglish ? 0 : 55),
+                                    left: LanguageClass.isEnglish ? 15 : 0,
+                                    right: LanguageClass.isEnglish ? 0 : 15),
                                 alignment: LanguageClass.isEnglish
                                     ? Alignment.topLeft
                                     : Alignment.topRight,
@@ -231,12 +232,17 @@ class _TriplistScreenState extends State<TriplistScreen> {
                                                     },
                                                     child: AnimatedContainer(
                                                       padding: EdgeInsets.only(
-                                                          left:
-                                                              selectedpackage ==
-                                                                      index
-                                                                  ? 30
-                                                                  : 5,
-                                                          right: 5),
+                                                          left: selectedpackage ==
+                                                                      index &&
+                                                                  index != 0
+                                                              ? 30
+                                                              : 5,
+                                                          right: index ==
+                                                                  listcampains!
+                                                                          .length -
+                                                                      1
+                                                              ? 15
+                                                              : 5),
                                                       margin: EdgeInsets.only(
                                                           left: index * 80),
                                                       decoration: BoxDecoration(

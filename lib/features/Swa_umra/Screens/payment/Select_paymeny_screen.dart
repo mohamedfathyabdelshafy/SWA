@@ -15,18 +15,11 @@ import 'package:swa/features/Swa_umra/Screens/payment/fawry_screen.dart';
 import 'package:swa/features/Swa_umra/bloc/umra_bloc.dart';
 import 'package:swa/features/Swa_umra/models/umra_detail.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_respo.dart';
-import 'package:swa/features/payment/electronic_wallet/presentation/cubit/eWallet_cubit.dart';
-import 'package:swa/features/payment/electronic_wallet/presentation/screens/electronic_screens.dart';
-import 'package:swa/features/payment/fawry/presentation/cubit/fawry_cubit.dart';
-import 'package:swa/features/payment/fawry/presentation/screens/fawry.dart';
 import 'package:swa/features/payment/wallet/data/model/my_wallet_response_model.dart';
 import 'package:swa/features/payment/wallet/data/repo/my_wallet_repo.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
-import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/main.dart';
 import 'package:swa/select_payment2/data/models/Curruncy_model.dart';
-import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
-import 'package:swa/select_payment2/presentation/credit_card/presentation/screens/chargeCard_screen.dart';
 
 class SelectPaymentUmraScreen extends StatefulWidget {
   SelectPaymentUmraScreen({super.key, this.user});
@@ -186,7 +179,7 @@ class _SelectPaymentUmraScreenState extends State<SelectPaymentUmraScreen> {
                                             color: AppColors.umragold,
                                             width: 2)),
                                     child: Text(
-                                      '${balance} ${Routes.curruncy}',
+                                      '${balance} ${Routes.curruncy ?? ""}',
                                       style: fontStyle(
                                           color: AppColors.white,
                                           fontSize: 16,
@@ -300,7 +293,7 @@ class _SelectPaymentUmraScreenState extends State<SelectPaymentUmraScreen> {
                                                   borderRadius:
                                                       BorderRadius.circular(4)),
                                               child: SvgPicture.asset(
-                                                  'assets/images/wallet.svg'),
+                                                  'assets/images/icons8-open-wallet-78.png'),
                                             ),
                                             SizedBox(
                                               width: 14,

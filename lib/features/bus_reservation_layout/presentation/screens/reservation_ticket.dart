@@ -372,7 +372,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                       )),
 
                                       Text(
-                                        "${Routes.curruncy} $afterdiscount",
+                                        "${Routes.curruncy ?? ""} $afterdiscount",
                                         style: fontStyle(
                                             color: Colors.white,
                                             fontFamily: FontFamily.bold,
@@ -854,7 +854,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                               ],
                                             )),
                                             Text(
-                                              "${Routes.curruncy} $afterdiscount2",
+                                              "${Routes.curruncy ?? ""} $afterdiscount2",
                                               style: fontStyle(
                                                   color: Colors.white,
                                                   fontFamily: FontFamily.medium,
@@ -1636,9 +1636,9 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                 state.promocodemodel!.message?.isPrecentage ==
                                         true
                                     ? widget.tripTypeId == '2'
-                                        ? "${minusdiscount + minusdiscount2} ${Routes.curruncy}"
-                                        : "$minusdiscount ${Routes.curruncy}"
-                                    : "$totaldiscount ${Routes.curruncy}",
+                                        ? "${minusdiscount + minusdiscount2} ${Routes.curruncy ?? ""}"
+                                        : "$minusdiscount ${Routes.curruncy ?? ""}"
+                                    : "$totaldiscount ${Routes.curruncy ?? ""}",
                                 textAlign: TextAlign.center,
                                 style: fontStyle(
                                     color: AppColors.primaryColor,
@@ -1670,8 +1670,8 @@ class _ReservationTicketState extends State<ReservationTicket> {
                               ),
                               Text(
                                 widget.tripTypeId == '2'
-                                    ? "  ${afterdiscount + afterdiscount2} ${Routes.curruncy}"
-                                    : "  $afterdiscount ${Routes.curruncy}",
+                                    ? "  ${afterdiscount + afterdiscount2} ${Routes.curruncy ?? ""}"
+                                    : "  $afterdiscount ${Routes.curruncy ?? ""}",
                                 textAlign: TextAlign.center,
                                 style: fontStyle(
                                     color: AppColors.blackColor,

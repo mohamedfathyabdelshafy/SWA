@@ -176,99 +176,96 @@ class _AccomidationScreenState extends State<AccomidationScreen> {
                                                   index: index,
                                                   key: UniqueKey(),
                                                   child: InkWell(
-                                                    onTap: () {},
-                                                    child: AnimatedContainer(
-                                                      padding: EdgeInsets.only(
-                                                          left:
-                                                              selectedpackage ==
-                                                                      index
-                                                                  ? 30
-                                                                  : 5,
-                                                          right: 5),
-                                                      margin: EdgeInsets.only(
-                                                          left: index * 80),
-                                                      decoration: BoxDecoration(
-                                                          boxShadow:
-                                                              selectedpackage ==
-                                                                      index
-                                                                  ? [
-                                                                      BoxShadow(
-                                                                          offset: Offset(4,
-                                                                              0),
-                                                                          color: Colors.black.withOpacity(
-                                                                              0.4),
-                                                                          blurRadius:
-                                                                              4,
-                                                                          spreadRadius:
-                                                                              0)
-                                                                    ]
-                                                                  : [
-                                                                      BoxShadow(
-                                                                          offset: Offset(4,
-                                                                              0),
-                                                                          color: Colors.black.withOpacity(
-                                                                              0.2),
-                                                                          blurRadius:
-                                                                              2,
-                                                                          spreadRadius:
-                                                                              0)
-                                                                    ],
-                                                          color: HexColor(
-                                                              listcampains![
+                                                      onTap: () {},
+                                                      child: AnimatedContainer(
+                                                        padding: EdgeInsets.only(
+                                                            left: selectedpackage ==
+                                                                        index &&
+                                                                    index != 0
+                                                                ? 30
+                                                                : 5,
+                                                            right: index ==
+                                                                    listcampains!
+                                                                            .length -
+                                                                        1
+                                                                ? 15
+                                                                : 5),
+                                                        margin: EdgeInsets.only(
+                                                            left: index * 80),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                boxShadow:
+                                                                    selectedpackage ==
+                                                                            index
+                                                                        ? [
+                                                                            BoxShadow(
+                                                                                offset: Offset(4, 0),
+                                                                                color: Colors.black.withOpacity(0.4),
+                                                                                blurRadius: 4,
+                                                                                spreadRadius: 0)
+                                                                          ]
+                                                                        : [
+                                                                            BoxShadow(
+                                                                                offset: Offset(4, 0),
+                                                                                color: Colors.black.withOpacity(0.2),
+                                                                                blurRadius: 2,
+                                                                                spreadRadius: 0)
+                                                                          ],
+                                                                color: HexColor(
+                                                                    listcampains![index]
+                                                                            .bgColor ??
+                                                                        '#AEAEAE'),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            13)),
+                                                        width:
+                                                            selectedpackage ==
+                                                                    index
+                                                                ? 148
+                                                                : 100,
+                                                        height: 47,
+                                                        duration: Duration(
+                                                            microseconds: 100),
+                                                        curve: Curves.linear,
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Expanded(
+                                                              child: FittedBox(
+                                                                fit: BoxFit
+                                                                    .fitWidth,
+                                                                child: Text(
+                                                                  listcampains![
                                                                           index]
-                                                                      .bgColor ??
-                                                                  '#AEAEAE'),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      13)),
-                                                      width: selectedpackage ==
-                                                              index
-                                                          ? 148
-                                                          : 100,
-                                                      height: 47,
-                                                      duration: Duration(
-                                                          microseconds: 100),
-                                                      curve: Curves.linear,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Expanded(
-                                                            child: FittedBox(
-                                                              fit: BoxFit
-                                                                  .fitWidth,
-                                                              child: Text(
-                                                                listcampains![
-                                                                        index]
-                                                                    .name!,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style: fontStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontFamily:
-                                                                        FontFamily
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        18),
+                                                                      .name!,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  style: fontStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontFamily:
+                                                                          FontFamily
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          18),
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
+                                                          ],
+                                                        ),
+                                                      )),
                                                 )).toList()),
                                   ],
                                 )),
@@ -522,7 +519,7 @@ class _AccomidationScreenState extends State<AccomidationScreen> {
                                     child: ListView.builder(
                                       itemCount:
                                           accomidationModel.message?.length,
-                                      shrinkWrap: true,
+                                      // shrinkWrap: true,
                                       physics: ScrollPhysics(),
                                       padding: EdgeInsets.zero,
                                       itemBuilder:
@@ -532,7 +529,6 @@ class _AccomidationScreenState extends State<AccomidationScreen> {
                                                 MainAxisAlignment.start,
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Container(
                                                 margin: EdgeInsets.symmetric(
@@ -690,7 +686,7 @@ class _AccomidationScreenState extends State<AccomidationScreen> {
                                                                       context)
                                                                   .size
                                                                   .height *
-                                                              0.4
+                                                              0.6
                                                           : null,
                                                       child: Scrollbar(
                                                         thickness: 10,
@@ -763,152 +759,162 @@ class _AccomidationScreenState extends State<AccomidationScreen> {
                                                               ),
                                                             ),
                                                             5.verticalSpace,
-                                                            ListView.builder(
-                                                              itemCount:
-                                                                  accomidationModel
-                                                                      .message![
-                                                                          index]
-                                                                      .roomTypeList!
-                                                                      .length,
-                                                              shrinkWrap: true,
-                                                              physics:
-                                                                  ScrollPhysics(),
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
-                                                                      horizontal:
-                                                                          15.w),
-                                                              itemBuilder:
-                                                                  (BuildContext
-                                                                          context,
-                                                                      int index2) {
-                                                                return accomidationModel
-                                                                        .message![
-                                                                            index]
-                                                                        .roomTypeList![
-                                                                            index2]
-                                                                        .isActive!
-                                                                    ? Container(
-                                                                        width: double
-                                                                            .infinity,
-                                                                        margin:
-                                                                            EdgeInsets.only(
-                                                                          top: 8
-                                                                              .h,
-                                                                        ),
-                                                                        padding: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                11.w,
-                                                                            vertical: 9.h),
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          color:
-                                                                              Color(0xfff4f4f4),
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(8),
-                                                                        ),
-                                                                        child:
-                                                                            Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.center,
-                                                                          children: [
-                                                                            Container(
-                                                                              width: 80.w,
-                                                                              height: 80.w,
-                                                                              child: Image.network(accomidationModel.message![index].roomTypeList![index2].image!),
-                                                                            ),
-                                                                            12.horizontalSpace,
-                                                                            Expanded(
-                                                                              child: Column(
-                                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                                mainAxisSize: MainAxisSize.min,
-                                                                                children: [
-                                                                                  Text(
-                                                                                    "${accomidationModel.message![index].roomTypeList![index2].typeRoom}",
-                                                                                    style: fontStyle(fontSize: 17.sp, color: Colors.black, fontWeight: FontWeight.w500, height: 1.2, fontFamily: FontFamily.medium),
-                                                                                  ),
-                                                                                  2.verticalSpace,
-                                                                                  RichText(
-                                                                                    textAlign: TextAlign.justify,
-                                                                                    text: TextSpan(text: accomidationModel.message![index].roomTypeList![index2].description ?? ' ', style: fontStyle(fontSize: 12.sp, color: Colors.black, fontWeight: FontWeight.w500, height: 1.2, fontFamily: FontFamily.regular), children: [
-                                                                                      accomidationModel.message![index].roomTypeList![index2].withMoreLink == true
-                                                                                          ? TextSpan(
-                                                                                              recognizer: TapGestureRecognizer()
-                                                                                                ..onTap = () {
-                                                                                                  UmraRepos().launchInWebView(accomidationModel.message![index].roomTypeList![index2].moreLink!);
-                                                                                                },
-                                                                                              text: '...more.',
-                                                                                              style: fontStyle(color: Colors.black, fontSize: 12.sp, decoration: TextDecoration.underline, fontFamily: FontFamily.bold, fontWeight: FontWeight.w500),
-                                                                                            )
-                                                                                          : TextSpan()
-                                                                                    ]),
-                                                                                  ),
-                                                                                  12.verticalSpace,
-                                                                                  Text(
-                                                                                    LanguageClass.isEnglish ? "Per person" : "سعر الفرد",
-                                                                                    style: fontStyle(fontSize: 14.sp, color: Colors.black, fontWeight: FontWeight.w500, height: 1.2, fontFamily: FontFamily.bold),
-                                                                                  ),
-                                                                                  Row(
-                                                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                    children: [
-                                                                                      Text(
-                                                                                        customernumber[index].customernumbers[index2] == 0 ? "${(accomidationModel.message![index].roomTypeList![index2].price)} ${Routes.curruncy}" : "${(accomidationModel.message![index].roomTypeList![index2].price * customernumber[index].customernumbers[index2]).toStringAsFixed(2)} ${Routes.curruncy}",
-                                                                                        style: fontStyle(color: Color(0xffff5d4b), fontSize: 12.sp, height: 1.2, fontFamily: FontFamily.regular, fontWeight: FontWeight.w500),
-                                                                                      ),
-                                                                                      9.horizontalSpace,
-                                                                                      Text(
-                                                                                        customernumber[index].customernumbers[index2] == 0 ? "${(accomidationModel.message![index].roomTypeList![index2].priceBeforeDiscount)} ${Routes.curruncy}" : "${(accomidationModel.message![index].roomTypeList![index2].priceBeforeDiscount * customernumber[index].customernumbers[index2]).toStringAsFixed(2)} ${Routes.curruncy}",
-                                                                                        style: fontStyle(
-                                                                                          color: Color(0xff9f9f9f),
-                                                                                          fontSize: 12.sp,
-                                                                                          height: 1.2,
-                                                                                          fontFamily: FontFamily.regular,
-                                                                                          fontWeight: FontWeight.w500,
-                                                                                          decoration: TextDecoration.lineThrough,
-                                                                                        ),
-                                                                                      ),
-                                                                                      Spacer(),
-                                                                                      Container(
-                                                                                        width: 80.w,
-                                                                                        height: 18.h,
-                                                                                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4)),
-                                                                                        child: Row(
-                                                                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                          children: [
-                                                                                            Expanded(
-                                                                                              child: InkWell(
-                                                                                                  onTap: () {
-                                                                                                    if (customernumber[index].customernumbers[index2] > 0) {
-                                                                                                      setState(() {
-                                                                                                        customernumber[index].customernumbers[index2]--;
-                                                                                                      });
-                                                                                                    }
+                                                            Expanded(
+                                                              child: ListView
+                                                                  .builder(
+                                                                itemCount: accomidationModel
+                                                                    .message![
+                                                                        index]
+                                                                    .roomTypeList!
+                                                                    .length,
+                                                                shrinkWrap:
+                                                                    true,
+                                                                physics:
+                                                                    ScrollPhysics(),
+                                                                padding: EdgeInsets
+                                                                    .symmetric(
+                                                                        horizontal:
+                                                                            15.w),
+                                                                itemBuilder:
+                                                                    (BuildContext
+                                                                            context,
+                                                                        int index2) {
+                                                                  return accomidationModel
+                                                                          .message![
+                                                                              index]
+                                                                          .roomTypeList![
+                                                                              index2]
+                                                                          .isActive!
+                                                                      ? Container(
+                                                                          width:
+                                                                              double.infinity,
+                                                                          margin:
+                                                                              EdgeInsets.only(
+                                                                            top:
+                                                                                8.h,
+                                                                          ),
+                                                                          padding: EdgeInsets.symmetric(
+                                                                              horizontal: 11.w,
+                                                                              vertical: 9.h),
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color:
+                                                                                Color(0xfff4f4f4),
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(8),
+                                                                          ),
+                                                                          child:
+                                                                              Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.start,
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.center,
+                                                                            children: [
+                                                                              Container(
+                                                                                width: 80.w,
+                                                                                height: 80.w,
+                                                                                child: Image.network(accomidationModel.message![index].roomTypeList![index2].image!),
+                                                                              ),
+                                                                              12.horizontalSpace,
+                                                                              Expanded(
+                                                                                child: Column(
+                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                                                  mainAxisSize: MainAxisSize.min,
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      "${accomidationModel.message![index].roomTypeList![index2].typeRoom}",
+                                                                                      style: fontStyle(fontSize: 17.sp, color: Colors.black, fontWeight: FontWeight.w500, height: 1.2, fontFamily: FontFamily.medium),
+                                                                                    ),
+                                                                                    2.verticalSpace,
+                                                                                    RichText(
+                                                                                      textAlign: TextAlign.justify,
+                                                                                      text: TextSpan(text: accomidationModel.message![index].roomTypeList![index2].description ?? ' ', style: fontStyle(fontSize: 12.sp, color: Colors.black, fontWeight: FontWeight.w500, height: 1.2, fontFamily: FontFamily.regular), children: [
+                                                                                        accomidationModel.message![index].roomTypeList![index2].withMoreLink == true
+                                                                                            ? TextSpan(
+                                                                                                recognizer: TapGestureRecognizer()
+                                                                                                  ..onTap = () {
+                                                                                                    UmraRepos().launchInWebView(accomidationModel.message![index].roomTypeList![index2].moreLink!);
                                                                                                   },
-                                                                                                  child: Container(
-                                                                                                    height: 18.h,
-                                                                                                    alignment: Alignment.center,
-                                                                                                    child: Text(
-                                                                                                      '-',
-                                                                                                      textAlign: TextAlign.center,
-                                                                                                      style: fontStyle(color: Colors.black, fontFamily: FontFamily.medium, height: 1.2, fontSize: 16.sp),
-                                                                                                    ),
-                                                                                                  )),
-                                                                                            ),
-                                                                                            Text(
-                                                                                              customernumber[index].customernumbers[index2].toString(),
-                                                                                              textAlign: TextAlign.center,
-                                                                                              style: fontStyle(color: Colors.black, height: 1.2, fontFamily: FontFamily.medium, fontSize: 10.sp),
-                                                                                            ),
-                                                                                            Expanded(
-                                                                                              child: InkWell(
-                                                                                                  onTap: () {
-                                                                                                    if (UmraDetails.reservedseats.isNotEmpty) {
-                                                                                                      if (accomidationModel.object!.isLinkWithTransportation == true && customernumber[index2].customernumbers.fold(0, (previousValue, element) => previousValue + element) >= UmraDetails.reservedseats.first.seatsnumber.length) {
-                                                                                                        Constants.showDefaultSnackBar(context: context, text: LanguageClass.isEnglish ? 'select number of persons in the room same as person numbers in transportation' : 'حدد عدد الأشخاص في الغرفة بنفس عدد الأشخاص في وسائل النقل');
+                                                                                                text: '...more.',
+                                                                                                style: fontStyle(color: Colors.black, fontSize: 12.sp, decoration: TextDecoration.underline, fontFamily: FontFamily.bold, fontWeight: FontWeight.w500),
+                                                                                              )
+                                                                                            : TextSpan()
+                                                                                      ]),
+                                                                                    ),
+                                                                                    12.verticalSpace,
+                                                                                    Text(
+                                                                                      LanguageClass.isEnglish ? "Per person" : "سعر الفرد",
+                                                                                      style: fontStyle(fontSize: 14.sp, color: Colors.black, fontWeight: FontWeight.w500, height: 1.2, fontFamily: FontFamily.bold),
+                                                                                    ),
+                                                                                    Row(
+                                                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                      children: [
+                                                                                        Text(
+                                                                                          customernumber[index].customernumbers[index2] == 0 ? "${(accomidationModel.message![index].roomTypeList![index2].price)} ${Routes.curruncy ?? ""}" : "${(accomidationModel.message![index].roomTypeList![index2].price * customernumber[index].customernumbers[index2]).toStringAsFixed(2)} ${Routes.curruncy ?? ""}",
+                                                                                          style: fontStyle(color: Color(0xffff5d4b), fontSize: 12.sp, height: 1.2, fontFamily: FontFamily.regular, fontWeight: FontWeight.w500),
+                                                                                        ),
+                                                                                        9.horizontalSpace,
+                                                                                        Text(
+                                                                                          customernumber[index].customernumbers[index2] == 0 ? "${(accomidationModel.message![index].roomTypeList![index2].priceBeforeDiscount)} ${Routes.curruncy ?? ""}" : "${(accomidationModel.message![index].roomTypeList![index2].priceBeforeDiscount * customernumber[index].customernumbers[index2]).toStringAsFixed(2)} ${Routes.curruncy ?? ""}",
+                                                                                          style: fontStyle(
+                                                                                            color: Color(0xff9f9f9f),
+                                                                                            fontSize: 12.sp,
+                                                                                            height: 1.2,
+                                                                                            fontFamily: FontFamily.regular,
+                                                                                            fontWeight: FontWeight.w500,
+                                                                                            decoration: TextDecoration.lineThrough,
+                                                                                          ),
+                                                                                        ),
+                                                                                        Spacer(),
+                                                                                        Container(
+                                                                                          width: 80.w,
+                                                                                          height: 18.h,
+                                                                                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4)),
+                                                                                          child: Row(
+                                                                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                            children: [
+                                                                                              Expanded(
+                                                                                                child: InkWell(
+                                                                                                    onTap: () {
+                                                                                                      if (customernumber[index].customernumbers[index2] > 0) {
+                                                                                                        setState(() {
+                                                                                                          customernumber[index].customernumbers[index2]--;
+                                                                                                        });
+                                                                                                      }
+                                                                                                    },
+                                                                                                    child: Container(
+                                                                                                      height: 18.h,
+                                                                                                      alignment: Alignment.center,
+                                                                                                      child: Text(
+                                                                                                        '-',
+                                                                                                        textAlign: TextAlign.center,
+                                                                                                        style: fontStyle(color: Colors.black, fontFamily: FontFamily.medium, height: 1.2, fontSize: 16.sp),
+                                                                                                      ),
+                                                                                                    )),
+                                                                                              ),
+                                                                                              Text(
+                                                                                                customernumber[index].customernumbers[index2].toString(),
+                                                                                                textAlign: TextAlign.center,
+                                                                                                style: fontStyle(color: Colors.black, height: 1.2, fontFamily: FontFamily.medium, fontSize: 10.sp),
+                                                                                              ),
+                                                                                              Expanded(
+                                                                                                child: InkWell(
+                                                                                                    onTap: () {
+                                                                                                      if (UmraDetails.reservedseats.isNotEmpty) {
+                                                                                                        if (accomidationModel.object!.isLinkWithTransportation == true && customernumber[index2].customernumbers.fold(0, (previousValue, element) => previousValue + element) >= UmraDetails.reservedseats.first.seatsnumber.length) {
+                                                                                                          Constants.showDefaultSnackBar(context: context, text: LanguageClass.isEnglish ? 'select number of persons in the room same as person numbers in transportation' : 'حدد عدد الأشخاص في الغرفة بنفس عدد الأشخاص في وسائل النقل');
+                                                                                                        } else {
+                                                                                                          if (customernumber[index].customernumbers[index2] == accomidationModel.message![index].roomTypeList![index2].numberAllow) {
+                                                                                                            Constants.showDefaultSnackBar(context: context, text: LanguageClass.isEnglish ? 'this is the maximum persons in this room' : 'هذا هو الحد الأقصى لعدد الأشخاص في هذه الغرفة');
+                                                                                                          } else {
+                                                                                                            setState(() {
+                                                                                                              customernumber[index].customernumbers[index2]++;
+                                                                                                            });
+                                                                                                          }
+                                                                                                        }
                                                                                                       } else {
                                                                                                         if (customernumber[index].customernumbers[index2] == accomidationModel.message![index].roomTypeList![index2].numberAllow) {
                                                                                                           Constants.showDefaultSnackBar(context: context, text: LanguageClass.isEnglish ? 'this is the maximum persons in this room' : 'هذا هو الحد الأقصى لعدد الأشخاص في هذه الغرفة');
@@ -918,39 +924,31 @@ class _AccomidationScreenState extends State<AccomidationScreen> {
                                                                                                           });
                                                                                                         }
                                                                                                       }
-                                                                                                    } else {
-                                                                                                      if (customernumber[index].customernumbers[index2] == accomidationModel.message![index].roomTypeList![index2].numberAllow) {
-                                                                                                        Constants.showDefaultSnackBar(context: context, text: LanguageClass.isEnglish ? 'this is the maximum persons in this room' : 'هذا هو الحد الأقصى لعدد الأشخاص في هذه الغرفة');
-                                                                                                      } else {
-                                                                                                        setState(() {
-                                                                                                          customernumber[index].customernumbers[index2]++;
-                                                                                                        });
-                                                                                                      }
-                                                                                                    }
-                                                                                                  },
-                                                                                                  child: Container(
-                                                                                                    height: 18.h,
-                                                                                                    alignment: Alignment.center,
-                                                                                                    child: Text(
-                                                                                                      '+',
-                                                                                                      textAlign: TextAlign.center,
-                                                                                                      style: fontStyle(color: Colors.black, height: 1.2, fontFamily: FontFamily.medium, fontSize: 16.sp),
-                                                                                                    ),
-                                                                                                  )),
-                                                                                            ),
-                                                                                          ],
-                                                                                        ),
-                                                                                      )
-                                                                                    ],
-                                                                                  )
-                                                                                ],
-                                                                              ),
-                                                                            )
-                                                                          ],
-                                                                        ),
-                                                                      )
-                                                                    : SizedBox();
-                                                              },
+                                                                                                    },
+                                                                                                    child: Container(
+                                                                                                      height: 18.h,
+                                                                                                      alignment: Alignment.center,
+                                                                                                      child: Text(
+                                                                                                        '+',
+                                                                                                        textAlign: TextAlign.center,
+                                                                                                        style: fontStyle(color: Colors.black, height: 1.2, fontFamily: FontFamily.medium, fontSize: 16.sp),
+                                                                                                      ),
+                                                                                                    )),
+                                                                                              ),
+                                                                                            ],
+                                                                                          ),
+                                                                                        )
+                                                                                      ],
+                                                                                    )
+                                                                                  ],
+                                                                                ),
+                                                                              )
+                                                                            ],
+                                                                          ),
+                                                                        )
+                                                                      : SizedBox();
+                                                                },
+                                                              ),
                                                             ),
                                                           ],
                                                         ),
@@ -987,7 +985,7 @@ class _AccomidationScreenState extends State<AccomidationScreen> {
                                         fit: BoxFit.scaleDown,
                                         child: Text(
                                           LanguageClass.isEnglish
-                                              ? "previous"
+                                              ? "Previous"
                                               : 'السابق',
                                           style: fontStyle(
                                               fontFamily: FontFamily.bold,

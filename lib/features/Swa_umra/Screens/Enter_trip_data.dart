@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,6 +35,8 @@ class _TripdataScreenState extends State<TripdataScreen> {
   DateTime? date;
 
   String selectedDate = '';
+  DateTime? selectedGeorgianDate;
+  JHijri? selectedHijriDate;
 
   bool opentap = false;
 
@@ -361,6 +365,8 @@ class _TripdataScreenState extends State<TripdataScreen> {
                             customdatepicker(
                               context: context,
                               hijiri: ishijiri,
+                              selectedGeorgianDate: selectedGeorgianDate,
+                              selectedHijriDate: selectedHijriDate,
                               onchange: (hdate) {
                                 date = hdate.date;
                                 hdate.jhijri.fDisplay = DisplayFormat.MMDDYYYY;
@@ -371,6 +377,10 @@ class _TripdataScreenState extends State<TripdataScreen> {
                                         intl.DateFormat('MM-dd-yyyy')
                                             .format(date!)
                                             .toString();
+
+                                ishijiri
+                                    ? selectedHijriDate = hdate.jhijri
+                                    : selectedGeorgianDate = hdate.date;
                                 setState(() {});
                                 Navigator.pop(context);
                               },
@@ -567,20 +577,28 @@ class _TripdataScreenState extends State<TripdataScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Icon(
-                                  Icons.search_rounded,
-                                  color: Colors.white,
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      top: LanguageClass.isEnglish ? 0 : 5.0),
+                                  child: Icon(
+                                    Icons.search_rounded,
+                                    color: Colors.white,
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 8,
                                 ),
-                                Text(
-                                  LanguageClass.isEnglish ? 'Search' : 'بحث',
-                                  style: fontStyle(
-                                    color: Colors.white,
-                                    fontFamily: FontFamily.bold,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w600,
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      bottom: LanguageClass.isEnglish ? 0 : 10),
+                                  child: Text(
+                                    LanguageClass.isEnglish ? 'Search' : 'بحث',
+                                    style: fontStyle(
+                                      color: Colors.white,
+                                      fontFamily: FontFamily.bold,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 )
                               ],
@@ -598,10 +616,13 @@ class _TripdataScreenState extends State<TripdataScreen> {
         ));
   }
 
-  Future customdatepicker(
-      {required BuildContext context,
-      required bool hijiri,
-      required onchange(JPickerValue date)}) async {
+  Future customdatepicker({
+    required BuildContext context,
+    required bool hijiri,
+    DateTime? selectedGeorgianDate,
+    JHijri? selectedHijriDate,
+    required Function(JPickerValue date) onchange,
+  }) async {
     return showGlobalDatePicker(
       context: context,
       headerTitle: Container(
@@ -614,7 +635,11 @@ class _TripdataScreenState extends State<TripdataScreen> {
             onTap: () {
               Navigator.pop(context);
               ishijiri = !ishijiri;
+              selectedGeorgianDate = null;
+              selectedHijriDate = null;
               customdatepicker(
+                selectedGeorgianDate: selectedGeorgianDate,
+                selectedHijriDate: selectedHijriDate,
                 context: context,
                 hijiri: ishijiri,
                 onchange: onchange,
@@ -647,7 +672,9 @@ class _TripdataScreenState extends State<TripdataScreen> {
               ],
             )),
       ),
-      selectedDate: JDateModel(jhijri: JHijri.now(), dateTime: DateTime.now()),
+      selectedDate: JDateModel(
+          jhijri: hijiri ? selectedHijriDate ?? JHijri.now() : null,
+          dateTime: !hijiri ? selectedGeorgianDate ?? DateTime.now() : null),
       pickerMode: DatePickerMode.day,
       pickerTheme: Theme.of(context),
       textDirection: TextDirection.ltr,

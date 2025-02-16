@@ -145,11 +145,11 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                                         fontFamily: FontFamily.bold),
                                   ),
                                   validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'This Field is Required';
-                                    } else {
-                                      return null;
-                                    }
+                                    return value!.isEmpty
+                                        ? 'This Field is Required'
+                                        : value.length < 11
+                                            ? 'Phone number must be 11 digits'
+                                            : null;
                                   },
                                 ),
                               ),
@@ -314,7 +314,8 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                             onTap: () {
                               log(phoneController.text);
                               if (phoneController.text == null ||
-                                  phoneController.text == '') {
+                                  phoneController.text == '' ||
+                                  phoneController.text.length < 11) {
                                 Constants.showDefaultSnackBar(
                                   context: context,
                                   text: LanguageClass.isEnglish

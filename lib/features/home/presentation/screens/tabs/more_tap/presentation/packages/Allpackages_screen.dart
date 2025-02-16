@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/lines_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/repo/more_repo.dart';
-import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/PLOH/more_cubit.dart';
-import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/PLOH/more_states.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/Select_package.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
 import 'package:swa/main.dart';
-import '../../../../../../../../config/routes/app_routes.dart';
-import '../../../../../../../../core/utils/constants.dart';
 
 class packagesScreen extends StatefulWidget {
   packagesScreen({super.key});
@@ -156,7 +151,7 @@ class _packagesScreenState extends State<packagesScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            selectpackageScreen()));
+                                            SelectPackageScreen()));
                               },
                               child: Container(
                                 height: 50,

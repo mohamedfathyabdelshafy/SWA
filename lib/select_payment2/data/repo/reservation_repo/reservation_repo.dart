@@ -156,14 +156,17 @@ class ReservationRepo {
     var countryid = CacheHelper.getDataToSharedPref(
       key: 'countryid',
     );
+    log("henaaa 1");
     final msg = jsonEncode(
         {"CustomerId": custId, "Amount": amount, "countryID": countryid});
+    log("henaaa 2");
 
     print(msg);
     var response = await apiConsumer.post(
       EndPoints.fawryPaymentMethod,
       body: msg,
     );
+    log("henaaa 3");
 
     print(" Body " + response.request.body);
 

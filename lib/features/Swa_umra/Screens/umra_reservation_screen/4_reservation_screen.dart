@@ -1,8 +1,4 @@
-import 'dart:developer';
-import 'dart:math';
-
 import 'package:dotted_line/dotted_line.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,19 +13,14 @@ import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/hex_color.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/styles.dart';
-import 'package:swa/features/Swa_umra/Screens/payment/Electronic_Wallet.dart';
 import 'package:swa/features/Swa_umra/Screens/payment/card_payment.dart';
 import 'package:swa/features/Swa_umra/Screens/payment/fawry_screen.dart';
 import 'package:swa/features/Swa_umra/Screens/umra_reservation_screen/5_select_payment.dart';
-
 import 'package:swa/features/Swa_umra/bloc/umra_bloc.dart';
-import 'package:swa/features/Swa_umra/Screens/payment/fawry_screen.dart';
 import 'package:swa/features/Swa_umra/models/campainlistmodel.dart';
 import 'package:swa/features/Swa_umra/models/payment_type_model.dart';
-import 'package:swa/features/Swa_umra/models/programs_model.dart';
 import 'package:swa/features/Swa_umra/models/umra_detail.dart';
 import 'package:swa/features/Swa_umra/models/umral_trip_model.dart';
-import 'package:swa/features/Swa_umra/repository/Umra_repository.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_respo.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/payment_packages/cardpayment_packages.dart';
 import 'package:swa/features/payment/wallet/data/model/my_wallet_response_model.dart';
@@ -648,99 +639,96 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                   index: index,
                                                   key: UniqueKey(),
                                                   child: InkWell(
-                                                    onTap: () {},
-                                                    child: AnimatedContainer(
-                                                      padding: EdgeInsets.only(
-                                                          left:
-                                                              selectedpackage ==
-                                                                      index
-                                                                  ? 30
-                                                                  : 5,
-                                                          right: 5),
-                                                      margin: EdgeInsets.only(
-                                                          left: index * 80),
-                                                      decoration: BoxDecoration(
-                                                          boxShadow:
-                                                              selectedpackage ==
-                                                                      index
-                                                                  ? [
-                                                                      BoxShadow(
-                                                                          offset: Offset(4,
-                                                                              0),
-                                                                          color: Colors.black.withOpacity(
-                                                                              0.4),
-                                                                          blurRadius:
-                                                                              4,
-                                                                          spreadRadius:
-                                                                              0)
-                                                                    ]
-                                                                  : [
-                                                                      BoxShadow(
-                                                                          offset: Offset(4,
-                                                                              0),
-                                                                          color: Colors.black.withOpacity(
-                                                                              0.2),
-                                                                          blurRadius:
-                                                                              2,
-                                                                          spreadRadius:
-                                                                              0)
-                                                                    ],
-                                                          color: HexColor(
-                                                              listcampains![
+                                                      onTap: () {},
+                                                      child: AnimatedContainer(
+                                                        padding: EdgeInsets.only(
+                                                            left: selectedpackage ==
+                                                                        index &&
+                                                                    index != 0
+                                                                ? 30
+                                                                : 5,
+                                                            right: index ==
+                                                                    listcampains!
+                                                                            .length -
+                                                                        1
+                                                                ? 15
+                                                                : 5),
+                                                        margin: EdgeInsets.only(
+                                                            left: index * 80),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                boxShadow:
+                                                                    selectedpackage ==
+                                                                            index
+                                                                        ? [
+                                                                            BoxShadow(
+                                                                                offset: Offset(4, 0),
+                                                                                color: Colors.black.withOpacity(0.4),
+                                                                                blurRadius: 4,
+                                                                                spreadRadius: 0)
+                                                                          ]
+                                                                        : [
+                                                                            BoxShadow(
+                                                                                offset: Offset(4, 0),
+                                                                                color: Colors.black.withOpacity(0.2),
+                                                                                blurRadius: 2,
+                                                                                spreadRadius: 0)
+                                                                          ],
+                                                                color: HexColor(
+                                                                    listcampains![index]
+                                                                            .bgColor ??
+                                                                        '#AEAEAE'),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            13)),
+                                                        width:
+                                                            selectedpackage ==
+                                                                    index
+                                                                ? 148
+                                                                : 100,
+                                                        height: 47,
+                                                        duration: Duration(
+                                                            microseconds: 100),
+                                                        curve: Curves.linear,
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Expanded(
+                                                              child: FittedBox(
+                                                                fit: BoxFit
+                                                                    .fitWidth,
+                                                                child: Text(
+                                                                  listcampains![
                                                                           index]
-                                                                      .bgColor ??
-                                                                  '#AEAEAE'),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      13)),
-                                                      width: selectedpackage ==
-                                                              index
-                                                          ? 148
-                                                          : 100,
-                                                      height: 47,
-                                                      duration: Duration(
-                                                          microseconds: 100),
-                                                      curve: Curves.linear,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Expanded(
-                                                            child: FittedBox(
-                                                              fit: BoxFit
-                                                                  .fitWidth,
-                                                              child: Text(
-                                                                listcampains![
-                                                                        index]
-                                                                    .name!,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style: fontStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontFamily:
-                                                                        FontFamily
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        18),
+                                                                      .name!,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  style: fontStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontFamily:
+                                                                          FontFamily
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          18),
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
+                                                          ],
+                                                        ),
+                                                      )),
                                                 )).toList()),
                                   ],
                                 )),
@@ -1073,7 +1061,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                   ),
                                                   Spacer(),
                                                   Text(
-                                                    '${Routes.curruncy} ${accomidationprice.toStringAsFixed(2)}',
+                                                    '${Routes.curruncy ?? ""} ${accomidationprice.toStringAsFixed(2)}',
                                                     style: fontStyle(
                                                         fontFamily:
                                                             FontFamily.medium,
@@ -1310,7 +1298,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                   ),
                                                   Spacer(),
                                                   Text(
-                                                    '${Routes.curruncy} ${transportationprice.toStringAsFixed(2)}',
+                                                    '${Routes.curruncy ?? ""} ${transportationprice.toStringAsFixed(2)}',
                                                     style: fontStyle(
                                                         fontFamily:
                                                             FontFamily.medium,
@@ -1606,7 +1594,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                   ),
                                                   Spacer(),
                                                   Text(
-                                                    '${Routes.curruncy} ${programsprice.toStringAsFixed(2)}',
+                                                    '${Routes.curruncy ?? ""} ${programsprice.toStringAsFixed(2)}',
                                                     style: fontStyle(
                                                         fontFamily:
                                                             FontFamily.medium,
@@ -1721,7 +1709,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                 ),
                                                               ),
                                                               Text(
-                                                                "${UmraDetails.umraprograms[index].price * UmraDetails.programsNumber[index]} ${Routes.curruncy}",
+                                                                "${UmraDetails.umraprograms[index].price * UmraDetails.programsNumber[index]} ${Routes.curruncy ?? ""}",
                                                                 style:
                                                                     fontStyle(
                                                                   fontSize:
@@ -1763,7 +1751,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 15.w),
                                     child: Text(
-                                      '${LanguageClass.isEnglish ? 'Total' : 'الإجمالي'} ${(accomidationprice + transportationprice + programsprice).toStringAsFixed(2)} ${Routes.curruncy}',
+                                      '${LanguageClass.isEnglish ? 'Total' : 'الإجمالي'} ${(accomidationprice + transportationprice + programsprice).toStringAsFixed(2)} ${Routes.curruncy ?? ""}',
                                       style: fontStyle(
                                         color: Colors.black,
                                         fontSize: 17.sp,
@@ -1944,7 +1932,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                 ),
                                               ),
                                               Text(
-                                                "${diffrence.toStringAsFixed(2)} ${Routes.curruncy}",
+                                                "${diffrence.toStringAsFixed(2)} ${Routes.curruncy ?? ""}",
                                                 style: fontStyle(
                                                     fontFamily: FontFamily.bold,
                                                     fontSize: 14.sp,
@@ -1994,7 +1982,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                     ),
                                                   ),
                                                   Text(
-                                                    "${diffrence.toString().replaceAll('-', '')} ${Routes.curruncy}",
+                                                    "${diffrence.toString().replaceAll('-', '')} ${Routes.curruncy ?? ""}",
                                                     style: fontStyle(
                                                         fontFamily:
                                                             FontFamily.bold,
@@ -2040,7 +2028,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                           ),
                                         ),
                                         Text(
-                                          "${afterdiscount.toStringAsFixed(2)} ${Routes.curruncy}",
+                                          "${afterdiscount.toStringAsFixed(2)} ${Routes.curruncy ?? ""}",
                                           style: fontStyle(
                                               fontFamily: FontFamily.bold,
                                               fontSize: 21.sp,
@@ -2369,7 +2357,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                               FontWeight.normal),
                                                                     ),
                                                                     Text(
-                                                                      '$balance ${Routes.curruncy}',
+                                                                      '$balance ${Routes.curruncy ?? ""}',
                                                                       style: fontStyle(
                                                                           color: Color(
                                                                               0xff23c956),
@@ -2447,7 +2435,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                           child: Text(
                                                             LanguageClass
                                                                     .isEnglish
-                                                                ? "previous"
+                                                                ? "Previous"
                                                                 : 'السابق',
                                                             style: fontStyle(
                                                                 fontFamily:
@@ -2965,7 +2953,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                               style: fontStyle(color: Colors.black, fontSize: 15.sp, fontFamily: FontFamily.medium, fontWeight: FontWeight.normal),
                                                                             ),
                                                                             Text(
-                                                                              '${balance.toStringAsFixed(3)} ${Routes.curruncy}',
+                                                                              '${balance.toStringAsFixed(3)} ${Routes.curruncy ?? ""}',
                                                                               style: fontStyle(color: Color(0xff23c956), fontSize: 10.sp, fontFamily: FontFamily.bold, fontWeight: FontWeight.normal),
                                                                             )
                                                                           ],
@@ -3051,7 +3039,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                         child:
                                                                             Text(
                                                                           LanguageClass.isEnglish
-                                                                              ? "previous"
+                                                                              ? "Previous"
                                                                               : 'السابق',
                                                                           style: fontStyle(
                                                                               fontFamily: FontFamily.bold,

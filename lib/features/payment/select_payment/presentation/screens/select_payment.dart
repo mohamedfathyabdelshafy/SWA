@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,6 +9,7 @@ import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
+import 'package:swa/features/Swa_umra/bloc/umra_bloc.dart';
 import 'package:swa/features/payment/electronic_wallet/presentation/cubit/eWallet_cubit.dart';
 import 'package:swa/features/payment/electronic_wallet/presentation/screens/electronic_screens.dart';
 import 'package:swa/features/payment/fawry/presentation/cubit/fawry_cubit.dart';
@@ -26,11 +29,14 @@ class SelectPaymentScreen extends StatefulWidget {
 
 class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
   int? countryid;
+  late final UmraBloc _umraBloc;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _umraBloc = UmraBloc();
+    _umraBloc.add(getpaymentstypeEvent());
 
     countryid = CacheHelper.getDataToSharedPref(
       key: 'countryid',
@@ -41,206 +47,244 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
   Widget build(BuildContext context) {
     double sizeHeight = context.height;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Directionality(
-          textDirection:
-              LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                height: sizeHeight * 0.08,
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, Routes.home, (route) => false,
-                      arguments: Routes.isomra);
-                },
-                child: Icon(
-                  Icons.arrow_back_rounded,
-                  color: Routes.isomra
-                      ? AppColors.umragold
-                      : AppColors.primaryColor,
-                  size: 35,
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(
-                  LanguageClass.isEnglish
-                      ? "Select payment"
-                      : "حدد طريقة الدفع",
-                  style: fontStyle(
-                      color: AppColors.blackColor,
-                      fontSize: 38,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: FontFamily.medium),
-                ),
-              ),
-              SizedBox(
-                height: sizeHeight * 0.05,
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
+    return BlocProvider(
+      create: (context) => _umraBloc,
+      child: BlocBuilder<UmraBloc, UmraState>(
+        builder: (context, state) {
+          log("STATE: ${state.paymenttypemodel?.message.toString()}");
+          final paymentTypelist = state.paymenttypemodel?.message;
+
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Directionality(
+                textDirection: LanguageClass.isEnglish
+                    ? TextDirection.ltr
+                    : TextDirection.rtl,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
+                    SizedBox(
+                      height: sizeHeight * 0.08,
+                    ),
                     InkWell(
-                      onTap: () async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                BlocProvider<ReservationCubit>(
-                                    create: (context) => ReservationCubit(),
-                                    child: chargeCard(
-                                      user: widget.user!,
-                                      index: 1,
-                                    )),
-                          ),
-                        );
+                      onTap: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, Routes.home, (route) => false,
+                            arguments: Routes.isomra);
                       },
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/images/visa.png',
-                            height: 50,
-                            width: 45,
-                            fit: BoxFit.fitWidth,
-                          ),
-                          Image.asset(
-                            'assets/images/master_card.png',
-                            height: 50,
-                            width: 45,
-                            fit: BoxFit.fitWidth,
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          customText(LanguageClass.isEnglish
-                              ? "Debit or credit card"
-                              : "بطاقة الخصم او الائتمان")
-                        ],
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        color: Routes.isomra
+                            ? AppColors.umragold
+                            : AppColors.primaryColor,
+                        size: 35,
                       ),
                     ),
                     const SizedBox(
-                      height: 17,
+                      height: 10,
                     ),
-                    countryid == 3
-                        ? SizedBox()
-                        : Column(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => MultiBlocProvider(
-                                        providers: [
-                                          BlocProvider<LoginCubit>(
-                                            create: (context) =>
-                                                sl<LoginCubit>(),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        LanguageClass.isEnglish
+                            ? "Select payment"
+                            : "حدد طريقة الدفع",
+                        style: fontStyle(
+                            color: AppColors.blackColor,
+                            fontSize: 38,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: FontFamily.medium),
+                      ),
+                    ),
+                    SizedBox(
+                      height: sizeHeight * 0.05,
+                    ),
+                    state.isloading
+                        ? Center(child: CircularProgressIndicator())
+                        : paymentTypelist?.isNotEmpty == true
+                            ? Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Column(
+                                  children: [
+                                    InkWell(
+                                      onTap: () async {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                BlocProvider<ReservationCubit>(
+                                                    create: (context) =>
+                                                        ReservationCubit(),
+                                                    child: chargeCard(
+                                                      user: widget.user!,
+                                                      index: 1,
+                                                    )),
                                           ),
-                                          BlocProvider<FawryCubit>(
-                                            create: (context) =>
-                                                sl<FawryCubit>(),
+                                        );
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Image.network(
+                                            paymentTypelist![0].image!,
+                                            height: 50,
+                                            width: 45,
+                                            fit: BoxFit.fitWidth,
                                           ),
-                                          BlocProvider<ReservationCubit>(
-                                            create: (context) =>
-                                                ReservationCubit(),
+                                          const SizedBox(
+                                            width: 5,
                                           ),
+                                          customText(
+                                              paymentTypelist[0].pageName)
                                         ],
-                                        child: FawryScreen(),
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                          color: AppColors.yellow2,
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          border: Border.all(
-                                              color: const Color(0xff4587FF))),
-                                      child: SvgPicture.asset(
-                                        'assets/images/Group 97.svg',
-                                        // height: 60,
-                                        // width: 100,
-                                        fit: BoxFit.fitWidth,
                                       ),
                                     ),
                                     const SizedBox(
-                                      width: 5,
+                                      height: 17,
                                     ),
-                                    customText(LanguageClass.isEnglish
-                                        ? "Pay Fawry"
-                                        : "مدفوعات فوري")
+                                    countryid == 3
+                                        ? SizedBox()
+                                        : Column(
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          MultiBlocProvider(
+                                                        providers: [
+                                                          BlocProvider<
+                                                              LoginCubit>(
+                                                            create: (context) =>
+                                                                sl<LoginCubit>(),
+                                                          ),
+                                                          BlocProvider<
+                                                              FawryCubit>(
+                                                            create: (context) =>
+                                                                sl<FawryCubit>(),
+                                                          ),
+                                                          BlocProvider<
+                                                              ReservationCubit>(
+                                                            create: (context) =>
+                                                                ReservationCubit(),
+                                                          ),
+                                                        ],
+                                                        child: FawryScreen(),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              5),
+                                                      decoration: BoxDecoration(
+                                                          color:
+                                                              AppColors.yellow2,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5),
+                                                          border: Border.all(
+                                                              color: const Color(
+                                                                  0xff4587FF))),
+                                                      child: Image.network(
+                                                        paymentTypelist[1]
+                                                            .image!,
+                                                        height: 25,
+                                                        width: 35,
+                                                        fit: BoxFit.fitWidth,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    customText(
+                                                        paymentTypelist[1]
+                                                            .pageName!)
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 17,
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          MultiBlocProvider(
+                                                              providers: [
+                                                            BlocProvider<
+                                                                LoginCubit>(
+                                                              create: (context) =>
+                                                                  sl<LoginCubit>(),
+                                                            ),
+                                                            BlocProvider<
+                                                                EWalletCubit>(
+                                                              create: (context) =>
+                                                                  sl<EWalletCubit>(),
+                                                            ),
+                                                          ],
+                                                              child:
+                                                                  const ElectronicScreen()),
+                                                    ),
+                                                  );
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    Image.network(
+                                                      paymentTypelist[2].image!,
+                                                      height: 40,
+                                                      width: 40,
+                                                      fit: BoxFit.fitWidth,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    customText(
+                                                        paymentTypelist[2]
+                                                            .pageName)
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                   ],
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 17,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          MultiBlocProvider(providers: [
-                                        BlocProvider<LoginCubit>(
-                                          create: (context) => sl<LoginCubit>(),
-                                        ),
-                                        BlocProvider<EWalletCubit>(
-                                          create: (context) =>
-                                              sl<EWalletCubit>(),
-                                        ),
-                                      ], child: const ElectronicScreen()),
-                                    ),
-                                  );
-                                },
-                                child: Row(
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/icons8-open-wallet-78.png',
-                                      height: 40,
-                                      width: 40,
-                                      fit: BoxFit.fitWidth,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    customText(LanguageClass.isEnglish
-                                        ? "Electronic wallet"
-                                        : "المحفظة الاكترونية")
-                                  ],
+                              )
+                            : Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Text(
+                                  LanguageClass.isEnglish
+                                      ? "There is no payment method"
+                                      : "لا توجد طريقة دفع",
+                                  style: fontStyle(
+                                      color: Colors.black,
+                                      fontSize: 21,
+                                      fontFamily: FontFamily.medium),
                                 ),
                               ),
-                            ],
-                          ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget customText(text) {
+  Widget customText(String? text) {
     return Text(
-      text,
+      text ?? 'NA',
       style: fontStyle(
           color: Colors.black, fontSize: 21, fontFamily: FontFamily.medium),
     );

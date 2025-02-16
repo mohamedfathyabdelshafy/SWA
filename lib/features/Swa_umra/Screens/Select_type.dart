@@ -263,6 +263,8 @@ class _SelectUmratypeScreenState extends State<SelectUmratypeScreen> {
                                                       Routes.user!.name!,
                                                       overflow:
                                                           TextOverflow.ellipsis,
+                                                      textAlign:
+                                                          TextAlign.center,
                                                       style: fontStyle(
                                                           color: Colors.white,
                                                           fontSize: 12,
@@ -302,7 +304,10 @@ class _SelectUmratypeScreenState extends State<SelectUmratypeScreen> {
                                   height: 30.h,
                                 ),
                                 Text(
-                                  'Made Effortlessly Easy',
+                                  LanguageClass.isEnglish
+                                      ? 'Made Effortlessly Easy'
+                                      : "اسهل ما يكون",
+                                  textAlign: TextAlign.center,
                                   style: fontStyle(
                                       fontFamily: FontFamily.regular,
                                       fontSize: 13,

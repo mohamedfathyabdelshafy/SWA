@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,8 +10,6 @@ import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
-import 'package:swa/features/payment/fawry/domain/use_cases/fawry_use_case.dart';
-import 'package:swa/features/payment/fawry/presentation/cubit/fawry_cubit.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
@@ -40,7 +40,6 @@ class _FawryScreenState extends State<FawryScreen> {
   @override
   Widget build(BuildContext context) {
     double sizeHeight = context.height;
-    double sizeWidth = context.width;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -159,10 +158,14 @@ class _FawryScreenState extends State<FawryScreen> {
                                           fontFamily: FontFamily.bold),
                                     ),
                                     validator: (value) {
-                                      if (value!.isEmpty) {
+                                      //check if only numbers or ","
+                                      value = value?.replaceAll(',', '');
+                                      final isNAN =
+                                          double.tryParse(value ?? '');
+                                      if (isNAN == null || isNAN == 0) {
                                         return LanguageClass.isEnglish
-                                            ? 'This Field is Required'
-                                            : "هذا مطلوب";
+                                            ? 'Invalid Amount'
+                                            : "من فضلك ادخل قيمة صحيحة";
                                       } else {
                                         return null;
                                       }
@@ -186,10 +189,17 @@ class _FawryScreenState extends State<FawryScreen> {
                                 // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
                                 showDoneConfirmationDialog(context,
                                     isError: false, callback: () {
-                                  Navigator.pop(context);
-                                  Navigator.pushNamedAndRemoveUntil(
-                                      context, Routes.home, (route) => false,
-                                      arguments: Routes.isomra);
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    if (context.mounted) {
+                                      Navigator.pushNamedAndRemoveUntil(
+                                        context,
+                                        Routes.home,
+                                        (route) => false,
+                                        arguments: Routes.isomra,
+                                      );
+                                    }
+                                  });
                                 },
                                     body: Column(
                                       mainAxisSize: MainAxisSize.min,
@@ -282,8 +292,9 @@ class _FawryScreenState extends State<FawryScreen> {
                               onTap: () {
                                 if (_user != null &&
                                     formKey.currentState!.validate()) {
-                                  double amount =
-                                      double.parse(amountController.text);
+                                  double amount = double.parse(amountController
+                                      .text
+                                      .replaceAll(',', ''));
 
                                   BlocProvider.of<ReservationCubit>(context)
                                       .fawrycharge(
@@ -299,7 +310,7 @@ class _FawryScreenState extends State<FawryScreen> {
                                 child: Constants.customButton(
                                   borderradias: 41,
                                   text: LanguageClass.isEnglish
-                                      ? "Chargee"
+                                      ? "Charge"
                                       : "شحن",
                                   color: Routes.isomra
                                       ? AppColors.umragold
