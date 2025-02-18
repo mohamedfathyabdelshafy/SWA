@@ -34,18 +34,13 @@ class ReservationScreen extends StatefulWidget {
   int typeid, selectedpackage;
   int? umrahReservationID;
 
-  ReservationScreen(
-      {super.key,
-      required this.selectedpackage,
-      required this.typeid,
-      this.umrahReservationID});
+  ReservationScreen({super.key, required this.selectedpackage, required this.typeid, this.umrahReservationID});
 
   @override
   State<ReservationScreen> createState() => _ReservationScreenState();
 }
 
-class _ReservationScreenState extends State<ReservationScreen>
-    with TickerProviderStateMixin {
+class _ReservationScreenState extends State<ReservationScreen> with TickerProviderStateMixin {
   final UmraBloc _umraBloc = UmraBloc();
 
   int selectedpackage = 0;
@@ -74,17 +69,14 @@ class _ReservationScreenState extends State<ReservationScreen>
       isComingSoon: false,
       orderIndex: 1,
       pageId: 2,
-      pageName: LanguageClass.isEnglish
-          ? 'Debit or Credit card'
-          : 'بطاقة الخصم او الائتمان');
+      pageName: LanguageClass.isEnglish ? 'Debit or Credit card' : 'بطاقة الخصم او الائتمان');
 
   bool accomidatioisopen = true;
   bool transportatioisopen = true;
   bool programisopen = true;
 
   getwalllet() async {
-    MyWalletResponseModel? wallet =
-        await MyWalletRepo(sl()).getMyWallet(customerId: Routes.customerid!);
+    MyWalletResponseModel? wallet = await MyWalletRepo(sl()).getMyWallet(customerId: Routes.customerid!);
     setState(() {
       balance = wallet!.message!;
     });
@@ -104,8 +96,7 @@ class _ReservationScreenState extends State<ReservationScreen>
 
         for (int j = 0; j < UmraDetails.accomidationRoom[i].room.length; j++) {
           accomidationprice = accomidationprice +
-              (UmraDetails.accomidationRoom[i].room[j].price *
-                  UmraDetails.accomidationRoom[i].customernumbers[j]);
+              (UmraDetails.accomidationRoom[i].room[j].price * UmraDetails.accomidationRoom[i].customernumbers[j]);
         }
       }
     }
@@ -129,8 +120,7 @@ class _ReservationScreenState extends State<ReservationScreen>
 
     for (int i = 0; i < UmraDetails.umraprograms.length; i++) {
       if (checkvaluePrograms[i] == true) {
-        programsprice = programsprice +
-            (UmraDetails.umraprograms[i].price * UmraDetails.programsNumber[i]);
+        programsprice = programsprice + (UmraDetails.umraprograms[i].price * UmraDetails.programsNumber[i]);
 
         UmraDetails.finalprogramslist.add(UmraDetails.umraprograms[i]);
         UmraDetails.finalcustomersprograms.add(UmraDetails.programsNumber[i]);
@@ -159,15 +149,11 @@ class _ReservationScreenState extends State<ReservationScreen>
         transportationprice = transportationprice +
             UmraDetails.reservedseats.firstWhere((element) {
               return element.tripid == UmraDetails.transportList![i].tripId;
-            },
-                orElse: () => TransportationsSeats(
-                    seatsnumber: [], totalprice: 0, tripid: 0)).totalprice;
+            }, orElse: () => TransportationsSeats(seatsnumber: [], totalprice: 0, tripid: 0)).totalprice;
 
         if (UmraDetails.reservedseats.firstWhere((element) {
               return element.tripid == UmraDetails.transportList![i].tripId;
-            },
-                orElse: () => TransportationsSeats(
-                    seatsnumber: [], totalprice: 0, tripid: 0)).tripid ==
+            }, orElse: () => TransportationsSeats(seatsnumber: [], totalprice: 0, tripid: 0)).tripid ==
             UmraDetails.transportList![i].tripId) {
           UmraDetails.finaltransportation!.add(UmraDetails.transportList![i]);
         }
@@ -192,12 +178,9 @@ class _ReservationScreenState extends State<ReservationScreen>
     super.initState();
     selectedpackage = widget.selectedpackage;
     _umraBloc.add(GetCompainListEvent());
-    checkvalueacomidation =
-        List<bool>.filled(UmraDetails.accomidation!.length, true);
-    checkvalueTransportation =
-        List<bool>.filled(UmraDetails.transportList!.length, true);
-    checkvaluePrograms =
-        List<bool>.filled(UmraDetails.umraprograms.length, true);
+    checkvalueacomidation = List<bool>.filled(UmraDetails.accomidation!.length, true);
+    checkvalueTransportation = List<bool>.filled(UmraDetails.transportList!.length, true);
+    checkvaluePrograms = List<bool>.filled(UmraDetails.umraprograms.length, true);
     calculateAccomidation();
     calculateTransportation();
     calculateprograms();
@@ -228,8 +211,7 @@ class _ReservationScreenState extends State<ReservationScreen>
         body: BlocListener(
           bloc: _umraBloc,
           listener: (context, UmraState state) {
-            if (state.reservationResponseElectronicModel?.status == 'success' &&
-                paymentpage!.pageId == 4) {
+            if (state.reservationResponseElectronicModel?.status == 'success' && paymentpage!.pageId == 4) {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -248,31 +230,22 @@ class _ReservationScreenState extends State<ReservationScreen>
                       ],
                     ),
                     titleTextStyle: fontStyle(
-                        fontWeight: FontWeight.bold,
-                        fontFamily: FontFamily.bold,
-                        color: Colors.black,
-                        fontSize: 20),
+                        fontWeight: FontWeight.bold, fontFamily: FontFamily.bold, color: Colors.black, fontSize: 20),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(LanguageClass.isEnglish
-                                ? 'Amount: '
-                                : "القيمة"),
-                            Text(UmraDetails.afterdiscount
-                                .toStringAsFixed(2)
-                                .toString())
+                            Text(LanguageClass.isEnglish ? 'Amount: ' : "القيمة"),
+                            Text(UmraDetails.afterdiscount.toStringAsFixed(2).toString())
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text('Reference Number: '),
-                            Text(state.reservationResponseElectronicModel!
-                                .message!.referenceNumber
-                                .toString())
+                            Text(state.reservationResponseElectronicModel!.message!.referenceNumber.toString())
                           ],
                         )
                       ],
@@ -297,10 +270,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                             child: Center(
                               child: Text(
                                 LanguageClass.isEnglish ? 'OK' : "موافقة",
-                                style: fontStyle(
-                                    color: AppColors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 22),
+                                style: fontStyle(color: AppColors.white, fontWeight: FontWeight.bold, fontSize: 22),
                               ),
                             ),
                           )),
@@ -308,10 +278,8 @@ class _ReservationScreenState extends State<ReservationScreen>
                   );
                 },
               );
-            } else if (state.reservationResponseElectronicModel?.status ==
-                'success') {
-              showDoneConfirmationfawryDialog(context, isError: false,
-                  callback: () {
+            } else if (state.reservationResponseElectronicModel?.status == 'success') {
+              showDoneConfirmationfawryDialog(context, isError: false, callback: () {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   Routes.umraticket,
@@ -329,10 +297,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                         children: [
                           Text(
                             LanguageClass.isEnglish ? 'Amount: ' : "القيمة",
-                            style: fontStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600),
+                            style: fontStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
                           ),
                           Text(UmraDetails.afterdiscount.toStringAsFixed(2))
                         ],
@@ -353,14 +318,9 @@ class _ReservationScreenState extends State<ReservationScreen>
                               children: [
                                 InkWell(
                                   onTap: () async {
-                                    Constants.showDefaultSnackBar(
-                                        context: context,
-                                        text: 'Reference Number copied');
+                                    Constants.showDefaultSnackBar(context: context, text: 'Reference Number copied');
                                     await Clipboard.setData(ClipboardData(
-                                        text: state
-                                            .reservationResponseElectronicModel!
-                                            .message!
-                                            .referenceNumber
+                                        text: state.reservationResponseElectronicModel!.message!.referenceNumber
                                             .toString()));
                                   },
                                   child: Container(
@@ -373,9 +333,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                 ),
                                 Expanded(
                                   child: Text(
-                                    state.reservationResponseElectronicModel!
-                                        .message!.referenceNumber
-                                        .toString(),
+                                    state.reservationResponseElectronicModel!.message!.referenceNumber.toString(),
                                     textAlign: TextAlign.end,
                                   ),
                                 ),
@@ -386,41 +344,30 @@ class _ReservationScreenState extends State<ReservationScreen>
                       )
                     ],
                   ),
-                  message:
-                      "You will get a notification by applying your wallet \n In order to agree to pay");
-            } else if (state.reservationResponseElectronicModel?.status ==
-                'failed') {
+                  message: "You will get a notification by applying your wallet \n In order to agree to pay");
+            } else if (state.reservationResponseElectronicModel?.status == 'failed') {
               Constants.showDefaultSnackBar(
-                  context: context,
-                  text:
-                      state.reservationResponseElectronicModel!.errormessage!);
-            } else if (state.reservationResponseCreditCard?.status ==
-                'success') {
-              showDoneConfirmationDialog(context,
-                  callbackTitle: "Go to OTP",
-                  message: 'Complete the payment process', callback: () {
+                  context: context, text: state.reservationResponseElectronicModel!.errormessage!);
+            } else if (state.reservationResponseCreditCard?.status == 'success') {
+              showDoneConfirmationDialog(context, callbackTitle: "Go to OTP", message: 'Complete the payment process',
+                  callback: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (_) => ConfirmPayWebView(
-                            webViewLink: state.reservationResponseCreditCard!
-                                .message!.nextAction!.redirectUrl!)));
+                            webViewLink: state.reservationResponseCreditCard!.message!.nextAction!.redirectUrl!)));
               });
-            } else if (state.reservationResponseCreditCard?.status ==
-                'failed') {
+            } else if (state.reservationResponseCreditCard?.status == 'failed') {
               Constants.showDefaultSnackBar(
                   context: context,
                   color: AppColors.umragold,
-                  text: state.reservationResponseCreditCard!.errormessage
-                      .toString());
-            } else if (state.reservationResponseMyWalletModel?.status ==
-                'failed') {
+                  text: state.reservationResponseCreditCard!.errormessage.toString());
+            } else if (state.reservationResponseMyWalletModel?.status == 'failed') {
               Constants.showDefaultSnackBar(
                   color: AppColors.umragold,
                   context: context,
                   text: state.reservationResponseMyWalletModel!.message ?? ' ');
-            } else if (state.reservationResponseMyWalletModel?.status ==
-                'success') {
+            } else if (state.reservationResponseMyWalletModel?.status == 'success') {
               Constants.showDefaultSnackBar(
                   color: AppColors.umragold,
                   context: context,
@@ -435,29 +382,23 @@ class _ReservationScreenState extends State<ReservationScreen>
             } else if (state.promocodemodel?.status == 'success') {
               discount = state.promocodemodel!.message!.discount!;
 
-              promocodid =
-                  state.promocodemodel!.message!.promoCodeId.toString();
+              promocodid = state.promocodemodel!.message!.promoCodeId.toString();
 
               UmraDetails.promocodid = promocodid;
               UmraDetails.promocode = _promocodetext.text;
 
               if (state.promocodemodel!.message!.isPrecentage == true) {
-                discount =
-                    (accomidationprice + programsprice + transportationprice) *
-                        state.promocodemodel!.message!.discount! /
-                        100;
+                discount = (accomidationprice + programsprice + transportationprice) *
+                    state.promocodemodel!.message!.discount! /
+                    100;
 
                 UmraDetails.dicount = discount;
-                afterdiscount =
-                    (accomidationprice + programsprice + transportationprice) -
-                        discount;
+                afterdiscount = (accomidationprice + programsprice + transportationprice) - discount;
                 UmraDetails.afterdiscount = afterdiscount;
               } else {
                 discount = state.promocodemodel!.message!.discount!;
                 UmraDetails.dicount = discount;
-                afterdiscount =
-                    (accomidationprice + programsprice + transportationprice) -
-                        discount;
+                afterdiscount = (accomidationprice + programsprice + transportationprice) - discount;
                 UmraDetails.afterdiscount = afterdiscount;
               }
 
@@ -466,8 +407,7 @@ class _ReservationScreenState extends State<ReservationScreen>
               }
             } else if (state.promocodemodel?.status == 'failed') {
               _promocodetext.text = '';
-              afterdiscount =
-                  (accomidationprice + programsprice + transportationprice);
+              afterdiscount = (accomidationprice + programsprice + transportationprice);
               if (widget.umrahReservationID != null) {
                 diffrence = afterdiscount - UmraDetails.totalBokkedprice;
               }
@@ -476,39 +416,32 @@ class _ReservationScreenState extends State<ReservationScreen>
               UmraDetails.dicount = discount;
               UmraDetails.promocodid = '';
               Constants.showDefaultSnackBar(
-                  color: AppColors.umragold,
-                  context: context,
-                  text: state.promocodemodel!.errormessage ?? ' ');
+                  color: AppColors.umragold, context: context, text: state.promocodemodel!.errormessage ?? ' ');
             } else if (state.policyticketmodel?.status == 'success') {
               showDialog(
                   context: context,
                   barrierColor: Colors.black.withOpacity(0.2),
                   useRootNavigator: true,
                   builder: (context) {
-                    return StatefulBuilder(builder: (buildContext,
-                        StateSetter setStater /*You can rename this!*/) {
+                    return StatefulBuilder(builder: (buildContext, StateSetter setStater /*You can rename this!*/) {
                       return AlertDialog(
                         contentPadding: EdgeInsets.zero,
                         insetPadding: EdgeInsets.symmetric(horizontal: 10.w),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                         content: Container(
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height * 0.7,
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10.w),
+                          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10.w),
                           decoration: BoxDecoration(
                               color: AppColors.white,
-                              border: Border.all(
-                                  color: Color(0xff707070), width: 2),
+                              border: Border.all(color: Color(0xff707070), width: 2),
                               borderRadius: BorderRadius.circular(16)),
                           child: Scrollbar(
                             thickness: 10,
                             trackVisibility: true,
                             interactive: true,
-                            scrollbarOrientation: LanguageClass.isEnglish
-                                ? ScrollbarOrientation.right
-                                : ScrollbarOrientation.left,
+                            scrollbarOrientation:
+                                LanguageClass.isEnglish ? ScrollbarOrientation.right : ScrollbarOrientation.left,
                             radius: Radius.circular(12),
                             thumbVisibility: true,
                             child: ListView(
@@ -517,15 +450,9 @@ class _ReservationScreenState extends State<ReservationScreen>
                               children: [
                                 20.verticalSpace,
                                 Text(
-                                  LanguageClass.isEnglish
-                                      ? 'Terms and conditions '
-                                      : "الشروط والأحكام",
-                                  textAlign: LanguageClass.isEnglish
-                                      ? TextAlign.left
-                                      : TextAlign.right,
-                                  textDirection: LanguageClass.isEnglish
-                                      ? TextDirection.ltr
-                                      : TextDirection.rtl,
+                                  LanguageClass.isEnglish ? 'Terms and conditions ' : "الشروط والأحكام",
+                                  textAlign: LanguageClass.isEnglish ? TextAlign.left : TextAlign.right,
+                                  textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
                                   style: fontStyle(
                                     color: Colors.black,
                                     fontFamily: FontFamily.medium,
@@ -534,23 +461,17 @@ class _ReservationScreenState extends State<ReservationScreen>
                                 ),
                                 20.verticalSpace,
                                 ListView.builder(
-                                  itemCount:
-                                      state.policyticketmodel!.message!.length,
+                                  itemCount: state.policyticketmodel!.message!.length,
                                   shrinkWrap: true,
                                   physics: ScrollPhysics(),
-                                  padding:
-                                      EdgeInsets.only(left: 12.w, right: 12.w),
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
+                                  padding: EdgeInsets.only(left: 12.w, right: 12.w),
+                                  itemBuilder: (BuildContext context, int index) {
                                     return Container(
                                         margin: EdgeInsets.only(top: 15.h),
-                                        child: Text(
-                                            "${state.policyticketmodel!.message![index]}",
+                                        child: Text("${state.policyticketmodel!.message![index]}",
                                             textAlign: TextAlign.justify,
                                             textDirection:
-                                                LanguageClass.isEnglish
-                                                    ? TextDirection.ltr
-                                                    : TextDirection.rtl,
+                                                LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
                                             style: fontStyle(
                                                 fontSize: 14.sp,
                                                 fontFamily: FontFamily.medium,
@@ -559,8 +480,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                   },
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 30.w, vertical: 10.h),
+                                  padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 10.h),
                                   child: InkWell(
                                     onTap: () {
                                       setState(() {
@@ -570,9 +490,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                     },
                                     child: Constants.customButton(
                                         borderradias: 30,
-                                        text: LanguageClass.isEnglish
-                                            ? "Accept"
-                                            : "اوافق",
+                                        text: LanguageClass.isEnglish ? "Accept" : "اوافق",
                                         color: AppColors.umragold),
                                   ),
                                 ),
@@ -598,23 +516,16 @@ class _ReservationScreenState extends State<ReservationScreen>
                   return SafeArea(
                       bottom: false,
                       child: Directionality(
-                        textDirection: LanguageClass.isEnglish
-                            ? TextDirection.ltr
-                            : TextDirection.rtl,
+                        textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
                         child: Column(
                           children: [
                             10.verticalSpace,
                             Container(
                                 margin: EdgeInsets.only(
-                                    left: LanguageClass.isEnglish ? 55 : 0,
-                                    right: LanguageClass.isEnglish ? 0 : 55),
-                                alignment: LanguageClass.isEnglish
-                                    ? Alignment.topLeft
-                                    : Alignment.topRight,
+                                    left: LanguageClass.isEnglish ? 55 : 0, right: LanguageClass.isEnglish ? 0 : 55),
+                                alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                                 child: Text(
-                                  LanguageClass.isEnglish
-                                      ? 'Packages'
-                                      : 'الحملات',
+                                  LanguageClass.isEnglish ? 'Packages' : 'الحملات',
                                   style: fontStyle(
                                       color: Colors.black,
                                       fontSize: 24.sp,
@@ -642,87 +553,47 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                       onTap: () {},
                                                       child: AnimatedContainer(
                                                         padding: EdgeInsets.only(
-                                                            left: selectedpackage ==
-                                                                        index &&
-                                                                    index != 0
-                                                                ? 30
-                                                                : 5,
-                                                            right: index ==
-                                                                    listcampains!
-                                                                            .length -
-                                                                        1
-                                                                ? 15
-                                                                : 5),
-                                                        margin: EdgeInsets.only(
-                                                            left: index * 80),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                                boxShadow:
-                                                                    selectedpackage ==
-                                                                            index
-                                                                        ? [
-                                                                            BoxShadow(
-                                                                                offset: Offset(4, 0),
-                                                                                color: Colors.black.withOpacity(0.4),
-                                                                                blurRadius: 4,
-                                                                                spreadRadius: 0)
-                                                                          ]
-                                                                        : [
-                                                                            BoxShadow(
-                                                                                offset: Offset(4, 0),
-                                                                                color: Colors.black.withOpacity(0.2),
-                                                                                blurRadius: 2,
-                                                                                spreadRadius: 0)
-                                                                          ],
-                                                                color: HexColor(
-                                                                    listcampains![index]
-                                                                            .bgColor ??
-                                                                        '#AEAEAE'),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            13)),
-                                                        width:
-                                                            selectedpackage ==
-                                                                    index
-                                                                ? 148
-                                                                : 100,
+                                                            left: selectedpackage == index && index != 0 ? 30 : 5,
+                                                            right: index == listcampains!.length - 1 ? 15 : 5),
+                                                        margin: EdgeInsets.only(left: index * 80),
+                                                        decoration: BoxDecoration(
+                                                            boxShadow: selectedpackage == index
+                                                                ? [
+                                                                    BoxShadow(
+                                                                        offset: Offset(4, 0),
+                                                                        color: Colors.black.withOpacity(0.4),
+                                                                        blurRadius: 4,
+                                                                        spreadRadius: 0)
+                                                                  ]
+                                                                : [
+                                                                    BoxShadow(
+                                                                        offset: Offset(4, 0),
+                                                                        color: Colors.black.withOpacity(0.2),
+                                                                        blurRadius: 2,
+                                                                        spreadRadius: 0)
+                                                                  ],
+                                                            color: HexColor(listcampains![index].bgColor ?? '#AEAEAE'),
+                                                            borderRadius: BorderRadius.circular(13)),
+                                                        width: selectedpackage == index ? 148 : 100,
                                                         height: 47,
-                                                        duration: Duration(
-                                                            microseconds: 100),
+                                                        duration: Duration(microseconds: 100),
                                                         curve: Curves.linear,
-                                                        alignment:
-                                                            Alignment.center,
+                                                        alignment: Alignment.center,
                                                         child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
                                                           children: [
                                                             Expanded(
                                                               child: FittedBox(
-                                                                fit: BoxFit
-                                                                    .fitWidth,
+                                                                fit: BoxFit.fitWidth,
                                                                 child: Text(
-                                                                  listcampains![
-                                                                          index]
-                                                                      .name!,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
+                                                                  listcampains![index].name!,
+                                                                  textAlign: TextAlign.center,
+                                                                  overflow: TextOverflow.ellipsis,
                                                                   style: fontStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontFamily:
-                                                                          FontFamily
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          18),
+                                                                      color: Colors.white,
+                                                                      fontFamily: FontFamily.bold,
+                                                                      fontSize: 18),
                                                                 ),
                                                               ),
                                                             ),
@@ -736,8 +607,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Container(
@@ -747,21 +617,16 @@ class _ReservationScreenState extends State<ReservationScreen>
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                         color: Colors.white,
-                                        border: Border.all(
-                                            width: 2,
-                                            color: AppColors.umragold),
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
+                                        border: Border.all(width: 2, color: AppColors.umragold),
+                                        borderRadius: BorderRadius.circular(100)),
                                     child: Container(
                                       width: 15,
                                       height: 15,
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
                                           color: AppColors.umragold,
-                                          border: Border.all(
-                                              color: AppColors.umragold),
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
+                                          border: Border.all(color: AppColors.umragold),
+                                          borderRadius: BorderRadius.circular(100)),
                                     ),
                                   )),
                                   Expanded(
@@ -778,21 +643,16 @@ class _ReservationScreenState extends State<ReservationScreen>
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                         color: Colors.white,
-                                        border: Border.all(
-                                            width: 2,
-                                            color: AppColors.umragold),
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
+                                        border: Border.all(width: 2, color: AppColors.umragold),
+                                        borderRadius: BorderRadius.circular(100)),
                                     child: Container(
                                       width: 15,
                                       height: 15,
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
                                           color: AppColors.umragold,
-                                          border: Border.all(
-                                              color: AppColors.umragold),
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
+                                          border: Border.all(color: AppColors.umragold),
+                                          borderRadius: BorderRadius.circular(100)),
                                     ),
                                   )),
                                   Expanded(
@@ -809,21 +669,16 @@ class _ReservationScreenState extends State<ReservationScreen>
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                         color: Colors.white,
-                                        border: Border.all(
-                                            width: 2,
-                                            color: AppColors.umragold),
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
+                                        border: Border.all(width: 2, color: AppColors.umragold),
+                                        borderRadius: BorderRadius.circular(100)),
                                     child: Container(
                                       width: 15,
                                       height: 15,
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
                                           color: AppColors.umragold,
-                                          border: Border.all(
-                                              color: AppColors.umragold),
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
+                                          border: Border.all(color: AppColors.umragold),
+                                          borderRadius: BorderRadius.circular(100)),
                                     ),
                                   )),
                                   Expanded(
@@ -840,28 +695,22 @@ class _ReservationScreenState extends State<ReservationScreen>
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                         color: Colors.white,
-                                        border: Border.all(
-                                            width: 2,
-                                            color: AppColors.umragold),
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
+                                        border: Border.all(width: 2, color: AppColors.umragold),
+                                        borderRadius: BorderRadius.circular(100)),
                                     child: Container(
                                       width: 15,
                                       height: 15,
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
                                           color: AppColors.umragold,
-                                          border: Border.all(
-                                              color: AppColors.umragold),
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
+                                          border: Border.all(color: AppColors.umragold),
+                                          borderRadius: BorderRadius.circular(100)),
                                     ),
                                   )),
                                   Expanded(
                                       child: Container(
                                     height: 1,
-                                    decoration: BoxDecoration(
-                                        color: AppColors.umragold),
+                                    decoration: BoxDecoration(color: AppColors.umragold),
                                   )),
                                   Container(
                                       child: Container(
@@ -870,21 +719,16 @@ class _ReservationScreenState extends State<ReservationScreen>
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                         color: Colors.white,
-                                        border: Border.all(
-                                            width: 2,
-                                            color: AppColors.umragold),
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
+                                        border: Border.all(width: 2, color: AppColors.umragold),
+                                        borderRadius: BorderRadius.circular(100)),
                                     child: Container(
                                       width: 15,
                                       height: 15,
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
                                           color: AppColors.umragold,
-                                          border: Border.all(
-                                              color: AppColors.umragold),
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
+                                          border: Border.all(color: AppColors.umragold),
+                                          borderRadius: BorderRadius.circular(100)),
                                     ),
                                   )),
                                 ],
@@ -893,8 +737,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                             6.verticalSpace,
                             Container(
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Expanded(
@@ -903,9 +746,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                       child: FittedBox(
                                         fit: BoxFit.fitWidth,
                                         child: Text(
-                                          LanguageClass.isEnglish
-                                              ? 'Packages'
-                                              : 'الحملات',
+                                          LanguageClass.isEnglish ? 'Packages' : 'الحملات',
                                           textAlign: TextAlign.center,
                                           style: fontStyle(
                                               fontFamily: FontFamily.bold,
@@ -922,9 +763,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                     child: FittedBox(
                                       fit: BoxFit.fitWidth,
                                       child: Text(
-                                        LanguageClass.isEnglish
-                                            ? 'Transportation'
-                                            : 'الانتقالات',
+                                        LanguageClass.isEnglish ? 'Transportation' : 'الانتقالات',
                                         textAlign: TextAlign.center,
                                         style: fontStyle(
                                             fontFamily: FontFamily.bold,
@@ -940,9 +779,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                     child: FittedBox(
                                       fit: BoxFit.fitWidth,
                                       child: Text(
-                                        LanguageClass.isEnglish
-                                            ? 'Accommodation'
-                                            : 'الإقامة',
+                                        LanguageClass.isEnglish ? 'Accommodation' : 'الإقامة',
                                         textAlign: TextAlign.center,
                                         style: fontStyle(
                                             fontFamily: FontFamily.bold,
@@ -958,9 +795,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                         child: FittedBox(
                                           fit: BoxFit.fitWidth,
                                           child: Text(
-                                            LanguageClass.isEnglish
-                                                ? 'Program'
-                                                : 'البرنامج',
+                                            LanguageClass.isEnglish ? 'Program' : 'البرنامج',
                                             textAlign: TextAlign.center,
                                             style: fontStyle(
                                                 fontFamily: FontFamily.bold,
@@ -976,9 +811,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                     child: FittedBox(
                                       fit: BoxFit.fitWidth,
                                       child: Text(
-                                        LanguageClass.isEnglish
-                                            ? 'Reservation'
-                                            : "الحجز",
+                                        LanguageClass.isEnglish ? 'Reservation' : "الحجز",
                                         textAlign: TextAlign.center,
                                         style: fontStyle(
                                             fontFamily: FontFamily.bold,
@@ -1001,36 +834,27 @@ class _ReservationScreenState extends State<ReservationScreen>
                                       ? SizedBox()
                                       : Column(
                                           mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
                                             Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 15.w),
+                                              padding: EdgeInsets.symmetric(horizontal: 15.w),
                                               child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
                                                   RotationTransition(
                                                     turns: accomidatioisopen
-                                                        ? AlwaysStoppedAnimation(
-                                                            360)
-                                                        : new AlwaysStoppedAnimation(
-                                                            180 / 360),
+                                                        ? AlwaysStoppedAnimation(360)
+                                                        : new AlwaysStoppedAnimation(180 / 360),
                                                     child: InkWell(
                                                       onTap: () {
                                                         if (accomidatioisopen) {
-                                                          accomidatioisopen =
-                                                              false;
+                                                          accomidatioisopen = false;
 
                                                           setState(() {});
                                                         } else {
-                                                          accomidatioisopen =
-                                                              true;
+                                                          accomidatioisopen = true;
 
                                                           setState(() {});
                                                         }
@@ -1038,36 +862,28 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                       child: Container(
                                                         width: 18.w,
                                                         height: 16.w,
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: SvgPicture.asset(
-                                                            'assets/images/arrowdown.svg'),
+                                                        alignment: Alignment.center,
+                                                        child: SvgPicture.asset('assets/images/arrowdown.svg'),
                                                       ),
                                                     ),
                                                   ),
                                                   10.horizontalSpace,
                                                   Text(
-                                                    LanguageClass.isEnglish
-                                                        ? 'Accommodation'
-                                                        : 'الإقامة',
+                                                    LanguageClass.isEnglish ? 'Accommodation' : 'الإقامة',
                                                     style: fontStyle(
                                                         color: Colors.black,
                                                         fontSize: 22.sp,
-                                                        fontFamily:
-                                                            FontFamily.regular,
+                                                        fontFamily: FontFamily.regular,
                                                         height: 1.2,
-                                                        fontWeight:
-                                                            FontWeight.normal),
+                                                        fontWeight: FontWeight.normal),
                                                   ),
                                                   Spacer(),
                                                   Text(
                                                     '${Routes.curruncy ?? ""} ${accomidationprice.toStringAsFixed(2)}',
                                                     style: fontStyle(
-                                                        fontFamily:
-                                                            FontFamily.medium,
+                                                        fontFamily: FontFamily.medium,
                                                         fontSize: 16.sp,
-                                                        fontWeight:
-                                                            FontWeight.w600,
+                                                        fontWeight: FontWeight.w600,
                                                         color: Colors.black),
                                                   )
                                                 ],
@@ -1077,148 +893,96 @@ class _ReservationScreenState extends State<ReservationScreen>
                                             accomidatioisopen
                                                 ? Flexible(
                                                     child: ListView.builder(
-                                                      itemCount: UmraDetails
-                                                          .accomidation!.length,
+                                                      itemCount: UmraDetails.accomidation!.length,
                                                       shrinkWrap: true,
                                                       padding: EdgeInsets.zero,
                                                       physics: ScrollPhysics(),
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index) {
+                                                      itemBuilder: (BuildContext context, int index) {
                                                         return Container(
-                                                          margin: EdgeInsets
-                                                              .symmetric(
-                                                                  vertical:
-                                                                      5.h),
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal:
-                                                                      15.w),
+                                                          margin: EdgeInsets.symmetric(vertical: 5.h),
+                                                          padding: EdgeInsets.symmetric(horizontal: 15.w),
                                                           child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
+                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            crossAxisAlignment: CrossAxisAlignment.center,
                                                             children: [
                                                               Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .start,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
+                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                                 children: [
                                                                   InkWell(
-                                                                    onTap: UmraDetails.accomidation![index].isRequired ==
-                                                                            true
-                                                                        ? () {}
-                                                                        : () {
-                                                                            setState(() {
-                                                                              checkvalueacomidation[index] = !checkvalueacomidation[index];
-                                                                            });
+                                                                    onTap:
+                                                                        UmraDetails.accomidation![index].isRequired ==
+                                                                                true
+                                                                            ? () {}
+                                                                            : () {
+                                                                                setState(() {
+                                                                                  checkvalueacomidation[index] =
+                                                                                      !checkvalueacomidation[index];
+                                                                                });
 
-                                                                            calculateAccomidation();
-                                                                          },
-                                                                    child:
-                                                                        Container(
-                                                                      width:
-                                                                          20.w,
-                                                                      height:
-                                                                          20.w,
+                                                                                calculateAccomidation();
+                                                                              },
+                                                                    child: Container(
+                                                                      width: 20.w,
+                                                                      height: 20.w,
                                                                       decoration: BoxDecoration(
-                                                                          borderRadius: BorderRadius.circular(
-                                                                              0),
+                                                                          borderRadius: BorderRadius.circular(0),
                                                                           border: Border.all(
-                                                                              width: 2,
-                                                                              color: Color(0xff707070))),
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              2),
-                                                                      child: checkvalueacomidation[
-                                                                              index]
+                                                                              width: 2, color: Color(0xff707070))),
+                                                                      padding: EdgeInsets.all(2),
+                                                                      child: checkvalueacomidation[index]
                                                                           ? Container(
                                                                               width: double.infinity,
                                                                               height: double.infinity,
-                                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(0), color: Color(0xff707070)),
+                                                                              decoration: BoxDecoration(
+                                                                                  borderRadius:
+                                                                                      BorderRadius.circular(0),
+                                                                                  color: Color(0xff707070)),
                                                                             )
                                                                           : SizedBox(),
                                                                     ),
                                                                   ),
                                                                   4.horizontalSpace,
                                                                   Text(
-                                                                    UmraDetails
-                                                                        .accomidation![
-                                                                            index]
-                                                                        .cityName!,
-                                                                    style:
-                                                                        fontStyle(
-                                                                      fontSize:
-                                                                          17.sp,
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                      height:
-                                                                          1.2,
-                                                                      fontFamily:
-                                                                          FontFamily
-                                                                              .medium,
+                                                                    UmraDetails.accomidation![index].cityName!,
+                                                                    style: fontStyle(
+                                                                      fontSize: 17.sp,
+                                                                      color: Colors.black,
+                                                                      fontWeight: FontWeight.w500,
+                                                                      height: 1.2,
+                                                                      fontFamily: FontFamily.medium,
                                                                     ),
                                                                   ),
                                                                 ],
                                                               ),
                                                               Text(
                                                                 "${UmraDetails.accomidation![index].numberNights} ${LanguageClass.isEnglish ? 'Nights' : 'ليالي'}",
-                                                                style:
-                                                                    fontStyle(
-                                                                  fontSize:
-                                                                      17.sp,
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
+                                                                style: fontStyle(
+                                                                  fontSize: 17.sp,
+                                                                  color: Colors.black,
+                                                                  fontWeight: FontWeight.w500,
                                                                   height: 1.2,
-                                                                  fontFamily:
-                                                                      FontFamily
-                                                                          .medium,
+                                                                  fontFamily: FontFamily.medium,
                                                                 ),
                                                               ),
                                                               Text(
                                                                 "${UmraDetails.accomidation![index].accommodationType}",
-                                                                style:
-                                                                    fontStyle(
-                                                                  fontSize:
-                                                                      17.sp,
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
+                                                                style: fontStyle(
+                                                                  fontSize: 17.sp,
+                                                                  color: Colors.black,
+                                                                  fontWeight: FontWeight.w500,
                                                                   height: 1.2,
-                                                                  fontFamily:
-                                                                      FontFamily
-                                                                          .medium,
+                                                                  fontFamily: FontFamily.medium,
                                                                 ),
                                                               ),
                                                               Text(
                                                                 "${UmraDetails.accomidation![index].accessDate}",
-                                                                style:
-                                                                    fontStyle(
-                                                                  fontSize:
-                                                                      17.sp,
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
+                                                                style: fontStyle(
+                                                                  fontSize: 17.sp,
+                                                                  color: Colors.black,
+                                                                  fontWeight: FontWeight.w500,
                                                                   height: 1.2,
-                                                                  fontFamily:
-                                                                      FontFamily
-                                                                          .medium,
+                                                                  fontFamily: FontFamily.medium,
                                                                 ),
                                                               ),
                                                             ],
@@ -1238,36 +1002,27 @@ class _ReservationScreenState extends State<ReservationScreen>
                                       ? SizedBox()
                                       : Column(
                                           mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
                                             Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 15.w),
+                                              padding: EdgeInsets.symmetric(horizontal: 15.w),
                                               child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
                                                   RotationTransition(
                                                     turns: transportatioisopen
-                                                        ? AlwaysStoppedAnimation(
-                                                            360)
-                                                        : new AlwaysStoppedAnimation(
-                                                            180 / 360),
+                                                        ? AlwaysStoppedAnimation(360)
+                                                        : new AlwaysStoppedAnimation(180 / 360),
                                                     child: InkWell(
                                                       onTap: () {
                                                         if (transportatioisopen) {
-                                                          transportatioisopen =
-                                                              false;
+                                                          transportatioisopen = false;
 
                                                           setState(() {});
                                                         } else {
-                                                          transportatioisopen =
-                                                              true;
+                                                          transportatioisopen = true;
 
                                                           setState(() {});
                                                         }
@@ -1275,36 +1030,28 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                       child: Container(
                                                         width: 18.w,
                                                         height: 16.w,
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: SvgPicture.asset(
-                                                            'assets/images/arrowdown.svg'),
+                                                        alignment: Alignment.center,
+                                                        child: SvgPicture.asset('assets/images/arrowdown.svg'),
                                                       ),
                                                     ),
                                                   ),
                                                   10.horizontalSpace,
                                                   Text(
-                                                    LanguageClass.isEnglish
-                                                        ? 'Transportation'
-                                                        : 'الانتقالات',
+                                                    LanguageClass.isEnglish ? 'Transportation' : 'الانتقالات',
                                                     style: fontStyle(
                                                         color: Colors.black,
                                                         fontSize: 22.sp,
-                                                        fontFamily:
-                                                            FontFamily.regular,
+                                                        fontFamily: FontFamily.regular,
                                                         height: 1.2,
-                                                        fontWeight:
-                                                            FontWeight.normal),
+                                                        fontWeight: FontWeight.normal),
                                                   ),
                                                   Spacer(),
                                                   Text(
                                                     '${Routes.curruncy ?? ""} ${transportationprice.toStringAsFixed(2)}',
                                                     style: fontStyle(
-                                                        fontFamily:
-                                                            FontFamily.medium,
+                                                        fontFamily: FontFamily.medium,
                                                         fontSize: 16.sp,
-                                                        fontWeight:
-                                                            FontWeight.w600,
+                                                        fontWeight: FontWeight.w600,
                                                         color: Colors.black),
                                                   )
                                                 ],
@@ -1314,48 +1061,25 @@ class _ReservationScreenState extends State<ReservationScreen>
                                             transportatioisopen
                                                 ? Flexible(
                                                     child: ListView.builder(
-                                                      itemCount: UmraDetails
-                                                          .transportList!
-                                                          .length,
+                                                      itemCount: UmraDetails.transportList!.length,
                                                       shrinkWrap: true,
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 15.w),
+                                                      padding: EdgeInsets.symmetric(horizontal: 15.w),
                                                       physics: ScrollPhysics(),
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index) {
-                                                        return UmraDetails
-                                                                .reservedseats
-                                                                .firstWhere(
-                                                                    (element) {
-                                                                  return element
-                                                                          .tripid ==
-                                                                      UmraDetails
-                                                                          .transportList![
-                                                                              index]
-                                                                          .tripId;
+                                                      itemBuilder: (BuildContext context, int index) {
+                                                        return UmraDetails.reservedseats
+                                                                .firstWhere((element) {
+                                                                  return element.tripid ==
+                                                                      UmraDetails.transportList![index].tripId;
                                                                 },
                                                                     orElse: () => TransportationsSeats(
-                                                                        seatsnumber: [],
-                                                                        totalprice:
-                                                                            0,
-                                                                        tripid:
-                                                                            0))
+                                                                        seatsnumber: [], totalprice: 0, tripid: 0))
                                                                 .seatsnumber
                                                                 .isNotEmpty
                                                             ? Container(
-                                                                margin: EdgeInsets
-                                                                    .symmetric(
-                                                                        vertical:
-                                                                            5.h),
+                                                                margin: EdgeInsets.symmetric(vertical: 5.h),
                                                                 child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
+                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                  crossAxisAlignment: CrossAxisAlignment.center,
                                                                   children: [
                                                                     InkWell(
                                                                       // onTap: () {
@@ -1365,29 +1089,35 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                       //               index]
                                                                       //           .tripId));
                                                                       // },
-                                                                      child:
-                                                                          Row(
+                                                                      child: Row(
                                                                         children: [
                                                                           InkWell(
-                                                                            onTap:
-                                                                                () {
+                                                                            onTap: () {
                                                                               setState(() {
-                                                                                checkvalueTransportation[index] = !checkvalueTransportation[index];
+                                                                                checkvalueTransportation[index] =
+                                                                                    !checkvalueTransportation[index];
                                                                               });
 
                                                                               calculateTransportation();
                                                                             },
-                                                                            child:
-                                                                                Container(
+                                                                            child: Container(
                                                                               width: 20.w,
                                                                               height: 20.w,
-                                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(0), border: Border.all(width: 2, color: Color(0xff707070))),
+                                                                              decoration: BoxDecoration(
+                                                                                  borderRadius:
+                                                                                      BorderRadius.circular(0),
+                                                                                  border: Border.all(
+                                                                                      width: 2,
+                                                                                      color: Color(0xff707070))),
                                                                               padding: EdgeInsets.all(2),
                                                                               child: checkvalueTransportation[index]
                                                                                   ? Container(
                                                                                       width: double.infinity,
                                                                                       height: double.infinity,
-                                                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(0), color: Color(0xff707070)),
+                                                                                      decoration: BoxDecoration(
+                                                                                          borderRadius:
+                                                                                              BorderRadius.circular(0),
+                                                                                          color: Color(0xff707070)),
                                                                                     )
                                                                                   : SizedBox(),
                                                                             ),
@@ -1396,13 +1126,18 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                           Text(
                                                                             UmraDetails.reservedseats
                                                                                 .firstWhere((element) {
-                                                                                  return element.tripid == UmraDetails.transportList![index].tripId;
-                                                                                }, orElse: () => TransportationsSeats(seatsnumber: [], totalprice: 0, tripid: 0))
+                                                                                  return element.tripid ==
+                                                                                      UmraDetails
+                                                                                          .transportList![index].tripId;
+                                                                                },
+                                                                                    orElse: () => TransportationsSeats(
+                                                                                        seatsnumber: [],
+                                                                                        totalprice: 0,
+                                                                                        tripid: 0))
                                                                                 .seatsnumber
                                                                                 .length
                                                                                 .toString(),
-                                                                            style:
-                                                                                fontStyle(
+                                                                            style: fontStyle(
                                                                               color: Colors.black,
                                                                               fontSize: 17.sp,
                                                                               fontWeight: FontWeight.normal,
@@ -1413,8 +1148,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                             LanguageClass.isEnglish
                                                                                 ? ' Seats'
                                                                                 : ' المقاعد',
-                                                                            style:
-                                                                                fontStyle(
+                                                                            style: fontStyle(
                                                                               color: Colors.black,
                                                                               fontSize: 17.sp,
                                                                               fontWeight: FontWeight.normal,
@@ -1426,15 +1160,14 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                     ),
                                                                     18.horizontalSpace,
                                                                     Expanded(
-                                                                      child: Transform
-                                                                          .flip(
-                                                                        flipX: index
-                                                                            .isOdd,
-                                                                        child:
-                                                                            Row(
+                                                                      child: Transform.flip(
+                                                                        flipX: index.isOdd,
+                                                                        child: Row(
                                                                           children: [
                                                                             Expanded(
-                                                                              child: UmraDetails.transportList![index].from == null
+                                                                              child: UmraDetails
+                                                                                          .transportList![index].from ==
+                                                                                      null
                                                                                   ? SizedBox()
                                                                                   : Transform.flip(
                                                                                       flipX: index.isOdd,
@@ -1444,15 +1177,20 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                                           shrinkWrap: true,
                                                                                           padding: EdgeInsets.zero,
                                                                                           physics: ScrollPhysics(),
-                                                                                          scrollDirection: Axis.horizontal,
+                                                                                          scrollDirection:
+                                                                                              Axis.horizontal,
                                                                                           children: [
                                                                                             Text(
-                                                                                              UmraDetails.transportList![index].from!,
+                                                                                              UmraDetails
+                                                                                                  .transportList![index]
+                                                                                                  .from!,
                                                                                               style: fontStyle(
                                                                                                 color: Colors.black,
                                                                                                 fontSize: 14.sp,
-                                                                                                fontWeight: FontWeight.w500,
-                                                                                                fontFamily: FontFamily.medium,
+                                                                                                fontWeight:
+                                                                                                    FontWeight.w500,
+                                                                                                fontFamily:
+                                                                                                    FontFamily.medium,
                                                                                               ),
                                                                                             ),
                                                                                           ],
@@ -1462,15 +1200,21 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                             ),
                                                                             16.horizontalSpace,
                                                                             RotationTransition(
-                                                                              turns: LanguageClass.isEnglish ? AlwaysStoppedAnimation(360) : new AlwaysStoppedAnimation(180 / 360),
+                                                                              turns: LanguageClass.isEnglish
+                                                                                  ? AlwaysStoppedAnimation(360)
+                                                                                  : new AlwaysStoppedAnimation(
+                                                                                      180 / 360),
                                                                               child: Container(
                                                                                 alignment: Alignment.center,
-                                                                                child: Image.asset('assets/images/longarrow.png'),
+                                                                                child: Image.asset(
+                                                                                    'assets/images/longarrow.png'),
                                                                               ),
                                                                             ),
                                                                             16.horizontalSpace,
                                                                             Expanded(
-                                                                              child: UmraDetails.transportList![index].to == null
+                                                                              child: UmraDetails
+                                                                                          .transportList![index].to ==
+                                                                                      null
                                                                                   ? SizedBox()
                                                                                   : Transform.flip(
                                                                                       flipX: index.isOdd,
@@ -1480,15 +1224,20 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                                           shrinkWrap: true,
                                                                                           padding: EdgeInsets.zero,
                                                                                           physics: ScrollPhysics(),
-                                                                                          scrollDirection: Axis.horizontal,
+                                                                                          scrollDirection:
+                                                                                              Axis.horizontal,
                                                                                           children: [
                                                                                             Text(
-                                                                                              UmraDetails.transportList![index].to!,
+                                                                                              UmraDetails
+                                                                                                  .transportList![index]
+                                                                                                  .to!,
                                                                                               style: fontStyle(
                                                                                                 color: Colors.black,
                                                                                                 fontSize: 14.sp,
-                                                                                                fontWeight: FontWeight.w500,
-                                                                                                fontFamily: FontFamily.medium,
+                                                                                                fontWeight:
+                                                                                                    FontWeight.w500,
+                                                                                                fontFamily:
+                                                                                                    FontFamily.medium,
                                                                                               ),
                                                                                             ),
                                                                                           ],
@@ -1502,20 +1251,12 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                     ),
                                                                     16.horizontalSpace,
                                                                     Text(
-                                                                      UmraDetails
-                                                                          .transportList![
-                                                                              index]
-                                                                          .tripDate!,
-                                                                      style:
-                                                                          fontStyle(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        fontSize:
-                                                                            17.sp,
-                                                                        fontWeight:
-                                                                            FontWeight.w500,
-                                                                        fontFamily:
-                                                                            FontFamily.medium,
+                                                                      UmraDetails.transportList![index].tripDate!,
+                                                                      style: fontStyle(
+                                                                        color: Colors.black,
+                                                                        fontSize: 17.sp,
+                                                                        fontWeight: FontWeight.w500,
+                                                                        fontFamily: FontFamily.medium,
                                                                       ),
                                                                     ),
                                                                   ],
@@ -1536,26 +1277,19 @@ class _ReservationScreenState extends State<ReservationScreen>
                                       ? SizedBox()
                                       : Column(
                                           mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
                                             Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 15.w),
+                                              padding: EdgeInsets.symmetric(horizontal: 15.w),
                                               child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
                                                   RotationTransition(
                                                     turns: programisopen
-                                                        ? AlwaysStoppedAnimation(
-                                                            360)
-                                                        : new AlwaysStoppedAnimation(
-                                                            180 / 360),
+                                                        ? AlwaysStoppedAnimation(360)
+                                                        : new AlwaysStoppedAnimation(180 / 360),
                                                     child: InkWell(
                                                       onTap: () {
                                                         if (programisopen) {
@@ -1571,36 +1305,28 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                       child: Container(
                                                         width: 18.w,
                                                         height: 16.w,
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: SvgPicture.asset(
-                                                            'assets/images/arrowdown.svg'),
+                                                        alignment: Alignment.center,
+                                                        child: SvgPicture.asset('assets/images/arrowdown.svg'),
                                                       ),
                                                     ),
                                                   ),
                                                   10.horizontalSpace,
                                                   Text(
-                                                    LanguageClass.isEnglish
-                                                        ? 'Program'
-                                                        : 'البرنامج',
+                                                    LanguageClass.isEnglish ? 'Program' : 'البرنامج',
                                                     style: fontStyle(
                                                         color: Colors.black,
                                                         fontSize: 22.sp,
-                                                        fontFamily:
-                                                            FontFamily.regular,
+                                                        fontFamily: FontFamily.regular,
                                                         height: 1.2,
-                                                        fontWeight:
-                                                            FontWeight.normal),
+                                                        fontWeight: FontWeight.normal),
                                                   ),
                                                   Spacer(),
                                                   Text(
                                                     '${Routes.curruncy ?? ""} ${programsprice.toStringAsFixed(2)}',
                                                     style: fontStyle(
-                                                        fontFamily:
-                                                            FontFamily.medium,
+                                                        fontFamily: FontFamily.medium,
                                                         fontSize: 16.sp,
-                                                        fontWeight:
-                                                            FontWeight.w600,
+                                                        fontWeight: FontWeight.w600,
                                                         color: Colors.black),
                                                   )
                                                 ],
@@ -1610,98 +1336,68 @@ class _ReservationScreenState extends State<ReservationScreen>
                                             programisopen
                                                 ? Flexible(
                                                     child: ListView.builder(
-                                                      itemCount: UmraDetails
-                                                          .umraprograms.length,
+                                                      itemCount: UmraDetails.umraprograms.length,
                                                       shrinkWrap: true,
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 15.w),
+                                                      padding: EdgeInsets.symmetric(horizontal: 15.w),
                                                       physics: ScrollPhysics(),
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index) {
+                                                      itemBuilder: (BuildContext context, int index) {
                                                         return Container(
-                                                          width:
-                                                              double.infinity,
-                                                          margin: EdgeInsets
-                                                              .symmetric(
-                                                                  vertical:
-                                                                      5.h),
+                                                          width: double.infinity,
+                                                          margin: EdgeInsets.symmetric(vertical: 5.h),
                                                           child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
+                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                                            mainAxisSize: MainAxisSize.max,
                                                             children: [
                                                               Expanded(
                                                                 child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .start,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .max,
+                                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                                  mainAxisSize: MainAxisSize.max,
                                                                   children: [
                                                                     InkWell(
-                                                                      onTap: UmraDetails.umraprograms[index].isRequired ==
-                                                                              true
-                                                                          ? () {}
-                                                                          : () {
-                                                                              setState(() {
-                                                                                checkvaluePrograms[index] = !checkvaluePrograms[index];
-                                                                              });
-                                                                              calculateprograms();
-                                                                            },
-                                                                      child:
-                                                                          Container(
-                                                                        width:
-                                                                            20.w,
-                                                                        height:
-                                                                            20.w,
+                                                                      onTap:
+                                                                          UmraDetails.umraprograms[index].isRequired ==
+                                                                                  true
+                                                                              ? () {}
+                                                                              : () {
+                                                                                  setState(() {
+                                                                                    checkvaluePrograms[index] =
+                                                                                        !checkvaluePrograms[index];
+                                                                                  });
+                                                                                  calculateprograms();
+                                                                                },
+                                                                      child: Container(
+                                                                        width: 20.w,
+                                                                        height: 20.w,
                                                                         decoration: BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(0),
-                                                                            border: Border.all(width: 2, color: Color(0xff707070))),
-                                                                        padding:
-                                                                            EdgeInsets.all(2),
+                                                                            borderRadius: BorderRadius.circular(0),
+                                                                            border: Border.all(
+                                                                                width: 2, color: Color(0xff707070))),
+                                                                        padding: EdgeInsets.all(2),
                                                                         child: checkvaluePrograms[index]
                                                                             ? Container(
                                                                                 width: double.infinity,
                                                                                 height: double.infinity,
-                                                                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(0), color: Color(0xff707070)),
+                                                                                decoration: BoxDecoration(
+                                                                                    borderRadius:
+                                                                                        BorderRadius.circular(0),
+                                                                                    color: Color(0xff707070)),
                                                                               )
                                                                             : SizedBox(),
                                                                       ),
                                                                     ),
                                                                     10.horizontalSpace,
                                                                     Expanded(
-                                                                      child:
-                                                                          Text(
-                                                                        UmraDetails
-                                                                            .umraprograms[index]
-                                                                            .title!,
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                        style:
-                                                                            fontStyle(
-                                                                          fontSize:
-                                                                              16.sp,
-                                                                          color:
-                                                                              Colors.black,
-                                                                          fontWeight:
-                                                                              FontWeight.w500,
-                                                                          height:
-                                                                              1.2,
-                                                                          fontFamily:
-                                                                              FontFamily.medium,
+                                                                      child: Text(
+                                                                        UmraDetails.umraprograms[index].title!,
+                                                                        overflow: TextOverflow.ellipsis,
+                                                                        style: fontStyle(
+                                                                          fontSize: 16.sp,
+                                                                          color: Colors.black,
+                                                                          fontWeight: FontWeight.w500,
+                                                                          height: 1.2,
+                                                                          fontFamily: FontFamily.medium,
                                                                         ),
                                                                       ),
                                                                     ),
@@ -1710,19 +1406,12 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                               ),
                                                               Text(
                                                                 "${UmraDetails.umraprograms[index].price * UmraDetails.programsNumber[index]} ${Routes.curruncy ?? ""}",
-                                                                style:
-                                                                    fontStyle(
-                                                                  fontSize:
-                                                                      14.sp,
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
+                                                                style: fontStyle(
+                                                                  fontSize: 14.sp,
+                                                                  color: Colors.black,
+                                                                  fontWeight: FontWeight.w500,
                                                                   height: 1.2,
-                                                                  fontFamily:
-                                                                      FontFamily
-                                                                          .medium,
+                                                                  fontFamily: FontFamily.medium,
                                                                 ),
                                                               ),
                                                             ],
@@ -1736,8 +1425,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                         ),
                                   10.verticalSpace,
                                   Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 15.w),
+                                    padding: EdgeInsets.symmetric(horizontal: 15.w),
                                     child: DottedLine(
                                       direction: Axis.horizontal,
                                       dashColor: Colors.black,
@@ -1748,8 +1436,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                   10.verticalSpace,
                                   Container(
                                     alignment: Alignment.centerRight,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 15.w),
+                                    padding: EdgeInsets.symmetric(horizontal: 15.w),
                                     child: Text(
                                       '${LanguageClass.isEnglish ? 'Total' : 'الإجمالي'} ${(accomidationprice + transportationprice + programsprice).toStringAsFixed(2)} ${Routes.curruncy ?? ""}',
                                       style: fontStyle(
@@ -1764,35 +1451,26 @@ class _ReservationScreenState extends State<ReservationScreen>
                                   10.verticalSpace,
                                   Container(
                                     height: 44,
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 25.w),
+                                    margin: EdgeInsets.symmetric(horizontal: 25.w),
                                     decoration: BoxDecoration(
                                         color: Color(0xffDEDEDE),
                                         borderRadius: BorderRadius.circular(22),
                                         boxShadow: [
                                           BoxShadow(
-                                              color: Color(0xffa7a7a7)
-                                                  .withOpacity(0.1),
+                                              color: Color(0xffa7a7a7).withOpacity(0.1),
                                               blurRadius: 3,
                                               offset: Offset(0, 3))
                                         ]),
                                     child: TextField(
                                       controller: _promocodetext,
                                       style: fontStyle(
-                                          color: Color(0xff969696),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold),
+                                          color: Color(0xff969696), fontSize: 14, fontWeight: FontWeight.bold),
                                       decoration: InputDecoration(
-                                        hintText: LanguageClass.isEnglish
-                                            ? 'I have a Promo Code !'
-                                            : 'لدي كود خصم',
+                                        hintText: LanguageClass.isEnglish ? 'I have a Promo Code !' : 'لدي كود خصم',
                                         hintStyle: fontStyle(
-                                            color: Color(0xff969696),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold),
+                                            color: Color(0xff969696), fontSize: 14, fontWeight: FontWeight.bold),
                                         border: InputBorder.none,
-                                        contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 25, vertical: 10),
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                                         suffixIcon: InkWell(
                                           onTap: () {
                                             if (Routes.user == null) {
@@ -1804,26 +1482,16 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                       : 'الرجاء تسجيل الدخول أولا');
                                             } else {
                                               if (_promocodetext.text != "") {
-                                                UmraDetails.totalPriceUmrah =
-                                                    afterdiscount;
-                                                UmraDetails
-                                                        .totlaPriceTransport =
-                                                    transportationprice;
-                                                UmraDetails
-                                                        .totlaPriceResidence =
-                                                    accomidationprice;
-                                                UmraDetails.totlaPriceProgram =
-                                                    programsprice;
-                                                _umraBloc.add(
-                                                    CheckpromcodeEvent(
-                                                        code: _promocodetext
-                                                            .text));
+                                                UmraDetails.totalPriceUmrah = afterdiscount;
+                                                UmraDetails.totlaPriceTransport = transportationprice;
+                                                UmraDetails.totlaPriceResidence = accomidationprice;
+                                                UmraDetails.totlaPriceProgram = programsprice;
+                                                _umraBloc.add(CheckpromcodeEvent(code: _promocodetext.text));
                                               } else {
                                                 Constants.showDefaultSnackBar(
                                                     color: AppColors.umragold,
                                                     context: context,
-                                                    text: LanguageClass
-                                                            .isEnglish
+                                                    text: LanguageClass.isEnglish
                                                         ? 'Please enter code'
                                                         : 'من فضلك  ادخل الكود ');
                                               }
@@ -1832,19 +1500,13 @@ class _ReservationScreenState extends State<ReservationScreen>
                                           child: Container(
                                             width: 100,
                                             decoration: BoxDecoration(
-                                                color: AppColors.umragold,
-                                                borderRadius:
-                                                    BorderRadius.circular(22)),
+                                                color: AppColors.umragold, borderRadius: BorderRadius.circular(22)),
                                             padding: EdgeInsets.only(left: 0),
                                             alignment: Alignment.center,
                                             child: Text(
-                                              LanguageClass.isEnglish
-                                                  ? 'Redeem'
-                                                  : "تطبيق",
+                                              LanguageClass.isEnglish ? 'Redeem' : "تطبيق",
                                               style: fontStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold),
+                                                  color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
                                             ),
                                           ),
                                         ),
@@ -1853,18 +1515,13 @@ class _ReservationScreenState extends State<ReservationScreen>
                                   ),
                                   10.verticalSpace,
                                   Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 35.w),
+                                    padding: EdgeInsets.symmetric(horizontal: 35.w),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Text(
-                                          LanguageClass.isEnglish
-                                              ? 'Disscount'
-                                              : 'خصم',
+                                          LanguageClass.isEnglish ? 'Disscount' : 'خصم',
                                           style: fontStyle(
                                               fontFamily: FontFamily.regular,
                                               fontSize: 14.sp,
@@ -1873,9 +1530,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                               color: AppColors.blackColor),
                                         ),
                                         Text(
-                                          discount
-                                              .toStringAsFixed(2)
-                                              .toString(),
+                                          discount.toStringAsFixed(2).toString(),
                                           style: fontStyle(
                                               fontFamily: FontFamily.medium,
                                               fontSize: 14,
@@ -1888,47 +1543,31 @@ class _ReservationScreenState extends State<ReservationScreen>
                                   ),
                                   10.verticalSpace,
                                   Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 15.w),
+                                    padding: EdgeInsets.symmetric(horizontal: 15.w),
                                     child: Divider(
                                       color: Colors.black,
                                     ),
                                   ),
                                   10.verticalSpace,
-                                  widget.umrahReservationID != null &&
-                                          !diffrence.isNegative
+                                  widget.umrahReservationID != null && !diffrence.isNegative
                                       ? Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 15.w),
+                                          padding: EdgeInsets.symmetric(horizontal: 15.w),
                                           child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Container(
                                                 margin: EdgeInsets.only(
-                                                    left:
-                                                        LanguageClass.isEnglish
-                                                            ? 20.w
-                                                            : 0,
-                                                    right:
-                                                        LanguageClass.isEnglish
-                                                            ? 0
-                                                            : 20.w),
+                                                    left: LanguageClass.isEnglish ? 20.w : 0,
+                                                    right: LanguageClass.isEnglish ? 0 : 20.w),
                                                 child: Text(
-                                                  LanguageClass.isEnglish
-                                                      ? 'Remaining payment'
-                                                      : 'المتبقي للدفع',
+                                                  LanguageClass.isEnglish ? 'Remaining payment' : 'المتبقي للدفع',
                                                   style: fontStyle(
-                                                      fontFamily:
-                                                          FontFamily.regular,
+                                                      fontFamily: FontFamily.regular,
                                                       fontSize: 12.sp,
                                                       height: 1,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color:
-                                                          AppColors.blackColor),
+                                                      fontWeight: FontWeight.w600,
+                                                      color: AppColors.blackColor),
                                                 ),
                                               ),
                                               Text(
@@ -1938,60 +1577,42 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                     fontSize: 14.sp,
                                                     height: 1,
                                                     fontWeight: FontWeight.w600,
-                                                    color:
-                                                        AppColors.primaryColor),
+                                                    color: AppColors.primaryColor),
                                               ),
                                             ],
                                           ),
                                         )
-                                      : widget.umrahReservationID != null &&
-                                              diffrence.isNegative
+                                      : widget.umrahReservationID != null && diffrence.isNegative
                                           ? Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 15.w),
+                                              padding: EdgeInsets.symmetric(horizontal: 15.w),
                                               child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
                                                   Container(
                                                     margin: EdgeInsets.only(
-                                                        left: LanguageClass
-                                                                .isEnglish
-                                                            ? 20.w
-                                                            : 0,
-                                                        right: LanguageClass
-                                                                .isEnglish
-                                                            ? 0
-                                                            : 20.w),
+                                                        left: LanguageClass.isEnglish ? 20.w : 0,
+                                                        right: LanguageClass.isEnglish ? 0 : 20.w),
                                                     child: Text(
                                                       LanguageClass.isEnglish
                                                           ? 'Receive in wallet'
                                                           : 'استلام في المحفظة',
                                                       style: fontStyle(
-                                                          fontFamily: FontFamily
-                                                              .regular,
+                                                          fontFamily: FontFamily.regular,
                                                           fontSize: 12.sp,
                                                           height: 1,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: AppColors
-                                                              .blackColor),
+                                                          fontWeight: FontWeight.w600,
+                                                          color: AppColors.blackColor),
                                                     ),
                                                   ),
                                                   Text(
                                                     "${diffrence.toString().replaceAll('-', '')} ${Routes.curruncy ?? ""}",
                                                     style: fontStyle(
-                                                        fontFamily:
-                                                            FontFamily.bold,
+                                                        fontFamily: FontFamily.bold,
                                                         fontSize: 14.sp,
                                                         height: 1,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: AppColors
-                                                            .primaryColor),
+                                                        fontWeight: FontWeight.w600,
+                                                        color: AppColors.primaryColor),
                                                   ),
                                                 ],
                                               ),
@@ -1999,26 +1620,17 @@ class _ReservationScreenState extends State<ReservationScreen>
                                           : 0.verticalSpace,
                                   5.verticalSpace,
                                   Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 15.w),
+                                    padding: EdgeInsets.symmetric(horizontal: 15.w),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Container(
                                           margin: EdgeInsets.only(
-                                              left: LanguageClass.isEnglish
-                                                  ? 20.w
-                                                  : 0,
-                                              right: LanguageClass.isEnglish
-                                                  ? 0
-                                                  : 20.w),
+                                              left: LanguageClass.isEnglish ? 20.w : 0,
+                                              right: LanguageClass.isEnglish ? 0 : 20.w),
                                           child: Text(
-                                            LanguageClass.isEnglish
-                                                ? 'Total Price'
-                                                : 'السعر الاجمالي',
+                                            LanguageClass.isEnglish ? 'Total Price' : 'السعر الاجمالي',
                                             style: fontStyle(
                                                 fontFamily: FontFamily.regular,
                                                 fontSize: 14.sp,
@@ -2042,13 +1654,10 @@ class _ReservationScreenState extends State<ReservationScreen>
                                   10.verticalSpace,
                                   Container(
                                     alignment: Alignment.centerLeft,
-                                    margin: EdgeInsets.only(
-                                        left: 15.w, right: 15.w),
+                                    margin: EdgeInsets.only(left: 15.w, right: 15.w),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Checkbox(
                                             value: accept,
@@ -2056,16 +1665,14 @@ class _ReservationScreenState extends State<ReservationScreen>
                                             checkColor: AppColors.umragold,
                                             focusColor: Colors.black,
                                             activeColor: Colors.black,
-                                            fillColor: MaterialStatePropertyAll(
-                                                Colors.white),
+                                            fillColor: MaterialStatePropertyAll(Colors.white),
                                             onChanged: (value) {
                                               setState(() {
                                                 accept = value!;
                                               });
 
                                               if (accept == true) {
-                                                _umraBloc.add(Getpolicyevent(
-                                                    type: 'PloicyTrip'));
+                                                _umraBloc.add(Getpolicyevent(type: 'PloicyTrip'));
                                               }
                                             }),
                                         Expanded(
@@ -2082,26 +1689,19 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                     color: Colors.black,
                                                     fontWeight: FontWeight.w500,
                                                     height: 1.2,
-                                                    fontFamily:
-                                                        FontFamily.medium,
+                                                    fontFamily: FontFamily.medium,
                                                   ),
                                                   children: [
                                                     TextSpan(
-                                                      text: LanguageClass
-                                                              .isEnglish
+                                                      text: LanguageClass.isEnglish
                                                           ? ' terms and conditions'
                                                           : ' شروط وأحكام سوا عمرة  ',
                                                       style: fontStyle(
-                                                          color: AppColors
-                                                              .umragold,
+                                                          color: AppColors.umragold,
                                                           fontSize: 14.sp,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .underline,
-                                                          fontFamily:
-                                                              FontFamily.medium,
-                                                          fontWeight:
-                                                              FontWeight.w500),
+                                                          decoration: TextDecoration.underline,
+                                                          fontFamily: FontFamily.medium,
+                                                          fontWeight: FontWeight.w500),
                                                     )
                                                   ]),
                                             ),
@@ -2116,92 +1716,59 @@ class _ReservationScreenState extends State<ReservationScreen>
                                           children: [
                                             accept
                                                 ? Container(
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 10.w),
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 15.h,
-                                                            horizontal: 15.w),
+                                                    margin: EdgeInsets.symmetric(horizontal: 10.w),
+                                                    padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 15.w),
                                                     decoration: BoxDecoration(
                                                       color: Color(0xfff5f5f5),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              16),
+                                                      borderRadius: BorderRadius.circular(16),
                                                     ),
                                                     child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
                                                         Container(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  bottom: 7.h),
+                                                          padding: EdgeInsets.only(bottom: 7.h),
                                                           decoration: BoxDecoration(
                                                               border: Border(
                                                                   bottom: BorderSide(
                                                             color: Colors.grey,
                                                           ))),
                                                           child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
+                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            crossAxisAlignment: CrossAxisAlignment.center,
                                                             children: [
                                                               Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .start,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
+                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                                 children: [
                                                                   Container(
                                                                     width: 50.w,
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    child: Image
-                                                                        .network(
-                                                                      paymentpage!
-                                                                          .image!,
-                                                                      fit: BoxFit
-                                                                          .fitWidth,
+                                                                    alignment: Alignment.center,
+                                                                    child: Image.network(
+                                                                      paymentpage!.image!,
+                                                                      fit: BoxFit.fitWidth,
                                                                     ),
                                                                   ),
                                                                   11.horizontalSpace,
                                                                   Column(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .start,
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
+                                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                                     children: [
                                                                       Text(
                                                                         LanguageClass.isEnglish
                                                                             ? 'Payment method'
                                                                             : 'طريقة الدفع',
                                                                         style: fontStyle(
-                                                                            color:
-                                                                                Colors.black,
+                                                                            color: Colors.black,
                                                                             fontSize: 10.sp,
                                                                             fontFamily: FontFamily.medium,
                                                                             fontWeight: FontWeight.normal),
                                                                       ),
                                                                       2.verticalSpace,
                                                                       Text(
-                                                                        paymentpage!
-                                                                            .pageName!,
+                                                                        paymentpage!.pageName!,
                                                                         style: fontStyle(
-                                                                            color:
-                                                                                Colors.black,
+                                                                            color: Colors.black,
                                                                             fontSize: 15.sp,
                                                                             fontFamily: FontFamily.regular,
                                                                             fontWeight: FontWeight.normal),
@@ -2212,95 +1779,61 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                               ),
                                                               InkWell(
                                                                 onTap: () {
-                                                                  if (Routes
-                                                                          .user ==
-                                                                      null) {
+                                                                  if (Routes.user == null) {
                                                                     Navigator.push(
                                                                         context,
                                                                         MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              MultiBlocProvider(
+                                                                          builder: (context) => MultiBlocProvider(
                                                                             providers: [
                                                                               BlocProvider<LoginCubit>(
                                                                                 create: (context) => sl<LoginCubit>(),
                                                                               ),
                                                                             ],
-                                                                            child:
-                                                                                LoginScreen(
+                                                                            child: LoginScreen(
                                                                               isback: true,
                                                                             ),
                                                                           ),
                                                                         ));
                                                                   } else {
-                                                                    UmraDetails
-                                                                            .afterdiscount =
-                                                                        afterdiscount;
-                                                                    Navigator
-                                                                        .push(
+                                                                    UmraDetails.afterdiscount = afterdiscount;
+                                                                    Navigator.push(
                                                                       context,
                                                                       PageTransition(
-                                                                        alignment:
-                                                                            Alignment.center,
-                                                                        childCurrent:
-                                                                            ReservationScreen(
-                                                                          selectedpackage:
-                                                                              selectedpackage,
-                                                                          typeid:
-                                                                              widget.typeid,
+                                                                        alignment: Alignment.center,
+                                                                        childCurrent: ReservationScreen(
+                                                                          selectedpackage: selectedpackage,
+                                                                          typeid: widget.typeid,
                                                                         ),
-                                                                        duration:
-                                                                            Duration(milliseconds: 300),
-                                                                        type: PageTransitionType
-                                                                            .bottomToTop,
-                                                                        child:
-                                                                            SelectPaymentumra(
-                                                                          umrahReservationID:
-                                                                              widget.umrahReservationID,
+                                                                        duration: Duration(milliseconds: 300),
+                                                                        type: PageTransitionType.bottomToTop,
+                                                                        child: SelectPaymentUmra(
+                                                                          umrahReservationID: widget.umrahReservationID,
                                                                         ),
                                                                       ),
-                                                                    ).then(
-                                                                        (value) {
-                                                                      if (value
-                                                                          is paymentbody) {
-                                                                        setState(
-                                                                            () {
-                                                                          paymentpage =
-                                                                              value;
+                                                                    ).then((value) {
+                                                                      if (value is paymentbody) {
+                                                                        setState(() {
+                                                                          paymentpage = value;
                                                                         });
                                                                       }
                                                                     });
                                                                   }
                                                                 },
-                                                                child:
-                                                                    Container(
+                                                                child: Container(
                                                                   width: 57.w,
                                                                   height: 16.h,
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .center,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    color: AppColors
-                                                                        .umragold,
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(3),
+                                                                  alignment: Alignment.center,
+                                                                  decoration: BoxDecoration(
+                                                                    color: AppColors.umragold,
+                                                                    borderRadius: BorderRadius.circular(3),
                                                                   ),
                                                                   child: Text(
-                                                                    LanguageClass
-                                                                            .isEnglish
-                                                                        ? 'Change'
-                                                                        : 'تغيير',
+                                                                    LanguageClass.isEnglish ? 'Change' : 'تغيير',
                                                                     style: fontStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontSize: 10
-                                                                            .sp,
-                                                                        fontFamily:
-                                                                            FontFamily
-                                                                                .medium,
-                                                                        fontWeight:
-                                                                            FontWeight.normal),
+                                                                        color: Colors.white,
+                                                                        fontSize: 10.sp,
+                                                                        fontFamily: FontFamily.medium,
+                                                                        fontWeight: FontWeight.normal),
                                                                   ),
                                                                 ),
                                                               )
@@ -2308,65 +1841,40 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                           ),
                                                         ),
                                                         Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
                                                           children: [
                                                             Row(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
+                                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                                              mainAxisAlignment: MainAxisAlignment.start,
                                                               children: [
                                                                 Container(
                                                                   width: 24.w,
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .center,
-                                                                  child: SvgPicture
-                                                                      .asset(
-                                                                          'assets/images/wallet2.svg'),
+                                                                  alignment: Alignment.center,
+                                                                  child: SvgPicture.asset('assets/images/wallet2.svg'),
                                                                 ),
                                                                 25.horizontalSpace,
                                                                 Column(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .start,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
+                                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                                  crossAxisAlignment: CrossAxisAlignment.start,
                                                                   children: [
                                                                     Text(
-                                                                      LanguageClass
-                                                                              .isEnglish
+                                                                      LanguageClass.isEnglish
                                                                           ? 'Use wallet Ballance'
                                                                           : 'استخدام رصيد المحفظة',
                                                                       style: fontStyle(
-                                                                          color: Colors
-                                                                              .black,
-                                                                          fontSize: 15
-                                                                              .sp,
-                                                                          fontFamily: FontFamily
-                                                                              .medium,
-                                                                          fontWeight:
-                                                                              FontWeight.normal),
+                                                                          color: Colors.black,
+                                                                          fontSize: 15.sp,
+                                                                          fontFamily: FontFamily.medium,
+                                                                          fontWeight: FontWeight.normal),
                                                                     ),
                                                                     Text(
                                                                       '$balance ${Routes.curruncy ?? ""}',
                                                                       style: fontStyle(
-                                                                          color: Color(
-                                                                              0xff23c956),
-                                                                          fontSize: 10
-                                                                              .sp,
-                                                                          fontFamily: FontFamily
-                                                                              .bold,
-                                                                          fontWeight:
-                                                                              FontWeight.normal),
+                                                                          color: Color(0xff23c956),
+                                                                          fontSize: 10.sp,
+                                                                          fontFamily: FontFamily.bold,
+                                                                          fontWeight: FontWeight.normal),
                                                                     )
                                                                   ],
                                                                 )
@@ -2374,20 +1882,13 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                             ),
                                                             Switch.adaptive(
                                                               // Don't use the ambient CupertinoThemeData to style this switch.
-                                                              applyCupertinoTheme:
-                                                                  false,
-                                                              activeColor:
-                                                                  AppColors
-                                                                      .umragold,
-                                                              inactiveTrackColor:
-                                                                  Color(
-                                                                      0xffd8d8d8),
+                                                              applyCupertinoTheme: false,
+                                                              activeColor: AppColors.umragold,
+                                                              inactiveTrackColor: Color(0xffd8d8d8),
                                                               value: usewallet,
-                                                              onChanged:
-                                                                  (bool value) {
+                                                              onChanged: (bool value) {
                                                                 setState(() {
-                                                                  usewallet =
-                                                                      value;
+                                                                  usewallet = value;
                                                                 });
                                                               },
                                                             ),
@@ -2399,16 +1900,11 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                 : SizedBox(),
                                             5.verticalSpace,
                                             Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 20.w),
-                                                alignment:
-                                                    Alignment.centerRight,
+                                                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                                alignment: Alignment.centerRight,
                                                 child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
                                                   children: [
                                                     InkWell(
                                                       onTap: () {
@@ -2417,33 +1913,19 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                       child: Container(
                                                         height: 35,
                                                         width: 70,
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 5.w,
-                                                                vertical: 2.h),
-                                                        alignment:
-                                                            Alignment.center,
+                                                        padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+                                                        alignment: Alignment.center,
                                                         decoration: BoxDecoration(
-                                                            color: Color(
-                                                                0xffecb959),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        41)),
+                                                            color: Color(0xffecb959),
+                                                            borderRadius: BorderRadius.circular(41)),
                                                         child: FittedBox(
                                                           fit: BoxFit.scaleDown,
                                                           child: Text(
-                                                            LanguageClass
-                                                                    .isEnglish
-                                                                ? "Previous"
-                                                                : 'السابق',
+                                                            LanguageClass.isEnglish ? "Previous" : 'السابق',
                                                             style: fontStyle(
-                                                                fontFamily:
-                                                                    FontFamily
-                                                                        .bold,
+                                                                fontFamily: FontFamily.bold,
                                                                 fontSize: 18.sp,
-                                                                color: Colors
-                                                                    .white),
+                                                                color: Colors.white),
                                                           ),
                                                         ),
                                                       ),
@@ -2451,183 +1933,101 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                     InkWell(
                                                       onTap: accept
                                                           ? () {
-                                                              if (Routes.user ==
-                                                                  null) {
+                                                              if (Routes.user == null) {
                                                                 Navigator.push(
                                                                     context,
                                                                     MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) =>
-                                                                              MultiBlocProvider(
+                                                                      builder: (context) => MultiBlocProvider(
                                                                         providers: [
-                                                                          BlocProvider<
-                                                                              LoginCubit>(
-                                                                            create: (context) =>
-                                                                                sl<LoginCubit>(),
+                                                                          BlocProvider<LoginCubit>(
+                                                                            create: (context) => sl<LoginCubit>(),
                                                                           ),
                                                                         ],
-                                                                        child:
-                                                                            LoginScreen(
-                                                                          isback:
-                                                                              true,
+                                                                        child: LoginScreen(
+                                                                          isback: true,
                                                                         ),
                                                                       ),
                                                                     ));
                                                               } else {
-                                                                UmraDetails
-                                                                        .totalPriceUmrah =
-                                                                    afterdiscount;
-                                                                UmraDetails
-                                                                        .totlaPriceTransport =
-                                                                    transportationprice;
-                                                                UmraDetails
-                                                                        .totlaPriceResidence =
-                                                                    accomidationprice;
-                                                                UmraDetails
-                                                                        .totlaPriceProgram =
-                                                                    programsprice;
+                                                                UmraDetails.totalPriceUmrah = afterdiscount;
+                                                                UmraDetails.totlaPriceTransport = transportationprice;
+                                                                UmraDetails.totlaPriceResidence = accomidationprice;
+                                                                UmraDetails.totlaPriceProgram = programsprice;
 
                                                                 if (usewallet) {
                                                                   _umraBloc.add(WalletdetactionEvent(
-                                                                      PaymentMethodID:
-                                                                          4,
-                                                                      paymentTypeID:
-                                                                          67));
-                                                                } else if (paymentpage!
-                                                                        .pageId ==
-                                                                    2) {
-                                                                  UmraDetails
-                                                                          .curruncy =
-                                                                      Routes
-                                                                          .curruncy!;
+                                                                      PaymentMethodID: 4, paymentTypeID: 67));
+                                                                } else if (paymentpage!.pageId == 2) {
+                                                                  UmraDetails.curruncy = Routes.curruncy!;
 
-                                                                  if (UmraDetails
-                                                                          .cardModel
-                                                                          .cardNumber !=
-                                                                      '') {
-                                                                    _umraBloc.add(
-                                                                        cardpaymentEvent(
-                                                                      PaymentMethodID:
-                                                                          4,
-                                                                      paymentTypeID:
-                                                                          68,
-                                                                      cvv: UmraDetails
-                                                                          .cvv
-                                                                          .toString(),
-                                                                      cardNumber: UmraDetails
-                                                                          .cardModel
-                                                                          .cardNumber!
+                                                                  if (UmraDetails.cardModel.cardNumber != '') {
+                                                                    _umraBloc.add(cardpaymentEvent(
+                                                                      PaymentMethodID: 4,
+                                                                      paymentTypeID: 68,
+                                                                      cvv: UmraDetails.cvv.toString(),
+                                                                      cardNumber: UmraDetails.cardModel.cardNumber!
                                                                           .toString()
-                                                                          .replaceAll(
-                                                                              " ",
-                                                                              ""),
-                                                                      cardExpiryYear: UmraDetails
-                                                                          .cardModel
-                                                                          .month!
+                                                                          .replaceAll(" ", ""),
+                                                                      cardExpiryYear: UmraDetails.cardModel.month!
                                                                           .substring(
                                                                             3,
                                                                           )
                                                                           .toString(),
-                                                                      cardExpiryMonth: UmraDetails
-                                                                          .cardModel
-                                                                          .month!
-                                                                          .substring(
-                                                                              0,
-                                                                              2)
+                                                                      cardExpiryMonth: UmraDetails.cardModel.month!
+                                                                          .substring(0, 2)
                                                                           .toString(),
                                                                     ));
                                                                   } else {
-                                                                    Navigator
-                                                                        .push(
+                                                                    Navigator.push(
                                                                       context,
                                                                       MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) =>
-                                                                                Umracardpay(
-                                                                          umrahReservationID:
-                                                                              widget.umrahReservationID,
-                                                                          index:
-                                                                              1,
+                                                                        builder: (context) => Umracardpay(
+                                                                          umrahReservationID: widget.umrahReservationID,
+                                                                          index: 1,
                                                                         ),
                                                                       ),
                                                                     );
                                                                   }
-                                                                } else if (paymentpage!
-                                                                        .pageId ==
-                                                                    3) {
+                                                                } else if (paymentpage!.pageId == 3) {
                                                                   _umraBloc.add(FawrypayEvent(
-                                                                      PaymentMethodID:
-                                                                          2,
-                                                                      paymentTypeID:
-                                                                          68));
-                                                                } else if (paymentpage!
-                                                                        .pageId ==
-                                                                    4) {
+                                                                      PaymentMethodID: 2, paymentTypeID: 68));
+                                                                } else if (paymentpage!.pageId == 4) {
                                                                   _umraBloc.add(ElectronicwalletEvent(
-                                                                      PaymentMethodID:
-                                                                          5,
-                                                                      paymentTypeID:
-                                                                          68,
-                                                                      phone: UmraDetails
-                                                                          .phonenumber));
+                                                                      PaymentMethodID: 5,
+                                                                      paymentTypeID: 68,
+                                                                      phone: UmraDetails.phonenumber));
                                                                 }
                                                               }
                                                             }
                                                           : () {},
                                                       child: Container(
                                                         height: 40.h,
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal:
-                                                                    10.w),
+                                                        padding: EdgeInsets.symmetric(horizontal: 10.w),
                                                         decoration: BoxDecoration(
-                                                            color: accept
-                                                                ? Colors.black
-                                                                : Colors
-                                                                    .grey[300],
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        41)),
-                                                        alignment:
-                                                            Alignment.center,
+                                                            color: accept ? Colors.black : Colors.grey[300],
+                                                            borderRadius: BorderRadius.circular(41)),
+                                                        alignment: Alignment.center,
                                                         child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          mainAxisSize: MainAxisSize.min,
                                                           children: [
                                                             usewallet
                                                                 ? Container(
                                                                     width: 35.w,
-                                                                    height:
-                                                                        35.w,
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    child: SvgPicture
-                                                                        .asset(
+                                                                    height: 35.w,
+                                                                    alignment: Alignment.center,
+                                                                    child: SvgPicture.asset(
                                                                       'assets/images/wallet2.svg',
                                                                     ),
                                                                   )
                                                                 : Container(
                                                                     width: 35.w,
-                                                                    height:
-                                                                        35.w,
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    child: Image
-                                                                        .network(
-                                                                      paymentpage!
-                                                                          .image!,
-                                                                      errorBuilder: (context,
-                                                                          error,
-                                                                          stackTrace) {
+                                                                    height: 35.w,
+                                                                    alignment: Alignment.center,
+                                                                    child: Image.network(
+                                                                      paymentpage!.image!,
+                                                                      errorBuilder: (context, error, stackTrace) {
                                                                         return Image.asset(
                                                                             'assets/images/icons8-open-wallet-78.png');
                                                                       },
@@ -2636,19 +2036,11 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                             2.horizontalSpace,
                                                             FittedBox(
                                                               child: Text(
-                                                                LanguageClass
-                                                                        .isEnglish
-                                                                    ? 'Pay'
-                                                                    : 'ادفع',
-                                                                style:
-                                                                    fontStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize:
-                                                                      16.sp,
-                                                                  fontFamily:
-                                                                      FontFamily
-                                                                          .bold,
+                                                                LanguageClass.isEnglish ? 'Pay' : 'ادفع',
+                                                                style: fontStyle(
+                                                                  color: Colors.white,
+                                                                  fontSize: 16.sp,
+                                                                  fontFamily: FontFamily.bold,
                                                                 ),
                                                               ),
                                                             ),
@@ -2662,90 +2054,48 @@ class _ReservationScreenState extends State<ReservationScreen>
                                         )
                                       : Column(
                                           children: [
-                                            diffrence.isNegative && accept ||
-                                                    diffrence == 0 && accept
+                                            diffrence.isNegative && accept || diffrence == 0 && accept
                                                 ? Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 20.w),
-                                                    alignment:
-                                                        Alignment.centerRight,
+                                                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                                    alignment: Alignment.centerRight,
                                                     child: Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.end,
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      mainAxisAlignment: MainAxisAlignment.end,
                                                       children: [
                                                         InkWell(
                                                           onTap: () {
-                                                            UmraDetails
-                                                                    .totalPriceUmrah =
-                                                                afterdiscount;
-                                                            UmraDetails
-                                                                    .totlaPriceTransport =
-                                                                transportationprice;
-                                                            UmraDetails
-                                                                    .totlaPriceResidence =
-                                                                accomidationprice;
-                                                            UmraDetails
-                                                                    .totlaPriceProgram =
-                                                                programsprice;
+                                                            UmraDetails.totalPriceUmrah = afterdiscount;
+                                                            UmraDetails.totlaPriceTransport = transportationprice;
+                                                            UmraDetails.totlaPriceResidence = accomidationprice;
+                                                            UmraDetails.totlaPriceProgram = programsprice;
 
-                                                            UmraDetails
-                                                                    .differentPrice =
-                                                                diffrence;
+                                                            UmraDetails.differentPrice = diffrence;
 
                                                             _umraBloc.add(EditReservationEvent(
-                                                                reservationID:
-                                                                    widget
-                                                                        .umrahReservationID!,
-                                                                paymentMethodID:
-                                                                    4,
-                                                                paymentTypeID:
-                                                                    67));
+                                                                reservationID: widget.umrahReservationID!,
+                                                                paymentMethodID: 4,
+                                                                paymentTypeID: 67));
                                                           },
                                                           child: Container(
                                                             height: 40.h,
                                                             width: 100.w,
-                                                            padding: EdgeInsets
-                                                                .symmetric(
-                                                                    horizontal:
-                                                                        10.w),
+                                                            padding: EdgeInsets.symmetric(horizontal: 10.w),
                                                             decoration: BoxDecoration(
-                                                                color: Colors
-                                                                    .black,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            41)),
-                                                            alignment: Alignment
-                                                                .center,
+                                                                color: Colors.black,
+                                                                borderRadius: BorderRadius.circular(41)),
+                                                            alignment: Alignment.center,
                                                             child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                                              mainAxisSize: MainAxisSize.min,
                                                               children: [
                                                                 FittedBox(
                                                                   child: Text(
-                                                                    LanguageClass
-                                                                            .isEnglish
-                                                                        ? 'Save'
-                                                                        : 'حفظ',
-                                                                    style:
-                                                                        fontStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          14.sp,
-                                                                      fontFamily:
-                                                                          FontFamily
-                                                                              .medium,
+                                                                    LanguageClass.isEnglish ? 'Save' : 'حفظ',
+                                                                    style: fontStyle(
+                                                                      color: Colors.white,
+                                                                      fontSize: 14.sp,
+                                                                      fontFamily: FontFamily.medium,
                                                                     ),
                                                                   ),
                                                                 ),
@@ -2755,106 +2105,85 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                         ),
                                                       ],
                                                     ))
-                                                : !diffrence.isNegative &&
-                                                        accept
+                                                : !diffrence.isNegative && accept
                                                     ? Column(
                                                         children: [
                                                           Container(
-                                                            margin: EdgeInsets
-                                                                .symmetric(
-                                                                    horizontal:
-                                                                        10.w),
-                                                            padding: EdgeInsets
-                                                                .symmetric(
-                                                                    vertical:
-                                                                        15.h,
-                                                                    horizontal:
-                                                                        15.w),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: Color(
-                                                                  0xfff5f5f5),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          16),
+                                                            margin: EdgeInsets.symmetric(horizontal: 10.w),
+                                                            padding:
+                                                                EdgeInsets.symmetric(vertical: 15.h, horizontal: 15.w),
+                                                            decoration: BoxDecoration(
+                                                              color: Color(0xfff5f5f5),
+                                                              borderRadius: BorderRadius.circular(16),
                                                             ),
                                                             child: Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
                                                               children: [
                                                                 Container(
-                                                                  padding: EdgeInsets
-                                                                      .only(
-                                                                          bottom:
-                                                                              7.h),
+                                                                  padding: EdgeInsets.only(bottom: 7.h),
                                                                   decoration: BoxDecoration(
                                                                       border: Border(
                                                                           bottom: BorderSide(
-                                                                    color: Colors
-                                                                        .grey,
+                                                                    color: Colors.grey,
                                                                   ))),
                                                                   child: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .center,
+                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                    crossAxisAlignment: CrossAxisAlignment.center,
                                                                     children: [
                                                                       Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.start,
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                                        crossAxisAlignment: CrossAxisAlignment.center,
                                                                         children: [
                                                                           Container(
-                                                                            width:
-                                                                                50.w,
-                                                                            alignment:
-                                                                                Alignment.center,
-                                                                            child:
-                                                                                Image.network(
+                                                                            width: 50.w,
+                                                                            alignment: Alignment.center,
+                                                                            child: Image.network(
                                                                               paymentpage!.image!,
                                                                               fit: BoxFit.fitWidth,
                                                                             ),
                                                                           ),
                                                                           11.horizontalSpace,
                                                                           Column(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.start,
+                                                                            mainAxisAlignment: MainAxisAlignment.start,
                                                                             crossAxisAlignment:
                                                                                 CrossAxisAlignment.start,
                                                                             children: [
                                                                               Text(
-                                                                                LanguageClass.isEnglish ? 'Payment method' : 'طريقة الدفع',
-                                                                                style: fontStyle(color: Colors.black, fontSize: 10.sp, fontFamily: FontFamily.medium, fontWeight: FontWeight.normal),
+                                                                                LanguageClass.isEnglish
+                                                                                    ? 'Payment method'
+                                                                                    : 'طريقة الدفع',
+                                                                                style: fontStyle(
+                                                                                    color: Colors.black,
+                                                                                    fontSize: 10.sp,
+                                                                                    fontFamily: FontFamily.medium,
+                                                                                    fontWeight: FontWeight.normal),
                                                                               ),
                                                                               2.verticalSpace,
                                                                               Text(
                                                                                 paymentpage!.pageName!,
-                                                                                style: fontStyle(color: Colors.black, fontSize: 15.sp, fontFamily: FontFamily.regular, fontWeight: FontWeight.normal),
+                                                                                style: fontStyle(
+                                                                                    color: Colors.black,
+                                                                                    fontSize: 15.sp,
+                                                                                    fontFamily: FontFamily.regular,
+                                                                                    fontWeight: FontWeight.normal),
                                                                               ),
                                                                             ],
                                                                           )
                                                                         ],
                                                                       ),
                                                                       InkWell(
-                                                                        onTap:
-                                                                            () {
-                                                                          if (Routes.user ==
-                                                                              null) {
+                                                                        onTap: () {
+                                                                          if (Routes.user == null) {
                                                                             Navigator.push(
                                                                                 context,
                                                                                 MaterialPageRoute(
-                                                                                  builder: (context) => MultiBlocProvider(
+                                                                                  builder: (context) =>
+                                                                                      MultiBlocProvider(
                                                                                     providers: [
                                                                                       BlocProvider<LoginCubit>(
-                                                                                        create: (context) => sl<LoginCubit>(),
+                                                                                        create: (context) =>
+                                                                                            sl<LoginCubit>(),
                                                                                       ),
                                                                                     ],
                                                                                     child: LoginScreen(
@@ -2873,8 +2202,9 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                                 ),
                                                                                 duration: Duration(milliseconds: 300),
                                                                                 type: PageTransitionType.bottomToTop,
-                                                                                child: SelectPaymentumra(
-                                                                                  umrahReservationID: widget.umrahReservationID,
+                                                                                child: SelectPaymentUmra(
+                                                                                  umrahReservationID:
+                                                                                      widget.umrahReservationID,
                                                                                 ),
                                                                               ),
                                                                             ).then((value) {
@@ -2886,23 +2216,15 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                             });
                                                                           }
                                                                         },
-                                                                        child:
-                                                                            Container(
-                                                                          width:
-                                                                              57.w,
-                                                                          height:
-                                                                              16.h,
-                                                                          alignment:
-                                                                              Alignment.center,
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            color:
-                                                                                AppColors.umragold,
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(3),
+                                                                        child: Container(
+                                                                          width: 57.w,
+                                                                          height: 16.h,
+                                                                          alignment: Alignment.center,
+                                                                          decoration: BoxDecoration(
+                                                                            color: AppColors.umragold,
+                                                                            borderRadius: BorderRadius.circular(3),
                                                                           ),
-                                                                          child:
-                                                                              Text(
+                                                                          child: Text(
                                                                             LanguageClass.isEnglish
                                                                                 ? 'Change'
                                                                                 : 'تغيير',
@@ -2918,68 +2240,55 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                   ),
                                                                 ),
                                                                 Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
+                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                  crossAxisAlignment: CrossAxisAlignment.center,
                                                                   children: [
                                                                     Row(
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .center,
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .start,
+                                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                                      mainAxisAlignment: MainAxisAlignment.start,
                                                                       children: [
                                                                         Container(
-                                                                          width:
-                                                                              24.w,
-                                                                          alignment:
-                                                                              Alignment.center,
-                                                                          child:
-                                                                              SvgPicture.asset('assets/images/wallet2.svg'),
+                                                                          width: 24.w,
+                                                                          alignment: Alignment.center,
+                                                                          child: SvgPicture.asset(
+                                                                              'assets/images/wallet2.svg'),
                                                                         ),
                                                                         25.horizontalSpace,
                                                                         Column(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.start,
+                                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                                          crossAxisAlignment: CrossAxisAlignment.start,
                                                                           children: [
                                                                             Text(
-                                                                              LanguageClass.isEnglish ? 'Use wallet Ballance' : 'استخدام رصيد المحفظة',
-                                                                              style: fontStyle(color: Colors.black, fontSize: 15.sp, fontFamily: FontFamily.medium, fontWeight: FontWeight.normal),
+                                                                              LanguageClass.isEnglish
+                                                                                  ? 'Use wallet Ballance'
+                                                                                  : 'استخدام رصيد المحفظة',
+                                                                              style: fontStyle(
+                                                                                  color: Colors.black,
+                                                                                  fontSize: 15.sp,
+                                                                                  fontFamily: FontFamily.medium,
+                                                                                  fontWeight: FontWeight.normal),
                                                                             ),
                                                                             Text(
                                                                               '${balance.toStringAsFixed(3)} ${Routes.curruncy ?? ""}',
-                                                                              style: fontStyle(color: Color(0xff23c956), fontSize: 10.sp, fontFamily: FontFamily.bold, fontWeight: FontWeight.normal),
+                                                                              style: fontStyle(
+                                                                                  color: Color(0xff23c956),
+                                                                                  fontSize: 10.sp,
+                                                                                  fontFamily: FontFamily.bold,
+                                                                                  fontWeight: FontWeight.normal),
                                                                             )
                                                                           ],
                                                                         )
                                                                       ],
                                                                     ),
-                                                                    Switch
-                                                                        .adaptive(
+                                                                    Switch.adaptive(
                                                                       // Don't use the ambient CupertinoThemeData to style this switch.
-                                                                      applyCupertinoTheme:
-                                                                          false,
-                                                                      activeColor:
-                                                                          AppColors
-                                                                              .umragold,
-                                                                      inactiveTrackColor:
-                                                                          Color(
-                                                                              0xffd8d8d8),
-                                                                      value:
-                                                                          usewallet,
-                                                                      onChanged:
-                                                                          (bool
-                                                                              value) {
-                                                                        setState(
-                                                                            () {
-                                                                          usewallet =
-                                                                              value;
+                                                                      applyCupertinoTheme: false,
+                                                                      activeColor: AppColors.umragold,
+                                                                      inactiveTrackColor: Color(0xffd8d8d8),
+                                                                      value: usewallet,
+                                                                      onChanged: (bool value) {
+                                                                        setState(() {
+                                                                          usewallet = value;
                                                                         });
                                                                       },
                                                                     ),
@@ -2994,50 +2303,28 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                           5.verticalSpace,
 
                                                           Container(
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
-                                                                      horizontal:
-                                                                          20.w),
+                                                              padding: EdgeInsets.symmetric(horizontal: 20.w),
                                                               child: Row(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
+                                                                mainAxisSize: MainAxisSize.min,
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                                 children: [
                                                                   InkWell(
                                                                     onTap: () {
-                                                                      Navigator.pop(
-                                                                          context);
+                                                                      Navigator.pop(context);
                                                                     },
-                                                                    child:
-                                                                        Container(
-                                                                      height:
-                                                                          35,
+                                                                    child: Container(
+                                                                      height: 35,
                                                                       width: 70,
                                                                       padding: EdgeInsets.symmetric(
-                                                                          horizontal: 5
-                                                                              .w,
-                                                                          vertical:
-                                                                              2.h),
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
+                                                                          horizontal: 5.w, vertical: 2.h),
+                                                                      alignment: Alignment.center,
                                                                       decoration: BoxDecoration(
-                                                                          color: Color(
-                                                                              0xffecb959),
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(41)),
-                                                                      child:
-                                                                          FittedBox(
-                                                                        fit: BoxFit
-                                                                            .scaleDown,
-                                                                        child:
-                                                                            Text(
+                                                                          color: Color(0xffecb959),
+                                                                          borderRadius: BorderRadius.circular(41)),
+                                                                      child: FittedBox(
+                                                                        fit: BoxFit.scaleDown,
+                                                                        child: Text(
                                                                           LanguageClass.isEnglish
                                                                               ? "Previous"
                                                                               : 'السابق',
@@ -3053,17 +2340,17 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                   InkWell(
                                                                     onTap: accept
                                                                         ? () {
-                                                                            UmraDetails.differentPrice =
-                                                                                diffrence;
-                                                                            if (Routes.user ==
-                                                                                null) {
+                                                                            UmraDetails.differentPrice = diffrence;
+                                                                            if (Routes.user == null) {
                                                                               Navigator.push(
                                                                                   context,
                                                                                   MaterialPageRoute(
-                                                                                    builder: (context) => MultiBlocProvider(
+                                                                                    builder: (context) =>
+                                                                                        MultiBlocProvider(
                                                                                       providers: [
                                                                                         BlocProvider<LoginCubit>(
-                                                                                          create: (context) => sl<LoginCubit>(),
+                                                                                          create: (context) =>
+                                                                                              sl<LoginCubit>(),
                                                                                         ),
                                                                                       ],
                                                                                       child: LoginScreen(
@@ -3072,29 +2359,47 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                                     ),
                                                                                   ));
                                                                             } else {
-                                                                              UmraDetails.totalPriceUmrah = afterdiscount;
-                                                                              UmraDetails.totlaPriceTransport = transportationprice;
-                                                                              UmraDetails.totlaPriceResidence = accomidationprice;
-                                                                              UmraDetails.totlaPriceProgram = programsprice;
+                                                                              UmraDetails.totalPriceUmrah =
+                                                                                  afterdiscount;
+                                                                              UmraDetails.totlaPriceTransport =
+                                                                                  transportationprice;
+                                                                              UmraDetails.totlaPriceResidence =
+                                                                                  accomidationprice;
+                                                                              UmraDetails.totlaPriceProgram =
+                                                                                  programsprice;
 
                                                                               if (usewallet) {
-                                                                                _umraBloc.add(EditReservationEvent(reservationID: widget.umrahReservationID!, paymentMethodID: 4, paymentTypeID: 67));
+                                                                                _umraBloc.add(EditReservationEvent(
+                                                                                    reservationID:
+                                                                                        widget.umrahReservationID!,
+                                                                                    paymentMethodID: 4,
+                                                                                    paymentTypeID: 67));
                                                                               } else if (paymentpage!.pageId == 2) {
                                                                                 UmraDetails.curruncy = Routes.curruncy!;
 
-                                                                                if (UmraDetails.cardModel.cardNumber != '') {
-                                                                                  _umraBloc.add(cardEditReservationEvent(
+                                                                                if (UmraDetails.cardModel.cardNumber !=
+                                                                                    '') {
+                                                                                  _umraBloc
+                                                                                      .add(cardEditReservationEvent(
                                                                                     PaymentMethodID: 4,
                                                                                     paymentTypeID: 68,
-                                                                                    umrareservationid: widget.umrahReservationID,
+                                                                                    umrareservationid:
+                                                                                        widget.umrahReservationID,
                                                                                     cvv: UmraDetails.cvv.toString(),
-                                                                                    cardNumber: UmraDetails.cardModel.cardNumber!.toString().replaceAll(" ", ""),
-                                                                                    cardExpiryYear: UmraDetails.cardModel.month!
-                                                                                        .substring(
-                                                                                          3,
-                                                                                        )
+                                                                                    cardNumber: UmraDetails
+                                                                                        .cardModel.cardNumber!
+                                                                                        .toString()
+                                                                                        .replaceAll(" ", ""),
+                                                                                    cardExpiryYear:
+                                                                                        UmraDetails.cardModel.month!
+                                                                                            .substring(
+                                                                                              3,
+                                                                                            )
+                                                                                            .toString(),
+                                                                                    cardExpiryMonth: UmraDetails
+                                                                                        .cardModel.month!
+                                                                                        .substring(0, 2)
                                                                                         .toString(),
-                                                                                    cardExpiryMonth: UmraDetails.cardModel.month!.substring(0, 2).toString(),
                                                                                   ));
                                                                                 } else {
                                                                                   Navigator.push(
@@ -3102,42 +2407,41 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                                     MaterialPageRoute(
                                                                                       builder: (context) => Umracardpay(
                                                                                         index: 1,
-                                                                                        umrahReservationID: widget.umrahReservationID,
+                                                                                        umrahReservationID:
+                                                                                            widget.umrahReservationID,
                                                                                       ),
                                                                                     ),
                                                                                   );
                                                                                 }
                                                                               } else if (paymentpage!.pageId == 3) {
-                                                                                _umraBloc.add(FawryEditEvent(PaymentMethodID: 2, umrareservationid: widget.umrahReservationID, paymentTypeID: 68));
+                                                                                _umraBloc.add(FawryEditEvent(
+                                                                                    PaymentMethodID: 2,
+                                                                                    umrareservationid:
+                                                                                        widget.umrahReservationID,
+                                                                                    paymentTypeID: 68));
                                                                               } else if (paymentpage!.pageId == 4) {
-                                                                                _umraBloc.add(EditElectronicwalletEvent(umrahReservationID: widget.umrahReservationID, PaymentMethodID: 5, paymentTypeID: 68, phone: UmraDetails.phonenumber));
+                                                                                _umraBloc.add(EditElectronicwalletEvent(
+                                                                                    umrahReservationID:
+                                                                                        widget.umrahReservationID,
+                                                                                    PaymentMethodID: 5,
+                                                                                    paymentTypeID: 68,
+                                                                                    phone: UmraDetails.phonenumber));
                                                                               }
                                                                             }
                                                                           }
                                                                         : () {},
-                                                                    child:
-                                                                        Container(
-                                                                      height:
-                                                                          40.h,
-                                                                      padding: EdgeInsets.symmetric(
-                                                                          horizontal:
-                                                                              10.w),
+                                                                    child: Container(
+                                                                      height: 40.h,
+                                                                      padding: EdgeInsets.symmetric(horizontal: 10.w),
                                                                       decoration: BoxDecoration(
-                                                                          color: accept
-                                                                              ? Colors.black
-                                                                              : Colors.grey[300],
+                                                                          color:
+                                                                              accept ? Colors.black : Colors.grey[300],
                                                                           borderRadius: BorderRadius.circular(41)),
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
-                                                                      child:
-                                                                          Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.center,
-                                                                        mainAxisSize:
-                                                                            MainAxisSize.min,
+                                                                      alignment: Alignment.center,
+                                                                      child: Row(
+                                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                                        mainAxisSize: MainAxisSize.min,
                                                                         children: [
                                                                           usewallet
                                                                               ? Container(
@@ -3154,15 +2458,16 @@ class _ReservationScreenState extends State<ReservationScreen>
                                                                                   alignment: Alignment.center,
                                                                                   child: Image.network(
                                                                                     paymentpage!.image!,
-                                                                                    errorBuilder: (context, error, stackTrace) {
-                                                                                      return Image.asset('assets/images/icons8-open-wallet-78.png');
+                                                                                    errorBuilder:
+                                                                                        (context, error, stackTrace) {
+                                                                                      return Image.asset(
+                                                                                          'assets/images/icons8-open-wallet-78.png');
                                                                                     },
                                                                                   ),
                                                                                 ),
                                                                           2.horizontalSpace,
                                                                           FittedBox(
-                                                                            child:
-                                                                                Text(
+                                                                            child: Text(
                                                                               LanguageClass.isEnglish ? 'Pay' : 'ادفع',
                                                                               style: fontStyle(
                                                                                 color: Colors.white,
