@@ -516,6 +516,7 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                         callbackTitle: LanguageClass.isEnglish
                                             ? "Go to OTP"
                                             : 'ادخل الرمز',
+                                        iswarning: true,
                                         message: LanguageClass.isEnglish
                                             ? 'Complete the payment process'
                                             : 'قم باستكمال عملية الدفع',
@@ -784,13 +785,28 @@ Future<dynamic> showDoneConfirmationDialog(BuildContext context,
     {required String message,
     String? callbackTitle,
     bool isError = false,
+    bool iswarning = false,
     required Function callback}) async {
   return CoolAlert.show(
       barrierDismissible: false,
       context: context,
       confirmBtnText: "ok",
-      title: isError ? 'error' : 'success',
-      lottieAsset: isError ? 'assets/json/error.json' : 'assets/json/done.json',
+      title: isError
+          ? LanguageClass.isEnglish
+              ? 'Error'
+              : 'خطأ'
+          : iswarning
+              ? LanguageClass.isEnglish
+                  ? 'Please'
+                  : 'يرجى'
+              : LanguageClass.isEnglish
+                  ? 'Success'
+                  : 'تم بنجاح',
+      lottieAsset: isError
+          ? 'assets/json/error.json'
+          : iswarning
+              ? 'assets/json/Warning.json'
+              : 'assets/json/done.json',
       type: isError ? CoolAlertType.error : CoolAlertType.success,
       loopAnimation: false,
       backgroundColor: isError ? Colors.red : Colors.white,

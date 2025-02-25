@@ -91,6 +91,22 @@ class _chargeCardState extends State<chargeCard> {
     }
   }
 
+  bool isloading = false;
+
+  double payamount = 0.0;
+
+  convertcurruncy({String? from, String? to, double? amount}) async {
+    isloading = true;
+    var responce = await PackagesRespo()
+        .Convertcurrency(amount: amount, from: from, to: to);
+
+    setState(() {
+      payamount = responce;
+
+      isloading = false;
+    });
+  }
+
   @override
   void dispose() {
     cardHolderName.dispose();
@@ -715,15 +731,18 @@ class _chargeCardState extends State<chargeCard> {
                                   bloc: BlocProvider.of<ReservationCubit>(
                                       context),
                                   listener: (context, state) {
-                                    if (state is LoadingCreditCardState) {
+                                    if (state is LoadingCreditCardState ||
+                                        isloading) {
                                       Constants.showLoadingDialog(context);
                                     } else if (state is LoadedCreditCardState) {
                                       Navigator.pop(context);
 
                                       showDoneConfirmationDialog(context,
                                           callbackTitle: "Go to OTP",
-                                          message:
-                                              'Complete the payment process',
+                                          iswarning: true,
+                                          message: LanguageClass.isEnglish
+                                              ? 'Complete the payment process'
+                                              : 'اكمل عملية الدفع',
                                           callback: () {
                                         Navigator.push(
                                             context,
@@ -926,35 +945,43 @@ class _chargeCardState extends State<chargeCard> {
                                                     "tripOneId${tripOneId}==tripOneId${tripRoundId}=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price==");
 
                                                 // if(_user != null && formKey.currentState!.validate()) {
-                                                BlocProvider.of<
-                                                            ReservationCubit>(
-                                                        context)
-                                                    .chargebycard(
-                                                  custId:
-                                                      widget.user.customerId!,
-                                                  curruncy: selectedcurruncy,
-                                                  amount: amount
-                                                      .toStringAsFixed(2)
-                                                      .toString(),
-                                                  cvv: cvv.toString(),
-                                                  cardNumber:
-                                                      cards[widget.index]
-                                                          .cardNumber!
-                                                          .toString()
-                                                          .replaceAll(" ", ""),
-                                                  cardExpiryYear:
-                                                      cards[widget.index]
-                                                          .month!
-                                                          .substring(
-                                                            3,
-                                                          )
-                                                          .toString(),
-                                                  cardExpiryMonth:
-                                                      cards[widget.index]
-                                                          .month!
-                                                          .substring(0, 2)
-                                                          .toString(),
-                                                );
+
+                                                convertcurruncy(
+                                                  amount: amount,
+                                                  from: selectedcurruncy,
+                                                  to: 'EGP',
+                                                ).then((value) {
+                                                  BlocProvider.of<
+                                                              ReservationCubit>(
+                                                          context)
+                                                      .chargebycard(
+                                                    custId:
+                                                        widget.user.customerId!,
+                                                    curruncy: selectedcurruncy,
+                                                    amount: payamount
+                                                        .toStringAsFixed(2)
+                                                        .toString(),
+                                                    cvv: cvv.toString(),
+                                                    cardNumber:
+                                                        cards[widget.index]
+                                                            .cardNumber!
+                                                            .toString()
+                                                            .replaceAll(
+                                                                " ", ""),
+                                                    cardExpiryYear:
+                                                        cards[widget.index]
+                                                            .month!
+                                                            .substring(
+                                                              3,
+                                                            )
+                                                            .toString(),
+                                                    cardExpiryMonth:
+                                                        cards[widget.index]
+                                                            .month!
+                                                            .substring(0, 2)
+                                                            .toString(),
+                                                  );
+                                                });
                                               }
                                             }
                                           }
@@ -1107,13 +1134,28 @@ Future<dynamic> showDoneConfirmationDialog(BuildContext context,
     {required String message,
     String? callbackTitle,
     bool isError = false,
+    bool iswarning = false,
     required Function callback}) async {
   return CoolAlert.show(
       barrierDismissible: false,
       context: context,
       confirmBtnText: "ok",
-      title: isError ? 'error' : 'success',
-      lottieAsset: isError ? 'assets/json/error.json' : 'assets/json/done.json',
+      title: isError
+          ? LanguageClass.isEnglish
+              ? 'Error'
+              : 'خطأ'
+          : iswarning
+              ? LanguageClass.isEnglish
+                  ? 'Please'
+                  : 'يرجى'
+              : LanguageClass.isEnglish
+                  ? 'Success'
+                  : 'تم بنجاح',
+      lottieAsset: isError
+          ? 'assets/json/error.json'
+          : iswarning
+              ? 'assets/json/Warning.json'
+              : 'assets/json/done.json',
       type: isError ? CoolAlertType.error : CoolAlertType.success,
       loopAnimation: false,
       backgroundColor: isError ? Colors.red : Colors.white,

@@ -34,7 +34,7 @@ class EndPoints {
   static const String privacy = '${baseUrl}Settings/PrivacyPolicyList';
   static const String sendEmail = '${baseUrl}Settings/SubmitContactUsMessage';
 
-  static const String huaweiVersion = "1.2.2";
-  static const String playStoreVersion = "1.2.2";
-  static const String iosVersion = "2.0.9";
+  static const String huaweiVersion = "1.2.3";
+  static const String playStoreVersion = "1.2.3";
+  static const String iosVersion = "2.1.1";
 }
