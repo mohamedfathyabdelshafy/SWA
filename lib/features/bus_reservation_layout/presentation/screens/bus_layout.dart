@@ -99,34 +99,21 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
       busSeatsModel = await value;
 
       if (busSeatsModel != null) {
-        unavailable = await busSeatsModel!.busSeatDetails!.totalSeats! -
-            busSeatsModel!.busSeatDetails!.emptySeats!;
+        unavailable = await busSeatsModel!.busSeatDetails!.totalSeats! - busSeatsModel!.busSeatDetails!.emptySeats!;
 
-        for (int i = 0;
-            i < busSeatsModel!.busSeatDetails!.busDetails!.totalRow!;
-            i++) {
-          for (int j = 0;
-              j <
-                  busSeatsModel!
-                      .busSeatDetails!.busDetails!.rowList![i].seats.length;
-              j++) {
-            print(
-                "fffffff fff ff ${busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j].seatNo}");
-            if (busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j]
-                    .isReserved ==
-                true) {
-              busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j]
-                  .seatState = SeatState.sold;
+        for (int i = 0; i < busSeatsModel!.busSeatDetails!.busDetails!.totalRow!; i++) {
+          for (int j = 0; j < busSeatsModel!.busSeatDetails!.busDetails!.rowList![i].seats.length; j++) {
+            print("fffffff fff ff ${busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j].seatNo}");
+            if (busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j].isReserved == true) {
+              busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j].seatState = SeatState.sold;
             }
 
             if (widget.isedit == true) {
               for (int n = 0; n < Ticketreservation.Seatsnumbers1.length; n++) {
                 countSeatesNum = Ticketreservation.Seatsnumbers1.length;
-                if (busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i]
-                        .seats[j].seatNo ==
+                if (busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j].seatNo ==
                     Ticketreservation.Seatsnumbers1[n]) {
-                  busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i]
-                      .seats[j].seatState = SeatState.selected;
+                  busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j].seatState = SeatState.selected;
                   countSeats.add(Ticketreservation.countSeats1[n]);
 
                   Seatsnumbers.add(Ticketreservation.Seatsnumbers1[n]);
@@ -140,8 +127,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
         setState(() {});
       }
     });
-    print(
-        "busSeatsmodel${busSeatsModel?.busSeatDetails?.busDetails?.totalRow}");
+    print("busSeatsmodel${busSeatsModel?.busSeatDetails?.busDetails?.totalRow}");
     print("unavailable$unavailable");
   }
 
@@ -270,9 +256,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                   height: 60.sp,
                   padding: const EdgeInsets.all(0),
                   margin: const EdgeInsets.symmetric(horizontal: 0),
-                  decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(10)),
+                  decoration: BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(10)),
                   width: double.infinity,
                   child: Column(
                     children: [
@@ -283,40 +267,26 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
-                                DateFormat('dd-MM-yyyy')
-                                    .format(widget.busdate!)
-                                    .toString(),
-                                style: fontStyle(
-                                    fontSize: 12.sp,
-                                    fontFamily: FontFamily.bold,
-                                    color: Colors.black),
+                                DateFormat('dd-MM-yyyy').format(widget.busdate!).toString(),
+                                style: fontStyle(fontSize: 12.sp, fontFamily: FontFamily.bold, color: Colors.black),
                               ),
                               Text(
-                                DateFormat('hh:mm a')
-                                    .format(widget.busdate!)
-                                    .toString(),
+                                DateFormat('hh:mm a').format(widget.busdate!).toString(),
                                 style: fontStyle(
-                                    fontSize: 12.sp,
-                                    height: 1,
-                                    fontFamily: FontFamily.bold,
-                                    color: Colors.black),
+                                    fontSize: 12.sp, height: 1, fontFamily: FontFamily.bold, color: Colors.black),
                               ),
                             ],
                           ),
                           Container(
                             height: 50.sp,
                             width: 4,
-                            margin: const EdgeInsetsDirectional.symmetric(
-                                horizontal: 12),
+                            margin: const EdgeInsetsDirectional.symmetric(horizontal: 12),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
                               gradient: LinearGradient(
                                 begin: AlignmentDirectional.topStart,
                                 end: AlignmentDirectional.bottomStart,
-                                colors: [
-                                  AppColors.primaryColor,
-                                  AppColors.primaryColor
-                                ],
+                                colors: [AppColors.primaryColor, AppColors.primaryColor],
                               ),
                             ),
                           ),
@@ -326,17 +296,11 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                             children: [
                               Text(
                                 widget.from,
-                                style: fontStyle(
-                                    fontSize: 16.sp,
-                                    fontFamily: FontFamily.bold,
-                                    color: Colors.black),
+                                style: fontStyle(fontSize: 16.sp, fontFamily: FontFamily.bold, color: Colors.black),
                               ),
                               Text(
                                 widget.to,
-                                style: fontStyle(
-                                    fontSize: 16.sp,
-                                    fontFamily: FontFamily.bold,
-                                    color: Colors.black),
+                                style: fontStyle(fontSize: 16.sp, fontFamily: FontFamily.bold, color: Colors.black),
                               ),
                             ],
                           ),
@@ -354,32 +318,20 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                           children: [
                             Text(
                               LanguageClass.isEnglish ? 'Available' : 'المتاح',
-                              style: fontStyle(
-                                  fontSize: 12.sp,
-                                  fontFamily: FontFamily.medium,
-                                  color: Colors.black),
+                              style: fontStyle(fontSize: 12.sp, fontFamily: FontFamily.medium, color: Colors.black),
                             ),
                             Padding(
                               padding: EdgeInsets.zero,
                               child: Text(
-                                busSeatsModel?.busSeatDetails?.emptySeats
-                                        .toString() ??
-                                    "",
+                                busSeatsModel?.busSeatDetails?.emptySeats.toString() ?? "",
                                 style: fontStyle(
-                                    fontSize: 30.sp,
-                                    fontFamily: FontFamily.bold,
-                                    color: AppColors.primaryColor),
+                                    fontSize: 30.sp, fontFamily: FontFamily.bold, color: AppColors.primaryColor),
                               ),
                             ),
                             const SizedBox(height: 20),
                             Text(
-                              LanguageClass.isEnglish
-                                  ? 'Selected'
-                                  : 'تم تحديده',
-                              style: fontStyle(
-                                  fontSize: 12.sp,
-                                  fontFamily: FontFamily.medium,
-                                  color: Colors.black),
+                              LanguageClass.isEnglish ? 'Selected' : 'تم تحديده',
+                              style: fontStyle(fontSize: 12.sp, fontFamily: FontFamily.medium, color: Colors.black),
                             ),
                             Text(
                               countSeatesNum.toString(),
@@ -391,20 +343,12 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                             ),
                             const SizedBox(height: 10),
                             Text(
-                              LanguageClass.isEnglish
-                                  ? 'Unavailable'
-                                  : 'غير متاح',
-                              style: fontStyle(
-                                  fontSize: 12.sp,
-                                  fontFamily: FontFamily.medium,
-                                  color: Colors.black),
+                              LanguageClass.isEnglish ? 'Unavailable' : 'غير متاح',
+                              style: fontStyle(fontSize: 12.sp, fontFamily: FontFamily.medium, color: Colors.black),
                             ),
                             Text(
                               unavailable.toString(),
-                              style: fontStyle(
-                                  fontSize: 30.sp,
-                                  fontFamily: FontFamily.bold,
-                                  color: Colors.grey),
+                              style: fontStyle(fontSize: 30.sp, fontFamily: FontFamily.bold, color: Colors.grey),
                             ),
                             SizedBox(
                               height: 10,
@@ -412,97 +356,56 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                             InkWell(
                               onTap: () {
                                 if (Seatsnumbers.isNotEmpty) {
-                                  cachCountSeats =
-                                      CacheHelper.getDataToSharedPref(
-                                              key: 'countSeats')
-                                          ?.map((e) => int.tryParse(e) ?? 0)
-                                          .toList();
+                                  cachCountSeats = CacheHelper.getDataToSharedPref(key: 'countSeats')
+                                      ?.map((e) => int.tryParse(e) ?? 0)
+                                      .toList();
                                   print("countSeats2Bassant$cachCountSeats");
 
-                                  final tripOneId =
-                                      CacheHelper.getDataToSharedPref(
-                                          key: 'tripOneId');
-                                  final tripRoundId =
-                                      CacheHelper.getDataToSharedPref(
-                                          key: 'tripRoundId');
-                                  final selectedDayTo =
-                                      CacheHelper.getDataToSharedPref(
-                                          key: 'selectedDayTo');
-                                  final selectedDayFrom =
-                                      CacheHelper.getDataToSharedPref(
-                                          key: 'selectedDayFrom');
-                                  final toStationId =
-                                      CacheHelper.getDataToSharedPref(
-                                          key: 'toStationId');
-                                  final fromStationId =
-                                      CacheHelper.getDataToSharedPref(
-                                          key: 'fromStationId');
-                                  final seatIdsOneTrip =
-                                      CacheHelper.getDataToSharedPref(
-                                              key: 'countSeats')
-                                          ?.map((e) => int.tryParse(e) ?? 0)
-                                          .toList();
-                                  final seatIdsRoundTrip =
-                                      CacheHelper.getDataToSharedPref(
-                                              key: 'countSeats2')
-                                          ?.map((e) => int.tryParse(e) ?? 0)
-                                          .toList();
-                                  final price = CacheHelper.getDataToSharedPref(
-                                      key: 'price');
-                                  final busdate =
-                                      CacheHelper.getDataToSharedPref(
-                                          key: 'accessBusDate');
+                                  final tripOneId = CacheHelper.getDataToSharedPref(key: 'tripOneId');
+                                  final tripRoundId = CacheHelper.getDataToSharedPref(key: 'tripRoundId');
+                                  final selectedDayTo = CacheHelper.getDataToSharedPref(key: 'selectedDayTo');
+                                  final selectedDayFrom = CacheHelper.getDataToSharedPref(key: 'selectedDayFrom');
+                                  final toStationId = CacheHelper.getDataToSharedPref(key: 'toStationId');
+                                  final fromStationId = CacheHelper.getDataToSharedPref(key: 'fromStationId');
+                                  final seatIdsOneTrip = CacheHelper.getDataToSharedPref(key: 'countSeats')
+                                      ?.map((e) => int.tryParse(e) ?? 0)
+                                      .toList();
+                                  final seatIdsRoundTrip = CacheHelper.getDataToSharedPref(key: 'countSeats2')
+                                      ?.map((e) => int.tryParse(e) ?? 0)
+                                      .toList();
+                                  final price = CacheHelper.getDataToSharedPref(key: 'price');
+                                  final busdate = CacheHelper.getDataToSharedPref(key: 'accessBusDate');
 
-                                  final lineid =
-                                      CacheHelper.getDataToSharedPref(
-                                          key: 'lineid');
-                                  final busid = CacheHelper.getDataToSharedPref(
-                                      key: 'busId');
-                                  final serviceTypeID =
-                                      CacheHelper.getDataToSharedPref(
-                                          key: 'serviceTypeID');
+                                  final lineid = CacheHelper.getDataToSharedPref(key: 'lineid');
+                                  final busid = CacheHelper.getDataToSharedPref(key: 'busId');
+                                  final serviceTypeID = CacheHelper.getDataToSharedPref(key: 'serviceTypeID');
 
                                   Ticketreservation.tripid1 = widget.tripId;
                                   Ticketreservation.tocity1 = widget.tocity;
                                   Ticketreservation.fromcity1 = widget.fromcity;
                                   Ticketreservation.priceticket1 = widget.price;
                                   Ticketreservation.countSeats1 = countSeats;
-                                  Ticketreservation.Seatsnumbers1 =
-                                      Seatsnumbers;
-                                  Ticketreservation.busid1 = busSeatsModel!
-                                      .busSeatDetails!.busDetails!.busID!;
-                                  Ticketreservation.fromcitystation1 =
-                                      widget.from;
+                                  Ticketreservation.Seatsnumbers1 = Seatsnumbers;
+                                  Ticketreservation.busid1 = busSeatsModel!.busSeatDetails!.busDetails!.busID!;
+                                  Ticketreservation.fromcitystation1 = widget.from;
                                   Ticketreservation.tocitystation1 = widget.to;
-                                  Ticketreservation.cachCountSeats1 =
-                                      cachCountSeats;
+                                  Ticketreservation.cachCountSeats1 = cachCountSeats;
 
-                                  Ticketreservation.numbertrip1 =
-                                      CacheHelper.getDataToSharedPref(
-                                          key: 'numberTrip');
-                                  Ticketreservation.elite1 =
-                                      CacheHelper.getDataToSharedPref(
-                                          key: "elite");
+                                  Ticketreservation.numbertrip1 = CacheHelper.getDataToSharedPref(key: 'numberTrip');
+                                  Ticketreservation.elite1 = CacheHelper.getDataToSharedPref(key: "elite");
                                   Ticketreservation.accessBusTime1 =
-                                      CacheHelper.getDataToSharedPref(
-                                          key: "accessBusTime");
-                                  Ticketreservation.accessDate1 =
-                                      CacheHelper.getDataToSharedPref(
-                                          key: "accessBusDate");
+                                      CacheHelper.getDataToSharedPref(key: "accessBusTime");
+                                  Ticketreservation.accessDate1 = CacheHelper.getDataToSharedPref(key: "accessBusDate");
 
                                   if (widget.triTypeId == '1') {
                                     if (UmraDetails.isbusforumra) {
-                                      UmraDetails.swatransportList!.first
-                                          .fromStationId = fromStationId;
-                                      UmraDetails.swatransportList!.first
-                                          .toStationId = toStationId;
+                                      UmraDetails.swatransportList!.first.fromStationId = fromStationId;
+                                      UmraDetails.swatransportList!.first.toStationId = toStationId;
 
-                                      UmraDetails.Swabusreservedseats.add(
-                                          TransportationsSeats(
+                                      UmraDetails.Swabusreservedseats.add(TransportationsSeats(
                                         tripid: tripOneId,
                                         seatsnumber: countSeats,
-                                        totalprice:
-                                            countSeats.length * widget.price,
+                                        totalprice: countSeats.length * widget.price,
                                       ));
 
                                       Navigator.pop(context);
@@ -512,38 +415,29 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              BlocProvider<LoginCubit>(
-                                                  create: (context) =>
-                                                      sl<LoginCubit>(),
-                                                  child: ReservationTicket(
-                                                    tripListBack:
-                                                        widget.tripListBack,
-                                                    tripTypeId:
-                                                        widget.triTypeId,
-                                                    user: widget.user,
-                                                  )),
+                                          builder: (context) => BlocProvider<LoginCubit>(
+                                              create: (context) => sl<LoginCubit>(),
+                                              child: ReservationTicket(
+                                                tripListBack: widget.tripListBack,
+                                                tripTypeId: widget.triTypeId,
+                                                user: widget.user,
+                                              )),
                                         ),
                                       );
                                     }
                                   } else {
                                     if (UmraDetails.isbusforumra) {
-                                      UmraDetails.swatransportList!.first
-                                          .fromStationId = fromStationId;
-                                      UmraDetails.swatransportList!.first
-                                          .toStationId = toStationId;
+                                      UmraDetails.swatransportList!.first.fromStationId = fromStationId;
+                                      UmraDetails.swatransportList!.first.toStationId = toStationId;
 
-                                      UmraDetails.Swabusreservedseats.add(
-                                          TransportationsSeats(
+                                      UmraDetails.Swabusreservedseats.add(TransportationsSeats(
                                         tripid: tripOneId,
                                         seatsnumber: countSeats,
-                                        totalprice:
-                                            countSeats.length * widget.price,
+                                        totalprice: countSeats.length * widget.price,
                                       ));
                                     }
 
-                                    if (Ticketreservation
-                                        .Seatsnumbers2.isNotEmpty) {
+                                    if (Ticketreservation.Seatsnumbers2.isNotEmpty) {
                                       if (widget.isedit == true) {
                                         Navigator.pop(context);
                                       } else {
@@ -555,17 +449,13 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) =>
-                                                  BlocProvider<LoginCubit>(
-                                                      create: (context) =>
-                                                          sl<LoginCubit>(),
-                                                      child: ReservationTicket(
-                                                        tripListBack:
-                                                            widget.tripListBack,
-                                                        tripTypeId:
-                                                            widget.triTypeId,
-                                                        user: widget.user,
-                                                      )),
+                                              builder: (context) => BlocProvider<LoginCubit>(
+                                                  create: (context) => sl<LoginCubit>(),
+                                                  child: ReservationTicket(
+                                                    tripListBack: widget.tripListBack,
+                                                    tripTypeId: widget.triTypeId,
+                                                    user: widget.user,
+                                                  )),
                                             ),
                                           );
                                         }
@@ -578,9 +468,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                   Constants.showDefaultSnackBar(
                                       color: Colors.red,
                                       context: context,
-                                      text: LanguageClass.isEnglish
-                                          ? 'Select Seats'
-                                          : 'اختر الكراسي');
+                                      text: LanguageClass.isEnglish ? 'Select Seats' : 'اختر الكراسي');
                                 }
                               },
                               child: Container(
@@ -593,10 +481,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                 child: Center(
                                   child: Text(
                                     LanguageClass.isEnglish ? "Save" : "تم",
-                                    style: fontStyle(
-                                        color: Colors.white,
-                                        fontFamily: FontFamily.bold,
-                                        fontSize: 16.sp),
+                                    style: fontStyle(color: Colors.white, fontFamily: FontFamily.bold, fontSize: 16.sp),
                                   ),
                                 ),
                               ),
@@ -663,8 +548,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                 : Positioned(
                                     top: seatheight < 10
                                         ? ((sizeHeight * .036) * seatheight)
-                                        : ((sizeHeight * .036) * seatheight) -
-                                            30.sp,
+                                        : ((sizeHeight * .036) * seatheight) - 30.sp,
                                     bottom: 5,
                                     left: 5,
                                     right: 5,
@@ -679,9 +563,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                         )),
                                   ),
                             Positioned(
-                              top: seatheight < 10
-                                  ? (sizeHeight / 9)
-                                  : (sizeHeight / 5) - 30.sp,
+                              top: seatheight < 10 ? (sizeHeight / 9) : (sizeHeight / 5) - 30.sp,
                               left: 0,
                               right: 0,
                               bottom: 0,
@@ -690,8 +572,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                 width: sizeWidth - (sizeWidth / 4),
                                 child: SeatLayoutWidget(
                                   seatHeight: (sizeHeight * .036),
-                                  onSeatStateChanged:
-                                      (rowI, colI, seatState, seat) {
+                                  onSeatStateChanged: (rowI, colI, seatState, seat) {
                                     print("set $seat");
                                     print("seatstate $seatState");
                                     print("rowI ${rowI}, column1 ${colI}");
@@ -712,110 +593,62 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                           context,
                                           () {
                                             Navigator.pop(context);
-                                            Navigator.pushNamedAndRemoveUntil(
-                                                context,
-                                                Routes.home,
-                                                (route) => false,
+                                            Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false,
                                                 arguments: Routes.isomra);
                                           },
                                         );
-                                        if (Reservationtimer
-                                                .controller.isStarted ==
-                                            false) {
+                                        if (Reservationtimer.controller.isStarted == false) {
                                           Reservationtimer.controller.start();
                                         }
 
-                                        BlocProvider.of<BusLayoutCubit>(context)
-                                            .seathold(
-                                                seatid: busSeatsModel!
-                                                    .busSeatDetails!
-                                                    .busDetails!
-                                                    .rowList![rowI]
-                                                    .seats[colI]
-                                                    .seatBusID!
-                                                    .toInt(),
-                                                tripid: busSeatsModel!
-                                                    .busSeatDetails!.tripId!);
+                                        BlocProvider.of<BusLayoutCubit>(context).seathold(
+                                            seatid: busSeatsModel!
+                                                .busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatBusID!
+                                                .toInt(),
+                                            tripid: busSeatsModel!.busSeatDetails!.tripId!);
                                       } else {
                                         _busLayoutCubit.seathold(
                                             seatid: busSeatsModel!
-                                                .busSeatDetails!
-                                                .busDetails!
-                                                .rowList![rowI]
-                                                .seats[colI]
-                                                .seatBusID!
+                                                .busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatBusID!
                                                 .toInt(),
-                                            tripid: busSeatsModel!
-                                                .busSeatDetails!.tripId!);
+                                            tripid: busSeatsModel!.busSeatDetails!.tripId!);
                                       }
 
                                       countSeats.add(busSeatsModel!
-                                          .busSeatDetails!
-                                          .busDetails!
-                                          .rowList![rowI]
-                                          .seats[colI]
-                                          .seatBusID!);
+                                          .busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatBusID!);
                                       Seatsnumbers.add(busSeatsModel!
-                                          .busSeatDetails!
-                                          .busDetails!
-                                          .rowList![rowI]
-                                          .seats[colI]
-                                          .seatNo!);
+                                          .busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatNo!);
                                       print("countSeats${Seatsnumbers}");
                                       countSeatesNum = countSeats.length;
-                                      CacheHelper.setDataToSharedPref(
-                                          key: 'countSeats', value: countSeats);
+                                      CacheHelper.setDataToSharedPref(key: 'countSeats', value: countSeats);
 
                                       setState(() {});
                                     } else {
                                       print("I am there");
                                       selectedSeats = null;
-                                      busSeatsModel
-                                          ?.busSeatDetails
-                                          ?.busDetails
-                                          ?.rowList?[rowI]
-                                          .seats[colI]
-                                          .seatState = SeatState.available;
+                                      busSeatsModel?.busSeatDetails?.busDetails?.rowList?[rowI].seats[colI].seatState =
+                                          SeatState.available;
                                       countSeats.remove(busSeatsModel!
-                                          .busSeatDetails!
-                                          .busDetails!
-                                          .rowList![rowI]
-                                          .seats[colI]
-                                          .seatBusID!);
+                                          .busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatBusID!);
                                       Seatsnumbers.remove(busSeatsModel!
-                                          .busSeatDetails!
-                                          .busDetails!
-                                          .rowList![rowI]
-                                          .seats[colI]
-                                          .seatNo!);
+                                          .busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatNo!);
                                       countSeatesNum = countSeats.length;
                                       setState(() {});
                                     }
                                   },
                                   stateModel: SeatLayoutStateModel(
-                                    rows: busSeatsModel?.busSeatDetails
-                                            ?.busDetails?.rowList?.length ??
-                                        0,
-                                    cols: busSeatsModel?.busSeatDetails
-                                            ?.busDetails?.totalColumn ??
-                                        5,
+                                    rows: busSeatsModel?.busSeatDetails?.busDetails?.rowList?.length ?? 0,
+                                    cols: busSeatsModel?.busSeatDetails?.busDetails?.totalColumn ?? 5,
                                     seatSvgSize: 35.sp.toInt(),
-                                    pathSelectedSeat:
-                                        'assets/images/unavailable_seats.svg',
-                                    pathDisabledSeat:
-                                        'assets/images/unavailable_seats.svg',
-                                    pathSoldSeat:
-                                        'assets/images/disabled_seats.svg',
-                                    pathUnSelectedSeat:
-                                        'assets/images/unavailable_seats.svg',
+                                    pathSelectedSeat: 'assets/images/unavailable_seats.svg',
+                                    pathDisabledSeat: 'assets/images/unavailable_seats.svg',
+                                    pathSoldSeat: 'assets/images/disabled_seats.svg',
+                                    pathUnSelectedSeat: 'assets/images/unavailable_seats.svg',
                                     currentSeats: List.generate(
-                                      busSeatsModel?.busSeatDetails?.busDetails
-                                              ?.rowList?.length ??
-                                          0,
+                                      busSeatsModel?.busSeatDetails?.busDetails?.rowList?.length ?? 0,
 
                                       // Number of rows based on totalSeats
-                                      (row) => busSeatsModel!.busSeatDetails!
-                                          .busDetails!.rowList![row].seats,
+                                      (row) => busSeatsModel!.busSeatDetails!.busDetails!.rowList![row].seats,
                                     ),
                                   ),
                                 ),
@@ -831,6 +664,9 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
             ),
           );
         },
+      ),
+      bottomNavigationBar: Navigationbottombar(
+        currentIndex: 0,
       ),
     );
   }

@@ -9,6 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:swa/bloc_observer.dart';
 import 'package:swa/config/routes/app_routes.dart';
+import 'package:swa/core/api/api_consumer.dart';
 import 'package:swa/core/utils/app_strings.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/notifcation_services.dart';
@@ -16,9 +17,14 @@ import 'package:swa/features/app_info/app_info_injection_container.dart';
 import 'package:swa/features/change_password/change_password_injection_container.dart';
 import 'package:swa/features/forgot_password/forgot_password_injection_container.dart';
 import 'package:swa/features/home/home_injection_container.dart';
+import 'package:swa/features/home/presentation/screens/Notification/bloc/notification_bloc.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/ticket_injection_container.dart';
 import 'package:swa/features/payment/electronic_wallet/eWallet_injection_container.dart';
 import 'package:swa/features/payment/fawry/fawry_injection_container.dart';
+import 'package:swa/features/payment/wallet/data/repo/my_wallet_repo.dart';
+import 'package:swa/features/payment/wallet/data/wallet_cubit/wallet_cubit.dart';
+import 'package:swa/features/reusable_payment/data/repo/payment_methods_repo.dart';
+import 'package:swa/features/reusable_payment/presentation/cubits/Payment_Methods/payment_methods_cubit.dart';
 import 'package:swa/features/sign_in/signin_injection_container.dart';
 import 'package:swa/features/sign_up/signup_injection_container.dart';
 import 'package:swa/injection_container.dart';
@@ -33,14 +39,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
-  geo.Geolocator.getServiceStatusStream()
-      .listen((geo.ServiceStatus status) async {
-    if (await Permission.location.isDenied ||
-        await Permission.location.isPermanentlyDenied) {
+  geo.Geolocator.getServiceStatusStream().listen((geo.ServiceStatus status) async {
+    if (await Permission.location.isDenied || await Permission.location.isPermanentlyDenied) {
       Permission.location.request();
 
-      if (await Permission.location.isDenied ||
-          await Permission.location.isPermanentlyDenied) {}
+      if (await Permission.location.isDenied || await Permission.location.isPermanentlyDenied) {}
     }
   });
 
@@ -60,8 +63,7 @@ Future<void> main() async {
   await dependencyInjectionInit();
   //For initializing network info and shared preferences
   await CacheHelper.init();
-  LanguageClass.isEnglish =
-      await CacheHelper.getDataToSharedPref(key: 'language') ?? true;
+  LanguageClass.isEnglish = await CacheHelper.getDataToSharedPref(key: 'language') ?? true;
   await CacheHelper.deleteDataToSharedPref(key: 'tripOneId');
   await CacheHelper.deleteDataToSharedPref(key: 'tripRoundId');
   await CacheHelper.deleteDataToSharedPref(key: 'countSeats');
@@ -95,32 +97,27 @@ class MyApp extends StatelessWidget {
         splitScreenMode: false,
         // Use builder only if you need to use library outside ScreenUtilInit context
         builder: (_, child) {
-          return MaterialApp(
-            localizationsDelegates: [GlobalMaterialLocalizations.delegate],
-            supportedLocales: [const Locale('en'), const Locale('ar')],
-            title: AppStrings.appName,
-            navigatorKey: NavHelper().navigatorKey,
-            debugShowCheckedModeBanner: false,
-            // home:
-            // MultiBlocProvider(providers: [
-            //   BlocProvider<RegisterCubit>(
-            //     create: (context) => sl<RegisterCubit>(),
-            //   ),
-            //   BlocProvider<GetAvailableCountriesCubit>(
-            //     create: (context) => sl<GetAvailableCountriesCubit>(),
-            //   ),
-            //   BlocProvider<GetAvailableCountryCitiesCubit>(
-            //     create: (context) => sl<GetAvailableCountryCitiesCubit>(),
-            //   ),
-            // ], child: SignUpScreen()),
-
-            // home: TriplistScreen(
-            //   city: "801",
-            //   date: "02-15-2025",
-            //   typeid: 1,
-            // ),
-            initialRoute: '/',
-            onGenerateRoute: AppRoute.onGenerateRoute,
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<PaymentMethodsCubit>(
+                create: (context) => PaymentMethodsCubit(sl<PaymentMethodsRepo>(), sl<MyWalletRepo>())..init(),
+              ),
+              BlocProvider<WalletCubit>(
+                create: (context) => WalletCubit(MyWalletRepo(sl<ApiConsumer>())),
+              ),
+              BlocProvider<NotificationBloc>(
+                create: (context) => NotificationBloc()..add(getNotificationlist()),
+              ),
+            ],
+            child: MaterialApp(
+              localizationsDelegates: [GlobalMaterialLocalizations.delegate],
+              supportedLocales: [const Locale('en'), const Locale('ar')],
+              title: AppStrings.appName,
+              navigatorKey: navigatorKey,
+              debugShowCheckedModeBanner: false,
+              // initialRoute: '/',
+              onGenerateRoute: AppRoute.onGenerateRoute,
+            ),
           );
         });
   }

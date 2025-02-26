@@ -23,13 +23,12 @@ class EWalletRemoteDataSourceImpl implements EWalletRemoteDataSource {
     final response = await apiConsumer.post(EndPoints.eWalletPaymentMethod,
         body: jsonEncode({
           "CustomerId": params.customerId,
-          "Amount": double.parse(params.amount).toStringAsFixed(2),
+          "Amount": double.parse(params.amount.replaceAll(",", "")).toStringAsFixed(2),
           "Mobile": params.mobileNumber,
           "countryID": countryid
         }));
 
     log(response.body.toString());
-    return PaymentMessageResponseModel.fromJson(
-        json.decode(response.body.toString()));
+    return PaymentMessageResponseModel.fromJson(json.decode(response.body.toString()));
   }
 }

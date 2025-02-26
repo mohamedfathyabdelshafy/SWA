@@ -23,12 +23,7 @@ class TriplistScreen extends StatefulWidget {
   String city, date;
   int typeid;
   int? umrahReservationID;
-  TriplistScreen(
-      {super.key,
-      required this.city,
-      required this.date,
-      this.umrahReservationID,
-      required this.typeid});
+  TriplistScreen({super.key, required this.city, required this.date, this.umrahReservationID, required this.typeid});
 
   @override
   State<TriplistScreen> createState() => _TriplistScreenState();
@@ -75,937 +70,661 @@ class _TriplistScreenState extends State<TriplistScreen> {
         backgroundColor: Colors.white,
         body: BlocListener(
           bloc: _umraBloc,
-          listener: (context, UmraState state) {
-            if (state.campainlistmodel?.status == "success") {
-              listcampains = state.campainlistmodel!.message!.list;
-              UmraDetails.campainid =
-                  state.campainlistmodel!.message!.list!.first.campiagnUmraId!;
-              _umraBloc.add(GetPackageListEvent(
-                  reservationid: widget.umrahReservationID,
-                  campianID: state
-                      .campainlistmodel!.message!.list!.first.campiagnUmraId!,
-                  city: widget.city,
-                  date: widget.date,
-                  typeid: widget.typeid));
-            } else if (state.pagelistmodel?.status == "success") {
-              pagedata = state.pagelistmodel!.message!;
-            } else if (state.packagesModel?.status == "success") {
-              for (int i = 0; i < state.packagesModel!.message!.length; i++) {
-                if (state.packagesModel!.message![i].isReserved == true) {
-                  selectedtripid = i;
-
-                  tripumraid = state.packagesModel!.message![i].tripUmrahId!;
-                }
-              }
-            }
-          },
+          listener: _handleUmrahBlocListenner,
           child: BlocBuilder(
               bloc: _umraBloc,
               builder: (context, UmraState state) {
-                if (state.isloading == true) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.umragold,
-                    ),
-                  );
-                } else {
-                  return SafeArea(
-                      bottom: false,
-                      child: Directionality(
-                        textDirection: LanguageClass.isEnglish
-                            ? TextDirection.ltr
-                            : TextDirection.rtl,
-                        child: Column(
-                          children: [
-                            10.verticalSpace,
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(left: 27, right: 27),
-                              alignment: LanguageClass.isEnglish
-                                  ? Alignment.topLeft
-                                  : Alignment.topRight,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                if (state.isloading) return Center(child: CircularProgressIndicator(color: AppColors.umragold));
+                return SafeArea(
+                    bottom: false,
+                    child: Directionality(
+                      textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+                      child: Column(
+                        children: [
+                          10.verticalSpace,
+                          _buildAppBar(context),
+                          10.verticalSpace,
+                          _buildPackageProviders(),
+                          10.verticalSpace,
+                          _buildProgressBar(),
+                          _buildAvailablePackages(state),
+                          _buildNextButton(context)
+                        ],
+                      ),
+                    ));
+              }),
+        ),
+        bottomNavigationBar: Navigationbottombar(currentIndex: 0));
+  }
+
+  Widget _buildAvailablePackages(UmraState state) {
+    return Expanded(
+      child: state.packagesModel!.message!.length > 0
+          ? ListView.builder(
+              itemCount: state.packagesModel!.message!.length,
+              shrinkWrap: true,
+              padding: EdgeInsets.symmetric(horizontal: 15.w),
+              physics: ScrollPhysics(),
+              itemBuilder: (BuildContext context, int index) {
+                return state.packagesModel!.message![index].isActive!
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                opentap == index ? opentap = -1 : opentap = index;
+                              });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(15),
+                              margin: EdgeInsets.only(top: 10),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      opacity: 1,
+                                      colorFilter: ColorFilter.mode(
+                                          HexColor(state.packagesModel!.message![index].bgColor!), BlendMode.multiply),
+                                      alignment: Alignment.center,
+                                      image: NetworkImage(
+                                        state.packagesModel!.message![index].image!,
+                                      ))),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  InkWell(
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Icon(
-                                      Icons.arrow_back_rounded,
-                                      color: AppColors.umragold,
-                                      size: 25,
-                                    ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Flexible(
+                                        child: FittedBox(
+                                          fit: BoxFit.contain,
+                                          child: Text(
+                                            state.packagesModel!.message![index].name!,
+                                            style: fontStyle(
+                                                color: Colors.white, fontFamily: FontFamily.bold, fontSize: 25.sp),
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        '${LanguageClass.isEnglish ? 'Availability' : 'المتاح'}  ${state.packagesModel!.message![index].availability!}',
+                                        style: fontStyle(
+                                            color: Colors.white,
+                                            fontFamily: FontFamily.bold,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 11.sp),
+                                      ),
+                                    ],
                                   ),
-                                  InkWell(
-                                    onTap: () async {
-                                      customdatepicker(
-                                        context: context,
-                                        hijiri: ishijiri,
-                                        onchange: (hdate) {
-                                          date = hdate.date;
-                                          hdate.jhijri.fDisplay =
-                                              DisplayFormat.MMDDYYYY;
+                                  9.verticalSpace,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 100.w,
+                                        child: Wrap(
+                                          alignment: WrapAlignment.start,
+                                          runAlignment: WrapAlignment.start,
+                                          crossAxisAlignment: WrapCrossAlignment.start,
+                                          direction: Axis.horizontal,
+                                          runSpacing: 2.w,
+                                          spacing: 2.w,
+                                          children: state.packagesModel!.message![index].nightList!
+                                              .map((e) => FittedBox(
+                                                    fit: BoxFit.fitWidth,
+                                                    child: Container(
+                                                      child: Text(
+                                                        '${e.cityName!} ${e.nights!} ${LanguageClass.isEnglish ? 'N' : 'ليلة'}',
+                                                        style: fontStyle(
+                                                            color: Colors.white,
+                                                            fontFamily: FontFamily.bold,
+                                                            fontWeight: FontWeight.w400,
+                                                            fontSize: 12.sp),
+                                                      ),
+                                                    ),
+                                                  ))
+                                              .toList(),
+                                        ),
+                                      ),
+                                      4.horizontalSpace,
+                                      Container(
+                                        width: 20.w,
+                                        child: state.packagesModel!.message![index].accommodationType == ''
+                                            ? 0.horizontalSpace
+                                            : FittedBox(
+                                                fit: BoxFit.contain,
+                                                child: Text(
+                                                  state.packagesModel!.message![index].accommodationType ?? '-',
+                                                  style: fontStyle(
+                                                      color: Colors.white,
+                                                      fontFamily: FontFamily.bold,
+                                                      fontWeight: FontWeight.w400,
+                                                      fontSize: 13.sp),
+                                                ),
+                                              ),
+                                      ),
+                                      4.horizontalSpace,
+                                      FittedBox(
+                                        fit: BoxFit.fitWidth,
+                                        child: Text(
+                                          state.packagesModel!.message![index].tripTime!,
+                                          style: fontStyle(
+                                              color: Colors.white,
+                                              fontFamily: FontFamily.bold,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 12.sp),
+                                        ),
+                                      ),
+                                      2.horizontalSpace,
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            selectedtripid == index ? selectedtripid = -1 : selectedtripid = index;
 
-                                          ishijiri
-                                              ? selectedDate =
-                                                  hdate.jhijri.toString()
-                                              : selectedDate =
-                                                  intl.DateFormat('MM-dd-yyyy')
-                                                      .format(date!)
-                                                      .toString();
-
-                                          _umraBloc.add(GetPackageListEvent(
-                                              reservationid:
-                                                  widget.umrahReservationID,
-                                              campianID: UmraDetails.campainid,
-                                              city: widget.city,
-                                              date: selectedDate,
-                                              typeid: widget.typeid));
-                                          setState(() {});
-                                          Navigator.pop(context);
+                                            tripumraid = state.packagesModel!.message![index].tripUmrahId!;
+                                          });
                                         },
-                                      );
-                                    },
-                                    child: SvgPicture.asset(
-                                        'assets/images/calender.svg'),
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 6.h),
+                                          decoration: BoxDecoration(
+                                              color: selectedtripid == index ? Color(0xffecb959) : Colors.white,
+                                              borderRadius: BorderRadius.circular(41)),
+                                          child: Text(
+                                            LanguageClass.isEnglish ? "Select" : 'اختر',
+                                            style: fontStyle(
+                                                color: selectedtripid == index ? Colors.white : Color(0xffCACACA),
+                                                fontFamily: FontFamily.bold,
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        state.packagesModel!.message![index].tripDate!,
+                                        style: fontStyle(
+                                            color: Colors.white,
+                                            fontFamily: FontFamily.bold,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 12.sp),
+                                      ),
+                                      10.horizontalSpace,
+                                      state.packagesModel!.message![index].withTransportation!
+                                          ? Text(
+                                              LanguageClass.isEnglish ? 'Transportation' : 'المواصلات',
+                                              style: fontStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: FontFamily.bold,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 12.sp),
+                                            )
+                                          : SizedBox(),
+                                    ],
                                   )
                                 ],
                               ),
                             ),
-                            10.verticalSpace,
-                            Container(
-                                margin: EdgeInsets.only(
-                                    left: LanguageClass.isEnglish ? 15 : 0,
-                                    right: LanguageClass.isEnglish ? 0 : 15),
-                                alignment: LanguageClass.isEnglish
-                                    ? Alignment.topLeft
-                                    : Alignment.topRight,
-                                child: Text(
-                                  LanguageClass.isEnglish
-                                      ? 'Packages'
-                                      : 'الحملات',
-                                  style: fontStyle(
-                                      fontSize: 24.sp,
-                                      fontFamily: FontFamily.bold,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500),
-                                )),
-                            Container(
-                                width: double.infinity,
-                                height: 50,
-                                child: ListView(
-                                  shrinkWrap: true,
-                                  padding: EdgeInsets.symmetric(horizontal: 15),
-                                  scrollDirection: Axis.horizontal,
-                                  physics: ScrollPhysics(),
-                                  children: [
-                                    Indexer(
-                                        alignment: Alignment.centerLeft,
-                                        reversed: true,
-                                        children: List.generate(
-                                            listcampains!.length,
-                                            (index) => Indexed(
-                                                  index: index,
-                                                  key: UniqueKey(),
-                                                  child: InkWell(
-                                                    onTap: () {
-                                                      UmraDetails.campainid =
-                                                          listcampains![index]
-                                                              .campiagnUmraId!;
-                                                      _umraBloc.add(GetPackageListEvent(
-                                                          reservationid: widget
-                                                              .umrahReservationID,
-                                                          campianID: listcampains![
-                                                                  index]
-                                                              .campiagnUmraId!,
-                                                          city: widget.city,
-                                                          date: widget.date,
-                                                          typeid:
-                                                              widget.typeid));
-                                                      setState(() {
-                                                        selectedpackage = index;
-                                                      });
-                                                      print(selectedpackage);
-                                                    },
-                                                    child: AnimatedContainer(
-                                                      padding: EdgeInsets.only(
-                                                          left: selectedpackage ==
-                                                                      index &&
-                                                                  index != 0
-                                                              ? 30
-                                                              : 5,
-                                                          right: index ==
-                                                                  listcampains!
-                                                                          .length -
-                                                                      1
-                                                              ? 15
-                                                              : 5),
-                                                      margin: EdgeInsets.only(
-                                                          left: index * 80),
-                                                      decoration: BoxDecoration(
-                                                          boxShadow:
-                                                              selectedpackage ==
-                                                                      index
-                                                                  ? [
-                                                                      BoxShadow(
-                                                                          offset: Offset(4,
-                                                                              0),
-                                                                          color: Colors.black.withOpacity(
-                                                                              0.4),
-                                                                          blurRadius:
-                                                                              4,
-                                                                          spreadRadius:
-                                                                              0)
-                                                                    ]
-                                                                  : [
-                                                                      BoxShadow(
-                                                                          offset: Offset(4,
-                                                                              0),
-                                                                          color: Colors.black.withOpacity(
-                                                                              0.2),
-                                                                          blurRadius:
-                                                                              2,
-                                                                          spreadRadius:
-                                                                              0)
-                                                                    ],
-                                                          color: HexColor(
-                                                              listcampains![
-                                                                          index]
-                                                                      .bgColor ??
-                                                                  '#AEAEAE'),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      13)),
-                                                      width: selectedpackage ==
-                                                              index
-                                                          ? 148
-                                                          : 100,
-                                                      height: 47,
-                                                      duration: Duration(
-                                                          microseconds: 100),
-                                                      curve: Curves.linear,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Expanded(
-                                                            child: FittedBox(
-                                                              fit: BoxFit
-                                                                  .fitWidth,
-                                                              child: Text(
-                                                                listcampains![
-                                                                        index]
-                                                                    .name!,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style: fontStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontFamily:
-                                                                        FontFamily
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        18),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                )).toList()),
-                                  ],
-                                )),
-                            10.verticalSpace,
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    child: selectedtripid != -1
-                                        ? Container(
-                                            width: 27,
-                                            height: 27,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                border: Border.all(
-                                                    width: 2,
-                                                    color: AppColors.umragold),
-                                                borderRadius:
-                                                    BorderRadius.circular(100)),
-                                            child: Container(
-                                              width: 15,
-                                              height: 15,
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                  color: AppColors.umragold,
-                                                  border: Border.all(
-                                                      color:
-                                                          AppColors.umragold),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100)),
-                                            ),
-                                          )
-                                        : Container(
-                                            width: 27,
-                                            height: 27,
-                                            decoration: BoxDecoration(
-                                                color: Color(0xffC6C6C6),
-                                                borderRadius:
-                                                    BorderRadius.circular(100)),
-                                          ),
-                                  ),
-                                  Expanded(
-                                      child: Container(
-                                    height: 1,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xffC6C6C6),
-                                    ),
-                                  )),
-                                  Container(
-                                    child: Container(
-                                      width: 27,
-                                      height: 27,
-                                      decoration: BoxDecoration(
-                                          color: Color(0xffC6C6C6),
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
-                                    ),
-                                  ),
-                                  Expanded(
-                                      child: Container(
-                                    height: 1,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xffC6C6C6),
-                                    ),
-                                  )),
-                                  Container(
-                                    child: Container(
-                                      width: 27,
-                                      height: 27,
-                                      decoration: BoxDecoration(
-                                          color: Color(0xffC6C6C6),
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
-                                    ),
-                                  ),
-                                  Expanded(
-                                      child: Container(
-                                    height: 1,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xffC6C6C6),
-                                    ),
-                                  )),
-                                  Container(
-                                    child: Container(
-                                      width: 27,
-                                      height: 27,
-                                      decoration: BoxDecoration(
-                                          color: Color(0xffC6C6C6),
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
-                                    ),
-                                  ),
-                                  Expanded(
-                                      child: Container(
-                                    height: 1,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xffC6C6C6),
-                                    ),
-                                  )),
-                                  Container(
-                                    child: Container(
-                                      width: 27,
-                                      height: 27,
-                                      decoration: BoxDecoration(
-                                          color: Color(0xffC6C6C6),
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            6.verticalSpace,
-                            Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      child: FittedBox(
-                                        fit: BoxFit.fitWidth,
-                                        child: Text(
-                                          LanguageClass.isEnglish
-                                              ? 'Packages'
-                                              : 'الحملات',
-                                          textAlign: TextAlign.center,
-                                          style: fontStyle(
-                                              fontFamily: FontFamily.bold,
-                                              fontSize: 9.sp,
-                                              height: 1.2,
-                                              color: Colors.black),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                      child: Container(
-                                    alignment: Alignment.center,
-                                    child: FittedBox(
-                                      fit: BoxFit.fitWidth,
-                                      child: Text(
-                                        LanguageClass.isEnglish
-                                            ? 'Transportation'
-                                            : 'الانتقالات',
-                                        textAlign: TextAlign.center,
-                                        style: fontStyle(
-                                            fontFamily: FontFamily.bold,
-                                            fontSize: 9.sp,
-                                            height: 1.2,
-                                            color: Colors.black),
-                                      ),
-                                    ),
-                                  )),
-                                  Expanded(
-                                      child: Container(
-                                    alignment: Alignment.center,
-                                    child: FittedBox(
-                                      fit: BoxFit.fitWidth,
-                                      child: Text(
-                                        LanguageClass.isEnglish
-                                            ? 'Accommodation'
-                                            : 'الإقامة',
-                                        textAlign: TextAlign.center,
-                                        style: fontStyle(
-                                            fontFamily: FontFamily.bold,
-                                            fontSize: 9.sp,
-                                            height: 1.2,
-                                            color: Colors.black),
-                                      ),
-                                    ),
-                                  )),
-                                  Expanded(
-                                    child: Container(
-                                        alignment: Alignment.center,
-                                        child: FittedBox(
-                                          fit: BoxFit.fitWidth,
-                                          child: Text(
-                                            LanguageClass.isEnglish
-                                                ? 'Program'
-                                                : 'البرنامج',
-                                            textAlign: TextAlign.center,
-                                            style: fontStyle(
-                                                fontFamily: FontFamily.bold,
-                                                fontSize: 9.sp,
-                                                height: 1.2,
-                                                color: Colors.black),
-                                          ),
-                                        )),
-                                  ),
-                                  Expanded(
-                                      child: Container(
-                                    alignment: Alignment.center,
-                                    child: FittedBox(
-                                      fit: BoxFit.fitWidth,
-                                      child: Text(
-                                        LanguageClass.isEnglish
-                                            ? 'Reservation'
-                                            : "الحجز",
-                                        textAlign: TextAlign.center,
-                                        style: fontStyle(
-                                            fontFamily: FontFamily.bold,
-                                            fontSize: 9.sp,
-                                            height: 1.2,
-                                            color: Colors.black),
-                                      ),
-                                    ),
-                                  )),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: state.packagesModel!.message!.length > 0
-                                  ? ListView.builder(
-                                      itemCount:
-                                          state.packagesModel!.message!.length,
-                                      shrinkWrap: true,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 15.w),
-                                      physics: ScrollPhysics(),
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return state.packagesModel!
-                                                .message![index].isActive!
-                                            ? Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisSize: MainAxisSize.min,
+                          ),
+                          opentap == index
+                              ? Flexible(
+                                  child: ListView.builder(
+                                    itemCount: state.packagesModel!.message![index].detailsList!.length,
+                                    shrinkWrap: true,
+                                    physics: ScrollPhysics(),
+                                    itemBuilder: (BuildContext context, int index2) {
+                                      return state.packagesModel!.message![index].detailsList![index2].isActive!
+                                          ? Container(
+                                              margin: EdgeInsets.only(top: 10),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.end,
                                                 children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        opentap == index
-                                                            ? opentap = -1
-                                                            : opentap = index;
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      padding:
-                                                          EdgeInsets.all(15),
-                                                      margin: EdgeInsets.only(
-                                                          top: 10),
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(14),
-                                                          image:
-                                                              DecorationImage(
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                  opacity: 1,
-                                                                  colorFilter: ColorFilter.mode(
-                                                                      HexColor(state
-                                                                          .packagesModel!
-                                                                          .message![
-                                                                              index]
-                                                                          .bgColor!),
-                                                                      BlendMode
-                                                                          .multiply),
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .center,
-                                                                  image:
-                                                                      NetworkImage(
-                                                                    state
-                                                                        .packagesModel!
-                                                                        .message![
-                                                                            index]
-                                                                        .image!,
-                                                                  ))),
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
+                                                  Expanded(
+                                                      child: RichText(
+                                                    textAlign: TextAlign.justify,
+                                                    text: TextSpan(
+                                                        text: state.packagesModel!.message![index].detailsList![index2]
+                                                            .description!,
+                                                        style: fontStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 13.sp,
+                                                            height: 1,
+                                                            fontFamily: FontFamily.medium,
+                                                            fontWeight: FontWeight.w500),
                                                         children: [
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Flexible(
-                                                                child:
-                                                                    FittedBox(
-                                                                  fit: BoxFit
-                                                                      .contain,
-                                                                  child: Text(
-                                                                    state
-                                                                        .packagesModel!
-                                                                        .message![
-                                                                            index]
-                                                                        .name!,
-                                                                    style: fontStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontFamily:
-                                                                            FontFamily
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            25.sp),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Text(
-                                                                '${LanguageClass.isEnglish ? 'Availability' : 'المتاح'}  ${state.packagesModel!.message![index].availability!}',
-                                                                style: fontStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontFamily:
-                                                                        FontFamily
-                                                                            .bold,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w400,
-                                                                    fontSize:
-                                                                        11.sp),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          9.verticalSpace,
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Container(
-                                                                width: 100.w,
-                                                                child: Wrap(
-                                                                  alignment:
-                                                                      WrapAlignment
-                                                                          .start,
-                                                                  runAlignment:
-                                                                      WrapAlignment
-                                                                          .start,
-                                                                  crossAxisAlignment:
-                                                                      WrapCrossAlignment
-                                                                          .start,
-                                                                  direction: Axis
-                                                                      .horizontal,
-                                                                  runSpacing:
-                                                                      2.w,
-                                                                  spacing: 2.w,
-                                                                  children: state
-                                                                      .packagesModel!
-                                                                      .message![
-                                                                          index]
-                                                                      .nightList!
-                                                                      .map((e) =>
-                                                                          FittedBox(
-                                                                            fit:
-                                                                                BoxFit.fitWidth,
-                                                                            child:
-                                                                                Container(
-                                                                              child: Text(
-                                                                                '${e.cityName!} ${e.nights!} ${LanguageClass.isEnglish ? 'N' : 'ليلة'}',
-                                                                                style: fontStyle(color: Colors.white, fontFamily: FontFamily.bold, fontWeight: FontWeight.w400, fontSize: 12.sp),
-                                                                              ),
-                                                                            ),
-                                                                          ))
-                                                                      .toList(),
-                                                                ),
-                                                              ),
-                                                              4.horizontalSpace,
-                                                              Container(
-                                                                width: 20.w,
-                                                                child: state
-                                                                            .packagesModel!
-                                                                            .message![index]
-                                                                            .accommodationType ==
-                                                                        ''
-                                                                    ? 0.horizontalSpace
-                                                                    : FittedBox(
-                                                                        fit: BoxFit
-                                                                            .contain,
-                                                                        child:
-                                                                            Text(
-                                                                          state.packagesModel!.message![index].accommodationType ??
-                                                                              '-',
-                                                                          style: fontStyle(
-                                                                              color: Colors.white,
-                                                                              fontFamily: FontFamily.bold,
-                                                                              fontWeight: FontWeight.w400,
-                                                                              fontSize: 13.sp),
-                                                                        ),
-                                                                      ),
-                                                              ),
-                                                              4.horizontalSpace,
-                                                              FittedBox(
-                                                                fit: BoxFit
-                                                                    .fitWidth,
-                                                                child: Text(
-                                                                  state
-                                                                      .packagesModel!
-                                                                      .message![
-                                                                          index]
-                                                                      .tripTime!,
+                                                          state.packagesModel!.message![index].detailsList![index2]
+                                                                  .withMoreLink!
+                                                              ? TextSpan(
+                                                                  recognizer: TapGestureRecognizer()
+                                                                    ..onTap = () {
+                                                                      UmraRepos().launchInWebView(state
+                                                                          .packagesModel!
+                                                                          .message![index]
+                                                                          .detailsList![index2]
+                                                                          .moreLink!);
+                                                                    },
+                                                                  text: '... more.',
                                                                   style: fontStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontFamily:
-                                                                          FontFamily
-                                                                              .bold,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400,
-                                                                      fontSize:
-                                                                          12.sp),
-                                                                ),
-                                                              ),
-                                                              2.horizontalSpace,
-                                                              InkWell(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    selectedtripid ==
-                                                                            index
-                                                                        ? selectedtripid =
-                                                                            -1
-                                                                        : selectedtripid =
-                                                                            index;
-
-                                                                    tripumraid = state
-                                                                        .packagesModel!
-                                                                        .message![
-                                                                            index]
-                                                                        .tripUmrahId!;
-                                                                  });
-                                                                },
-                                                                child:
-                                                                    Container(
-                                                                  padding: EdgeInsets.symmetric(
-                                                                      horizontal:
-                                                                          20.w,
-                                                                      vertical:
-                                                                          6.h),
-                                                                  decoration: BoxDecoration(
-                                                                      color: selectedtripid ==
-                                                                              index
-                                                                          ? Color(
-                                                                              0xffecb959)
-                                                                          : Colors
-                                                                              .white,
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              41)),
-                                                                  child: Text(
-                                                                    LanguageClass
-                                                                            .isEnglish
-                                                                        ? "Select"
-                                                                        : 'اختر',
-                                                                    style: fontStyle(
-                                                                        color: selectedtripid ==
-                                                                                index
-                                                                            ? Colors
-                                                                                .white
-                                                                            : Color(
-                                                                                0xffCACACA),
-                                                                        fontFamily:
-                                                                            FontFamily
-                                                                                .bold,
-                                                                        fontSize: 14
-                                                                            .sp,
-                                                                        fontWeight:
-                                                                            FontWeight.w500),
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Text(
-                                                                state
-                                                                    .packagesModel!
-                                                                    .message![
-                                                                        index]
-                                                                    .tripDate!,
-                                                                style: fontStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontFamily:
-                                                                        FontFamily
-                                                                            .bold,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w400,
-                                                                    fontSize:
-                                                                        12.sp),
-                                                              ),
-                                                              10.horizontalSpace,
-                                                              state
-                                                                      .packagesModel!
-                                                                      .message![
-                                                                          index]
-                                                                      .withTransportation!
-                                                                  ? Text(
-                                                                      LanguageClass
-                                                                              .isEnglish
-                                                                          ? 'Transportation'
-                                                                          : 'المواصلات',
-                                                                      style: fontStyle(
-                                                                          color: Colors
-                                                                              .white,
-                                                                          fontFamily: FontFamily
-                                                                              .bold,
-                                                                          fontWeight: FontWeight
-                                                                              .w400,
-                                                                          fontSize:
-                                                                              12.sp),
-                                                                    )
-                                                                  : SizedBox(),
-                                                            ],
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  opentap == index
-                                                      ? Flexible(
-                                                          child:
-                                                              ListView.builder(
-                                                            itemCount: state
-                                                                .packagesModel!
-                                                                .message![index]
-                                                                .detailsList!
-                                                                .length,
-                                                            shrinkWrap: true,
-                                                            physics:
-                                                                ScrollPhysics(),
-                                                            itemBuilder:
-                                                                (BuildContext
-                                                                        context,
-                                                                    int index2) {
-                                                              return state
-                                                                      .packagesModel!
-                                                                      .message![
-                                                                          index]
-                                                                      .detailsList![
-                                                                          index2]
-                                                                      .isActive!
-                                                                  ? Container(
-                                                                      margin: EdgeInsets
-                                                                          .only(
-                                                                              top: 10),
-                                                                      child:
-                                                                          Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.start,
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.end,
-                                                                        children: [
-                                                                          Expanded(
-                                                                              child: RichText(
-                                                                            textAlign:
-                                                                                TextAlign.justify,
-                                                                            text:
-                                                                                TextSpan(text: state.packagesModel!.message![index].detailsList![index2].description!, style: fontStyle(color: Colors.black, fontSize: 13.sp, height: 1, fontFamily: FontFamily.medium, fontWeight: FontWeight.w500), children: [
-                                                                              state.packagesModel!.message![index].detailsList![index2].withMoreLink!
-                                                                                  ? TextSpan(
-                                                                                      recognizer: TapGestureRecognizer()
-                                                                                        ..onTap = () {
-                                                                                          UmraRepos().launchInWebView(state.packagesModel!.message![index].detailsList![index2].moreLink!);
-                                                                                        },
-                                                                                      text: '... more.',
-                                                                                      style: fontStyle(color: Colors.black, fontSize: 14.sp, decoration: TextDecoration.underline, fontFamily: FontFamily.bold, fontWeight: FontWeight.w500),
-                                                                                    )
-                                                                                  : TextSpan()
-                                                                            ]),
-                                                                          )),
-                                                                        ],
-                                                                      ),
-                                                                    )
-                                                                  : SizedBox();
-                                                            },
-                                                          ),
-                                                        )
-                                                      : SizedBox()
+                                                                      color: Colors.black,
+                                                                      fontSize: 14.sp,
+                                                                      decoration: TextDecoration.underline,
+                                                                      fontFamily: FontFamily.bold,
+                                                                      fontWeight: FontWeight.w500),
+                                                                )
+                                                              : TextSpan()
+                                                        ]),
+                                                  )),
                                                 ],
-                                              )
-                                            : SizedBox();
-                                      },
-                                    )
-                                  : Center(
-                                      child: Text(
-                                        LanguageClass.isEnglish
-                                            ? 'No Packages!'
-                                            : 'لا يوجد حملات',
-                                        style: fontStyle(
-                                          color: Colors.black,
-                                          fontFamily: FontFamily.bold,
-                                          fontSize: 16.sp,
-                                        ),
-                                      ),
-                                    ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10.h, horizontal: 20.w),
-                              alignment: LanguageClass.isEnglish
-                                  ? Alignment.bottomRight
-                                  : Alignment.bottomLeft,
+                                              ),
+                                            )
+                                          : SizedBox();
+                                    },
+                                  ),
+                                )
+                              : SizedBox()
+                        ],
+                      )
+                    : SizedBox();
+              },
+            )
+          : Center(
+              child: Text(
+                LanguageClass.isEnglish ? 'No Packages!' : 'لا يوجد حملات',
+                style: fontStyle(
+                  color: Colors.black,
+                  fontFamily: FontFamily.bold,
+                  fontSize: 16.sp,
+                ),
+              ),
+            ),
+    );
+  }
+
+  Widget _buildNextButton(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
+      alignment: LanguageClass.isEnglish ? Alignment.bottomRight : Alignment.bottomLeft,
+      child: InkWell(
+        onTap: () {
+          if (selectedtripid != -1) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TransportationScreen(
+                      umrahReservationID: widget.umrahReservationID,
+                      selectedpackage: selectedpackage,
+                      typeid: tripumraid),
+                ));
+          }
+        },
+        child: Container(
+          height: 35,
+          width: 70,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: selectedtripid == -1 ? Color(0xffC3C3C3) : Color(0xffecb959),
+              borderRadius: BorderRadius.circular(41)),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              LanguageClass.isEnglish ? "Next" : 'التالي',
+              style: fontStyle(fontFamily: FontFamily.bold, fontSize: 18.sp, color: Colors.white),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPackageProviders() {
+    return Column(
+      children: [
+        Container(
+            margin: EdgeInsets.only(left: LanguageClass.isEnglish ? 15 : 0, right: LanguageClass.isEnglish ? 0 : 15),
+            alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
+            child: Text(
+              LanguageClass.isEnglish ? 'Packages' : 'الحملات',
+              style: fontStyle(
+                  fontSize: 24.sp, fontFamily: FontFamily.bold, color: Colors.black, fontWeight: FontWeight.w500),
+            )),
+        SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: ListView(
+              shrinkWrap: true,
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              scrollDirection: Axis.horizontal,
+              physics: ScrollPhysics(),
+              children: [
+                Indexer(
+                    alignment: Alignment.centerLeft,
+                    reversed: true,
+                    children: List.generate(
+                        listcampains!.length,
+                        (index) => Indexed(
+                              index: index,
+                              key: UniqueKey(),
                               child: InkWell(
                                 onTap: () {
-                                  if (selectedtripid != -1) {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              TransportationScreen(
-                                                  umrahReservationID:
-                                                      widget.umrahReservationID,
-                                                  selectedpackage:
-                                                      selectedpackage,
-                                                  typeid: tripumraid),
-                                        ));
-                                  }
+                                  UmraDetails.campainid = listcampains![index].campiagnUmraId!;
+                                  _umraBloc.add(GetPackageListEvent(
+                                      reservationid: widget.umrahReservationID,
+                                      campianID: listcampains![index].campiagnUmraId!,
+                                      city: widget.city,
+                                      date: widget.date,
+                                      typeid: widget.typeid));
+                                  setState(() {
+                                    selectedpackage = index;
+                                  });
                                 },
-                                child: Container(
-                                  height: 35,
-                                  width: 70,
-                                  alignment: Alignment.center,
+                                child: AnimatedContainer(
+                                  padding: EdgeInsets.only(
+                                      left: LanguageClass.isEnglish
+                                          ? (selectedpackage == index && index != 0 ? 30 : 5)
+                                          : (selectedpackage == index && index != 0 ? 5 : 30),
+                                      right: LanguageClass.isEnglish
+                                          ? (index == listcampains!.length - 1 ? 15 : 5)
+                                          : (index == listcampains!.length - 1 ? 5 : 15)),
+                                  margin: EdgeInsets.only(left: index * 80),
                                   decoration: BoxDecoration(
-                                      color: selectedtripid == -1
-                                          ? Color(0xffC3C3C3)
-                                          : Color(0xffecb959),
-                                      borderRadius: BorderRadius.circular(41)),
-                                  child: FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      LanguageClass.isEnglish
-                                          ? "Next"
-                                          : 'التالي',
-                                      style: fontStyle(
-                                          fontFamily: FontFamily.bold,
-                                          fontSize: 18.sp,
-                                          color: Colors.white),
-                                    ),
+                                      boxShadow: selectedpackage == index
+                                          ? [
+                                              BoxShadow(
+                                                  offset: Offset(4, 0),
+                                                  color: Colors.black.withOpacity(0.4),
+                                                  blurRadius: 4,
+                                                  spreadRadius: 0)
+                                            ]
+                                          : [
+                                              BoxShadow(
+                                                  offset: Offset(4, 0),
+                                                  color: Colors.black.withOpacity(0.2),
+                                                  blurRadius: 2,
+                                                  spreadRadius: 0)
+                                            ],
+                                      color: HexColor(listcampains![index].bgColor ?? '#AEAEAE'),
+                                      borderRadius: BorderRadius.circular(13)),
+                                  width: selectedpackage == index ? 148 : 100,
+                                  height: 47,
+                                  duration: Duration(microseconds: 100),
+                                  curve: Curves.linear,
+                                  alignment: Alignment.center,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          listcampains![index].name!,
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: fontStyle(
+                                              color: Colors.white,
+                                              fontFamily: FontFamily.bold,
+                                              fontSize: selectedpackage == index ? 12.sp : 10.sp),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
-                            )
-                          ],
+                            )).toList()),
+              ],
+            )),
+      ],
+    );
+  }
+
+  Widget _buildProgressBar() {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                child: selectedtripid != -1
+                    ? Container(
+                        width: 27,
+                        height: 27,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(width: 2, color: AppColors.umragold),
+                            borderRadius: BorderRadius.circular(100)),
+                        child: Container(
+                          width: 15,
+                          height: 15,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: AppColors.umragold,
+                              border: Border.all(color: AppColors.umragold),
+                              borderRadius: BorderRadius.circular(100)),
                         ),
-                      ));
-                }
-              }),
+                      )
+                    : Container(
+                        width: 27,
+                        height: 27,
+                        decoration: BoxDecoration(color: Color(0xffC6C6C6), borderRadius: BorderRadius.circular(100)),
+                      ),
+              ),
+              Expanded(
+                  child: Container(
+                height: 1,
+                decoration: BoxDecoration(
+                  color: Color(0xffC6C6C6),
+                ),
+              )),
+              Container(
+                child: Container(
+                  width: 27,
+                  height: 27,
+                  decoration: BoxDecoration(color: Color(0xffC6C6C6), borderRadius: BorderRadius.circular(100)),
+                ),
+              ),
+              Expanded(
+                  child: Container(
+                height: 1,
+                decoration: BoxDecoration(
+                  color: Color(0xffC6C6C6),
+                ),
+              )),
+              Container(
+                child: Container(
+                  width: 27,
+                  height: 27,
+                  decoration: BoxDecoration(color: Color(0xffC6C6C6), borderRadius: BorderRadius.circular(100)),
+                ),
+              ),
+              Expanded(
+                  child: Container(
+                height: 1,
+                decoration: BoxDecoration(
+                  color: Color(0xffC6C6C6),
+                ),
+              )),
+              Container(
+                child: Container(
+                  width: 27,
+                  height: 27,
+                  decoration: BoxDecoration(color: Color(0xffC6C6C6), borderRadius: BorderRadius.circular(100)),
+                ),
+              ),
+              Expanded(
+                  child: Container(
+                height: 1,
+                decoration: BoxDecoration(
+                  color: Color(0xffC6C6C6),
+                ),
+              )),
+              Container(
+                child: Container(
+                  width: 27,
+                  height: 27,
+                  decoration: BoxDecoration(color: Color(0xffC6C6C6), borderRadius: BorderRadius.circular(100)),
+                ),
+              ),
+            ],
+          ),
         ),
-        bottomNavigationBar: Navigationbottombar(
-          currentIndex: 0,
-        ));
+        6.verticalSpace,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Container(
+                alignment: Alignment.center,
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(
+                    LanguageClass.isEnglish ? 'Packages' : 'الحملات',
+                    textAlign: TextAlign.center,
+                    style: fontStyle(fontFamily: FontFamily.bold, fontSize: 9.sp, height: 1.2, color: Colors.black),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+                child: Container(
+              alignment: Alignment.center,
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
+                  LanguageClass.isEnglish ? 'Transportation' : 'الانتقالات',
+                  textAlign: TextAlign.center,
+                  style: fontStyle(fontFamily: FontFamily.bold, fontSize: 9.sp, height: 1.2, color: Colors.black),
+                ),
+              ),
+            )),
+            Expanded(
+                child: Container(
+              alignment: Alignment.center,
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
+                  LanguageClass.isEnglish ? 'Accommodation' : 'الإقامة',
+                  textAlign: TextAlign.center,
+                  style: fontStyle(fontFamily: FontFamily.bold, fontSize: 9.sp, height: 1.2, color: Colors.black),
+                ),
+              ),
+            )),
+            Expanded(
+              child: Container(
+                  alignment: Alignment.center,
+                  child: FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Text(
+                      LanguageClass.isEnglish ? 'Program' : 'البرنامج',
+                      textAlign: TextAlign.center,
+                      style: fontStyle(fontFamily: FontFamily.bold, fontSize: 9.sp, height: 1.2, color: Colors.black),
+                    ),
+                  )),
+            ),
+            Expanded(
+                child: Container(
+              alignment: Alignment.center,
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
+                  LanguageClass.isEnglish ? 'Reservation' : "الحجز",
+                  textAlign: TextAlign.center,
+                  style: fontStyle(fontFamily: FontFamily.bold, fontSize: 9.sp, height: 1.2, color: Colors.black),
+                ),
+              ),
+            )),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAppBar(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 27, right: 27),
+      alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          InkWell(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Icon(
+              Icons.arrow_back_rounded,
+              color: AppColors.umragold,
+              size: 25,
+            ),
+          ),
+          InkWell(
+            onTap: () async {
+              customdatepicker(
+                context: context,
+                hijiri: ishijiri,
+                onchange: (hdate) {
+                  date = hdate.date;
+                  hdate.jhijri.fDisplay = DisplayFormat.MMDDYYYY;
+
+                  ishijiri
+                      ? selectedDate = hdate.jhijri.toString()
+                      : selectedDate = intl.DateFormat('MM-dd-yyyy').format(date!).toString();
+
+                  _umraBloc.add(GetPackageListEvent(
+                      reservationid: widget.umrahReservationID,
+                      campianID: UmraDetails.campainid,
+                      city: widget.city,
+                      date: selectedDate,
+                      typeid: widget.typeid));
+                  setState(() {});
+                  Navigator.pop(context);
+                },
+              );
+            },
+            child: SvgPicture.asset('assets/images/calender.svg'),
+          )
+        ],
+      ),
+    );
+  }
+
+  void _handleUmrahBlocListenner(context, UmraState state) {
+    if (state.campainlistmodel?.status == "success") {
+      listcampains = state.campainlistmodel!.message!.list;
+      UmraDetails.campainid = state.campainlistmodel!.message!.list!.first.campiagnUmraId!;
+      _umraBloc.add(GetPackageListEvent(
+          reservationid: widget.umrahReservationID,
+          campianID: state.campainlistmodel!.message!.list!.first.campiagnUmraId!,
+          city: widget.city,
+          date: widget.date,
+          typeid: widget.typeid));
+    } else if (state.pagelistmodel?.status == "success") {
+      pagedata = state.pagelistmodel!.message!;
+    } else if (state.packagesModel?.status == "success") {
+      for (int i = 0; i < state.packagesModel!.message!.length; i++) {
+        if (state.packagesModel!.message![i].isReserved == true) {
+          selectedtripid = i;
+
+          tripumraid = state.packagesModel!.message![i].tripUmrahId!;
+        }
+      }
+    }
   }
 
   Future customdatepicker(
-      {required BuildContext context,
-      required bool hijiri,
-      required onchange(JPickerValue date)}) async {
+      {required BuildContext context, required bool hijiri, required onchange(JPickerValue date)}) async {
     return showGlobalDatePicker(
       context: context,
       headerTitle: Container(
@@ -1037,10 +756,7 @@ class _TriplistScreenState extends State<TriplistScreen> {
                           ? 'Gregorian'
                           : "ميلادي",
                   style: fontStyle(
-                      height: 1.2,
-                      fontFamily: FontFamily.medium,
-                      fontSize: 14.sp,
-                      color: AppColors.blackColor),
+                      height: 1.2, fontFamily: FontFamily.medium, fontSize: 14.sp, color: AppColors.blackColor),
                 ),
                 5.horizontalSpace,
                 Icon(

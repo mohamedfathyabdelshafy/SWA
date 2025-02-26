@@ -21,6 +21,7 @@ import 'package:swa/core/utils/location.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/custom_drop_down_list.dart';
+import 'package:swa/core/widgets/notifications_icon.dart';
 import 'package:swa/core/widgets/timer.dart';
 import 'package:swa/features/Swa_umra/models/umra_detail.dart';
 import 'package:swa/features/app_info/data/data_sources/app_info_remote_data_source.dart';
@@ -34,6 +35,7 @@ import 'package:swa/features/home/domain/use_cases/get_to_stations_list_data.dar
 import 'package:swa/features/home/presentation/cubit/home_cubit.dart';
 import 'package:swa/features/home/presentation/screens/Notification/Notification_respotary.dart';
 import 'package:swa/features/home/presentation/screens/Notification/Notification_screen.dart';
+import 'package:swa/features/home/presentation/screens/Notification/bloc/notification_bloc.dart';
 import 'package:swa/features/home/presentation/screens/Update_screen/update_screen.dart';
 import 'package:swa/features/home/presentation/screens/home.dart';
 import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/my_account.dart';
@@ -83,12 +85,9 @@ class _MyHomeState extends State<MyHome> {
 
   DateTime? date;
 
-  String selectedDatefrom =
-      intl.DateFormat('yyyy-MM-dd').format(DateTime.now()).toString();
+  String selectedDatefrom = intl.DateFormat('yyyy-MM-dd').format(DateTime.now()).toString();
 
-  String selectedDateto = intl.DateFormat('yyyy-MM-dd')
-      .format(DateTime.now().add(Duration(days: 1)))
-      .toString();
+  String selectedDateto = intl.DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 1))).toString();
 
   bool ishijiri = false;
 
@@ -119,10 +118,8 @@ class _MyHomeState extends State<MyHome> {
     if (result != null) {
       model = result;
       // Calculate the count with IsRead as false
-      count = model?.notifications
-              .where((notification) => !notification.IsRead!)
-              .length ??
-          0;
+      count = model?.notifications.where((notification) => !notification.IsRead!).length ?? 0;
+      log("Notification Count : $count");
     }
     isRefreshing = false;
     // PackageTermsCubit.get(context).getPackageTerms();// Reset the flag after refreshing.
@@ -172,17 +169,13 @@ class _MyHomeState extends State<MyHome> {
             listener: (BuildContext context, state) async {
               if (state is PackagesState) {
                 if (state.updateversion == 'success') {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => UpdateAppScreen()));
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UpdateAppScreen()));
                 }
                 if (state.advModel?.status == 'success') {
                   for (var element in state.advModel!.message!) {
                     showGeneralDialog(
                         context: context,
-                        pageBuilder: (BuildContext buildContext,
-                            Animation<double> animation,
+                        pageBuilder: (BuildContext buildContext, Animation<double> animation,
                             Animation<double> secondaryAnimation) {
                           return StatefulBuilder(builder: (context, setStater) {
                             return Container(
@@ -197,13 +190,11 @@ class _MyHomeState extends State<MyHome> {
                                 child: InkWell(
                                   onTap: () {
                                     if (element.linkApi != null) {
-                                      _launchInWebView(
-                                          Uri.parse(element.linkApi!));
+                                      _launchInWebView(Uri.parse(element.linkApi!));
                                     }
                                   },
                                   child: Container(
-                                    height: MediaQuery.of(context).size.height /
-                                        1.4,
+                                    height: MediaQuery.of(context).size.height / 1.4,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
@@ -212,14 +203,10 @@ class _MyHomeState extends State<MyHome> {
                                       alignment: Alignment.topCenter,
                                       children: [
                                         Container(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 10, horizontal: 5),
+                                          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
                                           child: Image.network(
                                             element.icon!,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height /
-                                                1.4,
+                                            height: MediaQuery.of(context).size.height / 1.4,
                                             fit: BoxFit.fill,
                                           ),
                                         ),
@@ -227,9 +214,7 @@ class _MyHomeState extends State<MyHome> {
                                           alignment: Alignment.topLeft,
                                           child: InkWell(
                                             onTap: () {
-                                              PackagesRespo().closeadsfunc(
-                                                  id: element
-                                                      .adCustomerAppWebViewId);
+                                              PackagesRespo().closeadsfunc(id: element.adCustomerAppWebViewId);
 
                                               Navigator.pop(context);
                                             },
@@ -237,10 +222,7 @@ class _MyHomeState extends State<MyHome> {
                                               width: 25,
                                               height: 25,
                                               decoration: BoxDecoration(
-                                                  color: Colors.black,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100)),
+                                                  color: Colors.black, borderRadius: BorderRadius.circular(100)),
                                               child: Icon(
                                                 Icons.close,
                                                 color: Colors.white,
@@ -261,13 +243,10 @@ class _MyHomeState extends State<MyHome> {
               }
             },
           ),
-          BlocListener(
-              bloc: BlocProvider.of<GetAvailableCountriesCubit>(context),
-              listener: (context, state) async {}),
+          BlocListener(bloc: BlocProvider.of<GetAvailableCountriesCubit>(context), listener: (context, state) async {}),
         ],
         child: Directionality(
-          textDirection:
-              LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+          textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
           child: Container(
             color: Colors.white,
             child: Column(
@@ -289,9 +268,7 @@ class _MyHomeState extends State<MyHome> {
                                 ? CarouselWidget(items: [
                                     ...List<Widget>.generate(
                                       state.adsModel!.message!.length ?? 0,
-                                      (index) => contentAdvertisment(
-                                          state.adsModel!.message![index],
-                                          sizeHeight),
+                                      (index) => contentAdvertisment(state.adsModel!.message![index], sizeHeight),
                                     ),
                                   ])
                                 : SizedBox(),
@@ -314,9 +291,7 @@ class _MyHomeState extends State<MyHome> {
                                     InkWell(
                                       onTap: () {
                                         Navigator.pushNamedAndRemoveUntil(
-                                            context,
-                                            Routes.initialRoute,
-                                            (route) => false);
+                                            context, Routes.initialRoute, (route) => false);
                                       },
                                       child: Icon(
                                         Icons.arrow_back_rounded,
@@ -328,8 +303,7 @@ class _MyHomeState extends State<MyHome> {
                                     Container(
                                       width: sizeWidth * 0.18,
                                       alignment: Alignment.center,
-                                      child: Image.asset(
-                                          "assets/images/homelogo.png"),
+                                      child: Image.asset("assets/images/homelogo.png"),
                                     ),
                                   ],
                                 ),
@@ -341,13 +315,10 @@ class _MyHomeState extends State<MyHome> {
                                             children: [
                                               IconButton(
                                                   onPressed: () async {
-                                                    Navigator.push(context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) {
+                                                    Navigator.push(context, MaterialPageRoute(builder: (context) {
                                                       return NotificationScreen(
                                                         isScreenHome: false,
-                                                        updateNotificationCount:
-                                                            updateNotificationCount,
+                                                        updateNotificationCount: updateNotificationCount,
                                                       );
                                                     }));
                                                   },
@@ -356,76 +327,39 @@ class _MyHomeState extends State<MyHome> {
                                                     size: 25,
                                                     color: Colors.white,
                                                   )),
-                                              model == null ||
-                                                      model!
-                                                          .notifications.isEmpty
-                                                  ? SizedBox()
-                                                  : count == 0
-                                                      ? const SizedBox()
-                                                      : Positioned(
-                                                          top: -2,
-                                                          right: 0,
-                                                          child: badges.Badge(
-                                                            badgeContent: Text(
-                                                              count.toString(),
-                                                              style: fontStyle(
-                                                                  fontFamily:
-                                                                      FontFamily
-                                                                          .medium,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize: 14),
-                                                            ),
-                                                            badgeStyle: badges.BadgeStyle(
-                                                                badgeColor:
-                                                                    AppColors
-                                                                        .darkPurple,
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            5)),
-                                                          ),
-                                                        )
+                                              NotificationsIcon(),
                                             ],
                                           ),
                                     Routes.user == null
                                         ? InkWell(
                                             onTap: () {
-                                              Navigator.pushNamed(
-                                                  context, Routes.signInRoute);
+                                              Navigator.pushNamed(context, Routes.signInRoute);
                                             },
                                             child: Container(
                                               height: 34,
                                               width: 87,
                                               decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
+                                                borderRadius: BorderRadius.circular(20),
                                                 color: AppColors.white,
                                               ),
                                               child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
                                                   Container(
                                                     width: 12,
                                                     alignment: Alignment.center,
-                                                    child: Image.asset(
-                                                        "assets/images/Icon open-account-lo.png"),
+                                                    child: Image.asset("assets/images/Icon open-account-lo.png"),
                                                   ),
                                                   SizedBox(
                                                     width: 5,
                                                   ),
                                                   Text(
-                                                    LanguageClass.isEnglish
-                                                        ? "Login"
-                                                        : 'دخول',
+                                                    LanguageClass.isEnglish ? "Login" : 'دخول',
                                                     style: fontStyle(
                                                         color: Colors.black,
                                                         fontSize: 14,
-                                                        fontFamily:
-                                                            FontFamily.medium),
+                                                        fontFamily: FontFamily.medium),
                                                   ),
                                                 ],
                                               ),
@@ -433,48 +367,37 @@ class _MyHomeState extends State<MyHome> {
                                           )
                                         : InkWell(
                                             onTap: () {
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) {
+                                              Navigator.push(context, MaterialPageRoute(builder: (context) {
                                                 return MyAccountScreen(
                                                   loginLocalDataSource: sl(),
                                                   user: Routes.user!,
                                                 );
                                               })).then((value) {
-                                                BlocProvider.of<LoginCubit>(
-                                                        context)
-                                                    .getUserData();
+                                                BlocProvider.of<LoginCubit>(context).getUserData();
                                               });
                                             },
                                             child: Container(
                                               height: 34,
                                               width: 87,
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10),
+                                              padding: EdgeInsets.symmetric(horizontal: 10),
                                               // width: sizeWidth * 0.3,
                                               decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
+                                                borderRadius: BorderRadius.circular(20),
                                                 color: AppColors.white,
                                               ),
                                               child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
                                                   Expanded(
                                                     child: Text(
                                                       Routes.user!.name!,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
+                                                      textAlign: TextAlign.center,
+                                                      overflow: TextOverflow.ellipsis,
                                                       style: fontStyle(
                                                           color: Colors.black,
                                                           fontSize: 12,
-                                                          fontFamily: FontFamily
-                                                              .medium),
+                                                          fontFamily: FontFamily.medium),
                                                     ),
                                                   ),
                                                 ],
@@ -520,21 +443,15 @@ class _MyHomeState extends State<MyHome> {
                                       "assets/images/arrow_one_way.svg",
                                       width: 40,
                                       height: 40,
-                                      color: tripTypeId == "1"
-                                          ? AppColors.primaryColor
-                                          : Color(0xffdddddd),
+                                      color: tripTypeId == "1" ? AppColors.primaryColor : Color(0xffdddddd),
                                     ),
                                     const SizedBox(
                                       height: 0,
                                     ),
                                     Text(
-                                      LanguageClass.isEnglish
-                                          ? "One way"
-                                          : "ذهاب فقط",
+                                      LanguageClass.isEnglish ? "One way" : "ذهاب فقط",
                                       style: fontStyle(
-                                          color: tripTypeId == "1"
-                                              ? AppColors.primaryColor
-                                              : Color(0xffdddddd),
+                                          color: tripTypeId == "1" ? AppColors.primaryColor : Color(0xffdddddd),
                                           fontSize: 18,
                                           fontFamily: FontFamily.medium,
                                           fontWeight: FontWeight.w500),
@@ -562,21 +479,15 @@ class _MyHomeState extends State<MyHome> {
                                       "assets/images/bus.svg",
                                       width: 40,
                                       height: 40,
-                                      color: tripTypeId == "2"
-                                          ? AppColors.primaryColor
-                                          : Color(0xffdddddd),
+                                      color: tripTypeId == "2" ? AppColors.primaryColor : Color(0xffdddddd),
                                     ),
                                     const SizedBox(
                                       height: 0,
                                     ),
                                     Text(
-                                      LanguageClass.isEnglish
-                                          ? "Round Trip"
-                                          : "ذهاب وعوده",
+                                      LanguageClass.isEnglish ? "Round Trip" : "ذهاب وعوده",
                                       style: fontStyle(
-                                          color: tripTypeId == "2"
-                                              ? AppColors.primaryColor
-                                              : Color(0xffdddddd),
+                                          color: tripTypeId == "2" ? AppColors.primaryColor : Color(0xffdddddd),
                                           fontSize: 18,
                                           fontFamily: FontFamily.medium,
                                           fontWeight: FontWeight.w500),
@@ -596,8 +507,7 @@ class _MyHomeState extends State<MyHome> {
                             Container(
                               alignment: Alignment.center,
                               child: InkWell(
-                                onTap: _toStationId == null ||
-                                        _fromStationId == null
+                                onTap: _toStationId == null || _fromStationId == null
                                     ? () {}
                                     : () {
                                         String to;
@@ -633,53 +543,34 @@ class _MyHomeState extends State<MyHome> {
                                 children: [
                                   Text(
                                     LanguageClass.isEnglish ? "From" : "من",
-                                    style: fontStyle(
-                                        fontFamily: FontFamily.medium,
-                                        color: Colors.black,
-                                        fontSize: 16),
-                                    textAlign: LanguageClass.isEnglish
-                                        ? TextAlign.left
-                                        : TextAlign.right,
+                                    style: fontStyle(fontFamily: FontFamily.medium, color: Colors.black, fontSize: 16),
+                                    textAlign: LanguageClass.isEnglish ? TextAlign.left : TextAlign.right,
                                   ),
                                   BlocListener(
                                     bloc: BlocProvider.of<HomeCubit>(context),
-                                    listener:
-                                        (BuildContext context, state) async {
-                                      if (state
-                                          is GetFromStationsListLoadingState) {
+                                    listener: (BuildContext context, state) async {
+                                      if (state is GetFromStationsListLoadingState) {
                                         Constants.showLoadingDialog(context);
-                                      } else if (state
-                                          is GetFromStationsListLoadedState) {
+                                      } else if (state is GetFromStationsListLoadedState) {
                                         Constants.hideLoadingDialog(context);
                                         setState(() {
-                                          if (state
-                                                  .homeMessageResponse.status ==
-                                              'failed') {
+                                          if (state.homeMessageResponse.status == 'failed') {
                                             Constants.showDefaultSnackBar(
-                                                context: context,
-                                                text: state
-                                                    .homeMessageResponse.message
-                                                    .toString());
+                                                context: context, text: state.homeMessageResponse.message.toString());
                                           } else {
-                                            _fromStations = state
-                                                .homeMessageResponse
-                                                .citiesStations!
+                                            _fromStations = state.homeMessageResponse.citiesStations!
                                                 .cast<CitiesStations>()
                                                 .toList();
                                           }
                                         });
-                                        final result = await Navigator.push(
-                                            context, MaterialPageRoute(
-                                                builder: (context) {
-                                          return SelectFromCity(
-                                              fromStations: _fromStations!);
+                                        final result =
+                                            await Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                          return SelectFromCity(fromStations: _fromStations!);
                                         }));
                                         if (result != null) {
                                           setState(() {
-                                            _fromStationId =
-                                                result['_fromStationId'];
-                                            _fromCityName =
-                                                result['_fromCityName'];
+                                            _fromStationId = result['_fromStationId'];
+                                            _fromCityName = result['_fromCityName'];
                                           });
                                         }
                                         // Widget _fromStationsListWidget = ListView.builder(
@@ -734,18 +625,14 @@ class _MyHomeState extends State<MyHome> {
                                         //   },
                                         // );
                                         // Constants.showListDialog(context, 'From Stations', _fromStationsListWidget);
-                                      } else if (state
-                                          is GetFromStationsListErrorState) {
+                                      } else if (state is GetFromStationsListErrorState) {
                                         Constants.hideLoadingDialog(context);
-                                        Constants.showDefaultSnackBar(
-                                            context: context,
-                                            text: state.error.toString());
+                                        Constants.showDefaultSnackBar(context: context, text: state.error.toString());
                                       }
                                     },
                                     child: InkWell(
                                         onTap: () {
-                                          BlocProvider.of<HomeCubit>(context)
-                                              .getFromStationsListData();
+                                          BlocProvider.of<HomeCubit>(context).getFromStationsListData();
                                         },
                                         child: CustomDropDownList(
                                             hint: _fromCityName == ''
@@ -758,72 +645,48 @@ class _MyHomeState extends State<MyHome> {
                                     padding: EdgeInsets.zero,
                                     child: Text(
                                       LanguageClass.isEnglish ? "To" : "الي",
-                                      style: fontStyle(
-                                          fontFamily: FontFamily.medium,
-                                          color: Colors.black,
-                                          fontSize: 16),
-                                      textAlign: LanguageClass.isEnglish
-                                          ? TextAlign.left
-                                          : TextAlign.right,
+                                      style:
+                                          fontStyle(fontFamily: FontFamily.medium, color: Colors.black, fontSize: 16),
+                                      textAlign: LanguageClass.isEnglish ? TextAlign.left : TextAlign.right,
                                     ),
                                   ),
                                   BlocListener(
                                     bloc: BlocProvider.of<HomeCubit>(context),
-                                    listener:
-                                        (BuildContext context, state) async {
-                                      if (state
-                                          is GetToStationsListLoadingState) {
+                                    listener: (BuildContext context, state) async {
+                                      if (state is GetToStationsListLoadingState) {
                                         Constants.showLoadingDialog(context);
-                                      } else if (state
-                                          is GetToStationsListLoadedState) {
+                                      } else if (state is GetToStationsListLoadedState) {
                                         Constants.hideLoadingDialog(context);
                                         setState(() {
-                                          if (state
-                                                  .homeMessageResponse.status ==
-                                              'failed') {
+                                          if (state.homeMessageResponse.status == 'failed') {
                                             Constants.showDefaultSnackBar(
-                                                context: context,
-                                                text: state
-                                                    .homeMessageResponse.message
-                                                    .toString());
+                                                context: context, text: state.homeMessageResponse.message.toString());
                                           } else {
-                                            _toStations = state
-                                                .homeMessageResponse
-                                                .citiesStations!
+                                            _toStations = state.homeMessageResponse.citiesStations!
                                                 .cast<CitiesStations>()
                                                 .toList();
                                           }
                                         });
-                                        final result = await Navigator.push(
-                                            context, MaterialPageRoute(
-                                                builder: (context) {
-                                          return SelectToCity(
-                                              toStations: _toStations!);
+                                        final result =
+                                            await Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                          return SelectToCity(toStations: _toStations!);
                                         }));
                                         if (result != null) {
                                           setState(() {
-                                            _toStationId =
-                                                result['_toStationId'];
+                                            _toStationId = result['_toStationId'];
                                             _toCityName = result['_toCityName'];
                                           });
                                         }
-                                      } else if (state
-                                          is GetToStationsListErrorState) {
+                                      } else if (state is GetToStationsListErrorState) {
                                         Constants.hideLoadingDialog(context);
-                                        Constants.showDefaultSnackBar(
-                                            context: context,
-                                            text: state.error.toString());
+                                        Constants.showDefaultSnackBar(context: context, text: state.error.toString());
                                       }
                                     },
                                     child: InkWell(
                                         onTap: () {
                                           if (_fromStationId != null) {
-                                            BlocProvider.of<HomeCubit>(context)
-                                                .getToStationsListData(
-                                                    ToStationsParams(
-                                                        stationId:
-                                                            _fromStationId
-                                                                .toString()));
+                                            BlocProvider.of<HomeCubit>(context).getToStationsListData(
+                                                ToStationsParams(stationId: _fromStationId.toString()));
                                           }
                                         },
                                         child: CustomDropDownList(
@@ -839,8 +702,7 @@ class _MyHomeState extends State<MyHome> {
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                           child: Column(
                             children: [
                               tripTypeId == "1"
@@ -851,25 +713,16 @@ class _MyHomeState extends State<MyHome> {
                                             hijiri: ishijiri,
                                             onchange: (hdate) {
                                               date = hdate.date;
-                                              hdate.jhijri.fDisplay =
-                                                  DisplayFormat.YYYYMMDD;
+                                              hdate.jhijri.fDisplay = DisplayFormat.YYYYMMDD;
 
                                               ishijiri
-                                                  ? selectedDatefrom =
-                                                      hdate.jhijri.toString()
+                                                  ? selectedDatefrom = hdate.jhijri.toString()
                                                   : selectedDatefrom =
-                                                      intl.DateFormat(
-                                                              'yyyy-MM-dd')
-                                                          .format(date!)
-                                                          .toString();
+                                                      intl.DateFormat('yyyy-MM-dd').format(date!).toString();
                                               ishijiri
-                                                  ? selectedDateto =
-                                                      hdate.jhijri.toString()
+                                                  ? selectedDateto = hdate.jhijri.toString()
                                                   : selectedDateto =
-                                                      intl.DateFormat(
-                                                              'yyyy-MM-dd')
-                                                          .format(date!)
-                                                          .toString();
+                                                      intl.DateFormat('yyyy-MM-dd').format(date!).toString();
 
                                               setState(() {});
                                               Navigator.pop(context);
@@ -891,14 +744,10 @@ class _MyHomeState extends State<MyHome> {
                                                     width: sizeWidth * 0.01,
                                                   ),
                                                   Text(
-                                                    LanguageClass.isEnglish
-                                                        ? "DEPART ON"
-                                                        : "تغادر من",
+                                                    LanguageClass.isEnglish ? "DEPART ON" : "تغادر من",
                                                     style: fontStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: AppColors
-                                                            .blackColor,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: AppColors.blackColor,
                                                         fontSize: 8),
                                                   )
                                                 ],
@@ -906,10 +755,7 @@ class _MyHomeState extends State<MyHome> {
                                               InkWell(
                                                 child: Text(selectedDatefrom,
                                                     textAlign: TextAlign.center,
-                                                    style: fontStyle(
-                                                        color: AppColors
-                                                            .blackColor,
-                                                        fontSize: 10)),
+                                                    style: fontStyle(color: AppColors.blackColor, fontSize: 10)),
                                               ),
                                             ],
                                           ),
@@ -917,10 +763,8 @@ class _MyHomeState extends State<MyHome> {
                                       ),
                                     )
                                   : Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Expanded(
                                           child: InkWell(
@@ -930,65 +774,46 @@ class _MyHomeState extends State<MyHome> {
                                                   hijiri: ishijiri,
                                                   onchange: (hdate) {
                                                     date = hdate.date;
-                                                    hdate.jhijri.fDisplay =
-                                                        DisplayFormat.YYYYMMDD;
+                                                    hdate.jhijri.fDisplay = DisplayFormat.YYYYMMDD;
 
                                                     ishijiri
-                                                        ? selectedDatefrom =
-                                                            hdate.jhijri
-                                                                .toString()
+                                                        ? selectedDatefrom = hdate.jhijri.toString()
                                                         : selectedDatefrom =
-                                                            intl.DateFormat(
-                                                                    'yyyy-MM-dd')
-                                                                .format(date!)
-                                                                .toString();
+                                                            intl.DateFormat('yyyy-MM-dd').format(date!).toString();
 
                                                     setState(() {});
                                                     Navigator.pop(context);
                                                   });
                                             },
                                             child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
                                                   children: [
                                                     Icon(
                                                       Icons.date_range_outlined,
-                                                      color:
-                                                          AppColors.blackColor,
+                                                      color: AppColors.blackColor,
                                                       size: 16,
                                                     ),
                                                     SizedBox(
                                                       width: sizeWidth * 0.01,
                                                     ),
                                                     Text(
-                                                      LanguageClass.isEnglish
-                                                          ? "DEPART ON GO"
-                                                          : " تغادر من ذهاب",
+                                                      LanguageClass.isEnglish ? "DEPART ON GO" : " تغادر من ذهاب",
                                                       style: fontStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: AppColors
-                                                              .blackColor,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: AppColors.blackColor,
                                                           fontSize: 8),
                                                     )
                                                   ],
                                                 ),
                                                 InkWell(
                                                   child: Text(selectedDatefrom,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: fontStyle(
-                                                          color: AppColors
-                                                              .blackColor,
-                                                          fontSize: 10)),
+                                                      textAlign: TextAlign.center,
+                                                      style: fontStyle(color: AppColors.blackColor, fontSize: 10)),
                                                 ),
                                               ],
                                             ),
@@ -1005,65 +830,46 @@ class _MyHomeState extends State<MyHome> {
                                                   hijiri: ishijiri,
                                                   onchange: (hdate) {
                                                     date = hdate.date;
-                                                    hdate.jhijri.fDisplay =
-                                                        DisplayFormat.YYYYMMDD;
+                                                    hdate.jhijri.fDisplay = DisplayFormat.YYYYMMDD;
 
                                                     ishijiri
-                                                        ? selectedDateto = hdate
-                                                            .jhijri
-                                                            .toString()
+                                                        ? selectedDateto = hdate.jhijri.toString()
                                                         : selectedDateto =
-                                                            intl.DateFormat(
-                                                                    'yyyy-MM-dd')
-                                                                .format(date!)
-                                                                .toString();
+                                                            intl.DateFormat('yyyy-MM-dd').format(date!).toString();
 
                                                     setState(() {});
                                                     Navigator.pop(context);
                                                   });
                                             },
                                             child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
                                                   children: [
                                                     Icon(
                                                       Icons.date_range_outlined,
-                                                      color:
-                                                          AppColors.blackColor,
+                                                      color: AppColors.blackColor,
                                                       size: 16,
                                                     ),
                                                     SizedBox(
                                                       width: sizeWidth * 0.01,
                                                     ),
                                                     Text(
-                                                      LanguageClass.isEnglish
-                                                          ? "DEPART ON BACK"
-                                                          : " تغادر من عودة",
+                                                      LanguageClass.isEnglish ? "DEPART ON BACK" : " تغادر من عودة",
                                                       style: fontStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: AppColors
-                                                              .blackColor,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: AppColors.blackColor,
                                                           fontSize: 8),
                                                     )
                                                   ],
                                                 ),
                                                 InkWell(
                                                   child: Text(selectedDateto,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: fontStyle(
-                                                          color: AppColors
-                                                              .blackColor,
-                                                          fontSize: 10)),
+                                                      textAlign: TextAlign.center,
+                                                      style: fontStyle(color: AppColors.blackColor, fontSize: 10)),
                                                 ),
                                               ],
                                             ),
@@ -1075,41 +881,27 @@ class _MyHomeState extends State<MyHome> {
                                 height: 15,
                               ),
                               Container(
-                                child: BlocListener<TimesTripsCubit,
-                                    TimesTripsStates>(
-                                  bloc:
-                                      BlocProvider.of<TimesTripsCubit>(context),
+                                child: BlocListener<TimesTripsCubit, TimesTripsStates>(
+                                  bloc: BlocProvider.of<TimesTripsCubit>(context),
                                   listener: (context, state) {
                                     if (state is LoadingTimesTrips) {
                                       Constants.showLoadingDialog(context);
                                     } else if (state is LoadedTimesTrips) {
-                                      tripListBack = state.timesTripsResponse
-                                              .message!.tripListBack ??
-                                          [];
+                                      tripListBack = state.timesTripsResponse.message!.tripListBack ?? [];
                                       Constants.hideLoadingDialog(context);
 
-                                      if (state.timesTripsResponse.message!
-                                          .tripList!.isNotEmpty) {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(
-                                                builder: (context) {
+                                      if (state.timesTripsResponse.message!.tripList!.isNotEmpty) {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) {
                                           return TimesScreen(
-                                            tripList: state.timesTripsResponse
-                                                .message!.tripList!,
+                                            tripList: state.timesTripsResponse.message!.tripList!,
                                             tripTypeId: tripTypeId,
-                                            tripListBack: state
-                                                    .timesTripsResponse
-                                                    .message!
-                                                    .tripListBack ??
-                                                [],
+                                            tripListBack: state.timesTripsResponse.message!.tripListBack ?? [],
                                           );
                                         })).then((value) {
                                           Reservationtimer.stoptimer();
 
-                                          Ticketreservation.Seatsnumbers1
-                                              .clear();
-                                          Ticketreservation.Seatsnumbers2
-                                              .clear();
+                                          Ticketreservation.Seatsnumbers1.clear();
+                                          Ticketreservation.Seatsnumbers2.clear();
                                         });
                                       } else {
                                         Constants.showDefaultSnackBar(
@@ -1120,14 +912,12 @@ class _MyHomeState extends State<MyHome> {
                                       }
                                     } else if (state is ErrorTimesTrips) {
                                       Constants.hideLoadingDialog(context);
-                                      Constants.showDefaultSnackBar(
-                                          context: context, text: state.msg);
+                                      Constants.showDefaultSnackBar(context: context, text: state.msg);
                                     }
                                   },
                                   child: InkWell(
                                     onTap: () {
-                                      if (_fromStationId == null ||
-                                          _toStationId == null) {
+                                      if (_fromStationId == null || _toStationId == null) {
                                         Constants.showDefaultSnackBar(
                                             context: context,
                                             text: LanguageClass.isEnglish
@@ -1138,27 +928,19 @@ class _MyHomeState extends State<MyHome> {
                                             "tripTypeIdBassant    ${_fromStationId.toString()}  ${_toStationId.toString()}"
                                             "  ${selectedDatefrom.toString()}  ${selectedDateto.toString()}");
                                         CacheHelper.setDataToSharedPref(
-                                            key: 'fromStationId',
-                                            value: _fromStationId.toString());
+                                            key: 'fromStationId', value: _fromStationId.toString());
                                         CacheHelper.setDataToSharedPref(
-                                            key: 'toStationId',
-                                            value: _toStationId.toString());
+                                            key: 'toStationId', value: _toStationId.toString());
                                         CacheHelper.setDataToSharedPref(
-                                            key: 'selectedDayTo',
-                                            value: selectedDateto.toString());
+                                            key: 'selectedDayTo', value: selectedDateto.toString());
                                         CacheHelper.setDataToSharedPref(
-                                            key: 'selectedDayFrom',
-                                            value: selectedDatefrom.toString());
+                                            key: 'selectedDayFrom', value: selectedDatefrom.toString());
                                         print("===}======");
 
-                                        UmraDetails.dateTypeID =
-                                            ishijiri ? 112 : 113;
-                                        BlocProvider.of<TimesTripsCubit>(
-                                                context)
-                                            .getTimes(
+                                        UmraDetails.dateTypeID = ishijiri ? 112 : 113;
+                                        BlocProvider.of<TimesTripsCubit>(context).getTimes(
                                           tripType: tripTypeId.toString(),
-                                          fromStationID:
-                                              _fromStationId.toString(),
+                                          fromStationID: _fromStationId.toString(),
                                           toStationID: _toStationId.toString(),
                                           dateGo: selectedDatefrom.toString(),
                                           dateBack: selectedDateto.toString(),
@@ -1171,18 +953,12 @@ class _MyHomeState extends State<MyHome> {
                                       //padding:  EdgeInsets.symmetric(horizontal: 10,vertical:20),
                                       //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
                                       decoration: BoxDecoration(
-                                          color: AppColors.primaryColor,
-                                          borderRadius:
-                                              BorderRadius.circular(41)),
+                                          color: AppColors.primaryColor, borderRadius: BorderRadius.circular(41)),
                                       child: Center(
                                         child: Text(
-                                          LanguageClass.isEnglish
-                                              ? "Search Bus"
-                                              : "بحث عن الاتوبيس",
+                                          LanguageClass.isEnglish ? "Search Bus" : "بحث عن الاتوبيس",
                                           style: fontStyle(
-                                              color: AppColors.white,
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 20),
+                                              color: AppColors.white, fontWeight: FontWeight.normal, fontSize: 20),
                                         ),
                                       ),
                                     ),
@@ -1239,9 +1015,7 @@ class _MyHomeState extends State<MyHome> {
   }
 
   Future customdatepicker(
-      {required BuildContext context,
-      required bool hijiri,
-      required onchange(JPickerValue date)}) async {
+      {required BuildContext context, required bool hijiri, required onchange(JPickerValue date)}) async {
     return showGlobalDatePicker(
       context: context,
       headerTitle: Container(
@@ -1273,10 +1047,7 @@ class _MyHomeState extends State<MyHome> {
                           ? 'Gregorian'
                           : "ميلادي",
                   style: fontStyle(
-                      height: 1.2,
-                      fontFamily: FontFamily.medium,
-                      fontSize: 14.sp,
-                      color: AppColors.blackColor),
+                      height: 1.2, fontFamily: FontFamily.medium, fontSize: 14.sp, color: AppColors.blackColor),
                 ),
                 5.horizontalSpace,
                 Icon(

@@ -58,7 +58,6 @@ class _ReservationScreenState extends State<ReservationScreen> with TickerProvid
   bool accept = false;
   bool usewallet = false;
   double balance = 0;
-  Curruncylist? curruncylist;
 
   double diffrence = 0;
 
@@ -80,11 +79,6 @@ class _ReservationScreenState extends State<ReservationScreen> with TickerProvid
     setState(() {
       balance = wallet!.message!;
     });
-
-    var responce = await PackagesRespo().GetallCurrency();
-    if (responce is Curruncylist) {
-      curruncylist = responce;
-    }
   }
 
   calculateAccomidation() {

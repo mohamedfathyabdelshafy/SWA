@@ -4,14 +4,13 @@
 
 import 'dart:convert';
 
-Curruncylist curruncylistFromJson(String str) =>
-    Curruncylist.fromJson(json.decode(str));
+Curruncylist curruncylistFromJson(String str) => Curruncylist.fromJson(json.decode(str));
 
 String curruncylistToJson(Curruncylist data) => json.encode(data.toJson());
 
 class Curruncylist {
   String? status;
-  List<Message>? message;
+  List<Currency>? message;
   dynamic balance;
   dynamic object;
   dynamic text;
@@ -28,8 +27,7 @@ class Curruncylist {
 
   factory Curruncylist.fromJson(Map<String, dynamic> json) => Curruncylist(
         status: json["status"],
-        message:
-            List<Message>.from(json["message"].map((x) => Message.fromJson(x))),
+        message: List<Currency>.from(json["message"].map((x) => Currency.fromJson(x))),
         balance: json["balance"],
         object: json["Object"],
         text: json["Text"],
@@ -46,14 +44,14 @@ class Curruncylist {
       };
 }
 
-class Message {
+class Currency {
   int? currencyId;
   int? code;
   String? name;
   String? symbol;
   dynamic unitName;
 
-  Message({
+  Currency({
     this.currencyId,
     this.code,
     this.name,
@@ -61,7 +59,7 @@ class Message {
     this.unitName,
   });
 
-  factory Message.fromJson(Map<String, dynamic> json) => Message(
+  factory Currency.fromJson(Map<String, dynamic> json) => Currency(
         currencyId: json["CurrencyID"],
         code: json["Code"],
         name: json["Name"],

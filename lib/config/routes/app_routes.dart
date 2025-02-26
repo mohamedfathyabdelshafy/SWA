@@ -82,7 +82,6 @@ class Routes {
 
 class AppRoute {
   static Route? onGenerateRoute(RouteSettings settings) {
-    final Object? args = settings.arguments;
     switch (settings.name) {
       case Routes.initialRoute:
         return MaterialPageRoute(
@@ -102,10 +101,8 @@ class AppRoute {
                   BlocProvider<HomeCubit>(
                     create: (context) => sl<HomeCubit>(),
                   ),
-                  BlocProvider<TimesTripsCubit>(
-                      create: (context) => sl<TimesTripsCubit>()),
-                  BlocProvider<TicketCubit>(
-                      create: (context) => sl<TicketCubit>()),
+                  BlocProvider<TimesTripsCubit>(create: (context) => sl<TimesTripsCubit>()),
+                  BlocProvider<TicketCubit>(create: (context) => sl<TicketCubit>()),
                 ], child: SelectappScreen()));
 
       case Routes.home:
@@ -127,10 +124,8 @@ class AppRoute {
                   BlocProvider<HomeCubit>(
                     create: (context) => sl<HomeCubit>(),
                   ),
-                  BlocProvider<TimesTripsCubit>(
-                      create: (context) => sl<TimesTripsCubit>()),
-                  BlocProvider<TicketCubit>(
-                      create: (context) => sl<TicketCubit>()),
+                  BlocProvider<TimesTripsCubit>(create: (context) => sl<TimesTripsCubit>()),
+                  BlocProvider<TicketCubit>(create: (context) => sl<TicketCubit>()),
                 ], child: isomra ? SelectUmratypeScreen() : MyHome()));
 
       case Routes.signInRoute:
@@ -147,10 +142,8 @@ class AppRoute {
           builder: (context) => MultiBlocProvider(
             providers: [
               BlocProvider(create: (context) => sl<RegisterCubit>()),
-              BlocProvider<GetAvailableCountriesCubit>(
-                  create: (context) => sl<GetAvailableCountriesCubit>()),
-              BlocProvider<GetAvailableCountryCitiesCubit>(
-                  create: (context) => sl<GetAvailableCountryCitiesCubit>()),
+              BlocProvider<GetAvailableCountriesCubit>(create: (context) => sl<GetAvailableCountriesCubit>()),
+              BlocProvider<GetAvailableCountryCitiesCubit>(create: (context) => sl<GetAvailableCountryCitiesCubit>()),
             ],
             child: SignUpScreen(),
           ),
@@ -174,10 +167,8 @@ class AppRoute {
                   BlocProvider<HomeCubit>(
                     create: (context) => sl<HomeCubit>(),
                   ),
-                  BlocProvider<TimesTripsCubit>(
-                      create: (context) => sl<TimesTripsCubit>()),
-                  BlocProvider<TicketCubit>(
-                      create: (context) => sl<TicketCubit>()),
+                  BlocProvider<TimesTripsCubit>(create: (context) => sl<TimesTripsCubit>()),
+                  BlocProvider<TicketCubit>(create: (context) => sl<TicketCubit>()),
                 ], child: UmraBookedScreen()));
 
       case Routes.EmailRoute:
@@ -185,10 +176,8 @@ class AppRoute {
           builder: (context) => MultiBlocProvider(
             providers: [
               BlocProvider(create: (context) => sl<RegisterCubit>()),
-              BlocProvider<GetAvailableCountriesCubit>(
-                  create: (context) => sl<GetAvailableCountriesCubit>()),
-              BlocProvider<GetAvailableCountryCitiesCubit>(
-                  create: (context) => sl<GetAvailableCountryCitiesCubit>()),
+              BlocProvider<GetAvailableCountriesCubit>(create: (context) => sl<GetAvailableCountriesCubit>()),
+              BlocProvider<GetAvailableCountryCitiesCubit>(create: (context) => sl<GetAvailableCountryCitiesCubit>()),
             ],
             child: Emailscreen(),
           ),
@@ -199,10 +188,8 @@ class AppRoute {
           builder: (context) => MultiBlocProvider(
             providers: [
               BlocProvider(create: (context) => sl<RegisterCubit>()),
-              BlocProvider<GetAvailableCountriesCubit>(
-                  create: (context) => sl<GetAvailableCountriesCubit>()),
-              BlocProvider<GetAvailableCountryCitiesCubit>(
-                  create: (context) => sl<GetAvailableCountryCitiesCubit>()),
+              BlocProvider<GetAvailableCountriesCubit>(create: (context) => sl<GetAvailableCountriesCubit>()),
+              BlocProvider<GetAvailableCountryCitiesCubit>(create: (context) => sl<GetAvailableCountryCitiesCubit>()),
             ],
             child: VerifyCodeScreen(),
           ),
@@ -240,7 +227,7 @@ class AppRoute {
                   BlocProvider<FawryCubit>(
                     create: (context) => sl<FawryCubit>(),
                   ),
-                ], child: FawryScreen() //ElectronicScreen
+                ], child: WalletFawryScreen() //ElectronicScreen
                     ));
       case Routes.eWalletScreen:
       // return MaterialPageRoute(builder: (context) => MultiBlocProvider(
@@ -265,8 +252,7 @@ class AppRoute {
           centerTitle: true,
         ),
         body: Center(
-          child: Constants.normalText(
-              context: context, text: AppStrings.noRouteFound),
+          child: Constants.normalText(context: context, text: AppStrings.noRouteFound),
         ),
       );
     });

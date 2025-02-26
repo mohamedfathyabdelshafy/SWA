@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
@@ -12,6 +13,7 @@ import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/icon_back.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
+import 'package:swa/features/payment/fawry/presentation/screens/fawry.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
@@ -41,7 +43,7 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
   TextEditingController cardHolderName = TextEditingController();
   TextEditingController expiryFieldCtrl = TextEditingController();
   TextEditingController cardNumberCtrl = TextEditingController();
-  TextEditingController amountController = TextEditingController();
+  // TextEditingController amountController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool showCardBack = false;
   int selectedIndex = 0;
@@ -63,10 +65,7 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
     widget.index = 0;
 
     if (jsonData != null && jsonData is String) {
-      cards = json
-          .decode(jsonData)
-          .map<CardModel>((e) => CardModel.fromJsom(e))
-          .toList();
+      cards = json.decode(jsonData).map<CardModel>((e) => CardModel.fromJsom(e)).toList();
     }
     print("cached cards ${cards}");
     super.initState();
@@ -93,8 +92,7 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
         key: formKey,
         child: SizedBox(
           child: Directionality(
-            textDirection:
-                LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+            textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 0),
               child: SingleChildScrollView(
@@ -113,9 +111,7 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                 height: sizeHeight * 0.08,
                               ),
                               Container(
-                                alignment: LanguageClass.isEnglish
-                                    ? Alignment.topLeft
-                                    : Alignment.topRight,
+                                alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                                 child: InkWell(
                                   onTap: () {
                                     Navigator.pop(context);
@@ -131,8 +127,7 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                 height: 10,
                               ),
                               Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 20),
+                                margin: const EdgeInsets.symmetric(horizontal: 20),
                                 child: Text(
                                   LanguageClass.isEnglish ? "payment" : "الدفع",
                                   style: fontStyle(
@@ -167,95 +162,62 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                             onTap: () {
                                               showModalBottomSheet(
                                                 context: context,
-                                                builder:
-                                                    (BuildContext context) {
+                                                builder: (BuildContext context) {
                                                   return Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            30),
+                                                    padding: const EdgeInsets.all(30),
                                                     child: Container(
                                                       height: 270,
                                                       child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: [
                                                           Text(
-                                                            LanguageClass
-                                                                    .isEnglish
-                                                                ? 'Choose Card'
-                                                                : "اختر كارت",
+                                                            LanguageClass.isEnglish ? 'Choose Card' : "اختر كارت",
                                                             style: fontStyle(
                                                                 fontSize: 15,
-                                                                fontFamily:
-                                                                    FontFamily
-                                                                        .bold,
-                                                                color: AppColors
-                                                                    .blackColor),
+                                                                fontFamily: FontFamily.bold,
+                                                                color: AppColors.blackColor),
                                                           ),
                                                           const SizedBox(
                                                             height: 5,
                                                           ),
-                                                          Divider(
-                                                              thickness: 0.5,
-                                                              color: AppColors
-                                                                  .grey),
+                                                          Divider(thickness: 0.5, color: AppColors.grey),
                                                           Column(
-                                                            children: List<
-                                                                    Widget>.generate(
-                                                                cards.length,
-                                                                (index) {
+                                                            children: List<Widget>.generate(cards.length, (index) {
                                                               return Column(
                                                                 children: [
                                                                   InkWell(
                                                                     onTap: () {
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                      setState(
-                                                                          () {
-                                                                        widget.index =
-                                                                            index;
+                                                                      Navigator.pop(context);
+                                                                      setState(() {
+                                                                        widget.index = index;
                                                                       });
                                                                     },
                                                                     child: Row(
                                                                       children: [
                                                                         Checkbox(
-                                                                          value: widget.index == index
-                                                                              ? true
-                                                                              : false,
-                                                                          activeColor:
-                                                                              Colors.yellow,
-                                                                          shape:
-                                                                              RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-                                                                          onChanged:
-                                                                              (value) {},
+                                                                          value: widget.index == index ? true : false,
+                                                                          activeColor: Colors.yellow,
+                                                                          shape: RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(100)),
+                                                                          onChanged: (value) {},
                                                                         ),
-                                                                        Image
-                                                                            .asset(
+                                                                        Image.asset(
                                                                           'assets/images/master_card.png',
-                                                                          height:
-                                                                              11,
-                                                                          width:
-                                                                              17,
-                                                                          fit: BoxFit
-                                                                              .fitWidth,
+                                                                          height: 11,
+                                                                          width: 17,
+                                                                          fit: BoxFit.fitWidth,
                                                                         ),
                                                                         Text(
                                                                           "XXXX-XXXX-XXXX-${cards[index].cardNumber!.substring(cards[index].cardNumber!.length - 4)}",
-                                                                          style:
-                                                                              fontStyle(
-                                                                            fontSize:
-                                                                                20,
-                                                                            fontFamily:
-                                                                                FontFamily.regular,
-                                                                            color:
-                                                                                Colors.black,
+                                                                          style: fontStyle(
+                                                                            fontSize: 20,
+                                                                            fontFamily: FontFamily.regular,
+                                                                            color: Colors.black,
                                                                           ),
                                                                         ),
                                                                         Spacer(),
                                                                         InkWell(
-                                                                          onTap:
-                                                                              () {
+                                                                          onTap: () {
                                                                             setState(() {
                                                                               if (index >= 0 && index < cards.length) {
                                                                                 cards.removeAt(index);
@@ -277,8 +239,7 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                                                               ),
                                                                             );
                                                                           },
-                                                                          child:
-                                                                              Icon(Icons.delete),
+                                                                          child: Icon(Icons.delete),
                                                                         )
                                                                       ],
                                                                     ),
@@ -287,73 +248,47 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                                               );
                                                             }),
                                                           ),
-                                                          Divider(
-                                                              thickness: 0.5,
-                                                              color: AppColors
-                                                                  .grey),
+                                                          Divider(thickness: 0.5, color: AppColors.grey),
                                                           Row(
                                                             children: [
                                                               SizedBox(
-                                                                width:
-                                                                    sizeWidth *
-                                                                        0.03,
+                                                                width: sizeWidth * 0.03,
                                                               ),
                                                               Container(
                                                                   decoration: BoxDecoration(
-                                                                      shape: BoxShape
-                                                                          .circle,
-                                                                      color: AppColors
-                                                                          .grey),
-                                                                  child:
-                                                                      const Icon(
+                                                                      shape: BoxShape.circle, color: AppColors.grey),
+                                                                  child: const Icon(
                                                                     Icons.add,
-                                                                    color: Colors
-                                                                        .lightGreen,
+                                                                    color: Colors.lightGreen,
                                                                     size: 20,
                                                                   )),
                                                               SizedBox(
-                                                                width:
-                                                                    sizeWidth *
-                                                                        0.03,
+                                                                width: sizeWidth * 0.03,
                                                               ),
                                                               InkWell(
-                                                                onTap:
-                                                                    () async {
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                  final card =
-                                                                      await Navigator
-                                                                          .push<
-                                                                              CardModel>(
+                                                                onTap: () async {
+                                                                  Navigator.pop(context);
+                                                                  final card = await Navigator.push<CardModel>(
                                                                     context,
                                                                     MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) {
+                                                                      builder: (context) {
                                                                         return const AddCreditCard();
                                                                       },
                                                                     ),
                                                                   );
-                                                                  if (card
-                                                                      is CardModel) {
-                                                                    cards.add(
-                                                                        card);
-                                                                    setState(
-                                                                        () {});
+                                                                  if (card is CardModel) {
+                                                                    cards.add(card);
+                                                                    setState(() {});
                                                                   }
                                                                 },
                                                                 child: Text(
-                                                                  LanguageClass
-                                                                          .isEnglish
+                                                                  LanguageClass.isEnglish
                                                                       ? 'Add New Card'
                                                                       : "اضافة كارت جديد",
                                                                   style: fontStyle(
-                                                                      fontSize:
-                                                                          15.45,
-                                                                      fontFamily:
-                                                                          FontFamily
-                                                                              .bold,
-                                                                      color: AppColors
-                                                                          .blackColor),
+                                                                      fontSize: 15.45,
+                                                                      fontFamily: FontFamily.bold,
+                                                                      color: AppColors.blackColor),
                                                                 ),
                                                               ),
                                                             ],
@@ -368,23 +303,19 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                             child: Row(
                                               children: [
                                                 Text(
-                                                  (widget.index >= 0 &&
-                                                          widget.index <
-                                                              cards.length)
+                                                  (widget.index >= 0 && widget.index < cards.length)
                                                       ? "XXXX-XXXX-XXXX-${cards[widget.index].cardNumber!.substring(cards[widget.index].cardNumber!.length - 4)}"
                                                       : "Choose Card",
                                                   style: fontStyle(
                                                       fontSize: 18,
-                                                      fontFamily:
-                                                          FontFamily.regular,
+                                                      fontFamily: FontFamily.regular,
                                                       color: Colors.black),
                                                 ),
                                                 const SizedBox(
                                                   width: 10,
                                                 ),
                                                 const Icon(
-                                                  Icons
-                                                      .keyboard_arrow_down_outlined,
+                                                  Icons.keyboard_arrow_down_outlined,
                                                   size: 30,
                                                 )
                                               ],
@@ -393,8 +324,7 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                         : InkWell(
                                             onTap: () async {
                                               //Navigator.pop(context);
-                                              final card = await Navigator.push<
-                                                  CardModel>(
+                                              final card = await Navigator.push<CardModel>(
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) {
@@ -408,9 +338,7 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                               }
                                             },
                                             child: Text(
-                                              LanguageClass.isEnglish
-                                                  ? 'Add credit Card'
-                                                  : "اضافة كارت جديد",
+                                              LanguageClass.isEnglish ? 'Add credit Card' : "اضافة كارت جديد",
                                               style: fontStyle(
                                                   fontSize: 15.45,
                                                   fontFamily: FontFamily.bold,
@@ -428,9 +356,7 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                       height: 20,
                                       width: 1,
                                       color: const Color(0xff47A9EB),
-                                      hint: LanguageClass.isEnglish
-                                          ? 'CVV'
-                                          : "الرقم السري",
+                                      hint: LanguageClass.isEnglish ? 'CVV' : "الرقم السري",
                                       textInputType: TextInputType.number,
                                       onChange: (value) {
                                         setState(() {
@@ -454,15 +380,11 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                         Container(
                                           height: 20,
                                           width: 1,
-                                          decoration: const BoxDecoration(
-                                              color: Color(0xffD865A4)),
+                                          decoration: const BoxDecoration(color: Color(0xffD865A4)),
                                         ),
                                         Expanded(
                                           child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 2,
-                                                      horizontal: 18),
+                                              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
                                               decoration: const BoxDecoration(
                                                   // border: Border.all(
                                                   //   color: AppColors.blue,
@@ -472,28 +394,21 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                                   // const BorderRadius.all(Radius.circular(10))
                                                   ),
                                               child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    LanguageClass.isEnglish
-                                                        ? "amount"
-                                                        : "القيمة",
+                                                    LanguageClass.isEnglish ? "amount" : "القيمة",
                                                     style: fontStyle(
                                                         fontSize: 15,
-                                                        fontFamily:
-                                                            FontFamily.bold,
-                                                        color: AppColors
-                                                            .greyLight),
+                                                        fontFamily: FontFamily.bold,
+                                                        color: AppColors.greyLight),
                                                   ),
                                                   Text(
                                                     Routes.Amount,
                                                     style: fontStyle(
                                                         fontSize: 18,
-                                                        fontFamily:
-                                                            FontFamily.bold,
-                                                        color: AppColors
-                                                            .blackColor),
+                                                        fontFamily: FontFamily.bold,
+                                                        color: AppColors.blackColor),
                                                   )
                                                 ],
                                               )),
@@ -509,34 +424,24 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                 listener: (context, PackagesState state) {
                                   if (state.isloading == true) {
                                     Constants.showLoadingDialog(context);
-                                  } else if (state.reservationResponseCreditCard
-                                          ?.status ==
-                                      'success') {
+                                  } else if (state.reservationResponseCreditCard?.status == 'success') {
                                     showDoneConfirmationDialog(context,
                                         callbackTitle: "Go to OTP",
-                                        message: 'Complete the payment process',
-                                        callback: () {
+                                        isWarning: true,
+                                        message: 'Complete the payment process', callback: () {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (_) => ConfirmPayWebView(
-                                                  webViewLink: state
-                                                      .reservationResponseCreditCard!
-                                                      .message!
-                                                      .nextAction!
+                                                  webViewLink: state.reservationResponseCreditCard!.message!.nextAction!
                                                       .redirectUrl!)));
                                     });
-                                  } else if (state.reservationResponseCreditCard
-                                          ?.status ==
-                                      'failed') {
+                                  } else if (state.reservationResponseCreditCard?.status == 'failed') {
                                     Constants.hideLoadingDialog(context);
                                     Constants.showDefaultSnackBar(
                                         context: context,
-                                        text: state
-                                            .reservationResponseCreditCard!
-                                            .message!
-                                            .statusDescription
-                                            .toString());
+                                        text:
+                                            state.reservationResponseCreditCard!.message!.statusDescription.toString());
                                   }
                                 },
                                 child: InkWell(
@@ -544,56 +449,29 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                       ? () {
                                           if (widget.index < 0) {
                                             Constants.showDefaultSnackBar(
-                                                color: Colors.red,
-                                                context: context,
-                                                text: 'Select card');
+                                                color: Colors.red, context: context, text: 'Select card');
                                           } else {
-                                            print(cards[widget.index]
-                                                .cardNumber!
-                                                .toString()
-                                                .replaceAll(" ", ""));
-                                            if (formKey.currentState!
-                                                .validate()) {
-                                              final tripOneId = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'tripOneId');
-                                              final tripRoundId = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'tripRoundId');
-                                              final selectedDayTo = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'selectedDayTo');
-                                              final selectedDayFrom = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'selectedDayFrom');
-                                              final toStationId = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'toStationId');
-                                              final fromStationId = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'fromStationId');
-                                              final seatIdsOneTrip = CacheHelper
-                                                      .getDataToSharedPref(
-                                                          key: 'countSeats')
-                                                  ?.map((e) =>
-                                                      int.tryParse(e) ?? 0)
+                                            print(cards[widget.index].cardNumber!.toString().replaceAll(" ", ""));
+                                            if (formKey.currentState!.validate()) {
+                                              final tripOneId = CacheHelper.getDataToSharedPref(key: 'tripOneId');
+                                              final tripRoundId = CacheHelper.getDataToSharedPref(key: 'tripRoundId');
+                                              final selectedDayTo =
+                                                  CacheHelper.getDataToSharedPref(key: 'selectedDayTo');
+                                              final selectedDayFrom =
+                                                  CacheHelper.getDataToSharedPref(key: 'selectedDayFrom');
+                                              final toStationId = CacheHelper.getDataToSharedPref(key: 'toStationId');
+                                              final fromStationId =
+                                                  CacheHelper.getDataToSharedPref(key: 'fromStationId');
+                                              final seatIdsOneTrip = CacheHelper.getDataToSharedPref(key: 'countSeats')
+                                                  ?.map((e) => int.tryParse(e) ?? 0)
                                                   .toList();
                                               final seatIdsRoundTrip =
-                                                  CacheHelper
-                                                          .getDataToSharedPref(
-                                                              key:
-                                                                  'countSeats2')
-                                                      ?.map((e) =>
-                                                          int.tryParse(e) ?? 0)
+                                                  CacheHelper.getDataToSharedPref(key: 'countSeats2')
+                                                      ?.map((e) => int.tryParse(e) ?? 0)
                                                       .toList();
-                                              final price = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'price');
+                                              final price = CacheHelper.getDataToSharedPref(key: 'price');
 
-                                              print(cards[widget.index]
-                                                  .month!
-                                                  .substring(0, 2)
-                                                  .toString());
+                                              print(cards[widget.index].month!.substring(0, 2).toString());
 
                                               print(cards[widget.index]
                                                   .month!
@@ -602,35 +480,24 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                                   )
                                                   .toString());
 
-                                              _packagesBloc
-                                                  .add(packagecardpayment(
+                                              _packagesBloc.add(packagecardpayment(
                                                 Amount: Routes.Amount,
-                                                FromStationID: int.parse(
-                                                    Routes.FromStationID!),
+                                                FromStationID: int.parse(Routes.FromStationID!),
                                                 PackageID: Routes.PackageID,
-                                                PackagePriceID:
-                                                    Routes.PackageID,
-                                                ToStationID: int.parse(
-                                                    Routes.ToStationID!),
+                                                PackagePriceID: Routes.PackageID,
+                                                ToStationID: int.parse(Routes.ToStationID!),
                                                 PaymentMethodID: '4',
                                                 PaymentTypeID: 68,
                                                 cvv: cvv.toString(),
-                                                cardNumber: cards[widget.index]
-                                                    .cardNumber!
-                                                    .toString()
-                                                    .replaceAll(" ", ""),
-                                                cardExpiryYear:
-                                                    cards[widget.index]
-                                                        .month!
-                                                        .substring(
-                                                          3,
-                                                        )
-                                                        .toString(),
-                                                cardExpiryMonth:
-                                                    cards[widget.index]
-                                                        .month!
-                                                        .substring(0, 2)
-                                                        .toString(),
+                                                cardNumber:
+                                                    cards[widget.index].cardNumber!.toString().replaceAll(" ", ""),
+                                                cardExpiryYear: cards[widget.index]
+                                                    .month!
+                                                    .substring(
+                                                      3,
+                                                    )
+                                                    .toString(),
+                                                cardExpiryMonth: cards[widget.index].month!.substring(0, 2).toString(),
                                               ));
                                             }
                                           }
@@ -642,22 +509,17 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                       width: 200,
                                       height: 70,
                                       decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(50)),
+                                        borderRadius: BorderRadius.all(Radius.circular(50)),
                                       ),
                                       child: Container(
                                         height: 65,
                                         decoration: BoxDecoration(
-                                            color: AppColors.primaryColor,
-                                            borderRadius:
-                                                BorderRadius.circular(41)),
+                                            color: AppColors.primaryColor, borderRadius: BorderRadius.circular(41)),
                                         child: Center(
                                           child: Padding(
                                             padding: EdgeInsets.all(8.0),
                                             child: Text(
-                                              LanguageClass.isEnglish
-                                                  ? 'pay'
-                                                  : "دفع",
+                                              LanguageClass.isEnglish ? 'pay' : "دفع",
                                               style: fontStyle(
                                                   color: Colors.white,
                                                   fontSize: 20,
@@ -720,12 +582,15 @@ class PayField extends StatelessWidget {
           decoration: BoxDecoration(color: color),
         ),
         const SizedBox(
-          width: 5,
+          width: 15,
         ),
         SizedBox(
           height: 60,
           width: 265,
           child: TextFormField(
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+              ],
               controller: ctr,
               keyboardType: textInputType,
               style: fontStyle(color: Colors.black),
@@ -733,17 +598,12 @@ class PayField extends StatelessWidget {
               // cursorColor: MyColors.blue,
               decoration: InputDecoration(
                 hintText: hint,
+                contentPadding: EdgeInsets.only(top: 10),
 
                 border: InputBorder.none,
                 // errorStyle: fontStyle(color: Colors.red, fontSize: 12),
-                hintStyle: fontStyle(
-                    color: AppColors.grey,
-                    fontSize: 12,
-                    fontFamily: FontFamily.bold),
-                labelStyle: fontStyle(
-                    color: AppColors.grey,
-                    fontSize: 12,
-                    fontFamily: FontFamily.bold),
+                hintStyle: fontStyle(fontSize: 15, fontFamily: FontFamily.bold, color: AppColors.greyLight),
+                labelStyle: fontStyle(color: AppColors.grey, fontSize: 12, fontFamily: FontFamily.bold),
                 // contentPadding: const EdgeInsets.symmetric(
                 //   horizontal: 10,
                 //   vertical: 5,
@@ -780,13 +640,28 @@ Future<dynamic> showDoneConfirmationDialog(BuildContext context,
     {required String message,
     String? callbackTitle,
     bool isError = false,
+    bool isWarning = false,
     required Function callback}) async {
   return CoolAlert.show(
       barrierDismissible: false,
       context: context,
       confirmBtnText: "ok",
-      title: isError ? 'error' : 'success',
-      lottieAsset: isError ? 'assets/json/error.json' : 'assets/json/done.json',
+      title: isError
+          ? LanguageClass.isEnglish
+              ? 'Error'
+              : 'خطأ'
+          : isWarning
+              ? LanguageClass.isEnglish
+                  ? 'Please'
+                  : 'يرجى'
+              : LanguageClass.isEnglish
+                  ? 'Success'
+                  : 'تم بنجاح',
+      lottieAsset: isError
+          ? 'assets/json/error.json'
+          : isWarning
+              ? 'assets/json/Warning.json'
+              : 'assets/json/done.json',
       type: isError ? CoolAlertType.error : CoolAlertType.success,
       loopAnimation: false,
       backgroundColor: isError ? Colors.red : Colors.white,
@@ -864,9 +739,7 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, Routes.home, (route) => false,
-                    arguments: Routes.isomra);
+                Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false, arguments: Routes.isomra);
               },
               icon: Icon(
                 Icons.home_outlined,
@@ -878,10 +751,7 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
       body: SafeArea(
         child: WillPopScope(
           onWillPop: () {
-            Navigator.pushNamedAndRemoveUntil(
-                NavHelper().navigatorKey.currentContext!,
-                Routes.home,
-                (route) => false,
+            Navigator.pushNamedAndRemoveUntil(navigatorKey.currentContext!, Routes.home, (route) => false,
                 arguments: Routes.isomra);
 
             return Future.value(false);
@@ -904,12 +774,8 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
                         await Future.delayed(const Duration(seconds: 2), () {
                           showDoneConfirmationDialog(context,
                               isError: true,
-                              callbackTitle: LanguageClass.isEnglish
-                                  ? 'Payment Error'
-                                  : 'حدث خطاء اثنا الدفع',
-                              message: LanguageClass.isEnglish
-                                  ? 'Payment Error'
-                                  : 'حدث خطاء اثنا الدفع', callback: () {
+                              callbackTitle: LanguageClass.isEnglish ? 'Payment Error' : 'حدث خطاء اثنا الدفع',
+                              message: LanguageClass.isEnglish ? 'Payment Error' : 'حدث خطاء اثنا الدفع', callback: () {
                             Navigator.pop(
                               context,
                             );
@@ -920,15 +786,13 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
                         });
 
                         return NavigationDecision.prevent;
-                      } else if (request.url
-                          .startsWith('https://swabus.com/Home/FawryCharge')) {
+                      } else if (request.url.startsWith('https://swabus.com/Home/FawryCharge')) {
                         await Future.delayed(const Duration(seconds: 2), () {
                           showDoneConfirmationDialog(context,
                               message: LanguageClass.isEnglish
                                   ? 'Payment completed successfully'
                                   : 'تم عملية الدفع بنجاح', callback: () {
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, Routes.home, (route) => false,
+                            Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false,
                                 arguments: Routes.isomra);
                           });
                         });

@@ -15,16 +15,16 @@ import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
 
-class FawryScreen extends StatefulWidget {
-  FawryScreen({
+class WalletFawryScreen extends StatefulWidget {
+  WalletFawryScreen({
     super.key,
   });
 
   @override
-  State<FawryScreen> createState() => _FawryScreenState();
+  State<WalletFawryScreen> createState() => _WalletFawryScreenState();
 }
 
-class _FawryScreenState extends State<FawryScreen> {
+class _WalletFawryScreenState extends State<WalletFawryScreen> {
   final formKey = GlobalKey<FormState>();
   User? _user;
 
@@ -45,8 +45,7 @@ class _FawryScreenState extends State<FawryScreen> {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: Directionality(
-        textDirection:
-            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+        textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
         child: Padding(
           padding: const EdgeInsets.all(30),
           child: SizedBox(
@@ -58,18 +57,14 @@ class _FawryScreenState extends State<FawryScreen> {
                   height: sizeHeight * 0.08,
                 ),
                 Container(
-                  alignment: LanguageClass.isEnglish
-                      ? Alignment.topLeft
-                      : Alignment.topRight,
+                  alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                   child: InkWell(
                     onTap: () {
                       Navigator.pop(context);
                     },
                     child: Icon(
                       Icons.arrow_back_rounded,
-                      color: Routes.isomra
-                          ? AppColors.umragold
-                          : AppColors.primaryColor,
+                      color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                       size: 35,
                     ),
                   ),
@@ -111,8 +106,7 @@ class _FawryScreenState extends State<FawryScreen> {
                               Container(
                                 height: 40,
                                 width: 1,
-                                decoration: const BoxDecoration(
-                                    color: Color(0xff47A9EB)),
+                                decoration: const BoxDecoration(color: Color(0xff47A9EB)),
                               ),
                               const SizedBox(
                                 width: 5,
@@ -132,40 +126,32 @@ class _FawryScreenState extends State<FawryScreen> {
                                       ),
                                   child: TextFormField(
                                     autofocus: true,
-                                    style: fontStyle(
-                                        color: AppColors.blackColor,
-                                        fontSize: 16),
+                                    style: fontStyle(color: AppColors.blackColor, fontSize: 16),
                                     cursorColor: AppColors.blue,
                                     controller: amountController,
-                                    inputFormatters: [NumericTextFormatter()],
+                                    inputFormatters: [
+                                      NumericTextFormatter(),
+                                      FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+                                    ],
                                     keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
-                                      hintText: LanguageClass.isEnglish
-                                          ? 'Amount'
-                                          : "القيمة",
+                                      hintText: LanguageClass.isEnglish ? 'Amount' : "القيمة",
                                       errorStyle: fontStyle(
                                         color: Colors.red,
                                         fontSize: 11,
                                       ),
                                       hintStyle: fontStyle(
-                                          color: AppColors.greyLight,
-                                          fontSize: 15,
-                                          fontFamily: FontFamily.bold),
-                                      labelStyle: fontStyle(
-                                          color: AppColors.grey,
-                                          fontSize: 12,
-                                          fontFamily: FontFamily.bold),
+                                          color: AppColors.greyLight, fontSize: 15, fontFamily: FontFamily.bold),
+                                      labelStyle:
+                                          fontStyle(color: AppColors.grey, fontSize: 12, fontFamily: FontFamily.bold),
                                     ),
                                     validator: (value) {
                                       //check if only numbers or ","
                                       value = value?.replaceAll(',', '');
-                                      final isNAN =
-                                          double.tryParse(value ?? '');
+                                      final isNAN = double.tryParse(value ?? '');
                                       if (isNAN == null || isNAN == 0) {
-                                        return LanguageClass.isEnglish
-                                            ? 'Invalid Amount'
-                                            : "من فضلك ادخل قيمة صحيحة";
+                                        return LanguageClass.isEnglish ? 'Invalid Amount' : "من فضلك ادخل قيمة صحيحة";
                                       } else {
                                         return null;
                                       }
@@ -188,19 +174,8 @@ class _FawryScreenState extends State<FawryScreen> {
                                 Constants.hideLoadingDialog(context);
                                 // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
                                 showDoneConfirmationDialog(context,
-                                    isError: false, callback: () {
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) {
-                                    if (context.mounted) {
-                                      Navigator.pushNamedAndRemoveUntil(
-                                        context,
-                                        Routes.home,
-                                        (route) => false,
-                                        arguments: Routes.isomra,
-                                      );
-                                    }
-                                  });
-                                },
+                                    isError: false,
+                                    callback: () {},
                                     body: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -208,25 +183,18 @@ class _FawryScreenState extends State<FawryScreen> {
                                           height: 20,
                                         ),
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              LanguageClass.isEnglish
-                                                  ? 'Amount: '
-                                                  : "القيمة",
+                                              LanguageClass.isEnglish ? 'Amount: ' : "القيمة",
                                               style: fontStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600),
+                                                  color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
                                             ),
-                                            Text(amountController.text
-                                                .toString())
+                                            Text(amountController.text.toString())
                                           ],
                                         ),
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               'Reference Number: ',
@@ -242,16 +210,11 @@ class _FawryScreenState extends State<FawryScreen> {
                                                   InkWell(
                                                     onTap: () async {
                                                       Constants.showDefaultSnackBar(
-                                                          context: context,
-                                                          text:
-                                                              'Reference Number copied');
-                                                      await Clipboard.setData(
-                                                          ClipboardData(
-                                                              text: state
-                                                                  .reservationResponseElectronicModel
-                                                                  .message!
-                                                                  .referenceNumber
-                                                                  .toString()));
+                                                          context: context, text: 'Reference Number copied');
+                                                      await Clipboard.setData(ClipboardData(
+                                                          text: state.reservationResponseElectronicModel.message!
+                                                              .referenceNumber
+                                                              .toString()));
                                                     },
                                                     child: Container(
                                                         width: 15,
@@ -263,10 +226,7 @@ class _FawryScreenState extends State<FawryScreen> {
                                                   ),
                                                   Expanded(
                                                     child: Text(
-                                                      state
-                                                          .reservationResponseElectronicModel
-                                                          .message!
-                                                          .referenceNumber
+                                                      state.reservationResponseElectronicModel.message!.referenceNumber
                                                           .toString(),
                                                       textAlign: TextAlign.end,
                                                     ),
@@ -278,43 +238,27 @@ class _FawryScreenState extends State<FawryScreen> {
                                         )
                                       ],
                                     ),
-                                    message: state
-                                        .reservationResponseElectronicModel
-                                        .text!);
+                                    message: state.reservationResponseElectronicModel.text!);
                               } else if (state is ErrorElectronicWalletState) {
                                 Constants.hideLoadingDialog(context);
-                                Constants.showDefaultSnackBar(
-                                    context: context,
-                                    text: state.error.toString());
+                                Constants.showDefaultSnackBar(context: context, text: state.error.toString());
                               }
                             },
                             child: InkWell(
                               onTap: () {
-                                if (_user != null &&
-                                    formKey.currentState!.validate()) {
-                                  double amount = double.parse(amountController
-                                      .text
-                                      .replaceAll(',', ''));
+                                if (_user != null && formKey.currentState!.validate()) {
+                                  double amount = double.parse(amountController.text.replaceAll(',', ''));
 
-                                  BlocProvider.of<ReservationCubit>(context)
-                                      .fawrycharge(
-                                          customerid: _user!.customerId!,
-                                          amount: amount
-                                              .toStringAsFixed(2)
-                                              .toString());
+                                  BlocProvider.of<ReservationCubit>(context).fawrycharge(
+                                      customerid: _user!.customerId!, amount: amount.toStringAsFixed(2).toString());
                                 }
                               },
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 30),
+                                padding: const EdgeInsets.symmetric(horizontal: 30),
                                 child: Constants.customButton(
                                   borderradias: 41,
-                                  text: LanguageClass.isEnglish
-                                      ? "Charge"
-                                      : "شحن",
-                                  color: Routes.isomra
-                                      ? AppColors.umragold
-                                      : AppColors.primaryColor,
+                                  text: LanguageClass.isEnglish ? "Charge" : "شحن",
+                                  color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                                 ),
                               ),
                             ),
@@ -335,17 +279,13 @@ class _FawryScreenState extends State<FawryScreen> {
   }
 
   Future<dynamic> showDoneConfirmationDialog(BuildContext context,
-      {required String message,
-      bool isError = false,
-      Widget? body,
-      required Function callback}) async {
+      {required String message, bool isError = false, Widget? body, required Function callback}) async {
     return CoolAlert.show(
         barrierDismissible: true,
         context: context,
         confirmBtnText: "ok",
         title: isError ? 'error' : '',
-        lottieAsset:
-            isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
+        lottieAsset: isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
         type: isError ? CoolAlertType.error : CoolAlertType.success,
         loopAnimation: false,
         backgroundColor: isError ? Colors.red : Colors.white,
@@ -359,13 +299,11 @@ class _FawryScreenState extends State<FawryScreen> {
 
 class NumericTextFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     if (newValue.text.isEmpty) {
       return newValue.copyWith(text: '');
     } else if (newValue.text.compareTo(oldValue.text) != 0) {
-      final int selectionIndexFromTheRight =
-          newValue.text.length - newValue.selection.end;
+      final int selectionIndexFromTheRight = newValue.text.length - newValue.selection.end;
       var value = newValue.text;
       if (newValue.text.length > 2) {
         value = value.replaceAll(RegExp(r'\D'), '');
@@ -374,8 +312,7 @@ class NumericTextFormatter extends TextInputFormatter {
       }
       return TextEditingValue(
         text: value,
-        selection: TextSelection.collapsed(
-            offset: value.length - selectionIndexFromTheRight),
+        selection: TextSelection.collapsed(offset: value.length - selectionIndexFromTheRight),
       );
     } else {
       return newValue;

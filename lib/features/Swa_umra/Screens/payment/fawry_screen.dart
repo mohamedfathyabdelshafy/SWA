@@ -11,6 +11,7 @@ import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/Swa_umra/bloc/umra_bloc.dart';
 import 'package:swa/features/Swa_umra/models/umra_detail.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/payment_packages/fawrypayment.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 
 class FawryUmraScreen extends StatefulWidget {
@@ -51,8 +52,7 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
             if (state.reservationResponseElectronicModel?.status == 'success') {
               Constants.hideLoadingDialog(context);
               // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
-              showDoneConfirmationfawryDialog(context, isError: false,
-                  callback: () {
+              showDoneConfirmationfawryDialog(context, isError: false, callback: () {
                 Navigator.popUntil(context, (route) => route.isFirst);
               },
                   body: Column(
@@ -66,10 +66,7 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
                         children: [
                           Text(
                             LanguageClass.isEnglish ? 'Amount: ' : "القيمة",
-                            style: fontStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600),
+                            style: fontStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
                           ),
                           Text(UmraDetails.afterdiscount.toString())
                         ],
@@ -90,14 +87,9 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
                               children: [
                                 InkWell(
                                   onTap: () async {
-                                    Constants.showDefaultSnackBar(
-                                        context: context,
-                                        text: 'Reference Number copied');
+                                    Constants.showDefaultSnackBar(context: context, text: 'Reference Number copied');
                                     await Clipboard.setData(ClipboardData(
-                                        text: state
-                                            .reservationResponseElectronicModel!
-                                            .message!
-                                            .referenceNumber
+                                        text: state.reservationResponseElectronicModel!.message!.referenceNumber
                                             .toString()));
                                   },
                                   child: Container(
@@ -110,9 +102,7 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    state.reservationResponseElectronicModel!
-                                        .message!.referenceNumber
-                                        .toString(),
+                                    state.reservationResponseElectronicModel!.message!.referenceNumber.toString(),
                                     textAlign: TextAlign.end,
                                   ),
                                 ),
@@ -123,15 +113,11 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
                       )
                     ],
                   ),
-                  message:
-                      "You will get a notification by applying your wallet \n In order to agree to pay");
-            } else if (state.reservationResponseElectronicModel?.status ==
-                'failed') {
+                  message: "You will get a notification by applying your wallet \n In order to agree to pay");
+            } else if (state.reservationResponseElectronicModel?.status == 'failed') {
               Constants.hideLoadingDialog(context);
               Constants.showDefaultSnackBar(
-                  context: context,
-                  text:
-                      state.reservationResponseElectronicModel!.errormessage!);
+                  context: context, text: state.reservationResponseElectronicModel!.errormessage!);
             }
           },
           child: BlocBuilder(
@@ -145,16 +131,12 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
                 );
               } else {
                 return Directionality(
-                    textDirection: LanguageClass.isEnglish
-                        ? TextDirection.ltr
-                        : TextDirection.rtl,
+                    textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
                     child: Column(
                       children: [
                         Container(
                           margin: const EdgeInsets.only(left: 27, right: 27),
-                          alignment: LanguageClass.isEnglish
-                              ? Alignment.topLeft
-                              : Alignment.topRight,
+                          alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                           child: InkWell(
                             onTap: () {
                               Navigator.pop(context);
@@ -168,17 +150,12 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
                         ),
                         Container(
                             margin: EdgeInsets.only(
-                                left: LanguageClass.isEnglish ? 55 : 0,
-                                right: LanguageClass.isEnglish ? 0 : 55),
-                            alignment: LanguageClass.isEnglish
-                                ? Alignment.topLeft
-                                : Alignment.topRight,
+                                left: LanguageClass.isEnglish ? 55 : 0, right: LanguageClass.isEnglish ? 0 : 55),
+                            alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                             child: Text(
                               LanguageClass.isEnglish ? 'Fawry' : 'فوري',
-                              style: fontStyle(
-                                  fontSize: 24.sp,
-                                  fontFamily: FontFamily.bold,
-                                  fontWeight: FontWeight.w500),
+                              style:
+                                  fontStyle(fontSize: 24.sp, fontFamily: FontFamily.bold, fontWeight: FontWeight.w500),
                             )),
 
                         SizedBox(
@@ -189,8 +166,7 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
                           child: Form(
                             key: formKey,
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 33),
+                              padding: const EdgeInsets.symmetric(horizontal: 33),
                               child: Column(
                                 //mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -200,8 +176,7 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
                                       Container(
                                         height: 40,
                                         width: 1,
-                                        decoration: BoxDecoration(
-                                            color: AppColors.umragold),
+                                        decoration: BoxDecoration(color: AppColors.umragold),
                                       ),
                                       const SizedBox(
                                         width: 5,
@@ -221,18 +196,18 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
                                               ),
                                           child: TextFormField(
                                             autofocus: true,
-                                            style: fontStyle(
-                                                color: AppColors.blackColor,
-                                                fontSize: 16),
+                                            style: fontStyle(color: AppColors.blackColor, fontSize: 16),
                                             cursorColor: AppColors.blue,
                                             controller: amountController,
                                             readOnly: true,
                                             keyboardType: TextInputType.number,
+                                            inputFormatters: [
+                                              NumericTextFormatter(),
+                                              FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+                                            ],
                                             decoration: InputDecoration(
                                               border: InputBorder.none,
-                                              hintText: LanguageClass.isEnglish
-                                                  ? 'Amount'
-                                                  : "القيمة",
+                                              hintText: LanguageClass.isEnglish ? 'Amount' : "القيمة",
                                               errorStyle: fontStyle(
                                                 color: Colors.red,
                                                 fontSize: 11,
@@ -242,15 +217,11 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
                                                   fontSize: 15,
                                                   fontFamily: FontFamily.bold),
                                               labelStyle: fontStyle(
-                                                  color: AppColors.grey,
-                                                  fontSize: 12,
-                                                  fontFamily: FontFamily.bold),
+                                                  color: AppColors.grey, fontSize: 12, fontFamily: FontFamily.bold),
                                             ),
                                             validator: (value) {
                                               if (value!.isEmpty) {
-                                                return LanguageClass.isEnglish
-                                                    ? 'This Field is Required'
-                                                    : "هذا مطلوب";
+                                                return LanguageClass.isEnglish ? 'This Field is Required' : "هذا مطلوب";
                                               } else {
                                                 return null;
                                               }
@@ -267,26 +238,20 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
                                   InkWell(
                                     onTap: () {
                                       Navigator.pop(context, true);
-                                      // if (widget.umrahReservationID != null) {
-                                      //   _umraBloc.add(FawryEditEvent(
-                                      //       PaymentMethodID: 2,
-                                      //       umrareservationid:
-                                      //           widget.umrahReservationID,
-                                      //       paymentTypeID: 68));
-                                      // } else {
-                                      //   _umraBloc.add(FawrypayEvent(
-                                      //       PaymentMethodID: 2,
-                                      //       paymentTypeID: 68));
-                                      // }
+                                      if (widget.umrahReservationID != null) {
+                                        _umraBloc.add(FawryEditEvent(
+                                            PaymentMethodID: 2,
+                                            umrareservationid: widget.umrahReservationID,
+                                            paymentTypeID: 68));
+                                      } else {
+                                        _umraBloc.add(FawrypayEvent(PaymentMethodID: 2, paymentTypeID: 68));
+                                      }
                                     },
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 30),
+                                      padding: const EdgeInsets.symmetric(horizontal: 30),
                                       child: Constants.customButton(
                                         borderradias: 41,
-                                        text: LanguageClass.isEnglish
-                                            ? 'Pay'
-                                            : 'ادفع',
+                                        text: LanguageClass.isEnglish ? 'Pay' : 'ادفع',
                                         color: AppColors.umragold,
                                       ),
                                     ),
@@ -310,17 +275,13 @@ class _FawryUmraScreenState extends State<FawryUmraScreen> {
 }
 
 Future<dynamic> showDoneConfirmationfawryDialog(BuildContext context,
-    {required String message,
-    bool isError = false,
-    Widget? body,
-    required Function callback}) async {
+    {required String message, bool isError = false, Widget? body, required Function callback}) async {
   return CoolAlert.show(
       barrierDismissible: true,
       context: context,
       confirmBtnText: "ok",
       title: isError ? 'error' : '',
-      lottieAsset:
-          isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
+      lottieAsset: isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
       type: isError ? CoolAlertType.error : CoolAlertType.success,
       loopAnimation: false,
       backgroundColor: isError ? Colors.red : Colors.white,

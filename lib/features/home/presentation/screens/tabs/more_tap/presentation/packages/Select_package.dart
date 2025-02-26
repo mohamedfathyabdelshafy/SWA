@@ -69,8 +69,7 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Directionality(
-        textDirection:
-            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+        textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
         child: BlocListener(
           bloc: _packageBloc,
           listener: (context, PackagesState state) {
@@ -78,54 +77,41 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
               discount = state.promocodemodel!.message!.discount.toString();
               var finalprice;
 
-              Routes.PromoCodeID =
-                  state.promocodemodel!.message!.promoCodeId.toString();
+              Routes.PromoCodeID = state.promocodemodel!.message!.promoCodeId.toString();
               ispersentage = state.promocodemodel!.message!.isPrecentage!;
               if (state.promocodemodel!.message!.isPrecentage == true) {
-                var minusdiscount = (double.parse(packageprice) *
-                        state.promocodemodel!.message!.discount!) /
-                    100;
+                var minusdiscount = (double.parse(packageprice) * state.promocodemodel!.message!.discount!) / 100;
 
                 finalprice = double.parse(packageprice) - minusdiscount;
               } else {
-                finalprice = double.parse(packageprice) -
-                    state.promocodemodel!.message!.discount!;
+                finalprice = double.parse(packageprice) - state.promocodemodel!.message!.discount!;
               }
 
               afterdiscount = finalprice.toString();
             } else if (state.promocodemodel?.status == 'failed') {
               Constants.showDefaultSnackBar(
-                  color: Colors.red,
-                  context: context,
-                  text: state.promocodemodel!.errormessage!);
+                  color: Colors.red, context: context, text: state.promocodemodel!.errormessage!);
             } else if (state.packagemodel?.status == 'failed') {
               Constants.showDefaultSnackBar(
-                  color: Colors.red,
-                  context: context,
-                  text: state.packagemodel!.errormessage!);
+                  color: Colors.red, context: context, text: state.packagemodel!.errormessage!);
             }
             if (state.stationfromModel?.status == 'success') {
               showGeneralDialog(
                   context: context,
-                  pageBuilder: (BuildContext buildContext,
-                      Animation<double> animation,
-                      Animation<double> secondaryAnimation) {
+                  pageBuilder:
+                      (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
                     return StatefulBuilder(builder: (context, setStater) {
                       return Material(
                         color: Colors.transparent,
                         child: Directionality(
-                          textDirection: LanguageClass.isEnglish
-                              ? TextDirection.ltr
-                              : TextDirection.rtl,
+                          textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
                           child: Container(
                             alignment: Alignment.topRight,
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(20),
-                                    bottomRight: Radius.circular(20))),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 5),
+                                    bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
+                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                             width: double.infinity,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -135,9 +121,7 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                   height: sizeHeight * 0.08,
                                 ),
                                 Container(
-                                  alignment: LanguageClass.isEnglish
-                                      ? Alignment.topLeft
-                                      : Alignment.topRight,
+                                  alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                                   child: InkWell(
                                     onTap: () {
                                       Navigator.pop(context);
@@ -154,12 +138,9 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                   height: 10,
                                 ),
                                 Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 20),
+                                  margin: const EdgeInsets.symmetric(horizontal: 20),
                                   child: Text(
-                                    LanguageClass.isEnglish
-                                        ? "Select City"
-                                        : "اختر مدينة",
+                                    LanguageClass.isEnglish ? "Select City" : "اختر مدينة",
                                     style: fontStyle(
                                         color: AppColors.blackColor,
                                         fontSize: 28,
@@ -173,13 +154,10 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                 Expanded(
                                   child: ListView.separated(
                                       itemBuilder: (context, index) {
-                                        final item =
-                                            state.stationfromModel!.message;
+                                        final item = state.stationfromModel!.message;
                                         return Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             InkWell(
                                               onTap: () {
@@ -191,93 +169,54 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                               },
                                               child: Container(
                                                 width: double.infinity,
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10),
+                                                padding: EdgeInsets.symmetric(horizontal: 10),
                                                 child: Text(
                                                   item![index].cityName!,
                                                   style: fontStyle(
-                                                      fontFamily:
-                                                          FontFamily.medium,
-                                                      color: taped2 == index
-                                                          ? AppColors
-                                                              .primaryColor
-                                                          : Color(0xffA3A3A3),
+                                                      fontFamily: FontFamily.medium,
+                                                      color:
+                                                          taped2 == index ? AppColors.primaryColor : Color(0xffA3A3A3),
                                                       fontSize: 18),
                                                 ),
                                               ),
                                             ),
                                             taped2 == index
                                                 ? Container(
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 15),
+                                                    margin: EdgeInsets.symmetric(horizontal: 15),
                                                     child: ListView.builder(
                                                       padding: EdgeInsets.zero,
-                                                      itemCount: state
-                                                          .stationfromModel!
-                                                          .message![index]
-                                                          .stationList!
-                                                          .length,
+                                                      itemCount:
+                                                          state.stationfromModel!.message![index].stationList!.length,
                                                       shrinkWrap: true,
                                                       physics: ScrollPhysics(),
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index2) {
+                                                      itemBuilder: (BuildContext context, int index2) {
                                                         return InkWell(
                                                           onTap: () {
-                                                            Navigator.pop(
-                                                                context);
+                                                            Navigator.pop(context);
                                                             if (taped == 1) {
-                                                              Stationfrom = item[
-                                                                      index]
-                                                                  .stationList![
-                                                                      index2]
-                                                                  .stationName!;
-                                                              stationfromid = item[
-                                                                      index]
-                                                                  .stationList![
-                                                                      index2]
-                                                                  .stationId
-                                                                  .toString();
+                                                              Stationfrom =
+                                                                  item[index].stationList![index2].stationName!;
+                                                              stationfromid =
+                                                                  item[index].stationList![index2].stationId.toString();
                                                             } else {
-                                                              stationto = item[
-                                                                      index]
-                                                                  .stationList![
-                                                                      index2]
-                                                                  .stationName!;
-                                                              stationtoid = item[
-                                                                      index]
-                                                                  .stationList![
-                                                                      index2]
-                                                                  .stationId
-                                                                  .toString();
+                                                              stationto = item[index].stationList![index2].stationName!;
+                                                              stationtoid =
+                                                                  item[index].stationList![index2].stationId.toString();
                                                             }
                                                             taped2 = -1;
 
                                                             setState(() {});
                                                           },
                                                           child: Container(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    5),
+                                                            padding: EdgeInsets.all(5),
                                                             decoration: BoxDecoration(
-                                                                color: AppColors
-                                                                    .white,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            20)),
+                                                                color: AppColors.white,
+                                                                borderRadius: BorderRadius.circular(20)),
                                                             child: Text(
-                                                              item![index]
-                                                                  .stationList![
-                                                                      index2]
-                                                                  .stationName!,
+                                                              item![index].stationList![index2].stationName!,
                                                               style: fontStyle(
-                                                                  fontFamily:
-                                                                      FontFamily
-                                                                          .medium,
-                                                                  color: Color(
-                                                                      0xffA3A3A3),
+                                                                  fontFamily: FontFamily.medium,
+                                                                  color: Color(0xffA3A3A3),
                                                                   fontSize: 15),
                                                             ),
                                                           ),
@@ -294,9 +233,7 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                           color: Colors.black,
                                         );
                                       },
-                                      itemCount: state.stationfromModel!.message
-                                              ?.length ??
-                                          0),
+                                      itemCount: state.stationfromModel!.message?.length ?? 0),
                                 ),
                               ],
                             ),
@@ -331,9 +268,7 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                           height: sizeHeight * 0.08,
                         ),
                         Container(
-                          alignment: LanguageClass.isEnglish
-                              ? Alignment.topLeft
-                              : Alignment.topRight,
+                          alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                           child: InkWell(
                             onTap: () {
                               Navigator.pop(context);
@@ -371,38 +306,28 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                 taped = 1;
                               },
                               child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                    vertical: Stationfrom.isEmpty ? 10 : 5),
+                                padding: EdgeInsets.symmetric(horizontal: 24, vertical: Stationfrom.isEmpty ? 10 : 5),
                                 decoration: BoxDecoration(
                                     color: Color(0xffDEDEDE),
                                     borderRadius: BorderRadius.circular(33),
                                     boxShadow: [
                                       BoxShadow(
-                                          color: Color(0xffa7a7a7)
-                                              .withOpacity(0.1),
+                                          color: Color(0xffa7a7a7).withOpacity(0.1),
                                           blurRadius: 3,
                                           offset: Offset(0, 3))
                                     ]),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          LanguageClass.isEnglish
-                                              ? 'From'
-                                              : "من",
+                                          LanguageClass.isEnglish ? 'From' : "من",
                                           style: fontStyle(
-                                              color: Color(0xff969696),
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
+                                              color: Color(0xff969696), fontSize: 18, fontWeight: FontWeight.bold),
                                         ),
                                         Stationfrom.isEmpty
                                             ? Container()
@@ -411,8 +336,7 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                                 style: fontStyle(
                                                     color: Color(0xff969696),
                                                     fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.normal),
+                                                    fontWeight: FontWeight.normal),
                                               )
                                       ],
                                     ),
@@ -425,8 +349,7 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                             width: 25,
                                             height: 25,
                                             alignment: Alignment.center,
-                                            child: Image.asset(
-                                                'assets/images/Icon ionic-md-checkm.png'),
+                                            child: Image.asset('assets/images/Icon ionic-md-checkm.png'),
                                           )
                                   ],
                                 ),
@@ -448,46 +371,35 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                           ? 'Please Select From station first'
                                           : '  من فضلك اختر محطة الذهاب اولا');
                                 } else {
-                                  _packageBloc.add(
-                                      stationtoEvent(stationid: stationfromid));
+                                  _packageBloc.add(stationtoEvent(stationid: stationfromid));
                                   setState(() {
                                     taped = 2;
                                   });
                                 }
                               },
                               child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                    vertical: stationto.isEmpty ? 10 : 5),
+                                padding: EdgeInsets.symmetric(horizontal: 24, vertical: stationto.isEmpty ? 10 : 5),
                                 decoration: BoxDecoration(
                                     color: Color(0xffDEDEDE),
                                     borderRadius: BorderRadius.circular(33),
                                     boxShadow: [
                                       BoxShadow(
-                                          color: Color(0xffa7a7a7)
-                                              .withOpacity(0.1),
+                                          color: Color(0xffa7a7a7).withOpacity(0.1),
                                           blurRadius: 3,
                                           offset: Offset(0, 3))
                                     ]),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          LanguageClass.isEnglish
-                                              ? 'To'
-                                              : " الي",
+                                          LanguageClass.isEnglish ? 'To' : " الي",
                                           style: fontStyle(
-                                              color: Color(0xff969696),
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
+                                              color: Color(0xff969696), fontSize: 18, fontWeight: FontWeight.bold),
                                         ),
                                         stationto.isEmpty
                                             ? Container()
@@ -496,8 +408,7 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                                 style: fontStyle(
                                                     color: Color(0xff969696),
                                                     fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.normal),
+                                                    fontWeight: FontWeight.normal),
                                               )
                                       ],
                                     ),
@@ -510,8 +421,7 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                             width: 25,
                                             height: 25,
                                             alignment: Alignment.center,
-                                            child: Image.asset(
-                                                'assets/images/Icon ionic-md-checkm.png'),
+                                            child: Image.asset('assets/images/Icon ionic-md-checkm.png'),
                                           )
                                   ],
                                 ),
@@ -534,53 +444,38 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                           ? 'Please Select  stations first'
                                           : ' من فضلك اختر المحطات');
                                 } else {
-                                  _packageBloc.add(packagesEvent(
-                                      stationfromid: stationfromid,
-                                      stationtoid: stationtoid));
+                                  _packageBloc
+                                      .add(packagesEvent(stationfromid: stationfromid, stationtoid: stationtoid));
                                   setState(() {
                                     taped = taped == 3 ? 0 : 3;
                                   });
                                 }
                               },
                               child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                    vertical: packagname.isEmpty ? 10 : 5),
+                                padding: EdgeInsets.symmetric(horizontal: 24, vertical: packagname.isEmpty ? 10 : 5),
                                 decoration: BoxDecoration(
                                     color: Color(0xffDEDEDE),
-                                    borderRadius: taped == 3 &&
-                                            state.packagemodel?.status !=
-                                                'failed'
-                                        ? BorderRadius.only(
-                                            topLeft: Radius.circular(33),
-                                            topRight: Radius.circular(33))
+                                    borderRadius: taped == 3 && state.packagemodel?.status != 'failed'
+                                        ? BorderRadius.only(topLeft: Radius.circular(33), topRight: Radius.circular(33))
                                         : BorderRadius.circular(33),
                                     boxShadow: [
                                       BoxShadow(
-                                          color: Color(0xffa7a7a7)
-                                              .withOpacity(0.1),
+                                          color: Color(0xffa7a7a7).withOpacity(0.1),
                                           blurRadius: 3,
                                           offset: Offset(0, 3))
                                     ]),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          LanguageClass.isEnglish
-                                              ? 'Select Package'
-                                              : "اختر الباقة",
+                                          LanguageClass.isEnglish ? 'Select Package' : "اختر الباقة",
                                           style: fontStyle(
-                                              color: Color(0xff969696),
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
+                                              color: Color(0xff969696), fontSize: 18, fontWeight: FontWeight.bold),
                                         ),
                                         packagname.isEmpty
                                             ? Container()
@@ -589,8 +484,7 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                                 style: fontStyle(
                                                     color: Color(0xff969696),
                                                     fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.normal),
+                                                    fontWeight: FontWeight.normal),
                                               )
                                       ],
                                     ),
@@ -603,8 +497,7 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                             width: 25,
                                             height: 25,
                                             alignment: Alignment.center,
-                                            child: Image.asset(
-                                                'assets/images/Icon ionic-md-checkm.png'),
+                                            child: Image.asset('assets/images/Icon ionic-md-checkm.png'),
                                           )
                                   ],
                                 ),
@@ -622,121 +515,79 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                     : state.packagemodel?.status == 'failed'
                                         ? Container()
                                         : Container(
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 0),
+                                            margin: EdgeInsets.symmetric(horizontal: 0),
                                             decoration: BoxDecoration(
                                                 color: Color(0xffDEDEDE),
                                                 borderRadius: BorderRadius.only(
-                                                    bottomLeft:
-                                                        Radius.circular(20),
-                                                    bottomRight:
-                                                        Radius.circular(20))),
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 5, vertical: 5),
+                                                    bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
+                                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                                             height: 100,
                                             width: double.infinity,
-                                            child: state.packagemodel!
-                                                        .message ==
-                                                    []
+                                            child: state.packagemodel!.message == []
                                                 ? Container(
                                                     child: Text(
-                                                      state.packagemodel!
-                                                          .errormessage!,
+                                                      state.packagemodel!.errormessage!,
                                                       style: fontStyle(
-                                                          fontFamily: FontFamily
-                                                              .regular,
+                                                          fontFamily: FontFamily.regular,
                                                           color: Colors.black,
                                                           fontSize: 15),
                                                     ),
                                                   )
                                                 : ListView.separated(
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      final item = state
-                                                          .packagemodel!
-                                                          .message;
+                                                    itemBuilder: (context, index) {
+                                                      final item = state.packagemodel!.message;
                                                       return InkWell(
                                                         onTap: () {
-                                                          packagname =
-                                                              item[index]
-                                                                  .packageName!;
-                                                          packageprice =
-                                                              item[index]
-                                                                  .packagePrice
-                                                                  .toString()!;
+                                                          packagname = item[index].packageName!;
+                                                          packageprice = item[index].packagePrice.toString()!;
 
-                                                          afterdiscount =
-                                                              packageprice;
-                                                          packageID =
-                                                              item[index]
-                                                                  .packageId!
-                                                                  .toString();
+                                                          afterdiscount = packageprice;
+                                                          packageID = item[index].packageId!.toString();
                                                           taped = -1;
                                                           setState(() {});
                                                         },
                                                         child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                           children: [
                                                             Container(
                                                               child: Text(
-                                                                item![index]
-                                                                    .packageName!,
+                                                                item![index].packageName!,
                                                                 style: fontStyle(
-                                                                    fontFamily:
-                                                                        FontFamily
-                                                                            .regular,
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontSize:
-                                                                        15),
+                                                                    fontFamily: FontFamily.regular,
+                                                                    color: Colors.black,
+                                                                    fontSize: 15),
                                                               ),
                                                             ),
                                                             Container(
                                                               child: Text(
-                                                                LanguageClass
-                                                                        .isEnglish
+                                                                LanguageClass.isEnglish
                                                                     ? "${item![index].tripCount!} trips"
                                                                     : "${item![index].tripCount!} رحلات",
                                                                 style: fontStyle(
-                                                                    fontFamily:
-                                                                        FontFamily
-                                                                            .regular,
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontSize:
-                                                                        15),
+                                                                    fontFamily: FontFamily.regular,
+                                                                    color: Colors.black,
+                                                                    fontSize: 15),
                                                               ),
                                                             ),
                                                             Container(
                                                               child: Text(
                                                                 " ${item![index].packagePrice.toString()} ${Routes.curruncy ?? ""}",
                                                                 style: fontStyle(
-                                                                    fontFamily:
-                                                                        FontFamily
-                                                                            .regular,
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontSize:
-                                                                        15),
+                                                                    fontFamily: FontFamily.regular,
+                                                                    color: Colors.black,
+                                                                    fontSize: 15),
                                                               ),
                                                             ),
                                                           ],
                                                         ),
                                                       );
                                                     },
-                                                    separatorBuilder:
-                                                        (context, index) {
+                                                    separatorBuilder: (context, index) {
                                                       return Divider(
                                                         color: Colors.black,
                                                       );
                                                     },
-                                                    itemCount: state
-                                                            .packagemodel!
-                                                            .message
-                                                            ?.length ??
-                                                        0),
+                                                    itemCount: state.packagemodel!.message?.length ?? 0),
                                           )
                                 : Container(),
 
@@ -752,27 +603,18 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
 
                             Container(
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    LanguageClass.isEnglish
-                                        ? 'Total Price'
-                                        : "السعر الكلي",
+                                    LanguageClass.isEnglish ? 'Total Price' : "السعر الكلي",
                                     textAlign: TextAlign.center,
-                                    style: fontStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
+                                    style: fontStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     "${packageprice} ${Routes.curruncy ?? ""}",
                                     textAlign: TextAlign.center,
-                                    style: fontStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
+                                    style: fontStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -789,26 +631,17 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                   borderRadius: BorderRadius.circular(22),
                                   boxShadow: [
                                     BoxShadow(
-                                        color:
-                                            Color(0xffa7a7a7).withOpacity(0.1),
-                                        blurRadius: 3,
-                                        offset: Offset(0, 3))
+                                        color: Color(0xffa7a7a7).withOpacity(0.1), blurRadius: 3, offset: Offset(0, 3))
                                   ]),
                               child: TextField(
                                 controller: _promocodetext,
-                                style: fontStyle(
-                                    color: Color(0xff969696),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold),
+                                style: fontStyle(color: Color(0xff969696), fontSize: 14, fontWeight: FontWeight.bold),
                                 decoration: InputDecoration(
                                   hintText: 'I have a Promocode !',
-                                  hintStyle: fontStyle(
-                                      color: Color(0xff969696),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
+                                  hintStyle:
+                                      fontStyle(color: Color(0xff969696), fontSize: 14, fontWeight: FontWeight.bold),
                                   border: InputBorder.none,
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 25, vertical: 10),
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                                   suffixIcon: InkWell(
                                     onTap: () {
                                       if (stationfromid == '') {
@@ -834,9 +667,8 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                                 : 'من فضلك اختر الباقة ');
                                       } else {
                                         if (_promocodetext.text != "") {
-                                          _packageBloc.add(PromocodeEvent(
-                                              promocode: _promocodetext.text,
-                                              packageid: packageID));
+                                          _packageBloc.add(
+                                              PromocodeEvent(promocode: _promocodetext.text, packageid: packageID));
                                         } else {
                                           Constants.showDefaultSnackBar(
                                               color: Colors.red,
@@ -850,19 +682,13 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                     child: Container(
                                       width: 100,
                                       decoration: BoxDecoration(
-                                          color: Color(0xffFF5D4B),
-                                          borderRadius:
-                                              BorderRadius.circular(22)),
+                                          color: Color(0xffFF5D4B), borderRadius: BorderRadius.circular(22)),
                                       padding: EdgeInsets.only(left: 0),
                                       alignment: Alignment.center,
                                       child: Text(
-                                        LanguageClass.isEnglish
-                                            ? 'Redeem'
-                                            : "تطبيق",
-                                        style: fontStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold),
+                                        LanguageClass.isEnglish ? 'Redeem' : "تطبيق",
+                                        style:
+                                            fontStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ),
@@ -876,27 +702,19 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
 
                             Container(
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    LanguageClass.isEnglish
-                                        ? 'Disscount'
-                                        : "خصم",
+                                    LanguageClass.isEnglish ? 'Disscount' : "خصم",
                                     textAlign: TextAlign.center,
-                                    style: fontStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
+                                    style: fontStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     "${discount} ${ispersentage ? '%' : Routes.curruncy}",
                                     textAlign: TextAlign.center,
                                     style: fontStyle(
-                                        color: AppColors.primaryColor,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
+                                        color: AppColors.primaryColor, fontSize: 14, fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -908,27 +726,19 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
 
                             Container(
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    LanguageClass.isEnglish
-                                        ? 'Total Price'
-                                        : "السعر الكلي",
+                                    LanguageClass.isEnglish ? 'Total Price' : "السعر الكلي",
                                     textAlign: TextAlign.center,
-                                    style: fontStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
+                                    style: fontStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     "${afterdiscount} ${Routes.curruncy ?? ""}",
                                     textAlign: TextAlign.center,
                                     style: fontStyle(
-                                        color: AppColors.blackColor,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
+                                        color: AppColors.blackColor, fontSize: 14, fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -1000,9 +810,7 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
 
                             InkWell(
                               onTap: () {
-                                if (stationtoid == '' ||
-                                    stationto == '' ||
-                                    packageID == '') {
+                                if (stationtoid == '' || stationto == '' || packageID == '') {
                                   Constants.showDefaultSnackBar(
                                       color: Colors.red,
                                       context: context,
@@ -1012,8 +820,7 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                 } else {
                                   showGeneralDialog(
                                     context: context,
-                                    pageBuilder: (BuildContext buildContext,
-                                        Animation<double> animation,
+                                    pageBuilder: (BuildContext buildContext, Animation<double> animation,
                                         Animation<double> secondaryAnimation) {
                                       return Material(
                                         color: Colors.transparent,
@@ -1021,13 +828,8 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                           color: Colors.white,
                                           margin: EdgeInsets.all(20),
                                           padding: EdgeInsets.all(30),
-                                          height: MediaQuery.of(context)
-                                              .size
-                                              .height,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width -
-                                              50,
+                                          height: MediaQuery.of(context).size.height,
+                                          width: MediaQuery.of(context).size.width - 50,
                                           child: Column(
                                             children: [
                                               Row(
@@ -1036,8 +838,7 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                                     onTap: () {
                                                       Navigator.pop(context);
                                                     },
-                                                    child:
-                                                        Icon(Icons.arrow_back),
+                                                    child: Icon(Icons.arrow_back),
                                                   ),
                                                   SizedBox(
                                                     width: 20,
@@ -1045,10 +846,7 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                                   Text(
                                                     packagname,
                                                     style: fontStyle(
-                                                        fontSize: 16,
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.w600),
+                                                        fontSize: 16, color: Colors.black, fontWeight: FontWeight.w600),
                                                   )
                                                 ],
                                               ),
@@ -1064,14 +862,9 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                                         ? 'Terms and conditions regarding to packages'
                                                         : "الشروط والأحكام الخاصة بالباقات",
                                                     textDirection:
-                                                        LanguageClass.isEnglish
-                                                            ? TextDirection.ltr
-                                                            : TextDirection.rtl,
+                                                        LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
                                                     style: fontStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold),
+                                                        color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
                                                   ),
                                                   SizedBox(
                                                     height: 23,
@@ -1099,15 +892,11 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
 ٩.) يتم إلغاء الاشتراك فورًا في حالة مخالفة قواعد الشركة دون إنذار مسبق، وتُحاسب على عدد الرحلات بنظام الدفع اليومي.
         ''',
                                                     textDirection:
-                                                        LanguageClass.isEnglish
-                                                            ? TextDirection.ltr
-                                                            : TextDirection.rtl,
+                                                        LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
                                                     style: fontStyle(
-                                                        color:
-                                                            Color(0xff818181),
+                                                        color: Color(0xff818181),
                                                         fontSize: 14,
-                                                        fontFamily:
-                                                            FontFamily.regular),
+                                                        fontFamily: FontFamily.regular),
                                                   ),
                                                   SizedBox(
                                                     height: 20,
@@ -1117,14 +906,9 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                                         ? 'Return and Exchange Policy'
                                                         : " سياسة الارجاع وتبديل الباقات",
                                                     textDirection:
-                                                        LanguageClass.isEnglish
-                                                            ? TextDirection.ltr
-                                                            : TextDirection.rtl,
+                                                        LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
                                                     style: fontStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 20,
-                                                        fontFamily:
-                                                            FontFamily.bold),
+                                                        color: Colors.black, fontSize: 20, fontFamily: FontFamily.bold),
                                                   ),
                                                   SizedBox(
                                                     height: 20,
@@ -1140,15 +924,11 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
 ٣.) يتم هناك خصم 2.5% عند الإلغاء مصاريف ادارية
         ''',
                                                     textDirection:
-                                                        LanguageClass.isEnglish
-                                                            ? TextDirection.ltr
-                                                            : TextDirection.rtl,
+                                                        LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
                                                     style: fontStyle(
-                                                        color:
-                                                            Color(0xff818181),
+                                                        color: Color(0xff818181),
                                                         fontSize: 14,
-                                                        fontFamily:
-                                                            FontFamily.regular),
+                                                        fontFamily: FontFamily.regular),
                                                   ),
                                                   SizedBox(
                                                     height: 20,
@@ -1158,14 +938,9 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                                         ? 'Penalties are imposed in the following cases'
                                                         : "تُفرض الغرامات في الحالات التالية",
                                                     textDirection:
-                                                        LanguageClass.isEnglish
-                                                            ? TextDirection.ltr
-                                                            : TextDirection.rtl,
+                                                        LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
                                                     style: fontStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 20,
-                                                        fontFamily:
-                                                            FontFamily.bold),
+                                                        color: Colors.black, fontSize: 20, fontFamily: FontFamily.bold),
                                                   ),
                                                   SizedBox(
                                                     height: 20,
@@ -1181,63 +956,44 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
 
         ''',
                                                     textDirection:
-                                                        LanguageClass.isEnglish
-                                                            ? TextDirection.ltr
-                                                            : TextDirection.rtl,
+                                                        LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
                                                     style: fontStyle(
-                                                        color:
-                                                            Color(0xff818181),
+                                                        color: Color(0xff818181),
                                                         fontSize: 14,
-                                                        fontFamily:
-                                                            FontFamily.regular),
+                                                        fontFamily: FontFamily.regular),
                                                   ),
                                                   SizedBox(
                                                     height: 20,
                                                   ),
                                                   InkWell(
                                                     onTap: () {
-                                                      Routes.Amount =
-                                                          afterdiscount;
-                                                      Routes.ToStationID =
-                                                          stationtoid;
+                                                      Routes.Amount = afterdiscount;
+                                                      Routes.ToStationID = stationtoid;
 
-                                                      Routes.PackageID =
-                                                          packageID;
+                                                      Routes.PackageID = packageID;
 
-                                                      Routes.FromStationID =
-                                                          stationfromid;
+                                                      Routes.FromStationID = stationfromid;
                                                       Navigator.pop(context);
 
                                                       Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  packagePaymentScreen()));
+                                                              builder: (context) => PackagePaymentScreen()));
                                                     },
                                                     child: Container(
                                                       height: 65,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      margin:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 20),
+                                                      alignment: Alignment.center,
+                                                      margin: EdgeInsets.symmetric(horizontal: 20),
                                                       decoration: BoxDecoration(
-                                                        color:
-                                                            Color(0xff1752D3),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(12),
+                                                        color: Color(0xff1752D3),
+                                                        borderRadius: BorderRadius.circular(12),
                                                       ),
                                                       child: Text(
-                                                        LanguageClass.isEnglish
-                                                            ? 'Agree and save'
-                                                            : 'موافقة وحفظ',
+                                                        LanguageClass.isEnglish ? 'Agree and save' : 'موافقة وحفظ',
                                                         style: fontStyle(
                                                             color: Colors.white,
                                                             fontSize: 24,
-                                                            fontFamily:
-                                                                FontFamily
-                                                                    .bold),
+                                                            fontFamily: FontFamily.bold),
                                                       ),
                                                     ),
                                                   )
@@ -1249,12 +1005,9 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                       );
                                     },
                                     barrierDismissible: true,
-                                    barrierLabel:
-                                        MaterialLocalizations.of(context)
-                                            .modalBarrierDismissLabel,
+                                    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
                                     barrierColor: Colors.black.withOpacity(0.1),
-                                    transitionDuration:
-                                        const Duration(milliseconds: 0),
+                                    transitionDuration: const Duration(milliseconds: 0),
                                   );
                                 }
                               },
@@ -1266,13 +1019,8 @@ class _SelectPackageScreenState extends State<SelectPackageScreen> {
                                   borderRadius: BorderRadius.circular(41),
                                 ),
                                 child: Text(
-                                  LanguageClass.isEnglish
-                                      ? 'Subscribe'
-                                      : "اشتراك",
-                                  style: fontStyle(
-                                      color: Colors.white,
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold),
+                                  LanguageClass.isEnglish ? 'Subscribe' : "اشتراك",
+                                  style: fontStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),

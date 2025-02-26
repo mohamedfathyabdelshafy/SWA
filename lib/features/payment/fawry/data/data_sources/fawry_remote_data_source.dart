@@ -23,10 +23,9 @@ class FawryRemoteDataSourceImpl implements FawryRemoteDataSource {
         EndPoints.fawryPaymentMethod,
         body: jsonEncode({
           "CustomerId": params.customerId,
-          "Amount": double.parse(params.amount).toStringAsFixed(2),
+          "Amount": double.parse(params.amount.replaceAll(",", "")).toStringAsFixed(2),
           "countryID": countryid
         }));
-    return PaymentMessageResponseModel.fromJson(
-        json.decode(response.body.toString()));
+    return PaymentMessageResponseModel.fromJson(json.decode(response.body.toString()));
   }
 }

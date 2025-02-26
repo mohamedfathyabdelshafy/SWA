@@ -3,22 +3,16 @@ import 'package:intl/intl.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/styles.dart';
+import 'package:swa/features/home/data/models/Notifications_model.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart' as intil;
 
 class NotificationDetailsScreen extends StatelessWidget {
   NotificationDetailsScreen({
     super.key,
-    required this.title,
-    required this.notificationid,
-    required this.desc,
-    required this.date,
+    required this.notification,
   });
-  final String title;
-
-  final String desc;
-  final int notificationid;
-
-  final String date;
+  final Data notification;
 
   Future<void> _launchInWebView(Uri url) async {
     if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
@@ -57,37 +51,40 @@ class NotificationDetailsScreen extends StatelessWidget {
           // 16.verticalSpace,
           Container(
             padding: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15), color: Colors.white),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Colors.white),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
-                  style: fontStyle(
-                      fontSize: 19,
-                      fontFamily: FontFamily.bold,
-                      color: Colors.black),
+                  notification.Title ?? "0",
+                  style: fontStyle(fontSize: 19, fontFamily: FontFamily.bold, color: Colors.black),
                 ),
                 SizedBox(
                   height: 16,
                 ),
                 Text(
-                  desc,
-                  style: fontStyle(
-                      fontSize: 17,
-                      fontFamily: FontFamily.regular,
-                      color: Color(0xff818181)),
+                  notification.Description ?? "0",
+                  style: fontStyle(fontSize: 17, fontFamily: FontFamily.regular, color: Color(0xff818181)),
                 ),
                 SizedBox(
                   height: 16,
                 ),
                 Text(
-                  date,
-                  style: fontStyle(
-                      fontSize: 13,
-                      fontFamily: FontFamily.regular,
-                      color: Color(0xff818181)),
+                  intil.DateFormat('d/M/y, hh:mm a').format(notification.Date ?? DateTime.now()),
+                  style: fontStyle(fontSize: 13, fontFamily: FontFamily.regular, color: Color(0xff818181)),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                InkWell(
+                  onTap: () {
+                    _launchInWebView(Uri.parse(notification.link ?? ""));
+                  },
+                  child: Text(
+                    notification.link,
+                    style: fontStyle(fontSize: 18, fontFamily: FontFamily.regular, color: Colors.blue)
+                        .copyWith(decoration: TextDecoration.underline),
+                  ),
                 ),
               ],
             ),

@@ -12,6 +12,7 @@ import 'package:swa/features/Swa_umra/Screens/Select_type.dart';
 import 'package:swa/features/app_info/domain/entities/country.dart';
 import 'package:swa/features/app_info/presentation/cubit/get_available_countries/get_available_countries_cubit.dart';
 import 'package:swa/features/home/presentation/cubit/home_cubit.dart';
+import 'package:swa/features/home/presentation/screens/Notification/bloc/notification_bloc.dart';
 import 'package:swa/features/home/presentation/screens/home.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
 import 'package:swa/features/home/presentation/screens/tabs/my_home.dart';
@@ -41,8 +42,7 @@ class _SelectappScreenState extends State<SelectappScreen> {
 
     BlocProvider.of<LoginCubit>(context).getUserData();
     super.initState();
-    BlocProvider.of<GetAvailableCountriesCubit>(context)
-        .getAvailableCountries();
+    BlocProvider.of<GetAvailableCountriesCubit>(context).getAvailableCountries();
 
     setState(() {});
     super.initState();
@@ -66,6 +66,7 @@ class _SelectappScreenState extends State<SelectappScreen> {
 
                   Routes.customerid = state.userResponse.user!.customerId;
                   Routes.user = state.userResponse.user;
+                  context.read<NotificationBloc>().add(getNotificationlist());
                 }
               }),
           BlocListener(
@@ -83,8 +84,7 @@ class _SelectappScreenState extends State<SelectappScreen> {
                   setState(() {});
 
                   if (await Permission.location.isDenied && countryid == null ||
-                      await Permission.location.isPermanentlyDenied &&
-                          countryid == null) {
+                      await Permission.location.isPermanentlyDenied && countryid == null) {
                     List list2 = state.countries.where((element) {
                       final title = element.Code;
 
@@ -98,17 +98,14 @@ class _SelectappScreenState extends State<SelectappScreen> {
                             countryId: 1,
                             countryName: "Egypt",
                             Code: "1",
-                            Flag:
-                                "https://swabus.com/Content/Dashboard/LTR/assets/img/Egypt.png",
+                            Flag: "https://swabus.com/Content/Dashboard/LTR/assets/img/Egypt.png",
                             curruncy: "EGP")
                       ];
                     }
                     setState(() {});
 
-                    CacheHelper.setDataToSharedPref(
-                        key: 'countryid', value: list2[0].countryId ?? '1');
-                    CacheHelper.setDataToSharedPref(
-                        key: 'countryflag', value: list2[0].Flag);
+                    CacheHelper.setDataToSharedPref(key: 'countryid', value: list2[0].countryId ?? '1');
+                    CacheHelper.setDataToSharedPref(key: 'countryflag', value: list2[0].Flag);
 
                     Routes.countryflag = list2[0].Flag;
                     Routes.countryflag = list2[0].Flag;
@@ -133,17 +130,14 @@ class _SelectappScreenState extends State<SelectappScreen> {
                             countryId: 1,
                             countryName: "Egypt",
                             Code: "1",
-                            Flag:
-                                "https://swabus.com/Content/Dashboard/LTR/assets/img/Egypt.png",
+                            Flag: "https://swabus.com/Content/Dashboard/LTR/assets/img/Egypt.png",
                             curruncy: "EGP")
                       ];
                     }
                     setState(() {});
 
-                    CacheHelper.setDataToSharedPref(
-                        key: 'countryid', value: list2[0].countryId ?? '1');
-                    CacheHelper.setDataToSharedPref(
-                        key: 'countryflag', value: list2[0].Flag);
+                    CacheHelper.setDataToSharedPref(key: 'countryid', value: list2[0].countryId ?? '1');
+                    CacheHelper.setDataToSharedPref(key: 'countryflag', value: list2[0].Flag);
                     Routes.countryflag = list2[0].Flag;
                     Routes.countryflag = list2[0].Flag;
                     Routes.curruncy = CacheHelper.getDataToSharedPref(
@@ -187,10 +181,7 @@ class _SelectappScreenState extends State<SelectappScreen> {
                       alignment: Alignment.center,
                       child: Text(
                         state.selectappmodel?.message?.title ?? '',
-                        style: fontStyle(
-                            color: Colors.black,
-                            fontFamily: FontFamily.bold,
-                            fontSize: 24),
+                        style: fontStyle(color: Colors.black, fontFamily: FontFamily.bold, fontSize: 24),
                       ),
                     ),
                     SizedBox(
@@ -202,96 +193,64 @@ class _SelectappScreenState extends State<SelectappScreen> {
                               scrollDirection: Axis.vertical,
                               shrinkWrap: true,
                               physics: ScrollPhysics(),
-                              itemCount: state
-                                  .selectappmodel!.message!.appList!.length,
+                              itemCount: state.selectappmodel!.message!.appList!.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return InkWell(
                                   onTap: () {
-                                    if (state.selectappmodel!.message!
-                                            .appList![index].orderIndex ==
-                                        1) {
+                                    if (state.selectappmodel!.message!.appList![index].orderIndex == 1) {
                                       Routes.isomra = false;
 
                                       Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                MultiBlocProvider(providers: [
+                                            builder: (context) => MultiBlocProvider(providers: [
                                                   BlocProvider<LoginCubit>(
-                                                    create: (context) =>
-                                                        sl<LoginCubit>(),
+                                                    create: (context) => sl<LoginCubit>(),
                                                   ),
                                                   BlocProvider<PackagesBloc>(
-                                                    create: (context) =>
-                                                        PackagesBloc(),
+                                                    create: (context) => PackagesBloc(),
                                                   ),
-                                                  BlocProvider<
-                                                      FawryReservation>(
-                                                    create: (context) =>
-                                                        sl<FawryReservation>(),
+                                                  BlocProvider<FawryReservation>(
+                                                    create: (context) => sl<FawryReservation>(),
                                                   ),
-                                                  BlocProvider<
-                                                      GetAvailableCountriesCubit>(
-                                                    create: (context) => sl<
-                                                        GetAvailableCountriesCubit>(),
+                                                  BlocProvider<GetAvailableCountriesCubit>(
+                                                    create: (context) => sl<GetAvailableCountriesCubit>(),
                                                   ),
                                                   BlocProvider<HomeCubit>(
-                                                    create: (context) =>
-                                                        sl<HomeCubit>(),
+                                                    create: (context) => sl<HomeCubit>(),
                                                   ),
                                                   BlocProvider<TimesTripsCubit>(
-                                                      create: (context) => sl<
-                                                          TimesTripsCubit>()),
-                                                  BlocProvider<TicketCubit>(
-                                                      create: (context) =>
-                                                          sl<TicketCubit>()),
+                                                      create: (context) => sl<TimesTripsCubit>()),
+                                                  BlocProvider<TicketCubit>(create: (context) => sl<TicketCubit>()),
                                                 ], child: MyHome())),
                                         (route) => false,
                                       );
-                                    } else if (state.selectappmodel!.message!
-                                            .appList![index].orderIndex ==
-                                        2) {
+                                    } else if (state.selectappmodel!.message!.appList![index].orderIndex == 2) {
                                       Routes.isomra = true;
 
                                       Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                MultiBlocProvider(
-                                                    providers: [
-                                                      BlocProvider<LoginCubit>(
-                                                        create: (context) =>
-                                                            sl<LoginCubit>(),
-                                                      ),
-                                                      BlocProvider<
-                                                          PackagesBloc>(
-                                                        create: (context) =>
-                                                            PackagesBloc(),
-                                                      ),
-                                                      BlocProvider<
-                                                          FawryReservation>(
-                                                        create: (context) => sl<
-                                                            FawryReservation>(),
-                                                      ),
-                                                      BlocProvider<
-                                                          GetAvailableCountriesCubit>(
-                                                        create: (context) => sl<
-                                                            GetAvailableCountriesCubit>(),
-                                                      ),
-                                                      BlocProvider<HomeCubit>(
-                                                        create: (context) =>
-                                                            sl<HomeCubit>(),
-                                                      ),
-                                                      BlocProvider<
-                                                              TimesTripsCubit>(
-                                                          create: (context) => sl<
-                                                              TimesTripsCubit>()),
-                                                      BlocProvider<TicketCubit>(
-                                                          create: (context) =>
-                                                              sl<TicketCubit>()),
-                                                    ],
-                                                    child:
-                                                        SelectUmratypeScreen())),
+                                            builder: (context) => MultiBlocProvider(providers: [
+                                                  BlocProvider<LoginCubit>(
+                                                    create: (context) => sl<LoginCubit>(),
+                                                  ),
+                                                  BlocProvider<PackagesBloc>(
+                                                    create: (context) => PackagesBloc(),
+                                                  ),
+                                                  BlocProvider<FawryReservation>(
+                                                    create: (context) => sl<FawryReservation>(),
+                                                  ),
+                                                  BlocProvider<GetAvailableCountriesCubit>(
+                                                    create: (context) => sl<GetAvailableCountriesCubit>(),
+                                                  ),
+                                                  BlocProvider<HomeCubit>(
+                                                    create: (context) => sl<HomeCubit>(),
+                                                  ),
+                                                  BlocProvider<TimesTripsCubit>(
+                                                      create: (context) => sl<TimesTripsCubit>()),
+                                                  BlocProvider<TicketCubit>(create: (context) => sl<TicketCubit>()),
+                                                ], child: SelectUmratypeScreen())),
                                         (route) => false,
                                       );
                                     }
@@ -300,36 +259,24 @@ class _SelectappScreenState extends State<SelectappScreen> {
                                     margin: EdgeInsets.only(bottom: 30.h),
                                     alignment: Alignment.center,
                                     child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Container(
                                           width: 156.w,
                                           height: 156.w,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(16)),
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
                                           alignment: Alignment.center,
                                           child: Image.network(
-                                            state.selectappmodel!.message!
-                                                .appList![index].image!,
+                                            state.selectappmodel!.message!.appList![index].image!,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
                                         5.verticalSpace,
                                         Text(
-                                          state
-                                                  .selectappmodel
-                                                  ?.message
-                                                  ?.appList?[index]
-                                                  .description ??
-                                              '',
+                                          state.selectappmodel?.message?.appList?[index].description ?? '',
                                           style: fontStyle(
-                                              color: Color(0xffa3a3a3),
-                                              fontFamily: FontFamily.medium,
-                                              fontSize: 13.sp),
+                                              color: Color(0xffa3a3a3), fontFamily: FontFamily.medium, fontSize: 13.sp),
                                         ),
                                       ],
                                     ),

@@ -25,22 +25,18 @@ class ElectronicScreen2 extends StatefulWidget {
 class _ElectronicScreen2State extends State<ElectronicScreen2> {
   final price = CacheHelper.getDataToSharedPref(key: 'price');
   final formKey = GlobalKey<FormState>();
-  TextEditingController amountController = TextEditingController();
+  // TextEditingController amountController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   User? _user;
 
   Future<dynamic> showDoneConfirmationDialog(BuildContext context,
-      {required String message,
-      bool isError = false,
-      Widget? body,
-      required Function callback}) async {
+      {required String message, bool isError = false, Widget? body, required Function callback}) async {
     return CoolAlert.show(
         barrierDismissible: true,
         context: context,
         confirmBtnText: "ok",
         title: isError ? 'error' : '',
-        lottieAsset:
-            isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
+        lottieAsset: isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
         type: isError ? CoolAlertType.error : CoolAlertType.success,
         loopAnimation: false,
         backgroundColor: isError ? Colors.red : Colors.white,
@@ -63,8 +59,7 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Directionality(
-        textDirection:
-            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+        textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: SingleChildScrollView(
@@ -100,9 +95,7 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    LanguageClass.isEnglish
-                        ? 'Electronic wallet'
-                        : "المحفظة الاكترونية",
+                    LanguageClass.isEnglish ? 'Electronic wallet' : "المحفظة الاكترونية",
                     style: fontStyle(
                         color: AppColors.blackColor,
                         fontSize: 24.sp,
@@ -123,15 +116,13 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                         Row(
                           children: [
                             Container(
-                              height: 40,
+                              height: 20,
                               width: 1,
-                              decoration:
-                                  const BoxDecoration(color: Color(0xff47A9EB)),
+                              decoration: const BoxDecoration(color: Color(0xff47A9EB)),
                             ),
                             Expanded(
                               child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 2, horizontal: 18),
+                                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
                                 decoration: const BoxDecoration(
                                     //color: AppColors.yellow
                                     // border: Border.all(
@@ -144,33 +135,22 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                                 child: TextFormField(
                                   maxLength: 11,
                                   autofocus: true,
-                                  style: fontStyle(
-                                      color: AppColors.blackColor,
-                                      fontSize: 16),
+                                  style: fontStyle(color: AppColors.blackColor, fontSize: 16),
                                   cursorColor: AppColors.blue,
                                   controller: phoneController,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp("[0-9]"))
-                                  ],
+                                  inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9]"))],
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
-                                    hintText: LanguageClass.isEnglish
-                                        ? 'Phone Number'
-                                        : "موبيل",
+                                    hintText: LanguageClass.isEnglish ? 'Phone Number' : "موبيل",
                                     errorStyle: fontStyle(
                                       color: Colors.red,
                                       fontSize: 11,
                                     ),
                                     hintStyle: fontStyle(
-                                        color: AppColors.greyLight,
-                                        fontSize: 15,
-                                        fontFamily: FontFamily.bold),
-                                    labelStyle: fontStyle(
-                                        color: AppColors.grey,
-                                        fontSize: 12,
-                                        fontFamily: FontFamily.bold),
+                                        color: AppColors.greyLight, fontSize: 15, fontFamily: FontFamily.bold),
+                                    labelStyle:
+                                        fontStyle(color: AppColors.grey, fontSize: 12, fontFamily: FontFamily.bold),
                                   ),
                                   validator: (value) {
                                     if (value!.isEmpty) {
@@ -192,13 +172,11 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                             Container(
                               height: 20,
                               width: 1,
-                              decoration:
-                                  const BoxDecoration(color: Color(0xffD865A4)),
+                              decoration: const BoxDecoration(color: Color(0xffD865A4)),
                             ),
                             Expanded(
                               child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 2, horizontal: 18),
+                                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
                                   decoration: const BoxDecoration(
                                       // border: Border.all(
                                       //   color: AppColors.blue,
@@ -208,30 +186,19 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                                       // const BorderRadius.all(Radius.circular(10))
                                       ),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       Text(
-                                        LanguageClass.isEnglish
-                                            ? "amount"
-                                            : "القيمة",
+                                        LanguageClass.isEnglish ? "amount" : "القيمة",
                                         style: fontStyle(
-                                            fontSize: 15,
-                                            fontFamily: FontFamily.bold,
-                                            color: AppColors.greyLight),
+                                            fontSize: 15, fontFamily: FontFamily.bold, color: AppColors.greyLight),
                                       ),
                                       Text(
                                         Routes.resrvedtrips.length == 2
-                                            ? (Routes.resrvedtrips[0].price! +
-                                                    Routes
-                                                        .resrvedtrips[1].price!)
-                                                .toString()
-                                            : Routes.resrvedtrips[0].price
-                                                .toString(),
+                                            ? (Routes.resrvedtrips[0].price! + Routes.resrvedtrips[1].price!).toString()
+                                            : Routes.resrvedtrips[0].price.toString(),
                                         style: fontStyle(
-                                            fontSize: 18,
-                                            fontFamily: FontFamily.bold,
-                                            color: AppColors.primaryColor),
+                                            fontSize: 18, fontFamily: FontFamily.bold, color: AppColors.primaryColor),
                                       )
                                     ],
                                   )),
@@ -247,12 +214,10 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                             } else if (state is LoadedElectronicWalletState) {
                               Constants.hideLoadingDialog(context);
                               // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
-                              showDoneConfirmationDialog(context,
-                                  isError: false, callback: () {
-                                Navigator.pop(context);
-                                Navigator.pushNamedAndRemoveUntil(
-                                    context, Routes.home, (route) => false,
-                                    arguments: Routes.isomra);
+                              showDoneConfirmationDialog(context, isError: false, callback: () {
+                                // Navigator.pop(context);
+                                // Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false,
+                                //     arguments: Routes.isomra);
                               },
                                   body: Column(
                                     mainAxisSize: MainAxisSize.min,
@@ -261,33 +226,23 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                                         height: 20,
                                       ),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            LanguageClass.isEnglish
-                                                ? 'Amount: '
-                                                : "القيمة",
+                                            LanguageClass.isEnglish ? 'Amount: ' : "القيمة",
                                             style: fontStyle(
-                                                color: Colors.black,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600),
+                                                color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
                                           ),
                                           Text(
                                             Routes.resrvedtrips.length == 2
-                                                ? (Routes.resrvedtrips[0]
-                                                            .price! +
-                                                        Routes.resrvedtrips[1]
-                                                            .price!)
+                                                ? (Routes.resrvedtrips[0].price! + Routes.resrvedtrips[1].price!)
                                                     .toString()
-                                                : Routes.resrvedtrips[0].price
-                                                    .toString(),
+                                                : Routes.resrvedtrips[0].price.toString(),
                                           )
                                         ],
                                       ),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             'Reference Number: ',
@@ -303,16 +258,11 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                                                 InkWell(
                                                   onTap: () async {
                                                     Constants.showDefaultSnackBar(
-                                                        context: context,
-                                                        text:
-                                                            'Reference Number copied');
-                                                    await Clipboard.setData(
-                                                        ClipboardData(
-                                                            text: state
-                                                                .reservationResponseElectronicModel
-                                                                .message!
-                                                                .referenceNumber
-                                                                .toString()));
+                                                        context: context, text: 'Reference Number copied');
+                                                    await Clipboard.setData(ClipboardData(
+                                                        text: state
+                                                            .reservationResponseElectronicModel.message!.referenceNumber
+                                                            .toString()));
                                                   },
                                                   child: Container(
                                                       width: 15,
@@ -324,10 +274,7 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                                                 ),
                                                 Expanded(
                                                   child: Text(
-                                                    state
-                                                        .reservationResponseElectronicModel
-                                                        .message!
-                                                        .referenceNumber
+                                                    state.reservationResponseElectronicModel.message!.referenceNumber
                                                         .toString(),
                                                     textAlign: TextAlign.end,
                                                   ),
@@ -342,46 +289,27 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                                       ),
                                     ],
                                   ),
-                                  message: state
-                                      .reservationResponseElectronicModel.text);
+                                  message: state.reservationResponseElectronicModel.text);
                             } else if (state is ErrorElectronicWalletState) {
                               Constants.hideLoadingDialog(context);
-                              Constants.showDefaultSnackBar(
-                                  context: context,
-                                  text: state.error.toString());
+                              Constants.showDefaultSnackBar(context: context, text: state.error.toString());
                             }
                           },
                           child: InkWell(
                             onTap: () {
-                              final tripOneId = CacheHelper.getDataToSharedPref(
-                                  key: 'tripOneId');
-                              final tripRoundId =
-                                  CacheHelper.getDataToSharedPref(
-                                      key: 'tripRoundId');
-                              final selectedDayTo =
-                                  CacheHelper.getDataToSharedPref(
-                                      key: 'selectedDayTo');
-                              final selectedDayFrom =
-                                  CacheHelper.getDataToSharedPref(
-                                      key: 'selectedDayFrom');
-                              final toStationId =
-                                  CacheHelper.getDataToSharedPref(
-                                      key: 'toStationId');
-                              final fromStationId =
-                                  CacheHelper.getDataToSharedPref(
-                                      key: 'fromStationId');
-                              final seatIdsOneTrip =
-                                  CacheHelper.getDataToSharedPref(
-                                          key: 'countSeats')
-                                      ?.map((e) => int.tryParse(e) ?? 0)
-                                      .toList();
-                              final seatIdsRoundTrip =
-                                  CacheHelper.getDataToSharedPref(
-                                          key: 'countSeats2')
-                                      ?.map((e) => int.tryParse(e) ?? 0)
-                                      .toList();
-                              final price =
-                                  CacheHelper.getDataToSharedPref(key: 'price');
+                              final tripOneId = CacheHelper.getDataToSharedPref(key: 'tripOneId');
+                              final tripRoundId = CacheHelper.getDataToSharedPref(key: 'tripRoundId');
+                              final selectedDayTo = CacheHelper.getDataToSharedPref(key: 'selectedDayTo');
+                              final selectedDayFrom = CacheHelper.getDataToSharedPref(key: 'selectedDayFrom');
+                              final toStationId = CacheHelper.getDataToSharedPref(key: 'toStationId');
+                              final fromStationId = CacheHelper.getDataToSharedPref(key: 'fromStationId');
+                              final seatIdsOneTrip = CacheHelper.getDataToSharedPref(key: 'countSeats')
+                                  ?.map((e) => int.tryParse(e) ?? 0)
+                                  .toList();
+                              final seatIdsRoundTrip = CacheHelper.getDataToSharedPref(key: 'countSeats2')
+                                  ?.map((e) => int.tryParse(e) ?? 0)
+                                  .toList();
+                              final price = CacheHelper.getDataToSharedPref(key: 'price');
                               print(
                                   "tripOneId${tripOneId}==tripOneId${tripRoundId}=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price");
                               print(
@@ -392,8 +320,7 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                                   "tripOneId${tripOneId}==tripOneId${tripRoundId}=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price==$mobile");
 
                               // if(_user != null && formKey.currentState!.validate()) {
-                              BlocProvider.of<ReservationCubit>(context)
-                                  .addReservationElectronicWallet(
+                              BlocProvider.of<ReservationCubit>(context).addReservationElectronicWallet(
                                 custId: widget.user.customerId!,
                                 paymentMethodID: 5,
                                 paymentTypeID: 68,
@@ -407,8 +334,7 @@ class _ElectronicScreen2State extends State<ElectronicScreen2> {
                                 horizontal: 30,
                               ),
                               child: Constants.customButton(
-                                text:
-                                    LanguageClass.isEnglish ? "Charge" : "شحن",
+                                text: LanguageClass.isEnglish ? "Charge" : "شحن",
                                 color: AppColors.primaryColor,
                               ),
                             ),

@@ -11,6 +11,7 @@ import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/hex_color.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
+import 'package:swa/core/utils/phone_number_validator_srrvice.dart';
 import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/customized_field.dart';
 import 'package:swa/features/app_info/domain/entities/city.dart';
@@ -23,6 +24,7 @@ import 'package:swa/features/sign_up/domain/use_cases/register.dart';
 import 'package:swa/features/sign_up/presentation/cubit/register_cubit.dart';
 import 'package:swa/features/sign_up/presentation/screens/component/city_drop_down_button.dart';
 import 'package:swa/features/sign_up/presentation/screens/component/country_drop_down_button.dart';
+import 'package:swa/main.dart';
 
 import '../../../bus_reservation_layout/data/models/documentType_model.dart';
 
@@ -55,23 +57,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Country? _selectedCountry;
 
   String selectedcode = '+20';
-  PhonecountrycodeModel phonecountrycodeModel =
-      PhonecountrycodeModel(codelist: []);
+  PhonecountrycodeModel phonecountrycodeModel = PhonecountrycodeModel(codelist: []);
   City? _selectedCity;
   IdentificationTypeModel? docType;
   List<documentdetails> documentDaata = [];
 
   String indentificationtypeID = '';
+  bool isPhoneValid = false;
 
-  Idtextfieldmodel? idtextfieldmodel = Idtextfieldmodel(
-      message: Message(title: '', length: 0, validationMesage: ''));
+  Idtextfieldmodel? idtextfieldmodel = Idtextfieldmodel(message: Message(title: '', length: 0, validationMesage: ''));
 
   @override
   void initState() {
     emailController.text = Routes.emailaddress;
     super.initState();
-    BlocProvider.of<GetAvailableCountriesCubit>(context)
-        .getAvailableCountries();
+    BlocProvider.of<GetAvailableCountriesCubit>(context).getAvailableCountries();
 
     BlocProvider.of<RegisterCubit>(context).GetIdentificationType();
     BlocProvider.of<RegisterCubit>(context).getphonecode();
@@ -86,27 +86,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
       listener: (context, state) {
         if (state is phonecodeState) {
           phonecountrycodeModel = state.phonecountrycodeModel;
+          phonecountrycodeModel.codelist?.forEach((element) {
+            log(" phonecountrycodeModel ${element.code}");
+          });
         } else if (state is TextfiedidState) {
           idtextfieldmodel = state.idtextfieldmodel;
         } else if (state is DocumenttypeState) {
           docType = state.documentTypeModel;
-          documentDaata = state.documentTypeModel.message!.entries
-              .map((entry) => documentdetails(entry.value, entry.key))
-              .toList();
+          documentDaata =
+              state.documentTypeModel.message!.entries.map((entry) => documentdetails(entry.value, entry.key)).toList();
         } else if (state is RegisterLoadingState) {
           Constants.showLoadingDialog(context);
         } else if (state is UserRegisterLoadedState) {
           Constants.hideLoadingDialog(context);
           Constants.showDefaultSnackBar(
-              context: context,
-              text: state.messageResponse.massage.toString(),
-              color: Colors.green);
+              context: context, text: state.messageResponse.massage.toString(), color: Colors.green);
 
           Navigator.pushReplacementNamed(context, Routes.signInRoute);
         } else if (state is RegisterErrorState) {
           Constants.hideLoadingDialog(context);
-          Constants.showDefaultSnackBar(
-              context: context, text: state.error.toString());
+          Constants.showDefaultSnackBar(context: context, text: state.error.toString());
         }
       },
       child: BlocBuilder<RegisterCubit, RegisterState>(
@@ -115,9 +114,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           return Scaffold(
             backgroundColor: AppColors.white,
             body: Directionality(
-              textDirection: LanguageClass.isEnglish
-                  ? TextDirection.ltr
-                  : TextDirection.rtl,
+              textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
               child: SingleChildScrollView(
                 child: Form(
                   key: formKey,
@@ -133,16 +130,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           },
                           child: Icon(
                             Icons.arrow_back,
-                            color: Routes.isomra
-                                ? AppColors.umragold
-                                : AppColors.primaryColor,
+                            color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                             size: 35,
                           ),
                         ),
                       ),
                       Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: sizeWidth / 10),
+                        padding: EdgeInsets.symmetric(horizontal: sizeWidth / 10),
                         child: Container(
                           child: ListView(
                             shrinkWrap: true,
@@ -150,14 +144,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             padding: EdgeInsets.zero,
                             children: [
                               Text(
-                                LanguageClass.isEnglish
-                                    ? "Sign Up"
-                                    : "انشاء حساب",
+                                LanguageClass.isEnglish ? "Sign Up" : "انشاء حساب",
                                 textAlign: TextAlign.start,
-                                style: fontStyle(
-                                    fontFamily: FontFamily.bold,
-                                    color: HexColor('#000000'),
-                                    fontSize: 34),
+                                style: fontStyle(fontFamily: FontFamily.bold, color: HexColor('#000000'), fontSize: 34),
                               ),
                               // SizedBox(height:context.height *0.03 ,),
                               SizedBox(
@@ -165,12 +154,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
 
                               Container(
-                                margin: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 30),
+                                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                                 child: Text(
-                                  LanguageClass.isEnglish
-                                      ? 'Full Name'
-                                      : 'الاسم كامل',
+                                  LanguageClass.isEnglish ? 'Full Name' : 'الاسم كامل',
                                   style: fontStyle(
                                       fontSize: 16,
                                       fontFamily: FontFamily.regular,
@@ -188,8 +174,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 hintText: '',
                                 controller: nameController,
                                 validator: (validator) {
-                                  return RegExp(r'^[a-zA-Z\u0600-\u06FF]+$')
-                                          .hasMatch(validator ?? '')
+                                  return RegExp(r'^[a-zA-Z\u0600-\u06FF]+$').hasMatch(validator ?? '')
                                       ? null
                                       : LanguageClass.isEnglish
                                           ? "Enter a valid name"
@@ -201,12 +186,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
 
                               Container(
-                                margin: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 30),
+                                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                                 child: Text(
-                                  LanguageClass.isEnglish
-                                      ? 'Mobile Number'
-                                      : 'رقم التليفون',
+                                  LanguageClass.isEnglish ? 'Mobile Number' : 'رقم التليفون',
                                   style: fontStyle(
                                       fontSize: 16,
                                       fontFamily: FontFamily.regular,
@@ -230,141 +212,102 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           enableDrag: true,
                                           isScrollControlled: true,
                                           backgroundColor: Colors.transparent,
-                                          barrierColor:
-                                              Colors.black.withOpacity(0.5),
+                                          barrierColor: Colors.black.withOpacity(0.5),
                                           useRootNavigator: true,
                                           builder: (context) {
                                             return StatefulBuilder(builder:
-                                                (buildContext,
-                                                    StateSetter
-                                                        setStater /*You can rename this!*/) {
+                                                (buildContext, StateSetter setStater /*You can rename this!*/) {
                                               return Padding(
-                                                padding: EdgeInsets.only(
-                                                    bottom:
-                                                        MediaQuery.of(context)
-                                                            .viewInsets
-                                                            .bottom),
+                                                padding:
+                                                    EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                                                 child: GestureDetector(
                                                   onTap: () {
-                                                    FocusScope.of(context)
-                                                        .requestFocus(
-                                                            new FocusNode());
+                                                    FocusScope.of(context).requestFocus(new FocusNode());
                                                   },
                                                   child: Container(
                                                     width: double.infinity,
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.7,
+                                                    height: MediaQuery.of(context).size.height * 0.7,
                                                     decoration: BoxDecoration(
                                                         color: Colors.white,
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        24),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        24))),
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 16.w),
+                                                        borderRadius: BorderRadius.only(
+                                                            topLeft: Radius.circular(24),
+                                                            topRight: Radius.circular(24))),
+                                                    padding: EdgeInsets.symmetric(horizontal: 16.w),
                                                     child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
+                                                      mainAxisSize: MainAxisSize.min,
                                                       children: [
                                                         Container(
-                                                          alignment:
-                                                              Alignment.center,
+                                                          alignment: Alignment.center,
                                                           child: Container(
-                                                            margin: EdgeInsets
-                                                                .symmetric(
-                                                                    vertical:
-                                                                        3),
+                                                            margin: EdgeInsets.symmetric(vertical: 3),
                                                             height: 6,
                                                             width: 64.w,
                                                             decoration: BoxDecoration(
-                                                                color: AppColors
-                                                                    .grey,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            5)),
+                                                                color: AppColors.grey,
+                                                                borderRadius: BorderRadius.circular(5)),
                                                           ),
                                                         ),
                                                         24.verticalSpace,
                                                         Flexible(
-                                                          child:
-                                                              ListView.builder(
-                                                            itemCount:
-                                                                phonecountrycodeModel
-                                                                    .codelist!
-                                                                    .length,
-                                                            padding: EdgeInsets
-                                                                .symmetric(
-                                                                    horizontal:
-                                                                        5),
+                                                          child: ListView.builder(
+                                                            itemCount: phonecountrycodeModel.codelist!.length,
+                                                            padding: EdgeInsets.symmetric(horizontal: 5),
                                                             shrinkWrap: true,
-                                                            physics:
-                                                                ScrollPhysics(),
-                                                            itemBuilder:
-                                                                (BuildContext
-                                                                        context,
-                                                                    int index2) {
+                                                            physics: ScrollPhysics(),
+                                                            itemBuilder: (BuildContext context, int index2) {
                                                               return InkWell(
                                                                 onTap: () {
                                                                   setState(() {
-                                                                    selectedcode = phonecountrycodeModel
-                                                                        .codelist![
-                                                                            index2]
-                                                                        .code!;
+                                                                    selectedcode =
+                                                                        phonecountrycodeModel.codelist![index2].code!;
                                                                   });
-                                                                  Navigator.pop(
-                                                                      context);
+                                                                  Navigator.pop(context);
                                                                 },
-                                                                child:
-                                                                    Container(
+                                                                child: Container(
                                                                   decoration: BoxDecoration(
                                                                       border: Border(
                                                                           bottom: BorderSide(
-                                                                    color:
-                                                                        AppColors
-                                                                            .grey,
+                                                                    color: AppColors.grey,
                                                                   ))),
                                                                   child: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .center,
+                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                    crossAxisAlignment: CrossAxisAlignment.center,
                                                                     children: [
                                                                       Expanded(
-                                                                        child:
-                                                                            Column(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.start,
+                                                                        child: Column(
+                                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                                          crossAxisAlignment: CrossAxisAlignment.start,
                                                                           children: [
                                                                             Container(
                                                                               margin: EdgeInsets.symmetric(vertical: 5),
-                                                                              child: FittedBox(fit: BoxFit.scaleDown, child: Text(phonecountrycodeModel.codelist![index2].name!, style: fontStyle(fontSize: 16, fontFamily: FontFamily.bold, fontWeight: FontWeight.w500, color: Colors.black))),
+                                                                              child: FittedBox(
+                                                                                  fit: BoxFit.scaleDown,
+                                                                                  child: Text(
+                                                                                      phonecountrycodeModel
+                                                                                          .codelist![index2].name!,
+                                                                                      style: fontStyle(
+                                                                                          fontSize: 16,
+                                                                                          fontFamily: FontFamily.bold,
+                                                                                          fontWeight: FontWeight.w500,
+                                                                                          color: Colors.black))),
                                                                             ),
                                                                             Container(
-                                                                              child: Text(phonecountrycodeModel.codelist![index2].code!, style: fontStyle(fontSize: 14, fontFamily: FontFamily.bold, fontWeight: FontWeight.w400, color: Colors.black54)),
+                                                                              child: Text(
+                                                                                  phonecountrycodeModel
+                                                                                      .codelist![index2].code!,
+                                                                                  style: fontStyle(
+                                                                                      fontSize: 14,
+                                                                                      fontFamily: FontFamily.bold,
+                                                                                      fontWeight: FontWeight.w400,
+                                                                                      color: Colors.black54)),
                                                                             ),
                                                                           ],
                                                                         ),
                                                                       ),
                                                                       Icon(
-                                                                        Icons
-                                                                            .arrow_forward_ios_rounded,
-                                                                        color: AppColors
-                                                                            .umragold,
-                                                                        size:
-                                                                            15,
+                                                                        Icons.arrow_forward_ios_rounded,
+                                                                        color: AppColors.umragold,
+                                                                        size: 15,
                                                                       )
                                                                     ],
                                                                   ),
@@ -384,22 +327,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     },
                                     child: Container(
                                       width: 80.w,
-                                      height: 70,
-                                      padding:
-                                          EdgeInsetsDirectional.only(end: 10),
+                                      height: 60.h,
+                                      padding: EdgeInsetsDirectional.only(end: 10),
+                                      margin: EdgeInsetsDirectional.only(start: 1.1.w),
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
-                                          color: Routes.isomra
-                                              ? AppColors.umragold
-                                              : AppColors.primaryColor,
-                                          borderRadius:
-                                              BorderRadius.circular(33)),
+                                          color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
+                                          borderRadius: BorderRadius.circular(33)),
                                       child: Text(
                                         selectedcode,
                                         style: fontStyle(
-                                            color: Colors.black,
-                                            fontFamily: FontFamily.bold,
-                                            fontSize: 16.sp),
+                                            color: Colors.black, fontFamily: FontFamily.bold, fontSize: 16.sp),
                                       ),
                                     ),
                                   ),
@@ -409,18 +347,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 controller: mobileController,
                                 keyboardType: TextInputType.number,
                                 validator: (validator) {
+                                  sl<PhoneNumberValidatorService>()
+                                      .isValid(selectedcode, validator ?? "")
+                                      .then((isValid) {
+                                    final hasValidationStateChanged = isPhoneValid != isValid;
+                                    isPhoneValid = isValid;
+                                    if (hasValidationStateChanged) setState(() {});
+                                  });
+
                                   if (validator == null || validator.isEmpty) {
-                                    return LanguageClass.isEnglish
-                                        ? "Enter phone"
-                                        : "ادخل الموبيل";
-                                  } else if (validator.length < 10 ||
-                                      validator.length > 10 ||
-                                      int.tryParse(validator) == null) {
-                                    return LanguageClass.isEnglish
-                                        ? "Enter a valid phone number"
-                                        : "ادخل رقم الموبيل الصحيح";
+                                    return LanguageClass.isEnglish ? "Enter phone" : "ادخل الموبيل";
                                   }
-                                  return null;
+                                  return isPhoneValid
+                                      ? null
+                                      : LanguageClass.isEnglish
+                                          ? "Enter a valid phone number"
+                                          : "ادخل رقم الموبيل الصحيح";
                                 },
                               ),
                               SizedBox(
@@ -428,12 +370,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
 
                               Container(
-                                margin: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 30),
+                                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                                 child: Text(
-                                  LanguageClass.isEnglish
-                                      ? 'Email'
-                                      : 'البريد الالكتروني',
+                                  LanguageClass.isEnglish ? 'Email' : 'البريد الالكتروني',
                                   style: fontStyle(
                                       fontSize: 16,
                                       fontFamily: FontFamily.regular,
@@ -449,24 +388,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 obscureText: false,
                                 readonly: true,
                                 color: Color(0xffDDDDDD),
-                                hintText: LanguageClass.isEnglish
-                                    ? "ex@email.com"
-                                    : "ex@email.com",
+                                hintText: LanguageClass.isEnglish ? "ex@email.com" : "ex@email.com",
                                 keyboardType: TextInputType.emailAddress,
                                 controller: emailController,
                                 validator: (validator) {
                                   if (validator == null || validator.isEmpty) {
-                                    return LanguageClass.isEnglish
-                                        ? "Enter Email"
-                                        : "ادخل الايميل";
+                                    return LanguageClass.isEnglish ? "Enter Email" : "ادخل الايميل";
                                   }
                                   String pattern =
                                       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
                                   RegExp regex = RegExp(pattern);
                                   if (!regex.hasMatch(validator)) {
-                                    return LanguageClass.isEnglish
-                                        ? "Your Email is invalid"
-                                        : "هذا الايميل غير صالح";
+                                    return LanguageClass.isEnglish ? "Your Email is invalid" : "هذا الايميل غير صالح";
                                   } else {
                                     return null;
                                   }
@@ -477,12 +410,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
 
                               Container(
-                                margin: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 30),
+                                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                                 child: Text(
-                                  LanguageClass.isEnglish
-                                      ? "Select your country"
-                                      : "ادخل الدولة",
+                                  LanguageClass.isEnglish ? "Select your country" : "ادخل الدولة",
                                   style: fontStyle(
                                       fontSize: 16,
                                       fontFamily: FontFamily.regular,
@@ -491,84 +421,64 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                               ),
 
-                              BlocBuilder<GetAvailableCountriesCubit,
-                                      GetAvailableCountriesCubitState>(
+                              BlocBuilder<GetAvailableCountriesCubit, GetAvailableCountriesCubitState>(
                                   builder: (context, state) {
                                 return state is GetAvailableCountriesLoadedState
                                     ? CountryDropDownTextFieldButton(
                                         countries: state.countries,
                                         controller: countrycontroller,
-                                        hintText:
-                                            _selectedCountry?.countryName !=
-                                                    null
-                                                ? _selectedCountry!.countryName
-                                                : LanguageClass.isEnglish
-                                                    ? "Select your country"
-                                                    : "ادخل الدولة",
+                                        hintText: _selectedCountry?.countryName != null
+                                            ? _selectedCountry!.countryName
+                                            : LanguageClass.isEnglish
+                                                ? "Select your country"
+                                                : "ادخل الدولة",
                                         onSelect: (country) {
                                           setState(() {
                                             _selectedCountry = country;
                                             _selectedCity = null;
                                           });
-                                          BlocProvider.of<
-                                                      GetAvailableCountryCitiesCubit>(
-                                                  context)
-                                              .getAvailableCountries(
-                                                  _selectedCountry!.countryId);
-                                          BlocProvider.of<RegisterCubit>(
-                                                  context)
-                                              .GetIdentificationType(
-                                                  countryid: _selectedCountry!
-                                                      .countryId
-                                                      .toString());
+                                          BlocProvider.of<GetAvailableCountryCitiesCubit>(context)
+                                              .getAvailableCountries(_selectedCountry!.countryId);
+                                          BlocProvider.of<RegisterCubit>(context)
+                                              .GetIdentificationType(countryid: _selectedCountry!.countryId.toString());
                                         },
                                       )
                                     : const SizedBox(height: 0.0, width: 0.0);
                               }),
-                              BlocBuilder<GetAvailableCountryCitiesCubit,
-                                      GetAvailableCountryCitiesCubitState>(
+                              BlocBuilder<GetAvailableCountryCitiesCubit, GetAvailableCountryCitiesCubitState>(
                                   builder: (context, state) {
-                                return state
-                                        is GetAvailableCountryCitiesLoadedState
+                                return state is GetAvailableCountryCitiesLoadedState
                                     ? Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(
                                             height: 20,
                                           ),
                                           Container(
-                                            margin: EdgeInsets.symmetric(
-                                                vertical: 5, horizontal: 30),
+                                            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                                             child: Text(
-                                              LanguageClass.isEnglish
-                                                  ? "Select your city"
-                                                  : "ادخل المدينة",
+                                              LanguageClass.isEnglish ? "Select your city" : "ادخل المدينة",
                                               style: fontStyle(
                                                   fontSize: 16,
-                                                  fontFamily:
-                                                      FontFamily.regular,
+                                                  fontFamily: FontFamily.regular,
                                                   color: Color(0xff616b80),
-                                                  fontWeight:
-                                                      FontWeight.normal),
+                                                  fontWeight: FontWeight.normal),
                                             ),
                                           ),
                                           CityDropDownTextFieldButton(
                                             countries: state.countryCities,
                                             controller: citycontroller,
-                                            hintText:
-                                                _selectedCity?.cityName != null
-                                                    ? _selectedCity!.cityName
-                                                    : LanguageClass.isEnglish
-                                                        ? "Enter your city"
-                                                        : "ادخل المدينة",
+                                            hintText: _selectedCity?.cityName != null
+                                                ? _selectedCity!.cityName
+                                                : LanguageClass.isEnglish
+                                                    ? "Enter your city"
+                                                    : "ادخل المدينة",
                                             onSelect: (city) {
                                               setState(() {
                                                 _selectedCity = city;
                                               });
 
-                                              log(_selectedCity!.cityId
-                                                  .toString());
+                                              log(_selectedCity!.cityId.toString());
                                             },
                                           ),
                                         ],
@@ -582,14 +492,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                               docType?.object?.display == true
                                   ? Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Container(
-                                          margin: EdgeInsets.symmetric(
-                                              vertical: 5, horizontal: 30),
+                                          margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                                           child: Text(
                                             docType!.object!.title.toString(),
                                             style: fontStyle(
@@ -600,66 +507,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           ),
                                         ),
                                         Container(
-                                            margin: EdgeInsets.symmetric(
-                                                vertical: 5, horizontal: 0),
+                                            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
                                             child: DropDownTextField(
                                                 initialValue: null,
                                                 onChanged: (value) {
                                                   idcontroller.text = "";
-                                                  if (value != null &&
-                                                      value != "") {
-                                                    indentificationtypeID =
-                                                        value.value.toString();
-                                                    BlocProvider.of<
-                                                                RegisterCubit>(
-                                                            context)
-                                                        .getidtextfield(
-                                                            countryid:
-                                                                _selectedCountry
-                                                                    ?.countryId
-                                                                    .toString(),
-                                                            iDTypeid: value
-                                                                .value
-                                                                .toString());
+                                                  if (value != null && value != "") {
+                                                    indentificationtypeID = value.value.toString();
+                                                    BlocProvider.of<RegisterCubit>(context).getidtextfield(
+                                                        countryid: _selectedCountry?.countryId.toString(),
+                                                        iDTypeid: value.value.toString());
                                                   }
                                                 },
-                                                autovalidateMode:
-                                                    AutovalidateMode
-                                                        .onUserInteraction,
-                                                textFieldDecoration:
-                                                    InputDecoration(
+                                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                textFieldDecoration: InputDecoration(
                                                   fillColor: Color(0xffDDDDDD),
-                                                  enabledBorder:
-                                                      OutlineInputBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(33),
-                                                          borderSide: BorderSide(
-                                                              color: Color(
-                                                                  0xffDDDDDD),
-                                                              width: 0)),
-                                                  disabledBorder:
-                                                      OutlineInputBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(33),
-                                                          borderSide:
-                                                              BorderSide(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  width: 0)),
+                                                  enabledBorder: OutlineInputBorder(
+                                                      borderRadius: BorderRadius.circular(33),
+                                                      borderSide: BorderSide(color: Color(0xffDDDDDD), width: 0)),
+                                                  disabledBorder: OutlineInputBorder(
+                                                      borderRadius: BorderRadius.circular(33),
+                                                      borderSide: BorderSide(color: Colors.white, width: 0)),
                                                   border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              33),
-                                                      borderSide: BorderSide(
-                                                          color: Colors.white,
-                                                          width: 0)),
+                                                      borderRadius: BorderRadius.circular(33),
+                                                      borderSide: BorderSide(color: Colors.white, width: 0)),
                                                   filled: true,
-                                                  contentPadding:
-                                                      EdgeInsets.symmetric(
-                                                          horizontal: 15,
-                                                          vertical: 25),
+                                                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 25),
                                                   suffixIcon: Icon(
                                                     Icons.arrow_drop_down,
                                                     color: Color(0xff898989),
@@ -668,30 +541,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                       '${LanguageClass.isEnglish ? "Select document type" : "اختر نوع الوثيقة"}',
                                                   errorStyle: fontStyle(
                                                       fontSize: 10.sp,
-                                                      fontFamily:
-                                                          FontFamily.regular,
-                                                      fontWeight:
-                                                          FontWeight.w500,
+                                                      fontFamily: FontFamily.regular,
+                                                      fontWeight: FontWeight.w500,
                                                       color: Colors.red),
                                                   hintStyle: fontStyle(
                                                     color: Color(0xffA2A2A2),
-                                                    fontFamily:
-                                                        FontFamily.medium,
+                                                    fontFamily: FontFamily.medium,
                                                     height: 1.2,
                                                     fontSize: 14.sp,
-                                                    fontWeight:
-                                                        FontWeight.normal,
+                                                    fontWeight: FontWeight.normal,
                                                   ),
                                                 ),
                                                 readOnly: true,
                                                 validator: (value) {
-                                                  if (docType?.object
-                                                          ?.isRequired ==
-                                                      true) {
-                                                    if (value == null ||
-                                                        value == "") {
-                                                      return LanguageClass
-                                                              .isEnglish
+                                                  if (docType?.object?.isRequired == true) {
+                                                    if (value == null || value == "") {
+                                                      return LanguageClass.isEnglish
                                                           ? "Please select document type"
                                                           : "الرجاء اختيار نوع الوثيقة";
                                                     } else {
@@ -716,24 +581,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                   fontWeight: FontWeight.w500,
                                                 ),
                                                 dropDownList: [
-                                                  for (int i = 0;
-                                                      i < documentDaata.length;
-                                                      i++)
+                                                  for (int i = 0; i < documentDaata.length; i++)
                                                     DropDownValueModel(
-                                                        name: documentDaata[i]
-                                                            .value!,
-                                                        value: documentDaata[i]
-                                                            .typeid),
+                                                        name: documentDaata[i].value!, value: documentDaata[i].typeid),
                                                 ])),
                                         SizedBox(
                                           height: 10,
                                         ),
                                         Container(
-                                          margin: EdgeInsets.symmetric(
-                                              vertical: 5, horizontal: 30),
+                                          margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                                           child: Text(
-                                            idtextfieldmodel!.message!.title
-                                                .toString(),
+                                            idtextfieldmodel!.message!.title.toString(),
                                             style: fontStyle(
                                                 fontSize: 16,
                                                 fontFamily: FontFamily.regular,
@@ -752,12 +610,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           validator: (validator) {
                                             if (validator == null ||
                                                 validator.isEmpty ||
-                                                validator.length !=
-                                                    idtextfieldmodel!
-                                                        .message!.length) {
-                                              return idtextfieldmodel!
-                                                  .message!.validationMesage
-                                                  .toString();
+                                                validator.length != idtextfieldmodel!.message!.length) {
+                                              return idtextfieldmodel!.message!.validationMesage.toString();
                                             }
                                             return null;
                                           },
@@ -768,8 +622,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   : 0.verticalSpace,
 
                               Container(
-                                margin: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 30),
+                                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                                 child: Text(
                                   LanguageClass.isEnglish
                                       ? "Enter Your Password(min 8 characters)"
@@ -791,16 +644,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 controller: passwordController,
                                 validator: (validator) {
                                   if (validator == null || validator.isEmpty) {
-                                    return LanguageClass.isEnglish
-                                        ? " Enter password"
-                                        : "  ادخل كلمة المرور";
-                                  } else if (validator.length > 8 &&
-                                      !validator.contains(' ')) {
+                                    return LanguageClass.isEnglish ? " Enter password" : "  ادخل كلمة المرور";
+                                  } else if (validator.length >= 8 && !validator.contains(' ')) {
                                     return null;
                                   }
-                                  return LanguageClass.isEnglish
-                                      ? " Invalid password"
-                                      : " كلمة مرور غير صالحة";
+                                  return LanguageClass.isEnglish ? " Invalid password" : " كلمة مرور غير صالحة";
                                 },
                                 hintText: '',
                               ),
@@ -810,12 +658,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
 
                               Container(
-                                margin: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 30),
+                                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                                 child: Text(
-                                  LanguageClass.isEnglish
-                                      ? "Confirm Your Password"
-                                      : "موافقة كلمة المرور",
+                                  LanguageClass.isEnglish ? "Confirm Your Password" : "موافقة كلمة المرور",
                                   style: fontStyle(
                                       fontSize: 16,
                                       fontFamily: FontFamily.regular,
@@ -851,52 +696,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   if (formKey.currentState!.validate()) {
                                     if (_selectedCountry == null) {
                                       Constants.hideLoadingDialog(context);
-                                      Constants.showDefaultSnackBar(
-                                          context: context,
-                                          text: "Select your country..");
+                                      Constants.showDefaultSnackBar(context: context, text: "Select your country..");
                                       return;
                                     }
                                     if (_selectedCity == null) {
                                       Constants.hideLoadingDialog(context);
-                                      Constants.showDefaultSnackBar(
-                                          context: context,
-                                          text: "Select your city..");
+                                      Constants.showDefaultSnackBar(context: context, text: "Select your city..");
                                       return;
                                     }
-                                    BlocProvider.of<RegisterCubit>(context)
-                                        .registerUser(UserRegisterParams(
+                                    BlocProvider.of<RegisterCubit>(context).registerUser(UserRegisterParams(
                                       name: nameController.text,
-                                      mobile:
-                                          '${selectedcode}${mobileController.text}',
+                                      mobile: '${selectedcode}${mobileController.text}',
                                       email: emailController.text,
                                       identificationNumber: idcontroller.text,
                                       password: passwordController.text,
                                       userType: "Customer",
-                                      indentificationtypeID:
-                                          indentificationtypeID,
+                                      indentificationtypeID: indentificationtypeID,
                                       countryId: _selectedCountry!.countryId,
                                       cityId: _selectedCity!.cityId,
                                     ));
                                   }
                                 },
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 20),
+                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                                   //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
                                   decoration: BoxDecoration(
-                                      color: Routes.isomra
-                                          ? AppColors.umragold
-                                          : AppColors.primaryColor,
+                                      color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                                       borderRadius: BorderRadius.circular(41)),
                                   child: Center(
                                     child: Text(
-                                      LanguageClass.isEnglish
-                                          ? "Sign Up"
-                                          : "انشاء الحساب",
-                                      style: fontStyle(
-                                          color: AppColors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 22),
+                                      LanguageClass.isEnglish ? "Sign Up" : "انشاء الحساب",
+                                      style:
+                                          fontStyle(color: AppColors.white, fontWeight: FontWeight.bold, fontSize: 22),
                                     ),
                                   ),
                                 ),

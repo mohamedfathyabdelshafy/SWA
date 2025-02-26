@@ -29,35 +29,29 @@ class PackagesBloc extends Bloc<PackagesEvent, PackagesState> {
       if (event is stationfromEvent) {
         emit(state.update(isloading: true));
 
-        StationfromModel stationfromModel =
-            await _packagesRespo.getstationfrom();
+        StationfromModel stationfromModel = await _packagesRespo.getstationfrom();
 
-        emit(
-            state.update(isloading: false, stationfromModel: stationfromModel));
+        emit(state.update(isloading: false, stationfromModel: stationfromModel));
       } else if (event is stationtoEvent) {
         emit(state.update(isloading: true));
 
-        StationfromModel stationfromModel =
-            await _packagesRespo.getstationto(stationid: event.stationid);
+        StationfromModel stationfromModel = await _packagesRespo.getstationto(stationid: event.stationid);
 
-        emit(
-            state.update(isloading: false, stationfromModel: stationfromModel));
+        emit(state.update(isloading: false, stationfromModel: stationfromModel));
       } else if (event is packagesEvent) {
         emit(state.update(isloading: true));
         log("rr1 : ");
 
-        Packagemodel stationfromModel = await _packagesRespo.getpackages(
-            stationtoid: event.stationtoid, stationfromid: event.stationfromid);
+        Packagemodel stationfromModel =
+            await _packagesRespo.getpackages(stationtoid: event.stationtoid, stationfromid: event.stationfromid);
         log("rr: $stationfromModel");
         emit(state.update(isloading: false, packagemodel: stationfromModel));
       } else if (event is GetactivepackageEvent) {
         emit(state.update(isloading: true));
 
-        ActivePackagemodel activePackagemodel =
-            await _packagesRespo.getactivepackages();
+        ActivePackagemodel activePackagemodel = await _packagesRespo.getactivepackages();
 
-        emit(state.update(
-            isloading: false, activePackagemodel: activePackagemodel));
+        emit(state.update(isloading: false, activePackagemodel: activePackagemodel));
       } else if (event is GetadsEvent) {
         emit(state.update(isloading: true));
 
@@ -73,27 +67,25 @@ class PackagesBloc extends Bloc<PackagesEvent, PackagesState> {
       } else if (event is PromocodeEvent) {
         emit(state.update(isloading: true));
 
-        Promocodemodel stationfromModel = await _packagesRespo.promocode(
-            code: event.promocode!, packageid: event.packageid);
+        Promocodemodel stationfromModel =
+            await _packagesRespo.promocode(code: event.promocode!, packageid: event.packageid);
 
         emit(state.update(isloading: false, promocodemodel: stationfromModel));
       } else if (event is PromocodReservationEvent) {
         emit(state.update(isloading: true));
 
-        Promocodemodel stationfromModel =
-            await _packagesRespo.promocodeRecervation(
-                code: event.promocode!,
-                custId: event.custId!,
-                paymentTypeID: event.paymentTypeID!,
-                promoid: event.promocodeid!,
-                trips: event.trips!);
+        Promocodemodel stationfromModel = await _packagesRespo.promocodeRecervation(
+            code: event.promocode!,
+            custId: event.custId!,
+            paymentTypeID: event.paymentTypeID!,
+            promoid: event.promocodeid!,
+            trips: event.trips!);
 
         emit(state.update(isloading: false, promocodemodel: stationfromModel));
       } else if (event is packagecardpayment) {
         emit(state.update(isloading: true));
 
-        ReservationResponseCreditCard res =
-            await _packagesRespo.packagespaycard(
+        ReservationResponseCreditCard res = await _packagesRespo.packagespaycard(
           amount: double.parse(event.Amount!),
           cardExpiryMonth: event.cardExpiryMonth!,
           cardExpiryYear: event.cardExpiryYear!,
@@ -106,13 +98,12 @@ class PackagesBloc extends Bloc<PackagesEvent, PackagesState> {
           paymentMethodID: event.PaymentMethodID,
         );
 
-        emit(
-            state.update(isloading: false, reservationResponseCreditCard: res));
+        emit(state.update(isloading: false, reservationResponseCreditCard: res));
       } else if (event is packagefawryEvent) {
         emit(state.update(isloading: true));
 
         ReservationResponseElectronicModel res = await _packagesRespo.fawrypay(
-          amount: double.parse(event.Amount!),
+          amount: double.parse(event.Amount!.replaceAll(",", "")),
           paymentMethodID: event.PaymentMethodID.toString(),
           fromStationID: event.FromStationID.toString(),
           packageid: event.PackageID!,
@@ -120,40 +111,33 @@ class PackagesBloc extends Bloc<PackagesEvent, PackagesState> {
           toStationId: event.ToStationID.toString(),
         );
 
-        emit(state.update(
-            isloading: false, reservationResponseElectronicModel: res));
+        emit(state.update(isloading: false, reservationResponseElectronicModel: res));
       } else if (event is packeydetcutpaymentevent) {
         emit(state.update(isloading: true));
 
-        ReservationResponseMyWalletModel stationfromModel =
-            await _packagesRespo.packagepaywallet(
-                amount: event.Amount!,
-                fromStationID: event.FromStationID.toString(),
-                packageid: event.PackageID!,
-                paymentTypeID: event.PaymentTypeID!,
-                promocodeid: event.PromoCodeID!,
-                toStationId: event.ToStationID.toString(),
-                paymentMethodID: event.PaymentMethodID.toString());
+        ReservationResponseMyWalletModel stationfromModel = await _packagesRespo.packagepaywallet(
+            amount: event.Amount!,
+            fromStationID: event.FromStationID.toString(),
+            packageid: event.PackageID!,
+            paymentTypeID: event.PaymentTypeID!,
+            promocodeid: event.PromoCodeID!,
+            toStationId: event.ToStationID.toString(),
+            paymentMethodID: event.PaymentMethodID.toString());
 
-        emit(state.update(
-            isloading: false,
-            reservationResponseMyWalletModel: stationfromModel));
+        emit(state.update(isloading: false, reservationResponseMyWalletModel: stationfromModel));
       } else if (event is PackageelectronicEvent) {
         // emit(state.update(isloading: true));
 
-        ReservationResponseElectronicModel stationfromModel =
-            await _packagesRespo.electronicpay(
-                amount: double.parse(event.Amount!),
-                fromStationID: event.FromStationID.toString(),
-                packageid: event.PackageID!,
-                paymentTypeID: event.PaymentTypeID!,
-                mobile: event.phone!,
-                toStationId: event.ToStationID.toString(),
-                paymentMethodID: event.PaymentMethodID.toString());
+        ReservationResponseElectronicModel stationfromModel = await _packagesRespo.electronicpay(
+            amount: double.parse(event.Amount!.replaceAll(",", "")),
+            fromStationID: event.FromStationID.toString(),
+            packageid: event.PackageID!,
+            paymentTypeID: event.PaymentTypeID!,
+            mobile: event.phone!,
+            toStationId: event.ToStationID.toString(),
+            paymentMethodID: event.PaymentMethodID.toString());
 
-        emit(state.update(
-            isloading: false,
-            reservationResponseElectronicModel: stationfromModel));
+        emit(state.update(isloading: false, reservationResponseElectronicModel: stationfromModel));
       } else if (event is checkversionevent) {
         // emit(state.update(isloading: true));
 

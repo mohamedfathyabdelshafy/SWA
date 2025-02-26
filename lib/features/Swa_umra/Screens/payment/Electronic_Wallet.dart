@@ -73,10 +73,7 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
                           : "سيصلك إشعار بتطبيق محفظتك \n من أجل الموافقة على الدفع"),
                     ],
                   ),
-                  titleTextStyle: fontStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontSize: 20),
+                  titleTextStyle: fontStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20),
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -91,9 +88,7 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text('Reference Number: '),
-                          Text(state.reservationResponseElectronicModel!
-                              .message!.referenceNumber
-                              .toString())
+                          Text(state.reservationResponseElectronicModel!.message!.referenceNumber.toString())
                         ],
                       )
                     ],
@@ -103,8 +98,7 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
                     ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, Routes.home, (route) => false,
+                          Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false,
                               arguments: Routes.isomra);
                         },
                         child: Container(
@@ -116,10 +110,7 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
                           child: Center(
                             child: Text(
                               LanguageClass.isEnglish ? 'OK' : "موافقة",
-                              style: fontStyle(
-                                  color: AppColors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 22),
+                              style: fontStyle(color: AppColors.white, fontWeight: FontWeight.bold, fontSize: 22),
                             ),
                           ),
                         )),
@@ -127,8 +118,7 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
                 );
               },
             );
-          } else if (state.reservationResponseElectronicModel?.status ==
-              'failed') {
+          } else if (state.reservationResponseElectronicModel?.status == 'failed') {
             Constants.hideLoadingDialog(context);
             Constants.showDefaultSnackBar(
                 context: context,
@@ -149,16 +139,12 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
               return SafeArea(
                   bottom: false,
                   child: Directionality(
-                      textDirection: LanguageClass.isEnglish
-                          ? TextDirection.ltr
-                          : TextDirection.rtl,
+                      textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
                       child: Column(
                         children: [
                           Container(
                             margin: const EdgeInsets.only(left: 27, right: 27),
-                            alignment: LanguageClass.isEnglish
-                                ? Alignment.topLeft
-                                : Alignment.topRight,
+                            alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                             child: InkWell(
                               onTap: () {
                                 Navigator.pop(context);
@@ -172,19 +158,12 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
                           ),
                           Container(
                               margin: EdgeInsets.only(
-                                  left: LanguageClass.isEnglish ? 55 : 0,
-                                  right: LanguageClass.isEnglish ? 0 : 55),
-                              alignment: LanguageClass.isEnglish
-                                  ? Alignment.topLeft
-                                  : Alignment.topRight,
+                                  left: LanguageClass.isEnglish ? 55 : 0, right: LanguageClass.isEnglish ? 0 : 55),
+                              alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                               child: Text(
-                                LanguageClass.isEnglish
-                                    ? 'Electronic wallet'
-                                    : 'محفظة الاكترونية',
+                                LanguageClass.isEnglish ? 'Electronic wallet' : 'محفظة الاكترونية',
                                 style: fontStyle(
-                                    fontSize: 24.sp,
-                                    fontFamily: FontFamily.bold,
-                                    fontWeight: FontWeight.w500),
+                                    fontSize: 24.sp, fontFamily: FontFamily.bold, fontWeight: FontWeight.w500),
                               )),
 
                           SizedBox(
@@ -201,16 +180,14 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
                                     Row(
                                       children: [
                                         Container(
-                                          height: 40,
+                                          height: 20,
                                           width: 1,
-                                          decoration: const BoxDecoration(
-                                              color: Color(0xff47A9EB)),
+                                          decoration: const BoxDecoration(color: Color(0xff47A9EB)),
                                         ),
                                         Expanded(
                                           child: Container(
                                             height: 70,
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 2, horizontal: 18),
+                                            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
                                             decoration: const BoxDecoration(
                                                 //color: AppColors.yellow
                                                 // border: Border.all(
@@ -223,23 +200,14 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
                                             child: TextFormField(
                                               maxLength: 11,
                                               autofocus: true,
-                                              style: fontStyle(
-                                                  color: AppColors.blackColor,
-                                                  fontSize: 16),
+                                              style: fontStyle(color: AppColors.blackColor, fontSize: 16),
                                               cursorColor: AppColors.blue,
                                               controller: phoneController,
-                                              inputFormatters: [
-                                                FilteringTextInputFormatter
-                                                    .allow(RegExp("[0-9]"))
-                                              ],
-                                              keyboardType:
-                                                  TextInputType.number,
+                                              inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9]"))],
+                                              keyboardType: TextInputType.number,
                                               decoration: InputDecoration(
                                                 border: InputBorder.none,
-                                                hintText:
-                                                    LanguageClass.isEnglish
-                                                        ? 'Phone Number'
-                                                        : 'رقم التليفون',
+                                                hintText: LanguageClass.isEnglish ? 'Phone Number' : 'رقم التليفون',
                                                 errorStyle: fontStyle(
                                                   color: Colors.red,
                                                   fontSize: 11,
@@ -247,13 +215,9 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
                                                 hintStyle: fontStyle(
                                                     color: AppColors.greyLight,
                                                     fontSize: 15,
-                                                    fontFamily:
-                                                        FontFamily.bold),
+                                                    fontFamily: FontFamily.bold),
                                                 labelStyle: fontStyle(
-                                                    color: AppColors.grey,
-                                                    fontSize: 12,
-                                                    fontFamily:
-                                                        FontFamily.bold),
+                                                    color: AppColors.grey, fontSize: 12, fontFamily: FontFamily.bold),
                                               ),
                                               validator: (value) {
                                                 if (value!.isEmpty) {
@@ -277,14 +241,12 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
                                         Container(
                                           height: 20,
                                           width: 1,
-                                          decoration: const BoxDecoration(
-                                              color: Color(0xffD865A4)),
+                                          decoration: const BoxDecoration(color: Color(0xffD865A4)),
                                         ),
                                         Expanded(
                                           child: Container(
                                             height: 50,
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 2, horizontal: 18),
+                                            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
                                             decoration: const BoxDecoration(
                                                 // border: Border.all(
                                                 //   color: AppColors.blue,
@@ -295,16 +257,15 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
                                                 ),
                                             child: TextFormField(
                                               autofocus: true,
-                                              style: fontStyle(
-                                                  color: AppColors.blackColor,
-                                                  fontSize: 16),
+                                              readOnly: true,
+                                              style: fontStyle(color: AppColors.blackColor, fontSize: 16),
                                               cursorColor: AppColors.blue,
                                               controller: amountController,
                                               inputFormatters: [
-                                                NumericTextFormatter()
+                                                NumericTextFormatter(),
+                                                FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                                               ],
-                                              keyboardType:
-                                                  TextInputType.number,
+                                              keyboardType: TextInputType.number,
                                               decoration: InputDecoration(
                                                 border: InputBorder.none,
                                                 hintText: 'Amount',
@@ -315,17 +276,18 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
                                                 hintStyle: fontStyle(
                                                     color: AppColors.greyLight,
                                                     fontSize: 15,
-                                                    fontFamily:
-                                                        FontFamily.bold),
+                                                    fontFamily: FontFamily.bold),
                                                 labelStyle: fontStyle(
-                                                    color: AppColors.grey,
-                                                    fontSize: 12,
-                                                    fontFamily:
-                                                        FontFamily.bold),
+                                                    color: AppColors.grey, fontSize: 12, fontFamily: FontFamily.bold),
                                               ),
                                               validator: (value) {
-                                                if (value!.isEmpty) {
-                                                  return 'This Field is Required';
+                                                //check if only numbers or ","
+                                                value = value?.replaceAll(',', '');
+                                                final isNAN = double.tryParse(value ?? '');
+                                                if (isNAN == null || isNAN == 0) {
+                                                  return LanguageClass.isEnglish
+                                                      ? 'Invalid Amount'
+                                                      : "من فضلك ادخل قيمة صحيحة";
                                                 } else {
                                                   return null;
                                                 }
@@ -341,10 +303,8 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
                                     InkWell(
                                       onTap: () {
                                         if (formKey.currentState!.validate()) {
-                                          UmraDetails.phonenumber =
-                                              phoneController.text;
-                                          Navigator.pop(
-                                              context, phoneController.text);
+                                          UmraDetails.phonenumber = phoneController.text;
+                                          Navigator.pop(context, phoneController.text);
 
                                           // if (widget.umrahReservationID !=
                                           //     null) {
@@ -370,9 +330,7 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
                                         ),
                                         child: Constants.customButton(
                                           borderradias: 41,
-                                          text: LanguageClass.isEnglish
-                                              ? 'Pay'
-                                              : 'ادفع',
+                                          text: LanguageClass.isEnglish ? 'Pay' : 'ادفع',
                                           color: AppColors.umragold,
                                         ),
                                       ),
@@ -393,17 +351,13 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
   }
 
   Future<dynamic> showDoneConfirmationDialog(BuildContext context,
-      {required String message,
-      bool isError = false,
-      Widget? body,
-      required Function callback}) async {
+      {required String message, bool isError = false, Widget? body, required Function callback}) async {
     return CoolAlert.show(
         barrierDismissible: true,
         context: context,
         confirmBtnText: "ok",
         title: isError ? 'error' : '',
-        lottieAsset:
-            isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
+        lottieAsset: isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
         type: isError ? CoolAlertType.error : CoolAlertType.success,
         loopAnimation: false,
         backgroundColor: isError ? Colors.red : Colors.white,

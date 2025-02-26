@@ -2,7 +2,7 @@ name: swa
 description: A new Flutter project.
 publish_to: "SWA"
 
-version: 1.2.2+17
+version: 1.2.3+18
 
 environment:
   sdk: ">=3.5.0 <4.0.0"
@@ -43,6 +43,7 @@ dependencies:
   page_transition: ^2.1.0
   pdf: ^3.9.0
   permission_handler: ^11.0.1
+  phone_numbers_parser: ^9.0.3
   pin_code_fields: ^8.0.1
   printing: ^5.4.2
   qr_flutter: ^4.1.0
@@ -102,7 +103,6 @@ flutter:
     - family: Arabic_Regular
       fonts:
         - asset: assets/fonts/arabic_regular.ttf
-
 #  fonts:
 #    - family: English_Black
 #      fonts:

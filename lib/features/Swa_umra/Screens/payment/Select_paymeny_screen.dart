@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
-import 'package:swa/core/utils/language.dart';
-import 'package:swa/core/utils/media_query_values.dart';
-import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/Swa_umra/Screens/payment/Electronic_Wallet.dart';
 import 'package:swa/features/Swa_umra/Screens/payment/card_payment.dart';
 import 'package:swa/features/Swa_umra/Screens/payment/fawry_screen.dart';
@@ -17,25 +12,22 @@ import 'package:swa/features/Swa_umra/models/umra_detail.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_respo.dart';
 import 'package:swa/features/payment/wallet/data/model/my_wallet_response_model.dart';
 import 'package:swa/features/payment/wallet/data/repo/my_wallet_repo.dart';
+import 'package:swa/features/reusable_payment/presentation/screens/reusable_payment_screen.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/main.dart';
 import 'package:swa/select_payment2/data/models/Curruncy_model.dart';
 
 class SelectPaymentUmraScreen extends StatefulWidget {
-  SelectPaymentUmraScreen({super.key, this.user});
-  User? user;
+  const SelectPaymentUmraScreen({super.key, this.user});
+  final User? user;
   @override
-  State<SelectPaymentUmraScreen> createState() =>
-      _SelectPaymentUmraScreenState();
+  State<SelectPaymentUmraScreen> createState() => _SelectPaymentUmraScreenState();
 }
 
 class _SelectPaymentUmraScreenState extends State<SelectPaymentUmraScreen> {
-  UmraBloc _umraBloc = new UmraBloc();
-
-  var countryid;
+  late final int countryid;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     countryid = CacheHelper.getDataToSharedPref(
       key: 'countryid',
@@ -44,291 +36,74 @@ class _SelectPaymentUmraScreenState extends State<SelectPaymentUmraScreen> {
   }
 
   double balance = 0;
-  Curruncylist? curruncylist;
 
   getwalllet() async {
-    MyWalletResponseModel? wallet =
-        await MyWalletRepo(sl()).getMyWallet(customerId: Routes.customerid!);
+    MyWalletResponseModel? wallet = await MyWalletRepo(sl()).getMyWallet(customerId: Routes.customerid!);
     setState(() {
       balance = wallet!.message!;
     });
-
-    var responce = await PackagesRespo().GetallCurrency();
-    if (responce is Curruncylist) {
-      curruncylist = responce;
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    double sizeHeight = context.height;
+    return BlocListener<UmraBloc, UmraState>(
+      listener: _handleListenner,
+      child: ReusablePaymentScreen(
+        onBackPressed: (context) => Navigator.pop(context),
+        onElectronicWalletPressed: _onElectronicWalletPressed,
+        onVisaPaymentPressed: _onVisaPaymentPressed,
+        onFawryPressed: _onFawryPaymentPressed,
+        onWalletPaymentPressed: _onWalletPaymentPressed,
+        hasWalletPayment: true,
+        shouldHideOtherPaymentMethodsIfWalletSelected: true,
+        hasTimer: true,
+        walletBalance: balance,
+      ),
+    );
+  }
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        bottom: false,
-        child: Directionality(
-          textDirection:
-              LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
-          child: BlocListener(
-            bloc: _umraBloc,
-            listener: (context, UmraState state) {
-              // TODO: implement listener
+  void _handleListenner(BuildContext context, UmraState state) {
+    if (state.reservationResponseMyWalletModel?.status == 'failed') {
+      Constants.showDefaultSnackBar(
+          color: AppColors.umragold, context: context, text: state.reservationResponseMyWalletModel!.message ?? ' ');
+    } else if (state.reservationResponseMyWalletModel?.status == 'success') {
+      Constants.showDefaultSnackBar(
+          color: AppColors.umragold, context: context, text: state.reservationResponseMyWalletModel!.message ?? ' ');
+      Navigator.popUntil(context, (route) => route.isFirst);
+    }
+  }
 
-              if (state.reservationResponseMyWalletModel?.status == 'failed') {
-                Constants.showDefaultSnackBar(
-                    color: AppColors.umragold,
-                    context: context,
-                    text:
-                        state.reservationResponseMyWalletModel!.message ?? ' ');
-              } else if (state.reservationResponseMyWalletModel?.status ==
-                  'success') {
-                Constants.showDefaultSnackBar(
-                    color: AppColors.umragold,
-                    context: context,
-                    text:
-                        state.reservationResponseMyWalletModel!.message ?? ' ');
-                Navigator.popUntil(context, (route) => route.isFirst);
-              }
-            },
-            child: BlocBuilder(
-              bloc: _umraBloc,
-              builder: (context, UmraState state) {
-                if (state.isloading == true) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.umragold,
-                    ),
-                  );
-                } else {
-                  return Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(left: 27, right: 27),
-                        alignment: LanguageClass.isEnglish
-                            ? Alignment.topLeft
-                            : Alignment.topRight,
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Icon(
-                            Icons.arrow_back_rounded,
-                            color: AppColors.umragold,
-                            size: 25,
-                          ),
-                        ),
-                      ),
-                      Container(
-                          margin: EdgeInsets.only(
-                              left: LanguageClass.isEnglish ? 55 : 0,
-                              right: LanguageClass.isEnglish ? 0 : 55),
-                          alignment: LanguageClass.isEnglish
-                              ? Alignment.topLeft
-                              : Alignment.topRight,
-                          child: Text(
-                            LanguageClass.isEnglish
-                                ? "Select payment"
-                                : "حدد طريقة الدفع",
-                            style: fontStyle(
-                                fontSize: 24.sp,
-                                fontFamily: FontFamily.bold,
-                                fontWeight: FontWeight.w500),
-                          )),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 30),
-                        child: Column(
-                          children: [
-                            InkWell(
-                              onTap: () async {
-                                _umraBloc.add(WalletdetactionEvent(
-                                    PaymentMethodID: 4, paymentTypeID: 67));
-                              },
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 23,
-                                    height: 22,
-                                    alignment: Alignment.center,
-                                    padding: EdgeInsets.all(2),
-                                    decoration: BoxDecoration(
-                                        color: AppColors.umragold,
-                                        borderRadius: BorderRadius.circular(4)),
-                                    child: SvgPicture.asset(
-                                        'assets/images/wallet.svg'),
-                                  ),
-                                  SizedBox(
-                                    width: 14,
-                                  ),
-                                  customText(LanguageClass.isEnglish
-                                      ? "Wallet deduction"
-                                      : "خصم من المحفظة"),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(7),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        color: AppColors.umragold,
-                                        borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(
-                                            color: AppColors.umragold,
-                                            width: 2)),
-                                    child: Text(
-                                      '${balance} ${Routes.curruncy ?? ""}',
-                                      style: fontStyle(
-                                          color: AppColors.white,
-                                          fontSize: 16,
-                                          fontFamily: FontFamily.medium),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 17,
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                UmraDetails.curruncy = Routes.curruncy!;
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Umracardpay(
-                                      index: 1,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 23,
-                                    height: 22,
-                                    alignment: Alignment.center,
-                                    padding: EdgeInsets.all(2),
-                                    decoration: BoxDecoration(
-                                        color: AppColors.umragold,
-                                        borderRadius: BorderRadius.circular(4)),
-                                    child: SvgPicture.asset(
-                                        'assets/images/visa.svg'),
-                                  ),
-                                  SizedBox(
-                                    width: 14,
-                                  ),
-                                  customText(LanguageClass.isEnglish
-                                      ? "Pay with Card"
-                                      : "الدفع بالبطاقة")
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 17,
-                            ),
-                            countryid == 1
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  FawryUmraScreen(),
-                                            ),
-                                          );
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              width: 23,
-                                              height: 22,
-                                              alignment: Alignment.center,
-                                              padding: EdgeInsets.all(2),
-                                              decoration: BoxDecoration(
-                                                  color: AppColors.umragold,
-                                                  borderRadius:
-                                                      BorderRadius.circular(4)),
-                                              child: SvgPicture.asset(
-                                                  'assets/images/fawry.svg'),
-                                            ),
-                                            SizedBox(
-                                              width: 14,
-                                            ),
-                                            customText(LanguageClass.isEnglish
-                                                ? "Pay Fawry"
-                                                : "مدفوعات فوري")
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 17,
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ElectronicUmraScreen(),
-                                            ),
-                                          );
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              width: 23,
-                                              height: 22,
-                                              alignment: Alignment.center,
-                                              padding: EdgeInsets.all(2),
-                                              decoration: BoxDecoration(
-                                                  color: AppColors.umragold,
-                                                  borderRadius:
-                                                      BorderRadius.circular(4)),
-                                              child: SvgPicture.asset(
-                                                  'assets/images/icons8-open-wallet-78.png'),
-                                            ),
-                                            SizedBox(
-                                              width: 14,
-                                            ),
-                                            customText(LanguageClass.isEnglish
-                                                ? "Electronic wallet"
-                                                : "المحفظة الاكترونية")
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : SizedBox(),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                }
-              },
-            ),
-          ),
+  void _onFawryPaymentPressed(context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FawryUmraScreen(),
+      ),
+    );
+  }
+
+  void _onVisaPaymentPressed(context) {
+    UmraDetails.curruncy = Routes.curruncy!;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Umracardpay(
+          index: 1,
         ),
       ),
     );
   }
 
-  Widget customText(text) {
-    return Text(
-      text,
-      style: fontStyle(
-          color: Colors.black,
-          fontSize: 21,
-          fontWeight: FontWeight.w600,
-          fontFamily: FontFamily.medium),
+  void _onElectronicWalletPressed(context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ElectronicUmraScreen(),
+      ),
     );
+  }
+
+  void _onWalletPaymentPressed(BuildContext context) {
+    context.read<UmraBloc>().add(WalletdetactionEvent(PaymentMethodID: 4, paymentTypeID: 67));
   }
 }

@@ -36,17 +36,13 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
   }
 
   Future<dynamic> showDoneConfirmationDialog(BuildContext context,
-      {required String message,
-      bool isError = false,
-      Widget? body,
-      required Function callback}) async {
+      {required String message, bool isError = false, Widget? body, required Function callback}) async {
     return CoolAlert.show(
         barrierDismissible: true,
         context: context,
         confirmBtnText: "ok",
         title: isError ? 'error' : 'success',
-        lottieAsset:
-            isError ? 'assets/json/error.json' : 'assets/json/done.json',
+        lottieAsset: isError ? 'assets/json/error.json' : 'assets/json/done.json',
         type: isError ? CoolAlertType.error : CoolAlertType.success,
         loopAnimation: false,
         backgroundColor: isError ? Colors.red : Colors.white,
@@ -57,7 +53,7 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
         });
   }
 
-  TextEditingController amountController = TextEditingController();
+  // TextEditingController amountController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     double sizeHeight = context.height;
@@ -65,8 +61,7 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Directionality(
-        textDirection:
-            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+        textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: SingleChildScrollView(
@@ -78,9 +73,7 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
                   height: sizeHeight * 0.08,
                 ),
                 Container(
-                  alignment: LanguageClass.isEnglish
-                      ? Alignment.topLeft
-                      : Alignment.topRight,
+                  alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                   child: InkWell(
                     onTap: () {
                       Navigator.pop(context);
@@ -130,8 +123,7 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
                             Container(
                               height: 40,
                               width: 1,
-                              decoration:
-                                  const BoxDecoration(color: Color(0xff47A9EB)),
+                              decoration: const BoxDecoration(color: Color(0xff47A9EB)),
                             ),
                             const SizedBox(
                               width: 5,
@@ -150,24 +142,17 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
 
                                       ),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       Text(
-                                        LanguageClass.isEnglish
-                                            ? "amount"
-                                            : "القيمة",
+                                        LanguageClass.isEnglish ? "amount" : "القيمة",
                                         style: fontStyle(
-                                            fontSize: 15,
-                                            fontFamily: FontFamily.bold,
-                                            color: AppColors.greyLight),
+                                            fontSize: 15, fontFamily: FontFamily.bold, color: AppColors.greyLight),
                                       ),
                                       Text(
                                         Routes.Amount.toString(),
                                         style: fontStyle(
-                                            fontSize: 18,
-                                            fontFamily: FontFamily.bold,
-                                            color: AppColors.primaryColor),
+                                            fontSize: 18, fontFamily: FontFamily.bold, color: AppColors.primaryColor),
                                       )
                                     ],
                                   )),
@@ -180,16 +165,12 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
                           listener: (context, PackagesState state) {
                             if (state.isloading == true) {
                               Constants.showLoadingDialog(context);
-                            } else if (state.reservationResponseElectronicModel
-                                    ?.status ==
-                                'success') {
+                            } else if (state.reservationResponseElectronicModel?.status == 'success') {
                               Constants.hideLoadingDialog(context);
                               // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
-                              showDoneConfirmationDialog(context,
-                                  isError: false, callback: () {
+                              showDoneConfirmationDialog(context, isError: false, callback: () {
                                 Navigator.pop(context);
-                                Navigator.pushNamedAndRemoveUntil(
-                                    context, Routes.home, (route) => false,
+                                Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false,
                                     arguments: Routes.isomra);
                               },
                                   body: Column(
@@ -199,24 +180,18 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
                                         height: 20,
                                       ),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            LanguageClass.isEnglish
-                                                ? 'Amount: '
-                                                : "القيمة",
+                                            LanguageClass.isEnglish ? 'Amount: ' : "القيمة",
                                             style: fontStyle(
-                                                color: Colors.black,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600),
+                                                color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
                                           ),
                                           Text(price.toString())
                                         ],
                                       ),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             'Reference Number: ',
@@ -232,16 +207,11 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
                                                 InkWell(
                                                   onTap: () async {
                                                     Constants.showDefaultSnackBar(
-                                                        context: context,
-                                                        text:
-                                                            'Reference Number copied');
-                                                    await Clipboard.setData(
-                                                        ClipboardData(
-                                                            text: state
-                                                                .reservationResponseElectronicModel!
-                                                                .message!
-                                                                .referenceNumber
-                                                                .toString()));
+                                                        context: context, text: 'Reference Number copied');
+                                                    await Clipboard.setData(ClipboardData(
+                                                        text: state.reservationResponseElectronicModel!.message!
+                                                            .referenceNumber
+                                                            .toString()));
                                                   },
                                                   child: Container(
                                                       width: 15,
@@ -253,10 +223,7 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
                                                 ),
                                                 Expanded(
                                                   child: Text(
-                                                    state
-                                                        .reservationResponseElectronicModel!
-                                                        .message!
-                                                        .referenceNumber
+                                                    state.reservationResponseElectronicModel!.message!.referenceNumber
                                                         .toString(),
                                                     textAlign: TextAlign.end,
                                                   ),
@@ -270,15 +237,10 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
                                   ),
                                   message:
                                       "You will get a notification by applying your wallet \n In order to agree to pay");
-                            } else if (state.reservationResponseElectronicModel
-                                    ?.status ==
-                                'failed') {
+                            } else if (state.reservationResponseElectronicModel?.status == 'failed') {
                               Constants.hideLoadingDialog(context);
                               Constants.showDefaultSnackBar(
-                                  context: context,
-                                  text: state
-                                      .reservationResponseElectronicModel!
-                                      .errormessage!);
+                                  context: context, text: state.reservationResponseElectronicModel!.errormessage!);
                             }
                           },
                           child: InkWell(
@@ -286,8 +248,7 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
                               // if(_user != null && formKey.currentState!.validate()) {
                               _packagesBloc.add(packagefawryEvent(
                                   Amount: Routes.Amount,
-                                  FromStationID:
-                                      int.parse(Routes.FromStationID!),
+                                  FromStationID: int.parse(Routes.FromStationID!),
                                   PackageID: Routes.PackageID,
                                   PackagePriceID: Routes.PackageID,
                                   ToStationID: int.parse(Routes.ToStationID!),
@@ -297,11 +258,9 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
                               //}
                             },
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 30),
+                              padding: const EdgeInsets.symmetric(horizontal: 30),
                               child: Constants.customButton(
-                                text:
-                                    LanguageClass.isEnglish ? "Charge" : "شحن",
+                                text: LanguageClass.isEnglish ? "Charge" : "شحن",
                                 color: AppColors.primaryColor,
                               ),
                             ),
@@ -325,13 +284,11 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
 
 class NumericTextFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     if (newValue.text.isEmpty) {
       return newValue.copyWith(text: '');
     } else if (newValue.text.compareTo(oldValue.text) != 0) {
-      final int selectionIndexFromTheRight =
-          newValue.text.length - newValue.selection.end;
+      final int selectionIndexFromTheRight = newValue.text.length - newValue.selection.end;
       var value = newValue.text;
       if (newValue.text.length > 2) {
         value = value.replaceAll(RegExp(r'\D'), '');
@@ -340,8 +297,7 @@ class NumericTextFormatter extends TextInputFormatter {
       }
       return TextEditingValue(
         text: value,
-        selection: TextSelection.collapsed(
-            offset: value.length - selectionIndexFromTheRight),
+        selection: TextSelection.collapsed(offset: value.length - selectionIndexFromTheRight),
       );
     } else {
       return newValue;

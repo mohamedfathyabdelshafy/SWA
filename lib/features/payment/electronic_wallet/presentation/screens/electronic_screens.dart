@@ -15,14 +15,14 @@ import 'package:swa/features/payment/fawry/presentation/screens/fawry.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 
-class ElectronicScreen extends StatefulWidget {
-  const ElectronicScreen({super.key});
+class AddWalletBalanceWithElectronicWalletScreen extends StatefulWidget {
+  const AddWalletBalanceWithElectronicWalletScreen({super.key});
 
   @override
-  State<ElectronicScreen> createState() => _ElectronicScreenState();
+  State<AddWalletBalanceWithElectronicWalletScreen> createState() => _AddWalletBalanceWithElectronicWalletScreenState();
 }
 
-class _ElectronicScreenState extends State<ElectronicScreen> {
+class _AddWalletBalanceWithElectronicWalletScreenState extends State<AddWalletBalanceWithElectronicWalletScreen> {
   final formKey = GlobalKey<FormState>();
   TextEditingController amountController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -42,8 +42,7 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Directionality(
-        textDirection:
-            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+        textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -53,18 +52,14 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                   height: sizeHeight * 0.08,
                 ),
                 Container(
-                  alignment: LanguageClass.isEnglish
-                      ? Alignment.topLeft
-                      : Alignment.topRight,
+                  alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                   child: InkWell(
                     onTap: () {
                       Navigator.pop(context);
                     },
                     child: Icon(
                       Icons.arrow_back_rounded,
-                      color: Routes.isomra
-                          ? AppColors.umragold
-                          : AppColors.primaryColor,
+                      color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                       size: 35,
                     ),
                   ),
@@ -75,9 +70,7 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    LanguageClass.isEnglish
-                        ? 'Electronic wallet'
-                        : 'محفظة الاكترونية',
+                    LanguageClass.isEnglish ? 'Electronic wallet' : 'محفظة الاكترونية',
                     style: fontStyle(
                         color: AppColors.blackColor,
                         fontSize: 38,
@@ -107,45 +100,32 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                               Container(
                                 height: 40,
                                 width: 1,
-                                decoration: const BoxDecoration(
-                                    color: Color(0xff47A9EB)),
+                                decoration: const BoxDecoration(color: Color(0xff47A9EB)),
                               ),
                               Expanded(
                                 child: Container(
                                   height: 70,
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 20, horizontal: 18),
+                                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
                                   decoration: const BoxDecoration(),
                                   child: TextFormField(
                                     maxLength: 11,
                                     autofocus: true,
-                                    style: fontStyle(
-                                        color: AppColors.blackColor,
-                                        fontSize: 16),
+                                    style: fontStyle(color: AppColors.blackColor, fontSize: 16),
                                     cursorColor: AppColors.blue,
                                     controller: phoneController,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp("[0-9]"))
-                                    ],
+                                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9]"))],
                                     keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
-                                      hintText: LanguageClass.isEnglish
-                                          ? 'Phone Number'
-                                          : 'رقم التليفون',
+                                      hintText: LanguageClass.isEnglish ? 'Phone Number' : 'رقم التليفون',
                                       errorStyle: fontStyle(
                                         color: Colors.red,
                                         fontSize: 11,
                                       ),
                                       hintStyle: fontStyle(
-                                          color: AppColors.greyLight,
-                                          fontSize: 15,
-                                          fontFamily: FontFamily.bold),
-                                      labelStyle: fontStyle(
-                                          color: AppColors.grey,
-                                          fontSize: 12,
-                                          fontFamily: FontFamily.bold),
+                                          color: AppColors.greyLight, fontSize: 15, fontFamily: FontFamily.bold),
+                                      labelStyle:
+                                          fontStyle(color: AppColors.grey, fontSize: 12, fontFamily: FontFamily.bold),
                                     ),
                                     validator: (value) {
                                       return value!.isEmpty
@@ -171,14 +151,12 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                               Container(
                                 height: 20,
                                 width: 1,
-                                decoration: const BoxDecoration(
-                                    color: Color(0xffD865A4)),
+                                decoration: const BoxDecoration(color: Color(0xffD865A4)),
                               ),
                               Expanded(
                                 child: Container(
                                   height: 50,
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 2, horizontal: 18),
+                                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
                                   decoration: const BoxDecoration(
                                       // border: Border.all(
                                       //   color: AppColors.blue,
@@ -189,12 +167,13 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                       ),
                                   child: TextFormField(
                                     autofocus: true,
-                                    style: fontStyle(
-                                        color: AppColors.blackColor,
-                                        fontSize: 16),
+                                    style: fontStyle(color: AppColors.blackColor, fontSize: 16),
                                     cursorColor: AppColors.blue,
                                     controller: amountController,
-                                    inputFormatters: [NumericTextFormatter()],
+                                    inputFormatters: [
+                                      NumericTextFormatter(),
+                                      FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+                                    ],
                                     keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
@@ -204,22 +183,19 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                         fontSize: 11,
                                       ),
                                       hintStyle: fontStyle(
-                                          color: AppColors.greyLight,
-                                          fontSize: 15,
-                                          fontFamily: FontFamily.bold),
-                                      labelStyle: fontStyle(
-                                          color: AppColors.grey,
-                                          fontSize: 12,
-                                          fontFamily: FontFamily.bold),
+                                          color: AppColors.greyLight, fontSize: 15, fontFamily: FontFamily.bold),
+                                      labelStyle:
+                                          fontStyle(color: AppColors.grey, fontSize: 12, fontFamily: FontFamily.bold),
                                     ),
                                     validator: (value) {
-                                      final isNaN = double.tryParse(value!);
-                                      return value!.isEmpty
-                                          ? 'This Field is Required'
-                                          : isNaN == null ||
-                                                  int.parse(value) <= 0
-                                              ? 'Please Enter a Valid Number'
-                                              : null;
+                                      //check if only numbers or ","
+                                      value = value?.replaceAll(',', '');
+                                      final isNAN = double.tryParse(value ?? '');
+                                      if (isNAN == null || isNAN == 0) {
+                                        return LanguageClass.isEnglish ? 'Invalid Amount' : "من فضلك ادخل قيمة صحيحة";
+                                      } else {
+                                        return null;
+                                      }
                                     },
                                   ),
                                 ),
@@ -243,14 +219,10 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                   isError: false,
                                   callback: () {
                                     //post frame callback
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
+                                    WidgetsBinding.instance.addPostFrameCallback((_) {
                                       if (context.mounted) {
-                                        Navigator.pushNamedAndRemoveUntil(
-                                            context,
-                                            Routes.home,
-                                            (route) => false,
-                                            arguments: Routes.isomra);
+                                        // Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false,
+                                        //     arguments: Routes.isomra);
                                       }
                                     });
                                   },
@@ -261,24 +233,18 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                         height: 20,
                                       ),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            LanguageClass.isEnglish
-                                                ? 'Amount: '
-                                                : "القيمة",
+                                            LanguageClass.isEnglish ? 'Amount: ' : "القيمة",
                                             style: fontStyle(
-                                                color: Colors.black,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600),
+                                                color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
                                           ),
                                           Text(amountController.text.toString())
                                         ],
                                       ),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             'Reference Number: ',
@@ -294,16 +260,11 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                                 InkWell(
                                                   onTap: () async {
                                                     Constants.showDefaultSnackBar(
-                                                        context: context,
-                                                        text:
-                                                            'Reference Number copied');
-                                                    await Clipboard.setData(
-                                                        ClipboardData(
-                                                            text: state
-                                                                .paymentMessageResponse
-                                                                .paymentMessage!
-                                                                .referenceNumber
-                                                                .toString()));
+                                                        context: context, text: 'Reference Number copied');
+                                                    await Clipboard.setData(ClipboardData(
+                                                        text: state
+                                                            .paymentMessageResponse.paymentMessage!.referenceNumber
+                                                            .toString()));
                                                   },
                                                   child: Container(
                                                       width: 15,
@@ -315,10 +276,7 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                                 ),
                                                 Expanded(
                                                   child: Text(
-                                                    state
-                                                        .paymentMessageResponse
-                                                        .paymentMessage!
-                                                        .referenceNumber
+                                                    state.paymentMessageResponse.paymentMessage!.referenceNumber
                                                         .toString(),
                                                     textAlign: TextAlign.end,
                                                   ),
@@ -330,24 +288,19 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                       )
                                     ],
                                   ),
-                                  message: state.paymentMessageResponse.text!
-                                      .toString(),
+                                  message: state.paymentMessageResponse.text!.toString(),
                                 );
                               } else if (state is EWalletErrorState) {
                                 Constants.hideLoadingDialog(context);
-                                Constants.showDefaultSnackBar(
-                                    context: context,
-                                    text: state.error.toString());
+                                Constants.showDefaultSnackBar(context: context, text: state.error.toString());
                               }
                             },
                             child: InkWell(
                               onTap: () {
-                                if (_user != null &&
-                                    formKey.currentState!.validate()) {
-                                  BlocProvider.of<EWalletCubit>(context)
-                                      .eWalletPaymentFunction(EWalletParams(
+                                if (_user != null && formKey.currentState!.validate()) {
+                                  BlocProvider.of<EWalletCubit>(context).eWalletPaymentFunction(EWalletParams(
                                     customerId: _user!.customerId.toString(),
-                                    amount: amountController.text,
+                                    amount: amountController.text.replaceAll(",", ""),
                                     mobileNumber: phoneController.text,
                                   ));
                                 }
@@ -358,12 +311,8 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
                                 ),
                                 child: Constants.customButton(
                                   borderradias: 41,
-                                  text: LanguageClass.isEnglish
-                                      ? "Charge"
-                                      : "شحن",
-                                  color: Routes.isomra
-                                      ? AppColors.umragold
-                                      : AppColors.primaryColor,
+                                  text: LanguageClass.isEnglish ? "Charge" : "شحن",
+                                  color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                                 ),
                               ),
                             ),
@@ -383,17 +332,13 @@ class _ElectronicScreenState extends State<ElectronicScreen> {
   }
 
   Future<dynamic> showDoneConfirmationDialog(BuildContext context,
-      {required String message,
-      bool isError = false,
-      Widget? body,
-      required Function callback}) async {
+      {required String message, bool isError = false, Widget? body, required Function callback}) async {
     return CoolAlert.show(
         barrierDismissible: true,
         context: context,
         confirmBtnText: "ok",
         title: isError ? 'error' : '',
-        lottieAsset:
-            isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
+        lottieAsset: isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
         type: isError ? CoolAlertType.error : CoolAlertType.success,
         loopAnimation: false,
         backgroundColor: isError ? Colors.red : Colors.white,

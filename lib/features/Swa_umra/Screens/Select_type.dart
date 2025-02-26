@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +10,7 @@ import 'package:swa/core/utils/Navigaton_bottombar.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/styles.dart';
+import 'package:swa/core/widgets/notifications_icon.dart';
 import 'package:swa/features/Swa_umra/Screens/Enter_trip_data.dart';
 import 'package:swa/features/Swa_umra/bloc/umra_bloc.dart';
 import 'package:swa/features/Swa_umra/models/packages_list_model.dart';
@@ -15,6 +18,7 @@ import 'package:swa/features/Swa_umra/models/umra_detail.dart';
 import 'package:swa/features/home/data/models/Notifications_model.dart';
 import 'package:swa/features/home/presentation/screens/Notification/Notification_respotary.dart';
 import 'package:swa/features/home/presentation/screens/Notification/Notification_screen.dart';
+import 'package:swa/features/home/presentation/screens/Notification/bloc/notification_bloc.dart';
 import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/my_account.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
@@ -42,10 +46,7 @@ class _SelectUmratypeScreenState extends State<SelectUmratypeScreen> {
     if (result != null) {
       model = result;
       // Calculate the count with IsRead as false
-      count = model?.notifications
-              .where((notification) => !notification.IsRead!)
-              .length ??
-          0;
+      count = model?.notifications.where((notification) => !notification.IsRead!).length ?? 0;
     }
     isRefreshing = false;
     // PackageTermsCubit.get(context).getPackageTerms();// Reset the flag after refreshing.
@@ -81,8 +82,7 @@ class _SelectUmratypeScreenState extends State<SelectUmratypeScreen> {
                   if (state.userResponse.status == 'success') {}
 
                   get();
-                  BlocProvider.of<PackagesBloc>(context)
-                      .add(GetpopupadsEvent());
+                  BlocProvider.of<PackagesBloc>(context).add(GetpopupadsEvent());
                 }
               },
             )
@@ -99,7 +99,7 @@ class _SelectUmratypeScreenState extends State<SelectUmratypeScreen> {
                 } else {
                   return SafeArea(
                     bottom: false,
-                    child: Container(
+                    child: SizedBox(
                       child: Column(
                         children: [
                           10.verticalSpace,
@@ -110,15 +110,10 @@ class _SelectUmratypeScreenState extends State<SelectUmratypeScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Container(
-                                  alignment: LanguageClass.isEnglish
-                                      ? Alignment.topLeft
-                                      : Alignment.topRight,
+                                  alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.pushNamedAndRemoveUntil(
-                                          context,
-                                          Routes.initialRoute,
-                                          (route) => false);
+                                      Navigator.pushNamedAndRemoveUntil(context, Routes.initialRoute, (route) => false);
                                     },
                                     child: Icon(
                                       Icons.arrow_back_rounded,
@@ -135,13 +130,10 @@ class _SelectUmratypeScreenState extends State<SelectUmratypeScreen> {
                                             children: [
                                               IconButton(
                                                   onPressed: () async {
-                                                    Navigator.push(context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) {
+                                                    Navigator.push(context, MaterialPageRoute(builder: (context) {
                                                       return NotificationScreen(
                                                         isScreenHome: false,
-                                                        updateNotificationCount:
-                                                            updateNotificationCount,
+                                                        updateNotificationCount: updateNotificationCount,
                                                       );
                                                     }));
                                                   },
@@ -150,77 +142,40 @@ class _SelectUmratypeScreenState extends State<SelectUmratypeScreen> {
                                                     size: 25,
                                                     color: AppColors.umragold,
                                                   )),
-                                              model == null ||
-                                                      model!
-                                                          .notifications.isEmpty
-                                                  ? SizedBox()
-                                                  : count == 0
-                                                      ? const SizedBox()
-                                                      : Positioned(
-                                                          top: -2,
-                                                          right: 0,
-                                                          child: badges.Badge(
-                                                            badgeContent: Text(
-                                                              count.toString(),
-                                                              style: fontStyle(
-                                                                  color: AppColors
-                                                                      .primaryColor,
-                                                                  fontFamily:
-                                                                      FontFamily
-                                                                          .medium,
-                                                                  fontSize: 14),
-                                                            ),
-                                                            badgeStyle: badges.BadgeStyle(
-                                                                badgeColor:
-                                                                    AppColors
-                                                                        .darkPurple,
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            5)),
-                                                          ),
-                                                        )
+                                              NotificationsIcon(),
                                             ],
                                           ),
                                     Routes.user == null
                                         ? InkWell(
                                             onTap: () {
-                                              Navigator.pushNamed(
-                                                  context, Routes.signInRoute);
+                                              Navigator.pushNamed(context, Routes.signInRoute);
                                             },
                                             child: Container(
                                               height: 34,
                                               width: 87,
                                               decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
+                                                borderRadius: BorderRadius.circular(20),
                                                 color: AppColors.umragold,
                                               ),
                                               child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
                                                   Container(
                                                     width: 12,
                                                     alignment: Alignment.center,
                                                     child: Image.asset(
-                                                        color: Colors.white,
-                                                        "assets/images/Icon open-account-lo.png"),
+                                                        color: Colors.white, "assets/images/Icon open-account-lo.png"),
                                                   ),
                                                   SizedBox(
                                                     width: 5,
                                                   ),
                                                   Text(
-                                                    LanguageClass.isEnglish
-                                                        ? "Login"
-                                                        : 'دخول',
+                                                    LanguageClass.isEnglish ? "Login" : 'دخول',
                                                     style: fontStyle(
                                                         color: Colors.white,
                                                         fontSize: 14,
-                                                        fontFamily:
-                                                            FontFamily.regular),
+                                                        fontFamily: FontFamily.regular),
                                                   ),
                                                 ],
                                               ),
@@ -228,48 +183,37 @@ class _SelectUmratypeScreenState extends State<SelectUmratypeScreen> {
                                           )
                                         : InkWell(
                                             onTap: () {
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) {
+                                              Navigator.push(context, MaterialPageRoute(builder: (context) {
                                                 return MyAccountScreen(
                                                   loginLocalDataSource: sl(),
                                                   user: Routes.user!,
                                                 );
                                               })).then((value) {
-                                                BlocProvider.of<LoginCubit>(
-                                                        context)
-                                                    .getUserData();
+                                                BlocProvider.of<LoginCubit>(context).getUserData();
                                               });
                                             },
                                             child: Container(
                                               height: 34,
                                               width: 87,
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10),
+                                              padding: EdgeInsets.symmetric(horizontal: 10),
                                               // width: sizeWidth * 0.3,
                                               decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
+                                                borderRadius: BorderRadius.circular(20),
                                                 color: AppColors.umragold,
                                               ),
                                               child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
                                                   Expanded(
                                                     child: Text(
                                                       Routes.user!.name!,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      textAlign:
-                                                          TextAlign.center,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      textAlign: TextAlign.center,
                                                       style: fontStyle(
                                                           color: Colors.white,
                                                           fontSize: 12,
-                                                          fontFamily: FontFamily
-                                                              .regular),
+                                                          fontFamily: FontFamily.regular),
                                                     ),
                                                   ),
                                                 ],
@@ -282,134 +226,93 @@ class _SelectUmratypeScreenState extends State<SelectUmratypeScreen> {
                             ),
                           ),
                           Expanded(
+                              flex: 2,
                               child: Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 80.h,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: 40.h,
+                                    ),
+                                    Container(
+                                      alignment: Alignment.center,
+                                      child: Image.asset('assets/images/swaumra.png'),
+                                    ),
+                                    // Spacer(),
+                                    Container(
+                                      alignment: Alignment.center,
+                                      child: Image.asset('assets/images/umrah.png'),
+                                    ),
+                                    SizedBox(
+                                      height: 30.h,
+                                    ),
+                                    Text(
+                                      LanguageClass.isEnglish ? 'Made Effortlessly Easy' : "اسهل ما يكون",
+                                      textAlign: TextAlign.center,
+                                      style: fontStyle(
+                                          fontFamily: FontFamily.regular,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xffA3A3A3)),
+                                    )
+                                  ],
                                 ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child:
-                                      Image.asset('assets/images/swaumra.png'),
-                                ),
-                                Spacer(),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Image.asset('assets/images/umrah.png'),
-                                ),
-                                SizedBox(
-                                  height: 30.h,
-                                ),
-                                Text(
-                                  LanguageClass.isEnglish
-                                      ? 'Made Effortlessly Easy'
-                                      : "اسهل ما يكون",
-                                  textAlign: TextAlign.center,
-                                  style: fontStyle(
-                                      fontFamily: FontFamily.regular,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xffA3A3A3)),
-                                )
-                              ],
-                            ),
-                          )),
+                              )),
                           Expanded(
-                            child: Container(
-                              child: Column(
+                            flex: 3,
+                            child: SizedBox(
+                              child: ListView(
                                 children: [
-                                  for (int i = 0;
-                                      i <
-                                          state.tripUmramodel!.message!.list!
-                                              .length;
-                                      i++)
-                                    state.tripUmramodel!.message!.list![i]
-                                            .isActive!
+                                  for (int i = 0; i < state.tripUmramodel!.message!.list!.length; i++)
+                                    state.tripUmramodel!.message!.list![i].isActive!
                                         ? Container(
                                             height: 70,
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 25),
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 33.w,
-                                                vertical: 10.h),
+                                            padding: EdgeInsets.symmetric(horizontal: 25),
+                                            margin: EdgeInsets.symmetric(horizontal: 33.w, vertical: 10.h),
                                             decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(41),
-                                              border: Border.all(
-                                                  width: 2,
-                                                  color: Color(0xff707070)),
+                                              borderRadius: BorderRadius.circular(41),
+                                              border: Border.all(width: 2, color: Color(0xff707070)),
                                             ),
                                             alignment: Alignment.center,
                                             child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 Expanded(
                                                     child: InkWell(
                                                   onTap: () {
-                                                    UmraDetails
-                                                            .tripTypeUmrahID =
-                                                        state
-                                                            .tripUmramodel!
-                                                            .message!
-                                                            .list![i]
-                                                            .tripUmraTypeId!;
+                                                    UmraDetails.tripTypeUmrahID =
+                                                        state.tripUmramodel!.message!.list![i].tripUmraTypeId!;
 
                                                     Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                TripdataScreen(
-                                                                  triptype: state
-                                                                      .tripUmramodel!
-                                                                      .message!
-                                                                      .list![i]
-                                                                      .name!,
+                                                            builder: (context) => TripdataScreen(
+                                                                  triptype:
+                                                                      state.tripUmramodel!.message!.list![i].name!,
                                                                   typeid: state
-                                                                      .tripUmramodel!
-                                                                      .message!
-                                                                      .list![i]
-                                                                      .tripUmraTypeId!,
+                                                                      .tripUmramodel!.message!.list![i].tripUmraTypeId!,
                                                                 )));
                                                   },
                                                   child: Center(
                                                     child: Text(
-                                                      state
-                                                          .tripUmramodel!
-                                                          .message!
-                                                          .list![i]
-                                                          .name!,
-                                                      textAlign:
-                                                          TextAlign.justify,
-                                                      textDirection:
-                                                          LanguageClass.isEnglish
-                                                              ? TextDirection
-                                                                  .ltr
-                                                              : TextDirection
-                                                                  .rtl,
+                                                      state.tripUmramodel!.message!.list![i].name!,
+                                                      textAlign: TextAlign.justify,
+                                                      textDirection: LanguageClass.isEnglish
+                                                          ? TextDirection.ltr
+                                                          : TextDirection.rtl,
                                                       style: fontStyle(
-                                                          fontFamily:
-                                                              FontFamily.bold,
+                                                          fontFamily: FontFamily.bold,
                                                           fontSize: 24,
                                                           color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.w700),
+                                                          fontWeight: FontWeight.w700),
                                                     ),
                                                   ),
                                                 )),
                                                 Tooltip(
-                                                  triggerMode:
-                                                      TooltipTriggerMode.tap,
-                                                  message: state
-                                                      .tripUmramodel!
-                                                      .message!
-                                                      .list![i]
-                                                      .description,
+                                                  triggerMode: TooltipTriggerMode.tap,
+                                                  message: state.tripUmramodel!.message!.list![i].description,
                                                   verticalOffset: -70,
                                                   textStyle: fontStyle(
                                                     fontFamily: FontFamily.bold,
@@ -417,22 +320,13 @@ class _SelectUmratypeScreenState extends State<SelectUmratypeScreen> {
                                                     fontWeight: FontWeight.w400,
                                                     color: Colors.white,
                                                   ),
-                                                  textAlign:
-                                                      LanguageClass.isEnglish
-                                                          ? TextAlign.left
-                                                          : TextAlign.right,
+                                                  textAlign: LanguageClass.isEnglish ? TextAlign.left : TextAlign.right,
                                                   padding: EdgeInsets.all(10),
                                                   margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.24),
+                                                      horizontal: MediaQuery.of(context).size.width * 0.24),
                                                   decoration: BoxDecoration(
                                                       color: Color(0xffECB95A),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              23)),
+                                                      borderRadius: BorderRadius.circular(23)),
                                                   child: Icon(
                                                     Icons.info_outline_rounded,
                                                     color: Color(0xffA5A5A5),

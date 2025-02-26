@@ -12,6 +12,7 @@ import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
+import 'package:swa/core/widgets/currency_selector.dart';
 import 'package:swa/features/Swa_umra/Screens/Select_type.dart';
 import 'package:swa/features/Swa_umra/models/umra_detail.dart';
 import 'package:swa/features/app_info/domain/entities/country.dart';
@@ -57,18 +58,16 @@ class _MoreScreenState extends State<MoreScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<GetAvailableCountriesCubit>(context)
-        .getAvailableCountries();
+    BlocProvider.of<GetAvailableCountriesCubit>(context).getAvailableCountries();
     getwalllet();
   }
 
   @override
   Widget build(BuildContext context) {
     double sizeHeight = context.height;
-    double sizeWidth = context.width;
 
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: isloading
@@ -78,9 +77,7 @@ class _MoreScreenState extends State<MoreScreen> {
                 ),
               )
             : Directionality(
-                textDirection: LanguageClass.isEnglish
-                    ? TextDirection.ltr
-                    : TextDirection.rtl,
+                textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
@@ -90,20 +87,15 @@ class _MoreScreenState extends State<MoreScreen> {
                         height: sizeHeight * 0.08,
                       ),
                       Container(
-                        alignment: LanguageClass.isEnglish
-                            ? Alignment.topLeft
-                            : Alignment.topRight,
+                        alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                         child: InkWell(
                           onTap: () {
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, Routes.home, (route) => false,
+                            Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false,
                                 arguments: Routes.isomra);
                           },
                           child: Icon(
                             Icons.arrow_back_rounded,
-                            color: Routes.isomra
-                                ? AppColors.umragold
-                                : AppColors.primaryColor,
+                            color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                             size: 35,
                           ),
                         ),
@@ -128,8 +120,7 @@ class _MoreScreenState extends State<MoreScreen> {
                       Expanded(
                         child: ListView.separated(
                             physics: ScrollPhysics(),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 0),
+                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                             reverse: false,
                             itemBuilder: (context, index) {
                               return index == 9
@@ -137,207 +128,33 @@ class _MoreScreenState extends State<MoreScreen> {
                                       ? Container()
                                       : InkWell(
                                           onTap: () {
-                                            showGeneralDialog(
-                                                context: context,
-                                                pageBuilder: (BuildContext
-                                                        buildContext,
-                                                    Animation<double> animation,
-                                                    Animation<double>
-                                                        secondaryAnimation) {
-                                                  return StatefulBuilder(
-                                                      builder:
-                                                          (context, setStater) {
-                                                    return Material(
-                                                      color: Colors.transparent,
-                                                      child: Directionality(
-                                                        textDirection:
-                                                            LanguageClass.isEnglish
-                                                                ? TextDirection
-                                                                    .ltr
-                                                                : TextDirection
-                                                                    .rtl,
-                                                        child: Container(
-                                                          alignment: Alignment
-                                                              .topRight,
-                                                          decoration: BoxDecoration(
-                                                              color:
-                                                                  Colors.white,
-                                                              borderRadius: BorderRadius.only(
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          20),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          20))),
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal:
-                                                                      30,
-                                                                  vertical: 5),
-                                                          width:
-                                                              double.infinity,
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              SizedBox(
-                                                                height:
-                                                                    sizeHeight *
-                                                                        0.08,
-                                                              ),
-                                                              Container(
-                                                                alignment: LanguageClass
-                                                                        .isEnglish
-                                                                    ? Alignment
-                                                                        .topLeft
-                                                                    : Alignment
-                                                                        .topRight,
-                                                                child: InkWell(
-                                                                  onTap: () {
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                  },
-                                                                  child: Icon(
-                                                                    Icons
-                                                                        .arrow_back_rounded,
-                                                                    color: Routes.isomra
-                                                                        ? AppColors
-                                                                            .umragold
-                                                                        : AppColors
-                                                                            .primaryColor,
-                                                                    size: 35,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              const SizedBox(
-                                                                height: 10,
-                                                              ),
-                                                              Container(
-                                                                margin: const EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal:
-                                                                        20),
-                                                                child: Text(
-                                                                  LanguageClass
-                                                                          .isEnglish
-                                                                      ? "Select Currency"
-                                                                      : "حدد العملة",
-                                                                  style: fontStyle(
-                                                                      color: AppColors
-                                                                          .blackColor,
-                                                                      fontSize:
-                                                                          28,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                      fontFamily:
-                                                                          FontFamily
-                                                                              .medium),
-                                                                ),
-                                                              ),
-                                                              SizedBox(
-                                                                height:
-                                                                    sizeHeight *
-                                                                        0.01,
-                                                              ),
-                                                              Expanded(
-                                                                child: ListView
-                                                                    .separated(
-                                                                        itemBuilder:
-                                                                            (context,
-                                                                                index) {
-                                                                          return Column(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.start,
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.start,
-                                                                            children: [
-                                                                              InkWell(
-                                                                                onTap: () {
-                                                                                  Routes.curruncy = curruncylist!.message![index].symbol!;
-
-                                                                                  setStater(() {
-                                                                                    CacheHelper.setDataToSharedPref(
-                                                                                      key: 'curruncycode',
-                                                                                      value: curruncylist!.message![index].symbol,
-                                                                                    );
-                                                                                  });
-                                                                                  setState(() {});
-
-                                                                                  Navigator.pop(context);
-                                                                                },
-                                                                                child: Container(
-                                                                                  width: double.infinity,
-                                                                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                                                                  child: Column(
-                                                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                    children: [
-                                                                                      Text(
-                                                                                        curruncylist!.message![index].name!,
-                                                                                        style: fontStyle(fontFamily: FontFamily.medium, color: Color(0xffA3A3A3), fontSize: 18),
-                                                                                      ),
-                                                                                      Text(
-                                                                                        curruncylist!.message![index].symbol!,
-                                                                                        style: fontStyle(fontFamily: FontFamily.bold, color: Colors.black, fontSize: 14),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ],
-                                                                          );
-                                                                        },
-                                                                        separatorBuilder:
-                                                                            (context,
-                                                                                index) {
-                                                                          return Divider(
-                                                                            color:
-                                                                                Colors.black,
-                                                                          );
-                                                                        },
-                                                                        itemCount: curruncylist!
-                                                                            .message!
-                                                                            .length),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  });
-                                                });
+                                            showCurrencySelector(context, currencyList: curruncylist!.message!,
+                                                onCurrencySelected: (currency) {
+                                              Routes.curruncy = currency.symbol!;
+                                              CacheHelper.setDataToSharedPref(
+                                                key: 'curruncycode',
+                                                value: currency.symbol,
+                                              );
+                                              setState(() {});
+                                              Navigator.pop(context);
+                                            });
                                           },
                                           child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 0, vertical: 10),
+                                            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                                             child: Row(
                                               children: [
-                                                Text(
-                                                    LanguageClass.isEnglish
-                                                        ? " Currency "
-                                                        : ' عملة ',
+                                                Text(LanguageClass.isEnglish ? " Currency " : ' عملة ',
                                                     style: fontStyle(
-                                                        color: AppColors
-                                                            .blackColor,
-                                                        fontFamily:
-                                                            FontFamily.medium,
-                                                        fontWeight:
-                                                            FontWeight.w600,
+                                                        color: AppColors.blackColor,
+                                                        fontFamily: FontFamily.medium,
+                                                        fontWeight: FontWeight.w600,
                                                         fontSize: 21)),
                                                 Text(
                                                   Routes.curruncy!,
                                                   style: fontStyle(
-                                                      color:
-                                                          AppColors.blackColor,
-                                                      fontFamily:
-                                                          FontFamily.medium,
-                                                      fontWeight:
-                                                          FontWeight.w600,
+                                                      color: AppColors.blackColor,
+                                                      fontFamily: FontFamily.medium,
+                                                      fontWeight: FontWeight.w600,
                                                       fontSize: 21),
                                                 )
                                               ],
@@ -345,100 +162,66 @@ class _MoreScreenState extends State<MoreScreen> {
                                           ),
                                         )
                                   : index == 8
-                                      ? BlocBuilder<GetAvailableCountriesCubit,
-                                              GetAvailableCountriesCubitState>(
+                                      ? BlocBuilder<GetAvailableCountriesCubit, GetAvailableCountriesCubitState>(
                                           builder: (context, state) {
-                                          return state
-                                                  is GetAvailableCountriesLoadedState
+                                          return state is GetAvailableCountriesLoadedState
                                               ? Container(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 0,
-                                                      vertical: 10),
+                                                  padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                                                   child: InkWell(
                                                     onTap: () {
                                                       showGeneralDialog(
                                                           context: context,
-                                                          pageBuilder: (BuildContext
-                                                                  buildContext,
-                                                              Animation<double>
-                                                                  animation,
-                                                              Animation<double>
-                                                                  secondaryAnimation) {
-                                                            return StatefulBuilder(
-                                                                builder: (context,
-                                                                    setStater) {
+                                                          pageBuilder: (BuildContext buildContext,
+                                                              Animation<double> animation,
+                                                              Animation<double> secondaryAnimation) {
+                                                            return StatefulBuilder(builder: (context, setStater) {
                                                               return Material(
-                                                                color: Colors
-                                                                    .transparent,
-                                                                child:
-                                                                    Directionality(
-                                                                  textDirection: LanguageClass
-                                                                          .isEnglish
-                                                                      ? TextDirection
-                                                                          .ltr
-                                                                      : TextDirection
-                                                                          .rtl,
-                                                                  child:
-                                                                      Container(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .topRight,
+                                                                color: Colors.transparent,
+                                                                child: Directionality(
+                                                                  textDirection: LanguageClass.isEnglish
+                                                                      ? TextDirection.ltr
+                                                                      : TextDirection.rtl,
+                                                                  child: Container(
+                                                                    alignment: Alignment.topRight,
                                                                     decoration: BoxDecoration(
-                                                                        color: Colors
-                                                                            .white,
+                                                                        color: Colors.white,
                                                                         borderRadius: BorderRadius.only(
-                                                                            bottomLeft:
-                                                                                Radius.circular(20),
+                                                                            bottomLeft: Radius.circular(20),
                                                                             bottomRight: Radius.circular(20))),
                                                                     padding: EdgeInsets.symmetric(
-                                                                        horizontal:
-                                                                            30,
-                                                                        vertical:
-                                                                            5),
-                                                                    width: double
-                                                                        .infinity,
-                                                                    child:
-                                                                        Column(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .start,
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .start,
+                                                                        horizontal: 30, vertical: 5),
+                                                                    width: double.infinity,
+                                                                    child: Column(
+                                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                                       children: [
                                                                         SizedBox(
-                                                                          height:
-                                                                              sizeHeight * 0.08,
+                                                                          height: sizeHeight * 0.08,
                                                                         ),
                                                                         Container(
                                                                           alignment: LanguageClass.isEnglish
                                                                               ? Alignment.topLeft
                                                                               : Alignment.topRight,
-                                                                          child:
-                                                                              InkWell(
-                                                                            onTap:
-                                                                                () {
+                                                                          child: InkWell(
+                                                                            onTap: () {
                                                                               Navigator.pop(context);
                                                                             },
-                                                                            child:
-                                                                                Icon(
+                                                                            child: Icon(
                                                                               Icons.arrow_back_rounded,
-                                                                              color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
+                                                                              color: Routes.isomra
+                                                                                  ? AppColors.umragold
+                                                                                  : AppColors.primaryColor,
                                                                               size: 35,
                                                                             ),
                                                                           ),
                                                                         ),
                                                                         const SizedBox(
-                                                                          height:
-                                                                              10,
+                                                                          height: 10,
                                                                         ),
                                                                         Container(
-                                                                          margin: const EdgeInsets
-                                                                              .symmetric(
+                                                                          margin: const EdgeInsets.symmetric(
                                                                               horizontal: 20),
-                                                                          child:
-                                                                              Text(
+                                                                          child: Text(
                                                                             LanguageClass.isEnglish
                                                                                 ? "Select your country"
                                                                                 : "اختر الدولة",
@@ -450,53 +233,80 @@ class _MoreScreenState extends State<MoreScreen> {
                                                                           ),
                                                                         ),
                                                                         SizedBox(
-                                                                          height:
-                                                                              sizeHeight * 0.01,
+                                                                          height: sizeHeight * 0.01,
                                                                         ),
                                                                         Expanded(
                                                                           child: ListView.separated(
                                                                               itemBuilder: (context, index) {
                                                                                 return Column(
-                                                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                  mainAxisAlignment:
+                                                                                      MainAxisAlignment.start,
+                                                                                  crossAxisAlignment:
+                                                                                      CrossAxisAlignment.start,
                                                                                   children: [
                                                                                     InkWell(
                                                                                       onTap: () {
-                                                                                        Routes.curruncy = state.countries[index].curruncy;
+                                                                                        Routes.curruncy = state
+                                                                                            .countries[index].curruncy;
 
                                                                                         CacheHelper.setDataToSharedPref(
                                                                                           key: 'curruncycode',
-                                                                                          value: state.countries[index].curruncy,
+                                                                                          value: state.countries[index]
+                                                                                              .curruncy,
                                                                                         );
 
-                                                                                        Routes.country = state.countries[index].countryName;
+                                                                                        Routes.country = state
+                                                                                            .countries[index]
+                                                                                            .countryName;
 
                                                                                         setStater(() {
-                                                                                          log(state.countries[index].countryId.toString());
-                                                                                          CacheHelper.setDataToSharedPref(
+                                                                                          log(state.countries[index]
+                                                                                              .countryId
+                                                                                              .toString());
+                                                                                          CacheHelper
+                                                                                              .setDataToSharedPref(
                                                                                             key: 'countryid',
-                                                                                            value: state.countries[index].countryId,
+                                                                                            value: state
+                                                                                                .countries[index]
+                                                                                                .countryId,
                                                                                           );
-                                                                                          CacheHelper.setDataToSharedPref(
+                                                                                          CacheHelper
+                                                                                              .setDataToSharedPref(
                                                                                             key: 'countryflag',
-                                                                                            value: state.countries[index].Flag,
+                                                                                            value: state
+                                                                                                .countries[index].Flag,
                                                                                           );
-                                                                                          Routes.countryflag = state.countries[index].Flag;
+                                                                                          Routes.countryflag = state
+                                                                                              .countries[index].Flag;
                                                                                         });
-                                                                                        Routes.curruncy = state.countries[index].curruncy;
+                                                                                        Routes.curruncy = state
+                                                                                            .countries[index].curruncy;
                                                                                         CacheHelper.setDataToSharedPref(
                                                                                           key: 'curruncycode',
-                                                                                          value: state.countries[index].curruncy,
+                                                                                          value: state.countries[index]
+                                                                                              .curruncy,
                                                                                         );
 
-                                                                                        Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false, arguments: Routes.isomra);
+                                                                                        Navigator
+                                                                                            .pushNamedAndRemoveUntil(
+                                                                                                context,
+                                                                                                Routes.home,
+                                                                                                (route) => false,
+                                                                                                arguments:
+                                                                                                    Routes.isomra);
                                                                                       },
                                                                                       child: Container(
                                                                                         width: double.infinity,
-                                                                                        padding: EdgeInsets.symmetric(horizontal: 10),
+                                                                                        padding: EdgeInsets.symmetric(
+                                                                                            horizontal: 10),
                                                                                         child: Text(
-                                                                                          state.countries[index].countryName,
-                                                                                          style: fontStyle(fontFamily: FontFamily.medium, color: Color(0xffA3A3A3), fontSize: 18),
+                                                                                          state.countries[index]
+                                                                                              .countryName,
+                                                                                          style: fontStyle(
+                                                                                              fontFamily:
+                                                                                                  FontFamily.medium,
+                                                                                              color: Color(0xffA3A3A3),
+                                                                                              fontSize: 18),
                                                                                         ),
                                                                                       ),
                                                                                     ),
@@ -519,18 +329,13 @@ class _MoreScreenState extends State<MoreScreen> {
                                                           });
                                                     },
                                                     child: Container(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 0,
-                                                          vertical: 10),
+                                                      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                                                       child: Row(
                                                         children: [
                                                           Container(
                                                             width: 25,
-                                                            child:
-                                                                Image.network(
-                                                              Routes
-                                                                  .countryflag!,
+                                                            child: Image.network(
+                                                              Routes.countryflag!,
                                                             ),
                                                           ),
                                                           SizedBox(
@@ -539,14 +344,9 @@ class _MoreScreenState extends State<MoreScreen> {
                                                           Text(
                                                             Routes.country,
                                                             style: fontStyle(
-                                                                color: AppColors
-                                                                    .blackColor,
-                                                                fontFamily:
-                                                                    FontFamily
-                                                                        .medium,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
+                                                                color: AppColors.blackColor,
+                                                                fontFamily: FontFamily.medium,
+                                                                fontWeight: FontWeight.w600,
                                                                 fontSize: 21),
                                                           )
                                                         ],
@@ -570,14 +370,9 @@ class _MoreScreenState extends State<MoreScreen> {
                                                         Text(
                                                           Routes.country!,
                                                           style: fontStyle(
-                                                              color: AppColors
-                                                                  .blackColor,
-                                                              fontFamily:
-                                                                  FontFamily
-                                                                      .medium,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
+                                                              color: AppColors.blackColor,
+                                                              fontFamily: FontFamily.medium,
+                                                              fontWeight: FontWeight.w600,
                                                               fontSize: 21),
                                                         )
                                                       ],
@@ -588,54 +383,38 @@ class _MoreScreenState extends State<MoreScreen> {
                                               value: dropdownValue,
                                               elevation: 16,
                                               style: fontStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 18,
-                                                  fontFamily:
-                                                      FontFamily.medium),
+                                                  color: Colors.black, fontSize: 18, fontFamily: FontFamily.medium),
                                               underline: Container(),
                                               onChanged: (String? value) {
                                                 if (value == list.first) {
-                                                  LanguageClass.isEnglish =
-                                                      true;
+                                                  LanguageClass.isEnglish = true;
                                                 } else {
-                                                  LanguageClass.isEnglish =
-                                                      false;
+                                                  LanguageClass.isEnglish = false;
                                                 }
 
                                                 CacheHelper.setDataToSharedPref(
-                                                    key: 'language',
-                                                    value: LanguageClass
-                                                        .isEnglish);
+                                                    key: 'language', value: LanguageClass.isEnglish);
 
                                                 setState(() {
                                                   dropdownValue = value!;
                                                 });
                                               },
-                                              items: list.map<
-                                                      DropdownMenuItem<String>>(
-                                                  (String value) {
+                                              items: list.map<DropdownMenuItem<String>>((String value) {
                                                 return DropdownMenuItem<String>(
                                                   value: value,
                                                   child: Container(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 0,
-                                                        vertical: 10),
-                                                    alignment: LanguageClass
-                                                            .isEnglish
+                                                    padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                                                    alignment: LanguageClass.isEnglish
                                                         ? Alignment.centerLeft
                                                         : Alignment.centerRight,
                                                     child: Text(
                                                       value,
-                                                      textAlign: LanguageClass
-                                                              .isEnglish
-                                                          ? TextAlign.left
-                                                          : TextAlign.right,
+                                                      textAlign:
+                                                          LanguageClass.isEnglish ? TextAlign.left : TextAlign.right,
                                                       style: fontStyle(
                                                           color: Colors.black,
                                                           fontSize: 18,
-                                                          fontFamily: FontFamily
-                                                              .arFontMedium),
+                                                          fontFamily: FontFamily.arFontMedium),
                                                     ),
                                                   ),
                                                 );
@@ -644,76 +423,43 @@ class _MoreScreenState extends State<MoreScreen> {
                                           : InkWell(
                                               onTap: () {
                                                 if (index == 1) {
-                                                  Navigator.push(context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) {
-                                                    return BlocProvider<
-                                                            MoreCubit>(
-                                                        create: (context) =>
-                                                            MoreCubit(),
-                                                        child: StationScreen());
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                                    return BlocProvider<MoreCubit>(
+                                                        create: (context) => MoreCubit(), child: StationScreen());
                                                   }));
                                                 } else if (index == 2) {
-                                                  Navigator.push(context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) {
-                                                    return BlocProvider<
-                                                            MoreCubit>(
-                                                        create: (context) =>
-                                                            MoreCubit(),
-                                                        child: BusClasses());
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                                    return BlocProvider<MoreCubit>(
+                                                        create: (context) => MoreCubit(), child: BusClasses());
                                                   }));
                                                 } else if (index == 3) {
-                                                  if (Routes.customerid ==
-                                                      null) {
+                                                  if (Routes.customerid == null) {
                                                     Constants.showDefaultSnackBar(
                                                         context: context,
                                                         color: Colors.red,
-                                                        text: LanguageClass
-                                                                .isEnglish
+                                                        text: LanguageClass.isEnglish
                                                             ? "login first"
                                                             : "سجل الدخول اولا");
                                                   } else {
-                                                    Navigator.push(context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) {
-                                                      return BlocProvider<
-                                                              MoreCubit>(
-                                                          create: (context) =>
-                                                              MoreCubit(),
-                                                          child:
-                                                              packagesScreen());
+                                                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                                      return BlocProvider<MoreCubit>(
+                                                          create: (context) => MoreCubit(), child: packagesScreen());
                                                     }));
                                                   }
                                                 } else if (index == 4) {
-                                                  Navigator.push(context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) {
-                                                    return BlocProvider<
-                                                            MoreCubit>(
-                                                        create: (context) =>
-                                                            MoreCubit(),
-                                                        child: FAQScreen());
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                                    return BlocProvider<MoreCubit>(
+                                                        create: (context) => MoreCubit(), child: FAQScreen());
                                                   }));
                                                 } else if (index == 5) {
-                                                  Navigator.push(context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) {
-                                                    return BlocProvider<
-                                                            MoreCubit>(
-                                                        create: (context) =>
-                                                            MoreCubit(),
-                                                        child: AboutUsScreen());
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                                    return BlocProvider<MoreCubit>(
+                                                        create: (context) => MoreCubit(), child: AboutUsScreen());
                                                   }));
                                                 } else if (index == 6) {
-                                                  Navigator.push(context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) {
-                                                    return BlocProvider<
-                                                            MoreCubit>(
-                                                        create: (context) =>
-                                                            MoreCubit(),
-                                                        child: ContactUs());
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                                    return BlocProvider<MoreCubit>(
+                                                        create: (context) => MoreCubit(), child: ContactUs());
                                                   }));
                                                   // Navigator.push(context,
                                                   //     MaterialPageRoute(
@@ -723,162 +469,99 @@ class _MoreScreenState extends State<MoreScreen> {
                                                   //       child: PrivacyScreen());
                                                   // }));
                                                 } else if (index == 7) {
-                                                  Navigator.push(context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) {
-                                                    return BlocProvider<
-                                                            MoreCubit>(
-                                                        create: (context) =>
-                                                            MoreCubit(),
-                                                        child:
-                                                            TermsConditionsScreen());
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                                    return BlocProvider<MoreCubit>(
+                                                        create: (context) => MoreCubit(),
+                                                        child: TermsConditionsScreen());
                                                   }));
                                                 } else if (index == 8) {
-                                                  Navigator.push(context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) {
-                                                    return BlocProvider<
-                                                            MoreCubit>(
-                                                        create: (context) =>
-                                                            MoreCubit(),
-                                                        child: ContactUs());
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                                    return BlocProvider<MoreCubit>(
+                                                        create: (context) => MoreCubit(), child: ContactUs());
                                                   }));
                                                 } else if (index == 0) {
-                                                  UmraDetails.isbusforumra =
-                                                      false;
-                                                  Navigator
-                                                      .pushNamedAndRemoveUntil(
-                                                          context,
-                                                          Routes.home,
-                                                          (route) => false,
-                                                          arguments:
-                                                              !Routes.isomra);
-                                                  Routes.isomra =
-                                                      !Routes.isomra;
+                                                  UmraDetails.isbusforumra = false;
+                                                  Navigator.pushNamedAndRemoveUntil(
+                                                      context, Routes.home, (route) => false,
+                                                      arguments: !Routes.isomra);
+                                                  Routes.isomra = !Routes.isomra;
                                                 }
                                               },
                                               child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 0,
-                                                        vertical: 10),
+                                                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                                                 child: index == 0
                                                     ? Routes.isomra
                                                         ? Container(
                                                             child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              crossAxisAlignment: CrossAxisAlignment.center,
                                                               children: [
                                                                 Text(
-                                                                  LanguageClass
-                                                                          .isEnglish
-                                                                      ? "Swa Bus"
-                                                                      : "سوا  باص",
+                                                                  LanguageClass.isEnglish ? "Swa Bus" : "سوا  باص",
                                                                   style: fontStyle(
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontSize:
-                                                                          18,
-                                                                      fontFamily:
-                                                                          FontFamily
-                                                                              .medium),
+                                                                      color: Colors.black,
+                                                                      fontSize: 18,
+                                                                      fontFamily: FontFamily.medium),
                                                                 ),
                                                                 SizedBox(
                                                                   width: 10,
                                                                 ),
                                                                 Container(
                                                                     width: 40,
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                            .all(
-                                                                            5),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: AppColors
-                                                                          .white,
+                                                                    alignment: Alignment.center,
+                                                                    padding: const EdgeInsets.all(5),
+                                                                    decoration: BoxDecoration(
+                                                                      color: AppColors.white,
                                                                     ),
-                                                                    child: SvgPicture
-                                                                        .asset(
-                                                                            'assets/images/Icon awesome-bus-alt.svg')),
+                                                                    child: SvgPicture.asset(
+                                                                        'assets/images/Icon awesome-bus-alt.svg')),
                                                               ],
                                                             ),
                                                           )
                                                         : Container(
                                                             child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              crossAxisAlignment: CrossAxisAlignment.center,
                                                               children: [
                                                                 Text(
-                                                                  LanguageClass
-                                                                          .isEnglish
-                                                                      ? "Swa Umrah"
-                                                                      : "سوا عمرة",
+                                                                  LanguageClass.isEnglish ? "Swa Umrah" : "سوا عمرة",
                                                                   style: fontStyle(
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontSize:
-                                                                          18,
-                                                                      fontFamily:
-                                                                          FontFamily
-                                                                              .medium),
+                                                                      color: Colors.black,
+                                                                      fontSize: 18,
+                                                                      fontFamily: FontFamily.medium),
                                                                 ),
                                                                 SizedBox(
                                                                   width: 10,
                                                                 ),
                                                                 Container(
                                                                     height: 30,
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                            .all(
-                                                                            5),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: AppColors
-                                                                          .white,
+                                                                    alignment: Alignment.center,
+                                                                    padding: const EdgeInsets.all(5),
+                                                                    decoration: BoxDecoration(
+                                                                      color: AppColors.white,
                                                                     ),
-                                                                    child: Image
-                                                                        .asset(
-                                                                            'assets/images/umrah.png')),
+                                                                    child: Image.asset('assets/images/umrah.png')),
                                                               ],
                                                             ),
                                                           )
                                                     : Text(
                                                         index == 1
-                                                            ? LanguageClass
-                                                                    .isEnglish
+                                                            ? LanguageClass.isEnglish
                                                                 ? "Lines"
                                                                 : "خطوط"
                                                             : index == 2
-                                                                ? LanguageClass
-                                                                        .isEnglish
+                                                                ? LanguageClass.isEnglish
                                                                     ? "Bus classes"
                                                                     : "انواع الاتوبيس"
                                                                 : index == 3
-                                                                    ? LanguageClass
-                                                                            .isEnglish
+                                                                    ? LanguageClass.isEnglish
                                                                         ? "Packages"
                                                                         : "الباقات"
                                                                     : index == 4
-                                                                        ? LanguageClass
-                                                                                .isEnglish
+                                                                        ? LanguageClass.isEnglish
                                                                             ? "FAQ"
                                                                             : "اسئله شائعة"
-                                                                        : index ==
-                                                                                5
+                                                                        : index == 5
                                                                             ? LanguageClass.isEnglish
                                                                                 ? "About Us"
                                                                                 : "من نحن"
@@ -888,9 +571,7 @@ class _MoreScreenState extends State<MoreScreen> {
                                                         style: fontStyle(
                                                             color: Colors.black,
                                                             fontSize: 18,
-                                                            fontFamily:
-                                                                FontFamily
-                                                                    .medium),
+                                                            fontFamily: FontFamily.medium),
                                                       ),
                                               ),
                                             );

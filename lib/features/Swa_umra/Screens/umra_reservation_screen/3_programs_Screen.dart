@@ -9,6 +9,7 @@ import 'package:indexed/indexed.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/Navigaton_bottombar.dart';
 import 'package:swa/core/utils/app_colors.dart';
+import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/hex_color.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/styles.dart';
@@ -25,11 +26,7 @@ class ProgramsScreen extends StatefulWidget {
   int typeid, selectedpackage;
   int? umrahReservationID;
 
-  ProgramsScreen(
-      {super.key,
-      required this.selectedpackage,
-      required this.typeid,
-      this.umrahReservationID});
+  ProgramsScreen({super.key, required this.selectedpackage, required this.typeid, this.umrahReservationID});
 
   @override
   State<ProgramsScreen> createState() => _ProgramsScreenState();
@@ -37,12 +34,12 @@ class ProgramsScreen extends StatefulWidget {
 
 class _ProgramsScreenState extends State<ProgramsScreen> {
   final UmraBloc _umraBloc = UmraBloc();
-  List<bool> checkvalue = [];
+  // List<bool> checkvalue = [];
 
   int selectedpackage = 0;
   int descriptiontap = -1;
 
-  List<int> customernumber = [];
+  Map<int, int> programsReservationCount = {};
 
   List<ListElement>? listcampains = [];
   ProgramsModel? programsModel;
@@ -69,23 +66,10 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
               listcampains = state.campainlistmodel!.message!.list;
             } else if (state.programsModel?.status == "success") {
               programsModel = state.programsModel;
-              checkvalue =
-                  List<bool>.filled(state.programsModel!.message!.length, true);
-
-              customernumber =
-                  List<int>.filled(state.programsModel!.message!.length, 0);
-
-              if (widget.umrahReservationID != null) {
-                for (int i = 0; i < programsModel!.message!.length; i++) {
-                  if (state.programsModel!.message![i].isreserved == true) {
-                    checkvalue[i] = true;
-                    customernumber[i] =
-                        state.programsModel!.message![i].personCountReserved!;
-                  } else {
-                    checkvalue[i] = false;
-                  }
-                }
-              }
+              state.programsModel!.message?.forEach((element) {
+                log("test hena");
+                programsReservationCount[element.tripUnrahProgramId!] = 0;
+              });
             }
           },
           child: BlocBuilder(
@@ -101,30 +85,23 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                   return SafeArea(
                       bottom: false,
                       child: Directionality(
-                        textDirection: LanguageClass.isEnglish
-                            ? TextDirection.ltr
-                            : TextDirection.rtl,
+                        textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
                         child: Column(
                           children: [
                             10.verticalSpace,
                             Container(
                                 margin: EdgeInsets.only(
-                                    left: LanguageClass.isEnglish ? 55 : 0,
-                                    right: LanguageClass.isEnglish ? 0 : 55),
-                                alignment: LanguageClass.isEnglish
-                                    ? Alignment.topLeft
-                                    : Alignment.topRight,
+                                    left: LanguageClass.isEnglish ? 55 : 0, right: LanguageClass.isEnglish ? 0 : 55),
+                                alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                                 child: Text(
-                                  LanguageClass.isEnglish
-                                      ? 'Packages'
-                                      : 'الحملات',
+                                  LanguageClass.isEnglish ? 'Packages' : 'الحملات',
                                   style: fontStyle(
                                       fontSize: 24.sp,
                                       fontFamily: FontFamily.bold,
                                       color: Colors.black,
                                       fontWeight: FontWeight.w500),
                                 )),
-                            Container(
+                            SizedBox(
                                 width: double.infinity,
                                 height: 50,
                                 child: ListView(
@@ -145,87 +122,47 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                                       onTap: () {},
                                                       child: AnimatedContainer(
                                                         padding: EdgeInsets.only(
-                                                            left: selectedpackage ==
-                                                                        index &&
-                                                                    index != 0
-                                                                ? 30
-                                                                : 5,
-                                                            right: index ==
-                                                                    listcampains!
-                                                                            .length -
-                                                                        1
-                                                                ? 15
-                                                                : 5),
-                                                        margin: EdgeInsets.only(
-                                                            left: index * 80),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                                boxShadow:
-                                                                    selectedpackage ==
-                                                                            index
-                                                                        ? [
-                                                                            BoxShadow(
-                                                                                offset: Offset(4, 0),
-                                                                                color: Colors.black.withOpacity(0.4),
-                                                                                blurRadius: 4,
-                                                                                spreadRadius: 0)
-                                                                          ]
-                                                                        : [
-                                                                            BoxShadow(
-                                                                                offset: Offset(4, 0),
-                                                                                color: Colors.black.withOpacity(0.2),
-                                                                                blurRadius: 2,
-                                                                                spreadRadius: 0)
-                                                                          ],
-                                                                color: HexColor(
-                                                                    listcampains![index]
-                                                                            .bgColor ??
-                                                                        '#AEAEAE'),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            13)),
-                                                        width:
-                                                            selectedpackage ==
-                                                                    index
-                                                                ? 148
-                                                                : 100,
+                                                            left: selectedpackage == index && index != 0 ? 30 : 5,
+                                                            right: index == listcampains!.length - 1 ? 15 : 5),
+                                                        margin: EdgeInsets.only(left: index * 80),
+                                                        decoration: BoxDecoration(
+                                                            boxShadow: selectedpackage == index
+                                                                ? [
+                                                                    BoxShadow(
+                                                                        offset: Offset(4, 0),
+                                                                        color: Colors.black.withOpacity(0.4),
+                                                                        blurRadius: 4,
+                                                                        spreadRadius: 0)
+                                                                  ]
+                                                                : [
+                                                                    BoxShadow(
+                                                                        offset: Offset(4, 0),
+                                                                        color: Colors.black.withOpacity(0.2),
+                                                                        blurRadius: 2,
+                                                                        spreadRadius: 0)
+                                                                  ],
+                                                            color: HexColor(listcampains![index].bgColor ?? '#AEAEAE'),
+                                                            borderRadius: BorderRadius.circular(13)),
+                                                        width: selectedpackage == index ? 148 : 100,
                                                         height: 47,
-                                                        duration: Duration(
-                                                            microseconds: 100),
+                                                        duration: Duration(microseconds: 100),
                                                         curve: Curves.linear,
-                                                        alignment:
-                                                            Alignment.center,
+                                                        alignment: Alignment.center,
                                                         child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
                                                           children: [
                                                             Expanded(
                                                               child: FittedBox(
-                                                                fit: BoxFit
-                                                                    .fitWidth,
+                                                                fit: BoxFit.fitWidth,
                                                                 child: Text(
-                                                                  listcampains![
-                                                                          index]
-                                                                      .name!,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
+                                                                  listcampains![index].name!,
+                                                                  textAlign: TextAlign.center,
+                                                                  overflow: TextOverflow.ellipsis,
                                                                   style: fontStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontFamily:
-                                                                          FontFamily
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          18),
+                                                                      color: Colors.white,
+                                                                      fontFamily: FontFamily.bold,
+                                                                      fontSize: 18),
                                                                 ),
                                                               ),
                                                             ),
@@ -239,8 +176,7 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Container(
@@ -250,21 +186,16 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                         color: Colors.white,
-                                        border: Border.all(
-                                            width: 2,
-                                            color: AppColors.umragold),
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
+                                        border: Border.all(width: 2, color: AppColors.umragold),
+                                        borderRadius: BorderRadius.circular(100)),
                                     child: Container(
                                       width: 15,
                                       height: 15,
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
                                           color: AppColors.umragold,
-                                          border: Border.all(
-                                              color: AppColors.umragold),
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
+                                          border: Border.all(color: AppColors.umragold),
+                                          borderRadius: BorderRadius.circular(100)),
                                     ),
                                   )),
                                   Expanded(
@@ -281,21 +212,16 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                         color: Colors.white,
-                                        border: Border.all(
-                                            width: 2,
-                                            color: AppColors.umragold),
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
+                                        border: Border.all(width: 2, color: AppColors.umragold),
+                                        borderRadius: BorderRadius.circular(100)),
                                     child: Container(
                                       width: 15,
                                       height: 15,
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
                                           color: AppColors.umragold,
-                                          border: Border.all(
-                                              color: AppColors.umragold),
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
+                                          border: Border.all(color: AppColors.umragold),
+                                          borderRadius: BorderRadius.circular(100)),
                                     ),
                                   )),
                                   Expanded(
@@ -312,21 +238,16 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                         color: Colors.white,
-                                        border: Border.all(
-                                            width: 2,
-                                            color: AppColors.umragold),
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
+                                        border: Border.all(width: 2, color: AppColors.umragold),
+                                        borderRadius: BorderRadius.circular(100)),
                                     child: Container(
                                       width: 15,
                                       height: 15,
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
                                           color: AppColors.umragold,
-                                          border: Border.all(
-                                              color: AppColors.umragold),
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
+                                          border: Border.all(color: AppColors.umragold),
+                                          borderRadius: BorderRadius.circular(100)),
                                     ),
                                   )),
                                   Expanded(
@@ -343,21 +264,16 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                         color: Colors.white,
-                                        border: Border.all(
-                                            width: 2,
-                                            color: AppColors.umragold),
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
+                                        border: Border.all(width: 2, color: AppColors.umragold),
+                                        borderRadius: BorderRadius.circular(100)),
                                     child: Container(
                                       width: 15,
                                       height: 15,
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
                                           color: AppColors.umragold,
-                                          border: Border.all(
-                                              color: AppColors.umragold),
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
+                                          border: Border.all(color: AppColors.umragold),
+                                          borderRadius: BorderRadius.circular(100)),
                                     ),
                                   )),
                                   Expanded(
@@ -372,19 +288,16 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                       width: 27,
                                       height: 27,
                                       decoration: BoxDecoration(
-                                          color: Color(0xffC6C6C6),
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
+                                          color: Color(0xffC6C6C6), borderRadius: BorderRadius.circular(100)),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                             6.verticalSpace,
-                            Container(
+                            SizedBox(
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Expanded(
@@ -393,9 +306,7 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                       child: FittedBox(
                                         fit: BoxFit.fitWidth,
                                         child: Text(
-                                          LanguageClass.isEnglish
-                                              ? 'Packages'
-                                              : 'الحملات',
+                                          LanguageClass.isEnglish ? 'Packages' : 'الحملات',
                                           textAlign: TextAlign.center,
                                           style: fontStyle(
                                               fontFamily: FontFamily.bold,
@@ -412,9 +323,7 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                     child: FittedBox(
                                       fit: BoxFit.fitWidth,
                                       child: Text(
-                                        LanguageClass.isEnglish
-                                            ? 'Transportation'
-                                            : 'الانتقالات',
+                                        LanguageClass.isEnglish ? 'Transportation' : 'الانتقالات',
                                         textAlign: TextAlign.center,
                                         style: fontStyle(
                                             fontFamily: FontFamily.bold,
@@ -430,9 +339,7 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                     child: FittedBox(
                                       fit: BoxFit.fitWidth,
                                       child: Text(
-                                        LanguageClass.isEnglish
-                                            ? 'Accommodation'
-                                            : 'الإقامة',
+                                        LanguageClass.isEnglish ? 'Accommodation' : 'الإقامة',
                                         textAlign: TextAlign.center,
                                         style: fontStyle(
                                             fontFamily: FontFamily.bold,
@@ -448,9 +355,7 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                         child: FittedBox(
                                           fit: BoxFit.fitWidth,
                                           child: Text(
-                                            LanguageClass.isEnglish
-                                                ? 'Program'
-                                                : 'البرنامج',
+                                            LanguageClass.isEnglish ? 'Program' : 'البرنامج',
                                             textAlign: TextAlign.center,
                                             style: fontStyle(
                                                 fontFamily: FontFamily.bold,
@@ -466,9 +371,7 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                     child: FittedBox(
                                       fit: BoxFit.fitWidth,
                                       child: Text(
-                                        LanguageClass.isEnglish
-                                            ? 'Reservation'
-                                            : "الحجز",
+                                        LanguageClass.isEnglish ? 'Reservation' : "الحجز",
                                         textAlign: TextAlign.center,
                                         style: fontStyle(
                                             fontFamily: FontFamily.bold,
@@ -482,8 +385,7 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                               ),
                             ),
                             10.verticalSpace,
-                            programsModel?.message == null ||
-                                    programsModel!.message!.isEmpty
+                            programsModel?.message == null || programsModel!.message!.isEmpty
                                 ? Expanded(
                                     child: Center(
                                       child: Text(
@@ -491,93 +393,63 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                             ? 'There are currently no programs'
                                             : 'لا يوجد برامج حالياً',
                                         style: fontStyle(
-                                            color: Colors.black,
-                                            fontSize: 16.sp,
-                                            fontFamily: FontFamily.medium),
+                                            color: Colors.black, fontSize: 16.sp, fontFamily: FontFamily.medium),
                                       ),
                                     ),
                                   )
                                 : Expanded(
                                     child: ListView.builder(
-                                        itemCount:
-                                            programsModel?.message?.length,
+                                        itemCount: programsModel?.message?.length,
                                         shrinkWrap: true,
                                         physics: ScrollPhysics(),
                                         padding: EdgeInsets.zero,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
+                                        itemBuilder: (BuildContext context, int index) {
+                                          final program = programsModel!.message![index];
+
+                                          final programId = program.tripUnrahProgramId!;
+
+                                          int programReservationCount = programsReservationCount[programId] ?? 0;
+
                                           return Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 10.verticalSpace,
                                                 Container(
                                                   width: double.infinity,
-                                                  margin: EdgeInsets.symmetric(
-                                                      vertical: 6.h),
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 15.w),
+                                                  margin: EdgeInsets.symmetric(vertical: 6.h),
+                                                  padding: EdgeInsets.symmetric(horizontal: 15.w),
                                                   child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
                                                     children: [
                                                       Expanded(
                                                         child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
+                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          mainAxisSize: MainAxisSize.min,
                                                           children: [
                                                             InkWell(
-                                                              onTap: programsModel
-                                                                          ?.message![
-                                                                              index]
-                                                                          .isRequired ==
-                                                                      true
-                                                                  ? () {}
-                                                                  : () {
-                                                                      setState(
-                                                                          () {
-                                                                        checkvalue[index] =
-                                                                            !checkvalue[index];
-                                                                      });
-                                                                    },
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  programsReservationCount[programId] = 0;
+                                                                });
+                                                              },
                                                               child: Container(
                                                                 width: 20.w,
                                                                 height: 20.w,
                                                                 decoration: BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(
-                                                                                0),
-                                                                    border: Border.all(
-                                                                        width:
-                                                                            2,
-                                                                        color: Color(
-                                                                            0xff707070))),
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(2),
-                                                                child: checkvalue[
-                                                                        index]
+                                                                    borderRadius: BorderRadius.circular(0),
+                                                                    border:
+                                                                        Border.all(width: 2, color: Color(0xff707070))),
+                                                                padding: EdgeInsets.all(2),
+                                                                child: programReservationCount > 0
                                                                     ? Container(
-                                                                        width:
-                                                                            18.w,
-                                                                        height:
-                                                                            18.w,
+                                                                        width: 18.w,
+                                                                        height: 18.w,
                                                                         decoration: BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(0),
+                                                                            borderRadius: BorderRadius.circular(0),
                                                                             color: Color(0xff707070)),
                                                                       )
                                                                     : SizedBox(),
@@ -586,23 +458,13 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                                             10.horizontalSpace,
                                                             Expanded(
                                                               child: Text(
-                                                                programsModel!
-                                                                    .message![
-                                                                        index]
-                                                                    .title!,
-                                                                style:
-                                                                    fontStyle(
-                                                                  fontSize:
-                                                                      16.sp,
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
+                                                                programsModel!.message![index].title!,
+                                                                style: fontStyle(
+                                                                  fontSize: 16.sp,
+                                                                  color: Colors.black,
+                                                                  fontWeight: FontWeight.w500,
                                                                   height: 1.2,
-                                                                  fontFamily:
-                                                                      FontFamily
-                                                                          .medium,
+                                                                  fontFamily: FontFamily.medium,
                                                                 ),
                                                               ),
                                                             ),
@@ -614,39 +476,43 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                                         style: fontStyle(
                                                           fontSize: 14.sp,
                                                           color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.w500,
+                                                          fontWeight: FontWeight.w500,
                                                           height: 1.2,
-                                                          fontFamily:
-                                                              FontFamily.medium,
+                                                          fontFamily: FontFamily.medium,
                                                         ),
                                                       ),
                                                     ],
                                                   ),
                                                 ),
+                                                program.isRequired ?? false
+                                                    ? Padding(
+                                                        padding: EdgeInsetsDirectional.only(start: 45.w),
+                                                        child: Text(
+                                                          LanguageClass.isEnglish ? '*required' : '*مطلوب',
+                                                          style: fontStyle(
+                                                            fontSize: 12.sp,
+                                                            color: Colors.red,
+                                                            fontWeight: FontWeight.w500,
+                                                            height: 1.2,
+                                                            fontFamily: FontFamily.medium,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : Container(),
                                                 Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 15.w),
+                                                  padding: EdgeInsets.symmetric(horizontal: 15.w),
                                                   child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
                                                     children: [
                                                       ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(7),
+                                                        borderRadius: BorderRadius.circular(7),
                                                         child: Container(
                                                           width: 80.w,
                                                           height: 80.w,
-                                                          alignment:
-                                                              Alignment.center,
+                                                          alignment: Alignment.center,
                                                           child: Image.network(
-                                                            programsModel!
-                                                                .message![index]
-                                                                .image!,
+                                                            programsModel!.message![index].image!,
                                                             fit: BoxFit.cover,
                                                           ),
                                                         ),
@@ -654,57 +520,32 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                                       7.horizontalSpace,
                                                       Expanded(
                                                         child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
+                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
                                                             Container(
-                                                              width: double
-                                                                  .infinity,
+                                                              width: double.infinity,
                                                               child: RichText(
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
+                                                                overflow: TextOverflow.ellipsis,
+                                                                textAlign: TextAlign.start,
                                                                 softWrap: true,
                                                                 maxLines: 3,
                                                                 text: TextSpan(
-                                                                    text: programsModel
-                                                                        ?.message![
-                                                                            index]
-                                                                        .description![
-                                                                            0]
+                                                                    text: programsModel?.message![index].description![0]
                                                                         .toString(),
-                                                                    recognizer:
-                                                                        TapGestureRecognizer()
-                                                                          ..onTap =
-                                                                              () {
-                                                                            setState(() {
-                                                                              descriptiontap = index;
-                                                                            });
-                                                                          },
-                                                                    style:
-                                                                        fontStyle(
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      fontSize:
-                                                                          13.sp,
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .normal,
-                                                                      height:
-                                                                          1.2,
-                                                                      fontFamily:
-                                                                          FontFamily
-                                                                              .bold,
+                                                                    recognizer: TapGestureRecognizer()
+                                                                      ..onTap = () {
+                                                                        setState(() {
+                                                                          descriptiontap = index;
+                                                                        });
+                                                                      },
+                                                                    style: fontStyle(
+                                                                      overflow: TextOverflow.ellipsis,
+                                                                      fontSize: 13.sp,
+                                                                      color: Colors.black,
+                                                                      fontWeight: FontWeight.normal,
+                                                                      height: 1.2,
+                                                                      fontFamily: FontFamily.bold,
                                                                     ),
                                                                     children: [
                                                                       programsModel?.message![index].withMoreLink ==
@@ -712,10 +553,18 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                                                           ? TextSpan(
                                                                               recognizer: TapGestureRecognizer()
                                                                                 ..onTap = () {
-                                                                                  UmraRepos().launchInWebView(programsModel?.message![index].moreLink!);
+                                                                                  UmraRepos().launchInWebView(
+                                                                                      programsModel
+                                                                                          ?.message![index].moreLink!);
                                                                                 },
                                                                               text: '...more.',
-                                                                              style: fontStyle(overflow: TextOverflow.visible, color: Color(0xff009dff), fontSize: 13.sp, decoration: TextDecoration.underline, fontFamily: FontFamily.bold, fontWeight: FontWeight.w500),
+                                                                              style: fontStyle(
+                                                                                  overflow: TextOverflow.visible,
+                                                                                  color: Color(0xff009dff),
+                                                                                  fontSize: 13.sp,
+                                                                                  decoration: TextDecoration.underline,
+                                                                                  fontFamily: FontFamily.bold,
+                                                                                  fontWeight: FontWeight.w500),
                                                                             )
                                                                           : TextSpan()
                                                                     ]),
@@ -726,40 +575,30 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                                               width: 80.w,
                                                               height: 18.h,
                                                               decoration: BoxDecoration(
-                                                                  color: AppColors
-                                                                      .umragold,
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              4)),
+                                                                  color: AppColors.umragold,
+                                                                  borderRadius: BorderRadius.circular(4)),
                                                               child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceEvenly,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
+                                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                                 children: [
                                                                   Expanded(
                                                                     child: InkWell(
                                                                         onTap: () {
-                                                                          if (customernumber[index] >
-                                                                              0) {
+                                                                          final canDecreaseCount =
+                                                                              programReservationCount > 0;
+                                                                          if (canDecreaseCount) {
                                                                             setState(() {
-                                                                              customernumber[index]--;
+                                                                              programsReservationCount[programId] =
+                                                                                  programReservationCount - 1;
                                                                             });
                                                                           }
                                                                         },
                                                                         child: Container(
-                                                                          height:
-                                                                              18.h,
-                                                                          alignment:
-                                                                              Alignment.center,
-                                                                          child:
-                                                                              Text(
+                                                                          height: 18.h,
+                                                                          alignment: Alignment.center,
+                                                                          child: Text(
                                                                             '-',
-                                                                            textAlign:
-                                                                                TextAlign.center,
+                                                                            textAlign: TextAlign.center,
                                                                             style: fontStyle(
                                                                                 color: Colors.white,
                                                                                 fontFamily: FontFamily.medium,
@@ -769,43 +608,37 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                                                         )),
                                                                   ),
                                                                   Text(
-                                                                    customernumber[
-                                                                            index]
-                                                                        .toString(),
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
+                                                                    programsReservationCount[programId].toString(),
+                                                                    textAlign: TextAlign.center,
                                                                     style: fontStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        height:
-                                                                            1.2,
-                                                                        fontFamily:
-                                                                            FontFamily
-                                                                                .medium,
-                                                                        fontSize:
-                                                                            12.sp),
+                                                                        color: Colors.white,
+                                                                        height: 1.2,
+                                                                        fontFamily: FontFamily.medium,
+                                                                        fontSize: 12.sp),
                                                                   ),
                                                                   Expanded(
                                                                     child: InkWell(
                                                                         onTap: () {
-                                                                          print(
-                                                                              checkvalue.toString());
-                                                                          setState(
-                                                                              () {
-                                                                            customernumber[index]++;
+                                                                          // print(checkvalue.toString());
+                                                                          setState(() {
+                                                                            final isMax =
+                                                                                program.personCountReserved! != 0 &&
+                                                                                    program.personCountReserved! <=
+                                                                                        programsReservationCount[
+                                                                                            programId]!;
+                                                                            if (isMax) return _showMaxError(context);
+
+                                                                            programsReservationCount[programId] =
+                                                                                programReservationCount + 1;
+                                                                            programReservationCount + 1;
                                                                           });
                                                                         },
                                                                         child: Container(
-                                                                          height:
-                                                                              18.h,
-                                                                          alignment:
-                                                                              Alignment.center,
-                                                                          child:
-                                                                              Text(
+                                                                          height: 18.h,
+                                                                          alignment: Alignment.center,
+                                                                          child: Text(
                                                                             '+',
-                                                                            textAlign:
-                                                                                TextAlign.center,
+                                                                            textAlign: TextAlign.center,
                                                                             style: fontStyle(
                                                                                 color: Colors.white,
                                                                                 height: 1.2,
@@ -826,12 +659,10 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                               ]);
                                         })),
                             Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10.h, horizontal: 20.w),
+                              padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
                               alignment: Alignment.bottomRight,
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   InkWell(
@@ -841,23 +672,16 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                     child: Container(
                                       height: 35,
                                       width: 70,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 5.w, vertical: 2.h),
+                                      padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
-                                          color: Color(0xffecb959),
-                                          borderRadius:
-                                              BorderRadius.circular(41)),
+                                          color: Color(0xffecb959), borderRadius: BorderRadius.circular(41)),
                                       child: FittedBox(
                                         fit: BoxFit.scaleDown,
                                         child: Text(
-                                          LanguageClass.isEnglish
-                                              ? "Previous"
-                                              : 'السابق',
+                                          LanguageClass.isEnglish ? "Previous" : 'السابق',
                                           style: fontStyle(
-                                              fontFamily: FontFamily.bold,
-                                              fontSize: 18.sp,
-                                              color: Colors.white),
+                                              fontFamily: FontFamily.bold, fontSize: 18.sp, color: Colors.white),
                                         ),
                                       ),
                                     ),
@@ -867,48 +691,46 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                       UmraDetails.umraprograms = [];
                                       UmraDetails.programsNumber = [];
 
-                                      for (int i = 0;
-                                          i < checkvalue.length;
-                                          i++) {
-                                        if (checkvalue[i] == true &&
-                                            customernumber[i] > 0) {
-                                          UmraDetails.umraprograms
-                                              .add(programsModel!.message![i]);
+                                      // check if response is not success
+                                      // check if any program is required and count is less than 0
+                                      final isSucces = programsModel?.status == 'success';
+                                      bool hasRequiredUnselectedPrograms = false;
+                                      if (!isSucces) return;
 
+                                      programsModel?.message?.forEach((program) {
+                                        final isProgramRequiredAndCountLessThanZero = program.isRequired == true &&
+                                            programsReservationCount[program.tripUnrahProgramId]! <= 0;
+                                        hasRequiredUnselectedPrograms = isProgramRequiredAndCountLessThanZero;
+                                        if (isProgramRequiredAndCountLessThanZero) return _showErrorSnackbar(context);
+
+                                        if (programsReservationCount[program.tripUnrahProgramId]! > 0) {
+                                          UmraDetails.umraprograms.add(program);
                                           UmraDetails.programsNumber
-                                              .add(customernumber[i]);
+                                              .add(programsReservationCount[program.tripUnrahProgramId]!);
                                         }
-                                      }
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ReservationScreen(
-                                                    umrahReservationID: widget
-                                                        .umrahReservationID,
-                                                    selectedpackage:
-                                                        selectedpackage,
-                                                    typeid: widget.typeid,
-                                                  )));
+                                      });
+                                      if (!hasRequiredUnselectedPrograms)
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => ReservationScreen(
+                                                      umrahReservationID: widget.umrahReservationID,
+                                                      selectedpackage: selectedpackage,
+                                                      typeid: widget.typeid,
+                                                    )));
                                     },
                                     child: Container(
                                       height: 35,
                                       width: 70,
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
-                                          color: Color(0xffecb959),
-                                          borderRadius:
-                                              BorderRadius.circular(41)),
+                                          color: Color(0xffecb959), borderRadius: BorderRadius.circular(41)),
                                       child: FittedBox(
                                         fit: BoxFit.scaleDown,
                                         child: Text(
-                                          LanguageClass.isEnglish
-                                              ? "Next"
-                                              : 'التالي',
+                                          LanguageClass.isEnglish ? "Next" : 'التالي',
                                           style: fontStyle(
-                                              fontFamily: FontFamily.bold,
-                                              fontSize: 18.sp,
-                                              color: Colors.white),
+                                              fontFamily: FontFamily.bold, fontSize: 18.sp, color: Colors.white),
                                         ),
                                       ),
                                     ),
@@ -925,5 +747,19 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
         bottomNavigationBar: Navigationbottombar(
           currentIndex: 0,
         ));
+  }
+
+  void _showErrorSnackbar(BuildContext context) {
+    return Constants.showDefaultSnackBar(
+        color: Colors.red, context: context, text: LanguageClass.isEnglish ? 'Please Select Programs' : 'اختر البرامج');
+  }
+
+  void _showMaxError(BuildContext context) {
+    return Constants.showDefaultSnackBar(
+        color: Colors.red,
+        context: context,
+        text: LanguageClass.isEnglish
+            ? 'this is the maximum persons in this program'
+            : 'هذا هو الحد الأقصى لعدد الأشخاص في هذه البرنامج');
   }
 }

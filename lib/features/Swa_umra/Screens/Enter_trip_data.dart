@@ -63,19 +63,14 @@ class _TripdataScreenState extends State<TripdataScreen> {
             if (state.cityUmramodel?.status == 'success') {
               showGeneralDialog(
                   context: context,
-                  pageBuilder: (context, Animation<double> animation,
-                      Animation<double> secondaryAnimation) {
+                  pageBuilder: (context, Animation<double> animation, Animation<double> secondaryAnimation) {
                     return Material(
                       color: Colors.transparent,
                       child: Directionality(
-                        textDirection: LanguageClass.isEnglish
-                            ? TextDirection.ltr
-                            : TextDirection.rtl,
+                        textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 25),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12)),
+                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,9 +80,7 @@ class _TripdataScreenState extends State<TripdataScreen> {
                                 height: 40,
                               ),
                               Container(
-                                alignment: LanguageClass.isEnglish
-                                    ? Alignment.topLeft
-                                    : Alignment.topRight,
+                                alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                                 child: InkWell(
                                   onTap: () {
                                     Navigator.pop(context);
@@ -102,9 +95,7 @@ class _TripdataScreenState extends State<TripdataScreen> {
                               Container(
                                 margin: EdgeInsets.symmetric(horizontal: 25),
                                 child: Text(
-                                  LanguageClass.isEnglish
-                                      ? "Select City"
-                                      : "حدد المدينة",
+                                  LanguageClass.isEnglish ? "Select City" : "حدد المدينة",
                                   style: fontStyle(
                                       color: AppColors.blackColor,
                                       fontSize: 25,
@@ -123,30 +114,23 @@ class _TripdataScreenState extends State<TripdataScreen> {
                                       color: Color(0xffE0E0E0),
                                     );
                                   },
-                                  itemCount:
-                                      state.cityUmramodel!.message!.length,
+                                  itemCount: state.cityUmramodel!.message!.length,
                                   scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
+                                  itemBuilder: (BuildContext context, int index) {
                                     return InkWell(
                                       onTap: () {
                                         setState(() {
-                                          selectcity = state.cityUmramodel!
-                                              .message![index].cityName!;
+                                          selectcity = state.cityUmramodel!.message![index].cityName!;
 
-                                          cityid = state.cityUmramodel!
-                                              .message![index].cityId
-                                              .toString();
+                                          cityid = state.cityUmramodel!.message![index].cityId.toString();
                                         });
                                         Navigator.pop(context);
                                       },
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20, vertical: 15),
+                                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                                         child: Text(
-                                          state.cityUmramodel!.message![index]
-                                              .cityName!,
+                                          state.cityUmramodel!.message![index].cityName!,
                                           style: fontStyle(
                                               color: AppColors.blackColor,
                                               fontSize: 14,
@@ -275,18 +259,14 @@ class _TripdataScreenState extends State<TripdataScreen> {
                 return SafeArea(
                   bottom: false,
                   child: Directionality(
-                    textDirection: LanguageClass.isEnglish
-                        ? TextDirection.ltr
-                        : TextDirection.rtl,
+                    textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
                     child: Column(
                       children: [
                         10.verticalSpace,
 
                         Container(
                           margin: const EdgeInsets.only(left: 27, right: 27),
-                          alignment: LanguageClass.isEnglish
-                              ? Alignment.topLeft
-                              : Alignment.topRight,
+                          alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                           child: InkWell(
                             onTap: () {
                               Navigator.pop(context);
@@ -300,11 +280,8 @@ class _TripdataScreenState extends State<TripdataScreen> {
                         ),
                         Container(
                             margin: EdgeInsets.only(
-                                left: LanguageClass.isEnglish ? 55 : 0,
-                                right: LanguageClass.isEnglish ? 0 : 55),
-                            alignment: LanguageClass.isEnglish
-                                ? Alignment.topLeft
-                                : Alignment.topRight,
+                                left: LanguageClass.isEnglish ? 55 : 0, right: LanguageClass.isEnglish ? 0 : 55),
+                            alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                             child: Text(
                               widget.triptype,
                               style: fontStyle(
@@ -323,12 +300,10 @@ class _TripdataScreenState extends State<TripdataScreen> {
                           },
                           child: Container(
                             margin: EdgeInsets.symmetric(horizontal: 33),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 25),
+                            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 25),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(41),
-                                border: Border.all(
-                                    width: 2, color: const Color(0xff707070))),
+                                border: Border.all(width: 2, color: const Color(0xff707070))),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -340,18 +315,14 @@ class _TripdataScreenState extends State<TripdataScreen> {
                                           : "من مدينة ( المغادرة )"
                                       : selectcity,
                                   style: fontStyle(
-                                      color: selectcity == ''
-                                          ? Color(0xff969696)
-                                          : Colors.black,
+                                      color: selectcity == '' ? Color(0xff969696) : Colors.black,
                                       fontWeight: FontWeight.w600,
                                       fontFamily: FontFamily.bold,
                                       fontSize: 18),
                                 ),
                                 Icon(
                                   Icons.check_circle_rounded,
-                                  color: selectcity == ''
-                                      ? Color(0xffDEDEDE)
-                                      : AppColors.umragold,
+                                  color: selectcity == '' ? Color(0xffDEDEDE) : AppColors.umragold,
                                 )
                               ],
                             ),
@@ -373,14 +344,9 @@ class _TripdataScreenState extends State<TripdataScreen> {
 
                                 ishijiri
                                     ? selectedDate = hdate.jhijri.toString()
-                                    : selectedDate =
-                                        intl.DateFormat('MM-dd-yyyy')
-                                            .format(date!)
-                                            .toString();
+                                    : selectedDate = intl.DateFormat('MM-dd-yyyy').format(date!).toString();
 
-                                ishijiri
-                                    ? selectedHijriDate = hdate.jhijri
-                                    : selectedGeorgianDate = hdate.date;
+                                ishijiri ? selectedHijriDate = hdate.jhijri : selectedGeorgianDate = hdate.date;
                                 setState(() {});
                                 Navigator.pop(context);
                               },
@@ -410,12 +376,10 @@ class _TripdataScreenState extends State<TripdataScreen> {
                           },
                           child: Container(
                             margin: EdgeInsets.symmetric(horizontal: 33),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 25),
+                            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 25),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(41),
-                                border: Border.all(
-                                    width: 2, color: const Color(0xff707070))),
+                                border: Border.all(width: 2, color: const Color(0xff707070))),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -427,18 +391,14 @@ class _TripdataScreenState extends State<TripdataScreen> {
                                           : 'حدد التاريخ'
                                       : selectedDate,
                                   style: fontStyle(
-                                      color: date == null
-                                          ? Color(0xff969696)
-                                          : Colors.black,
+                                      color: date == null ? Color(0xff969696) : Colors.black,
                                       fontWeight: FontWeight.w600,
                                       fontFamily: FontFamily.bold,
                                       fontSize: 18),
                                 ),
                                 Icon(
                                   Icons.check_circle_rounded,
-                                  color: date == null
-                                      ? Color(0xffDEDEDE)
-                                      : AppColors.umragold,
+                                  color: date == null ? Color(0xffDEDEDE) : AppColors.umragold,
                                 )
                               ],
                             ),
@@ -557,9 +517,7 @@ class _TripdataScreenState extends State<TripdataScreen> {
                               Constants.showDefaultSnackBar(
                                   context: context,
                                   color: AppColors.umragold,
-                                  text: LanguageClass.isEnglish
-                                      ? "Enter all the data"
-                                      : 'أدخل كافة البيانات');
+                                  text: LanguageClass.isEnglish ? "Enter all the data" : 'أدخل كافة البيانات');
                             }
                           },
                           child: Container(
@@ -568,9 +526,7 @@ class _TripdataScreenState extends State<TripdataScreen> {
                             width: double.infinity,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: selectcity == '' || date == null
-                                  ? Color(0xffDEDEDE)
-                                  : AppColors.umragold,
+                              color: selectcity == '' || date == null ? Color(0xffDEDEDE) : AppColors.umragold,
                               borderRadius: BorderRadius.circular(41),
                             ),
                             child: Row(
@@ -578,8 +534,7 @@ class _TripdataScreenState extends State<TripdataScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.only(
-                                      top: LanguageClass.isEnglish ? 0 : 5.0),
+                                  padding: EdgeInsets.only(top: LanguageClass.isEnglish ? 0 : 5.0),
                                   child: Icon(
                                     Icons.search_rounded,
                                     color: Colors.white,
@@ -589,8 +544,7 @@ class _TripdataScreenState extends State<TripdataScreen> {
                                   width: 8,
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(
-                                      bottom: LanguageClass.isEnglish ? 0 : 10),
+                                  padding: EdgeInsets.only(bottom: LanguageClass.isEnglish ? 0 : 10),
                                   child: Text(
                                     LanguageClass.isEnglish ? 'Search' : 'بحث',
                                     style: fontStyle(
@@ -658,10 +612,7 @@ class _TripdataScreenState extends State<TripdataScreen> {
                           ? 'Gregorian'
                           : "ميلادي",
                   style: fontStyle(
-                      height: 1.2,
-                      fontFamily: FontFamily.medium,
-                      fontSize: 14.sp,
-                      color: AppColors.blackColor),
+                      height: 1.2, fontFamily: FontFamily.medium, fontSize: 14.sp, color: AppColors.blackColor),
                 ),
                 5.horizontalSpace,
                 Icon(
@@ -672,11 +623,14 @@ class _TripdataScreenState extends State<TripdataScreen> {
               ],
             )),
       ),
-      selectedDate: JDateModel(
-          jhijri: hijiri ? selectedHijriDate ?? JHijri.now() : null,
-          dateTime: !hijiri ? selectedGeorgianDate ?? DateTime.now() : null),
+      selectedDate: selectedHijriDate == null && selectedGeorgianDate == null
+          ? null
+          : JDateModel(
+              jhijri: hijiri ? selectedHijriDate ?? JHijri.now() : null,
+              dateTime: !hijiri ? selectedGeorgianDate ?? DateTime.now() : null),
       pickerMode: DatePickerMode.day,
       pickerTheme: Theme.of(context),
+      startDate: JDateModel(dateTime: DateTime.now()),
       textDirection: TextDirection.ltr,
       buttons: Container(),
       locale: LanguageClass.isEnglish ? Locale("en", "US") : Locale("ar", ""),

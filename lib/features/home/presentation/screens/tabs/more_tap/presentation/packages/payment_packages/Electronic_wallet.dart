@@ -10,6 +10,7 @@ import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
+import 'package:swa/features/payment/fawry/presentation/screens/fawry.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
@@ -19,13 +20,12 @@ class Electronicwalletpackage extends StatefulWidget {
     super.key,
   });
   @override
-  State<Electronicwalletpackage> createState() =>
-      _ElectronicwalletpackageState();
+  State<Electronicwalletpackage> createState() => _ElectronicwalletpackageState();
 }
 
 class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
   final formKey = GlobalKey<FormState>();
-  TextEditingController amountController = TextEditingController();
+  // TextEditingController amountController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   PackagesBloc _packagesBloc = new PackagesBloc();
   @override
@@ -40,8 +40,7 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Directionality(
-        textDirection:
-            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+        textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: SingleChildScrollView(
@@ -55,8 +54,7 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                   alignment: Alignment.topLeft,
                   child: InkWell(
                     onTap: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, Routes.home, (route) => false,
+                      Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false,
                           arguments: Routes.isomra);
                     },
                     child: Icon(
@@ -72,9 +70,7 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    LanguageClass.isEnglish
-                        ? 'Electronic wallet'
-                        : "المحفظة الاكترونية",
+                    LanguageClass.isEnglish ? 'Electronic wallet' : "المحفظة الاكترونية",
                     style: fontStyle(
                         color: AppColors.blackColor,
                         fontSize: 38,
@@ -97,13 +93,11 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                             Container(
                               height: 40,
                               width: 1,
-                              decoration:
-                                  const BoxDecoration(color: Color(0xff47A9EB)),
+                              decoration: const BoxDecoration(color: Color(0xff47A9EB)),
                             ),
                             Expanded(
                               child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 2, horizontal: 18),
+                                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
                                 decoration: const BoxDecoration(
                                     //color: AppColors.yellow
                                     // border: Border.all(
@@ -116,33 +110,26 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                                 child: TextFormField(
                                   maxLength: 11,
                                   autofocus: true,
-                                  style: fontStyle(
-                                      color: AppColors.blackColor,
-                                      fontSize: 16),
+                                  readOnly: true,
+                                  style: fontStyle(color: AppColors.blackColor, fontSize: 16),
                                   cursorColor: AppColors.blue,
                                   controller: phoneController,
                                   inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp("[0-9]"))
+                                    FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                                    NumericTextFormatter(),
                                   ],
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
-                                    hintText: LanguageClass.isEnglish
-                                        ? 'Phone Number'
-                                        : "موبيل",
+                                    hintText: LanguageClass.isEnglish ? 'Phone Number' : "موبيل",
                                     errorStyle: fontStyle(
                                       color: Colors.red,
                                       fontSize: 11,
                                     ),
                                     hintStyle: fontStyle(
-                                        color: AppColors.greyLight,
-                                        fontSize: 15,
-                                        fontFamily: FontFamily.bold),
-                                    labelStyle: fontStyle(
-                                        color: AppColors.grey,
-                                        fontSize: 12,
-                                        fontFamily: FontFamily.bold),
+                                        color: AppColors.greyLight, fontSize: 15, fontFamily: FontFamily.bold),
+                                    labelStyle:
+                                        fontStyle(color: AppColors.grey, fontSize: 12, fontFamily: FontFamily.bold),
                                   ),
                                   validator: (value) {
                                     return value!.isEmpty
@@ -164,13 +151,11 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                             Container(
                               height: 20,
                               width: 1,
-                              decoration:
-                                  const BoxDecoration(color: Color(0xffD865A4)),
+                              decoration: const BoxDecoration(color: Color(0xffD865A4)),
                             ),
                             Expanded(
                               child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 2, horizontal: 18),
+                                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
                                   decoration: const BoxDecoration(
                                       // border: Border.all(
                                       //   color: AppColors.blue,
@@ -180,24 +165,17 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                                       // const BorderRadius.all(Radius.circular(10))
                                       ),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       Text(
-                                        LanguageClass.isEnglish
-                                            ? "amount"
-                                            : "القيمة",
+                                        LanguageClass.isEnglish ? "amount" : "القيمة",
                                         style: fontStyle(
-                                            fontSize: 15,
-                                            fontFamily: FontFamily.bold,
-                                            color: AppColors.greyLight),
+                                            fontSize: 15, fontFamily: FontFamily.bold, color: AppColors.greyLight),
                                       ),
                                       Text(
                                         Routes.Amount,
                                         style: fontStyle(
-                                            fontSize: 18,
-                                            fontFamily: FontFamily.bold,
-                                            color: AppColors.primaryColor),
+                                            fontSize: 18, fontFamily: FontFamily.bold, color: AppColors.primaryColor),
                                       )
                                     ],
                                   )),
@@ -210,9 +188,7 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                           listener: (context, PackagesState state) {
                             if (state.isloading == true) {
                               Constants.showLoadingDialog(context);
-                            } else if (state.reservationResponseElectronicModel
-                                    ?.status ==
-                                'success') {
+                            } else if (state.reservationResponseElectronicModel?.status == 'success') {
                               Constants.hideLoadingDialog(context);
                               // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseElectronicModel.message!.statusDescription!);
 
@@ -221,8 +197,7 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                                 builder: (BuildContext context) {
                                   return AlertDialog(
                                     title: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Icon(
@@ -234,32 +209,23 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                                             : "سيصلك إشعار بتطبيق محفظتك \n من أجل الموافقة على الدفع"),
                                       ],
                                     ),
-                                    titleTextStyle: fontStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                        fontSize: 20),
+                                    titleTextStyle:
+                                        fontStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20),
                                     content: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(LanguageClass.isEnglish
-                                                ? 'Amount: '
-                                                : "القيمة"),
+                                            Text(LanguageClass.isEnglish ? 'Amount: ' : "القيمة"),
                                             Text(Routes.Amount.toString())
                                           ],
                                         ),
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             const Text('Reference Number: '),
-                                            Text(state
-                                                .reservationResponseElectronicModel!
-                                                .message!
-                                                .referenceNumber
+                                            Text(state.reservationResponseElectronicModel!.message!.referenceNumber
                                                 .toString())
                                           ],
                                         )
@@ -270,10 +236,7 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                                       ElevatedButton(
                                           onPressed: () {
                                             Navigator.pop(context);
-                                            Navigator.pushNamedAndRemoveUntil(
-                                                context,
-                                                Routes.home,
-                                                (route) => false,
+                                            Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false,
                                                 arguments: Routes.isomra);
                                           },
                                           child: Container(
@@ -281,17 +244,12 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                                             // margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
                                             decoration: BoxDecoration(
                                                 // color: color ?? AppColors.darkRed,
-                                                borderRadius:
-                                                    BorderRadius.circular(100)),
+                                                borderRadius: BorderRadius.circular(100)),
                                             child: Center(
                                               child: Text(
-                                                LanguageClass.isEnglish
-                                                    ? 'OK'
-                                                    : "موافقة",
+                                                LanguageClass.isEnglish ? 'OK' : "موافقة",
                                                 style: fontStyle(
-                                                    color: AppColors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 22),
+                                                    color: AppColors.white, fontWeight: FontWeight.bold, fontSize: 22),
                                               ),
                                             ),
                                           )),
@@ -299,15 +257,10 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                                   );
                                 },
                               );
-                            } else if (state.reservationResponseElectronicModel
-                                    ?.status ==
-                                'failed') {
+                            } else if (state.reservationResponseElectronicModel?.status == 'failed') {
                               Constants.hideLoadingDialog(context);
                               Constants.showDefaultSnackBar(
-                                  context: context,
-                                  text: state
-                                      .reservationResponseElectronicModel!
-                                      .errormessage!);
+                                  context: context, text: state.reservationResponseElectronicModel!.errormessage!);
                             }
                           },
                           child: InkWell(
@@ -318,15 +271,12 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                                   phoneController.text.length < 11) {
                                 Constants.showDefaultSnackBar(
                                   context: context,
-                                  text: LanguageClass.isEnglish
-                                      ? 'Enter phone number'
-                                      : "المحفظة الاكترونية",
+                                  text: LanguageClass.isEnglish ? 'Enter phone number' : "المحفظة الاكترونية",
                                 );
                               } else {
                                 _packagesBloc.add(PackageelectronicEvent(
                                     Amount: Routes.Amount,
-                                    FromStationID:
-                                        int.parse(Routes.FromStationID!),
+                                    FromStationID: int.parse(Routes.FromStationID!),
                                     PackageID: Routes.PackageID,
                                     PackagePriceID: Routes.PackageID,
                                     ToStationID: int.parse(Routes.ToStationID!),
@@ -340,8 +290,7 @@ class _ElectronicwalletpackageState extends State<Electronicwalletpackage> {
                                 horizontal: 30,
                               ),
                               child: Constants.customButton(
-                                text:
-                                    LanguageClass.isEnglish ? "Charge" : "شحن",
+                                text: LanguageClass.isEnglish ? "Charge" : "شحن",
                                 color: AppColors.primaryColor,
                               ),
                             ),

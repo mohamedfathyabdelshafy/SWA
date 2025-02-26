@@ -224,7 +224,7 @@ class _AccomidationScreenState extends State<AccomidationScreen> {
                                     : "${(accomidationModel.message![acomodationIndex].roomTypeList![roomIndex].price * customernumber[acomodationIndex].customernumbers[roomIndex]).toStringAsFixed(2)} ${Routes.curruncy ?? ""}",
                                 style: fontStyle(
                                     color: Color(0xffff5d4b),
-                                    fontSize: 12.sp,
+                                    fontSize: 10.sp,
                                     height: 1.2,
                                     fontFamily: FontFamily.regular,
                                     fontWeight: FontWeight.w500),
@@ -236,7 +236,7 @@ class _AccomidationScreenState extends State<AccomidationScreen> {
                                     : "${(accomidationModel.message![acomodationIndex].roomTypeList![roomIndex].priceBeforeDiscount * customernumber[acomodationIndex].customernumbers[roomIndex]).toStringAsFixed(2)} ${Routes.curruncy ?? ""}",
                                 style: fontStyle(
                                   color: Color(0xff9f9f9f),
-                                  fontSize: 12.sp,
+                                  fontSize: 10.sp,
                                   height: 1.2,
                                   fontFamily: FontFamily.regular,
                                   fontWeight: FontWeight.w500,

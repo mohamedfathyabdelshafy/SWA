@@ -33,12 +33,7 @@ class PromocodReservationEvent extends PackagesEvent {
   int? paymentTypeID;
   String? promocodeid;
   List<TripReservationList>? trips;
-  PromocodReservationEvent(
-      {this.promocode,
-      this.custId,
-      this.paymentTypeID,
-      this.promocodeid,
-      this.trips});
+  PromocodReservationEvent({this.promocode, this.custId, this.paymentTypeID, this.promocodeid, this.trips});
 }
 
 class GetactivepackageEvent extends PackagesEvent {}
