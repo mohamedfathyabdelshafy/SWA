@@ -753,7 +753,7 @@ class PayField extends StatelessWidget {
           width: 265,
           child: TextFormField(
               inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
               ],
               controller: ctr,
               keyboardType: textInputType,

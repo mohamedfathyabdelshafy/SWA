@@ -101,7 +101,7 @@ class _AddCreditCardState extends State<AddCreditCard> {
                               style: fontStyle(fontFamily: FontFamily.regular, color: Colors.black, fontSize: 18),
                               cursorColor: AppColors.blackColor,
                               inputFormatters: [
-                                FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+                                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                                 LengthLimitingTextInputFormatter(16),
                                 CreditCardFormat(number: 4, char: " "),
                               ],
@@ -151,7 +151,7 @@ class _AddCreditCardState extends State<AddCreditCard> {
                           keyboardType: TextInputType.number,
                           style: fontStyle(fontFamily: FontFamily.medium, color: Colors.black, fontSize: 18),
                           inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                             LengthLimitingTextInputFormatter(4),
                             CreditCardFormat(number: 2, char: "/"),
                             ExpiryDateInputFormatter(),
@@ -180,7 +180,7 @@ class _AddCreditCardState extends State<AddCreditCard> {
                       Expanded(
                         child: TextFormField(
                           inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                           ],
                           keyboardType: TextInputType.number,
                           maxLength: 3,
