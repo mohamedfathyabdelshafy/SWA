@@ -31,6 +31,8 @@ class TriplistScreen extends StatefulWidget {
 
 class _TriplistScreenState extends State<TriplistScreen> {
   final UmraBloc _umraBloc = UmraBloc();
+  DateTime? selectedGeorgianDate;
+  JHijri? selectedHijriDate;
 
   int selectedpackage = 0;
   List<ListElement>? listcampains = [];
@@ -674,6 +676,8 @@ class _TriplistScreenState extends State<TriplistScreen> {
               customdatepicker(
                 context: context,
                 hijiri: ishijiri,
+                selectedGeorgianDate: selectedGeorgianDate,
+                selectedHijriDate: selectedHijriDate,
                 onchange: (hdate) {
                   date = hdate.date;
                   hdate.jhijri.fDisplay = DisplayFormat.MMDDYYYY;
@@ -682,6 +686,7 @@ class _TriplistScreenState extends State<TriplistScreen> {
                       ? selectedDate = hdate.jhijri.toString()
                       : selectedDate = intl.DateFormat('MM-dd-yyyy').format(date!).toString();
 
+                  ishijiri ? selectedHijriDate = hdate.jhijri : selectedGeorgianDate = hdate.date;
                   _umraBloc.add(GetPackageListEvent(
                       reservationid: widget.umrahReservationID,
                       campianID: UmraDetails.campainid,
@@ -692,6 +697,27 @@ class _TriplistScreenState extends State<TriplistScreen> {
                   Navigator.pop(context);
                 },
               );
+              // customdatepicker(
+              //   context: context,
+              //   hijiri: ishijiri,
+              //   onchange: (hdate) {
+              //     date = hdate.date;
+              //     hdate.jhijri.fDisplay = DisplayFormat.MMDDYYYY;
+
+              //     ishijiri
+              //         ? selectedDate = hdate.jhijri.toString()
+              //         : selectedDate = intl.DateFormat('MM-dd-yyyy').format(date!).toString();
+
+              //     _umraBloc.add(GetPackageListEvent(
+              //         reservationid: widget.umrahReservationID,
+              //         campianID: UmraDetails.campainid,
+              //         city: widget.city,
+              //         date: selectedDate,
+              //         typeid: widget.typeid));
+              //     setState(() {});
+              //     Navigator.pop(context);
+              //   },
+              // );
             },
             child: SvgPicture.asset('assets/images/calender.svg'),
           )
@@ -723,8 +749,13 @@ class _TriplistScreenState extends State<TriplistScreen> {
     }
   }
 
-  Future customdatepicker(
-      {required BuildContext context, required bool hijiri, required onchange(JPickerValue date)}) async {
+  Future customdatepicker({
+    required BuildContext context,
+    required bool hijiri,
+    DateTime? selectedGeorgianDate,
+    JHijri? selectedHijriDate,
+    required Function(JPickerValue date) onchange,
+  }) async {
     return showGlobalDatePicker(
       context: context,
       headerTitle: Container(
@@ -737,7 +768,11 @@ class _TriplistScreenState extends State<TriplistScreen> {
             onTap: () {
               Navigator.pop(context);
               ishijiri = !ishijiri;
+              selectedGeorgianDate = null;
+              selectedHijriDate = null;
               customdatepicker(
+                selectedGeorgianDate: selectedGeorgianDate,
+                selectedHijriDate: selectedHijriDate,
                 context: context,
                 hijiri: ishijiri,
                 onchange: onchange,
@@ -767,9 +802,14 @@ class _TriplistScreenState extends State<TriplistScreen> {
               ],
             )),
       ),
-      selectedDate: JDateModel(jhijri: JHijri.now(), dateTime: DateTime.now()),
+      selectedDate: selectedHijriDate == null && selectedGeorgianDate == null
+          ? null
+          : JDateModel(
+              jhijri: hijiri ? selectedHijriDate ?? JHijri.now() : null,
+              dateTime: !hijiri ? selectedGeorgianDate ?? DateTime.now() : null),
       pickerMode: DatePickerMode.day,
       pickerTheme: Theme.of(context),
+      startDate: JDateModel(dateTime: DateTime.now().subtract(Duration(days: ishijiri ? 1 : 0))),
       textDirection: TextDirection.ltr,
       buttons: Container(),
       locale: LanguageClass.isEnglish ? Locale("en", "US") : Locale("ar", ""),

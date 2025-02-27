@@ -9,21 +9,20 @@ Future<void> registerDependencyInjectionInit() async {
   //! Features
 
   // Blocs
-  sl.registerFactory<RegisterCubit>(() => RegisterCubit(registerUserUseCase: sl(), ));
 
   // Use cases
   //We use lazy we don't need to load the whole app
   sl.registerLazySingleton<RegisterUser>(() => RegisterUser(registerRepository: sl()));
 
-
   // Repository
   //We use lazy we don't need to load the whole app
   sl.registerLazySingleton<RegisterRepository>(() => RegisterRepositoryImpl(
-    networkInfo: sl(),
-    registerRemoteDataSource: sl(),
-  ));
+        networkInfo: sl(),
+        registerRemoteDataSource: sl(),
+      ));
 
   // Data Sources
-  sl.registerLazySingleton<RegisterRemoteDataSource>(() => RegisterRemoteDataSourceImpl(apiConsumer: sl(),));
-
+  sl.registerLazySingleton<RegisterRemoteDataSource>(() => RegisterRemoteDataSourceImpl(
+        apiConsumer: sl(),
+      ));
 }

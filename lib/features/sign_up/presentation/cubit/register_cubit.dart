@@ -4,7 +4,6 @@ import 'package:swa/core/error/failures.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/documentType_model.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/id_textfield_model.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/phoneCode_model.dart';
-import 'package:swa/features/sign_up/data/data_sources/register_remote_data_source.dart';
 import 'package:swa/features/sign_up/domain/entities/message_response.dart';
 import 'package:swa/features/sign_up/domain/use_cases/register.dart';
 import 'package:swa/main.dart';
@@ -21,8 +20,7 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   Future<void> registerUser(UserRegisterParams params) async {
     emit(RegisterLoadingState());
-    Either<Failure, MessageResponse> response =
-        await registerUserUseCase(params);
+    Either<Failure, MessageResponse> response = await registerUserUseCase(params);
     emit(
       response.fold(
         (failure) => RegisterErrorState(error: failure.toString()),
@@ -78,8 +76,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   }
 
   Future<void> getidtextfield({String? countryid, String? iDTypeid}) async {
-    var res =
-        await ticketRepo.gettextfieldid(country: countryid, id: iDTypeid!);
+    var res = await ticketRepo.gettextfieldid(country: countryid, id: iDTypeid!);
 
     if (res is Idtextfieldmodel) {
       if (res.status == "success") {

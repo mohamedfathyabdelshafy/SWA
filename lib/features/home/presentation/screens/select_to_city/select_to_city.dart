@@ -19,7 +19,8 @@ class _SelectToCityState extends State<SelectToCity> {
   ///To be changed by selected station id
   int? toStationId;
 
-  String toCityName = 'Select';
+  String toStationName = 'Select';
+
   int isTabbed = 0;
 
   @override
@@ -34,8 +35,7 @@ class _SelectToCityState extends State<SelectToCity> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Directionality(
-          textDirection:
-              LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+          textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -62,8 +62,7 @@ class _SelectToCityState extends State<SelectToCity> {
                   itemCount: widget.toStations.length,
                   itemBuilder: (context, index) {
                     String cityName = widget.toStations[index].cityName;
-                    List<StationList> stationsList =
-                        widget.toStations[index].stationList;
+                    List<StationList> stationsList = widget.toStations[index].stationList;
                     return stationsList.isNotEmpty
                         ? Material(
                             child: Container(
@@ -74,9 +73,7 @@ class _SelectToCityState extends State<SelectToCity> {
                                   InkWell(
                                     onTap: () {
                                       setState(() {
-                                        isTabbed == index
-                                            ? isTabbed = -1
-                                            : isTabbed = index;
+                                        isTabbed == index ? isTabbed = -1 : isTabbed = index;
                                         print("istabbed$isTabbed");
                                       });
                                     },
@@ -92,9 +89,7 @@ class _SelectToCityState extends State<SelectToCity> {
                                           Text(
                                             cityName,
                                             style: fontStyle(
-                                                color: isTabbed == index
-                                                    ? AppColors.primaryColor
-                                                    : Color(0xffA3A3A3),
+                                                color: isTabbed == index ? AppColors.primaryColor : Color(0xffA3A3A3),
                                                 fontFamily: FontFamily.bold,
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 18),
@@ -111,29 +106,22 @@ class _SelectToCityState extends State<SelectToCity> {
                                               return Container();
                                             },
                                             shrinkWrap: true,
-                                            physics:
-                                                const ClampingScrollPhysics(), //NeverScrollableScrollPhysics(),
+                                            physics: const ClampingScrollPhysics(), //NeverScrollableScrollPhysics(),
                                             scrollDirection: Axis.vertical,
                                             itemCount: stationsList.length,
                                             itemBuilder: (context, index) {
                                               return ListTile(
                                                 dense: true,
-                                                contentPadding:
-                                                    EdgeInsets.symmetric(
-                                                        vertical: 0,
-                                                        horizontal: 10),
+                                                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                                                 onTap: () {
                                                   setState(() {
-                                                    toStationId =
-                                                        stationsList[index]
-                                                            .stationId;
-                                                    toCityName =
-                                                        stationsList[index]
-                                                            .stationName;
+                                                    toStationId = stationsList[index].stationId;
+                                                    toStationName = stationsList[index].stationName;
                                                   });
                                                   Navigator.of(context).pop({
                                                     '_toStationId': toStationId,
-                                                    '_toCityName': toCityName,
+                                                    '_toStationName': toStationName,
+                                                    '_toCityName': cityName,
                                                   });
                                                 },
                                                 title: Row(
@@ -141,36 +129,22 @@ class _SelectToCityState extends State<SelectToCity> {
                                                     Flexible(
                                                       fit: FlexFit.loose,
                                                       child: Container(
-                                                        padding:
-                                                            EdgeInsets.all(10),
+                                                        padding: EdgeInsets.all(10),
                                                         decoration: BoxDecoration(
                                                             boxShadow: [
                                                               BoxShadow(
-                                                                  color: AppColors
-                                                                      .lightBink,
-                                                                  offset:
-                                                                      Offset(
-                                                                          0, 0),
-                                                                  spreadRadius:
-                                                                      0,
-                                                                  blurRadius:
-                                                                      15)
+                                                                  color: AppColors.lightBink,
+                                                                  offset: Offset(0, 0),
+                                                                  spreadRadius: 0,
+                                                                  blurRadius: 15)
                                                             ],
-                                                            color: AppColors
-                                                                .primaryColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        12)),
+                                                            color: AppColors.primaryColor,
+                                                            borderRadius: BorderRadius.circular(12)),
                                                         child: Text(
-                                                          stationsList[index]
-                                                              .stationName,
+                                                          stationsList[index].stationName,
                                                           style: fontStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily:
-                                                                  FontFamily
-                                                                      .medium,
+                                                              color: Colors.white,
+                                                              fontFamily: FontFamily.medium,
                                                               fontSize: 18),
                                                         ),
                                                       ),

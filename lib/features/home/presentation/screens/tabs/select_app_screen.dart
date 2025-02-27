@@ -13,7 +13,6 @@ import 'package:swa/features/app_info/domain/entities/country.dart';
 import 'package:swa/features/app_info/presentation/cubit/get_available_countries/get_available_countries_cubit.dart';
 import 'package:swa/features/home/presentation/cubit/home_cubit.dart';
 import 'package:swa/features/home/presentation/screens/Notification/bloc/notification_bloc.dart';
-import 'package:swa/features/home/presentation/screens/home.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
 import 'package:swa/features/home/presentation/screens/tabs/my_home.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/presentation/PLOH/ticket_history_cubit.dart';
@@ -177,25 +176,21 @@ class _SelectappScreenState extends State<SelectappScreen> {
                     SizedBox(
                       height: sizeHeight * 0.1,
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        state.selectappmodel?.message?.title ?? '',
-                        style: fontStyle(color: Colors.black, fontFamily: FontFamily.bold, fontSize: 24),
-                      ),
+                    Text(
+                      state.selectappmodel?.message?.title ?? '',
+                      style: fontStyle(color: Colors.black, fontFamily: FontFamily.bold, fontSize: 24),
                     ),
-                    SizedBox(
-                      height: sizeHeight * 0.08,
-                    ),
+                    Spacer(),
                     state.selectappmodel?.message != null
-                        ? Expanded(
-                            child: ListView.builder(
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              physics: ScrollPhysics(),
-                              itemCount: state.selectappmodel!.message!.appList!.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return InkWell(
+                        ? ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
+                            itemCount: state.selectappmodel!.message!.appList!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 50.h),
+                                child: InkWell(
                                   onTap: () {
                                     if (state.selectappmodel!.message!.appList![index].orderIndex == 1) {
                                       Routes.isomra = false;
@@ -255,37 +250,34 @@ class _SelectappScreenState extends State<SelectappScreen> {
                                       );
                                     }
                                   },
-                                  child: Container(
-                                    margin: EdgeInsets.only(bottom: 30.h),
-                                    alignment: Alignment.center,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          width: 156.w,
-                                          height: 156.w,
-                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
-                                          alignment: Alignment.center,
-                                          child: Image.network(
-                                            state.selectappmodel!.message!.appList![index].image!,
-                                            fit: BoxFit.cover,
-                                          ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 156.w,
+                                        height: 156.w,
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                                        alignment: Alignment.center,
+                                        child: Image.network(
+                                          state.selectappmodel!.message!.appList![index].image!,
+                                          fit: BoxFit.cover,
                                         ),
-                                        5.verticalSpace,
-                                        Text(
-                                          state.selectappmodel?.message?.appList?[index].description ?? '',
-                                          style: fontStyle(
-                                              color: Color(0xffa3a3a3), fontFamily: FontFamily.medium, fontSize: 13.sp),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                      5.verticalSpace,
+                                      Text(
+                                        state.selectappmodel?.message?.appList?[index].description ?? '',
+                                        style: fontStyle(
+                                            color: Color(0xffa3a3a3), fontFamily: FontFamily.medium, fontSize: 13.sp),
+                                      ),
+                                    ],
                                   ),
-                                );
-                              },
-                            ),
+                                ),
+                              );
+                            },
                           )
                         : SizedBox(),
+                    Spacer(),
                   ],
                 );
               }

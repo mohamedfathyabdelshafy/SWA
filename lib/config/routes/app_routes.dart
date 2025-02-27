@@ -6,13 +6,11 @@ import 'package:swa/features/Swa_umra/Screens/Select_type.dart';
 import 'package:swa/features/Swa_umra/Screens/Umra_booked_ticket.dart';
 import 'package:swa/features/app_info/presentation/cubit/get_available_countries/get_available_countries_cubit.dart';
 import 'package:swa/features/app_info/presentation/cubit/get_available_country_cities_cubit/get_available_country_cities_cubit.dart';
-import 'package:swa/features/change_password/presentation/screens/code_screen.dart';
 import 'package:swa/features/done_login/presentation/pages/done_login.dart';
 import 'package:swa/features/forgot_password/presentation/cubit/forgot_password_cubit.dart';
 import 'package:swa/features/forgot_password/presentation/screens/forgot_password.dart';
 import 'package:swa/features/home/presentation/cubit/home_cubit.dart';
 import 'package:swa/features/home/presentation/screens/Update_screen/update_screen.dart';
-import 'package:swa/features/home/presentation/screens/home.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
 import 'package:swa/features/home/presentation/screens/tabs/my_home.dart';
 import 'package:swa/features/home/presentation/screens/tabs/select_app_screen.dart';
@@ -81,6 +79,17 @@ class Routes {
 }
 
 class AppRoute {
+  /// This function is used to generate routes for the app based on the given route name.
+  /// It uses a switch statement to determine which route to generate based on the route name.
+  /// If the route name is not recognized, it will return a default route.
+  ///
+  /// The function takes a [RouteSettings] object as a parameter, which contains the route name
+  /// and any arguments that were passed to the route.
+  ///
+  /// The function returns a [Route] object, which is used by the app to generate the route.
+  /// If the route name is not recognized, the function will return null.
+  ///
+  /// The function is used by the [MaterialApp] widget to generate routes for the app.
   static Route? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.initialRoute:
@@ -141,7 +150,6 @@ class AppRoute {
         return MaterialPageRoute(
           builder: (context) => MultiBlocProvider(
             providers: [
-              BlocProvider(create: (context) => sl<RegisterCubit>()),
               BlocProvider<GetAvailableCountriesCubit>(create: (context) => sl<GetAvailableCountriesCubit>()),
               BlocProvider<GetAvailableCountryCitiesCubit>(create: (context) => sl<GetAvailableCountryCitiesCubit>()),
             ],
@@ -175,7 +183,6 @@ class AppRoute {
         return MaterialPageRoute(
           builder: (context) => MultiBlocProvider(
             providers: [
-              BlocProvider(create: (context) => sl<RegisterCubit>()),
               BlocProvider<GetAvailableCountriesCubit>(create: (context) => sl<GetAvailableCountriesCubit>()),
               BlocProvider<GetAvailableCountryCitiesCubit>(create: (context) => sl<GetAvailableCountryCitiesCubit>()),
             ],
@@ -187,7 +194,6 @@ class AppRoute {
         return MaterialPageRoute(
           builder: (context) => MultiBlocProvider(
             providers: [
-              BlocProvider(create: (context) => sl<RegisterCubit>()),
               BlocProvider<GetAvailableCountriesCubit>(create: (context) => sl<GetAvailableCountriesCubit>()),
               BlocProvider<GetAvailableCountryCitiesCubit>(create: (context) => sl<GetAvailableCountryCitiesCubit>()),
             ],

@@ -64,7 +64,7 @@ class _SelectPaymentScreen2State extends State<SelectPaymentScreen2> {
       create: (context) => ReservationCubit(),
       child: BlocListener<ReservationCubit, ReservationStates>(
         listener: _handleListenner,
-        child: ReusablePaymentScreen(
+        child: ReusablePaymentMethodSelectionScreen(
           onBackPressed: (context) => Navigator.pop(context),
           onElectronicWalletPressed: _onElectronicWalletPressed,
           onVisaPaymentPressed: _onVisaPaymentPressed,

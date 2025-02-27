@@ -4,28 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart' as intl;
+import 'package:jhijri/jHijri.dart';
 import 'package:jhijri_picker/_src/_jWidgets.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
-import 'package:geolocator/geolocator.dart' as geo;
-import 'package:badges/badges.dart' as badges;
 import 'package:swa/core/utils/Navigaton_bottombar.dart';
-import 'package:intl/intl.dart' as intl;
-
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
-import 'package:swa/core/utils/location.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/custom_drop_down_list.dart';
 import 'package:swa/core/widgets/notifications_icon.dart';
 import 'package:swa/core/widgets/timer.dart';
 import 'package:swa/features/Swa_umra/models/umra_detail.dart';
-import 'package:swa/features/app_info/data/data_sources/app_info_remote_data_source.dart';
-import 'package:swa/features/app_info/data/models/country_model.dart';
 import 'package:swa/features/app_info/domain/entities/country.dart';
 import 'package:swa/features/app_info/presentation/cubit/get_available_countries/get_available_countries_cubit.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/Ticket_class.dart';
@@ -35,26 +28,19 @@ import 'package:swa/features/home/domain/use_cases/get_to_stations_list_data.dar
 import 'package:swa/features/home/presentation/cubit/home_cubit.dart';
 import 'package:swa/features/home/presentation/screens/Notification/Notification_respotary.dart';
 import 'package:swa/features/home/presentation/screens/Notification/Notification_screen.dart';
-import 'package:swa/features/home/presentation/screens/Notification/bloc/notification_bloc.dart';
 import 'package:swa/features/home/presentation/screens/Update_screen/update_screen.dart';
-import 'package:swa/features/home/presentation/screens/home.dart';
 import 'package:swa/features/home/presentation/screens/my_account/presentation/screens/my_account.dart';
 import 'package:swa/features/home/presentation/screens/select_from_city/select_from_city.dart';
 import 'package:swa/features/home/presentation/screens/select_to_city/select_to_city.dart';
-import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/Ads_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_respo.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/widgets/carousel_widget.dart';
-import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/presentation/PLOH/ticket_history_cubit.dart';
-import 'package:swa/features/payment/fawry2/presentation/PLOH/fawry_Reservation_cubit.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/features/times_trips/presentation/PLOH/times_trips_cubit.dart';
 import 'package:swa/features/times_trips/presentation/PLOH/times_trips_states.dart';
 import 'package:swa/features/times_trips/presentation/screens/times_screen.dart';
 import 'package:swa/main.dart';
-import 'package:jhijri/jHijri.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 
 class MyHome extends StatefulWidget {
@@ -77,6 +63,8 @@ class _MyHomeState extends State<MyHome> {
   ///To be changed by selected station id
   int? _fromStationId;
   int? _toStationId;
+  String _fromStationName = '';
+  String _toStationName = '';
   String _fromCityName = '';
   String _toCityName = '';
 
@@ -84,6 +72,11 @@ class _MyHomeState extends State<MyHome> {
   Country? dropdownvalue;
 
   DateTime? date;
+  DateTime? selectedToGeorgianDate;
+  JHijri? selectedToHijriDate;
+
+  DateTime? selectedFromGeorgianDate;
+  JHijri? selectedFromHijriDate;
 
   String selectedDatefrom = intl.DateFormat('yyyy-MM-dd').format(DateTime.now()).toString();
 
@@ -568,8 +561,10 @@ class _MyHomeState extends State<MyHome> {
                                           return SelectFromCity(fromStations: _fromStations!);
                                         }));
                                         if (result != null) {
+                                          log(result.toString());
                                           setState(() {
                                             _fromStationId = result['_fromStationId'];
+                                            _fromStationName = result['_fromStationName'];
                                             _fromCityName = result['_fromCityName'];
                                           });
                                         }
@@ -635,11 +630,11 @@ class _MyHomeState extends State<MyHome> {
                                           BlocProvider.of<HomeCubit>(context).getFromStationsListData();
                                         },
                                         child: CustomDropDownList(
-                                            hint: _fromCityName == ''
+                                            hint: _fromStationName == ''
                                                 ? LanguageClass.isEnglish
                                                     ? 'Select'
                                                     : 'تحديد'
-                                                : _fromCityName)),
+                                                : '$_fromCityName - $_fromStationName')),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.zero,
@@ -674,6 +669,7 @@ class _MyHomeState extends State<MyHome> {
                                         if (result != null) {
                                           setState(() {
                                             _toStationId = result['_toStationId'];
+                                            _toStationName = result['_toStationName'];
                                             _toCityName = result['_toCityName'];
                                           });
                                         }
@@ -690,11 +686,11 @@ class _MyHomeState extends State<MyHome> {
                                           }
                                         },
                                         child: CustomDropDownList(
-                                            hint: _toCityName == ''
+                                            hint: _toStationName == ''
                                                 ? LanguageClass.isEnglish
                                                     ? 'Select'
                                                     : 'تحديد'
-                                                : _toCityName)),
+                                                : '$_toCityName - $_toStationName')),
                                   ),
                                 ],
                               ),
@@ -709,25 +705,39 @@ class _MyHomeState extends State<MyHome> {
                                   ? InkWell(
                                       onTap: () {
                                         customdatepicker(
-                                            context: context,
-                                            hijiri: ishijiri,
-                                            onchange: (hdate) {
-                                              date = hdate.date;
-                                              hdate.jhijri.fDisplay = DisplayFormat.YYYYMMDD;
+                                          context: context,
+                                          hijiri: ishijiri,
+                                          selectedGeorgianDate: selectedFromGeorgianDate,
+                                          selectedHijriDate: selectedFromHijriDate,
+                                          onchange: (hdate) {
+                                            date = hdate.date;
+                                            hdate.jhijri.fDisplay = DisplayFormat.MMDDYYYY;
 
-                                              ishijiri
-                                                  ? selectedDatefrom = hdate.jhijri.toString()
-                                                  : selectedDatefrom =
-                                                      intl.DateFormat('yyyy-MM-dd').format(date!).toString();
-                                              ishijiri
-                                                  ? selectedDateto = hdate.jhijri.toString()
-                                                  : selectedDateto =
-                                                      intl.DateFormat('yyyy-MM-dd').format(date!).toString();
+                                            ishijiri
+                                                ? selectedDatefrom = hdate.jhijri.toString()
+                                                : selectedDatefrom =
+                                                    intl.DateFormat('yyyy-MM-dd').format(date!).toString();
 
-                                              setState(() {});
-                                              Navigator.pop(context);
-                                            });
-                                        // showMyDatePicker(selectedDayFrom);
+                                            ishijiri
+                                                ? selectedDateto = hdate.jhijri.toString()
+                                                : selectedDateto =
+                                                    intl.DateFormat('yyyy-MM-dd').format(date!).toString();
+                                            if (ishijiri) {
+                                              selectedToHijriDate = hdate.jhijri;
+                                              selectedToGeorgianDate = null;
+                                              selectedFromHijriDate = hdate.jhijri;
+                                              selectedFromGeorgianDate = null;
+                                            } else {
+                                              selectedToHijriDate = null;
+                                              selectedToGeorgianDate = hdate.date;
+                                              selectedFromHijriDate = null;
+                                              selectedFromGeorgianDate = hdate.date;
+                                            }
+
+                                            setState(() {});
+                                            Navigator.pop(context);
+                                          },
+                                        );
                                       },
                                       child: Row(
                                         children: [
@@ -748,14 +758,14 @@ class _MyHomeState extends State<MyHome> {
                                                     style: fontStyle(
                                                         fontWeight: FontWeight.bold,
                                                         color: AppColors.blackColor,
-                                                        fontSize: 8),
+                                                        fontSize: 12),
                                                   )
                                                 ],
                                               ),
                                               InkWell(
-                                                child: Text(selectedDatefrom,
+                                                child: Text("\n $selectedDatefrom",
                                                     textAlign: TextAlign.center,
-                                                    style: fontStyle(color: AppColors.blackColor, fontSize: 10)),
+                                                    style: fontStyle(color: AppColors.blackColor, fontSize: 12)),
                                               ),
                                             ],
                                           ),
@@ -770,20 +780,30 @@ class _MyHomeState extends State<MyHome> {
                                           child: InkWell(
                                             onTap: () {
                                               customdatepicker(
-                                                  context: context,
-                                                  hijiri: ishijiri,
-                                                  onchange: (hdate) {
-                                                    date = hdate.date;
-                                                    hdate.jhijri.fDisplay = DisplayFormat.YYYYMMDD;
+                                                context: context,
+                                                hijiri: ishijiri,
+                                                selectedGeorgianDate: selectedFromGeorgianDate,
+                                                selectedHijriDate: selectedFromHijriDate,
+                                                onchange: (hdate) {
+                                                  date = hdate.date;
+                                                  hdate.jhijri.fDisplay = DisplayFormat.MMDDYYYY;
 
-                                                    ishijiri
-                                                        ? selectedDatefrom = hdate.jhijri.toString()
-                                                        : selectedDatefrom =
-                                                            intl.DateFormat('yyyy-MM-dd').format(date!).toString();
+                                                  ishijiri
+                                                      ? selectedDatefrom = hdate.jhijri.toString()
+                                                      : selectedDatefrom =
+                                                          intl.DateFormat('MM-dd-yyyy').format(date!).toString();
 
-                                                    setState(() {});
-                                                    Navigator.pop(context);
-                                                  });
+                                                  if (ishijiri) {
+                                                    selectedFromHijriDate = hdate.jhijri;
+                                                    selectedFromGeorgianDate = null;
+                                                  } else {
+                                                    selectedFromHijriDate = null;
+                                                    selectedFromGeorgianDate = hdate.date;
+                                                  }
+                                                  setState(() {});
+                                                  Navigator.pop(context);
+                                                },
+                                              );
                                             },
                                             child: Column(
                                               mainAxisAlignment: MainAxisAlignment.center,
@@ -806,14 +826,14 @@ class _MyHomeState extends State<MyHome> {
                                                       style: fontStyle(
                                                           fontWeight: FontWeight.bold,
                                                           color: AppColors.blackColor,
-                                                          fontSize: 8),
+                                                          fontSize: 12),
                                                     )
                                                   ],
                                                 ),
                                                 InkWell(
-                                                  child: Text(selectedDatefrom,
+                                                  child: Text("\n$selectedDatefrom",
                                                       textAlign: TextAlign.center,
-                                                      style: fontStyle(color: AppColors.blackColor, fontSize: 10)),
+                                                      style: fontStyle(color: AppColors.blackColor, fontSize: 14)),
                                                 ),
                                               ],
                                             ),
@@ -826,20 +846,30 @@ class _MyHomeState extends State<MyHome> {
                                           child: InkWell(
                                             onTap: () {
                                               customdatepicker(
-                                                  context: context,
-                                                  hijiri: ishijiri,
-                                                  onchange: (hdate) {
-                                                    date = hdate.date;
-                                                    hdate.jhijri.fDisplay = DisplayFormat.YYYYMMDD;
+                                                context: context,
+                                                hijiri: ishijiri,
+                                                selectedGeorgianDate: selectedToGeorgianDate,
+                                                selectedHijriDate: selectedToHijriDate,
+                                                onchange: (hdate) {
+                                                  date = hdate.date;
+                                                  hdate.jhijri.fDisplay = DisplayFormat.MMDDYYYY;
 
-                                                    ishijiri
-                                                        ? selectedDateto = hdate.jhijri.toString()
-                                                        : selectedDateto =
-                                                            intl.DateFormat('yyyy-MM-dd').format(date!).toString();
+                                                  ishijiri
+                                                      ? selectedDateto = hdate.jhijri.toString()
+                                                      : selectedDateto =
+                                                          intl.DateFormat('MM-dd-yyyy').format(date!).toString();
 
-                                                    setState(() {});
-                                                    Navigator.pop(context);
-                                                  });
+                                                  if (ishijiri) {
+                                                    selectedToHijriDate = hdate.jhijri;
+                                                    selectedToGeorgianDate = null;
+                                                  } else {
+                                                    selectedToHijriDate = null;
+                                                    selectedToGeorgianDate = hdate.date;
+                                                  }
+                                                  setState(() {});
+                                                  Navigator.pop(context);
+                                                },
+                                              );
                                             },
                                             child: Column(
                                               mainAxisAlignment: MainAxisAlignment.center,
@@ -862,14 +892,14 @@ class _MyHomeState extends State<MyHome> {
                                                       style: fontStyle(
                                                           fontWeight: FontWeight.bold,
                                                           color: AppColors.blackColor,
-                                                          fontSize: 8),
+                                                          fontSize: 12),
                                                     )
                                                   ],
                                                 ),
                                                 InkWell(
-                                                  child: Text(selectedDateto,
+                                                  child: Text("\n$selectedDateto",
                                                       textAlign: TextAlign.center,
-                                                      style: fontStyle(color: AppColors.blackColor, fontSize: 10)),
+                                                      style: fontStyle(color: AppColors.blackColor, fontSize: 14)),
                                                 ),
                                               ],
                                             ),
@@ -1014,8 +1044,13 @@ class _MyHomeState extends State<MyHome> {
     }
   }
 
-  Future customdatepicker(
-      {required BuildContext context, required bool hijiri, required onchange(JPickerValue date)}) async {
+  Future customdatepicker({
+    required BuildContext context,
+    required bool hijiri,
+    DateTime? selectedGeorgianDate,
+    JHijri? selectedHijriDate,
+    required Function(JPickerValue date) onchange,
+  }) async {
     return showGlobalDatePicker(
       context: context,
       headerTitle: Container(
@@ -1028,11 +1063,27 @@ class _MyHomeState extends State<MyHome> {
             onTap: () {
               Navigator.pop(context);
               ishijiri = !ishijiri;
+              selectedGeorgianDate = null;
+              selectedHijriDate = null;
+              selectedFromGeorgianDate = null;
+              selectedFromHijriDate = null;
+              selectedToGeorgianDate = null;
+              selectedToHijriDate = null;
+              selectedDatefrom = ishijiri
+                  ? JHijri(fDisplay: DisplayFormat.MMDDYYYY, fDate: DateTime.now()).toString()
+                  : intl.DateFormat('yyyy-MM-dd').format(DateTime.now()).toString();
+              selectedDateto = ishijiri
+                  ? JHijri(fDisplay: DisplayFormat.MMDDYYYY, fDate: DateTime.now().add(Duration(days: 1))).toString()
+                  : intl.DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 1))).toString();
+
               customdatepicker(
+                selectedGeorgianDate: selectedGeorgianDate,
+                selectedHijriDate: selectedHijriDate,
                 context: context,
                 hijiri: ishijiri,
                 onchange: onchange,
               );
+              setState(() {});
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -1052,21 +1103,26 @@ class _MyHomeState extends State<MyHome> {
                 5.horizontalSpace,
                 Icon(
                   Icons.change_circle_rounded,
-                  color: AppColors.primaryColor,
+                  color: AppColors.umragold,
                   size: 20,
                 )
               ],
             )),
       ),
-      selectedDate: JDateModel(jhijri: JHijri.now(), dateTime: DateTime.now()),
+      selectedDate: selectedHijriDate == null && selectedGeorgianDate == null
+          ? null
+          : JDateModel(
+              jhijri: hijiri ? selectedHijriDate ?? JHijri.now() : null,
+              dateTime: !hijiri ? selectedGeorgianDate ?? DateTime.now() : null),
       pickerMode: DatePickerMode.day,
       pickerTheme: Theme.of(context),
+      startDate: JDateModel(dateTime: DateTime.now().subtract(Duration(days: ishijiri ? 1 : 0))),
       textDirection: TextDirection.ltr,
       buttons: Container(),
       locale: LanguageClass.isEnglish ? Locale("en", "US") : Locale("ar", ""),
       pickerType: hijiri ? PickerType.JHijri : PickerType.JNormal,
       onChange: onchange,
-      primaryColor: AppColors.primaryColor,
+      primaryColor: AppColors.umragold,
       calendarTextColor: Colors.black,
       backgroundColor: Colors.white,
       borderRadius: const Radius.circular(0),

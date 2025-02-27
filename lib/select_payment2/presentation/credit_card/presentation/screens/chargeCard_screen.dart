@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/app_colors.dart';
@@ -13,9 +14,19 @@ import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/currency_selector.dart';
+import 'package:swa/features/Swa_umra/Screens/Select_type.dart';
+import 'package:swa/features/app_info/presentation/cubit/get_available_countries/get_available_countries_cubit.dart';
+import 'package:swa/features/home/presentation/cubit/home_cubit.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_respo.dart';
+import 'package:swa/features/home/presentation/screens/tabs/my_home.dart';
+import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/presentation/PLOH/ticket_history_cubit.dart';
 import 'package:swa/features/payment/fawry/presentation/screens/fawry.dart';
+import 'package:swa/features/payment/fawry2/presentation/PLOH/fawry_Reservation_cubit.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
+import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
+import 'package:swa/features/times_trips/presentation/PLOH/times_trips_cubit.dart';
+import 'package:swa/main.dart';
 import 'package:swa/select_payment2/data/models/Curruncy_model.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
 import 'package:swa/select_payment2/presentation/credit_card/presentation/navigation_helper.dart';
@@ -118,7 +129,7 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
   @override
   Widget build(BuildContext context) {
     double sizeWidth = MediaQuery.of(context).size.width;
-    double sizeHeight = context.height;
+    double sizeHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -518,7 +529,12 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                     if (state is LoadingCreditCardState || isloading) {
                                       Constants.showLoadingDialog(context);
                                     } else if (state is LoadedCreditCardState) {
-                                      Navigator.pop(context);
+                                      Constants.hideLoadingDialog(context);
+
+                                      NavHelper().navigate(ConfirmPayWebView(
+                                        webViewLink:
+                                            state.reservationResponseCreditCard.message!.nextAction!.redirectUrl!,
+                                      ));
 
                                       showDoneConfirmationDialog(context,
                                           callbackTitle: "Go to OTP",
@@ -526,121 +542,8 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                           message: LanguageClass.isEnglish
                                               ? 'Complete the payment process'
                                               : 'اكمل عملية الدفع', callback: () {
-                                        Navigator.pop(context);
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (_) => ConfirmPayWebView(
-                                                      webViewLink: state.reservationResponseCreditCard.message!
-                                                          .nextAction!.redirectUrl!,
-                                                    )));
-                                        // launchUrl(Uri.parse(state.url.toString()));
+                                        // NavHelper().goBack();
                                       });
-
-                                      // Constants.hideLoadingDialog(context);
-                                      // showWebViewDialog(
-                                      //     context,
-                                      //     state
-                                      //             .reservationResponseCreditCard
-                                      //             .message
-                                      //             ?.nextAction
-                                      //             ?.redirectUrl ??
-                                      //         "");
-                                      // Constants.showDefaultSnackBar(context: context, text: state.reservationResponseCreditCard.message!.statusDescription!);
-
-                                      // showDialog(
-                                      //   context: context,
-                                      //   builder: (BuildContext context) {
-                                      //     return AlertDialog(
-                                      //       title: Column(
-                                      //         mainAxisAlignment:
-                                      //             MainAxisAlignment.spaceBetween,
-                                      //         mainAxisSize: MainAxisSize.min,
-                                      //         children: const [
-                                      //           Icon(
-                                      //             Icons.check_circle,
-                                      //             color: Colors.green,
-                                      //           ),
-                                      //           Text(
-                                      //               "You will get a notification by applying your wallet \n In order to agree to pay"),
-                                      //         ],
-                                      //       ),
-                                      //       titleTextStyle: const fontStyle(
-                                      //           fontWeight: FontWeight.bold,
-                                      //           color: Colors.black,
-                                      //           fontSize: 20),
-                                      //       content: Column(
-                                      //         mainAxisSize: MainAxisSize.min,
-                                      //         children: [
-                                      //           Row(
-                                      //             mainAxisAlignment:
-                                      //                 MainAxisAlignment
-                                      //                     .spaceBetween,
-                                      //             children: [
-                                      //               const Text('Amount: '),
-                                      //               Text(price.toString())
-                                      //             ],
-                                      //           ),
-                                      //           Row(
-                                      //             mainAxisAlignment:
-                                      //                 MainAxisAlignment
-                                      //                     .spaceBetween,
-                                      //             children: [
-                                      //               const Text('Url: '),
-                                      //               InkWell(
-                                      //                   onTap: () {
-                                      //                     launchUrl(
-                                      //                         Uri.parse(state
-                                      //                                 .reservationResponseCreditCard
-                                      //                                 .message!
-                                      //                                 .nextAction!
-                                      //                                 .redirectUrl ??
-                                      //                             ""),
-                                      //                         mode: LaunchMode
-                                      //                             .externalApplication);
-                                      //                   },
-                                      //                   child: Text(state
-                                      //                       .reservationResponseCreditCard
-                                      //                       .message!
-                                      //                       .nextAction!
-                                      //                       .redirectUrl
-                                      //                       .toString()))
-                                      //             ],
-                                      //           )
-                                      //         ],
-                                      //       ),
-                                      //       actionsOverflowButtonSpacing: 20,
-                                      //       actions: [
-                                      //         ElevatedButton(
-                                      //             onPressed: () {
-                                      //               Navigator.pop(context);
-                                      //               Navigator.pushNamed(context,
-                                      //                   Routes.initialRoute);
-                                      //             },
-                                      //             child: Container(
-                                      //               // padding: const EdgeInsets.symmetric(horizontal: 20,vertical:20),
-                                      //               // margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
-                                      //               decoration: BoxDecoration(
-                                      //                   // color: color ?? AppColors.darkRed,
-                                      //                   borderRadius:
-                                      //                       BorderRadius.circular(
-                                      //                           100)),
-                                      //               child: Center(
-                                      //                 child: Text(
-                                      //                   'OK',
-                                      //                   style: fontStyle(
-                                      //                       color:
-                                      //                           AppColors.white,
-                                      //                       fontWeight:
-                                      //                           FontWeight.bold,
-                                      //                       fontSize: 22),
-                                      //                 ),
-                                      //               ),
-                                      //             )),
-                                      //       ],
-                                      //     );
-                                      //   },
-                                      // );
                                     } else if (state is ErrorCreditCardState) {
                                       Constants.hideLoadingDialog(context);
                                       Constants.showDefaultSnackBar(context: context, text: state.error.toString());
@@ -653,53 +556,17 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                               Constants.showDefaultSnackBar(
                                                   color: Colors.red, context: context, text: 'Select card');
                                             } else {
-                                              print(cards[widget.index].cardNumber!.toString().replaceAll(" ", ""));
                                               if (formKey.currentState!.validate()) {
-                                                final tripOneId = CacheHelper.getDataToSharedPref(key: 'tripOneId');
-                                                final tripRoundId = CacheHelper.getDataToSharedPref(key: 'tripRoundId');
-                                                final selectedDayTo =
-                                                    CacheHelper.getDataToSharedPref(key: 'selectedDayTo');
-                                                final selectedDayFrom =
-                                                    CacheHelper.getDataToSharedPref(key: 'selectedDayFrom');
-                                                final toStationId = CacheHelper.getDataToSharedPref(key: 'toStationId');
-                                                final fromStationId =
-                                                    CacheHelper.getDataToSharedPref(key: 'fromStationId');
-                                                final seatIdsOneTrip =
-                                                    CacheHelper.getDataToSharedPref(key: 'countSeats')
-                                                        ?.map((e) => int.tryParse(e) ?? 0)
-                                                        .toList();
-                                                final seatIdsRoundTrip =
-                                                    CacheHelper.getDataToSharedPref(key: 'countSeats2')
-                                                        ?.map((e) => int.tryParse(e) ?? 0)
-                                                        .toList();
-                                                final price = CacheHelper.getDataToSharedPref(key: 'price');
-
-                                                print(cards[widget.index].month!.substring(0, 2).toString());
-
-                                                print(cards[widget.index]
-                                                    .month!
-                                                    .substring(
-                                                      3,
-                                                    )
-                                                    .toString());
-
-                                                double amount = double.parse(amountController.text);
-
-                                                print(
-                                                    "tripOneId${tripOneId}==tripOneId${tripRoundId}=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price");
-                                                print(
-                                                    "tripOneId${selectedDayTo}==tripOneId${selectedDayFrom}=====${toStationId}===${fromStationId}==$price");
-
-                                                print(
-                                                    "tripOneId${tripOneId}==tripOneId${tripRoundId}=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price==");
-
-                                                // if(_user != null && formKey.currentState!.validate()) {
+                                                double? amount =
+                                                    double.tryParse(amountController.text.replaceAll(',', ''));
+                                                log("Amount $amount");
 
                                                 convertcurruncy(
                                                   amount: amount,
                                                   from: selectedcurruncy,
                                                   to: 'EGP',
                                                 ).then((value) {
+                                                  log("expiry ${cards[widget.index].month}");
                                                   BlocProvider.of<ReservationCubit>(context).chargebycard(
                                                     custId: widget.user.customerId!,
                                                     curruncy: selectedcurruncy,
@@ -861,7 +728,7 @@ Future<dynamic> showDoneConfirmationDialog(BuildContext context,
     String? callbackTitle,
     bool isError = false,
     bool isWarning = false,
-    required Function callback}) async {
+    required VoidCallback? callback}) async {
   return CoolAlert.show(
       barrierDismissible: false,
       context: context,
@@ -886,43 +753,8 @@ Future<dynamic> showDoneConfirmationDialog(BuildContext context,
       loopAnimation: false,
       backgroundColor: isError ? Colors.red : Colors.white,
       text: message,
-      onConfirmBtnTap: () {
-        callback();
-      });
+      onConfirmBtnTap: callback);
 }
-
-// void showWebViewDialog(BuildContext context, String? url) {
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return AlertDialog(
-//         title: Text('WebView Dialog'),
-//         content: Container(
-//             height: 300, // Adjust the height as needed
-//             width: 300, // Adjust the width as needed
-//             child: InkWell(
-//               onTap: () {
-//                 launchUrl(Uri.parse(url ?? ""),
-//                     mode: LaunchMode.externalApplication);
-//               },
-//               child: Container(
-//                 child: Text(
-//                   "url",
-//                 ),
-//               ),
-//             )),
-//         actions: [
-//           TextButton(
-//             onPressed: () {
-//               Navigator.of(context).pop();
-//             },
-//             child: Text('Close'),
-//           ),
-//         ],
-//       );
-//     },
-//   );
-// }
 
 class ConfirmPayWebView extends StatefulWidget {
   final String webViewLink;
@@ -945,13 +777,14 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
 
   @override
   Widget build(BuildContext context) {
+    log("henaaa 222");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
         automaticallyImplyLeading: false,
         leading: InkWell(
           onTap: () {
-            Navigator.pop(context);
+            NavHelper().goBack();
           },
           child: Icon(
             Icons.arrow_back,
@@ -961,7 +794,8 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false, arguments: Routes.isomra);
+                // NavHelper().navigate();
+                // Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false, arguments: Routes.isomra);
               },
               icon: Icon(
                 Icons.home_outlined,
@@ -971,13 +805,8 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
         ],
       ),
       body: SafeArea(
-        child: WillPopScope(
-          onWillPop: () {
-            Navigator.pushNamedAndRemoveUntil(navigatorKey.currentContext!, Routes.home, (route) => false,
-                arguments: Routes.isomra);
-
-            return Future.value(false);
-          },
+        child: PopScope(
+          canPop: false,
           child: WebViewWidget(
               controller: controller
                 ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -998,12 +827,8 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
                               isError: true,
                               callbackTitle: LanguageClass.isEnglish ? 'Payment Error' : 'حدث خطاء اثنا الدفع',
                               message: LanguageClass.isEnglish ? 'Payment Error' : 'حدث خطاء اثنا الدفع', callback: () {
-                            Navigator.pop(
-                              context,
-                            );
-                            Navigator.pop(
-                              context,
-                            );
+                            NavHelper().goBack();
+                            NavHelper().goBack();
                           });
                         });
 
@@ -1014,8 +839,27 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
                               message: LanguageClass.isEnglish
                                   ? 'Payment completed successfully'
                                   : 'تم عملية الدفع بنجاح', callback: () {
-                            Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false,
-                                arguments: Routes.isomra);
+                            NavHelper().navigate(
+                                MultiBlocProvider(providers: [
+                                  BlocProvider<LoginCubit>(
+                                    create: (context) => sl<LoginCubit>(),
+                                  ),
+                                  BlocProvider<PackagesBloc>(
+                                    create: (context) => PackagesBloc(),
+                                  ),
+                                  BlocProvider<FawryReservation>(
+                                    create: (context) => sl<FawryReservation>(),
+                                  ),
+                                  BlocProvider<GetAvailableCountriesCubit>(
+                                    create: (context) => sl<GetAvailableCountriesCubit>(),
+                                  ),
+                                  BlocProvider<HomeCubit>(
+                                    create: (context) => sl<HomeCubit>(),
+                                  ),
+                                  BlocProvider<TimesTripsCubit>(create: (context) => sl<TimesTripsCubit>()),
+                                  BlocProvider<TicketCubit>(create: (context) => sl<TicketCubit>()),
+                                ], child: Routes.isomra ? SelectUmratypeScreen() : MyHome()),
+                                replace: true);
                           });
                         });
 

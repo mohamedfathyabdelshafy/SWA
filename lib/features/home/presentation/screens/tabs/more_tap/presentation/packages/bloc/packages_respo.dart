@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -36,8 +35,7 @@ class PackagesRespo {
       key: 'countryid',
     );
 
-    var response = await apiConsumer.get(
-        "${EndPoints.baseUrl}Stations/GetSationListFrom?countryID=$countryid");
+    var response = await apiConsumer.get("${EndPoints.baseUrl}Stations/GetSationListFrom?countryID=$countryid");
 
     log(" station from" + response.body);
     var decode = json.decode(response.body);
@@ -46,9 +44,8 @@ class PackagesRespo {
   }
 
   Future checkversion() async {
-    GooglePlayServicesAvailability availability = await GoogleApiAvailability
-        .instance
-        .checkGooglePlayServicesAvailability();
+    GooglePlayServicesAvailability availability =
+        await GoogleApiAvailability.instance.checkGooglePlayServicesAvailability();
 
     log(availability.toString());
 
@@ -64,8 +61,8 @@ class PackagesRespo {
             ? EndPoints.playStoreVersion
             : EndPoints.huaweiVersion;
 
-    var response = await apiConsumer.get(
-        "${EndPoints.baseUrl}UpdateVersions/CheckVersion?typeID=$typeID&version=$version");
+    var response =
+        await apiConsumer.get("${EndPoints.baseUrl}UpdateVersions/CheckVersion?typeID=$typeID&version=$version");
     log("${EndPoints.baseUrl}UpdateVersions/CheckVersion?typeID=$typeID&version=$version");
 
     log(" response" + response.body);
@@ -81,8 +78,8 @@ class PackagesRespo {
       key: 'countryid',
     );
 
-    var response = await apiConsumer.get(
-        "${EndPoints.baseUrl}Stations/GetSationListTo?stationId=$stationid&countryID=$countryid");
+    var response =
+        await apiConsumer.get("${EndPoints.baseUrl}Stations/GetSationListTo?stationId=$stationid&countryID=$countryid");
 
     log(" station from" + response.body);
     var decode = json.decode(response.body);
@@ -95,8 +92,7 @@ class PackagesRespo {
       key: 'countryid',
     );
 
-    var response = await apiConsumer
-        .get("${EndPoints.baseUrl}Settings/GetMainPage?countryID=$countryid");
+    var response = await apiConsumer.get("${EndPoints.baseUrl}Settings/GetMainPage?countryID=$countryid");
 
     log(" Select app" + response.body);
     var decode = json.decode(response.body);
@@ -109,8 +105,8 @@ class PackagesRespo {
       key: 'countryid',
     );
 
-    var response = await apiConsumer.get(
-        "${EndPoints.baseUrl}Package/GetPackages?fromID=$stationfromid&toID=$stationtoid&countryID=$countryid");
+    var response = await apiConsumer
+        .get("${EndPoints.baseUrl}Package/GetPackages?fromID=$stationfromid&toID=$stationtoid&countryID=$countryid");
 
     log("packges" + response.body);
     var decode = json.decode(response.body);
@@ -150,8 +146,8 @@ class PackagesRespo {
   }
 
   Future getadsfunc() async {
-    var response = await apiConsumer.get(
-        "${EndPoints.baseUrl}ADCustomerAppWebView/GetAds?CustomerID=${Routes.customerid}");
+    var response =
+        await apiConsumer.get("${EndPoints.baseUrl}ADCustomerAppWebView/GetAds?CustomerID=${Routes.customerid}");
 
     log('Atvertisment' + response.body);
     var decodedResponse = json.decode(response.body);
@@ -487,8 +483,7 @@ class PackagesRespo {
     };
     log('a7a');
 
-    var request = http.Request(
-        'GET', Uri.parse('${EndPoints.baseUrl}Currency/GetAllCurrency'));
+    var request = http.Request('GET', Uri.parse('${EndPoints.baseUrl}Currency/GetAllCurrency'));
     request.headers.addAll(headers);
     log(await request.toString());
 
@@ -504,7 +499,7 @@ class PackagesRespo {
     }
   }
 
-  Future Convertcurrency({String? from, String? to, double? amount}) async {
+  Future<double> Convertcurrency({String? from, String? to, double? amount}) async {
     var countryid = CacheHelper.getDataToSharedPref(
       key: 'countryid',
     );
@@ -515,22 +510,19 @@ class PackagesRespo {
       "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
     };
 
-    var request = http.Request(
-        'GET',
-        Uri.parse(
-            '${EndPoints.baseUrl}Currency/GetExchnageRate?fromCurrency=$from&toCurrency=$to&amount=$amount'));
+    var request = http.Request('GET',
+        Uri.parse('${EndPoints.baseUrl}Currency/GetExchnageRate?fromCurrency=$from&toCurrency=$to&amount=$amount'));
     request.headers.addAll(headers);
-    log(await request.toString());
 
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
       var jsonresponse = jsonDecode(await response.stream.bytesToString());
-      log(jsonresponse.toString());
-
-      return jsonresponse['message'];
+      final double? convertedAmount = double.tryParse(jsonresponse['message'].toString());
+      if (convertedAmount == null) throw Exception();
+      return convertedAmount;
     } else {
-      log(await response.stream.bytesToString());
+      throw Exception();
     }
   }
 }

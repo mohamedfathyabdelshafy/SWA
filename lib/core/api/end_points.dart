@@ -12,7 +12,7 @@ class EndPoints {
   static const String fawryPaymentMethod = '${baseUrl}Fawry/RefNumPayment';
   static const String eWalletPaymentMethod = '${baseUrl}Fawry/EwalletPayment';
   static const String timesTrips = '${baseUrl}Trip/GetTrips';
-  static const String busLayout = '${baseUrl}Trip/GetSingleTripDetails';
+  // static const String busLayout = '${baseUrl}Trip/GetSingleTripDetails';
   static const String reservation = '${baseUrl}Reservation/AddReservation';
 
   static const String reservationUmra = '${baseUrl}TripUmra/AddReservation';

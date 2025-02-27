@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,16 +12,10 @@ import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
-import 'package:swa/core/widgets/icon_back.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
-import 'package:swa/features/payment/fawry/presentation/screens/fawry.dart';
-import 'package:swa/features/sign_in/domain/entities/user.dart';
-import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
-import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
 import 'package:swa/select_payment2/presentation/credit_card/model/card_model.dart';
 import 'package:swa/select_payment2/presentation/credit_card/presentation/navigation_helper.dart';
 import 'package:swa/select_payment2/presentation/credit_card/presentation/screens/credit_card.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class Cardpaymentscreen extends StatefulWidget {
@@ -45,7 +40,6 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
   TextEditingController cardNumberCtrl = TextEditingController();
   // TextEditingController amountController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  bool showCardBack = false;
   int selectedIndex = 0;
   FocusNode cardHolderNameNode = FocusNode();
   FocusNode cardNumberNode = FocusNode();
@@ -59,9 +53,7 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
   void initState() {
     // final jsonData = json.decode(CacheHelper.getDataToSharedPref(key: 'cards'));
     final jsonData = CacheHelper.getDataToSharedPref(key: 'cards');
-    print(jsonData.runtimeType);
-    print(jsonData);
-    print("EEeeeeeeeeeeeeeeeeeeeeeeeee");
+
     widget.index = 0;
 
     if (jsonData != null && jsonData is String) {
@@ -165,7 +157,7 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                                 builder: (BuildContext context) {
                                                   return Padding(
                                                     padding: const EdgeInsets.all(30),
-                                                    child: Container(
+                                                    child: SizedBox(
                                                       height: 270,
                                                       child: Column(
                                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -360,7 +352,6 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                       textInputType: TextInputType.number,
                                       onChange: (value) {
                                         setState(() {
-                                          showCardBack = true;
                                           cvv = value;
                                         });
                                       },
@@ -368,7 +359,6 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                       maxLength: 3,
                                       onFieldSubmitted: (value) {
                                         setState(() {
-                                          showCardBack = false;
                                           amountNode.requestFocus();
                                         });
                                       },
@@ -614,11 +604,9 @@ class PayField extends StatelessWidget {
               onChanged: (value) => onChange(value),
               focusNode: focusNode,
               validator: (value) {
-                if (value!.isEmpty) {
-                  return 'This Field is Required';
-                } else {
-                  return null;
-                }
+                if (value!.isEmpty) return 'This Field is Required';
+                if (value.length != 3) return 'Please enter a valid CVV';
+                return null;
               },
               onFieldSubmitted: (value) {
                 if (onFieldSubmitted != null) {

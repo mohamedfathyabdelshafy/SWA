@@ -82,7 +82,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     double sizeHeight = context.height;
     double sizeWidth = context.width;
     return BlocListener<RegisterCubit, RegisterState>(
-      bloc: BlocProvider.of<RegisterCubit>(context),
       listener: (context, state) {
         if (state is phonecodeState) {
           phonecountrycodeModel = state.phonecountrycodeModel;
@@ -95,21 +94,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
           docType = state.documentTypeModel;
           documentDaata =
               state.documentTypeModel.message!.entries.map((entry) => documentdetails(entry.value, entry.key)).toList();
-        } else if (state is RegisterLoadingState) {
-          Constants.showLoadingDialog(context);
         } else if (state is UserRegisterLoadedState) {
-          Constants.hideLoadingDialog(context);
           Constants.showDefaultSnackBar(
               context: context, text: state.messageResponse.massage.toString(), color: Colors.green);
 
           Navigator.pushReplacementNamed(context, Routes.signInRoute);
         } else if (state is RegisterErrorState) {
-          Constants.hideLoadingDialog(context);
           Constants.showDefaultSnackBar(context: context, text: state.error.toString());
         }
       },
       child: BlocBuilder<RegisterCubit, RegisterState>(
-        bloc: BlocProvider.of<RegisterCubit>(context),
         builder: (context, state) {
           return Scaffold(
             backgroundColor: AppColors.white,
@@ -691,47 +685,48 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 height: 40,
                               ),
 
-                              InkWell(
-                                onTap: () {
-                                  if (formKey.currentState!.validate()) {
-                                    if (_selectedCountry == null) {
-                                      Constants.hideLoadingDialog(context);
-                                      Constants.showDefaultSnackBar(context: context, text: "Select your country..");
-                                      return;
-                                    }
-                                    if (_selectedCity == null) {
-                                      Constants.hideLoadingDialog(context);
-                                      Constants.showDefaultSnackBar(context: context, text: "Select your city..");
-                                      return;
-                                    }
-                                    BlocProvider.of<RegisterCubit>(context).registerUser(UserRegisterParams(
-                                      name: nameController.text,
-                                      mobile: '${selectedcode}${mobileController.text}',
-                                      email: emailController.text,
-                                      identificationNumber: idcontroller.text,
-                                      password: passwordController.text,
-                                      userType: "Customer",
-                                      indentificationtypeID: indentificationtypeID,
-                                      countryId: _selectedCountry!.countryId,
-                                      cityId: _selectedCity!.cityId,
-                                    ));
-                                  }
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                                  //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
-                                  decoration: BoxDecoration(
-                                      color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
-                                      borderRadius: BorderRadius.circular(41)),
-                                  child: Center(
-                                    child: Text(
-                                      LanguageClass.isEnglish ? "Sign Up" : "انشاء الحساب",
-                                      style:
-                                          fontStyle(color: AppColors.white, fontWeight: FontWeight.bold, fontSize: 22),
-                                    ),
-                                  ),
-                                ),
-                              )
+                              state is RegisterLoadingState
+                                  ? Center(child: CircularProgressIndicator())
+                                  : InkWell(
+                                      onTap: () {
+                                        if (formKey.currentState!.validate()) {
+                                          if (_selectedCountry == null) {
+                                            Constants.showDefaultSnackBar(
+                                                context: context, text: "Select your country..");
+                                            return;
+                                          }
+                                          if (_selectedCity == null) {
+                                            Constants.showDefaultSnackBar(context: context, text: "Select your city..");
+                                            return;
+                                          }
+                                          BlocProvider.of<RegisterCubit>(context).registerUser(UserRegisterParams(
+                                            name: nameController.text,
+                                            mobile: '${selectedcode}${mobileController.text}',
+                                            email: emailController.text,
+                                            identificationNumber: idcontroller.text,
+                                            password: passwordController.text,
+                                            userType: "Customer",
+                                            indentificationtypeID: indentificationtypeID,
+                                            countryId: _selectedCountry!.countryId,
+                                            cityId: _selectedCity!.cityId,
+                                          ));
+                                        }
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                                        //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
+                                        decoration: BoxDecoration(
+                                            color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
+                                            borderRadius: BorderRadius.circular(41)),
+                                        child: Center(
+                                          child: Text(
+                                            LanguageClass.isEnglish ? "Sign Up" : "انشاء الحساب",
+                                            style: fontStyle(
+                                                color: AppColors.white, fontWeight: FontWeight.bold, fontSize: 22),
+                                          ),
+                                        ),
+                                      ),
+                                    )
                             ],
                           ),
                         ),

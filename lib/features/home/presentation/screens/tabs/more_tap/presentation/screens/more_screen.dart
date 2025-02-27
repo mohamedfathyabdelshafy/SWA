@@ -13,9 +13,7 @@ import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/currency_selector.dart';
-import 'package:swa/features/Swa_umra/Screens/Select_type.dart';
 import 'package:swa/features/Swa_umra/models/umra_detail.dart';
-import 'package:swa/features/app_info/domain/entities/country.dart';
 import 'package:swa/features/app_info/presentation/cubit/get_available_countries/get_available_countries_cubit.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/PLOH/more_cubit.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/Allpackages_screen.dart';
@@ -24,11 +22,12 @@ import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentatio
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/abous_us.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/bus_class.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/contact_us.dart';
-import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/lines_screen.dart';
-import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/privacy_screen.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/stations_screen.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/terms_and_conditions_terms.dart';
+import 'package:swa/features/payment/wallet/data/wallet_cubit/wallet_cubit.dart';
 import 'package:swa/select_payment2/data/models/Curruncy_model.dart';
+
+//Refactor currency code , country flag ...
 
 class MoreScreen extends StatefulWidget {
   const MoreScreen({super.key});
@@ -73,7 +72,7 @@ class _MoreScreenState extends State<MoreScreen> {
         body: isloading
             ? Center(
                 child: CircularProgressIndicator(
-                  color: AppColors.umragold,
+                  color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                 ),
               )
             : Directionality(
@@ -130,6 +129,7 @@ class _MoreScreenState extends State<MoreScreen> {
                                           onTap: () {
                                             showCurrencySelector(context, currencyList: curruncylist!.message!,
                                                 onCurrencySelected: (currency) {
+                                              // context.read<WalletCubit>().convertWalletBalance(currency.symbol!);
                                               Routes.curruncy = currency.symbol!;
                                               CacheHelper.setDataToSharedPref(
                                                 key: 'curruncycode',
@@ -150,7 +150,9 @@ class _MoreScreenState extends State<MoreScreen> {
                                                         fontWeight: FontWeight.w600,
                                                         fontSize: 21)),
                                                 Text(
-                                                  Routes.curruncy!,
+                                                  CacheHelper.getDataToSharedPref(
+                                                    key: 'curruncycode',
+                                                  ),
                                                   style: fontStyle(
                                                       color: AppColors.blackColor,
                                                       fontFamily: FontFamily.medium,
@@ -248,7 +250,6 @@ class _MoreScreenState extends State<MoreScreen> {
                                                                                       onTap: () {
                                                                                         Routes.curruncy = state
                                                                                             .countries[index].curruncy;
-
                                                                                         CacheHelper.setDataToSharedPref(
                                                                                           key: 'curruncycode',
                                                                                           value: state.countries[index]
@@ -335,7 +336,9 @@ class _MoreScreenState extends State<MoreScreen> {
                                                           Container(
                                                             width: 25,
                                                             child: Image.network(
-                                                              Routes.countryflag!,
+                                                              CacheHelper.getDataToSharedPref(
+                                                                key: 'countryflag',
+                                                              ),
                                                             ),
                                                           ),
                                                           SizedBox(
@@ -354,15 +357,18 @@ class _MoreScreenState extends State<MoreScreen> {
                                                     ),
                                                   ),
                                                 )
-                                              : Routes.countryflag == null
+                                              : CacheHelper.getDataToSharedPref(
+                                                        key: 'countryflag',
+                                                      ) ==
+                                                      null
                                                   ? Container()
                                                   : Row(
                                                       children: [
                                                         Container(
                                                           width: 25,
-                                                          child: Image.network(
-                                                            Routes.countryflag!,
-                                                          ),
+                                                          child: Image.network(CacheHelper.getDataToSharedPref(
+                                                            key: 'countryflag',
+                                                          )),
                                                         ),
                                                         SizedBox(
                                                           width: 10,

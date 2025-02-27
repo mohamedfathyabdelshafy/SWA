@@ -34,7 +34,7 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ReusablePaymentScreen(
+    return ReusablePaymentMethodSelectionScreen(
       onBackPressed: _onBackPressed,
       onVisaPaymentPressed: _onVisaPaymentPressed,
       onElectronicWalletPressed: _onElectronicWalletPressed,
@@ -59,7 +59,7 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
             create: (context) => ReservationCubit(),
             child: AddWalletBalanceWithCreditCardScreen(
               user: widget.user!,
-              index: 1,
+              index: 0,
             )),
       ),
     );

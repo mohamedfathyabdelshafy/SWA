@@ -71,7 +71,6 @@ class UmraRepos {
     var response =
         await apiConsumer.get("${EndPoints.baseUrl}Trip/GetSingleTripDetails?tripId=$tripid&countryID=$countryid");
 
-    log(" bus eats " + response.body);
     var decode = json.decode(response.body);
     Seatsmodel seatsmodel = Seatsmodel.fromJson(decode);
     return seatsmodel;
@@ -833,9 +832,6 @@ class UmraRepos {
       key: 'countryid',
     );
 
-    print(
-        "${EndPoints.baseUrl}TripUmra/GetAccommodationList?tripUmrahID=$tripUmrahID&dateTypeID=${UmraDetails.dateTypeID}&toCurrency=${Routes.curruncy}&countryID=$countryid${umrahReservationID != null ? '&umrahReservationID=$umrahReservationID' : ''}");
-
     final res = await apiConsumer.get(
         "${EndPoints.baseUrl}TripUmra/GetAccommodationList?tripUmrahID=$tripUmrahID&dateTypeID=${UmraDetails.dateTypeID}&toCurrency=${Routes.curruncy}&countryID=$countryid${umrahReservationID != null ? '&umrahReservationID=$umrahReservationID' : ''}");
 
@@ -849,8 +845,7 @@ class UmraRepos {
     var countryid = CacheHelper.getDataToSharedPref(
       key: 'countryid',
     );
-    print(
-        "${EndPoints.baseUrl}TripUmra/GetProgramList?tripUmrahID=$tripUmrahID${umrahReservationID != null ? '&umrahReservationID=$umrahReservationID' : ''}");
+
     final res = await apiConsumer.get(
         "${EndPoints.baseUrl}TripUmra/GetProgramList?tripUmrahID=$tripUmrahID&dateTypeID=${UmraDetails.dateTypeID}&toCurrency=${Routes.curruncy}&countryID=$countryid${umrahReservationID != null ? '&umrahReservationID=$umrahReservationID' : ''}");
 
@@ -1077,8 +1072,6 @@ class UmraRepos {
     var countryid = CacheHelper.getDataToSharedPref(
       key: 'countryid',
     );
-    print(
-        "${EndPoints.baseUrl}TripUmra/GetListUmrahBooking?customerID=${Routes.customerid}&countryID=$countryid&dateTypeID=${countryid == 1 ? 113 : 112}&toCurrency=${Routes.curruncy}");
     final res = await apiConsumer.get(
         "${EndPoints.baseUrl}TripUmra/GetListUmrahBooking?customerID=${Routes.customerid}&countryID=$countryid&dateTypeID=${countryid == 1 ? 113 : 112}&toCurrency=${Routes.curruncy}");
 

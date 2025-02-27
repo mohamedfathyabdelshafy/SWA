@@ -22,7 +22,7 @@ class PackagePaymentScreen extends StatelessWidget {
       create: (context) => PackagesBloc(),
       child: BlocListener<PackagesBloc, PackagesState>(
         listener: _handleListenner,
-        child: ReusablePaymentScreen(
+        child: ReusablePaymentMethodSelectionScreen(
           onBackPressed: (context) => Navigator.pop(context),
           onElectronicWalletPressed: _onElectronicWalletPressed,
           onVisaPaymentPressed: _onVisaPaymentPressed,

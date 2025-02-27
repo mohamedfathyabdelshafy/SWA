@@ -13,7 +13,7 @@ import 'package:swa/core/widgets/Timer_widget.dart';
 import 'package:swa/features/reusable_payment/data/models/payment_method.dart';
 import 'package:swa/features/reusable_payment/presentation/cubits/Payment_Methods/payment_methods_cubit.dart';
 
-class ReusablePaymentScreen extends StatefulWidget {
+class ReusablePaymentMethodSelectionScreen extends StatefulWidget {
   final void Function(BuildContext context) onBackPressed;
   final void Function(BuildContext context)? onWalletPaymentPressed;
   final bool hasTimer;
@@ -24,7 +24,7 @@ class ReusablePaymentScreen extends StatefulWidget {
   final void Function(BuildContext context)? onFawryPressed;
   final void Function(BuildContext context)? onElectronicWalletPressed;
 
-  const ReusablePaymentScreen({
+  const ReusablePaymentMethodSelectionScreen({
     super.key,
     required this.onBackPressed,
     this.onWalletPaymentPressed,
@@ -38,10 +38,10 @@ class ReusablePaymentScreen extends StatefulWidget {
   });
 
   @override
-  State<ReusablePaymentScreen> createState() => _ReusablePaymentScreenState();
+  State<ReusablePaymentMethodSelectionScreen> createState() => _ReusablePaymentMethodSelectionScreenState();
 }
 
-class _ReusablePaymentScreenState extends State<ReusablePaymentScreen> {
+class _ReusablePaymentMethodSelectionScreenState extends State<ReusablePaymentMethodSelectionScreen> {
   bool _walletSwitchOn = false;
 
   @override

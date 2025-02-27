@@ -96,7 +96,6 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
 
         for (int i = 0; i < busSeatsModel!.busSeatDetails!.busDetails!.totalRow!; i++) {
           for (int j = 0; j < busSeatsModel!.busSeatDetails!.busDetails!.rowList![i].seats.length; j++) {
-            print("fffffff fff ff ${busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j].seatNo}");
             if (busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j].isReserved == true) {
               busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j].seatState = SeatState.sold;
             }

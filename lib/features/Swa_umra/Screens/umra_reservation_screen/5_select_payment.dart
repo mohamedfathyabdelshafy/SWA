@@ -12,7 +12,7 @@ class SelectPaymentUmra extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ReusablePaymentScreen(
+    return ReusablePaymentMethodSelectionScreen(
       onBackPressed: (context) => Navigator.pop(context),
       onElectronicWalletPressed: _onElectronicWalletPressed,
       onVisaPaymentPressed: _onVisaPaymentPressed,

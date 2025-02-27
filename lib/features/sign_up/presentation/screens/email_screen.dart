@@ -45,8 +45,7 @@ class _EmailscreenState extends State<Emailscreen> {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: Directionality(
-        textDirection:
-            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+        textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
         child: SingleChildScrollView(
           child: Form(
             key: formKey,
@@ -62,9 +61,7 @@ class _EmailscreenState extends State<Emailscreen> {
                     },
                     child: Icon(
                       Icons.arrow_back,
-                      color: Routes.isomra
-                          ? AppColors.umragold
-                          : AppColors.primaryColor,
+                      color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                       size: 35,
                     ),
                   ),
@@ -80,10 +77,7 @@ class _EmailscreenState extends State<Emailscreen> {
                         Text(
                           LanguageClass.isEnglish ? "Sign Up" : "انشاء حساب",
                           textAlign: TextAlign.start,
-                          style: fontStyle(
-                              fontFamily: FontFamily.bold,
-                              color: HexColor('#000000'),
-                              fontSize: 34),
+                          style: fontStyle(fontFamily: FontFamily.bold, color: HexColor('#000000'), fontSize: 34),
                         ),
                         // SizedBox(height:context.height *0.03 ,),
                         SizedBox(
@@ -91,12 +85,9 @@ class _EmailscreenState extends State<Emailscreen> {
                         ),
 
                         Container(
-                          margin:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                          margin: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                           child: Text(
-                            LanguageClass.isEnglish
-                                ? 'Email'
-                                : 'البريد الالكتروني',
+                            LanguageClass.isEnglish ? 'Email' : 'البريد الالكتروني',
                             style: fontStyle(
                                 fontSize: 16,
                                 fontFamily: FontFamily.regular,
@@ -111,24 +102,17 @@ class _EmailscreenState extends State<Emailscreen> {
                           isPassword: false,
                           obscureText: false,
                           color: Color(0xffDDDDDD),
-                          hintText: LanguageClass.isEnglish
-                              ? "ex@email.com"
-                              : "ex@email.com",
+                          hintText: LanguageClass.isEnglish ? "ex@email.com" : "ex@email.com",
                           keyboardType: TextInputType.emailAddress,
                           controller: emailController,
                           validator: (validator) {
                             if (validator == null || validator.isEmpty) {
-                              return LanguageClass.isEnglish
-                                  ? "Enter Email"
-                                  : "ادخل الايميل";
+                              return LanguageClass.isEnglish ? "Enter Email" : "ادخل الايميل";
                             }
-                            String pattern =
-                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+                            String pattern = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
                             RegExp regex = RegExp(pattern);
                             if (!regex.hasMatch(validator)) {
-                              return LanguageClass.isEnglish
-                                  ? "Your Email is invalid"
-                                  : "هذا الايميل غير صالح";
+                              return LanguageClass.isEnglish ? "Your Email is invalid" : "هذا الايميل غير صالح";
                             } else {
                               return null;
                             }
@@ -142,54 +126,42 @@ class _EmailscreenState extends State<Emailscreen> {
                           height: 40,
                         ),
 
-                        BlocListener(
-                          bloc: BlocProvider.of<RegisterCubit>(context),
+                        BlocConsumer<RegisterCubit, RegisterState>(
                           listener: (context, state) {
-                            if (state is RegisterLoadingState) {
-                              Constants.showLoadingDialog(context);
-                            } else if (state is EmailsendState) {
+                            if (state is EmailsendState) {
                               if (state.message == 'success') {
                                 Routes.emailaddress = emailController.text;
 
-                                Navigator.pushReplacementNamed(
-                                    context, Routes.verifyemailroure);
+                                Navigator.pushReplacementNamed(context, Routes.verifyemailroure);
                               }
                             } else if (state is RegisterErrorState) {
-                              Constants.hideLoadingDialog(context);
-                              Constants.showDefaultSnackBar(
-                                  context: context,
-                                  text: state.error.toString());
+                              Constants.showDefaultSnackBar(context: context, text: state.error.toString());
                             }
                           },
-                          child: InkWell(
-                            onTap: () {
-                              if (formKey.currentState!.validate()) {
-                                BlocProvider.of<RegisterCubit>(context)
-                                    .Sendcodeemail(email: emailController.text);
-                              }
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 20),
-                              //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
-                              decoration: BoxDecoration(
-                                  color: Routes.isomra
-                                      ? AppColors.umragold
-                                      : AppColors.primaryColor,
-                                  borderRadius: BorderRadius.circular(41)),
-                              child: Center(
-                                child: Text(
-                                  LanguageClass.isEnglish
-                                      ? "Sign Up"
-                                      : "انشاء الحساب",
-                                  style: fontStyle(
-                                      color: AppColors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22),
+                          builder: (context, state) => state is RegisterLoadingState
+                              ? Center(child: CircularProgressIndicator())
+                              : InkWell(
+                                  onTap: () {
+                                    if (formKey.currentState!.validate()) {
+                                      BlocProvider.of<RegisterCubit>(context)
+                                          .Sendcodeemail(email: emailController.text);
+                                    }
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                                    //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
+                                    decoration: BoxDecoration(
+                                        color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
+                                        borderRadius: BorderRadius.circular(41)),
+                                    child: Center(
+                                      child: Text(
+                                        LanguageClass.isEnglish ? "Sign Up" : "انشاء الحساب",
+                                        style: fontStyle(
+                                            color: AppColors.white, fontWeight: FontWeight.bold, fontSize: 22),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ),
                         )
                       ],
                     ),

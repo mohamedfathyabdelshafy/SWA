@@ -48,7 +48,7 @@ class _SelectPaymentUmraScreenState extends State<SelectPaymentUmraScreen> {
   Widget build(BuildContext context) {
     return BlocListener<UmraBloc, UmraState>(
       listener: _handleListenner,
-      child: ReusablePaymentScreen(
+      child: ReusablePaymentMethodSelectionScreen(
         onBackPressed: (context) => Navigator.pop(context),
         onElectronicWalletPressed: _onElectronicWalletPressed,
         onVisaPaymentPressed: _onVisaPaymentPressed,

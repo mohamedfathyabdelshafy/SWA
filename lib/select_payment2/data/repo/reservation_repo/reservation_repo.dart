@@ -157,8 +157,7 @@ class ReservationRepo {
       key: 'countryid',
     );
     log("henaaa 1");
-    final msg = jsonEncode(
-        {"CustomerId": custId, "Amount": amount, "countryID": countryid});
+    final msg = jsonEncode({"CustomerId": custId, "Amount": amount, "countryID": countryid});
     log("henaaa 2");
 
     print(msg);
@@ -183,8 +182,7 @@ class ReservationRepo {
     var countryid = CacheHelper.getDataToSharedPref(
       key: 'countryid',
     );
-    final res = await apiConsumer
-        .get("${EndPoints.baseUrl}Settings/PloicyTrip?countryID=$countryid");
+    final res = await apiConsumer.get("${EndPoints.baseUrl}Settings/PloicyTrip?countryID=$countryid");
 
     log("policy" + res.body);
     var decode = json.decode(res.body);
@@ -285,9 +283,6 @@ class ReservationRepo {
 
     print(msg);
     var response = await apiConsumer.post(EndPoints.chargecard, body: msg);
-    print(" Body " + response.request.toString());
-
-    log('charge Response ' + response.body);
 
     var decodedResponse = json.decode(response.body);
     ReservationResponseCreditCard reservationResponseCreditCard =

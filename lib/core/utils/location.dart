@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -40,19 +40,16 @@ Future<Position> determinePosition() async {
 
   if (permission == LocationPermission.deniedForever) {
     // Permissions are denied forever, handle appropriately.
-    return Future.error(
-        'Location permissions are permanently denied, we cannot request permissions.');
+    return Future.error('Location permissions are permanently denied, we cannot request permissions.');
   }
 
   // When we reach here, permissions are granted and we can
   // continue accessing the position of the device.
-  Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.medium);
+  Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
 
-  List<Placemark> placemarks =
-      await placemarkFromCoordinates(position.latitude, position.longitude);
+  List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
 
-  print(placemarks[0].isoCountryCode!);
+  log("Placemarks ${placemarks[0].isoCountryCode!}");
 
   Routes.countryname = placemarks[0].isoCountryCode!;
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -36,8 +38,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: sizeWidth / 10),
         child: Directionality(
-          textDirection:
-              LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+          textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
           child: Form(
             key: formKey,
             child: SingleChildScrollView(
@@ -55,9 +56,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            LanguageClass.isEnglish
-                                ? "Enter Code"
-                                : "ادخل الكود",
+                            LanguageClass.isEnglish ? "Enter Code" : "ادخل الكود",
                             style: fontStyle(
                                 color: AppColors.blackColor,
                                 fontWeight: FontWeight.bold,
@@ -94,9 +93,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                               autoFocus: true,
                               validator: (validator) {
                                 if (validator == null || validator.isEmpty) {
-                                  return LanguageClass.isEnglish
-                                      ? " Enter the code"
-                                      : "ادخل الكود";
+                                  return LanguageClass.isEnglish ? " Enter the code" : "ادخل الكود";
                                 }
                                 return null;
                               },
@@ -108,8 +105,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                                 inactiveColor: const Color(0xffDDDDDD),
                                 inactiveFillColor: Color(0xffDDDDDD),
                                 selectedFillColor: Color(0xffDDDDDD),
-                                fieldOuterPadding:
-                                    const EdgeInsets.symmetric(horizontal: 4),
+                                fieldOuterPadding: const EdgeInsets.symmetric(horizontal: 4),
                                 borderWidth: 1,
                                 borderRadius: BorderRadius.circular(100),
                                 fieldHeight: 60,
@@ -117,8 +113,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                                 activeFillColor: Color(0xffDDDDDD),
                               ),
                               cursorColor: Colors.black,
-                              animationDuration:
-                                  const Duration(milliseconds: 300),
+                              animationDuration: const Duration(milliseconds: 300),
                               enableActiveFill: true,
                               controller: codeController,
                               keyboardType: TextInputType.number,
@@ -139,37 +134,29 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                       ),
                     ),
                     const Spacer(),
-                    BlocListener(
-                      bloc: BlocProvider.of<RegisterCubit>(context),
+                    BlocConsumer<RegisterCubit, RegisterState>(
                       listener: (context, state) {
-                        if (state is RegisterLoadingState) {
-                          Constants.showLoadingDialog(context);
-                        } else if (state is EmailsendState) {
+                        if (state is EmailsendState) {
                           if (state.message == 'success') {
-                            Navigator.pushReplacementNamed(
-                                context, Routes.signUpRoute);
+                            Navigator.pushReplacementNamed(context, Routes.signUpRoute);
                           }
                         } else if (state is RegisterErrorState) {
-                          Constants.hideLoadingDialog(context);
-                          Constants.showDefaultSnackBar(
-                              context: context, text: state.error.toString());
+                          log("rrrr 3");
+                          Constants.showDefaultSnackBar(context: context, text: state.error.toString());
                         }
                       },
-                      child: InkWell(
-                          onTap: () {
-                            if (formKey.currentState!.validate()) {
-                              BlocProvider.of<RegisterCubit>(context)
-                                  .confirmemail(otp: codeController.text);
-                            }
-                          },
-                          child: Constants.customButton(
-                              borderradias: 41,
-                              color: Routes.isomra
-                                  ? AppColors.umragold
-                                  : AppColors.primaryColor,
-                              text: LanguageClass.isEnglish
-                                  ? "Enter code"
-                                  : "ادخل الرمز")),
+                      builder: (context, state) => state is RegisterLoadingState
+                          ? const Center(child: CircularProgressIndicator())
+                          : InkWell(
+                              onTap: () {
+                                if (formKey.currentState!.validate()) {
+                                  BlocProvider.of<RegisterCubit>(context).confirmemail(otp: codeController.text);
+                                }
+                              },
+                              child: Constants.customButton(
+                                  borderradias: 41,
+                                  color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
+                                  text: LanguageClass.isEnglish ? "Enter code" : "ادخل الرمز")),
                     ),
                     const SizedBox(
                       height: 50,

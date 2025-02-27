@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:swa/core/api/api_consumer.dart';
@@ -18,10 +19,7 @@ class HttpConsumer implements ApiConsumer {
     try {
       final response = await client.get(
         Uri.parse(path),
-        headers: {
-          "APIKey": "546548dwfdfsd3f4sdfhgat52",
-          "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
-        },
+        headers: {"APIKey": "546548dwfdfsd3f4sdfhgat52", "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"},
         // headers: await _getToken()
       );
       return _handleResponseErrors(response);
@@ -33,8 +31,7 @@ class HttpConsumer implements ApiConsumer {
   }
 
   @override
-  Future post(String path,
-      {dynamic body, Map<String, dynamic>? queryParameters}) async {
+  Future post(String path, {dynamic body, Map<String, dynamic>? queryParameters}) async {
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       "APIKey": "546548dwfdfsd3f4sdfhgat52",
@@ -58,8 +55,7 @@ class HttpConsumer implements ApiConsumer {
   }
 
   Future uploadMultiPart(String path, String imagePath,
-      {Map<String, dynamic>? body,
-      Map<String, dynamic>? queryParameters}) async {
+      {Map<String, dynamic>? body, Map<String, dynamic>? queryParameters}) async {
     try {
       var results = http.MultipartRequest(
         'POST',
@@ -99,6 +95,7 @@ class HttpConsumer implements ApiConsumer {
 
   dynamic _handleResponseErrors(http.Response response) {
     String _message = '';
+    log(response.body);
     if (response.statusCode != StatusCode.ok) {
       _message = (jsonDecode(response.body)['Message']).toString();
     }
