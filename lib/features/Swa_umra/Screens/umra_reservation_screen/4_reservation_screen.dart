@@ -343,7 +343,10 @@ class _ReservationScreenState extends State<ReservationScreen> with TickerProvid
               Constants.showDefaultSnackBar(
                   context: context, text: state.reservationResponseElectronicModel!.errormessage!);
             } else if (state.reservationResponseCreditCard?.status == 'success') {
-              showDoneConfirmationDialog(context, callbackTitle: "Go to OTP", message: 'Complete the payment process',
+              showDoneConfirmationDialog(context,
+                  callbackTitle: LanguageClass.isEnglish ? "Go to OTP" : 'ادخل الرمز',
+                  isWarning: true,
+                  message: LanguageClass.isEnglish ? 'Complete the payment process' : 'قم باستكمال عملية الدفع',
                   callback: () {
                 Navigator.push(
                     context,

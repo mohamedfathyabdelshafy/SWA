@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
@@ -39,9 +42,11 @@ class _SelectappScreenState extends State<SelectappScreen> {
     super.initState();
     packagesBloc.add(selectappevent());
 
+    determinePosition().then((value) {
+      BlocProvider.of<GetAvailableCountriesCubit>(context).getAvailableCountries();
+    });
     BlocProvider.of<LoginCubit>(context).getUserData();
     super.initState();
-    BlocProvider.of<GetAvailableCountriesCubit>(context).getAvailableCountries();
 
     setState(() {});
     super.initState();
@@ -81,33 +86,38 @@ class _SelectappScreenState extends State<SelectappScreen> {
                   );
 
                   setState(() {});
+                  LocationPermission permission;
 
-                  if (await Permission.location.isDenied && countryid == null ||
-                      await Permission.location.isPermanentlyDenied && countryid == null) {
+                  permission = await Geolocator.checkPermission();
+
+                  if (permission == LocationPermission.denied && countryid == null ||
+                      permission == LocationPermission.deniedForever && countryid == null) {
+                    log('location denied');
                     List list2 = state.countries.where((element) {
                       final title = element.Code;
 
-                      final searc = 'EG';
+                      final searc = 'SA';
                       return title.contains(searc);
                     }).toList();
 
                     if (list2.isEmpty) {
                       list2 = [
                         Country(
-                            countryId: 1,
-                            countryName: "Egypt",
-                            Code: "1",
-                            Flag: "https://swabus.com/Content/Dashboard/LTR/assets/img/Egypt.png",
-                            curruncy: "EGP")
+                            countryId: 3,
+                            countryName: "Saudi Arabia",
+                            Code: "3",
+                            Flag: "https://swabus.com/Content/Dashboard/LTR/assets/img/Saudi.png",
+                            curruncy: "SAR")
                       ];
                     }
                     setState(() {});
 
-                    CacheHelper.setDataToSharedPref(key: 'countryid', value: list2[0].countryId ?? '1');
+                    CacheHelper.setDataToSharedPref(key: 'countryid', value: list2[0].countryId ?? '3');
                     CacheHelper.setDataToSharedPref(key: 'countryflag', value: list2[0].Flag);
 
                     Routes.countryflag = list2[0].Flag;
                     Routes.countryflag = list2[0].Flag;
+
                     Routes.curruncy = CacheHelper.getDataToSharedPref(
                           key: 'curruncycode',
                         ) ??
@@ -126,16 +136,16 @@ class _SelectappScreenState extends State<SelectappScreen> {
                     if (list2.isEmpty) {
                       list2 = [
                         Country(
-                            countryId: 1,
-                            countryName: "Egypt",
-                            Code: "1",
-                            Flag: "https://swabus.com/Content/Dashboard/LTR/assets/img/Egypt.png",
-                            curruncy: "EGP")
+                            countryId: 3,
+                            countryName: "Saudi Arabia",
+                            Code: "3",
+                            Flag: "https://swabus.com/Content/Dashboard/LTR/assets/img/Saudi.png",
+                            curruncy: "SAR")
                       ];
                     }
                     setState(() {});
 
-                    CacheHelper.setDataToSharedPref(key: 'countryid', value: list2[0].countryId ?? '1');
+                    CacheHelper.setDataToSharedPref(key: 'countryid', value: list2[0].countryId ?? '3');
                     CacheHelper.setDataToSharedPref(key: 'countryflag', value: list2[0].Flag);
                     Routes.countryflag = list2[0].Flag;
                     Routes.countryflag = list2[0].Flag;
@@ -144,6 +154,7 @@ class _SelectappScreenState extends State<SelectappScreen> {
                         ) ??
                         list2[0].curruncy;
                     Routes.country = list2[0].countryName;
+                    log('location working ' + Routes.country.toString());
                   } else {
                     final list2 = state.countries.where((element) {
                       final title = element.countryId.toString();
@@ -156,6 +167,8 @@ class _SelectappScreenState extends State<SelectappScreen> {
                         ) ??
                         list2[0].curruncy;
                     Routes.country = list2[0].countryName;
+
+                    log('location country selected ' + Routes.country.toString());
                   }
                 }
               }),

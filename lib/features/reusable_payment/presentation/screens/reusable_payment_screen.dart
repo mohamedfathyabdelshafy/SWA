@@ -143,6 +143,7 @@ class _ReusablePaymentMethodSelectionScreenState extends State<ReusablePaymentMe
           InkWell(
             onTap: widget.onWalletPaymentPressed != null ? () => widget.onWalletPaymentPressed!(context) : null,
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   width: 23,
@@ -155,28 +156,47 @@ class _ReusablePaymentMethodSelectionScreenState extends State<ReusablePaymentMe
                 SizedBox(
                   width: 14,
                 ),
-                Text(
-                  paymentMethod.name,
-                  style: fontStyle(
-                      color: Colors.black, fontSize: 21, fontWeight: FontWeight.w600, fontFamily: FontFamily.medium),
-                )
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      paymentMethod.name,
+                      style: fontStyle(
+                          color: Colors.black,
+                          fontSize: 21,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: FontFamily.medium),
+                    ),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        '${widget.walletBalance} ${Routes.curruncy ?? ""}',
+                        style: fontStyle(color: AppColors.primaryColor, fontSize: 12.sp, fontFamily: FontFamily.medium),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
           if (widget.walletBalance != null) ...[
             Spacer(),
-            Container(
-              padding: EdgeInsets.all(7),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: AppColors.primaryColor,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.primaryColor, width: 2)),
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  '${widget.walletBalance} ${Routes.curruncy ?? ""}',
-                  style: fontStyle(color: AppColors.white, fontSize: 12, fontFamily: FontFamily.medium),
+            InkWell(
+              onTap: widget.onWalletPaymentPressed != null ? () => widget.onWalletPaymentPressed!(context) : null,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: AppColors.primaryColor,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.primaryColor, width: 2)),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    LanguageClass.isEnglish ? 'Pay' : 'دفع',
+                    style: fontStyle(color: AppColors.white, fontSize: 12, fontFamily: FontFamily.medium),
+                  ),
                 ),
               ),
             )
@@ -206,6 +226,8 @@ class _ReusablePaymentMethodSelectionScreenState extends State<ReusablePaymentMe
     return Container(
       child: widget.hasTimer
           ? Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 InkWell(
                   onTap: () => widget.onBackPressed(context),

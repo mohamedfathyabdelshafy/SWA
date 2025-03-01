@@ -266,8 +266,9 @@ class _TimesScreenState extends State<TimesScreen> {
                                           ))
                                     ],
                                   ),
+                                  4.verticalSpace,
                                   Container(
-                                    alignment: Alignment.center,
+                                    alignment: Alignment.centerRight,
                                     child: InkWell(
                                       onTap: () {
                                         Navigator.push(
@@ -455,6 +456,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                                       fontFamily: FontFamily.medium,
                                                       fontSize: 13.sp),
                                                 ),
+                                                4.verticalSpace,
                                                 Container(
                                                   alignment: Alignment.centerRight,
                                                   child: InkWell(
@@ -579,7 +581,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                                           color: AppColors.primaryColor,
                                                           fontWeight: FontWeight.bold,
                                                           fontFamily: FontFamily.medium,
-                                                          fontSize: 10.sp,
+                                                          fontSize: 12.sp,
                                                         ),
                                                       ),
                                                     ),
@@ -971,8 +973,9 @@ class _TimesScreenState extends State<TimesScreen> {
                                             ))
                                       ],
                                     ),
+                                    4.verticalSpace,
                                     Container(
-                                      alignment: Alignment.center,
+                                      alignment: Alignment.centerRight,
                                       child: InkWell(
                                         onTap: () {
                                           Navigator.push(
@@ -1169,6 +1172,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                                             fontFamily: FontFamily.medium,
                                                             fontSize: 12.sp),
                                                       ),
+                                                      4.verticalSpace,
                                                       Container(
                                                         alignment: Alignment.centerRight,
                                                         child: InkWell(
@@ -1276,7 +1280,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                                             });
                                                           },
                                                           child: Container(
-                                                            padding: EdgeInsets.all(10),
+                                                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                                                             decoration: BoxDecoration(
                                                                 boxShadow: [
                                                                   BoxShadow(
@@ -1293,7 +1297,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                                                 color: AppColors.primaryColor,
                                                                 fontWeight: FontWeight.bold,
                                                                 fontFamily: FontFamily.medium,
-                                                                fontSize: 10.sp,
+                                                                fontSize: 12.sp,
                                                               ),
                                                             ),
                                                           ),

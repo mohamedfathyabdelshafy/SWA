@@ -665,9 +665,6 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
           );
         },
       ),
-      bottomNavigationBar: Navigationbottombar(
-        currentIndex: 0,
-      ),
     );
   }
 }

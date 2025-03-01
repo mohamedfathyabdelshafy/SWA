@@ -99,7 +99,7 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
     setState(() {
       amountController.text = responce.toString();
       totalamount = responce;
-      amounttopay = responce;
+      amounttopay = responceEgp;
     });
   }
 
@@ -509,8 +509,11 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                   Navigator.pop(context);
 
                                   showDoneConfirmationDialog(context,
-                                      callbackTitle: "Go to OTP",
-                                      message: 'Complete the payment process', callback: () {
+                                      callbackTitle: LanguageClass.isEnglish ? "Go to OTP" : 'ادخل الرمز',
+                                      isWarning: true,
+                                      message: LanguageClass.isEnglish
+                                          ? 'Complete the payment process'
+                                          : 'قم باستكمال عملية الدفع', callback: () {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(

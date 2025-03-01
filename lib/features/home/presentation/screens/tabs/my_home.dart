@@ -740,6 +740,7 @@ class _MyHomeState extends State<MyHome> {
                                         );
                                       },
                                       child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Column(
                                             children: [
@@ -1103,7 +1104,7 @@ class _MyHomeState extends State<MyHome> {
                 5.horizontalSpace,
                 Icon(
                   Icons.change_circle_rounded,
-                  color: AppColors.umragold,
+                  color: AppColors.primaryColor,
                   size: 20,
                 )
               ],
@@ -1122,7 +1123,7 @@ class _MyHomeState extends State<MyHome> {
       locale: LanguageClass.isEnglish ? Locale("en", "US") : Locale("ar", ""),
       pickerType: hijiri ? PickerType.JHijri : PickerType.JNormal,
       onChange: onchange,
-      primaryColor: AppColors.umragold,
+      primaryColor: AppColors.primaryColor,
       calendarTextColor: Colors.black,
       backgroundColor: Colors.white,
       borderRadius: const Radius.circular(0),

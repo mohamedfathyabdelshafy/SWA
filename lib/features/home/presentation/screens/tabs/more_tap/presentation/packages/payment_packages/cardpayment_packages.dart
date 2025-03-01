@@ -416,9 +416,11 @@ class _CardpaymentscreenState extends State<Cardpaymentscreen> {
                                     Constants.showLoadingDialog(context);
                                   } else if (state.reservationResponseCreditCard?.status == 'success') {
                                     showDoneConfirmationDialog(context,
-                                        callbackTitle: "Go to OTP",
+                                        callbackTitle: LanguageClass.isEnglish ? "Go to OTP" : 'ادخل الرمز',
                                         isWarning: true,
-                                        message: 'Complete the payment process', callback: () {
+                                        message: LanguageClass.isEnglish
+                                            ? 'Complete the payment process'
+                                            : 'قم باستكمال عملية الدفع', callback: () {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -717,6 +719,7 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
         automaticallyImplyLeading: false,
         leading: InkWell(
           onTap: () {
+            Navigator.pop(context);
             Navigator.pop(context);
           },
           child: Icon(

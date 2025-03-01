@@ -30,8 +30,7 @@ class FirebaseNotificationService {
     );
     //Calling this method updates these options to allow customizing notification
     // presentation behavior whilst the application is in the foreground.
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true, // Required to display a heads up notification
       badge: true,
       sound: true,
@@ -43,8 +42,7 @@ class FirebaseNotificationService {
   void handleForegroundNotifications() async {
     // when the app is foreground and on focus status
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      log('Got a message whilst in the foreground! Message data: ${message.toMap()}',
-          name: "onMessage");
+      log('Got a message whilst in the foreground! Message data: ${message.toMap()}', name: "onMessage");
       print(message.data['notification']);
 
       if (message.notification != null) {
@@ -57,8 +55,7 @@ class FirebaseNotificationService {
     });
     // whe click on the message
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      log("onMessageOpenedApp ${message.notification}\n${message.toMap()}",
-          name: "onMessageOpenedApp");
+      log("onMessageOpenedApp ${message.notification}\n${message.toMap()}", name: "onMessageOpenedApp");
 
       if (message.data['category'] == 'open_link') {
         _launchInWebView(Uri.parse(message.data['url']));
@@ -88,7 +85,7 @@ class FirebaseNotificationService {
       fcmToken = await FirebaseMessaging.instance.getToken();
     }
     // ignore: prefer_interpolation_to_compose_strings
-    log(" fcmToken " + fcmToken!);
+    log(" fcmToken  ${fcmToken}");
     if (fcmToken != null) {}
   }
 

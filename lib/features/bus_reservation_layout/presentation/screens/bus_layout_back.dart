@@ -550,9 +550,6 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
           );
         },
       ),
-      bottomNavigationBar: Navigationbottombar(
-        currentIndex: 0,
-      ),
     );
   }
 }

@@ -17,10 +17,12 @@ class MyWalletRepo {
     final res = await apiConsumer.get(
       "${EndPoints.baseUrl}Customer/GetWalletBalance?customerid=$customerId&countryID=$countryid&toCurrency=${Routes.curruncy}",
     );
+
     log("mywallet" + res.body);
+
+    log(res.request.toString());
     var decode = jsonDecode(res.body);
-    MyWalletResponseModel myWalletResponseModel =
-        MyWalletResponseModel.fromJson(decode);
+    MyWalletResponseModel myWalletResponseModel = MyWalletResponseModel.fromJson(decode);
     return myWalletResponseModel;
   }
 }

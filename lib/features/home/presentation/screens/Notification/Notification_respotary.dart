@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/api/api_consumer.dart';
 import 'package:swa/core/api/end_points.dart';
+import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/features/home/data/models/Notifications_model.dart';
 import 'package:swa/main.dart';
 
@@ -11,8 +12,12 @@ class NotifcationRespo {
   final ApiConsumer apiConsumer = sl();
 
   Future getNotifications() async {
+    var countryid = CacheHelper.getDataToSharedPref(
+          key: 'countryid',
+        ) ??
+        1;
     final response = await apiConsumer.get(
-      '${EndPoints.baseUrl}Notification/NotificationList?CustomerID=${Routes.customerid}',
+      '${EndPoints.baseUrl}Notification/NotificationList?CustomerID=${Routes.customerid}&countryID=$countryid',
     );
 
     log(await response.body);
@@ -30,8 +35,12 @@ class NotifcationRespo {
   }
 
   Future Deleteall() async {
+    var countryid = CacheHelper.getDataToSharedPref(
+          key: 'countryid',
+        ) ??
+        1;
     final response = await apiConsumer.get(
-      '${EndPoints.baseUrl}Notification/DeleteAll?CustomerID=${Routes.customerid}',
+      '${EndPoints.baseUrl}Notification/DeleteAll?CustomerID=${Routes.customerid}&countryID=$countryid',
     );
 
     log(await response.body);

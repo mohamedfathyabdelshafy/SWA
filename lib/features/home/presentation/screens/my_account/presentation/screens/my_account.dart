@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swa/config/routes/app_routes.dart';
+import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
@@ -39,8 +40,7 @@ class MyAccountScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Directionality(
-        textDirection:
-            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+        textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Column(
@@ -50,18 +50,14 @@ class MyAccountScreen extends StatelessWidget {
                 height: sizeHeight * 0.08,
               ),
               Container(
-                alignment: LanguageClass.isEnglish
-                    ? Alignment.topLeft
-                    : Alignment.topRight,
+                alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                 child: InkWell(
                   onTap: () {
                     Navigator.pop(context);
                   },
                   child: Icon(
                     Icons.arrow_back_rounded,
-                    color: Routes.isomra
-                        ? AppColors.umragold
-                        : AppColors.primaryColor,
+                    color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                     size: 35,
                   ),
                 ),
@@ -99,26 +95,19 @@ class MyAccountScreen extends StatelessWidget {
                                   builder: (context) => MultiBlocProvider(
                                           providers: [
                                             BlocProvider<PersonalInfoCubit>(
-                                              create: (context) =>
-                                                  PersonalInfoCubit(),
+                                              create: (context) => PersonalInfoCubit(),
                                             ),
-                                            BlocProvider<
-                                                    GetAvailableCountriesCubit>(
-                                                create: (context) => sl<
-                                                    GetAvailableCountriesCubit>()),
-                                            BlocProvider<
-                                                    GetAvailableCountryCitiesCubit>(
-                                                create: (context) => sl<
-                                                    GetAvailableCountryCitiesCubit>()),
+                                            BlocProvider<GetAvailableCountriesCubit>(
+                                                create: (context) => sl<GetAvailableCountriesCubit>()),
+                                            BlocProvider<GetAvailableCountryCitiesCubit>(
+                                                create: (context) => sl<GetAvailableCountryCitiesCubit>()),
                                           ],
                                           child: PersonalInfoScreen(
                                             user: user,
                                           ))));
                         },
                         child: customText(
-                          LanguageClass.isEnglish
-                              ? "Personal Info"
-                              : "معلومات شخصية",
+                          LanguageClass.isEnglish ? "Personal Info" : "معلومات شخصية",
                         )),
                     Divider(
                       color: Colors.black,
@@ -128,8 +117,7 @@ class MyAccountScreen extends StatelessWidget {
                     ),
                     InkWell(
                         onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) {
                             return BlocProvider<ChangePasswordCubit>(
                               create: (context) => ChangePasswordCubit(),
                               child: ChangePassword(
@@ -138,9 +126,7 @@ class MyAccountScreen extends StatelessWidget {
                             );
                           }));
                         },
-                        child: customText(LanguageClass.isEnglish
-                            ? "Change Password"
-                            : "تغير كلمة المرور")),
+                        child: customText(LanguageClass.isEnglish ? "Change Password" : "تغير كلمة المرور")),
                     Divider(
                       color: Colors.black,
                     ),
@@ -148,8 +134,9 @@ class MyAccountScreen extends StatelessWidget {
                       height: 10,
                     ),
                     InkWell(
-                        onTap: () {
+                        onTap: () async {
                           loginLocalDataSource.clearUserData();
+                          await CacheHelper.deleteDataToSharedPref(key: "cards");
 
                           Routes.customerid = null;
                           Routes.user = null;
@@ -160,8 +147,7 @@ class MyAccountScreen extends StatelessWidget {
                             (Route<dynamic> route) => false,
                           );
                         },
-                        child: customText(
-                            LanguageClass.isEnglish ? "Logout" : "خروج")),
+                        child: customText(LanguageClass.isEnglish ? "Logout" : "خروج")),
                     Divider(
                       color: Colors.black,
                     ),
@@ -179,15 +165,11 @@ class MyAccountScreen extends StatelessWidget {
                                 ),
                                 backgroundColor: AppColors.darkPurple,
                                 title: Text(
-                                  LanguageClass.isEnglish
-                                      ? "Delete Account"
-                                      : "حذف الحساب",
+                                  LanguageClass.isEnglish ? "Delete Account" : "حذف الحساب",
                                   style: fontStyle(
                                       fontSize: 20,
                                       fontFamily: FontFamily.bold,
-                                      color: Routes.isomra
-                                          ? AppColors.umragold
-                                          : AppColors.primaryColor),
+                                      color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor),
                                 ),
                                 content: Text(
                                   LanguageClass.isEnglish
@@ -202,28 +184,21 @@ class MyAccountScreen extends StatelessWidget {
                                 actions: [
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(); // Close the dialog
+                                      Navigator.of(context).pop(); // Close the dialog
                                     },
                                     child: Text(
-                                      LanguageClass.isEnglish
-                                          ? "Cancel"
-                                          : "الغاء",
+                                      LanguageClass.isEnglish ? "Cancel" : "الغاء",
                                       style: fontStyle(
                                         fontSize: 18,
-                                        color: Routes.isomra
-                                            ? AppColors.umragold
-                                            : AppColors.primaryColor,
+                                        color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                                         fontFamily: FontFamily.bold,
                                       ),
                                     ),
                                   ),
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(); // Close the dialog
-                                      userdelete
-                                          .deleteuserfun(user.customerId!);
+                                      Navigator.of(context).pop(); // Close the dialog
+                                      userdelete.deleteuserfun(user.customerId!);
                                       loginLocalDataSource.clearUserData();
                                       Navigator.pushNamedAndRemoveUntil(
                                         context,
@@ -235,9 +210,7 @@ class MyAccountScreen extends StatelessWidget {
                                       LanguageClass.isEnglish ? "OK" : "موافقة",
                                       style: fontStyle(
                                         fontSize: 18,
-                                        color: Routes.isomra
-                                            ? AppColors.umragold
-                                            : AppColors.primaryColor,
+                                        color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                                         fontFamily: FontFamily.bold,
                                       ),
                                     ),
@@ -247,9 +220,7 @@ class MyAccountScreen extends StatelessWidget {
                             },
                           );
                         },
-                        child: customText(LanguageClass.isEnglish
-                            ? "Delete account"
-                            : "حذف الحساب")),
+                        child: customText(LanguageClass.isEnglish ? "Delete account" : "حذف الحساب")),
                   ],
                 ),
               ),
@@ -264,8 +235,7 @@ class MyAccountScreen extends StatelessWidget {
   Widget customText(text) {
     return Text(
       text,
-      style: fontStyle(
-          color: Colors.black, fontSize: 18, fontFamily: FontFamily.medium),
+      style: fontStyle(color: Colors.black, fontSize: 18, fontFamily: FontFamily.medium),
     );
   }
 }

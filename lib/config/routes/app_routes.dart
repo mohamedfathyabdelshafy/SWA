@@ -54,14 +54,14 @@ class Routes {
 
 // static const String homeRoute = '/home';
 
-  static String countryname = 'Eg';
+  static String countryname = 'Sa';
 
-  static String country = 'Egypt';
+  static String country = 'Saudi Arabia';
 
   static String emailaddress = '';
 
   static String? countryflag;
-  static String? curruncy, ToStationID, FromStationID;
+  static String? curruncy = 'SAR', ToStationID, FromStationID;
 
   static int? customerid;
   static User? user;

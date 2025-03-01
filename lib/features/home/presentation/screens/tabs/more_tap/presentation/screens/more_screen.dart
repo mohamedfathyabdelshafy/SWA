@@ -151,8 +151,9 @@ class _MoreScreenState extends State<MoreScreen> {
                                                         fontSize: 21)),
                                                 Text(
                                                   CacheHelper.getDataToSharedPref(
-                                                    key: 'curruncycode',
-                                                  ),
+                                                        key: 'curruncycode',
+                                                      ) ??
+                                                      Routes.curruncy,
                                                   style: fontStyle(
                                                       color: AppColors.blackColor,
                                                       fontFamily: FontFamily.medium,
@@ -337,8 +338,9 @@ class _MoreScreenState extends State<MoreScreen> {
                                                             width: 25,
                                                             child: Image.network(
                                                               CacheHelper.getDataToSharedPref(
-                                                                key: 'countryflag',
-                                                              ),
+                                                                    key: 'countryflag',
+                                                                  ) ??
+                                                                  Routes.countryflag,
                                                             ),
                                                           ),
                                                           SizedBox(
@@ -486,70 +488,72 @@ class _MoreScreenState extends State<MoreScreen> {
                                                         create: (context) => MoreCubit(), child: ContactUs());
                                                   }));
                                                 } else if (index == 0) {
-                                                  UmraDetails.isbusforumra = false;
-                                                  Navigator.pushNamedAndRemoveUntil(
-                                                      context, Routes.home, (route) => false,
-                                                      arguments: !Routes.isomra);
-                                                  Routes.isomra = !Routes.isomra;
+                                                  // UmraDetails.isbusforumra = false;
+                                                  // Navigator.pushNamedAndRemoveUntil(
+                                                  //     context, Routes.home, (route) => false,
+                                                  //     arguments: !Routes.isomra);
+                                                  // Routes.isomra = !Routes.isomra;
                                                 }
                                               },
                                               child: Container(
                                                 padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                                                 child: index == 0
-                                                    ? Routes.isomra
-                                                        ? Container(
-                                                            child: Row(
-                                                              mainAxisAlignment: MainAxisAlignment.start,
-                                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                                              children: [
-                                                                Text(
-                                                                  LanguageClass.isEnglish ? "Swa Bus" : "سوا  باص",
-                                                                  style: fontStyle(
-                                                                      color: Colors.black,
-                                                                      fontSize: 18,
-                                                                      fontFamily: FontFamily.medium),
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Container(
-                                                                    width: 40,
-                                                                    alignment: Alignment.center,
-                                                                    padding: const EdgeInsets.all(5),
-                                                                    decoration: BoxDecoration(
-                                                                      color: AppColors.white,
-                                                                    ),
-                                                                    child: SvgPicture.asset(
-                                                                        'assets/images/Icon awesome-bus-alt.svg')),
-                                                              ],
-                                                            ),
-                                                          )
-                                                        : Container(
-                                                            child: Row(
-                                                              mainAxisAlignment: MainAxisAlignment.start,
-                                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                                              children: [
-                                                                Text(
-                                                                  LanguageClass.isEnglish ? "Swa Umrah" : "سوا عمرة",
-                                                                  style: fontStyle(
-                                                                      color: Colors.black,
-                                                                      fontSize: 18,
-                                                                      fontFamily: FontFamily.medium),
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Container(
-                                                                    height: 30,
-                                                                    alignment: Alignment.center,
-                                                                    padding: const EdgeInsets.all(5),
-                                                                    decoration: BoxDecoration(
-                                                                      color: AppColors.white,
-                                                                    ),
-                                                                    child: Image.asset('assets/images/umrah.png')),
-                                                              ],
-                                                            ),
-                                                          )
+                                                    ? SizedBox()
+
+                                                    // Routes.isomra
+                                                    //     ? Container(
+                                                    //         child: Row(
+                                                    //           mainAxisAlignment: MainAxisAlignment.start,
+                                                    //           crossAxisAlignment: CrossAxisAlignment.center,
+                                                    //           children: [
+                                                    //             Text(
+                                                    //               LanguageClass.isEnglish ? "Swa Bus" : "سوا  باص",
+                                                    //               style: fontStyle(
+                                                    //                   color: Colors.black,
+                                                    //                   fontSize: 18,
+                                                    //                   fontFamily: FontFamily.medium),
+                                                    //             ),
+                                                    //             SizedBox(
+                                                    //               width: 10,
+                                                    //             ),
+                                                    //             Container(
+                                                    //                 width: 40,
+                                                    //                 alignment: Alignment.center,
+                                                    //                 padding: const EdgeInsets.all(5),
+                                                    //                 decoration: BoxDecoration(
+                                                    //                   color: AppColors.white,
+                                                    //                 ),
+                                                    //                 child: SvgPicture.asset(
+                                                    //                     'assets/images/Icon awesome-bus-alt.svg')),
+                                                    //           ],
+                                                    //         ),
+                                                    //       )
+                                                    //     : Container(
+                                                    //         child: Row(
+                                                    //           mainAxisAlignment: MainAxisAlignment.start,
+                                                    //           crossAxisAlignment: CrossAxisAlignment.center,
+                                                    //           children: [
+                                                    //             Text(
+                                                    //               LanguageClass.isEnglish ? "Swa Umrah" : "سوا عمرة",
+                                                    //               style: fontStyle(
+                                                    //                   color: Colors.black,
+                                                    //                   fontSize: 18,
+                                                    //                   fontFamily: FontFamily.medium),
+                                                    //             ),
+                                                    //             SizedBox(
+                                                    //               width: 10,
+                                                    //             ),
+                                                    //             Container(
+                                                    //                 height: 30,
+                                                    //                 alignment: Alignment.center,
+                                                    //                 padding: const EdgeInsets.all(5),
+                                                    //                 decoration: BoxDecoration(
+                                                    //                   color: AppColors.white,
+                                                    //                 ),
+                                                    //                 child: Image.asset('assets/images/umrah.png')),
+                                                    //           ],
+                                                    //         ),
+                                                    //       )
                                                     : Text(
                                                         index == 1
                                                             ? LanguageClass.isEnglish

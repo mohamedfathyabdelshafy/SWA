@@ -1,7 +1,7 @@
 class EndPoints {
-  // static const String baseUrl = 'https://api.swabus.com/api/';
+  static const String baseUrl = 'https://api.swabus.com/api/';
   // static const String baseUrl = 'http://testapi.swabus.com/api/';
-  static const String baseUrl = 'https://swaapi.dmj-salek-admin.com/api/';
+  // static const String baseUrl = 'https://swaapi.dmj-salek-admin.com/api/';
 
   static const String register = '${baseUrl}Customer/AddCustomer';
   static const String login = '${baseUrl}Accounts/Login';
@@ -33,7 +33,7 @@ class EndPoints {
   static const String privacy = '${baseUrl}Settings/PrivacyPolicyList';
   static const String sendEmail = '${baseUrl}Settings/SubmitContactUsMessage';
 
-  static const String huaweiVersion = "1.2.3";
-  static const String playStoreVersion = "1.2.3";
-  static const String iosVersion = "2.1.1";
+  static const String huaweiVersion = "1.2.4";
+  static const String playStoreVersion = "1.2.4";
+  static const String iosVersion = "2.1.2";
 }

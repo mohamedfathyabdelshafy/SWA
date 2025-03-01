@@ -82,6 +82,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
   String promocodid = '';
   bool ihaveprocode = false;
   double afterdiscount = 0;
+
   double afterdiscount2 = 0;
 
   PackagesBloc _packagesBloc = new PackagesBloc();
@@ -139,7 +140,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
 
             Routes.PromoCodeID = state.promocodemodel!.message!.promoCodeId.toString();
 
-            if (widget.tripTypeId == '2') {
+            if (widget.tripTypeId == '2' && state.promocodemodel!.message!.isPrecentage == false) {
               discount = discount / 2;
 
               Routes.discount = discount;
@@ -316,7 +317,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                       )),
 
                                       Text(
-                                        "${Routes.curruncy ?? ""} $afterdiscount",
+                                        "${Routes.curruncy ?? ""} $realprice",
                                         style:
                                             fontStyle(color: Colors.white, fontFamily: FontFamily.bold, fontSize: 16),
                                       ),
@@ -479,7 +480,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                     height: 10,
                                   ),
                                   Container(
-                                    alignment: Alignment.centerRight,
+                                    alignment: Alignment.centerLeft,
                                     child: InkWell(
                                       onTap: () {
                                         if (widget.tripTypeId == '2') {
@@ -507,6 +508,9 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                           ).then((value) {
                                             afterdiscount =
                                                 (Ticketreservation.countSeats1.length * Ticketreservation.priceticket1);
+
+                                            realprice =
+                                                (Ticketreservation.countSeats1.length * Ticketreservation.priceticket1);
                                             ihaveprocode = false;
                                             setState(() {});
 
@@ -529,7 +533,8 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                           LanguageClass.isEnglish ? 'Edit ' : 'تعديل ',
                                           style: fontStyle(
                                             color: AppColors.primaryColor,
-                                            fontFamily: FontFamily.bold,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontFamily.medium,
                                             fontSize: 12.sp,
                                           ),
                                         ),
@@ -653,7 +658,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                               ],
                                             )),
                                             Text(
-                                              "${Routes.curruncy ?? ""} $afterdiscount2",
+                                              "${Routes.curruncy ?? ""} $realprice2",
                                               style: fontStyle(
                                                   color: Colors.white, fontFamily: FontFamily.medium, fontSize: 16.sp),
                                             ),
@@ -824,7 +829,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                           height: 10,
                                         ),
                                         Container(
-                                          alignment: Alignment.centerRight,
+                                          alignment: Alignment.centerLeft,
                                           child: InkWell(
                                             onTap: () {
                                               Navigator.push(
@@ -857,6 +862,8 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                             ))),
                                               ).then((value) {
                                                 afterdiscount2 = (Ticketreservation.countSeats2.length *
+                                                    Ticketreservation.priceticket2);
+                                                realprice2 = (Ticketreservation.countSeats2.length *
                                                     Ticketreservation.priceticket2);
                                                 ihaveprocode = false;
                                                 setState(() {});
@@ -1105,9 +1112,33 @@ class _ReservationTicketState extends State<ReservationTicket> {
                         SizedBox(
                           height: 20,
                         ),
-                        SizedBox(
-                          height: 10,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              LanguageClass.isEnglish ? 'Price' : "السعر ",
+                              textAlign: TextAlign.center,
+                              style: fontStyle(
+                                  color: Colors.black,
+                                  fontFamily: FontFamily.medium,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              widget.tripTypeId == '2'
+                                  ? "  ${realprice + realprice2} ${Routes.curruncy ?? ""}"
+                                  : "  $realprice ${Routes.curruncy ?? ""}",
+                              textAlign: TextAlign.center,
+                              style: fontStyle(
+                                  color: AppColors.blackColor,
+                                  fontFamily: FontFamily.bold,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
+                        10.verticalSpace,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -1136,9 +1167,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: 30,
-                        ),
+                        10.verticalSpace,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,

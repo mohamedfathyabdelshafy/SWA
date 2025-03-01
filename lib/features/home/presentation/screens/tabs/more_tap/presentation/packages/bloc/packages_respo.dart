@@ -44,33 +44,38 @@ class PackagesRespo {
   }
 
   Future checkversion() async {
-    GooglePlayServicesAvailability availability =
-        await GoogleApiAvailability.instance.checkGooglePlayServicesAvailability();
+    try {
+      GooglePlayServicesAvailability availability =
+          await GoogleApiAvailability.instance.checkGooglePlayServicesAvailability();
 
-    log(availability.toString());
+      log(availability.toString());
 
-    //17 android 18 ios 19 huawei
-    String typeID = Platform.isIOS
-        ? "18"
-        : availability == GooglePlayServicesAvailability.success
-            ? "17"
-            : "19";
-    String version = Platform.isIOS
-        ? EndPoints.iosVersion
-        : availability == GooglePlayServicesAvailability.success
-            ? EndPoints.playStoreVersion
-            : EndPoints.huaweiVersion;
+      //17 android 18 ios 19 huawei
+      String typeID = Platform.isIOS
+          ? "18"
+          : availability == GooglePlayServicesAvailability.success
+              ? "17"
+              : "19";
+      String version = Platform.isIOS
+          ? EndPoints.iosVersion
+          : availability == GooglePlayServicesAvailability.success
+              ? EndPoints.playStoreVersion
+              : EndPoints.huaweiVersion;
 
-    var response =
-        await apiConsumer.get("${EndPoints.baseUrl}UpdateVersions/CheckVersion?typeID=$typeID&version=$version");
-    log("${EndPoints.baseUrl}UpdateVersions/CheckVersion?typeID=$typeID&version=$version");
+      var response =
+          await apiConsumer.get("${EndPoints.baseUrl}UpdateVersions/CheckVersion?typeID=$typeID&version=$version");
+      log("${EndPoints.baseUrl}UpdateVersions/CheckVersion?typeID=$typeID&version=$version");
 
-    log(" response" + response.body);
-    var decode = json.decode(response.body);
+      log(" response" + response.body);
+      var decode = json.decode(response.body);
 
-    log('Ahmed ' + decode['status']);
+      log('Ahmed ' + decode['status']);
 
-    return decode['status'];
+      return decode['status'];
+    } catch (e) {
+      log('Error $e');
+      return 'failed';
+    }
   }
 
   Future getstationto({required String stationid}) async {
@@ -89,8 +94,9 @@ class PackagesRespo {
 
   Future selectapp() async {
     var countryid = CacheHelper.getDataToSharedPref(
-      key: 'countryid',
-    );
+          key: 'countryid',
+        ) ??
+        3;
 
     var response = await apiConsumer.get("${EndPoints.baseUrl}Settings/GetMainPage?countryID=$countryid");
 
@@ -134,9 +140,10 @@ class PackagesRespo {
           key: 'countryid',
         ) ??
         1;
+    print("${EndPoints.baseUrl}GetAds/GetAds?countryID=$countryid&typeID=${Routes.isomra ? 2 : 1}");
 
     var response = await apiConsumer.get(
-      "${EndPoints.baseUrl}GetAds/GetAds?countryID=$countryid",
+      "${EndPoints.baseUrl}GetAds/GetAds?countryID=$countryid&typeID=${Routes.isomra ? 2 : 1}",
     );
 
     log("responce adv " + response.body.toString());
@@ -146,8 +153,12 @@ class PackagesRespo {
   }
 
   Future getadsfunc() async {
-    var response =
-        await apiConsumer.get("${EndPoints.baseUrl}ADCustomerAppWebView/GetAds?CustomerID=${Routes.customerid}");
+    var countryid = CacheHelper.getDataToSharedPref(
+          key: 'countryid',
+        ) ??
+        1;
+    var response = await apiConsumer.get(
+        "${EndPoints.baseUrl}ADCustomerAppWebView/GetAds?CustomerID=${Routes.customerid}&typeID=${Routes.isomra ? 2 : 1}");
 
     log('Atvertisment' + response.body);
     var decodedResponse = json.decode(response.body);

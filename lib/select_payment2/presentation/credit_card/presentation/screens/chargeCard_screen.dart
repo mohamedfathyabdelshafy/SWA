@@ -537,11 +537,11 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                       ));
 
                                       showDoneConfirmationDialog(context,
-                                          callbackTitle: "Go to OTP",
+                                          callbackTitle: LanguageClass.isEnglish ? "Go to OTP" : 'ادخل الرمز',
                                           isWarning: true,
                                           message: LanguageClass.isEnglish
                                               ? 'Complete the payment process'
-                                              : 'اكمل عملية الدفع', callback: () {
+                                              : 'قم باستكمال عملية الدفع', callback: () {
                                         // NavHelper().goBack();
                                       });
                                     } else if (state is ErrorCreditCardState) {
@@ -795,11 +795,11 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
           IconButton(
               onPressed: () {
                 // NavHelper().navigate();
-                // Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false, arguments: Routes.isomra);
+                Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false, arguments: Routes.isomra);
               },
               icon: Icon(
                 Icons.home_outlined,
-                color: AppColors.white,
+                color: Colors.white,
                 size: 35,
               ))
         ],
@@ -810,7 +810,6 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
           child: WebViewWidget(
               controller: controller
                 ..setJavaScriptMode(JavaScriptMode.unrestricted)
-                ..setBackgroundColor(const Color(0x00000000))
                 ..setNavigationDelegate(
                   NavigationDelegate(
                     onProgress: (int progress) {

@@ -55,9 +55,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController idcontroller = TextEditingController();
 
   Country? _selectedCountry;
-
-  String selectedcode = '+20';
+  bool isloading = false;
+  String selectedcode = '+966';
   PhonecountrycodeModel phonecountrycodeModel = PhonecountrycodeModel(codelist: []);
+  List<Codelist>? fixedcodelist = [];
   City? _selectedCity;
   IdentificationTypeModel? docType;
   List<documentdetails> documentDaata = [];
@@ -74,7 +75,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     BlocProvider.of<GetAvailableCountriesCubit>(context).getAvailableCountries();
 
     BlocProvider.of<RegisterCubit>(context).GetIdentificationType();
-    BlocProvider.of<RegisterCubit>(context).getphonecode();
   }
 
   @override
@@ -85,9 +85,167 @@ class _SignUpScreenState extends State<SignUpScreen> {
       listener: (context, state) {
         if (state is phonecodeState) {
           phonecountrycodeModel = state.phonecountrycodeModel;
-          phonecountrycodeModel.codelist?.forEach((element) {
-            log(" phonecountrycodeModel ${element.code}");
-          });
+          fixedcodelist = state.phonecountrycodeModel.codelist;
+          isloading = false;
+
+          showModalBottomSheet(
+              context: context,
+              isDismissible: true,
+              enableDrag: true,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              barrierColor: Colors.black.withOpacity(0.5),
+              useRootNavigator: true,
+              builder: (context) {
+                TextEditingController _searchController = TextEditingController();
+                return StatefulBuilder(builder: (buildContext, StateSetter setStater /*You can rename this!*/) {
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: GestureDetector(
+                      onTap: () {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height * 0.7,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.only(topLeft: Radius.circular(24), topRight: Radius.circular(24))),
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              alignment: Alignment.center,
+                              child: Container(
+                                margin: EdgeInsets.symmetric(vertical: 3),
+                                height: 6,
+                                width: 64.w,
+                                decoration:
+                                    BoxDecoration(color: AppColors.grey, borderRadius: BorderRadius.circular(5)),
+                              ),
+                            ),
+                            24.verticalSpace,
+
+                            Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 20),
+                              child: Text(
+                                LanguageClass.isEnglish ? "Select country code" : "حدد رمز الدولة",
+                                style: fontStyle(
+                                    color: AppColors.blackColor,
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: FontFamily.medium),
+                              ),
+                            ),
+                            SizedBox(
+                              height: sizeHeight * 0.01,
+                            ),
+                            // Search Bar
+                            Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[100],
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: TextField(
+                                controller: _searchController,
+                                onChanged: (value) {
+                                  final list2 = fixedcodelist!.where((element) {
+                                    final title = element.name!.toLowerCase();
+                                    final code = element.code!.toLowerCase();
+
+                                    final searc = value.toLowerCase();
+                                    return title.contains(searc) || code.contains(searc);
+                                  }).toList();
+
+                                  setStater(() {
+                                    phonecountrycodeModel.codelist = list2;
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  hintText: LanguageClass.isEnglish ? "Search code" : "ابحث عن رمز",
+                                  prefixIcon: Icon(
+                                    Icons.search,
+                                    color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
+                                  ),
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.symmetric(vertical: 15),
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              child: ListView.builder(
+                                itemCount: phonecountrycodeModel.codelist!.length,
+                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                shrinkWrap: true,
+                                physics: ScrollPhysics(),
+                                itemBuilder: (BuildContext context, int index2) {
+                                  return InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        selectedcode = phonecountrycodeModel.codelist![index2].code!;
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              bottom: BorderSide(
+                                        color: AppColors.grey,
+                                      ))),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  margin: EdgeInsets.symmetric(vertical: 5),
+                                                  child: FittedBox(
+                                                      fit: BoxFit.scaleDown,
+                                                      child: Text(phonecountrycodeModel.codelist![index2].name!,
+                                                          style: fontStyle(
+                                                              fontSize: 16,
+                                                              fontFamily: FontFamily.bold,
+                                                              fontWeight: FontWeight.w500,
+                                                              color: Colors.black))),
+                                                ),
+                                                Container(
+                                                  child: Text(phonecountrycodeModel.codelist![index2].code!,
+                                                      style: fontStyle(
+                                                          fontSize: 14,
+                                                          fontFamily: FontFamily.bold,
+                                                          fontWeight: FontWeight.w400,
+                                                          color: Colors.black54)),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons.arrow_forward_ios_rounded,
+                                            color: AppColors.umragold,
+                                            size: 15,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            16.verticalSpace,
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                });
+              });
         } else if (state is TextfiedidState) {
           idtextfieldmodel = state.idtextfieldmodel;
         } else if (state is DocumenttypeState) {
@@ -100,6 +258,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
           Navigator.pushReplacementNamed(context, Routes.signInRoute);
         } else if (state is RegisterErrorState) {
+          isloading = false;
+
           Constants.showDefaultSnackBar(context: context, text: state.error.toString());
         }
       },
@@ -168,11 +328,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 hintText: '',
                                 controller: nameController,
                                 validator: (validator) {
-                                  return RegExp(r'^[a-zA-Z\u0600-\u06FF]+$').hasMatch(validator ?? '')
-                                      ? null
-                                      : LanguageClass.isEnglish
+                                  return validator == ''
+                                      ? LanguageClass.isEnglish
                                           ? "Enter a valid name"
-                                          : "ادخل الاسم الصحيح";
+                                          : "ادخل الاسم الصحيح"
+                                      : null;
                                 },
                               ),
                               SizedBox(
@@ -191,174 +351,65 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                               ),
 
-                              CustomizedField(
-                                colorText: Colors.black,
-                                borderradias: 33,
-                                isPassword: false,
-                                obscureText: false,
-                                prefixIcon: Container(
-                                  margin: EdgeInsetsDirectional.only(end: 10),
-                                  child: InkWell(
-                                    onTap: () {
-                                      showModalBottomSheet(
-                                          context: context,
-                                          isDismissible: true,
-                                          enableDrag: true,
-                                          isScrollControlled: true,
-                                          backgroundColor: Colors.transparent,
-                                          barrierColor: Colors.black.withOpacity(0.5),
-                                          useRootNavigator: true,
-                                          builder: (context) {
-                                            return StatefulBuilder(builder:
-                                                (buildContext, StateSetter setStater /*You can rename this!*/) {
-                                              return Padding(
-                                                padding:
-                                                    EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    FocusScope.of(context).requestFocus(new FocusNode());
-                                                  },
-                                                  child: Container(
-                                                    width: double.infinity,
-                                                    height: MediaQuery.of(context).size.height * 0.7,
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius: BorderRadius.only(
-                                                            topLeft: Radius.circular(24),
-                                                            topRight: Radius.circular(24))),
-                                                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                                                    child: Column(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: [
-                                                        Container(
-                                                          alignment: Alignment.center,
-                                                          child: Container(
-                                                            margin: EdgeInsets.symmetric(vertical: 3),
-                                                            height: 6,
-                                                            width: 64.w,
-                                                            decoration: BoxDecoration(
-                                                                color: AppColors.grey,
-                                                                borderRadius: BorderRadius.circular(5)),
-                                                          ),
-                                                        ),
-                                                        24.verticalSpace,
-                                                        Flexible(
-                                                          child: ListView.builder(
-                                                            itemCount: phonecountrycodeModel.codelist!.length,
-                                                            padding: EdgeInsets.symmetric(horizontal: 5),
-                                                            shrinkWrap: true,
-                                                            physics: ScrollPhysics(),
-                                                            itemBuilder: (BuildContext context, int index2) {
-                                                              return InkWell(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    selectedcode =
-                                                                        phonecountrycodeModel.codelist![index2].code!;
-                                                                  });
-                                                                  Navigator.pop(context);
-                                                                },
-                                                                child: Container(
-                                                                  decoration: BoxDecoration(
-                                                                      border: Border(
-                                                                          bottom: BorderSide(
-                                                                    color: AppColors.grey,
-                                                                  ))),
-                                                                  child: Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                                    children: [
-                                                                      Expanded(
-                                                                        child: Column(
-                                                                          mainAxisAlignment: MainAxisAlignment.start,
-                                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                                          children: [
-                                                                            Container(
-                                                                              margin: EdgeInsets.symmetric(vertical: 5),
-                                                                              child: FittedBox(
-                                                                                  fit: BoxFit.scaleDown,
-                                                                                  child: Text(
-                                                                                      phonecountrycodeModel
-                                                                                          .codelist![index2].name!,
-                                                                                      style: fontStyle(
-                                                                                          fontSize: 16,
-                                                                                          fontFamily: FontFamily.bold,
-                                                                                          fontWeight: FontWeight.w500,
-                                                                                          color: Colors.black))),
-                                                                            ),
-                                                                            Container(
-                                                                              child: Text(
-                                                                                  phonecountrycodeModel
-                                                                                      .codelist![index2].code!,
-                                                                                  style: fontStyle(
-                                                                                      fontSize: 14,
-                                                                                      fontFamily: FontFamily.bold,
-                                                                                      fontWeight: FontWeight.w400,
-                                                                                      color: Colors.black54)),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                      Icon(
-                                                                        Icons.arrow_forward_ios_rounded,
-                                                                        color: AppColors.umragold,
-                                                                        size: 15,
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            },
-                                                          ),
-                                                        ),
-                                                        16.verticalSpace,
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            });
+                              isloading
+                                  ? Center(child: CircularProgressIndicator())
+                                  : Directionality(
+                                      textDirection: TextDirection.ltr,
+                                      child: CustomizedField(
+                                        colorText: Colors.black,
+                                        borderradias: 33,
+                                        isPassword: false,
+                                        obscureText: false,
+                                        prefixIcon: Container(
+                                          margin: EdgeInsetsDirectional.only(end: 10),
+                                          child: InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                isloading = true;
+                                              });
+                                              BlocProvider.of<RegisterCubit>(context).getphonecode();
+                                            },
+                                            child: Container(
+                                              width: 80.w,
+                                              height: 60.h,
+                                              padding: EdgeInsetsDirectional.only(end: 10),
+                                              margin: EdgeInsetsDirectional.only(start: 1.1.w),
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                  color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
+                                                  borderRadius: BorderRadius.circular(33)),
+                                              child: Text(
+                                                selectedcode,
+                                                style: fontStyle(
+                                                    color: Colors.black, fontFamily: FontFamily.bold, fontSize: 16.sp),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        color: Color(0xffDDDDDD),
+                                        hintText: "",
+                                        controller: mobileController,
+                                        keyboardType: TextInputType.number,
+                                        validator: (validator) {
+                                          sl<PhoneNumberValidatorService>()
+                                              .isValid(selectedcode, validator ?? "")
+                                              .then((isValid) {
+                                            final hasValidationStateChanged = isPhoneValid != isValid;
+                                            isPhoneValid = isValid;
+                                            if (hasValidationStateChanged) setState(() {});
                                           });
-                                    },
-                                    child: Container(
-                                      width: 80.w,
-                                      height: 60.h,
-                                      padding: EdgeInsetsDirectional.only(end: 10),
-                                      margin: EdgeInsetsDirectional.only(start: 1.1.w),
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
-                                          borderRadius: BorderRadius.circular(33)),
-                                      child: Text(
-                                        selectedcode,
-                                        style: fontStyle(
-                                            color: Colors.black, fontFamily: FontFamily.bold, fontSize: 16.sp),
+
+                                          if (validator == null || validator.isEmpty) {
+                                            return LanguageClass.isEnglish ? "Enter phone" : "ادخل الموبيل";
+                                          }
+                                          return isPhoneValid
+                                              ? null
+                                              : LanguageClass.isEnglish
+                                                  ? "Enter a valid phone number"
+                                                  : "ادخل رقم الموبيل الصحيح";
+                                        },
                                       ),
                                     ),
-                                  ),
-                                ),
-                                color: Color(0xffDDDDDD),
-                                hintText: "",
-                                controller: mobileController,
-                                keyboardType: TextInputType.number,
-                                validator: (validator) {
-                                  sl<PhoneNumberValidatorService>()
-                                      .isValid(selectedcode, validator ?? "")
-                                      .then((isValid) {
-                                    final hasValidationStateChanged = isPhoneValid != isValid;
-                                    isPhoneValid = isValid;
-                                    if (hasValidationStateChanged) setState(() {});
-                                  });
-
-                                  if (validator == null || validator.isEmpty) {
-                                    return LanguageClass.isEnglish ? "Enter phone" : "ادخل الموبيل";
-                                  }
-                                  return isPhoneValid
-                                      ? null
-                                      : LanguageClass.isEnglish
-                                          ? "Enter a valid phone number"
-                                          : "ادخل رقم الموبيل الصحيح";
-                                },
-                              ),
                               SizedBox(
                                 height: 10,
                               ),
