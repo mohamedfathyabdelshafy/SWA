@@ -34,11 +34,6 @@ Future<Position> determinePosition() async {
   if (permission == LocationPermission.deniedForever) {
     // Permissions are denied forever, handle appropriately.
     print('Location permissions are permanently denied, we cannot request permissions. ');
-    CacheHelper.setDataToSharedPref(
-      key: 'countryflag',
-      value: 'https://swabus.com/Content/Dashboard/LTR/assets/img/Saudi.png',
-    );
-    CacheHelper.setDataToSharedPref(key: 'countryid', value: '3');
   }
 
   // When we reach here, permissions are granted and we can

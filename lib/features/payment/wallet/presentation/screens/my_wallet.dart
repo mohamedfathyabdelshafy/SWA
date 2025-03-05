@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,15 +27,20 @@ class _MyCreditState extends State<MyCredit> {
   // MyWalletResponseModel? myWalletResponseModel;
   // MyWalletRepo myWalletRepo = MyWalletRepo(sl());
 
-  int? countryid;
+  var countryid;
 
   @override
   void initState() {
     super.initState();
-    context.read<WalletCubit>().getUserWallet(widget.user?.customerId);
+
+    if (widget.user != null) {
+      context.read<WalletCubit>().getUserWallet(widget.user!.customerId);
+    }
     countryid = CacheHelper.getDataToSharedPref(
       key: 'countryid',
     );
+
+    log(countryid.toString());
   }
 
   @override
@@ -89,7 +96,9 @@ class _MyCreditState extends State<MyCredit> {
                     ),
                     InkWell(
                       onTap: () {
-                        context.read<WalletCubit>().getUserWallet(widget.user!.customerId);
+                        if (widget.user != null) {
+                          context.read<WalletCubit>().getUserWallet(widget.user!.customerId);
+                        }
                       },
                       child: Icon(
                         Icons.refresh,

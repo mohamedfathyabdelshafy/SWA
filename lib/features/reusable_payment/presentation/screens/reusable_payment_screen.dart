@@ -17,6 +17,7 @@ class ReusablePaymentMethodSelectionScreen extends StatefulWidget {
   final void Function(BuildContext context) onBackPressed;
   final void Function(BuildContext context)? onWalletPaymentPressed;
   final bool hasTimer;
+  final countryid;
   final bool hasWalletPayment;
   final double? walletBalance;
   final bool shouldHideOtherPaymentMethodsIfWalletSelected;
@@ -28,6 +29,7 @@ class ReusablePaymentMethodSelectionScreen extends StatefulWidget {
     super.key,
     required this.onBackPressed,
     this.onWalletPaymentPressed,
+    this.countryid,
     this.hasWalletPayment = false,
     this.shouldHideOtherPaymentMethodsIfWalletSelected = false,
     this.onVisaPaymentPressed,
@@ -76,6 +78,8 @@ class _ReusablePaymentMethodSelectionScreenState extends State<ReusablePaymentMe
     final bool showWallet =
         widget.shouldHideOtherPaymentMethodsIfWalletSelected ? isWalletSelected : widget.hasWalletPayment;
 
+    final bool showonlycard = widget.countryid == '3';
+
     return BlocBuilder<PaymentMethodsCubit, PaymentMethodsState>(
       builder: (context, state) {
         if (state.isLoading) return CircularProgressIndicator();
@@ -88,7 +92,13 @@ class _ReusablePaymentMethodSelectionScreenState extends State<ReusablePaymentMe
                     context, state.paymentMethods.firstWhere((e) => e.type == PaymentMethodType.wallet))
                 : Container(),
             if (!(widget.shouldHideOtherPaymentMethodsIfWalletSelected && isWalletSelected))
-              ...state.paymentMethods.map((e) => _buildPaymentMethod(e, context)),
+              ...state.paymentMethods.map((e) {
+                if (showonlycard) {
+                  return e.type == PaymentMethodType.creditCard ? _buildPaymentMethod(e, context) : Container();
+                } else {
+                  return _buildPaymentMethod(e, context);
+                }
+              }),
           ],
         );
       },

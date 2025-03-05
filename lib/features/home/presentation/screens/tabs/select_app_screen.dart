@@ -81,6 +81,8 @@ class _SelectappScreenState extends State<SelectappScreen> {
                     key: 'countryid',
                   );
 
+                  log('country state   $countryid ' + countryid.runtimeType.toString());
+
                   Routes.countryflag = CacheHelper.getDataToSharedPref(
                     key: 'countryflag',
                   );
@@ -112,7 +114,7 @@ class _SelectappScreenState extends State<SelectappScreen> {
                     }
                     setState(() {});
 
-                    CacheHelper.setDataToSharedPref(key: 'countryid', value: list2[0].countryId ?? '3');
+                    CacheHelper.setDataToSharedPref(key: 'countryid', value: list2[0].countryId ?? 3);
                     CacheHelper.setDataToSharedPref(key: 'countryflag', value: list2[0].Flag);
 
                     Routes.countryflag = list2[0].Flag;
@@ -145,7 +147,7 @@ class _SelectappScreenState extends State<SelectappScreen> {
                     }
                     setState(() {});
 
-                    CacheHelper.setDataToSharedPref(key: 'countryid', value: list2[0].countryId ?? '3');
+                    CacheHelper.setDataToSharedPref(key: 'countryid', value: list2[0].countryId ?? 3);
                     CacheHelper.setDataToSharedPref(key: 'countryflag', value: list2[0].Flag);
                     Routes.countryflag = list2[0].Flag;
                     Routes.countryflag = list2[0].Flag;
@@ -160,7 +162,7 @@ class _SelectappScreenState extends State<SelectappScreen> {
                       final title = element.countryId.toString();
 
                       final searc = countryid.toString();
-                      return title.contains(searc);
+                      return searc.contains(title);
                     }).toList();
                     Routes.curruncy = CacheHelper.getDataToSharedPref(
                           key: 'curruncycode',
@@ -168,7 +170,7 @@ class _SelectappScreenState extends State<SelectappScreen> {
                         list2[0].curruncy;
                     Routes.country = list2[0].countryName;
 
-                    log('location country selected ' + Routes.country.toString());
+                    log('location country selected ' + Routes.curruncy.toString());
                   }
                 }
               }),

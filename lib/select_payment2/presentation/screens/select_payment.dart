@@ -39,7 +39,7 @@ class SelectPaymentScreen2 extends StatefulWidget {
 }
 
 class _SelectPaymentScreen2State extends State<SelectPaymentScreen2> {
-  int? countryid;
+  var countryid;
   double balance = 0;
 
   getwalllet() async {
@@ -65,6 +65,7 @@ class _SelectPaymentScreen2State extends State<SelectPaymentScreen2> {
       child: BlocListener<ReservationCubit, ReservationStates>(
         listener: _handleListenner,
         child: ReusablePaymentMethodSelectionScreen(
+          countryid: countryid,
           onBackPressed: (context) => Navigator.pop(context),
           onElectronicWalletPressed: _onElectronicWalletPressed,
           onVisaPaymentPressed: _onVisaPaymentPressed,

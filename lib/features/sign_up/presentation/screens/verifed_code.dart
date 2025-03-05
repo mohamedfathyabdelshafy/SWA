@@ -48,6 +48,20 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     SizedBox(height: context.height * 0.05),
+                    Container(
+                      alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
+                      margin: EdgeInsets.symmetric(horizontal: 0),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
+                          size: 35,
+                        ),
+                      ),
+                    ),
                     SizedBox(height: context.height * 0.08),
                     Image.asset("assets/images/applogo.png"),
                     SizedBox(height: context.height * 0.1),

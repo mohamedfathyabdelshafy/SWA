@@ -270,7 +270,8 @@ class _MoreScreenState extends State<MoreScreen> {
                                                                                             key: 'countryid',
                                                                                             value: state
                                                                                                 .countries[index]
-                                                                                                .countryId,
+                                                                                                .countryId
+                                                                                                .toString(),
                                                                                           );
                                                                                           CacheHelper
                                                                                               .setDataToSharedPref(
@@ -406,6 +407,9 @@ class _MoreScreenState extends State<MoreScreen> {
                                                 setState(() {
                                                   dropdownValue = value!;
                                                 });
+
+                                                BlocProvider.of<GetAvailableCountriesCubit>(context)
+                                                    .getAvailableCountries();
                                               },
                                               items: list.map<DropdownMenuItem<String>>((String value) {
                                                 return DropdownMenuItem<String>(

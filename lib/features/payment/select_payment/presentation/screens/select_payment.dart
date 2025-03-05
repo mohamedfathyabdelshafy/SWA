@@ -21,7 +21,7 @@ class SelectPaymentScreen extends StatefulWidget {
 }
 
 class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
-  int? countryid;
+  var countryid;
 
   @override
   void initState() {
@@ -35,6 +35,7 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
   @override
   Widget build(BuildContext context) {
     return ReusablePaymentMethodSelectionScreen(
+      countryid: countryid,
       onBackPressed: _onBackPressed,
       onVisaPaymentPressed: _onVisaPaymentPressed,
       onElectronicWalletPressed: _onElectronicWalletPressed,

@@ -130,6 +130,11 @@ class _ReservationTicketState extends State<ReservationTicket> {
         listener: (context, PackagesState state) {
           if (state.promocodemodel?.status == 'failed') {
             _promocodetext.text = '';
+            discount = 0;
+            totaldiscount = 0;
+
+            afterdiscount = realprice;
+            afterdiscount2 = realprice2;
             Constants.showDefaultSnackBar(
                 color: Colors.red, context: context, text: state.promocodemodel!.errormessage ?? ' ');
           } else if (state.promocodemodel?.status == 'success') {
