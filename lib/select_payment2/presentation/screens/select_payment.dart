@@ -108,7 +108,72 @@ class _SelectPaymentScreen2State extends State<SelectPaymentScreen2> {
       Constants.showDefaultSnackBar(context: context, text: state.error);
     }
     if (state is ImageMyWalletState) {
-      _showImageDialog(context, state.message);
+      showGeneralDialog(
+        context: context,
+        pageBuilder: (BuildContext buildContext, Animation<double> animation,
+            Animation<double> secondaryAnimation) {
+          return StatefulBuilder(builder: (context, setStater) {
+            return Container(
+              color: Colors.transparent,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Material(
+                color: Colors.transparent,
+                elevation: 0,
+                child: InkWell(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height / 1.4,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Stack(
+                      alignment: Alignment.topCenter,
+                      children: [
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                          child: Image.network(
+                            state.message,
+                            height: MediaQuery.of(context).size.height / 1.4,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              width: 25,
+                              height: 25,
+                              decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(100)),
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          });
+        },
+      ).then((value) {
+        // This block will execute when the dialog is dismissed
+        Navigator.pushNamedAndRemoveUntil(
+            context, Routes.home, (route) => false,
+            arguments: Routes.isomra);
+      });
     } else if (state is ImageWithGiftMyWalletState) {
       late ConfettiController _controllerTopCenter;
       _controllerTopCenter =
@@ -201,7 +266,68 @@ class _SelectPaymentScreen2State extends State<SelectPaymentScreen2> {
             arguments: Routes.isomra);
       });
     } else if (state is ImageElectronicWalletState) {
-      _showImageDialog(context, state.message, onCloseCallback: () {
+      showGeneralDialog(
+        context: context,
+        pageBuilder: (BuildContext buildContext, Animation<double> animation,
+            Animation<double> secondaryAnimation) {
+          return StatefulBuilder(builder: (context, setStater) {
+            return Container(
+              color: Colors.transparent,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Material(
+                color: Colors.transparent,
+                elevation: 0,
+                child: InkWell(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height / 1.4,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Stack(
+                      alignment: Alignment.topCenter,
+                      children: [
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                          child: Image.network(
+                            state.message,
+                            height: MediaQuery.of(context).size.height / 1.4,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              width: 25,
+                              height: 25,
+                              decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(100)),
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          });
+        },
+      ).then((value) {
+        // This block will execute when the dialog is dismissed
         Navigator.pushNamedAndRemoveUntil(
             context, Routes.home, (route) => false,
             arguments: Routes.isomra);
@@ -298,7 +424,68 @@ class _SelectPaymentScreen2State extends State<SelectPaymentScreen2> {
             arguments: Routes.isomra);
       });
     } else if (state is ImageCreditCardState) {
-      _showImageDialog(context, state.message, onCloseCallback: () {
+      showGeneralDialog(
+        context: context,
+        pageBuilder: (BuildContext buildContext, Animation<double> animation,
+            Animation<double> secondaryAnimation) {
+          return StatefulBuilder(builder: (context, setStater) {
+            return Container(
+              color: Colors.transparent,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Material(
+                color: Colors.transparent,
+                elevation: 0,
+                child: InkWell(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height / 1.4,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Stack(
+                      alignment: Alignment.topCenter,
+                      children: [
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                          child: Image.network(
+                            state.message,
+                            height: MediaQuery.of(context).size.height / 1.4,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              width: 25,
+                              height: 25,
+                              decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(100)),
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          });
+        },
+      ).then((value) {
+        // This block will execute when the dialog is dismissed
         Navigator.pushNamedAndRemoveUntil(
             context, Routes.home, (route) => false,
             arguments: Routes.isomra);
