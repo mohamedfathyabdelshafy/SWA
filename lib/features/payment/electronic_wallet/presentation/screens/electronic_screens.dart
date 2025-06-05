@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:confetti/confetti.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -15,6 +18,7 @@ import 'package:swa/features/payment/electronic_wallet/presentation/cubit/eWalle
 import 'package:swa/features/payment/fawry/presentation/screens/fawry.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AddWalletBalanceWithElectronicWalletScreen extends StatefulWidget {
   const AddWalletBalanceWithElectronicWalletScreen({super.key});
@@ -394,12 +398,127 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                                 );
                               } else if (state is EWalletImageState) {
                                 Constants.hideLoadingDialog(context);
-                                _showImageDialog(context, state.message);
+                                _showImageDialog(context, state.message,
+                                    onCloseCallback: () {});
                               } else if (state is EWalletImageWithGiftState) {
                                 Constants.hideLoadingDialog(context);
                                 // You might want a different dialog for gift images
-                                _showImageDialog(context, state.message,
-                                    hasGift: true);
+                                late ConfettiController _controllerTopCenter;
+                                _controllerTopCenter = ConfettiController(
+                                    duration: const Duration(seconds: 3));
+
+                                showGeneralDialog(
+                                  context: context,
+                                  pageBuilder: (BuildContext buildContext,
+                                      Animation<double> animation,
+                                      Animation<double> secondaryAnimation) {
+                                    return StatefulBuilder(
+                                        builder: (context, setStater) {
+                                      _controllerTopCenter.play();
+
+                                      return Container(
+                                        color: Colors.transparent,
+                                        height:
+                                            MediaQuery.of(context).size.height,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        alignment: Alignment.center,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          elevation: 0,
+                                          child: InkWell(
+                                            child: Container(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height /
+                                                  1.4,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Stack(
+                                                alignment: Alignment.topCenter,
+                                                children: [
+                                                  Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 10,
+                                                            horizontal: 5),
+                                                    child: Image.network(
+                                                      state.message,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height /
+                                                              1.4,
+                                                      fit: BoxFit.fill,
+                                                    ),
+                                                  ),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topCenter,
+                                                    child: ConfettiWidget(
+                                                      shouldLoop: false,
+                                                      confettiController:
+                                                          _controllerTopCenter,
+                                                      blastDirection: pi,
+                                                      maxBlastForce:
+                                                          2, // set a lower max blast force
+                                                      minBlastForce:
+                                                          1, // set a lower min blast force
+                                                      emissionFrequency: 0.05,
+                                                      blastDirectionality:
+                                                          BlastDirectionality
+                                                              .explosive,
+                                                      numberOfParticles:
+                                                          20, // a lot of particles at once
+                                                      gravity: 0.2,
+                                                      colors: [
+                                                        AppColors.primaryColor,
+                                                        AppColors.umragold
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Container(
+                                                        width: 25,
+                                                        height: 25,
+                                                        decoration: BoxDecoration(
+                                                            color: Colors.black,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        100)),
+                                                        child: Icon(
+                                                          Icons.close,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    });
+                                  },
+                                ).then((value) {
+                                  // This block will execute when the dialog is dismissed
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context, Routes.home, (route) => false,
+                                      arguments: Routes.isomra);
+                                });
                               }
                             },
                             child: InkWell(
@@ -472,52 +591,100 @@ class _AddWalletBalanceWithElectronicWalletScreenState
 
   // Helper method to show image dialog
   void _showImageDialog(BuildContext context, String imageUrlOrBase64,
-      {bool hasGift = false}) {
-    showDialog(
+      {String? linkApi, VoidCallback? onCloseCallback}) {
+    // Removed hasGift as it's not needed for the core style
+    showGeneralDialog(
       context: context,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Determine if it's a URL or Base64 string.
-              // Assuming it's a network URL for now. If Base64, you'll need to decode.
-              Image.network(
-                imageUrlOrBase64,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Icon(
-                      Icons.error); // Fallback for image loading error
+      barrierDismissible: false, // Ensure it's not dismissed by tapping outside
+      transitionDuration: const Duration(
+          milliseconds: 200), // Optional: Add a transition duration
+      pageBuilder: (BuildContext buildContext, Animation<double> animation,
+          Animation<double> secondaryAnimation) {
+        return StatefulBuilder(builder: (context, setStater) {
+          return Container(
+            color: Colors
+                .transparent, // Transparent background for the dialog area
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            alignment: Alignment.center,
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Material(
+              color: Colors
+                  .transparent, // Transparent material to allow InkWell effect
+              elevation: 0,
+              child: InkWell(
+                onTap: () {
+                  if (linkApi != null && linkApi.isNotEmpty) {
+                    // Assuming _launchInWebView is defined elsewhere or use url_launcher
+                    // Example: Launch URL in browser or in-app WebView
+                    launchUrl(Uri.parse(linkApi),
+                        mode: LaunchMode.externalApplication);
+                  }
                 },
-              ),
-              if (hasGift) // Optional: display text for gift
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text(
-                      LanguageClass.isEnglish
-                          ? "You received a gift!"
-                          : "لقد تلقيت هدية!",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                child: Container(
+                  height: MediaQuery.of(context).size.height /
+                      1.4, // Max height like your example
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    // No explicit background color unless image doesn't cover
+                  ),
+                  child: Stack(
+                    alignment: Alignment
+                        .topCenter, // Align close button to top-center of the stack
+                    children: [
+                      Container(
+                        // Removed explicit padding here to allow image to fill more
+                        child: Image.network(
+                          imageUrlOrBase64, // Use imageUrlOrBase64 here
+                          height: MediaQuery.of(context).size.height / 1.4,
+                          fit: BoxFit
+                              .fill, // Fill the container, might distort if aspect ratio is off
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(
+                              Icons.error,
+                              color: Colors.red,
+                              size: 80, // Make error icon more prominent
+                            ); // Show error icon if image fails to load
+                          },
+                        ),
+                      ),
+                      // Close button - Positioned within Stack for precise placement
+                      Positioned(
+                        top: 10, // Adjust as needed
+                        // Assuming you want it consistently on the right side for LTR/RTL
+                        right: LanguageClass.isEnglish ? 10 : null,
+                        left: LanguageClass.isEnglish ? null : 10,
+                        child: InkWell(
+                          onTap: () {
+                            onCloseCallback
+                                ?.call(); // Call the provided callback
+                            Navigator.pop(context); // Dismiss the dialog
+                          },
+                          child: Container(
+                            width: 25,
+                            height: 25,
+                            decoration: BoxDecoration(
+                              color: Colors
+                                  .black, // Dark background for close button
+                              borderRadius:
+                                  BorderRadius.circular(100), // Circular shape
+                            ),
+                            child: Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 18, // Slightly smaller icon
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              const SizedBox(height: 16),
-              Text(
-                LanguageClass.isEnglish
-                    ? "E-Wallet Transaction Details"
-                    : "تفاصيل معاملة المحفظة الإلكترونية",
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-              },
-              child: Text(LanguageClass.isEnglish ? "Close" : "إغلاق"),
             ),
-          ],
-        );
+          );
+        });
       },
     );
   }
