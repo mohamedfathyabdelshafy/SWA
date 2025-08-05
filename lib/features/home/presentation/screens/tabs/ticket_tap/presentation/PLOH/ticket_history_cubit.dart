@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:swa/features/bus_reservation_layout/data/models/Reservation_Response_fawry_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/data/model/Response_ticket_history_Model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/data/model/Ticketdetails_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/data/repo/ticket_repo.dart';
@@ -12,8 +13,7 @@ class TicketCubit extends Cubit<TicketStates> {
   TicketCubit() : super(InitialTicketHistory());
   TicketRepo ticketRepo = TicketRepo(sl());
 
-  Future<ResponseTicketHistoryModel?> getTicketHistory(
-      {required int customerId}) async {
+  Future<ResponseTicketHistoryModel?> getTicketHistory({required int customerId}) async {
     try {
       emit(LoadingTicketHistory());
 
@@ -26,8 +26,10 @@ class TicketCubit extends Cubit<TicketStates> {
       return res; // Return the response
     } catch (e) {
       print(e.toString());
-      emit(ErrorTicketHistory(
-          msg: "Failed to load ticket history: ${e.toString()}"));
+      if (!isClosed) {
+        emit(ErrorTicketHistory(msg: "Failed to load ticket history: ${e.toString()}"));
+      }
+
       return null;
     }
   }
@@ -40,13 +42,12 @@ class TicketCubit extends Cubit<TicketStates> {
       if (res?.status == "success") {
         emit(LoadedTicketdetails(ticketdetailsModel: res!));
       } else {
-        emit(ErrorTicketHistory(msg: res?.errorMassage ?? ""));
+        emit(ErrorTicketHistory(msg: res.toString() ?? ""));
       }
       return res; // Return the response
     } catch (e) {
       print(e.toString());
-      emit(ErrorTicketHistory(
-          msg: "Failed to load ticket details: ${e.toString()}"));
+      emit(ErrorTicketHistory(msg: "Failed to load ticket details: ${e.toString()}"));
       return null;
     }
   }
@@ -64,31 +65,30 @@ class TicketCubit extends Cubit<TicketStates> {
       }
     } catch (e) {
       print(e.toString());
-      emit(ErrorTicketHistory(
-          msg: "Failed to load edit policy: ${e.toString()}"));
+      emit(ErrorTicketHistory(msg: "Failed to load edit policy: ${e.toString()}"));
     }
   }
 
   Future cancelticket({required int id, required customerId}) async {
     try {
-      emit(
-          LoadingTicketHistory()); // Show loading indicator during cancellation
+      emit(LoadingTicketHistory()); // Show loading indicator during cancellation
 
       final res = await ticketRepo.cancelticketfun(resrvationid: id);
-      if (res?.status == "success") {
-        log('Ticket cancelled successfully');
-        emit(Cancelticketstate(message: res.message!));
-        // After successful cancellation, refresh ticket history
-        await getTicketHistory(customerId: customerId); // Await this call
+      if (res is ReservationResponseModel) {
+        if (res.status == "success") {
+          log('Ticket cancelled successfully');
+
+          emit(Cancelticketstate(message: res.message!));
+        } else {
+          emit(CancelticketErrorstate(errormessage: res.message!));
+        }
       } else {
         // If cancellation fails, still attempt to refresh history to show latest state
-        emit(Cancelticketstate(message: res?.message ?? "Cancellation failed"));
-        await getTicketHistory(customerId: customerId); // Await this call
+        emit(CancelticketErrorstate(errormessage: res ?? "Cancellation failed"));
       }
     } catch (e) {
       print(e.toString());
-      emit(ErrorTicketHistory(
-          msg: "Error during ticket cancellation: ${e.toString()}"));
+      emit(ErrorTicketHistory(msg: "Error during ticket cancellation: ${e.toString()}"));
       // Even on error, try to refresh the list in case some data changed
       await getTicketHistory(customerId: customerId);
     }

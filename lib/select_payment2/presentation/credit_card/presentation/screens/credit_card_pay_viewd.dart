@@ -33,11 +33,7 @@ class CreditCardPayView extends StatefulWidget {
   String promocodeid;
 
   CreditCardPayView(
-      {super.key,
-      required this.index,
-      required this.user,
-      required this.Discount,
-      required this.promocodeid});
+      {super.key, required this.index, required this.user, required this.Discount, required this.promocodeid});
 
   @override
   State<CreditCardPayView> createState() => _CreditCardPayViewState();
@@ -76,20 +72,15 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
     widget.index = 0;
 
     if (jsonData != null && jsonData is String) {
-      cards = json
-          .decode(jsonData)
-          .map<CardModel>((e) => CardModel.fromJsom(e))
-          .toList();
+      cards = json.decode(jsonData).map<CardModel>((e) => CardModel.fromJsom(e)).toList();
     }
     print("cached cards ${cards}");
     Routes.resrvedtrips.length > 1
-        ? totalamount =
-            (Routes.resrvedtrips[0].price! + Routes.resrvedtrips[1].price!)
+        ? totalamount = (Routes.resrvedtrips[0].price! + Routes.resrvedtrips[1].price!)
         : totalamount = Routes.resrvedtrips[0].price!;
 
     Routes.resrvedtrips.length > 1
-        ? amounttopay =
-            (Routes.resrvedtrips[0].price! + Routes.resrvedtrips[1].price!)
+        ? amounttopay = (Routes.resrvedtrips[0].price! + Routes.resrvedtrips[1].price!)
         : amounttopay = Routes.resrvedtrips[0].price!;
     getwalllet();
     selectedcurruncy = Routes.curruncy!;
@@ -101,11 +92,9 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
   String selectedcurruncy = '';
 
   convertcurruncy({String? from, String? to, double? amount}) async {
-    var responce = await PackagesRespo()
-        .Convertcurrency(amount: amount, from: from, to: to);
+    var responce = await PackagesRespo().Convertcurrency(amount: amount, from: from, to: to);
 
-    var responceEgp = await PackagesRespo()
-        .Convertcurrency(amount: amount, from: from, to: 'EGP');
+    var responceEgp = await PackagesRespo().Convertcurrency(amount: amount, from: from, to: 'EGP');
 
     setState(() {
       amountController.text = responce.toString();
@@ -161,9 +150,7 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        alignment: LanguageClass.isEnglish
-                            ? Alignment.topLeft
-                            : Alignment.topRight,
+                        alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                         child: InkWell(
                           onTap: () {
                             Navigator.pop(context);
@@ -183,9 +170,7 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                   ),
                   Container(
                     child: Text(
-                      LanguageClass.isEnglish
-                          ? 'Pay with Debit/Credit'
-                          : 'دفع باستخدام كارت الائتمان',
+                      LanguageClass.isEnglish ? 'Pay with Debit/Credit' : 'دفع باستخدام كارت الائتمان',
                       style: fontStyle(
                         color: AppColors.blackColor,
                         fontSize: 38,
@@ -227,122 +212,82 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                             context: context,
                                             builder: (BuildContext context) {
                                               return Padding(
-                                                padding:
-                                                    const EdgeInsets.all(30),
+                                                padding: const EdgeInsets.all(30),
                                                 child: Container(
                                                   height: 270,
                                                   child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Text(
-                                                        LanguageClass.isEnglish
-                                                            ? 'Choose Card'
-                                                            : "اختر كارت",
+                                                        LanguageClass.isEnglish ? 'Choose Card' : "اختر كارت",
                                                         style: fontStyle(
                                                             fontSize: 15,
-                                                            fontFamily:
-                                                                FontFamily.bold,
-                                                            color: AppColors
-                                                                .blackColor),
+                                                            fontFamily: FontFamily.bold,
+                                                            color: AppColors.blackColor),
                                                       ),
                                                       const SizedBox(
                                                         height: 5,
                                                       ),
-                                                      Divider(
-                                                          thickness: 0.5,
-                                                          color:
-                                                              AppColors.grey),
+                                                      Divider(thickness: 0.5, color: AppColors.grey),
                                                       Column(
-                                                        children: List<
-                                                                Widget>.generate(
-                                                            cards.length,
-                                                            (index) {
+                                                        children: List<Widget>.generate(cards.length, (index) {
                                                           return Column(
                                                             children: [
                                                               InkWell(
                                                                 onTap: () {
-                                                                  Navigator.pop(
-                                                                      context);
+                                                                  Navigator.pop(context);
                                                                   setState(() {
-                                                                    widget.index =
-                                                                        index;
+                                                                    widget.index = index;
                                                                   });
                                                                 },
                                                                 child: Row(
                                                                   children: [
                                                                     Checkbox(
-                                                                      value: widget.index ==
-                                                                              index
-                                                                          ? true
-                                                                          : false,
-                                                                      activeColor:
-                                                                          Colors
-                                                                              .yellow,
+                                                                      value: widget.index == index ? true : false,
+                                                                      activeColor: Colors.yellow,
                                                                       shape: RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(100)),
-                                                                      onChanged:
-                                                                          (value) {},
+                                                                          borderRadius: BorderRadius.circular(100)),
+                                                                      onChanged: (value) {},
                                                                     ),
                                                                     Image.asset(
                                                                       'assets/images/master_card.png',
-                                                                      height:
-                                                                          11,
+                                                                      height: 11,
                                                                       width: 17,
-                                                                      fit: BoxFit
-                                                                          .fitWidth,
+                                                                      fit: BoxFit.fitWidth,
                                                                     ),
                                                                     Text(
                                                                       "XXXX-XXXX-XXXX-${cards[index].cardNumber!.substring(cards[index].cardNumber!.length - 4)}",
-                                                                      style:
-                                                                          fontStyle(
-                                                                        fontSize:
-                                                                            20,
-                                                                        fontFamily:
-                                                                            FontFamily.regular,
-                                                                        color: Colors
-                                                                            .black,
+                                                                      style: fontStyle(
+                                                                        fontSize: 20,
+                                                                        fontFamily: FontFamily.regular,
+                                                                        color: Colors.black,
                                                                       ),
                                                                     ),
                                                                     Spacer(),
                                                                     InkWell(
-                                                                      onTap:
-                                                                          () {
-                                                                        setState(
-                                                                            () {
-                                                                          if (index >= 0 &&
-                                                                              index < cards.length) {
+                                                                      onTap: () {
+                                                                        setState(() {
+                                                                          if (index >= 0 && index < cards.length) {
                                                                             cards.removeAt(index);
                                                                           }
                                                                           // cards.removeAt(index);
-                                                                          CacheHelper
-                                                                              .setDataToSharedPref(
-                                                                            key:
-                                                                                "cards",
-                                                                            value:
-                                                                                json.encode(
+                                                                          CacheHelper.setDataToSharedPref(
+                                                                            key: "cards",
+                                                                            value: json.encode(
                                                                               cards.map((e) => e.toJson()).toList(),
                                                                             ),
                                                                           );
-                                                                          Navigator.pop(
-                                                                              context);
+                                                                          Navigator.pop(context);
                                                                           //  Navigator.pop(context);
                                                                         });
-                                                                        CacheHelper
-                                                                            .setDataToSharedPref(
-                                                                          key:
-                                                                              "cards",
-                                                                          value:
-                                                                              json.encode(
+                                                                        CacheHelper.setDataToSharedPref(
+                                                                          key: "cards",
+                                                                          value: json.encode(
                                                                             cards.map((e) => e.toJson()).toList(),
                                                                           ),
                                                                         );
                                                                       },
-                                                                      child: Icon(
-                                                                          Icons
-                                                                              .delete),
+                                                                      child: Icon(Icons.delete),
                                                                     )
                                                                   ],
                                                                 ),
@@ -351,68 +296,47 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                                           );
                                                         }),
                                                       ),
-                                                      Divider(
-                                                          thickness: 0.5,
-                                                          color:
-                                                              AppColors.grey),
+                                                      Divider(thickness: 0.5, color: AppColors.grey),
                                                       Row(
                                                         children: [
                                                           SizedBox(
-                                                            width: sizeWidth *
-                                                                0.03,
+                                                            width: sizeWidth * 0.03,
                                                           ),
                                                           Container(
                                                               decoration: BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                  color:
-                                                                      AppColors
-                                                                          .grey),
+                                                                  shape: BoxShape.circle, color: AppColors.grey),
                                                               child: const Icon(
                                                                 Icons.add,
-                                                                color: Colors
-                                                                    .lightGreen,
+                                                                color: Colors.lightGreen,
                                                                 size: 20,
                                                               )),
                                                           SizedBox(
-                                                            width: sizeWidth *
-                                                                0.03,
+                                                            width: sizeWidth * 0.03,
                                                           ),
                                                           InkWell(
                                                             onTap: () async {
-                                                              Navigator.pop(
-                                                                  context);
-                                                              final card =
-                                                                  await Navigator
-                                                                      .push<
-                                                                          CardModel>(
+                                                              Navigator.pop(context);
+                                                              final card = await Navigator.push<CardModel>(
                                                                 context,
                                                                 MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) {
+                                                                  builder: (context) {
                                                                     return const AddCreditCard();
                                                                   },
                                                                 ),
                                                               );
-                                                              if (card
-                                                                  is CardModel) {
+                                                              if (card is CardModel) {
                                                                 cards.add(card);
                                                                 setState(() {});
                                                               }
                                                             },
                                                             child: Text(
-                                                              LanguageClass
-                                                                      .isEnglish
+                                                              LanguageClass.isEnglish
                                                                   ? 'Add New Card'
                                                                   : "اضافة كارت جديد",
                                                               style: fontStyle(
-                                                                  fontSize:
-                                                                      15.45,
-                                                                  fontFamily:
-                                                                      FontFamily
-                                                                          .bold,
-                                                                  color: AppColors
-                                                                      .blackColor),
+                                                                  fontSize: 15.45,
+                                                                  fontFamily: FontFamily.bold,
+                                                                  color: AppColors.blackColor),
                                                             ),
                                                           ),
                                                         ],
@@ -427,23 +351,17 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                         child: Row(
                                           children: [
                                             Text(
-                                              (widget.index >= 0 &&
-                                                      widget.index <
-                                                          cards.length)
+                                              (widget.index >= 0 && widget.index < cards.length)
                                                   ? "XXXX-XXXX-XXXX-${cards[widget.index].cardNumber!.substring(cards[widget.index].cardNumber!.length - 4)}"
                                                   : "Choose Card",
                                               style: fontStyle(
-                                                  fontSize: 14,
-                                                  fontFamily:
-                                                      FontFamily.regular,
-                                                  color: Colors.black),
+                                                  fontSize: 14, fontFamily: FontFamily.regular, color: Colors.black),
                                             ),
                                             const SizedBox(
                                               width: 10,
                                             ),
                                             const Icon(
-                                              Icons
-                                                  .keyboard_arrow_down_outlined,
+                                              Icons.keyboard_arrow_down_outlined,
                                               size: 30,
                                             )
                                           ],
@@ -452,8 +370,7 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                     : InkWell(
                                         onTap: () async {
                                           //Navigator.pop(context);
-                                          final card =
-                                              await Navigator.push<CardModel>(
+                                          final card = await Navigator.push<CardModel>(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) {
@@ -467,9 +384,7 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                           }
                                         },
                                         child: Text(
-                                          LanguageClass.isEnglish
-                                              ? 'Add credit Card'
-                                              : "اضافة كارت جديد",
+                                          LanguageClass.isEnglish ? 'Add credit Card' : "اضافة كارت جديد",
                                           style: fontStyle(
                                               fontSize: 15.45,
                                               fontFamily: FontFamily.bold,
@@ -487,9 +402,7 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                   height: 20,
                                   width: 1,
                                   color: const Color(0xff47A9EB),
-                                  hint: LanguageClass.isEnglish
-                                      ? 'CVV'
-                                      : "الرقم السري",
+                                  hint: LanguageClass.isEnglish ? 'CVV' : "الرقم السري",
                                   textInputType: TextInputType.number,
                                   onChange: (value) {
                                     setState(() {
@@ -515,13 +428,11 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                     Container(
                                       height: 20,
                                       width: 1,
-                                      decoration: const BoxDecoration(
-                                          color: Color(0xffD865A4)),
+                                      decoration: const BoxDecoration(color: Color(0xffD865A4)),
                                     ),
                                     Flexible(
                                       child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 2, horizontal: 18),
+                                          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
                                           decoration: const BoxDecoration(
                                               // border: Border.all(
                                               //   color: AppColors.blue,
@@ -531,13 +442,10 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                               // const BorderRadius.all(Radius.circular(10))
                                               ),
                                           child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.stretch,
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
                                             children: [
                                               Text(
-                                                LanguageClass.isEnglish
-                                                    ? "amount"
-                                                    : "القيمة",
+                                                LanguageClass.isEnglish ? "amount" : "القيمة",
                                                 style: fontStyle(
                                                     fontSize: 15,
                                                     fontFamily: FontFamily.bold,
@@ -548,8 +456,7 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                                 style: fontStyle(
                                                     fontSize: 18,
                                                     fontFamily: FontFamily.bold,
-                                                    color:
-                                                        AppColors.primaryColor),
+                                                    color: AppColors.primaryColor),
                                               )
                                             ],
                                           )),
@@ -557,15 +464,11 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                     2.horizontalSpace,
                                     InkWell(
                                       onTap: () {
-                                        showCurrencySelector(context,
-                                            currencyList:
-                                                curruncylist!.message!,
+                                        showCurrencySelector(context, currencyList: curruncylist!.message!,
                                             onCurrencySelected: (currency) {
                                           Navigator.pop(context);
                                           convertcurruncy(
-                                              amount: totalamount,
-                                              from: selectedcurruncy,
-                                              to: currency.symbol!);
+                                              amount: totalamount, from: selectedcurruncy, to: currency.symbol!);
                                           setState(() {
                                             selectedcurruncy = currency.symbol!;
                                           });
@@ -573,16 +476,12 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                       },
                                       child: Container(
                                         child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             Text(
                                               selectedcurruncy,
-                                              style: fontStyle(
-                                                  color: Colors.black,
-                                                  fontFamily: FontFamily.bold),
+                                              style: fontStyle(color: Colors.black, fontFamily: FontFamily.bold),
                                             ),
                                             4.horizontalSpace,
                                             Icon(
@@ -609,23 +508,17 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                 Navigator.pop(context);
 
                                 showDoneConfirmationDialog(context,
-                                    callbackTitle: LanguageClass.isEnglish
-                                        ? "Go to OTP"
-                                        : 'ادخل الرمز',
+                                    callbackTitle: LanguageClass.isEnglish ? "Go to OTP" : 'ادخل الرمز',
                                     isWarning: true,
                                     message: LanguageClass.isEnglish
                                         ? 'Complete the payment process'
-                                        : 'قم باستكمال عملية الدفع',
-                                    callback: () {
+                                        : 'قم باستكمال عملية الدفع', callback: () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (_) => ConfirmPayWebView(
                                                 webViewLink: state
-                                                    .reservationResponseCreditCard
-                                                    .message!
-                                                    .nextAction!
-                                                    .redirectUrl!,
+                                                    .reservationResponseCreditCard.message!.nextAction!.redirectUrl!,
                                               )));
                                   // launchUrl(Uri.parse(state.url.toString()));
                                 });
@@ -739,9 +632,7 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
 
                                 Constants.showDefaultSnackBar(
                                     context: context,
-                                    text: LanguageClass.isEnglish
-                                        ? "Card is invalid"
-                                        : "الكارت غير صالح");
+                                    text: LanguageClass.isEnglish ? "Card is invalid" : "الكارت غير صالح");
                               }
                             },
                             child: InkWell(
@@ -752,51 +643,26 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
 
                                       if (cards.length < 0) {
                                         Constants.showDefaultSnackBar(
-                                            color: Colors.red,
-                                            context: context,
-                                            text: 'Select card');
+                                            color: Colors.red, context: context, text: 'Select card');
                                       } else {
-                                        print(cards[widget.index]
-                                            .cardNumber!
-                                            .toString()
-                                            .replaceAll(" ", ""));
+                                        print(cards[widget.index].cardNumber!.toString().replaceAll(" ", ""));
                                         if (formKey.currentState!.validate()) {
-                                          final tripOneId =
-                                              CacheHelper.getDataToSharedPref(
-                                                  key: 'tripOneId');
-                                          final tripRoundId =
-                                              CacheHelper.getDataToSharedPref(
-                                                  key: 'tripRoundId');
-                                          final selectedDayTo =
-                                              CacheHelper.getDataToSharedPref(
-                                                  key: 'selectedDayTo');
+                                          final tripOneId = CacheHelper.getDataToSharedPref(key: 'tripOneId');
+                                          final tripRoundId = CacheHelper.getDataToSharedPref(key: 'tripRoundId');
+                                          final selectedDayTo = CacheHelper.getDataToSharedPref(key: 'selectedDayTo');
                                           final selectedDayFrom =
-                                              CacheHelper.getDataToSharedPref(
-                                                  key: 'selectedDayFrom');
-                                          final toStationId =
-                                              CacheHelper.getDataToSharedPref(
-                                                  key: 'toStationId');
-                                          final fromStationId =
-                                              CacheHelper.getDataToSharedPref(
-                                                  key: 'fromStationId');
-                                          final seatIdsOneTrip = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'countSeats')
+                                              CacheHelper.getDataToSharedPref(key: 'selectedDayFrom');
+                                          final toStationId = CacheHelper.getDataToSharedPref(key: 'toStationId');
+                                          final fromStationId = CacheHelper.getDataToSharedPref(key: 'fromStationId');
+                                          final seatIdsOneTrip = CacheHelper.getDataToSharedPref(key: 'countSeats')
                                               ?.map((e) => int.tryParse(e) ?? 0)
                                               .toList();
-                                          final seatIdsRoundTrip = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'countSeats2')
+                                          final seatIdsRoundTrip = CacheHelper.getDataToSharedPref(key: 'countSeats2')
                                               ?.map((e) => int.tryParse(e) ?? 0)
                                               .toList();
-                                          final price =
-                                              CacheHelper.getDataToSharedPref(
-                                                  key: 'price');
+                                          final price = CacheHelper.getDataToSharedPref(key: 'price');
 
-                                          print(cards[widget.index]
-                                              .month!
-                                              .substring(0, 2)
-                                              .toString());
+                                          print(cards[widget.index].month!.substring(0, 2).toString());
 
                                           print(cards[widget.index]
                                               .month!
@@ -814,13 +680,9 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                               "tripOneId${tripOneId}==tripOneId${tripRoundId}=====${seatIdsOneTrip}===${seatIdsRoundTrip}==$price==");
 
                                           convertcurruncy(
-                                                  amount: totalamount,
-                                                  from: selectedcurruncy,
-                                                  to: selectedcurruncy)
+                                                  amount: totalamount, from: selectedcurruncy, to: selectedcurruncy)
                                               .then((value) {
-                                            BlocProvider.of<ReservationCubit>(
-                                                    context)
-                                                .addReservationCreditCard(
+                                            BlocProvider.of<ReservationCubit>(context).addReservationCreditCard(
                                               custId: widget.user.customerId!,
                                               promocodeid: Routes.PromoCodeID,
                                               totalamount: amounttopay,
@@ -828,22 +690,15 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                               paymentMethodID: 4,
                                               paymentTypeID: 68,
                                               cvv: cvv.toString(),
-                                              cardNumber: cards[widget.index]
-                                                  .cardNumber!
-                                                  .toString()
-                                                  .replaceAll(" ", ""),
-                                              cardExpiryYear:
-                                                  cards[widget.index]
-                                                      .month!
-                                                      .substring(
-                                                        3,
-                                                      )
-                                                      .toString(),
-                                              cardExpiryMonth:
-                                                  cards[widget.index]
-                                                      .month!
-                                                      .substring(0, 2)
-                                                      .toString(),
+                                              cardNumber:
+                                                  cards[widget.index].cardNumber!.toString().replaceAll(" ", ""),
+                                              cardExpiryYear: cards[widget.index]
+                                                  .month!
+                                                  .substring(
+                                                    3,
+                                                  )
+                                                  .toString(),
+                                              cardExpiryMonth: cards[widget.index].month!.substring(0, 2).toString(),
                                             );
                                           });
                                         }
@@ -856,22 +711,17 @@ class _CreditCardPayViewState extends State<CreditCardPayView> {
                                   width: 200,
                                   height: 70,
                                   decoration: const BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(50)),
+                                    borderRadius: BorderRadius.all(Radius.circular(50)),
                                   ),
                                   child: Container(
                                     height: 65,
                                     decoration: BoxDecoration(
-                                        color: AppColors.primaryColor,
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
+                                        color: AppColors.primaryColor, borderRadius: BorderRadius.circular(15)),
                                     child: Center(
                                       child: Padding(
                                         padding: EdgeInsets.all(8.0),
                                         child: Text(
-                                          LanguageClass.isEnglish
-                                              ? 'Charge'
-                                              : "شحن",
+                                          LanguageClass.isEnglish ? 'Charge' : "شحن",
                                           style: fontStyle(
                                               color: Colors.white,
                                               fontSize: 20,
@@ -950,14 +800,8 @@ class PayField extends StatelessWidget {
 
                 border: InputBorder.none,
                 // errorStyle: fontStyle(color: Colors.red, fontSize: 12),
-                hintStyle: fontStyle(
-                    fontSize: 15,
-                    fontFamily: FontFamily.bold,
-                    color: AppColors.greyLight),
-                labelStyle: fontStyle(
-                    color: AppColors.grey,
-                    fontSize: 12,
-                    fontFamily: FontFamily.bold),
+                hintStyle: fontStyle(fontSize: 15, fontFamily: FontFamily.bold, color: AppColors.greyLight),
+                labelStyle: fontStyle(color: AppColors.grey, fontSize: 12, fontFamily: FontFamily.bold),
                 // contentPadding: const EdgeInsets.symmetric(
                 //   horizontal: 10,
                 //   vertical: 5,
@@ -1093,9 +937,7 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, Routes.home, (route) => false,
-                    arguments: Routes.isomra);
+                Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false, arguments: Routes.isomra);
               },
               icon: Icon(
                 Icons.home_outlined,
@@ -1107,8 +949,7 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
       body: SafeArea(
         child: WillPopScope(
           onWillPop: () {
-            Navigator.pushNamedAndRemoveUntil(navigatorKey.currentContext!,
-                Routes.initialRoute, (route) => false);
+            Navigator.pushNamedAndRemoveUntil(navigatorKey.currentContext!, Routes.initialRoute, (route) => false);
 
             return Future.value(false);
           },
@@ -1130,12 +971,8 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
                         await Future.delayed(const Duration(seconds: 2), () {
                           showDoneConfirmationDialog(context,
                               isError: true,
-                              callbackTitle: LanguageClass.isEnglish
-                                  ? 'Payment Error'
-                                  : 'حدث خطاء اثنا الدفع',
-                              message: LanguageClass.isEnglish
-                                  ? 'Payment Error'
-                                  : 'حدث خطاء اثنا الدفع', callback: () {
+                              callbackTitle: LanguageClass.isEnglish ? 'Payment Error' : 'حدث خطاء اثنا الدفع',
+                              message: LanguageClass.isEnglish ? 'Payment Error' : 'حدث خطاء اثنا الدفع', callback: () {
                             Navigator.pop(
                               context,
                             );
@@ -1146,15 +983,29 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
                         });
 
                         return NavigationDecision.prevent;
-                      } else if (request.url
-                          .startsWith('https://swabus.com/Home/FawryCharge')) {
+                      } else if (request.url.contains('99997')) {
+                        // Example for error URL
+                        await Future.delayed(const Duration(seconds: 2), () {
+                          if (mounted) {
+                            //
+                            showDoneConfirmationDialog(context, //
+                                isError: true,
+                                message: LanguageClass.isEnglish ? 'Payment Error' : 'حدث خطاء اثنا الدفع',
+                                callback: () {
+                              NavHelper().goBack(); // Pop WebView
+                              NavHelper().goBack(); // Pop Credit Card Screen
+                            });
+                          }
+                        });
+                        return NavigationDecision.prevent; // Prevent navigation to this URL
+                      } else if (request.url.startsWith('https://swabus.com/Home/FawryCharge') ||
+                          request.url.contains('success_callback_url')) {
                         await Future.delayed(const Duration(seconds: 2), () {
                           showDoneConfirmationDialog(context,
                               message: LanguageClass.isEnglish
                                   ? 'Payment completed successfully'
                                   : 'تم عملية الدفع بنجاح', callback: () {
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, Routes.home, (route) => false,
+                            Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false,
                                 arguments: Routes.isomra);
                           });
                         });

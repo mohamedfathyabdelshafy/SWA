@@ -7,8 +7,7 @@ import 'dart:convert';
 import 'package:swa/features/bus_reservation_layout/data/models/BusSeatsModel.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/bus_seat_widget/seat_layout_model.dart';
 
-BusSeatsEditModel busSeatsEditModelFromJson(String str) =>
-    BusSeatsEditModel.fromJson(json.decode(str));
+BusSeatsEditModel busSeatsEditModelFromJson(String str) => BusSeatsEditModel.fromJson(json.decode(str));
 
 class BusSeatsEditModel {
   String status;
@@ -25,8 +24,7 @@ class BusSeatsEditModel {
     required this.obj,
   });
 
-  factory BusSeatsEditModel.fromJson(Map<String, dynamic> json) =>
-      BusSeatsEditModel(
+  factory BusSeatsEditModel.fromJson(Map<String, dynamic> json) => BusSeatsEditModel(
         status: json["status"],
         message: Message.fromJson(json["message"]),
         balance: json["balance"],
@@ -112,8 +110,7 @@ class BusDetailsVm {
         totalColumn: json["TotalColumn"],
         totalSeats: json["TotalSeats"],
         busDetailsId: json["BusDetailsID"],
-        rowList: List<RowLists>.from(
-            json["RowList"].map((x) => RowLists.fromJson(x))),
+        rowList: List<RowLists>.from(json["RowList"].map((x) => RowLists.fromJson(x))),
       );
 }
 

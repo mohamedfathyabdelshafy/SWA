@@ -1,10 +1,18 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:get/route_manager.dart';
+import 'package:lottie/lottie.dart';
+import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
+import 'package:swa/core/utils/styles.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/Country_list.dart';
+import 'package:swa/main.dart';
 import 'package:swa/select_payment2/data/models/Curruncy_model.dart';
+import 'package:swa/select_payment2/presentation/credit_card/presentation/navigation_helper.dart';
 import 'dart:developer';
 
 import '../../config/routes/app_routes.dart';
@@ -109,49 +117,45 @@ import '../local_cache_helper.dart';
 //   }
 // }
 
-Future<Position> determinePosition(
-    BuildContext context, List<Country> countries) async {
+Future determinePosition(BuildContext context, List<Country> countries) async {
   bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
   while (!serviceEnabled) {
     await showDoneConfirmationDialog(
       context,
-      message: LanguageClass.isEnglish
-          ? "Please enable location services to continue."
-          : "برجاء فتح خدمة الموقع للاستكمال",
+      message:
+          LanguageClass.isEnglish ? "Please enable location services to continue." : "برجاء فتح خدمة الموقع للاستكمال",
       isError: true,
       callback: () async {
-        await Geolocator.openLocationSettings();
+        Navigator.pop(context);
+        await Geolocator.openLocationSettings().then((value) async {
+          log(value.toString());
+          serviceEnabled = await Geolocator.isLocationServiceEnabled();
+        });
       },
     );
 
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 2));
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
   }
 
   LocationPermission permission = await Geolocator.checkPermission();
   if (permission == LocationPermission.denied ||
-      permission == LocationPermission.deniedForever) {
+      permission == LocationPermission.deniedForever ||
+      permission == LocationPermission.unableToDetermine) {
+    print("A77med permission: ${permission}");
     permission = await Geolocator.requestPermission();
   }
 
-  CacheHelper.setDataToSharedPref(key: 'locationPermission', value: true);
+  // CacheHelper.setDataToSharedPref(key: 'locationPermission', value: true);
 
-  if (permission == LocationPermission.deniedForever) {
-    return Future.error('Location permissions are permanently denied.');
-  }
+  if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) {
+    final position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
 
-  if (permission == LocationPermission.whileInUse ||
-      permission == LocationPermission.always) {
-    final position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.medium);
+    final placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+    final countryName = placemarks.first.country!;
 
-    final placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-    final countryName =
-        placemarks.first.country?.toLowerCase() == "united states"
-            ? "Egypt"
-            : placemarks.first.country!;
+    print("A7med Country Name: $countryName");
     Routes.countryname = countryName;
 
     print("COUNTRY ISO: ${placemarks.first.isoCountryCode}");
@@ -159,32 +163,27 @@ Future<Position> determinePosition(
     final matchedCountry = countries.firstWhere(
       (c) => c.countryName.toLowerCase().contains(countryName.toLowerCase()),
       orElse: () => CountryModel(
-        countryId: 3,
-        countryName: "Saudi Arabia",
-        Code: "3",
-        Flag: "https://swabus.com/Content/Dashboard/LTR/assets/img/Saudi.png",
-        curruncy: "SAR",
+        countryId: 1,
+        countryName: "Egypt",
+        Code: "1",
+        Flag: "https://swabus.com/Content/Dashboard/LTR/assets/img/Egypt.png",
+        curruncy: "EGP",
       ),
     );
 
-    CacheHelper.setDataToSharedPref(
-        key: 'countryid', value: matchedCountry.countryId);
-    CacheHelper.setDataToSharedPref(
-        key: 'defaultCountryID', value: matchedCountry.countryId);
+    CacheHelper.setDataToSharedPref(key: 'countryid', value: matchedCountry.countryId);
+    CacheHelper.setDataToSharedPref(key: 'defaultCountryID', value: matchedCountry.countryId);
     CacheHelper.setDataToSharedPref(
         key: 'countryflag',
         value: matchedCountry.countryId == 1
             ? "https://swabus.com/Content/Dashboard/LTR/assets/img/Egypt.png"
             : "https://swabus.com/Content/Dashboard/LTR/assets/img/Saudi.png");
-    CacheHelper.setDataToSharedPref(
-        key: 'curruncycode', value: matchedCountry.curruncy);
+    CacheHelper.setDataToSharedPref(key: 'curruncycode', value: matchedCountry.curruncy);
 
     Curruncylist curruncylist = await PackagesRespo().GetallCurrency();
 
     var currencyId = curruncylist.message
-        ?.where((element) =>
-            element.symbol!.toLowerCase() ==
-            matchedCountry.curruncy.toLowerCase())
+        ?.where((element) => element.symbol!.toLowerCase() == matchedCountry.curruncy.toLowerCase())
         .first
         .code;
 
@@ -198,38 +197,64 @@ Future<Position> determinePosition(
     Routes.curruncy = matchedCountry.curruncy;
     Routes.curruncyId = currencyId;
 
-    print("TIKTIK Currency ID: ${Routes.curruncyId}");
+    print("TIKTIK Currency ID: ${matchedCountry.countryId}");
 
     Routes.country = matchedCountry.countryName;
     log("Location determined: ${Routes.country}");
     return position;
   }
-
-  return Future.error('Failed to get valid location permissions.');
 }
 
 Future<dynamic> showDoneConfirmationDialog(BuildContext context,
-    {required String message,
-    bool isError = false,
-    Widget? body,
-    required Function callback}) async {
-  return CoolAlert.show(
+    {required String message, bool isError = false, Widget? body, required Function callback}) async {
+  return await showDialog(
     barrierDismissible: false,
     context: context,
-    confirmBtnText: "OK",
-    title: isError
-        ? LanguageClass.isEnglish
-            ? 'Warning'
-            : 'تحذير'
-        : '',
-    lottieAsset: 'assets/json/Warning.json',
-    type: isError ? CoolAlertType.error : CoolAlertType.success,
-    loopAnimation: false,
-    backgroundColor: Colors.white,
-    text: message,
-    widget: body,
-    onConfirmBtnTap: () {
-      callback(); // Execute the callback function after tapping OK
-    },
+    builder: (context) => WillPopScope(
+      onWillPop: () async => false,
+      child: AlertDialog(
+        content: Container(
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(height: 80, alignment: Alignment.center, child: Lottie.asset('assets/json/Warning.json')),
+              const SizedBox(height: 10),
+              Center(
+                child: Text(
+                  LanguageClass.isEnglish ? 'Warning' : 'تحذير',
+                  style: fontStyle(fontFamily: FontFamily.bold, fontSize: 18, color: Colors.black),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Center(
+                child: Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: fontStyle(fontFamily: FontFamily.medium, color: Colors.black, fontSize: 14),
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                  onPressed: () {
+                    callback();
+                  },
+                  style: ElevatedButton.styleFrom(
+                      elevation: 0, backgroundColor: AppColors.primaryColor, textStyle: TextStyle(color: Colors.white)),
+                  child: Container(
+                      child: Container(
+                          width: 50,
+                          height: 20,
+                          alignment: Alignment.center,
+                          child: Text(
+                            "ok",
+                            style: fontStyle(color: Colors.white, fontFamily: FontFamily.bold),
+                          ))))
+            ],
+          ),
+        ),
+      ),
+    ),
   );
 }

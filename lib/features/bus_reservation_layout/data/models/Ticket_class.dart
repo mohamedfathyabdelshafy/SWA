@@ -7,6 +7,8 @@ class Ticketreservation {
   static String tocity1 = '';
   static String elite1 = '';
   static String accessBusTime1 = '';
+  static String? arrivaldate1;
+
   static String accessDate1 = '';
 
   static int numbertrip2 = 0;
@@ -27,6 +29,8 @@ class Ticketreservation {
   static int tripid2 = 0;
   static String tocity2 = '';
   static String fromcity2 = '';
+  static String? arrivaldate2;
+
   static double priceticket2 = 0;
   static String tocitystation2 = '';
   static String fromcitystation2 = '';

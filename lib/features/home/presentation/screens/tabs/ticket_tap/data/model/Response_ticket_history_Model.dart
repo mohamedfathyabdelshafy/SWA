@@ -1,11 +1,5 @@
 class ResponseTicketHistoryModel {
-  ResponseTicketHistoryModel(
-      {this.status,
-      this.message,
-      this.balance,
-      this.object,
-      this.obj,
-      this.errorMassage});
+  ResponseTicketHistoryModel({this.status, this.message, this.balance, this.object, this.obj, this.errorMassage});
 
   ResponseTicketHistoryModel.fromJson(dynamic json) {
     status = json['status'];
@@ -58,6 +52,7 @@ class Message {
       this.isPaid,
       this.reservationDate,
       this.CanEditOrCancel,
+      this.Penalty,
       this.servecietype});
 
   Message.fromJson(dynamic json) {
@@ -87,6 +82,7 @@ class Message {
     reservationDate = DateTime.parse(json["ReservationDate"]);
     isPaid = json["IsPaid"];
     CanEditOrCancel = json['CanEditOrCancel'];
+    Penalty = json['Penalty'] ?? 0.0;
   }
   String? phoneNumber;
   String? customerName;
@@ -117,4 +113,5 @@ class Message {
   String? servecietype;
   bool? isPaid;
   bool? CanEditOrCancel;
+  dynamic Penalty;
 }

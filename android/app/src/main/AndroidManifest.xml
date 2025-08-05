@@ -65,5 +65,9 @@
         <service
             android:name="com.huawei.push.plugin.PushPluginService"
             android:exported="true"/>
+
+              <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCYsYxe7GS6bTiQPM3uFe51m_sLfji4u8I"/>
+
     </application>
 </manifest>

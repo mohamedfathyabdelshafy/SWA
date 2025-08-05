@@ -31,9 +31,12 @@ class PromocodReservationEvent extends PackagesEvent {
   String? promocode;
   int? custId;
   int? paymentTypeID;
+
+  int? institutionID;
   String? promocodeid;
   List<TripReservationList>? trips;
-  PromocodReservationEvent({this.promocode, this.custId, this.paymentTypeID, this.promocodeid, this.trips});
+  PromocodReservationEvent(
+      {this.promocode, this.custId, this.paymentTypeID, this.promocodeid, this.institutionID, this.trips});
 }
 
 class GetactivepackageEvent extends PackagesEvent {}
@@ -116,3 +119,5 @@ class PackageelectronicEvent extends PackagesEvent {
 class checkversionevent extends PackagesEvent {}
 
 class selectappevent extends PackagesEvent {}
+
+class getinstitutionevent extends PackagesEvent {}

@@ -52,34 +52,33 @@ class _TimerwidgetState extends State<Timerwidget> {
         onStart: () {
           debugPrint('Countdown Started');
         },
-        onComplete: () {
+        onComplete: () async {
           debugPrint('Countdown Ended');
-          Reservationtimer.controller.pause();
 
-          BusLayoutRepo(apiConsumer: sl()).Removeholdfun(
-              tripid: Ticketreservation.tripid1,
-              Seatsnumbers: Ticketreservation.countSeats1);
+          if (Reservationtimer.controller.isPaused.value == false) {
+            Reservationtimer.controller.pause();
+          }
 
-          BusLayoutRepo(apiConsumer: sl()).Removeholdfun(
-              tripid: Ticketreservation.tripid2,
-              Seatsnumbers: Ticketreservation.countSeats2);
+          BusLayoutRepo(apiConsumer: sl())
+              .Removeholdfun(tripid: Ticketreservation.tripid1, Seatsnumbers: Ticketreservation.countSeats1);
+
+          BusLayoutRepo(apiConsumer: sl())
+              .Removeholdfun(tripid: Ticketreservation.tripid2, Seatsnumbers: Ticketreservation.countSeats2);
 
           bool ishow = false;
 
           if (ishow == false) {
             ishow = true;
-            Navigator.pushNamedAndRemoveUntil(
-                context, Routes.home, (r) => false,
-                arguments: false);
+            Navigator.pushNamedAndRemoveUntil(context, Routes.home, (r) => false, arguments: false);
             CoolAlert.show(
                 barrierDismissible: false,
                 context: context,
                 confirmBtnText: "ok",
-                title: 'error',
-                lottieAsset: 'assets/json/error.json',
+                title: LanguageClass.isEnglish ? 'Info' : 'انتباه',
+                lottieAsset: 'assets/json/Warning.json',
                 type: CoolAlertType.error,
                 loopAnimation: false,
-                backgroundColor: Colors.red,
+                backgroundColor: Colors.white,
                 text: LanguageClass.isEnglish
                     ? 'Time for reservation has been finished start again'
                     : "لقد انتهى وقت الحجز، ابدأ من جديد",

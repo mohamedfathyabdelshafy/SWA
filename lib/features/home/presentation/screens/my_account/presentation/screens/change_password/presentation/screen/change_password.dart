@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swa/config/routes/app_routes.dart';
@@ -34,7 +36,9 @@ class ChangePassword extends StatelessWidget {
           if (state is ChangePasswordLoaded) {
             Constants.hideLoadingDialog(context);
             Constants.showDefaultSnackBar(
-                context: context, text: state.changePasswordResponse.message!);
+                color: state.changePasswordResponse.status == 'success' ? Colors.green : AppColors.primaryColor,
+                context: context,
+                text: state.changePasswordResponse.message!);
             Navigator.pop(context);
             Navigator.pop(context);
           }
@@ -44,8 +48,7 @@ class ChangePassword extends StatelessWidget {
           }
         },
         child: Directionality(
-          textDirection:
-              LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+          textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
           child: Form(
             key: formKey,
             child: Padding(
@@ -57,18 +60,14 @@ class ChangePassword extends StatelessWidget {
                     height: sizeHeight * 0.08,
                   ),
                   Container(
-                    alignment: LanguageClass.isEnglish
-                        ? Alignment.topLeft
-                        : Alignment.topRight,
+                    alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                     child: InkWell(
                       onTap: () {
                         Navigator.pop(context);
                       },
                       child: Icon(
                         Icons.arrow_back_rounded,
-                        color: Routes.isomra
-                            ? AppColors.umragold
-                            : AppColors.primaryColor,
+                        color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                         size: 35,
                       ),
                     ),
@@ -79,9 +78,7 @@ class ChangePassword extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      LanguageClass.isEnglish
-                          ? "Change Password"
-                          : "تغير كلمة المرور",
+                      LanguageClass.isEnglish ? "Change Password" : "تغير كلمة المرور",
                       style: fontStyle(
                           color: AppColors.blackColor,
                           fontSize: 25,
@@ -101,15 +98,11 @@ class ChangePassword extends StatelessWidget {
                     controller: oldPassController,
                     validator: (validator) {
                       if (validator == null || validator.isEmpty) {
-                        return LanguageClass.isEnglish
-                            ? "Enter your old password"
-                            : "ادخل كلمة المرور القديمة ";
+                        return LanguageClass.isEnglish ? "Enter your old password" : "ادخل كلمة المرور القديمة ";
                       }
                       return null;
                     },
-                    labelText: LanguageClass.isEnglish
-                        ? "Old Password"
-                        : "كلمة المرور القديمة ",
+                    labelText: LanguageClass.isEnglish ? "Old Password" : "كلمة المرور القديمة ",
                   ),
                   SizedBox(
                     height: 15,
@@ -123,15 +116,11 @@ class ChangePassword extends StatelessWidget {
                     controller: newPassController,
                     validator: (validator) {
                       if (validator == null || validator.isEmpty) {
-                        return LanguageClass.isEnglish
-                            ? "Enter your new Password"
-                            : "ادخل كلمة المرور القديمة ";
+                        return LanguageClass.isEnglish ? "Enter your new Password" : "ادخل كلمة المرور القديمة ";
                       }
                       return null;
                     },
-                    labelText: LanguageClass.isEnglish
-                        ? "New Password"
-                        : "كلمة المرور الجديدة",
+                    labelText: LanguageClass.isEnglish ? "New Password" : "كلمة المرور الجديدة",
                   ),
                   SizedBox(
                     height: 15,
@@ -145,19 +134,13 @@ class ChangePassword extends StatelessWidget {
                     controller: confirmPassController,
                     validator: (validator) {
                       if (validator == null || validator.isEmpty) {
-                        return LanguageClass.isEnglish
-                            ? "Confirm your password"
-                            : "موافقة كلمة المرور";
+                        return LanguageClass.isEnglish ? "Confirm your password" : "موافقة كلمة المرور";
                       } else if (validator != newPassController.text) {
-                        return LanguageClass.isEnglish
-                            ? "Password mismatch"
-                            : "كلمة المرور غير متطابقة";
+                        return LanguageClass.isEnglish ? "Password mismatch" : "كلمة المرور غير متطابقة";
                       }
                       return null;
                     },
-                    labelText: LanguageClass.isEnglish
-                        ? "Confirm New Password"
-                        : "الموافقة علي كلمة المرور",
+                    labelText: LanguageClass.isEnglish ? "Confirm New Password" : "الموافقة علي كلمة المرور",
                   ),
                   SizedBox(
                     height: 25,
@@ -165,11 +148,8 @@ class ChangePassword extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       if (formKey.currentState!.validate()) {
-                        BlocProvider.of<ChangePasswordCubit>(context)
-                            .changePassword(
-                                userId: user.userId!,
-                                oldPass: oldPassController.text,
-                                newPass: confirmPassController.text);
+                        BlocProvider.of<ChangePasswordCubit>(context).changePassword(
+                            userId: user.userId!, oldPass: oldPassController.text, newPass: confirmPassController.text);
                       } else {
                         return;
                       }
@@ -179,9 +159,7 @@ class ChangePassword extends StatelessWidget {
                       child: Constants.customButton(
                         borderradias: 41,
                         text: LanguageClass.isEnglish ? "Save" : "حفظ",
-                        color: Routes.isomra
-                            ? AppColors.umragold
-                            : AppColors.primaryColor,
+                        color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                       ),
                     ),
                   )

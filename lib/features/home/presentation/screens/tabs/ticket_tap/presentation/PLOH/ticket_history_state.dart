@@ -18,7 +18,7 @@ class LoadedTicketHistory extends TicketStates {
   ResponseTicketHistoryModel responseTicketHistoryModel;
   LoadedTicketHistory({required this.responseTicketHistoryModel});
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [responseTicketHistoryModel];
 }
 
 class LoadedTicketdetails extends TicketStates {
@@ -40,6 +40,13 @@ class Cancelticketstate extends TicketStates {
   Cancelticketstate({required this.message});
   @override
   List<Object?> get props => [message];
+}
+
+class CancelticketErrorstate extends TicketStates {
+  String errormessage;
+  CancelticketErrorstate({required this.errormessage});
+  @override
+  List<Object?> get props => [errormessage];
 }
 
 class ErrorTicketHistory extends TicketStates {

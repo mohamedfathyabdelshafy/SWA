@@ -1,9 +1,12 @@
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:swa/core/utils/language.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/BusSeatsEditModel.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/Reservation_Response_fawry_model.dart';
 import 'package:swa/features/bus_reservation_layout/data/repo/bus_reservation_repo.dart';
+import 'package:swa/features/forgot_password/data/models/edit_ticket_model.dart';
+import 'package:swa/features/forgot_password/data/models/message_response_model.dart';
 import '../../../../main.dart';
 import '../../data/models/BusSeatsModel.dart';
 import 'bus_layout_reservation_states.dart';
@@ -47,13 +50,10 @@ class BusLayoutCubit extends Cubit<ReservationState> {
 
   void getBusSeatsedit({required int reservationID, SeatDetails? seat}) async {
     emit(BusSeatsLoadingState());
-    await busLayoutRepo
-        .getReservationSeatsData(reservationID: reservationID)
-        .then((value) {
+    await busLayoutRepo.getReservationSeatsData(reservationID: reservationID).then((value) {
       busSeatsEditModel = value;
       if (seat != null) {
-        busSeatsEditModel?.message.busDetailsVm.rowList =
-            value.message.busDetailsVm.rowList.map<RowLists>((element) {
+        busSeatsEditModel!.message?.busDetailsVm.rowList = value.message!.busDetailsVm.rowList.map<RowLists>((element) {
           element.seats.map<SeatDetails?>((element) {
             if (element.seatBusID == seat.seatBusID) {
               element = seat;
@@ -64,7 +64,7 @@ class BusLayoutCubit extends Cubit<ReservationState> {
           }).toList();
           return element;
         }).toList();
-        value.message.busDetailsVm.rowList.forEach((element) {
+        value.message?.busDetailsVm.rowList.forEach((element) {
           element.seats.forEach((element) {
             print("asdasdasd ${element.seatState}");
           });
@@ -77,21 +77,21 @@ class BusLayoutCubit extends Cubit<ReservationState> {
     emit(ReservationInitial());
   }
 
-  void SaveticketEdit(
-      {required int reservationID,
-      required List<num> Seatsnumbers,
-      double? price}) async {
+  void SaveticketEdit({required int reservationID, required List<num> Seatsnumbers, double? price}) async {
     emit(BusSeatsLoadingState());
     try {
-      final res = await busLayoutRepo.saveticketedit(
-          reservationID: reservationID,
-          Seatsnumbers: Seatsnumbers,
-          price: price!);
-      if (res.status == 'success') {
-        emit(GetAdReservationLoadedState(reservationResponse: res.massage));
+      final res =
+          await busLayoutRepo.saveticketedit(reservationID: reservationID, Seatsnumbers: Seatsnumbers, price: price!);
+      if (res is MessageResponseModel) {
+        log("A7med ");
+
+        if (res.status == 'success') {
+          emit(GetAdReservationLoadedState(reservationResponse: res.massage));
+        } else {
+          emit(ReservationErrorState(message: res.massage!));
+        }
       } else {
-        log('ahmed 33');
-        emit(ReservationErrorState(message: res.massage!));
+        emit(ReservationErrorState(message: res!));
       }
     } catch (e) {
       emit(ReservationErrorState(message: e.toString()));
@@ -103,8 +103,7 @@ class BusLayoutCubit extends Cubit<ReservationState> {
     required int tripid,
   }) async {
     try {
-      final res =
-          await busLayoutRepo.Seatholdfunction(setid: seatid, tripid: tripid);
+      final res = await busLayoutRepo.Seatholdfunction(setid: seatid, tripid: tripid);
       if (res.status == 'success') {
       } else {
         log('ahmed 33');
@@ -121,8 +120,7 @@ class BusLayoutCubit extends Cubit<ReservationState> {
   }) async {
     emit(BusSeatsLoadingState());
     try {
-      final res = await busLayoutRepo.Removeholdfun(
-          tripid: tripid, Seatsnumbers: Seatsnumbers);
+      final res = await busLayoutRepo.Removeholdfun(tripid: tripid, Seatsnumbers: Seatsnumbers);
       if (res.status == 'success') {
         emit(Setholdstat(reservationResponse: res.massage));
       } else {

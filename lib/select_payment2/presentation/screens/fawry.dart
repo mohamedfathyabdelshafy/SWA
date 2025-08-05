@@ -37,25 +37,19 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
   }
 
   Future<dynamic> showDoneConfirmationDialog(BuildContext context,
-      {required String message,
-      bool isError = false,
-      Widget? body,
-      required Function callback}) async {
+      {required String message, bool isError = false, Widget? body, required Function callback}) async {
     return CoolAlert.show(
         barrierDismissible: true,
         context: context,
         confirmBtnText: "ok",
         title: isError ? 'error' : '',
-        lottieAsset:
-            isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
+        lottieAsset: isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
         type: CoolAlertType.custom,
         loopAnimation: false,
         backgroundColor: isError ? Colors.red : Colors.white,
         text: message,
         widget: body,
-        onConfirmBtnTap: () {
-          callback();
-        });
+        onConfirmBtnTap: callback());
   }
 
   // TextEditingController amountController = TextEditingController();
@@ -66,8 +60,7 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Directionality(
-        textDirection:
-            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+        textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: SingleChildScrollView(
@@ -83,9 +76,7 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      alignment: LanguageClass.isEnglish
-                          ? Alignment.topLeft
-                          : Alignment.topRight,
+                      alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                       child: InkWell(
                         onTap: () {
                           Navigator.pop(context);
@@ -131,8 +122,7 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                             Container(
                               height: 40,
                               width: 1,
-                              decoration:
-                                  const BoxDecoration(color: Color(0xff47A9EB)),
+                              decoration: const BoxDecoration(color: Color(0xff47A9EB)),
                             ),
                             const SizedBox(
                               width: 5,
@@ -151,30 +141,19 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
 
                                       ),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       Text(
-                                        LanguageClass.isEnglish
-                                            ? "amount"
-                                            : "القيمة",
+                                        LanguageClass.isEnglish ? "amount" : "القيمة",
                                         style: fontStyle(
-                                            fontSize: 15,
-                                            fontFamily: FontFamily.bold,
-                                            color: AppColors.greyLight),
+                                            fontSize: 15, fontFamily: FontFamily.bold, color: AppColors.greyLight),
                                       ),
                                       Text(
                                         Routes.resrvedtrips.length == 2
-                                            ? (Routes.resrvedtrips[0].price! +
-                                                    Routes
-                                                        .resrvedtrips[1].price!)
-                                                .toString()
-                                            : Routes.resrvedtrips[0].price
-                                                .toString(),
+                                            ? (Routes.resrvedtrips[0].price! + Routes.resrvedtrips[1].price!).toString()
+                                            : Routes.resrvedtrips[0].price.toString(),
                                         style: fontStyle(
-                                            fontSize: 18,
-                                            fontFamily: FontFamily.bold,
-                                            color: AppColors.primaryColor),
+                                            fontSize: 18, fontFamily: FontFamily.bold, color: AppColors.primaryColor),
                                       )
                                     ],
                                   )),
@@ -195,8 +174,8 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                                 isError: false,
                                 callback: () {
                                   // Navigator.pop(context);
-                                  // Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false,
-                                  //     arguments: Routes.isomra);
+                                  Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false,
+                                      arguments: Routes.isomra);
                                 },
                                 body: Column(
                                   mainAxisSize: MainAxisSize.min,
@@ -205,35 +184,26 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                                       height: 20,
                                     ),
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          LanguageClass.isEnglish
-                                              ? 'Amount: '
-                                              : "القيمة",
-                                          style: fontStyle(
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600),
+                                          LanguageClass.isEnglish ? 'Amount: ' : "القيمة",
+                                          style:
+                                              fontStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
                                         ),
                                         Text(
                                           Routes.resrvedtrips.length == 2
-                                              ? (Routes.resrvedtrips[0].price! +
-                                                      Routes.resrvedtrips[1]
-                                                          .price!)
+                                              ? (Routes.resrvedtrips[0].price! + Routes.resrvedtrips[1].price!)
                                                   .toString()
-                                              : Routes.resrvedtrips[0].price
-                                                  .toString(),
+                                              : Routes.resrvedtrips[0].price.toString(),
                                         )
                                       ],
                                     ),
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'Reference Number: ',
+                                          LanguageClass.isEnglish ? 'Reference Number: ' : "رقم المرجع :",
                                           style: fontStyle(
                                               color: Colors.black,
                                               fontSize: 14,
@@ -248,15 +218,11 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                                                   Constants.showDefaultSnackBar(
                                                       color: Colors.green,
                                                       context: context,
-                                                      text:
-                                                          'Reference Number copied');
-                                                  await Clipboard.setData(
-                                                      ClipboardData(
-                                                          text: state
-                                                              .reservationResponseElectronicModel
-                                                              .message!
-                                                              .referenceNumber
-                                                              .toString()));
+                                                      text: 'Reference Number copied');
+                                                  await Clipboard.setData(ClipboardData(
+                                                      text: state
+                                                          .reservationResponseElectronicModel.message!.referenceNumber
+                                                          .toString()));
                                                 },
                                                 child: Container(
                                                     width: 15,
@@ -268,10 +234,7 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                                               ),
                                               Expanded(
                                                 child: Text(
-                                                  state
-                                                      .reservationResponseElectronicModel
-                                                      .message!
-                                                      .referenceNumber
+                                                  state.reservationResponseElectronicModel.message!.referenceNumber
                                                       .toString(),
                                                   textAlign: TextAlign.end,
                                                 ),
@@ -286,20 +249,14 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                                     ),
                                   ],
                                 ),
-                                message: state
-                                    .reservationResponseElectronicModel.text
-                                    .toString(),
+                                message: state.reservationResponseElectronicModel.text.toString(),
                               );
                             } else if (state is ErrorElectronicWalletState) {
                               Constants.hideLoadingDialog(context);
-                              Constants.showDefaultSnackBar(
-                                  context: context,
-                                  text: state.error.toString());
+                              Constants.showDefaultSnackBar(context: context, text: state.error.toString());
                             } else if (state is ErrorMyWalletState) {
                               Constants.hideLoadingDialog(context);
-                              Constants.showDefaultSnackBar(
-                                  context: context,
-                                  text: state.error.toString());
+                              Constants.showDefaultSnackBar(context: context, text: state.error.toString());
                             }
                           },
                           child: InkWell(
@@ -307,8 +264,7 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                               CacheHelper.getDataToSharedPref(key: 'price');
 
                               // if(_user != null && formKey.currentState!.validate()) {
-                              BlocProvider.of<ReservationCubit>(context)
-                                  .addReservationFawry(
+                              BlocProvider.of<ReservationCubit>(context).addReservationFawry(
                                 custId: widget.user.customerId!,
                                 paymentMethodID: 2,
                                 paymentTypeID: 68,
@@ -316,11 +272,9 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
                               //}
                             },
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 30),
+                              padding: const EdgeInsets.symmetric(horizontal: 30),
                               child: Constants.customButton(
-                                text:
-                                    LanguageClass.isEnglish ? "Charge" : "شحن",
+                                text: LanguageClass.isEnglish ? "Charge" : "شحن",
                                 color: AppColors.primaryColor,
                               ),
                             ),
@@ -344,13 +298,11 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
 
 class NumericTextFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     if (newValue.text.isEmpty) {
       return newValue.copyWith(text: '');
     } else if (newValue.text.compareTo(oldValue.text) != 0) {
-      final int selectionIndexFromTheRight =
-          newValue.text.length - newValue.selection.end;
+      final int selectionIndexFromTheRight = newValue.text.length - newValue.selection.end;
       var value = newValue.text;
       if (newValue.text.length > 2) {
         value = value.replaceAll(RegExp(r'\D'), '');
@@ -359,8 +311,7 @@ class NumericTextFormatter extends TextInputFormatter {
       }
       return TextEditingValue(
         text: value,
-        selection: TextSelection.collapsed(
-            offset: value.length - selectionIndexFromTheRight),
+        selection: TextSelection.collapsed(offset: value.length - selectionIndexFromTheRight),
       );
     } else {
       return newValue;

@@ -6,7 +6,7 @@ class PackagesState {
   StationfromModel? stationfromModel;
   AdsModel? adsModel;
   Selectappmodel? selectappmodel;
-
+  InstitutionsModel? institutionsmodel;
   String? updateversion;
   Packagemodel? packagemodel;
   Promocodemodel? promocodemodel;
@@ -22,6 +22,7 @@ class PackagesState {
       this.advModel,
       this.selectappmodel,
       this.adsModel,
+      this.institutionsmodel,
       this.reservationResponseMyWalletModel,
       this.promocodemodel,
       this.packagemodel,
@@ -32,20 +33,15 @@ class PackagesState {
     return PackagesState(
         isloading: false,
         updateversion: '',
+        institutionsmodel: InstitutionsModel(),
         advModel: AdvModel(message: []),
         adsModel: AdsModel(message: []),
-        reservationResponseElectronicModel:
-            ReservationResponseElectronicModel(),
+        reservationResponseElectronicModel: ReservationResponseElectronicModel(),
         reservationResponseCreditCard: ReservationResponseCreditCard(),
         reservationResponseMyWalletModel: ReservationResponseMyWalletModel(),
         promocodemodel: Promocodemodel(),
         activePackagemodel: ActivePackagemodel(
-            message: packages(
-                packageName: '',
-                remaingTrip: 0,
-                toDate: '',
-                tripCount: 0,
-                tripDone: 0)),
+            message: packages(packageName: '', remaingTrip: 0, toDate: '', tripCount: 0, tripDone: 0)),
         stationfromModel: StationfromModel(),
         packagemodel: Packagemodel(message: [], errormessage: ''));
   }
@@ -57,6 +53,7 @@ class PackagesState {
       Selectappmodel? selectappmodel,
       Promocodemodel? promocodemodel,
       AdsModel? adsModel,
+      InstitutionsModel? institutionsmodel,
       ReservationResponseElectronicModel? reservationResponseElectronicModel,
       ActivePackagemodel? activePackagemodel,
       ReservationResponseCreditCard? reservationResponseCreditCard,
@@ -66,6 +63,7 @@ class PackagesState {
     return PackagesState(
         isloading: isloading,
         advModel: advModel,
+        institutionsmodel: institutionsmodel,
         selectappmodel: selectappmodel,
         updateversion: updateversion,
         adsModel: adsModel ?? this.adsModel,

@@ -37,3 +37,8 @@ class phonecodeState extends RegisterState {
   final PhonecountrycodeModel phonecountrycodeModel;
   phonecodeState({required this.phonecountrycodeModel});
 }
+
+class ExistuserState extends RegisterState {
+  final CustomerExistmodel existcustomerModel;
+  ExistuserState({required this.existcustomerModel});
+}

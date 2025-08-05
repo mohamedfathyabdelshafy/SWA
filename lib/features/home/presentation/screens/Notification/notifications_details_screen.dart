@@ -81,7 +81,7 @@ class NotificationDetailsScreen extends StatelessWidget {
                     _launchInWebView(Uri.parse(notification.link ?? ""));
                   },
                   child: Text(
-                    notification.link,
+                    notification.link ?? "",
                     style: fontStyle(fontSize: 18, fontFamily: FontFamily.regular, color: Colors.blue)
                         .copyWith(decoration: TextDecoration.underline),
                   ),

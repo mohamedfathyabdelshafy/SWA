@@ -40,6 +40,7 @@ class BusLayoutScreenBack extends StatefulWidget {
     required this.fromcity,
     required this.triTypeId,
     required this.price,
+    required this.arrivaltime,
     this.busdate,
     this.busttime,
     required this.isedit,
@@ -56,6 +57,7 @@ class BusLayoutScreenBack extends StatefulWidget {
   num? discount;
 
   DateTime? busdate;
+  DateTime? arrivaltime;
   String? busttime;
   double price;
   User? user;
@@ -96,32 +98,20 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
       seatheight = busSeatsModel!.busSeatDetails!.busDetails!.rowList!.length;
 
       if (busSeatsModel != null) {
-        unavailable = busSeatsModel!.busSeatDetails!.totalSeats! -
-            busSeatsModel!.busSeatDetails!.emptySeats!;
+        unavailable = busSeatsModel!.busSeatDetails!.totalSeats! - busSeatsModel!.busSeatDetails!.emptySeats!;
 
-        for (int i = 0;
-            i < busSeatsModel!.busSeatDetails!.busDetails!.totalRow!;
-            i++) {
-          for (int j = 0;
-              j <
-                  busSeatsModel!
-                      .busSeatDetails!.busDetails!.rowList![i].seats.length;
-              j++) {
-            if (busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j]
-                    .isReserved ==
-                true) {
-              busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j]
-                  .seatState = SeatState.sold;
+        for (int i = 0; i < busSeatsModel!.busSeatDetails!.busDetails!.totalRow!; i++) {
+          for (int j = 0; j < busSeatsModel!.busSeatDetails!.busDetails!.rowList![i].seats.length; j++) {
+            if (busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j].isReserved == true) {
+              busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j].seatState = SeatState.sold;
             }
 
             if (widget.isedit == true) {
               for (int n = 0; n < Ticketreservation.Seatsnumbers2.length; n++) {
                 countSeatesNum = Ticketreservation.Seatsnumbers2.length;
-                if (busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i]
-                        .seats[j].seatNo ==
+                if (busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j].seatNo ==
                     Ticketreservation.Seatsnumbers2[n]) {
-                  busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i]
-                      .seats[j].seatState = SeatState.selected;
+                  busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j].seatState = SeatState.selected;
                   countSeats.add(Ticketreservation.countSeats2[n]);
 
                   seatsnumber.add(Ticketreservation.Seatsnumbers2[n]);
@@ -134,8 +124,7 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
         setState(() {});
       }
     });
-    print(
-        "busSeatsmodel${busSeatsModel?.busSeatDetails?.busDetails?.totalRow}");
+    print("busSeatsmodel${busSeatsModel?.busSeatDetails?.busDetails?.totalRow}");
     print("unavailable$unavailable");
   }
 
@@ -154,573 +143,511 @@ class _BusLayoutScreenBackState extends State<BusLayoutScreenBack> {
               ),
             );
           }
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(
-                  height: sizeHeight * 0.06,
-                ),
-                Container(
-                  alignment: Alignment.topLeft,
-                  child: InkWell(
-                    onTap: () {
-                      if (widget.isedit == false) {
-                        Ticketreservation.Seatsnumbers2.clear();
-                      }
-                      Navigator.pop(context);
-                    },
-                    child: Icon(
-                      Icons.arrow_back_rounded,
-                      color: AppColors.primaryColor,
-                      size: 35,
+
+          return WillPopScope(
+              onWillPop: () async {
+                if (widget.isedit == false) {
+                  Ticketreservation.Seatsnumbers2.clear();
+                }
+                Navigator.pop(context);
+
+                return true;
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(
+                      height: sizeHeight * 0.06,
                     ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        LanguageClass.isEnglish ? "Select seats" : "حدد كراسيك",
-                        style: fontStyle(
-                            color: AppColors.blackColor,
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w600,
-                            height: 1.2,
-                            fontFamily: FontFamily.medium),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      child: InkWell(
+                        onTap: () {
+                          if (widget.isedit == false) {
+                            Ticketreservation.Seatsnumbers2.clear();
+                          }
+                          Navigator.pop(context);
+                        },
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          color: AppColors.primaryColor,
+                          size: 35,
+                        ),
                       ),
-                      Timerwidget()
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  height: 60.sp,
-                  padding: const EdgeInsets.all(0),
-                  margin: const EdgeInsets.symmetric(horizontal: 0),
-                  decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(10)),
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      Row(
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                DateFormat('dd-MM-yyyy')
-                                    .format(widget.busdate!)
-                                    .toString(),
-                                style: fontStyle(
-                                    fontSize: 12.sp,
-                                    fontFamily: FontFamily.bold,
-                                    height: 1,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black),
-                              ),
-                              Text(
-                                DateFormat('hh:mm a')
-                                    .format(widget.busdate!)
-                                    .toString(),
-                                style: fontStyle(
-                                    fontSize: 12.sp,
-                                    fontFamily: FontFamily.bold,
-                                    fontWeight: FontWeight.w600,
-                                    height: 1,
-                                    color: Colors.black),
-                              ),
-                            ],
+                          Text(
+                            LanguageClass.isEnglish ? "Select seats" : "حدد كراسيك",
+                            style: fontStyle(
+                                color: AppColors.blackColor,
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w600,
+                                height: 1.2,
+                                fontFamily: FontFamily.medium),
                           ),
-                          Container(
-                            height: 50.sp,
-                            width: 4,
-                            margin: const EdgeInsetsDirectional.symmetric(
-                                horizontal: 12),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              gradient: LinearGradient(
-                                begin: AlignmentDirectional.topStart,
-                                end: AlignmentDirectional.bottomStart,
-                                colors: [
-                                  AppColors.primaryColor,
-                                  AppColors.primaryColor
+                          Timerwidget()
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      height: 60.sp,
+                      padding: const EdgeInsets.all(0),
+                      margin: const EdgeInsets.symmetric(horizontal: 0),
+                      decoration: BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(10)),
+                      width: double.infinity,
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    DateFormat('dd-MM-yyyy').format(widget.busdate!).toString(),
+                                    style: fontStyle(
+                                        fontSize: 10.sp,
+                                        fontFamily: FontFamily.bold,
+                                        height: 1,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black),
+                                  ),
+                                  Text(
+                                    DateFormat('hh:mm a').format(widget.busdate!).toString(),
+                                    style: fontStyle(
+                                        fontSize: 10.sp,
+                                        fontFamily: FontFamily.bold,
+                                        fontWeight: FontWeight.w600,
+                                        height: 1,
+                                        color: Colors.black),
+                                  ),
+                                  // 5.verticalSpace,
+                                  // Text(
+                                  //   DateFormat('dd-MM-yyyy').format(widget.arrivaltime!).toString(),
+                                  //   style: fontStyle(
+                                  //       fontSize: 10.sp,
+                                  //       fontFamily: FontFamily.bold,
+                                  //       height: 1,
+                                  //       fontWeight: FontWeight.w600,
+                                  //       color: Colors.black),
+                                  // ),
+                                  // Text(
+                                  //   DateFormat('hh:mm a').format(widget.arrivaltime!).toString(),
+                                  //   style: fontStyle(
+                                  //       fontSize: 10.sp,
+                                  //       fontFamily: FontFamily.bold,
+                                  //       fontWeight: FontWeight.w600,
+                                  //       height: 1,
+                                  //       color: Colors.black),
+                                  // ),
                                 ],
                               ),
-                            ),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.from,
-                                style: fontStyle(
-                                    fontSize: 16.sp,
-                                    fontFamily: FontFamily.bold,
-                                    height: 1,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black),
+                              Container(
+                                height: 50.sp,
+                                width: 4,
+                                margin: const EdgeInsetsDirectional.symmetric(horizontal: 12),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  gradient: LinearGradient(
+                                    begin: AlignmentDirectional.topStart,
+                                    end: AlignmentDirectional.bottomStart,
+                                    colors: [AppColors.primaryColor, AppColors.primaryColor],
+                                  ),
+                                ),
                               ),
-                              Text(
-                                widget.to,
-                                style: fontStyle(
-                                    fontSize: 16.sp,
-                                    fontFamily: FontFamily.bold,
-                                    height: 1.2,
-                                    color: Colors.black),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.from,
+                                    style: fontStyle(
+                                        fontSize: 16.sp,
+                                        fontFamily: FontFamily.bold,
+                                        height: 1,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black),
+                                  ),
+                                  Text(
+                                    widget.to,
+                                    style: fontStyle(
+                                        fontSize: 16.sp, fontFamily: FontFamily.bold, height: 1.2, color: Colors.black),
+                                  ),
+                                ],
                               ),
                             ],
-                          ),
+                          )
                         ],
-                      )
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: ListView(
-                          shrinkWrap: true,
-                          children: [
-                            Text(
-                              LanguageClass.isEnglish ? 'Available' : 'المتاح',
-                              style: fontStyle(
-                                  fontSize: 12.sp,
-                                  fontFamily: FontFamily.medium,
-                                  height: 1.2,
-                                  color: Colors.black),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.zero,
-                              child: Text(
-                                busSeatsModel?.busSeatDetails?.emptySeats
-                                        .toString() ??
-                                    "",
-                                style: fontStyle(
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ListView(
+                              shrinkWrap: true,
+                              children: [
+                                Text(
+                                  LanguageClass.isEnglish ? 'Available' : 'المتاح',
+                                  style: fontStyle(
+                                      fontSize: 12.sp, fontFamily: FontFamily.medium, height: 1.2, color: Colors.black),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.zero,
+                                  child: Text(
+                                    busSeatsModel?.busSeatDetails?.emptySeats.toString() ?? "",
+                                    style: fontStyle(
+                                        fontSize: 30.sp,
+                                        fontFamily: FontFamily.bold,
+                                        height: 1.2,
+                                        color: AppColors.primaryColor),
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                Text(
+                                  LanguageClass.isEnglish ? 'Selected' : 'تم تحديده',
+                                  style: fontStyle(
+                                      fontSize: 12.sp, height: 1, fontFamily: FontFamily.medium, color: Colors.black),
+                                ),
+                                Text(
+                                  countSeatesNum.toString(),
+                                  style: fontStyle(
                                     fontSize: 30.sp,
                                     fontFamily: FontFamily.bold,
                                     height: 1.2,
-                                    color: AppColors.primaryColor),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            Text(
-                              LanguageClass.isEnglish
-                                  ? 'Selected'
-                                  : 'تم تحديده',
-                              style: fontStyle(
-                                  fontSize: 12.sp,
-                                  height: 1,
-                                  fontFamily: FontFamily.medium,
-                                  color: Colors.black),
-                            ),
-                            Text(
-                              countSeatesNum.toString(),
-                              style: fontStyle(
-                                fontSize: 30.sp,
-                                fontFamily: FontFamily.bold,
-                                height: 1.2,
-                                color: Color(0xff5332F7),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              LanguageClass.isEnglish
-                                  ? 'Unavailable'
-                                  : 'غير متاح',
-                              style: fontStyle(
-                                  fontSize: 12.sp,
-                                  fontFamily: FontFamily.medium,
-                                  height: 1,
-                                  color: Colors.black),
-                            ),
-                            Text(
-                              unavailable.toString(),
-                              style: fontStyle(
-                                  fontSize: 30.sp,
-                                  height: 1.2,
-                                  fontFamily: FontFamily.bold,
-                                  color: Colors.grey),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                if (seatsnumber.isNotEmpty) {
-                                  cachCountSeats2 =
-                                      CacheHelper.getDataToSharedPref(
-                                              key: 'countSeats2')
+                                    color: Color(0xff5332F7),
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  LanguageClass.isEnglish ? 'Unavailable' : 'غير متاح',
+                                  style: fontStyle(
+                                      fontSize: 12.sp, fontFamily: FontFamily.medium, height: 1, color: Colors.black),
+                                ),
+                                Text(
+                                  unavailable.toString(),
+                                  style: fontStyle(
+                                      fontSize: 30.sp, height: 1.2, fontFamily: FontFamily.bold, color: Colors.grey),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    if (seatsnumber.isNotEmpty) {
+                                      cachCountSeats2 = CacheHelper.getDataToSharedPref(key: 'countSeats2')
                                           ?.map((e) => int.tryParse(e) ?? 0)
                                           .toList();
-                                  print("countSeats3Bassant$cachCountSeats2");
+                                      print("countSeats3Bassant$cachCountSeats2");
 
-                                  Ticketreservation.tripid2 = widget.tripId;
-                                  Ticketreservation.tocity2 = widget.tocity;
-                                  Ticketreservation.fromcity2 = widget.fromcity;
-                                  Ticketreservation.priceticket2 = widget.price;
-                                  Ticketreservation.countSeats2 = countSeats;
-                                  Ticketreservation.Seatsnumbers2 = seatsnumber;
-                                  Ticketreservation.busid2 = busSeatsModel!
-                                      .busSeatDetails!.busDetails!.busID!;
-                                  Ticketreservation.fromcitystation2 =
-                                      widget.from;
-                                  Ticketreservation.tocitystation2 = widget.to;
-                                  Ticketreservation.cachCountSeats2 =
-                                      cachCountSeats2;
+                                      Ticketreservation.tripid2 = widget.tripId;
+                                      Ticketreservation.tocity2 = widget.tocity;
+                                      Ticketreservation.fromcity2 = widget.fromcity;
+                                      Ticketreservation.priceticket2 = widget.price;
+                                      Ticketreservation.countSeats2 = countSeats;
+                                      Ticketreservation.Seatsnumbers2 = seatsnumber;
+                                      Ticketreservation.busid2 = busSeatsModel!.busSeatDetails!.busDetails!.busID!;
+                                      Ticketreservation.fromcitystation2 = widget.from;
+                                      Ticketreservation.tocitystation2 = widget.to;
+                                      Ticketreservation.cachCountSeats2 = cachCountSeats2;
 
-                                  Ticketreservation.numbertrip2 =
-                                      CacheHelper.getDataToSharedPref(
-                                          key: 'numberTrip2');
-                                  Ticketreservation.elite2 =
-                                      CacheHelper.getDataToSharedPref(
-                                          key: "elite2");
-                                  Ticketreservation.accessDate2 =
-                                      CacheHelper.getDataToSharedPref(
-                                          key: "accessBusDate2");
+                                      Ticketreservation.numbertrip2 =
+                                          CacheHelper.getDataToSharedPref(key: 'numberTrip2');
+                                      Ticketreservation.elite2 = CacheHelper.getDataToSharedPref(key: "elite2");
+                                      Ticketreservation.accessDate2 =
+                                          CacheHelper.getDataToSharedPref(key: "accessBusDate2");
+                                      Ticketreservation.arrivaldate2 =
+                                          CacheHelper.getDataToSharedPref(key: "arrivalDate2");
 
-                                  Ticketreservation.accessBusTime2 =
-                                      CacheHelper.getDataToSharedPref(
-                                          key: "accessBusTime2");
+                                      Ticketreservation.accessBusTime2 =
+                                          CacheHelper.getDataToSharedPref(key: "accessBusTime2");
 
-                                  if (UmraDetails.isbusforumra) {
-                                    UmraDetails.swatransportList!.first
-                                        .fromStationId = null;
-                                    UmraDetails.swatransportList!.first
-                                        .toStationId = null;
-
-                                    UmraDetails.Swabusreservedseats.add(
-                                        TransportationsSeats(
-                                      tripid: widget.tripId,
-                                      seatsnumber: countSeats,
-                                      totalprice:
-                                          countSeats.length * widget.price,
-                                    ));
-                                  }
-                                  if (Ticketreservation.Seatsnumbers1.isEmpty) {
-                                    print("TIK TIK FROM 1");
-                                    Navigator.pop(context);
-                                  } else {
-                                    if (widget.isedit == true) {
-                                      print("TIK TIK FROM 2");
-
-                                      Navigator.pop(context);
-                                    } else {
                                       if (UmraDetails.isbusforumra) {
-                                        print("TIK TIK FROM 3");
+                                        UmraDetails.swatransportList!.first.fromStationId = null;
+                                        UmraDetails.swatransportList!.first.toStationId = null;
 
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
+                                        UmraDetails.Swabusreservedseats.add(TransportationsSeats(
+                                          tripid: widget.tripId,
+                                          seatsnumber: countSeats,
+                                          totalprice: countSeats.length * widget.price,
+                                        ));
+                                      }
+                                      if (Ticketreservation.Seatsnumbers1.isEmpty) {
+                                        print("TIK TIK FROM 1");
                                         Navigator.pop(context);
                                       } else {
-                                        if (seatsnumber.length == 1) {
-                                          print("TIK TIK FROM 4");
+                                        if (widget.isedit == true) {
+                                          print("TIK TIK FROM 2");
 
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    MultiBlocProvider(
-                                                        providers: [
-                                                          BlocProvider<
-                                                                  LoginCubit>(
-                                                              create: (context) =>
-                                                                  sl<LoginCubit>()),
-                                                          BlocProvider<
-                                                              TimesTripsCubit>(
-                                                            create: (context) =>
-                                                                TimesTripsCubit(),
-                                                          )
-                                                        ],
-                                                        // Replace with your actual cubit creation logic
-                                                        child:
-                                                            ReservationTicket(
-                                                          tripTypeId: "2",
-                                                          countSeats2:
-                                                              cachCountSeats2,
-                                                          user: widget.user,
-                                                          actualDiscount:
-                                                              widget.discount! *
-                                                                  2,
-                                                        ))),
-                                          );
+                                          Navigator.pop(context);
                                         } else {
-                                          print("TIK TIK FROM 5");
+                                          if (UmraDetails.isbusforumra) {
+                                            print("TIK TIK FROM 3");
 
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ReservationTicket(
-                                                  tripTypeId: widget.triTypeId,
-                                                  user: widget.user,
-                                                  actualDiscount:
-                                                      widget.discount! * 2,
-                                                ),
-                                              ));
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                          } else {
+                                            if (seatsnumber.length == 1) {
+                                              print("TIK TIK FROM 4");
 
-                                          // Navigator.push(
-                                          //     context,
-                                          //     MaterialPageRoute(
-                                          //       builder: (context) =>
-                                          //           CustomerInfoScreen(
-                                          //         to: widget.to,
-                                          //         isFromBackTrip: true,
-                                          //         tocity: widget.tocity,
-                                          //         fromcity: widget.fromcity,
-                                          //         from: widget.from,
-                                          //         triTypeId: widget.triTypeId,
-                                          //         isedit: widget.isedit,
-                                          //         busGoId: busSeatsModel!
-                                          //             .busSeatDetails!
-                                          //             .busDetails!
-                                          //             .busID!,
-                                          //         busdate: DateTime.tryParse(
-                                          //             widget.busdate
-                                          //                 .toString()),
-                                          //         price: widget.price,
-                                          //         tripId: widget.tripId,
-                                          //         Seatsnumbers: countSeats,
-                                          //         actualSeats: seatsnumber,
-                                          //         fromStationName: widget.from,
-                                          //         toStationName: widget.to,
-                                          //         user: widget.user,
-                                          //         tripTypeId: widget.triTypeId,
-                                          //       ),
-                                          //     ));
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => MultiBlocProvider(
+                                                            providers: [
+                                                              BlocProvider<LoginCubit>(
+                                                                  create: (context) => sl<LoginCubit>()),
+                                                              BlocProvider<TimesTripsCubit>(
+                                                                create: (context) => TimesTripsCubit(),
+                                                              )
+                                                            ],
+                                                            // Replace with your actual cubit creation logic
+                                                            child: ReservationTicket(
+                                                              tripTypeId: "2",
+                                                              countSeats2: cachCountSeats2,
+                                                              user: widget.user,
+                                                              actualDiscount: widget.discount! * 2,
+                                                            ))),
+                                              );
+                                            } else {
+                                              print("TIK TIK FROM 5");
+
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => MultiBlocProvider(
+                                                      providers: [
+                                                        BlocProvider<LoginCubit>(create: (context) => sl<LoginCubit>()),
+                                                        BlocProvider<TimesTripsCubit>(
+                                                          create: (context) => TimesTripsCubit(),
+                                                        )
+                                                      ],
+                                                      child: ReservationTicket(
+                                                        tripTypeId: widget.triTypeId,
+                                                        user: widget.user,
+                                                        actualDiscount: widget.discount! * 2,
+                                                      ),
+                                                    ),
+                                                  ));
+
+                                              // Navigator.push(
+                                              //     context,
+                                              //     MaterialPageRoute(
+                                              //       builder: (context) =>
+                                              //           CustomerInfoScreen(
+                                              //         to: widget.to,
+                                              //         isFromBackTrip: true,
+                                              //         tocity: widget.tocity,
+                                              //         fromcity: widget.fromcity,
+                                              //         from: widget.from,
+                                              //         triTypeId: widget.triTypeId,
+                                              //         isedit: widget.isedit,
+                                              //         busGoId: busSeatsModel!
+                                              //             .busSeatDetails!
+                                              //             .busDetails!
+                                              //             .busID!,
+                                              //         busdate: DateTime.tryParse(
+                                              //             widget.busdate
+                                              //                 .toString()),
+                                              //         price: widget.price,
+                                              //         tripId: widget.tripId,
+                                              //         Seatsnumbers: countSeats,
+                                              //         actualSeats: seatsnumber,
+                                              //         fromStationName: widget.from,
+                                              //         toStationName: widget.to,
+                                              //         user: widget.user,
+                                              //         tripTypeId: widget.triTypeId,
+                                              //       ),
+                                              //     ));
+                                            }
+                                          }
                                         }
                                       }
-                                    }
-                                  }
-                                } else {
-                                  Constants.showDefaultSnackBar(
-                                      color: Colors.red,
-                                      context: context,
-                                      text: LanguageClass.isEnglish
-                                          ? 'Select Seats'
-                                          : 'اختر الكراسي');
-                                }
-                              },
-                              child: Container(
-                                height: 30.sp,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: AppColors.primaryColor,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    LanguageClass.isEnglish ? "Save" : "تم",
-                                    style: fontStyle(
-                                        color: Colors.white,
-                                        fontFamily: FontFamily.bold,
-                                        fontSize: 16.sp),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 15,
-                            )
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Stack(
-                          children: [
-                            seatheight < 10
-                                ? Positioned(
-                                    top: 0,
-                                    right: 0,
-                                    left: 0,
-                                    bottom: 0,
-                                    child: Container(
-                                        alignment: Alignment.topCenter,
-                                        height: sizeHeight / 5,
-                                        width: sizeWidth - (sizeWidth / 4),
-                                        child: Image.asset(
-                                          'assets/images/mini.png',
-                                          fit: BoxFit.fill,
-                                          height: sizeHeight / 4,
-                                          width: sizeWidth - (sizeWidth / 4),
-                                        )),
-                                  )
-                                : Positioned(
-                                    top: 0,
-                                    right: 0,
-                                    left: 0,
-                                    bottom: 0,
-                                    child: Container(
-                                        alignment: Alignment.topCenter,
-                                        height: sizeHeight / 5,
-                                        width: sizeWidth - (sizeWidth / 4),
-                                        child: Image.asset(
-                                          'assets/images/bus_body.png',
-                                          fit: BoxFit.fill,
-                                          height: sizeHeight / 4,
-                                          width: sizeWidth - (sizeWidth / 4),
-                                        )),
-                                  ),
-                            seatheight < 10
-                                ? Positioned(
-                                    top: ((sizeHeight * .036) * seatheight),
-                                    bottom: 5,
-                                    left: 5,
-                                    right: 5,
-                                    child: Container(
-                                        alignment: Alignment.topCenter,
-                                        width: sizeWidth - (sizeWidth / 4),
-                                        child: Image.asset(
-                                          'assets/images/miniback.png',
-                                          fit: BoxFit.fill,
-                                          height: sizeHeight / 4,
-                                          width: sizeWidth - (sizeWidth / 4),
-                                        )),
-                                  )
-                                : Positioned(
-                                    top: seatheight < 10
-                                        ? ((sizeHeight * .036) * seatheight)
-                                        : ((sizeHeight * .036) * seatheight) -
-                                            30.sp,
-                                    bottom: 5,
-                                    left: 5,
-                                    right: 5,
-                                    child: Container(
-                                        alignment: Alignment.topCenter,
-                                        width: sizeWidth - (sizeWidth / 4),
-                                        child: Image.asset(
-                                          'assets/images/busback.png',
-                                          fit: BoxFit.fill,
-                                          height: sizeHeight / 4,
-                                          width: sizeWidth - (sizeWidth / 4),
-                                        )),
-                                  ),
-                            Positioned(
-                              top: seatheight < 10
-                                  ? (sizeHeight / 9)
-                                  : (sizeHeight / 5) - 30.sp,
-                              left: 0,
-                              right: 0,
-                              bottom: 0,
-                              child: Container(
-                                alignment: Alignment.topCenter,
-                                width: sizeWidth - (sizeWidth / 4),
-                                child: SeatLayoutWidget(
-                                  seatHeight: (sizeHeight * .036),
-                                  onSeatStateChanged:
-                                      (rowI, colI, seatState, seat) {
-                                    print("set $seat");
-                                    print("seatstate $seatState");
-                                    print("rowI ${rowI}, column1 ${colI}");
-                                    if (seatState == SeatState.selected) {
-                                      print("I am here");
-
-                                      _busLayoutCubit.seathold(
-                                          seatid: busSeatsModel!
-                                              .busSeatDetails!
-                                              .busDetails!
-                                              .rowList![rowI]
-                                              .seats[colI]
-                                              .seatBusID!
-                                              .toInt(),
-                                          tripid: busSeatsModel!
-                                              .busSeatDetails!.tripId!);
-
-                                      countSeats.add(busSeatsModel!
-                                          .busSeatDetails!
-                                          .busDetails!
-                                          .rowList![rowI]
-                                          .seats[colI]
-                                          .seatBusID!);
-                                      seatsnumber.add(busSeatsModel!
-                                          .busSeatDetails!
-                                          .busDetails!
-                                          .rowList![rowI]
-                                          .seats[colI]
-                                          .seatNo!);
-                                      print("countSeats${seatsnumber}");
-                                      countSeatesNum = countSeats.length;
-                                      CacheHelper.setDataToSharedPref(
-                                          key: 'countSeats', value: countSeats);
-
-                                      setState(() {});
                                     } else {
-                                      print("I am there");
-                                      selectedSeats = null;
-                                      busSeatsModel
-                                          ?.busSeatDetails
-                                          ?.busDetails
-                                          ?.rowList?[rowI]
-                                          .seats[colI]
-                                          .seatState = SeatState.available;
-                                      countSeats.remove(busSeatsModel!
-                                          .busSeatDetails!
-                                          .busDetails!
-                                          .rowList![rowI]
-                                          .seats[colI]
-                                          .seatBusID!);
-                                      seatsnumber.remove(busSeatsModel!
-                                          .busSeatDetails!
-                                          .busDetails!
-                                          .rowList![rowI]
-                                          .seats[colI]
-                                          .seatNo!);
-                                      countSeatesNum = countSeats.length;
-                                      setState(() {});
+                                      Constants.showDefaultSnackBar(
+                                          color: Colors.red,
+                                          context: context,
+                                          text: LanguageClass.isEnglish ? 'Select Seats' : 'اختر الكراسي');
                                     }
                                   },
-                                  stateModel: SeatLayoutStateModel(
-                                    rows: busSeatsModel?.busSeatDetails
-                                            ?.busDetails?.rowList?.length ??
-                                        0,
-                                    cols: busSeatsModel?.busSeatDetails
-                                            ?.busDetails?.totalColumn ??
-                                        5,
-                                    seatSvgSize: 30.sp.toInt(),
-                                    pathSelectedSeat:
-                                        'assets/images/unavailable_seats.svg',
-                                    pathDisabledSeat:
-                                        'assets/images/unavailable_seats.svg',
-                                    pathSoldSeat:
-                                        'assets/images/disabled_seats.svg',
-                                    pathUnSelectedSeat:
-                                        'assets/images/unavailable_seats.svg',
-                                    currentSeats: List.generate(
-                                      busSeatsModel?.busSeatDetails?.busDetails
-                                              ?.rowList?.length ??
-                                          0,
-
-                                      // Number of rows based on totalSeats
-                                      (row) => busSeatsModel!.busSeatDetails!
-                                          .busDetails!.rowList![row].seats,
+                                  child: Container(
+                                    height: 30.sp,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primaryColor,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        LanguageClass.isEnglish ? "Save" : "تم",
+                                        style: fontStyle(
+                                            color: Colors.white, fontFamily: FontFamily.bold, fontSize: 16.sp),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
+                                SizedBox(
+                                  height: 15,
+                                )
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Stack(
+                              children: [
+                                seatheight < 10
+                                    ? Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        left: 0,
+                                        bottom: 0,
+                                        child: Container(
+                                            alignment: Alignment.topCenter,
+                                            height: sizeHeight / 5,
+                                            width: sizeWidth - (sizeWidth / 4),
+                                            child: Image.asset(
+                                              'assets/images/mini.png',
+                                              fit: BoxFit.fill,
+                                              height: sizeHeight / 4,
+                                              width: sizeWidth - (sizeWidth / 4),
+                                            )),
+                                      )
+                                    : Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        left: 0,
+                                        bottom: 0,
+                                        child: Container(
+                                            alignment: Alignment.topCenter,
+                                            height: sizeHeight / 5,
+                                            width: sizeWidth - (sizeWidth / 4),
+                                            child: Image.asset(
+                                              'assets/images/bus_body.png',
+                                              fit: BoxFit.fill,
+                                              height: sizeHeight / 4,
+                                              width: sizeWidth - (sizeWidth / 4),
+                                            )),
+                                      ),
+                                seatheight < 10
+                                    ? Positioned(
+                                        top: ((sizeHeight * .036) * seatheight),
+                                        bottom: 5,
+                                        left: 5,
+                                        right: 5,
+                                        child: Container(
+                                            alignment: Alignment.topCenter,
+                                            width: sizeWidth - (sizeWidth / 4),
+                                            child: Image.asset(
+                                              'assets/images/miniback.png',
+                                              fit: BoxFit.fill,
+                                              height: sizeHeight / 4,
+                                              width: sizeWidth - (sizeWidth / 4),
+                                            )),
+                                      )
+                                    : Positioned(
+                                        top: seatheight < 10
+                                            ? ((sizeHeight * .036) * seatheight)
+                                            : ((sizeHeight * .036) * seatheight) - 30.sp,
+                                        bottom: 5,
+                                        left: 5,
+                                        right: 5,
+                                        child: Container(
+                                            alignment: Alignment.topCenter,
+                                            width: sizeWidth - (sizeWidth / 4),
+                                            child: Image.asset(
+                                              'assets/images/busback.png',
+                                              fit: BoxFit.fill,
+                                              height: sizeHeight / 4,
+                                              width: sizeWidth - (sizeWidth / 4),
+                                            )),
+                                      ),
+                                Positioned(
+                                  top: seatheight < 10 ? (sizeHeight / 9) : (sizeHeight / 5) - 30.sp,
+                                  left: 0,
+                                  right: 0,
+                                  bottom: 0,
+                                  child: Container(
+                                    alignment: Alignment.topCenter,
+                                    width: sizeWidth - (sizeWidth / 4),
+                                    child: SeatLayoutWidget(
+                                      seatHeight: (sizeHeight * .036),
+                                      onSeatStateChanged: (rowI, colI, seatState, seat) {
+                                        print("set $seat");
+                                        print("seatstate $seatState");
+                                        print("rowI ${rowI}, column1 ${colI}");
+                                        if (seatState == SeatState.selected) {
+                                          print("I am here");
+
+                                          _busLayoutCubit.seathold(
+                                              seatid: busSeatsModel!
+                                                  .busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatBusID!
+                                                  .toInt(),
+                                              tripid: busSeatsModel!.busSeatDetails!.tripId!);
+
+                                          countSeats.add(busSeatsModel!
+                                              .busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatBusID!);
+                                          seatsnumber.add(busSeatsModel!
+                                              .busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatNo!);
+                                          print("countSeats${seatsnumber}");
+                                          countSeatesNum = countSeats.length;
+                                          CacheHelper.setDataToSharedPref(key: 'countSeats', value: countSeats);
+
+                                          setState(() {});
+                                        } else {
+                                          print("I am there");
+                                          selectedSeats = null;
+                                          busSeatsModel?.busSeatDetails?.busDetails?.rowList?[rowI].seats[colI]
+                                              .seatState = SeatState.available;
+                                          countSeats.remove(busSeatsModel!
+                                              .busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatBusID!);
+                                          seatsnumber.remove(busSeatsModel!
+                                              .busSeatDetails!.busDetails!.rowList![rowI].seats[colI].seatNo!);
+                                          countSeatesNum = countSeats.length;
+                                          setState(() {});
+                                        }
+                                      },
+                                      stateModel: SeatLayoutStateModel(
+                                        rows: busSeatsModel?.busSeatDetails?.busDetails?.rowList?.length ?? 0,
+                                        cols: busSeatsModel?.busSeatDetails?.busDetails?.totalColumn ?? 5,
+                                        seatSvgSize: 30.sp.toInt(),
+                                        pathSelectedSeat: 'assets/images/unavailable_seats.svg',
+                                        pathDisabledSeat: 'assets/images/unavailable_seats.svg',
+                                        pathSoldSeat: 'assets/images/disabled_seats.svg',
+                                        pathUnSelectedSeat: 'assets/images/unavailable_seats.svg',
+                                        currentSeats: List.generate(
+                                          busSeatsModel?.busSeatDetails?.busDetails?.rowList?.length ?? 0,
+
+                                          // Number of rows based on totalSeats
+                                          (row) => busSeatsModel!.busSeatDetails!.busDetails!.rowList![row].seats,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          );
+              ));
         },
       ),
     );

@@ -7,6 +7,7 @@ import 'package:swa/core/api/end_points.dart';
 import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/features/Swa_umra/models/umra_detail.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/BusSeatsEditModel.dart';
+import 'package:swa/features/forgot_password/data/models/edit_ticket_model.dart';
 import 'package:swa/features/forgot_password/data/models/message_response_model.dart';
 
 import '../../../../core/api/api_consumer.dart';
@@ -20,8 +21,8 @@ class BusLayoutRepo {
           key: 'countryid',
         ) ??
         3;
-    var response = await apiConsumer.get(
-        "${EndPoints.baseUrl}Trip/GetSingleTripDetails?tripId=$tripId&countryID=$countryid");
+    var response =
+        await apiConsumer.get("${EndPoints.baseUrl}Trip/GetSingleTripDetails?tripId=$tripId&countryID=$countryid");
 
     log('ReservationData response ' + response.body);
 
@@ -30,8 +31,7 @@ class BusLayoutRepo {
     return busSeatsModel;
   }
 
-  Future<BusSeatsEditModel> getReservationSeatsData(
-      {required int reservationID}) async {
+  Future<BusSeatsEditModel> getReservationSeatsData({required int reservationID}) async {
     var countryid = CacheHelper.getDataToSharedPref(
           key: 'countryid',
         ) ??
@@ -42,15 +42,11 @@ class BusLayoutRepo {
     log('ReservationData response ' + response.body);
 
     var decodedResponse = json.decode(response.body);
-    BusSeatsEditModel busSeatsModel =
-        BusSeatsEditModel.fromJson(decodedResponse);
+    BusSeatsEditModel busSeatsModel = BusSeatsEditModel.fromJson(decodedResponse);
     return busSeatsModel;
   }
 
-  Future<MessageResponseModel> saveticketedit(
-      {required int reservationID,
-      required List<num> Seatsnumbers,
-      required double price}) async {
+  Future saveticketedit({required int reservationID, required List<num> Seatsnumbers, required double price}) async {
     var countryid = CacheHelper.getDataToSharedPref(
           key: 'countryid',
         ) ??
@@ -66,20 +62,23 @@ class BusLayoutRepo {
           "totalPrice": totalprice,
           "seatPrice": price,
           "countryID": countryid,
-          "dateTypeID": countryid == 1 ? 113 : 112,
+          "dateTypeID": countryid.toString() == "1" ? 113 : 112,
           "toCurrency": Routes.curruncy
         }),
         "${EndPoints.baseUrl}Reservation/EditReservation");
     log('ReservationData request ' + response.request.toString());
 
-    log('ReservationData body ' + response.request.body.toString());
+    log('ReservationData edit body ' + response.request.body.toString());
 
-    log('ReservationData response ' + response.body);
-
+    log('Reservation edit response ' + response.body);
     var decodedResponse = json.decode(response.body);
-    MessageResponseModel busSeatsModel =
-        MessageResponseModel.fromJson(decodedResponse);
-    return busSeatsModel;
+
+    if (response.statusCode == 200) {
+      MessageResponseModel busSeatsModel = MessageResponseModel.fromJson(decodedResponse);
+      return busSeatsModel;
+    } else {
+      return decodedResponse['message'];
+    }
   }
 
   Future<MessageResponseModel> Seatholdfunction({
@@ -91,14 +90,12 @@ class BusLayoutRepo {
         ) ??
         3;
 
-    var response = await apiConsumer.post(
-        "${EndPoints.baseUrl}Reservation/HoldSeat?seatId=$setid&tripId=$tripid");
+    var response = await apiConsumer.post("${EndPoints.baseUrl}Reservation/HoldSeat?seatId=$setid&tripId=$tripid");
 
     log('sethold response ' + response.body);
 
     var decodedResponse = json.decode(response.body);
-    MessageResponseModel busSeatsModel =
-        MessageResponseModel.fromJson(decodedResponse);
+    MessageResponseModel busSeatsModel = MessageResponseModel.fromJson(decodedResponse);
     return busSeatsModel;
   }
 
@@ -113,8 +110,7 @@ class BusLayoutRepo {
     log('removehold response ' + response.body);
 
     var decodedResponse = json.decode(response.body);
-    MessageResponseModel busSeatsModel =
-        MessageResponseModel.fromJson(decodedResponse);
+    MessageResponseModel busSeatsModel = MessageResponseModel.fromJson(decodedResponse);
     return busSeatsModel;
   }
 }

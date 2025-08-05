@@ -194,7 +194,8 @@ class _ContactUsState extends State<ContactUs> {
                                       return LanguageClass.isEnglish ? "Enter Email" : "ادخل الايميل";
                                     }
                                     String pattern =
-                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+                                        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+$";
+
                                     RegExp regex = RegExp(pattern);
                                     if (!regex.hasMatch(validator)) {
                                       return LanguageClass.isEnglish ? "Your Email is invalid" : "هذا الايميل غير صالح";

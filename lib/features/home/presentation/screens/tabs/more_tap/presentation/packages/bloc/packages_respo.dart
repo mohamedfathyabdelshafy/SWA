@@ -15,6 +15,7 @@ import 'package:swa/features/home/data/models/Ads_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/ActivePackage_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/Ads_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/Select_appmodel.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/institutions_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/packages_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/station_from_model.dart';
 import 'package:swa/main.dart';
@@ -36,8 +37,7 @@ class PackagesRespo {
         ) ??
         3;
 
-    var response = await apiConsumer.get(
-        "${EndPoints.baseUrl}Stations/GetSationListFrom?countryID=$countryid");
+    var response = await apiConsumer.get("${EndPoints.baseUrl}Stations/GetSationListFrom?countryID=$countryid");
 
     log(" station from" + response.body);
     var decode = json.decode(response.body);
@@ -47,9 +47,8 @@ class PackagesRespo {
 
   Future checkversion() async {
     try {
-      GooglePlayServicesAvailability availability = await GoogleApiAvailability
-          .instance
-          .checkGooglePlayServicesAvailability();
+      GooglePlayServicesAvailability availability =
+          await GoogleApiAvailability.instance.checkGooglePlayServicesAvailability();
 
       log(availability.toString());
 
@@ -65,8 +64,8 @@ class PackagesRespo {
               ? EndPoints.playStoreVersion
               : EndPoints.huaweiVersion;
 
-      var response = await apiConsumer.get(
-          "${EndPoints.baseUrl}UpdateVersions/CheckVersion?typeID=$typeID&version=$version");
+      var response =
+          await apiConsumer.get("${EndPoints.baseUrl}UpdateVersions/CheckVersion?typeID=$typeID&version=$version");
       log("${EndPoints.baseUrl}UpdateVersions/CheckVersion?typeID=$typeID&version=$version");
 
       log(" response" + response.body);
@@ -87,8 +86,8 @@ class PackagesRespo {
         ) ??
         3;
 
-    var response = await apiConsumer.get(
-        "${EndPoints.baseUrl}Stations/GetSationListTo?stationId=$stationid&countryID=$countryid");
+    var response =
+        await apiConsumer.get("${EndPoints.baseUrl}Stations/GetSationListTo?stationId=$stationid&countryID=$countryid");
 
     log(" station from" + response.body);
     var decode = json.decode(response.body);
@@ -102,8 +101,7 @@ class PackagesRespo {
         ) ??
         3;
 
-    var response = await apiConsumer
-        .get("${EndPoints.baseUrl}Settings/GetMainPage?countryID=$countryid");
+    var response = await apiConsumer.get("${EndPoints.baseUrl}Settings/GetMainPage?countryID=$countryid");
 
     log(" Select app" + response.body);
 
@@ -111,12 +109,23 @@ class PackagesRespo {
     Selectappmodel linesModel = Selectappmodel.fromJson(decode);
 
     CacheHelper.setDataToSharedPref(
-        key: "appsCount",
-        value: linesModel.message!.appList!.length != null
-            ? linesModel.message!.appList!.length
-            : 0);
+        key: "appsCount", value: linesModel.message!.appList!.length != null ? linesModel.message!.appList!.length : 0);
 
     return linesModel;
+  }
+
+  Future getinstitutions() async {
+    var countryid = CacheHelper.getDataToSharedPref(
+          key: 'countryid',
+        ) ??
+        3;
+
+    var response = await apiConsumer.get("${EndPoints.baseUrl}Institution/GetList?countryID=$countryid");
+
+    var decode = json.decode(response.body);
+    InstitutionsModel institutions = InstitutionsModel.fromJson(decode);
+
+    return institutions;
   }
 
   Future getpackages({required String stationfromid, stationtoid}) async {
@@ -125,8 +134,8 @@ class PackagesRespo {
         ) ??
         3;
 
-    var response = await apiConsumer.get(
-        "${EndPoints.baseUrl}Package/GetPackages?fromID=$stationfromid&toID=$stationtoid&countryID=$countryid");
+    var response = await apiConsumer
+        .get("${EndPoints.baseUrl}Package/GetPackages?fromID=$stationfromid&toID=$stationtoid&countryID=$countryid");
 
     log("packges" + response.body);
     var decode = json.decode(response.body);
@@ -155,8 +164,7 @@ class PackagesRespo {
           key: 'countryid',
         ) ??
         1;
-    print(
-        "${EndPoints.baseUrl}GetAds/GetAds?countryID=$countryid&typeID=${Routes.isomra ? 2 : 1}");
+    print("${EndPoints.baseUrl}GetAds/GetAds?countryID=$countryid&typeID=${Routes.isomra ? 2 : 1}");
 
     var response = await apiConsumer.get(
       "${EndPoints.baseUrl}GetAds/GetAds?countryID=$countryid&typeID=${Routes.isomra ? 2 : 1}",
@@ -212,6 +220,7 @@ class PackagesRespo {
     required String code,
     required int custId,
     required int paymentTypeID,
+    int? institutionID,
     required String promoid,
     required List<TripReservationList> trips,
   }) async {
@@ -254,6 +263,7 @@ class PackagesRespo {
         "CustomerID": custId,
         "CountryID": countryid,
         "PromoCodeID": promoid,
+        "InstitutionID": institutionID,
         "PromoCode": code,
         "PaymentTypeID": paymentTypeID,
         "toCurrency": Routes.curruncy,
@@ -462,7 +472,6 @@ class PackagesRespo {
       'APIKey': '546548dwfdfsd3f4sdfhgat52',
       "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
     };
-    log('a7a');
 
     var request = http.Request(
         'POST',
@@ -515,10 +524,8 @@ class PackagesRespo {
       'APIKey': '546548dwfdfsd3f4sdfhgat52',
       "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
     };
-    log('a7a');
 
-    var request = http.Request(
-        'GET', Uri.parse('${EndPoints.baseUrl}Currency/GetAllCurrency'));
+    var request = http.Request('GET', Uri.parse('${EndPoints.baseUrl}Currency/GetAllCurrency'));
     request.headers.addAll(headers);
     log(await request.toString());
 
@@ -534,8 +541,7 @@ class PackagesRespo {
     }
   }
 
-  Future<double> Convertcurrency(
-      {String? from, String? to, double? amount}) async {
+  Future<double> Convertcurrency({String? from, String? to, double? amount}) async {
     var countryid = CacheHelper.getDataToSharedPref(
           key: 'countryid',
         ) ??
@@ -547,18 +553,15 @@ class PackagesRespo {
       "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
     };
 
-    var request = http.Request(
-        'GET',
-        Uri.parse(
-            '${EndPoints.baseUrl}Currency/GetExchnageRate?fromCurrency=$from&toCurrency=$to&amount=$amount'));
+    var request = http.Request('GET',
+        Uri.parse('${EndPoints.baseUrl}Currency/GetExchnageRate?fromCurrency=$from&toCurrency=$to&amount=$amount'));
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
       var jsonresponse = jsonDecode(await response.stream.bytesToString());
-      final double? convertedAmount =
-          double.tryParse(jsonresponse['message'].toString());
+      final double? convertedAmount = double.tryParse(jsonresponse['message'].toString());
       print("Tik Tik Converted $amount $from To $convertedAmount $to");
       if (convertedAmount == null) throw Exception();
       return convertedAmount;

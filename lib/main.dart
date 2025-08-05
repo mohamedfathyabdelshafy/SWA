@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,16 +9,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart' as geo;
-import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:swa/bloc_observer.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/api/api_consumer.dart';
 import 'package:swa/core/utils/app_strings.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/notifcation_services.dart';
-import 'package:swa/core/widgets/reusable_card_payment_screen.dart';
 import 'package:swa/features/app_info/app_info_injection_container.dart';
 import 'package:swa/features/change_password/change_password_injection_container.dart';
 import 'package:swa/features/forgot_password/forgot_password_injection_container.dart';
@@ -26,6 +23,7 @@ import 'package:swa/features/home/home_injection_container.dart';
 import 'package:swa/features/home/presentation/screens/Notification/bloc/notification_bloc.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_respo.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/ticket_injection_container.dart';
+import 'package:swa/features/new_statistics.dart/bloc/statistics_bloc.dart';
 import 'package:swa/features/payment/electronic_wallet/eWallet_injection_container.dart';
 import 'package:swa/features/payment/fawry/fawry_injection_container.dart';
 import 'package:swa/features/payment/wallet/data/repo/my_wallet_repo.dart';
@@ -44,20 +42,22 @@ import 'features/times_trips/times_trips_injection_container.dart';
 
 final sl = GetIt.instance;
 
-final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
-    GlobalKey<ScaffoldMessengerState>();
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   bool isHuawei = false;
-  Future<bool> isHuaweiDevice() async {
-    final deviceInfo = DeviceInfoPlugin();
-    final androidInfo = await deviceInfo.androidInfo;
-    return androidInfo.manufacturer.toLowerCase() == 'huawei';
-  }
 
-  isHuawei = await isHuaweiDevice();
+  if (!Platform.isIOS) {
+    Future<bool> isHuaweiDevice() async {
+      final deviceInfo = DeviceInfoPlugin();
+      final androidInfo = await deviceInfo.androidInfo;
+      return androidInfo.manufacturer.toLowerCase() == 'huawei';
+    }
+
+    isHuawei = await isHuaweiDevice();
+  }
 
   print("Tik Tik is huawei: $isHuawei");
 
@@ -82,8 +82,7 @@ Future<void> main() async {
   await dependencyInjectionInit();
   //For initializing network info and shared preferences
   await CacheHelper.init();
-  LanguageClass.isEnglish =
-      await CacheHelper.getDataToSharedPref(key: 'language') ?? true;
+  LanguageClass.isEnglish = await CacheHelper.getDataToSharedPref(key: 'language') ?? true;
   await CacheHelper.deleteDataToSharedPref(key: 'tripOneId');
   await CacheHelper.deleteDataToSharedPref(key: 'tripRoundId');
   await CacheHelper.deleteDataToSharedPref(key: 'countSeats');
@@ -122,21 +121,15 @@ class MyApp extends StatelessWidget {
           return MultiBlocProvider(
             providers: [
               BlocProvider<PaymentMethodsCubit>(
-                create: (context) => PaymentMethodsCubit(
-                    sl<PaymentMethodsRepo>(), sl<MyWalletRepo>())
-                  ..init(),
+                create: (context) => PaymentMethodsCubit(sl<PaymentMethodsRepo>(), sl<MyWalletRepo>())..init(),
               ),
               BlocProvider<WalletCubit>(
-                create: (context) => WalletCubit(
-                    MyWalletRepo(sl<ApiConsumer>()), PackagesRespo()),
+                create: (context) => WalletCubit(MyWalletRepo(sl<ApiConsumer>()), PackagesRespo()),
               ),
               BlocProvider<NotificationBloc>(
-                create: (context) =>
-                    NotificationBloc()..add(getNotificationlist()),
+                create: (context) => NotificationBloc()..add(getNotificationlist()),
               ),
-              BlocProvider(
-                  create: (context) =>
-                      RegisterCubit(registerUserUseCase: sl())),
+              BlocProvider(create: (context) => RegisterCubit(registerUserUseCase: sl())),
             ],
             child: MaterialApp(
               localizationsDelegates: [GlobalMaterialLocalizations.delegate],

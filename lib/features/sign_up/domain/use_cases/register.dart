@@ -23,11 +23,12 @@ class UserRegisterParams extends Equatable {
   final String userType;
   final int countryId;
   final int cityId;
+  dynamic tempCustomerId;
   final String identificationNumber;
   final String indentificationtypeID;
   final String defaultCountry;
   final int currencyId;
-  const UserRegisterParams(
+  UserRegisterParams(
       {required this.name,
       required this.mobile,
       required this.email,
@@ -37,6 +38,7 @@ class UserRegisterParams extends Equatable {
       required this.identificationNumber,
       required this.indentificationtypeID,
       required this.cityId,
+      this.tempCustomerId,
       required this.defaultCountry,
       required this.currencyId});
 
@@ -49,6 +51,7 @@ class UserRegisterParams extends Equatable {
         userType,
         cityId,
         countryId,
+        tempCustomerId,
         identificationNumber,
         indentificationtypeID,
         defaultCountry,

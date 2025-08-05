@@ -65,6 +65,7 @@ class ReservationRepo {
         "PromoCodeID": promoid,
         "PaymentMethodID": null,
         "PaymentTypeID": paymentTypeID,
+        "InstitutionID": Routes.institutionID,
         "toCurrency": Routes.curruncy,
         "dateTypeID": UmraDetails.dateTypeID
       }),
@@ -128,6 +129,7 @@ class ReservationRepo {
         "PromoCodeID": promoid,
         "PaymentTypeID": paymentTypeID,
         "PaymentMethodID": paymentMethodID,
+        "InstitutionID": Routes.institutionID,
         "toCurrency": Routes.curruncy,
         "dateTypeID": UmraDetails.dateTypeID,
         "EwalletModel": {
@@ -147,7 +149,8 @@ class ReservationRepo {
     var decodedResponse = json.decode(response.body);
     ReservationResponseElectronicModel reservationResponseElectronicModel =
         ReservationResponseElectronicModel.fromJson(decodedResponse);
-    print("response ${json.decode(response.body)}");
+
+    print("A7med ok 7777");
     return reservationResponseElectronicModel;
   }
 
@@ -160,8 +163,7 @@ class ReservationRepo {
         ) ??
         3;
     log("henaaa 1");
-    final msg = jsonEncode(
-        {"CustomerId": custId, "Amount": amount, "countryID": countryid});
+    final msg = jsonEncode({"CustomerId": custId, "Amount": amount, "countryID": countryid});
     log("henaaa 2");
 
     print(msg);
@@ -187,8 +189,7 @@ class ReservationRepo {
           key: 'countryid',
         ) ??
         3;
-    final res = await apiConsumer
-        .get("${EndPoints.baseUrl}Settings/PloicyTrip?countryID=$countryid");
+    final res = await apiConsumer.get("${EndPoints.baseUrl}Settings/PloicyTrip?countryID=$countryid");
 
     log("policy" + res.body);
     var decode = json.decode(res.body);
@@ -243,6 +244,7 @@ class ReservationRepo {
         "PromoCodeID": promoid,
         "PaymentTypeID": paymentTypeID,
         "PaymentMethodID": paymentMethodID,
+        "InstitutionID": Routes.institutionID,
         "toCurrency": Routes.curruncy,
         "dateTypeID": UmraDetails.dateTypeID,
         "RefNoModel": {
@@ -354,6 +356,7 @@ class ReservationRepo {
       "currency": curruncy,
       "toCurrency": Routes.curruncy,
       "dateTypeID": UmraDetails.dateTypeID,
+      "InstitutionID": Routes.institutionID,
       "cardPaymentModel": {
         "CustomerId": custId,
         "amount": totalamount.toStringAsFixed(2),

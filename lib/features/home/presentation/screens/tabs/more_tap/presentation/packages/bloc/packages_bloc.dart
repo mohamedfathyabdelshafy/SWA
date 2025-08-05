@@ -9,6 +9,7 @@ import 'package:swa/features/home/data/models/Ads_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/ActivePackage_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/Ads_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/Select_appmodel.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/institutions_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/packages_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/promocode_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/station_from_model.dart';
@@ -77,6 +78,7 @@ class PackagesBloc extends Bloc<PackagesEvent, PackagesState> {
         Promocodemodel stationfromModel = await _packagesRespo.promocodeRecervation(
             code: event.promocode!,
             custId: event.custId!,
+            institutionID: event.institutionID,
             paymentTypeID: event.paymentTypeID!,
             promoid: event.promocodeid!,
             trips: event.trips!);
@@ -150,6 +152,18 @@ class PackagesBloc extends Bloc<PackagesEvent, PackagesState> {
         final res = await _packagesRespo.selectapp();
 
         emit(state.update(isloading: false, selectappmodel: res));
+      } else if (event is getinstitutionevent) {
+        emit(state.update(isloading: true));
+
+        final res = await _packagesRespo.getinstitutions();
+
+        if (res is InstitutionsModel) {
+          emit(state.update(isloading: false, institutionsmodel: res));
+        } else {
+          emit(state.update(
+            isloading: false,
+          ));
+        }
       }
     });
   }

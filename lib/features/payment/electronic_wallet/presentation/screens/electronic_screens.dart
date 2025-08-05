@@ -24,12 +24,10 @@ class AddWalletBalanceWithElectronicWalletScreen extends StatefulWidget {
   const AddWalletBalanceWithElectronicWalletScreen({super.key});
 
   @override
-  State<AddWalletBalanceWithElectronicWalletScreen> createState() =>
-      _AddWalletBalanceWithElectronicWalletScreenState();
+  State<AddWalletBalanceWithElectronicWalletScreen> createState() => _AddWalletBalanceWithElectronicWalletScreenState();
 }
 
-class _AddWalletBalanceWithElectronicWalletScreenState
-    extends State<AddWalletBalanceWithElectronicWalletScreen> {
+class _AddWalletBalanceWithElectronicWalletScreenState extends State<AddWalletBalanceWithElectronicWalletScreen> {
   final formKey = GlobalKey<FormState>();
   TextEditingController amountController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -51,8 +49,7 @@ class _AddWalletBalanceWithElectronicWalletScreenState
     return Scaffold(
       backgroundColor: Colors.white,
       body: Directionality(
-        textDirection:
-            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+        textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -63,18 +60,14 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                   height: sizeHeight * 0.08,
                 ),
                 Container(
-                  alignment: LanguageClass.isEnglish
-                      ? Alignment.topLeft
-                      : Alignment.topRight,
+                  alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                   child: InkWell(
                     onTap: () {
                       Navigator.pop(context);
                     },
                     child: Icon(
                       Icons.arrow_back_rounded,
-                      color: Routes.isomra
-                          ? AppColors.umragold
-                          : AppColors.primaryColor,
+                      color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                       size: 35,
                     ),
                   ),
@@ -85,9 +78,7 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                 Container(
                   //margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    LanguageClass.isEnglish
-                        ? 'Electronic wallet'
-                        : 'محفظة الاكترونية',
+                    LanguageClass.isEnglish ? 'Electronic wallet' : 'محفظة الاكترونية',
                     style: fontStyle(
                         color: AppColors.blackColor,
                         fontSize: 38,
@@ -117,46 +108,33 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                               Container(
                                 height: 40,
                                 width: 1,
-                                decoration: const BoxDecoration(
-                                    color: Color(0xff47A9EB)),
+                                decoration: const BoxDecoration(color: Color(0xff47A9EB)),
                               ),
                               Expanded(
                                 child: Container(
                                   height: 70,
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 18),
+                                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
                                   decoration: const BoxDecoration(),
                                   child: TextFormField(
                                     maxLength: 11,
                                     autofocus: true,
-                                    style: fontStyle(
-                                        color: AppColors.blackColor,
-                                        fontSize: 16),
+                                    style: fontStyle(color: AppColors.blackColor, fontSize: 16),
                                     cursorColor: AppColors.blue,
                                     controller: phoneController,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp("[0-9]"))
-                                    ],
+                                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9]"))],
                                     keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
                                       counter: SizedBox.shrink(),
-                                      hintText: LanguageClass.isEnglish
-                                          ? 'Phone Number'
-                                          : 'رقم التليفون',
+                                      hintText: LanguageClass.isEnglish ? 'Phone Number' : 'رقم التليفون',
                                       errorStyle: fontStyle(
                                         color: Colors.red,
                                         fontSize: 11,
                                       ),
                                       hintStyle: fontStyle(
-                                          color: AppColors.greyLight,
-                                          fontSize: 15,
-                                          fontFamily: FontFamily.bold),
-                                      labelStyle: fontStyle(
-                                          color: AppColors.grey,
-                                          fontSize: 12,
-                                          fontFamily: FontFamily.bold),
+                                          color: AppColors.greyLight, fontSize: 15, fontFamily: FontFamily.bold),
+                                      labelStyle:
+                                          fontStyle(color: AppColors.grey, fontSize: 12, fontFamily: FontFamily.bold),
                                     ),
                                     validator: (value) {
                                       return value!.isEmpty
@@ -176,12 +154,10 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                               ValueListenableBuilder<TextEditingValue>(
                                 valueListenable: phoneController,
                                 builder: (context, value, child) {
-                                  final digitsOnly = value.text
-                                      .replaceAll(RegExp(r'[^0-9]'), '');
+                                  final digitsOnly = value.text.replaceAll(RegExp(r'[^0-9]'), '');
                                   return Text(
                                     "${digitsOnly.length}/11", // Display digits entered vs max length
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 12),
+                                    style: TextStyle(color: Colors.grey, fontSize: 12),
                                   );
                                 },
                               ),
@@ -195,14 +171,12 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                               Container(
                                 height: 20,
                                 width: 1,
-                                decoration: const BoxDecoration(
-                                    color: Color(0xffD865A4)),
+                                decoration: const BoxDecoration(color: Color(0xffD865A4)),
                               ),
                               Expanded(
                                 child: Container(
                                   height: 50,
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 2, horizontal: 18),
+                                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
                                   decoration: const BoxDecoration(
                                       // border: Border.all(
                                       //   color: AppColors.blue,
@@ -213,15 +187,12 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                                       ),
                                   child: TextFormField(
                                     autofocus: true,
-                                    style: fontStyle(
-                                        color: AppColors.blackColor,
-                                        fontSize: 16),
+                                    style: fontStyle(color: AppColors.blackColor, fontSize: 16),
                                     cursorColor: AppColors.blue,
                                     controller: amountController,
                                     inputFormatters: [
                                       NumericTextFormatter(), // Assuming NumericTextFormatter is defined elsewhere or imported
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'[0-9,]')),
+                                      FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                                     ],
                                     keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
@@ -232,23 +203,16 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                                         fontSize: 11,
                                       ),
                                       hintStyle: fontStyle(
-                                          color: AppColors.greyLight,
-                                          fontSize: 15,
-                                          fontFamily: FontFamily.bold),
-                                      labelStyle: fontStyle(
-                                          color: AppColors.grey,
-                                          fontSize: 12,
-                                          fontFamily: FontFamily.bold),
+                                          color: AppColors.greyLight, fontSize: 15, fontFamily: FontFamily.bold),
+                                      labelStyle:
+                                          fontStyle(color: AppColors.grey, fontSize: 12, fontFamily: FontFamily.bold),
                                     ),
                                     validator: (value) {
                                       //check if only numbers or ","
                                       value = value?.replaceAll(',', '');
-                                      final isNAN =
-                                          double.tryParse(value ?? '');
+                                      final isNAN = double.tryParse(value ?? '');
                                       if (isNAN == null || isNAN == 0) {
-                                        return LanguageClass.isEnglish
-                                            ? 'Invalid Amount'
-                                            : "من فضلك ادخل قيمة صحيحة";
+                                        return LanguageClass.isEnglish ? 'Invalid Amount' : "من فضلك ادخل قيمة صحيحة";
                                       } else if (isNAN < 9) {
                                         return LanguageClass.isEnglish
                                             ? 'اقل قيمة للشحن 10 جنيهات'
@@ -277,10 +241,10 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                                   context,
                                   isError: false,
                                   callback: () {
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
+                                    WidgetsBinding.instance.addPostFrameCallback((_) {
                                       if (context.mounted) {
-                                        // You might want to navigate or update UI here
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
                                       }
                                     });
                                   },
@@ -291,27 +255,21 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                                         height: 20,
                                       ),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            LanguageClass.isEnglish
-                                                ? 'Amount: '
-                                                : "القيمة",
+                                            LanguageClass.isEnglish ? 'Amount: ' : "القيمة",
                                             style: fontStyle(
-                                                color: Colors.black,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600),
+                                                color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
                                           ),
                                           Text(amountController.text.toString())
                                         ],
                                       ),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            'Reference Number: ',
+                                            LanguageClass.isEnglish ? 'Reference Number: ' : 'رقم المرجع :',
                                             style: fontStyle(
                                                 color: Colors.black,
                                                 fontSize: 14,
@@ -323,10 +281,7 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                                               children: [
                                                 Expanded(
                                                   child: Text(
-                                                    state
-                                                        .paymentMessageResponse
-                                                        .paymentMessage!
-                                                        .referenceNumber
+                                                    state.paymentMessageResponse.paymentMessage!.referenceNumber
                                                         .toString(),
                                                     textAlign: TextAlign.end,
                                                   ),
@@ -339,15 +294,11 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                                                     Constants.showDefaultSnackBar(
                                                         context: context,
                                                         color: Colors.green,
-                                                        text:
-                                                            'Reference Number copied');
-                                                    await Clipboard.setData(
-                                                        ClipboardData(
-                                                            text: state
-                                                                .paymentMessageResponse
-                                                                .paymentMessage!
-                                                                .referenceNumber
-                                                                .toString()));
+                                                        text: 'Reference Number copied');
+                                                    await Clipboard.setData(ClipboardData(
+                                                        text: state
+                                                            .paymentMessageResponse.paymentMessage!.referenceNumber
+                                                            .toString()));
                                                   },
                                                   child: Container(
                                                       width: 15,
@@ -364,20 +315,16 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                                       )
                                     ],
                                   ),
-                                  message: state.paymentMessageResponse.text!
-                                      .toString(),
+                                  message: state.paymentMessageResponse.text!.toString(),
                                 );
                               } else if (state is EWalletErrorState) {
                                 Constants.hideLoadingDialog(context);
-                                Constants.showDefaultSnackBar(
-                                    context: context,
-                                    text: state.error.toString());
+                                Constants.showDefaultSnackBar(context: context, text: state.error.toString());
                               } else if (state is EWalletConfirmationState) {
                                 Constants.hideLoadingDialog(context);
                                 showDoneConfirmationDialog(
                                   context,
-                                  isError:
-                                      false, // Or set to true if it's a negative confirmation
+                                  isError: false, // Or set to true if it's a negative confirmation
                                   message: state.message,
                                   callback: () {
                                     // Handle confirmation action, e.g., navigate or refresh
@@ -388,8 +335,7 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                                 Constants.hideLoadingDialog(context);
                                 showDoneConfirmationDialog(
                                   context,
-                                  isError:
-                                      true, // Warnings are usually treated as errors for display
+                                  isError: true, // Warnings are usually treated as errors for display
                                   message: state.message,
                                   callback: () {
                                     // Handle warning action
@@ -400,55 +346,38 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                                 Constants.hideLoadingDialog(context);
                                 showGeneralDialog(
                                   context: context,
-                                  pageBuilder: (BuildContext buildContext,
-                                      Animation<double> animation,
+                                  pageBuilder: (BuildContext buildContext, Animation<double> animation,
                                       Animation<double> secondaryAnimation) {
-                                    return StatefulBuilder(
-                                        builder: (context, setStater) {
+                                    return StatefulBuilder(builder: (context, setStater) {
                                       return Container(
                                         color: Colors.transparent,
-                                        height:
-                                            MediaQuery.of(context).size.height,
-                                        width:
-                                            MediaQuery.of(context).size.width,
+                                        height: MediaQuery.of(context).size.height,
+                                        width: MediaQuery.of(context).size.width,
                                         alignment: Alignment.center,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20),
+                                        padding: EdgeInsets.symmetric(horizontal: 20),
                                         child: Material(
                                           color: Colors.transparent,
                                           elevation: 0,
                                           child: InkWell(
                                             child: Container(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height /
-                                                  1.4,
+                                              height: MediaQuery.of(context).size.height / 1.4,
                                               alignment: Alignment.center,
                                               decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
+                                                borderRadius: BorderRadius.circular(10),
                                               ),
                                               child: Stack(
                                                 alignment: Alignment.topCenter,
                                                 children: [
                                                   Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 10,
-                                                            horizontal: 5),
+                                                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
                                                     child: Image.network(
                                                       state.message,
-                                                      height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height /
-                                                              1.4,
+                                                      height: MediaQuery.of(context).size.height / 1.4,
                                                       fit: BoxFit.fill,
                                                     ),
                                                   ),
                                                   Container(
-                                                    alignment:
-                                                        Alignment.topLeft,
+                                                    alignment: Alignment.topLeft,
                                                     child: InkWell(
                                                       onTap: () {
                                                         Navigator.pop(context);
@@ -458,10 +387,7 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                                                         height: 25,
                                                         decoration: BoxDecoration(
                                                             color: Colors.black,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        100)),
+                                                            borderRadius: BorderRadius.circular(100)),
                                                         child: Icon(
                                                           Icons.close,
                                                           color: Colors.white,
@@ -479,95 +405,66 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                                   },
                                 ).then((value) {
                                   // This block will execute when the dialog is dismissed
-                                  Navigator.pushNamedAndRemoveUntil(
-                                      context, Routes.home, (route) => false,
+                                  Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false,
                                       arguments: Routes.isomra);
                                 });
                               } else if (state is EWalletImageWithGiftState) {
                                 Constants.hideLoadingDialog(context);
                                 // You might want a different dialog for gift images
                                 late ConfettiController _controllerTopCenter;
-                                _controllerTopCenter = ConfettiController(
-                                    duration: const Duration(seconds: 3));
+                                _controllerTopCenter = ConfettiController(duration: const Duration(seconds: 3));
 
                                 showGeneralDialog(
                                   context: context,
-                                  pageBuilder: (BuildContext buildContext,
-                                      Animation<double> animation,
+                                  pageBuilder: (BuildContext buildContext, Animation<double> animation,
                                       Animation<double> secondaryAnimation) {
-                                    return StatefulBuilder(
-                                        builder: (context, setStater) {
+                                    return StatefulBuilder(builder: (context, setStater) {
                                       _controllerTopCenter.play();
 
                                       return Container(
                                         color: Colors.transparent,
-                                        height:
-                                            MediaQuery.of(context).size.height,
-                                        width:
-                                            MediaQuery.of(context).size.width,
+                                        height: MediaQuery.of(context).size.height,
+                                        width: MediaQuery.of(context).size.width,
                                         alignment: Alignment.center,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20),
+                                        padding: EdgeInsets.symmetric(horizontal: 20),
                                         child: Material(
                                           color: Colors.transparent,
                                           elevation: 0,
                                           child: InkWell(
                                             child: Container(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height /
-                                                  1.4,
+                                              height: MediaQuery.of(context).size.height / 1.4,
                                               alignment: Alignment.center,
                                               decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
+                                                borderRadius: BorderRadius.circular(10),
                                               ),
                                               child: Stack(
                                                 alignment: Alignment.topCenter,
                                                 children: [
                                                   Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 10,
-                                                            horizontal: 5),
+                                                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
                                                     child: Image.network(
                                                       state.message,
-                                                      height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height /
-                                                              1.4,
+                                                      height: MediaQuery.of(context).size.height / 1.4,
                                                       fit: BoxFit.fill,
                                                     ),
                                                   ),
                                                   Align(
-                                                    alignment:
-                                                        Alignment.topCenter,
+                                                    alignment: Alignment.topCenter,
                                                     child: ConfettiWidget(
                                                       shouldLoop: false,
-                                                      confettiController:
-                                                          _controllerTopCenter,
+                                                      confettiController: _controllerTopCenter,
                                                       blastDirection: pi,
-                                                      maxBlastForce:
-                                                          2, // set a lower max blast force
-                                                      minBlastForce:
-                                                          1, // set a lower min blast force
+                                                      maxBlastForce: 2, // set a lower max blast force
+                                                      minBlastForce: 1, // set a lower min blast force
                                                       emissionFrequency: 0.05,
-                                                      blastDirectionality:
-                                                          BlastDirectionality
-                                                              .explosive,
-                                                      numberOfParticles:
-                                                          20, // a lot of particles at once
+                                                      blastDirectionality: BlastDirectionality.explosive,
+                                                      numberOfParticles: 20, // a lot of particles at once
                                                       gravity: 0.2,
-                                                      colors: [
-                                                        AppColors.primaryColor,
-                                                        AppColors.umragold
-                                                      ],
+                                                      colors: [AppColors.primaryColor, AppColors.umragold],
                                                     ),
                                                   ),
                                                   Container(
-                                                    alignment:
-                                                        Alignment.topLeft,
+                                                    alignment: Alignment.topLeft,
                                                     child: InkWell(
                                                       onTap: () {
                                                         Navigator.pop(context);
@@ -577,10 +474,7 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                                                         height: 25,
                                                         decoration: BoxDecoration(
                                                             color: Colors.black,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        100)),
+                                                            borderRadius: BorderRadius.circular(100)),
                                                         child: Icon(
                                                           Icons.close,
                                                           color: Colors.white,
@@ -598,21 +492,17 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                                   },
                                 ).then((value) {
                                   // This block will execute when the dialog is dismissed
-                                  Navigator.pushNamedAndRemoveUntil(
-                                      context, Routes.home, (route) => false,
+                                  Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false,
                                       arguments: Routes.isomra);
                                 });
                               }
                             },
                             child: InkWell(
                               onTap: () {
-                                if (_user != null &&
-                                    formKey.currentState!.validate()) {
-                                  BlocProvider.of<EWalletCubit>(context)
-                                      .eWalletPaymentFunction(EWalletParams(
+                                if (_user != null && formKey.currentState!.validate()) {
+                                  BlocProvider.of<EWalletCubit>(context).eWalletPaymentFunction(EWalletParams(
                                     customerId: _user!.customerId.toString(),
-                                    amount: amountController.text
-                                        .replaceAll(",", ""),
+                                    amount: amountController.text.replaceAll(",", ""),
                                     mobileNumber: phoneController.text,
                                   ));
                                 }
@@ -623,12 +513,8 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                                 ),
                                 child: Constants.customButton(
                                   borderradias: 41,
-                                  text: LanguageClass.isEnglish
-                                      ? "Charge"
-                                      : "شحن",
-                                  color: Routes.isomra
-                                      ? AppColors.umragold
-                                      : AppColors.primaryColor,
+                                  text: LanguageClass.isEnglish ? "Charge" : "شحن",
+                                  color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
                                 ),
                               ),
                             ),
@@ -648,23 +534,16 @@ class _AddWalletBalanceWithElectronicWalletScreenState
   }
 
   Future<dynamic> showDoneConfirmationDialog(BuildContext context,
-      {required String message,
-      bool isError = false,
-      Widget? body,
-      required Function callback}) async {
+      {required String message, bool isError = false, Widget? body, required Function callback}) async {
     return CoolAlert.show(
         barrierDismissible: true,
         context: context,
         confirmBtnText: "ok",
-        title:
-            isError ? 'error' : '', // Title is set to 'error' for isError=true
-        lottieAsset:
-            isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
+        title: isError ? 'error' : '', // Title is set to 'error' for isError=true
+        lottieAsset: isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
         type: CoolAlertType.custom,
         loopAnimation: false,
-        backgroundColor: isError
-            ? Colors.red
-            : Colors.white, // Background color also changes
+        backgroundColor: isError ? Colors.red : Colors.white, // Background color also changes
         text: message,
         widget: body,
         onConfirmBtnTap: () {
@@ -679,50 +558,42 @@ class _AddWalletBalanceWithElectronicWalletScreenState
     showGeneralDialog(
       context: context,
       barrierDismissible: false, // Ensure it's not dismissed by tapping outside
-      transitionDuration: const Duration(
-          milliseconds: 200), // Optional: Add a transition duration
-      pageBuilder: (BuildContext buildContext, Animation<double> animation,
-          Animation<double> secondaryAnimation) {
+      transitionDuration: const Duration(milliseconds: 200), // Optional: Add a transition duration
+      pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
         return StatefulBuilder(builder: (context, setStater) {
           return Container(
-            color: Colors
-                .transparent, // Transparent background for the dialog area
+            color: Colors.transparent, // Transparent background for the dialog area
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             alignment: Alignment.center,
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Material(
-              color: Colors
-                  .transparent, // Transparent material to allow InkWell effect
+              color: Colors.transparent, // Transparent material to allow InkWell effect
               elevation: 0,
               child: InkWell(
                 onTap: () {
                   if (linkApi != null && linkApi.isNotEmpty) {
                     // Assuming _launchInWebView is defined elsewhere or use url_launcher
                     // Example: Launch URL in browser or in-app WebView
-                    launchUrl(Uri.parse(linkApi),
-                        mode: LaunchMode.externalApplication);
+                    launchUrl(Uri.parse(linkApi), mode: LaunchMode.externalApplication);
                   }
                 },
                 child: Container(
-                  height: MediaQuery.of(context).size.height /
-                      1.4, // Max height like your example
+                  height: MediaQuery.of(context).size.height / 1.4, // Max height like your example
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     // No explicit background color unless image doesn't cover
                   ),
                   child: Stack(
-                    alignment: Alignment
-                        .topCenter, // Align close button to top-center of the stack
+                    alignment: Alignment.topCenter, // Align close button to top-center of the stack
                     children: [
                       Container(
                         // Removed explicit padding here to allow image to fill more
                         child: Image.network(
                           imageUrlOrBase64, // Use imageUrlOrBase64 here
                           height: MediaQuery.of(context).size.height / 1.4,
-                          fit: BoxFit
-                              .fill, // Fill the container, might distort if aspect ratio is off
+                          fit: BoxFit.fill, // Fill the container, might distort if aspect ratio is off
                           errorBuilder: (context, error, stackTrace) {
                             return const Icon(
                               Icons.error,
@@ -740,18 +611,15 @@ class _AddWalletBalanceWithElectronicWalletScreenState
                         left: LanguageClass.isEnglish ? null : 10,
                         child: InkWell(
                           onTap: () {
-                            onCloseCallback
-                                ?.call(); // Call the provided callback
+                            onCloseCallback?.call(); // Call the provided callback
                             Navigator.pop(context); // Dismiss the dialog
                           },
                           child: Container(
                             width: 25,
                             height: 25,
                             decoration: BoxDecoration(
-                              color: Colors
-                                  .black, // Dark background for close button
-                              borderRadius:
-                                  BorderRadius.circular(100), // Circular shape
+                              color: Colors.black, // Dark background for close button
+                              borderRadius: BorderRadius.circular(100), // Circular shape
                             ),
                             child: Icon(
                               Icons.close,
@@ -777,8 +645,7 @@ class _AddWalletBalanceWithElectronicWalletScreenState
 // For example:
 class NumericTextFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     // This is a simple example. You might want more sophisticated logic
     // for formatting numbers with commas based on locale.
     final text = newValue.text.replaceAll(',', '');
@@ -787,8 +654,7 @@ class NumericTextFormatter extends TextInputFormatter {
     }
     try {
       final num = double.parse(text);
-      final formatter =
-          intl.NumberFormat('#,##0.##'); // Adjust format as needed
+      final formatter = intl.NumberFormat('#,##0.##'); // Adjust format as needed
       final newText = formatter.format(num);
       return newValue.copyWith(
         text: newText,

@@ -27,7 +27,11 @@ class CustomizedField extends StatefulWidget {
 
   final ontap;
 
+  final oncompleted;
+
   final onchange;
+
+  final onSubmit;
 
   CustomizedField({
     Key? key,
@@ -50,6 +54,8 @@ class CustomizedField extends StatefulWidget {
     required this.colorText,
     this.maxLength,
     this.bordercolor,
+    this.oncompleted,
+    this.onSubmit,
   }) : super(key: key);
 
   @override
@@ -65,8 +71,7 @@ class _CustomizedFieldState extends State<CustomizedField> {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius:
-                BorderRadius.all(Radius.circular(widget.borderradias ?? 0)),
+            borderRadius: BorderRadius.all(Radius.circular(widget.borderradias ?? 0)),
           ),
           child: TextFormField(
             maxLength: widget.maxLength,
@@ -76,7 +81,12 @@ class _CustomizedFieldState extends State<CustomizedField> {
               widget.onchange == null ? () {} : widget.onchange(v);
             },
 
+            onFieldSubmitted: (v) {
+              widget.onSubmit == null ? () {} : widget.onSubmit(v);
+            },
+
             onTap: widget.ontap ?? () {}, // and this
+            onEditingComplete: widget.oncompleted ?? () {},
 
             controller: widget.controller,
             autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -86,17 +96,13 @@ class _CustomizedFieldState extends State<CustomizedField> {
             validator: widget.validator,
 
             style: fontStyle(
-                color: widget.colorText,
-                fontSize: 18.sp,
-                fontFamily: FontFamily.medium,
-                fontWeight: FontWeight.w500),
+                color: widget.colorText, fontSize: 18.sp, fontFamily: FontFamily.medium, fontWeight: FontWeight.w500),
             cursorColor: Color(0xffA2A2A2),
             decoration: InputDecoration(
               fillColor: widget.color,
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(widget.borderradias ?? 0),
-                  borderSide: BorderSide(
-                      color: widget.bordercolor ?? Colors.white, width: 0)),
+                  borderSide: BorderSide(color: widget.bordercolor ?? Colors.white, width: 0)),
               disabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(widget.borderradias ?? 0),
                   borderSide: BorderSide(color: Colors.white, width: 0)),
@@ -104,18 +110,14 @@ class _CustomizedFieldState extends State<CustomizedField> {
                   borderRadius: BorderRadius.circular(widget.borderradias ?? 0),
                   borderSide: BorderSide(color: Colors.white, width: 0)),
               filled: true,
-              contentPadding:
-                  EdgeInsets.symmetric(horizontal: 24, vertical: 25),
+              contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 25),
               suffixIcon: widget.isPassword
                   ? Padding(
                       padding: EdgeInsets.only(
-                          right: LanguageClass.isEnglish ? 8 : 0,
-                          left: LanguageClass.isEnglish ? 0.0 : 8),
+                          right: LanguageClass.isEnglish ? 8 : 0, left: LanguageClass.isEnglish ? 0.0 : 8),
                       child: IconButton(
                         icon: Icon(
-                          widget.obscureText
-                              ? Icons.visibility_off
-                              : Icons.visibility,
+                          widget.obscureText ? Icons.visibility_off : Icons.visibility,
                           color: Color(0xff898989),
                         ),
                         onPressed: () {
@@ -135,10 +137,7 @@ class _CustomizedFieldState extends State<CustomizedField> {
               prefixIcon: widget.prefixIcon,
               hintText: widget.hintText,
               errorStyle: fontStyle(
-                  fontSize: 10.sp,
-                  fontFamily: FontFamily.regular,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.red),
+                  fontSize: 10.sp, fontFamily: FontFamily.regular, fontWeight: FontWeight.w500, color: Colors.red),
               hintStyle: widget.hintStyle ??
                   fontStyle(
                     color: Color(0xffA2A2A2),

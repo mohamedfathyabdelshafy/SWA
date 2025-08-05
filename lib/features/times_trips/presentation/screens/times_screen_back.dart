@@ -18,12 +18,7 @@ import '../../data/models/TimesTripsResponsedart.dart';
 
 // ignore: must_be_immutable
 class TimesScreenBack extends StatefulWidget {
-  TimesScreenBack(
-      {super.key,
-      required this.tripListBack,
-      required this.tripTypeId,
-      required this.price,
-      this.user});
+  TimesScreenBack({super.key, required this.tripListBack, required this.tripTypeId, required this.price, this.user});
   List<TripList> tripListBack;
   String tripTypeId;
   double price;
@@ -86,20 +81,15 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                         InkWell(
                           onTap: () {
                             setState(() {
-                              selected == index
-                                  ? selected = -1
-                                  : selected = index;
+                              selected == index ? selected = -1 : selected = index;
                             });
                           },
                           child: Container(
                             height: 140,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
-                                color: selected == index
-                                    ? Color(0xffFF5D4B)
-                                    : AppColors.lightBink),
-                            margin:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
+                                color: selected == index ? Color(0xffFF5D4B) : AppColors.lightBink),
+                            margin: const EdgeInsets.symmetric(horizontal: 10.0),
                             padding: EdgeInsets.all(10),
                             child: Row(
                               children: [
@@ -111,10 +101,7 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                       gradient: LinearGradient(
                                           begin: Alignment.topCenter,
                                           end: Alignment.bottomCenter,
-                                          colors: [
-                                            AppColors.white,
-                                            AppColors.yellow2
-                                          ])),
+                                          colors: [AppColors.white, AppColors.yellow2])),
                                 ),
                                 SizedBox(
                                   width: 10,
@@ -125,47 +112,31 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                   children: [
                                     Text(
                                       LanguageClass.isEnglish ? "From" : "من",
-                                      style: fontStyle(
-                                          color: Colors.white,
-                                          fontFamily: FontFamily.medium,
-                                          fontSize: 12),
+                                      style:
+                                          fontStyle(color: Colors.white, fontFamily: FontFamily.medium, fontSize: 12),
                                     ),
                                     Text(
-                                      widget.tripListBack[index].fromCityName ??
-                                          '',
-                                      style: fontStyle(
-                                          color: Colors.white,
-                                          fontFamily: FontFamily.bold,
-                                          fontSize: 12),
+                                      widget.tripListBack[index].fromCityName ?? '',
+                                      style: fontStyle(color: Colors.white, fontFamily: FontFamily.bold, fontSize: 12),
                                     ),
                                     Text(
-                                      widget.tripListBack[index].from,
-                                      style: fontStyle(
-                                          color: Colors.white,
-                                          fontFamily: FontFamily.medium,
-                                          fontSize: 12),
+                                      widget.tripListBack[index].from!,
+                                      style:
+                                          fontStyle(color: Colors.white, fontFamily: FontFamily.medium, fontSize: 12),
                                     ),
                                     Text(
                                       LanguageClass.isEnglish ? "To" : "الي",
-                                      style: fontStyle(
-                                          color: Colors.white,
-                                          fontFamily: FontFamily.medium,
-                                          fontSize: 12),
+                                      style:
+                                          fontStyle(color: Colors.white, fontFamily: FontFamily.medium, fontSize: 12),
                                     ),
                                     Text(
-                                      widget.tripListBack[index].toCityName ??
-                                          '',
-                                      style: fontStyle(
-                                          color: Colors.white,
-                                          fontFamily: FontFamily.bold,
-                                          fontSize: 12),
+                                      widget.tripListBack[index].toCityName ?? '',
+                                      style: fontStyle(color: Colors.white, fontFamily: FontFamily.bold, fontSize: 12),
                                     ),
                                     Text(
-                                      widget.tripListBack[index].to,
-                                      style: fontStyle(
-                                          color: Colors.white,
-                                          fontFamily: FontFamily.medium,
-                                          fontSize: 12),
+                                      widget.tripListBack[index].to!,
+                                      style:
+                                          fontStyle(color: Colors.white, fontFamily: FontFamily.medium, fontSize: 12),
                                     ),
                                   ],
                                 ),
@@ -175,157 +146,89 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      widget.tripListBack[index].lineName,
-                                      style: fontStyle(
-                                          color: Colors.white,
-                                          fontFamily: FontFamily.medium,
-                                          fontSize: 12),
+                                      widget.tripListBack[index].lineName!,
+                                      style:
+                                          fontStyle(color: Colors.white, fontFamily: FontFamily.medium, fontSize: 12),
                                     ),
                                     Text(
-                                      widget.tripListBack[index]
-                                          .timeOfCustomerStation
-                                          .substring(0, 5)
-                                          .toString(),
-                                      style: fontStyle(
-                                          color: Colors.white,
-                                          fontFamily: FontFamily.bold,
-                                          fontSize: 14),
+                                      widget.tripListBack[index].timeOfCustomerStation!.substring(0, 5).toString(),
+                                      style: fontStyle(color: Colors.white, fontFamily: FontFamily.bold, fontSize: 14),
                                     ),
                                     Text(
-                                      '${widget.tripListBack[index].price.toString()} ${Routes.curruncy ?? ""}' ??
-                                          '',
-                                      style: fontStyle(
-                                          color: Colors.white,
-                                          fontFamily: FontFamily.bold,
-                                          fontSize: 14),
+                                      '${widget.tripListBack[index].price.toString()} ${Routes.curruncy ?? ""}' ?? '',
+                                      style: fontStyle(color: Colors.white, fontFamily: FontFamily.bold, fontSize: 14),
                                     ),
                                     InkWell(
                                       onTap: () {
                                         CacheHelper.setDataToSharedPref(
-                                            key: 'numberTrip2',
-                                            value: widget.tripListBack[index]
-                                                .tripNumber);
+                                            key: 'numberTrip2', value: widget.tripListBack[index].tripNumber);
                                         CacheHelper.setDataToSharedPref(
-                                            key: 'elite2',
-                                            value: widget.tripListBack[index]
-                                                .serviceType);
+                                            key: 'elite2', value: widget.tripListBack[index].serviceType);
                                         CacheHelper.setDataToSharedPref(
                                             key: 'accessBusDate2',
-                                            value: widget
-                                                .tripListBack[index].accessDate
-                                                .toString());
+                                            value: widget.tripListBack[index].accessDate.toString());
                                         CacheHelper.setDataToSharedPref(
-                                            key: 'accessBusTime2',
-                                            value: widget.tripListBack[index]
-                                                .accessBusTime);
+                                            key: 'arrivalDate2',
+                                            value: widget.tripListBack[index].arrivalDate.toString());
                                         CacheHelper.setDataToSharedPref(
-                                            key: 'lineName2',
-                                            value: widget
-                                                .tripListBack[index].lineName);
+                                            key: 'accessBusTime2', value: widget.tripListBack[index].accessBusTime);
                                         CacheHelper.setDataToSharedPref(
-                                            key: 'tripOneId',
-                                            value: widget.tripListBack[index]
-                                                    .tripId ??
-                                                0);
+                                            key: 'lineName2', value: widget.tripListBack[index].lineName);
+                                        CacheHelper.setDataToSharedPref(
+                                            key: 'tripOneId', value: widget.tripListBack[index].tripId ?? 0);
 
                                         CacheHelper.setDataToSharedPref(
-                                            key: 'tripRoundId',
-                                            value: widget
-                                                .tripListBack[index].tripId
-                                                .toString());
+                                            key: 'tripRoundId', value: widget.tripListBack[index].tripId.toString());
 
                                         CacheHelper.setDataToSharedPref(
-                                            key: 'lineid2',
-                                            value: widget.tripListBack[index]
-                                                    .lineId ??
-                                                0);
+                                            key: 'lineid2', value: widget.tripListBack[index].lineId ?? 0);
 
                                         CacheHelper.setDataToSharedPref(
                                             key: 'serviceTypeID2',
-                                            value: widget.tripListBack[index]
-                                                    .serviceTypeId ??
-                                                0);
+                                            value: widget.tripListBack[index].serviceTypeId ?? 0);
 
                                         CacheHelper.setDataToSharedPref(
-                                            key: 'busId2',
-                                            value: widget.tripListBack[index]
-                                                    .busId ??
-                                                0);
+                                            key: 'busId2', value: widget.tripListBack[index].busId ?? 0);
 
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MultiBlocProvider(
+                                              builder: (context) => MultiBlocProvider(
                                                       providers: [
-                                                        BlocProvider<
-                                                                LoginCubit>(
-                                                            create: (context) =>
-                                                                sl<LoginCubit>()),
-                                                        BlocProvider<
-                                                            TimesTripsCubit>(
-                                                          create: (context) =>
-                                                              TimesTripsCubit(),
+                                                        BlocProvider<LoginCubit>(create: (context) => sl<LoginCubit>()),
+                                                        BlocProvider<TimesTripsCubit>(
+                                                          create: (context) => TimesTripsCubit(),
                                                         ),
-                                                        BlocProvider<
-                                                            BusLayoutCubit>(
-                                                          create: (context) =>
-                                                              BusLayoutCubit(),
+                                                        BlocProvider<BusLayoutCubit>(
+                                                          create: (context) => BusLayoutCubit(),
                                                         )
                                                       ],
                                                       // Replace with your actual cubit creation logic
-                                                      child:
-                                                          BusLayoutScreenBack(
+                                                      child: BusLayoutScreenBack(
                                                         isedit: false,
-                                                        to: widget
-                                                                .tripListBack[
-                                                                    index]
-                                                                .to ??
-                                                            "",
-                                                        from: widget
-                                                                .tripListBack[
-                                                                    index]
-                                                                .from ??
-                                                            "",
-                                                        triTypeId:
-                                                            widget.tripTypeId,
-                                                        price: widget
-                                                            .tripListBack[index]
-                                                            .price!,
+                                                        arrivaltime: widget.tripListBack[index].arrivalDate,
+                                                        to: widget.tripListBack[index].to ?? "",
+                                                        from: widget.tripListBack[index].from ?? "",
+                                                        triTypeId: widget.tripTypeId,
+                                                        price: widget.tripListBack[index].price!,
                                                         user: widget.user,
-                                                        tripId: widget
-                                                            .tripListBack[index]
-                                                            .tripId!,
-                                                        tocity: widget
-                                                                .tripListBack[
-                                                                    index]
-                                                                .toCityName ??
-                                                            '',
-                                                        fromcity: widget
-                                                                .tripListBack[
-                                                                    index]
-                                                                .fromCityName ??
-                                                            '',
+                                                        tripId: widget.tripListBack[index].tripId!,
+                                                        tocity: widget.tripListBack[index].toCityName ?? '',
+                                                        fromcity: widget.tripListBack[index].fromCityName ?? '',
                                                       ))),
                                         );
                                       },
                                       child: Container(
                                         padding: EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: AppColors.white,
-                                                  offset: Offset(0, 0),
-                                                  spreadRadius: 0,
-                                                  blurRadius: 15)
-                                            ],
-                                            color: AppColors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(12)),
+                                        decoration: BoxDecoration(boxShadow: [
+                                          BoxShadow(
+                                              color: AppColors.white,
+                                              offset: Offset(0, 0),
+                                              spreadRadius: 0,
+                                              blurRadius: 15)
+                                        ], color: AppColors.white, borderRadius: BorderRadius.circular(12)),
                                         child: Text(
-                                          LanguageClass.isEnglish
-                                              ? 'Reservation'
-                                              : 'حجز',
+                                          LanguageClass.isEnglish ? 'Reservation' : 'حجز',
                                           style: fontStyle(
                                             color: AppColors.primaryColor,
                                             fontWeight: FontWeight.bold,
@@ -344,28 +247,20 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                             ? Container(
                                 margin: EdgeInsets.symmetric(horizontal: 20),
                                 child: ListView.builder(
-                                  itemCount: widget
-                                      .tripListBack[index].lineCity.length,
+                                  itemCount: widget.tripListBack[index].lineCity.length,
                                   shrinkWrap: true,
                                   physics: ScrollPhysics(),
-                                  itemBuilder:
-                                      (BuildContext context, int index2) {
+                                  itemBuilder: (BuildContext context, int index2) {
                                     return Container(
                                       padding: EdgeInsets.all(10),
                                       decoration: BoxDecoration(
-                                          border: Border(
-                                              bottom: BorderSide(
-                                                  width: 1,
-                                                  color: Colors.black26))),
+                                          border: Border(bottom: BorderSide(width: 1, color: Colors.black26))),
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           Text(
-                                            '${widget.tripListBack[index].lineCity[index2].cityName}' ??
-                                                '',
+                                            '${widget.tripListBack[index].lineCity[index2].cityName}' ?? '',
                                             style: fontStyle(
                                                 color: AppColors.primaryColor,
                                                 fontFamily: FontFamily.bold,
@@ -375,80 +270,41 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                             onPressed: () {
                                               showGeneralDialog(
                                                   context: context,
-                                                  pageBuilder: (BuildContext
-                                                          buildContext,
-                                                      Animation<double>
-                                                          animation,
-                                                      Animation<double>
-                                                          secondaryAnimation) {
-                                                    return StatefulBuilder(
-                                                        builder: (context,
-                                                            setStater) {
+                                                  pageBuilder: (BuildContext buildContext, Animation<double> animation,
+                                                      Animation<double> secondaryAnimation) {
+                                                    return StatefulBuilder(builder: (context, setStater) {
                                                       return Material(
-                                                        color:
-                                                            Colors.transparent,
+                                                        color: Colors.transparent,
                                                         child: Directionality(
-                                                          textDirection:
-                                                              LanguageClass
-                                                                      .isEnglish
-                                                                  ? TextDirection
-                                                                      .ltr
-                                                                  : TextDirection
-                                                                      .rtl,
+                                                          textDirection: LanguageClass.isEnglish
+                                                              ? TextDirection.ltr
+                                                              : TextDirection.rtl,
                                                           child: Container(
-                                                            margin: EdgeInsets
-                                                                .symmetric(
-                                                                    horizontal:
-                                                                        25,
-                                                                    vertical:
-                                                                        50),
-                                                            alignment: Alignment
-                                                                .topRight,
+                                                            margin: EdgeInsets.symmetric(horizontal: 25, vertical: 50),
+                                                            alignment: Alignment.topRight,
                                                             decoration: BoxDecoration(
-                                                                color: Colors
-                                                                    .white,
+                                                                color: Colors.white,
                                                                 borderRadius: BorderRadius.only(
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            20),
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            20))),
-                                                            padding: EdgeInsets
-                                                                .symmetric(
-                                                                    horizontal:
-                                                                        30,
-                                                                    vertical:
-                                                                        5),
-                                                            width:
-                                                                double.infinity,
+                                                                    bottomLeft: Radius.circular(20),
+                                                                    bottomRight: Radius.circular(20))),
+                                                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                                                            width: double.infinity,
                                                             child: Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
                                                               children: [
-                                                                SizedBox(
-                                                                    height: 15),
+                                                                SizedBox(height: 15),
                                                                 Container(
                                                                   alignment: LanguageClass.isEnglish
-                                                                      ? Alignment
-                                                                          .topLeft
-                                                                      : Alignment
-                                                                          .topRight,
-                                                                  child:
-                                                                      InkWell(
+                                                                      ? Alignment.topLeft
+                                                                      : Alignment.topRight,
+                                                                  child: InkWell(
                                                                     onTap: () {
-                                                                      Navigator.pop(
-                                                                          context);
+                                                                      Navigator.pop(context);
                                                                     },
                                                                     child: Icon(
-                                                                      Icons
-                                                                          .arrow_back_rounded,
-                                                                      color: AppColors
-                                                                          .primaryColor,
+                                                                      Icons.arrow_back_rounded,
+                                                                      color: AppColors.primaryColor,
                                                                       size: 35,
                                                                     ),
                                                                   ),
@@ -457,72 +313,72 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                                                   height: 10,
                                                                 ),
                                                                 Container(
-                                                                  margin: const EdgeInsets
-                                                                      .symmetric(
-                                                                      horizontal:
-                                                                          20),
+                                                                  margin: const EdgeInsets.symmetric(horizontal: 20),
                                                                   child: Text(
-                                                                    LanguageClass
-                                                                            .isEnglish
+                                                                    LanguageClass.isEnglish
                                                                         ? "Access Points"
                                                                         : "نقط التجمع",
                                                                     style: fontStyle(
-                                                                        color: AppColors
-                                                                            .blackColor,
-                                                                        fontSize:
-                                                                            28,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w600,
-                                                                        fontFamily:
-                                                                            FontFamily.medium),
+                                                                        color: AppColors.blackColor,
+                                                                        fontSize: 28,
+                                                                        fontWeight: FontWeight.w600,
+                                                                        fontFamily: FontFamily.medium),
                                                                   ),
                                                                 ),
                                                                 SizedBox(
                                                                   height: 20,
                                                                 ),
                                                                 Expanded(
-                                                                  child: ListView
-                                                                      .separated(
-                                                                          itemBuilder:
-                                                                              (context,
-                                                                                  index3) {
-                                                                            return Container(
-                                                                              child: Row(
-                                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                children: [
-                                                                                  Container(
-                                                                                    padding: EdgeInsets.symmetric(horizontal: 10),
-                                                                                    child: Text(
-                                                                                      '${widget.tripListBack[index].lineCity[index2].lineStationList[index3].stationName}' ?? '',
-                                                                                      style: fontStyle(color: AppColors.primaryColor, fontFamily: FontFamily.bold, fontSize: 14),
-                                                                                    ),
-                                                                                  ),
-                                                                                  Container(
-                                                                                    padding: EdgeInsets.symmetric(horizontal: 10),
-                                                                                    child: Text(
-                                                                                      '${widget.tripListBack[index].lineCity[index2].lineStationList[index3].accessTime.substring(0, 5)}' ?? '',
-                                                                                      style: fontStyle(color: AppColors.primaryColor, fontFamily: FontFamily.bold, fontSize: 14),
-                                                                                    ),
-                                                                                  ),
-                                                                                ],
+                                                                  child: ListView.separated(
+                                                                      itemBuilder: (context, index3) {
+                                                                        return Container(
+                                                                          child: Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.spaceBetween,
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.start,
+                                                                            children: [
+                                                                              Container(
+                                                                                padding: EdgeInsets.symmetric(
+                                                                                    horizontal: 10),
+                                                                                child: Text(
+                                                                                  '${widget.tripListBack[index].lineCity[index2].lineStationList[index3].stationName}' ??
+                                                                                      '',
+                                                                                  style: fontStyle(
+                                                                                      color: AppColors.primaryColor,
+                                                                                      fontFamily: FontFamily.bold,
+                                                                                      fontSize: 14),
+                                                                                ),
                                                                               ),
-                                                                            );
-                                                                          },
-                                                                          separatorBuilder:
-                                                                              (context,
-                                                                                  index) {
-                                                                            return Divider(
-                                                                              color: Colors.black,
-                                                                            );
-                                                                          },
-                                                                          physics:
-                                                                              ScrollPhysics(),
-                                                                          shrinkWrap:
-                                                                              true,
-                                                                          itemCount:
-                                                                              widget.tripListBack[index].lineCity[index2].lineStationList.length ?? 0),
+                                                                              Container(
+                                                                                padding: EdgeInsets.symmetric(
+                                                                                    horizontal: 10),
+                                                                                child: Text(
+                                                                                  '${widget.tripListBack[index].lineCity[index2].lineStationList[index3].accessTime!.substring(0, 5)}' ??
+                                                                                      '',
+                                                                                  style: fontStyle(
+                                                                                      color: AppColors.primaryColor,
+                                                                                      fontFamily: FontFamily.bold,
+                                                                                      fontSize: 14),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                      separatorBuilder: (context, index) {
+                                                                        return Divider(
+                                                                          color: Colors.black,
+                                                                        );
+                                                                      },
+                                                                      physics: ScrollPhysics(),
+                                                                      shrinkWrap: true,
+                                                                      itemCount: widget
+                                                                              .tripListBack[index]
+                                                                              .lineCity[index2]
+                                                                              .lineStationList
+                                                                              .length ??
+                                                                          0),
                                                                 ),
                                                               ],
                                                             ),
@@ -534,20 +390,16 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                                   });
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  AppColors.primaryColor,
+                                              backgroundColor: AppColors.primaryColor,
                                               elevation: 4,
                                               shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(16.0),
+                                                borderRadius: BorderRadius.circular(16.0),
                                               ),
                                             ),
                                             child: Row(
                                               children: [
                                                 Text(
-                                                  LanguageClass.isEnglish
-                                                      ? "Points"
-                                                      : "نقط التجمع",
+                                                  LanguageClass.isEnglish ? "Points" : "نقط التجمع",
                                                   style: fontStyle(
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: 18,
@@ -558,8 +410,7 @@ class _TimesScreenBackState extends State<TimesScreenBack> {
                                                   width: 5,
                                                 ),
                                                 Icon(
-                                                  Icons
-                                                      .arrow_circle_right_rounded,
+                                                  Icons.arrow_circle_right_rounded,
                                                   color: AppColors.white,
                                                 ),
                                               ],

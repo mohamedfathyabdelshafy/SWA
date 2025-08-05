@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -55,6 +57,7 @@ class MyHome extends StatefulWidget {
 
 class _MyHomeState extends State<MyHome> {
   bool isTabbed = false;
+
   int currentIndex = 0;
   List<CitiesStations>? _fromStations;
   List<CitiesStations>? _toStations;
@@ -79,12 +82,9 @@ class _MyHomeState extends State<MyHome> {
   DateTime? selectedFromGeorgianDate;
   JHijri? selectedFromHijriDate;
 
-  String selectedDatefrom =
-      intl.DateFormat('yyyy-MM-dd').format(DateTime.now()).toString();
+  String selectedDatefrom = intl.DateFormat('yyyy-MM-dd').format(DateTime.now()).toString();
 
-  String selectedDateto = intl.DateFormat('yyyy-MM-dd')
-      .format(DateTime.now().add(Duration(days: 1)))
-      .toString();
+  String selectedDateto = intl.DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 1))).toString();
 
   bool ishijiri = false;
 
@@ -115,10 +115,7 @@ class _MyHomeState extends State<MyHome> {
     if (result != null) {
       model = result;
       // Calculate the count with IsRead as false
-      count = model?.notifications
-              .where((notification) => !notification.IsRead!)
-              .length ??
-          0;
+      count = model?.notifications.where((notification) => !notification.IsRead!).length ?? 0;
       log("Notification Count : $count");
     }
     isRefreshing = false;
@@ -174,9 +171,14 @@ class _MyHomeState extends State<MyHome> {
     void _onTokenError(Object error) {}
 
     Future<void> initTokenStream() async {
-      await Push.setAutoInitEnabled(true);
-      Push.getTokenStream.listen(_onTokenEvent, onError: _onTokenError);
-      Push.getToken("");
+      final deviceInfo = await DeviceInfoPlugin().androidInfo;
+      final isHuawei = deviceInfo.manufacturer.toLowerCase().contains('huawei');
+
+      if (isHuawei) {
+        await Push.setAutoInitEnabled(true);
+        Push.getTokenStream.listen(_onTokenEvent, onError: _onTokenError);
+        Push.getToken("");
+      }
     }
 
     initTokenStream();
@@ -226,15 +228,29 @@ class _MyHomeState extends State<MyHome> {
 
     void _onTokenError(Object error) {}
 
-    Future<void> initTokenStream() async {
-      await Push.setAutoInitEnabled(true);
-      if (!mounted) return;
-      Push.getTokenStream.listen(
-        _onTokenEvent,
-        onError: _onTokenError,
-      );
+    Future<bool> isHuaweiDevice() async {
+      final deviceInfo = DeviceInfoPlugin();
+      if (Platform.isIOS) {
+        return false;
+      } else {
+        final androidInfo = await deviceInfo.androidInfo;
+        return androidInfo.manufacturer.toLowerCase() == 'huawei';
+      }
+    }
 
-      Push.getToken("");
+    Future<void> initTokenStream() async {
+      final isHuawei = await isHuaweiDevice();
+
+      if (isHuawei) {
+        await Push.setAutoInitEnabled(true);
+        if (!mounted) return;
+        Push.getTokenStream.listen(
+          _onTokenEvent,
+          onError: _onTokenError,
+        );
+
+        Push.getToken("");
+      }
     }
 
     initTokenStream();
@@ -261,17 +277,14 @@ class _MyHomeState extends State<MyHome> {
             listener: (BuildContext context, state) async {
               if (state is PackagesState) {
                 if (state.updateversion == 'success') {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => UpdateAppScreen()));
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UpdateAppScreen()));
                 }
                 if (state.advModel?.status == 'success') {
                   for (var element in state.advModel!.message!) {
+                    print("A7a ${element.icon}");
                     showGeneralDialog(
                         context: context,
-                        pageBuilder: (BuildContext buildContext,
-                            Animation<double> animation,
+                        pageBuilder: (BuildContext buildContext, Animation<double> animation,
                             Animation<double> secondaryAnimation) {
                           return StatefulBuilder(builder: (context, setStater) {
                             return Container(
@@ -286,13 +299,11 @@ class _MyHomeState extends State<MyHome> {
                                 child: InkWell(
                                   onTap: () {
                                     if (element.linkApi != null) {
-                                      _launchInWebView(
-                                          Uri.parse(element.linkApi!));
+                                      _launchInWebView(Uri.parse(element.linkApi!));
                                     }
                                   },
                                   child: Container(
-                                    height: MediaQuery.of(context).size.height /
-                                        1.4,
+                                    height: MediaQuery.of(context).size.height / 1.4,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
@@ -301,14 +312,10 @@ class _MyHomeState extends State<MyHome> {
                                       alignment: Alignment.topCenter,
                                       children: [
                                         Container(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 10, horizontal: 5),
+                                          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
                                           child: Image.network(
                                             element.icon!,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height /
-                                                1.4,
+                                            height: MediaQuery.of(context).size.height / 1.4,
                                             fit: BoxFit.fill,
                                           ),
                                         ),
@@ -316,9 +323,7 @@ class _MyHomeState extends State<MyHome> {
                                           alignment: Alignment.topLeft,
                                           child: InkWell(
                                             onTap: () {
-                                              PackagesRespo().closeadsfunc(
-                                                  id: element
-                                                      .adCustomerAppWebViewId);
+                                              PackagesRespo().closeadsfunc(id: element.adCustomerAppWebViewId);
 
                                               Navigator.pop(context);
                                             },
@@ -326,10 +331,7 @@ class _MyHomeState extends State<MyHome> {
                                               width: 25,
                                               height: 25,
                                               decoration: BoxDecoration(
-                                                  color: Colors.black,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100)),
+                                                  color: Colors.black, borderRadius: BorderRadius.circular(100)),
                                               child: Icon(
                                                 Icons.close,
                                                 color: Colors.white,
@@ -350,13 +352,10 @@ class _MyHomeState extends State<MyHome> {
               }
             },
           ),
-          BlocListener(
-              bloc: BlocProvider.of<GetAvailableCountriesCubit>(context),
-              listener: (context, state) async {}),
+          BlocListener(bloc: BlocProvider.of<GetAvailableCountriesCubit>(context), listener: (context, state) async {}),
         ],
         child: Directionality(
-          textDirection:
-              LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+          textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
           child: Container(
             color: Colors.white,
             child: Column(
@@ -378,9 +377,7 @@ class _MyHomeState extends State<MyHome> {
                                 ? CarouselWidget(items: [
                                     ...List<Widget>.generate(
                                       state.adsModel!.message!.length ?? 0,
-                                      (index) => contentAdvertisment(
-                                          state.adsModel!.message![index],
-                                          sizeHeight),
+                                      (index) => contentAdvertisment(state.adsModel!.message![index], sizeHeight),
                                     ),
                                   ])
                                 : SizedBox(),
@@ -403,9 +400,7 @@ class _MyHomeState extends State<MyHome> {
                                     InkWell(
                                       onTap: () {
                                         Navigator.pushNamedAndRemoveUntil(
-                                            context,
-                                            Routes.initialRoute,
-                                            (route) => false);
+                                            context, Routes.initialRoute, (route) => false);
                                       },
                                       child: Icon(
                                         Icons.arrow_back_rounded,
@@ -417,8 +412,7 @@ class _MyHomeState extends State<MyHome> {
                                     Container(
                                       width: sizeWidth * 0.18,
                                       alignment: Alignment.center,
-                                      child: Image.asset(
-                                          "assets/images/homelogo.png"),
+                                      child: Image.asset("assets/images/homelogo.png"),
                                     ),
                                   ],
                                 ),
@@ -430,13 +424,10 @@ class _MyHomeState extends State<MyHome> {
                                             children: [
                                               IconButton(
                                                   onPressed: () async {
-                                                    Navigator.push(context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) {
+                                                    Navigator.push(context, MaterialPageRoute(builder: (context) {
                                                       return NotificationScreen(
                                                         isScreenHome: false,
-                                                        updateNotificationCount:
-                                                            updateNotificationCount,
+                                                        updateNotificationCount: updateNotificationCount,
                                                       );
                                                     }));
                                                   },
@@ -451,41 +442,33 @@ class _MyHomeState extends State<MyHome> {
                                     Routes.user == null
                                         ? InkWell(
                                             onTap: () {
-                                              Navigator.pushNamed(
-                                                  context, Routes.signInRoute);
+                                              Navigator.pushNamed(context, Routes.signInRoute);
                                             },
                                             child: Container(
                                               height: 34,
                                               width: 87,
                                               decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
+                                                borderRadius: BorderRadius.circular(20),
                                                 color: AppColors.white,
                                               ),
                                               child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
                                                   Container(
                                                     width: 12,
                                                     alignment: Alignment.center,
-                                                    child: Image.asset(
-                                                        "assets/images/Icon open-account-lo.png"),
+                                                    child: Image.asset("assets/images/Icon open-account-lo.png"),
                                                   ),
                                                   SizedBox(
                                                     width: 5,
                                                   ),
                                                   Text(
-                                                    LanguageClass.isEnglish
-                                                        ? "Login"
-                                                        : 'دخول',
+                                                    LanguageClass.isEnglish ? "Login" : 'دخول',
                                                     style: fontStyle(
                                                         color: Colors.black,
                                                         fontSize: 14,
-                                                        fontFamily:
-                                                            FontFamily.medium),
+                                                        fontFamily: FontFamily.medium),
                                                   ),
                                                 ],
                                               ),
@@ -493,48 +476,37 @@ class _MyHomeState extends State<MyHome> {
                                           )
                                         : InkWell(
                                             onTap: () {
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) {
+                                              Navigator.push(context, MaterialPageRoute(builder: (context) {
                                                 return MyAccountScreen(
                                                   loginLocalDataSource: sl(),
                                                   user: Routes.user!,
                                                 );
                                               })).then((value) {
-                                                BlocProvider.of<LoginCubit>(
-                                                        context)
-                                                    .getUserData();
+                                                BlocProvider.of<LoginCubit>(context).getUserData();
                                               });
                                             },
                                             child: Container(
                                               height: 34,
                                               width: 87,
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10),
+                                              padding: EdgeInsets.symmetric(horizontal: 10),
                                               // width: sizeWidth * 0.3,
                                               decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
+                                                borderRadius: BorderRadius.circular(20),
                                                 color: AppColors.white,
                                               ),
                                               child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
                                                   Expanded(
                                                     child: Text(
                                                       Routes.user!.name!,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
+                                                      textAlign: TextAlign.center,
+                                                      overflow: TextOverflow.ellipsis,
                                                       style: fontStyle(
                                                           color: Colors.black,
                                                           fontSize: 12,
-                                                          fontFamily: FontFamily
-                                                              .medium),
+                                                          fontFamily: FontFamily.medium),
                                                     ),
                                                   ),
                                                 ],
@@ -580,21 +552,15 @@ class _MyHomeState extends State<MyHome> {
                                       "assets/images/arrow_one_way.svg",
                                       width: 40,
                                       height: 40,
-                                      color: tripTypeId == "1"
-                                          ? AppColors.primaryColor
-                                          : Color(0xffdddddd),
+                                      color: tripTypeId == "1" ? AppColors.primaryColor : Color(0xffdddddd),
                                     ),
                                     const SizedBox(
                                       height: 0,
                                     ),
                                     Text(
-                                      LanguageClass.isEnglish
-                                          ? "One way"
-                                          : "ذهاب فقط",
+                                      LanguageClass.isEnglish ? "One way" : "ذهاب فقط",
                                       style: fontStyle(
-                                          color: tripTypeId == "1"
-                                              ? AppColors.primaryColor
-                                              : Color(0xffdddddd),
+                                          color: tripTypeId == "1" ? AppColors.primaryColor : Color(0xffdddddd),
                                           fontSize: 18,
                                           fontFamily: FontFamily.medium,
                                           fontWeight: FontWeight.w500),
@@ -622,21 +588,15 @@ class _MyHomeState extends State<MyHome> {
                                       "assets/images/bus.svg",
                                       width: 40,
                                       height: 40,
-                                      color: tripTypeId == "2"
-                                          ? AppColors.primaryColor
-                                          : Color(0xffdddddd),
+                                      color: tripTypeId == "2" ? AppColors.primaryColor : Color(0xffdddddd),
                                     ),
                                     const SizedBox(
                                       height: 0,
                                     ),
                                     Text(
-                                      LanguageClass.isEnglish
-                                          ? "Round Trip"
-                                          : "ذهاب وعوده",
+                                      LanguageClass.isEnglish ? "Round Trip" : "ذهاب وعوده",
                                       style: fontStyle(
-                                          color: tripTypeId == "2"
-                                              ? AppColors.primaryColor
-                                              : Color(0xffdddddd),
+                                          color: tripTypeId == "2" ? AppColors.primaryColor : Color(0xffdddddd),
                                           fontSize: 18,
                                           fontFamily: FontFamily.medium,
                                           fontWeight: FontWeight.w500),
@@ -656,21 +616,24 @@ class _MyHomeState extends State<MyHome> {
                             Container(
                               alignment: Alignment.center,
                               child: InkWell(
-                                onTap: _toStationId == null ||
-                                        _fromStationId == null
+                                onTap: _toStationId == null || _fromStationId == null
                                     ? () {}
                                     : () {
                                         String to;
+                                        String tostation;
                                         int? toid;
 
                                         toid = _toStationId;
                                         to = _toCityName;
+                                        tostation = _toStationName;
 
                                         _toStationId = _fromStationId;
+                                        _toStationName = _fromStationName;
 
                                         _toCityName = _fromCityName;
 
                                         _fromCityName = to;
+                                        _fromStationName = tostation;
 
                                         _fromStationId = toid;
                                         setState(() {});
@@ -693,56 +656,36 @@ class _MyHomeState extends State<MyHome> {
                                 children: [
                                   Text(
                                     LanguageClass.isEnglish ? "From" : "من",
-                                    style: fontStyle(
-                                        fontFamily: FontFamily.medium,
-                                        color: Colors.black,
-                                        fontSize: 16),
-                                    textAlign: LanguageClass.isEnglish
-                                        ? TextAlign.left
-                                        : TextAlign.right,
+                                    style: fontStyle(fontFamily: FontFamily.medium, color: Colors.black, fontSize: 16),
+                                    textAlign: LanguageClass.isEnglish ? TextAlign.left : TextAlign.right,
                                   ),
                                   BlocListener(
                                     bloc: BlocProvider.of<HomeCubit>(context),
-                                    listener:
-                                        (BuildContext context, state) async {
-                                      if (state
-                                          is GetFromStationsListLoadingState) {
+                                    listener: (BuildContext context, state) async {
+                                      if (state is GetFromStationsListLoadingState) {
                                         Constants.showLoadingDialog(context);
-                                      } else if (state
-                                          is GetFromStationsListLoadedState) {
+                                      } else if (state is GetFromStationsListLoadedState) {
                                         Constants.hideLoadingDialog(context);
                                         setState(() {
-                                          if (state
-                                                  .homeMessageResponse.status ==
-                                              'failed') {
+                                          if (state.homeMessageResponse.status == 'failed') {
                                             Constants.showDefaultSnackBar(
-                                                context: context,
-                                                text: state
-                                                    .homeMessageResponse.message
-                                                    .toString());
+                                                context: context, text: state.homeMessageResponse.message.toString());
                                           } else {
-                                            _fromStations = state
-                                                .homeMessageResponse
-                                                .citiesStations!
+                                            _fromStations = state.homeMessageResponse.citiesStations!
                                                 .cast<CitiesStations>()
                                                 .toList();
                                           }
                                         });
-                                        final result = await Navigator.push(
-                                            context, MaterialPageRoute(
-                                                builder: (context) {
-                                          return SelectFromCity(
-                                              fromStations: _fromStations!);
+                                        final result =
+                                            await Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                          return SelectFromCity(fromStations: _fromStations!);
                                         }));
                                         if (result != null) {
                                           log(result.toString());
                                           setState(() {
-                                            _fromStationId =
-                                                result['_fromStationId'];
-                                            _fromStationName =
-                                                result['_fromStationName'];
-                                            _fromCityName =
-                                                result['_fromCityName'];
+                                            _fromStationId = result['_fromStationId'];
+                                            _fromStationName = result['_fromStationName'];
+                                            _fromCityName = result['_fromCityName'];
                                           });
                                         }
                                         // Widget _fromStationsListWidget = ListView.builder(
@@ -797,18 +740,14 @@ class _MyHomeState extends State<MyHome> {
                                         //   },
                                         // );
                                         // Constants.showListDialog(context, 'From Stations', _fromStationsListWidget);
-                                      } else if (state
-                                          is GetFromStationsListErrorState) {
+                                      } else if (state is GetFromStationsListErrorState) {
                                         Constants.hideLoadingDialog(context);
-                                        Constants.showDefaultSnackBar(
-                                            context: context,
-                                            text: state.error.toString());
+                                        Constants.showDefaultSnackBar(context: context, text: state.error.toString());
                                       }
                                     },
                                     child: InkWell(
                                         onTap: () {
-                                          BlocProvider.of<HomeCubit>(context)
-                                              .getFromStationsListData();
+                                          BlocProvider.of<HomeCubit>(context).getFromStationsListData();
                                         },
                                         child: CustomDropDownList(
                                             hint: _fromStationName == ''
@@ -821,74 +760,49 @@ class _MyHomeState extends State<MyHome> {
                                     padding: EdgeInsets.zero,
                                     child: Text(
                                       LanguageClass.isEnglish ? "To" : "الي",
-                                      style: fontStyle(
-                                          fontFamily: FontFamily.medium,
-                                          color: Colors.black,
-                                          fontSize: 16),
-                                      textAlign: LanguageClass.isEnglish
-                                          ? TextAlign.left
-                                          : TextAlign.right,
+                                      style:
+                                          fontStyle(fontFamily: FontFamily.medium, color: Colors.black, fontSize: 16),
+                                      textAlign: LanguageClass.isEnglish ? TextAlign.left : TextAlign.right,
                                     ),
                                   ),
                                   BlocListener(
                                     bloc: BlocProvider.of<HomeCubit>(context),
-                                    listener:
-                                        (BuildContext context, state) async {
-                                      if (state
-                                          is GetToStationsListLoadingState) {
+                                    listener: (BuildContext context, state) async {
+                                      if (state is GetToStationsListLoadingState) {
                                         Constants.showLoadingDialog(context);
-                                      } else if (state
-                                          is GetToStationsListLoadedState) {
+                                      } else if (state is GetToStationsListLoadedState) {
                                         Constants.hideLoadingDialog(context);
                                         setState(() {
-                                          if (state
-                                                  .homeMessageResponse.status ==
-                                              'failed') {
+                                          if (state.homeMessageResponse.status == 'failed') {
                                             Constants.showDefaultSnackBar(
-                                                context: context,
-                                                text: state
-                                                    .homeMessageResponse.message
-                                                    .toString());
+                                                context: context, text: state.homeMessageResponse.message.toString());
                                           } else {
-                                            _toStations = state
-                                                .homeMessageResponse
-                                                .citiesStations!
+                                            _toStations = state.homeMessageResponse.citiesStations!
                                                 .cast<CitiesStations>()
                                                 .toList();
                                           }
                                         });
-                                        final result = await Navigator.push(
-                                            context, MaterialPageRoute(
-                                                builder: (context) {
-                                          return SelectToCity(
-                                              toStations: _toStations!);
+                                        final result =
+                                            await Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                          return SelectToCity(toStations: _toStations!);
                                         }));
                                         if (result != null) {
                                           setState(() {
-                                            _toStationId =
-                                                result['_toStationId'];
-                                            _toStationName =
-                                                result['_toStationName'];
+                                            _toStationId = result['_toStationId'];
+                                            _toStationName = result['_toStationName'];
                                             _toCityName = result['_toCityName'];
                                           });
                                         }
-                                      } else if (state
-                                          is GetToStationsListErrorState) {
+                                      } else if (state is GetToStationsListErrorState) {
                                         Constants.hideLoadingDialog(context);
-                                        Constants.showDefaultSnackBar(
-                                            context: context,
-                                            text: state.error.toString());
+                                        Constants.showDefaultSnackBar(context: context, text: state.error.toString());
                                       }
                                     },
                                     child: InkWell(
                                         onTap: () {
                                           if (_fromStationId != null) {
-                                            BlocProvider.of<HomeCubit>(context)
-                                                .getToStationsListData(
-                                                    ToStationsParams(
-                                                        stationId:
-                                                            _fromStationId
-                                                                .toString()));
+                                            BlocProvider.of<HomeCubit>(context).getToStationsListData(
+                                                ToStationsParams(stationId: _fromStationId.toString()));
                                           }
                                         },
                                         child: CustomDropDownList(
@@ -904,8 +818,7 @@ class _MyHomeState extends State<MyHome> {
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                           child: Column(
                             children: [
                               tripTypeId == "1"
@@ -914,46 +827,31 @@ class _MyHomeState extends State<MyHome> {
                                         customdatepicker(
                                           context: context,
                                           hijiri: ishijiri,
-                                          selectedGeorgianDate:
-                                              selectedFromGeorgianDate,
-                                          selectedHijriDate:
-                                              selectedFromHijriDate,
+                                          selectedGeorgianDate: selectedFromGeorgianDate,
+                                          selectedHijriDate: selectedFromHijriDate,
                                           onchange: (hdate) {
                                             date = hdate.date;
-                                            hdate.jhijri.fDisplay =
-                                                DisplayFormat.MMDDYYYY;
+                                            hdate.jhijri.fDisplay = DisplayFormat.MMDDYYYY;
 
                                             ishijiri
-                                                ? selectedDatefrom =
-                                                    hdate.jhijri.toString()
+                                                ? selectedDatefrom = hdate.jhijri.toString()
                                                 : selectedDatefrom =
-                                                    intl.DateFormat(
-                                                            'yyyy-MM-dd')
-                                                        .format(date!)
-                                                        .toString();
+                                                    intl.DateFormat('yyyy-MM-dd').format(date!).toString();
 
                                             ishijiri
-                                                ? selectedDateto =
-                                                    hdate.jhijri.toString()
+                                                ? selectedDateto = hdate.jhijri.toString()
                                                 : selectedDateto =
-                                                    intl.DateFormat(
-                                                            'yyyy-MM-dd')
-                                                        .format(date!)
-                                                        .toString();
+                                                    intl.DateFormat('yyyy-MM-dd').format(date!).toString();
                                             if (ishijiri) {
-                                              selectedToHijriDate =
-                                                  hdate.jhijri;
+                                              selectedToHijriDate = hdate.jhijri;
                                               selectedToGeorgianDate = null;
-                                              selectedFromHijriDate =
-                                                  hdate.jhijri;
+                                              selectedFromHijriDate = hdate.jhijri;
                                               selectedFromGeorgianDate = null;
                                             } else {
                                               selectedToHijriDate = null;
-                                              selectedToGeorgianDate =
-                                                  hdate.date;
+                                              selectedToGeorgianDate = hdate.date;
                                               selectedFromHijriDate = null;
-                                              selectedFromGeorgianDate =
-                                                  hdate.date;
+                                              selectedFromGeorgianDate = hdate.date;
                                             }
 
                                             setState(() {});
@@ -962,8 +860,7 @@ class _MyHomeState extends State<MyHome> {
                                         );
                                       },
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Column(
                                             children: [
@@ -978,26 +875,18 @@ class _MyHomeState extends State<MyHome> {
                                                     width: sizeWidth * 0.01,
                                                   ),
                                                   Text(
-                                                    LanguageClass.isEnglish
-                                                        ? "DEPART ON"
-                                                        : "تغادر من",
+                                                    LanguageClass.isEnglish ? "DEPART ON" : "تغادر من",
                                                     style: fontStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: AppColors
-                                                            .blackColor,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: AppColors.blackColor,
                                                         fontSize: 12),
                                                   )
                                                 ],
                                               ),
                                               InkWell(
-                                                child: Text(
-                                                    "\n $selectedDatefrom",
+                                                child: Text("\n $selectedDatefrom",
                                                     textAlign: TextAlign.center,
-                                                    style: fontStyle(
-                                                        color: AppColors
-                                                            .blackColor,
-                                                        fontSize: 12)),
+                                                    style: fontStyle(color: AppColors.blackColor, fontSize: 12)),
                                               ),
                                             ],
                                           ),
@@ -1005,10 +894,8 @@ class _MyHomeState extends State<MyHome> {
                                       ),
                                     )
                                   : Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Expanded(
                                           child: InkWell(
@@ -1016,35 +903,23 @@ class _MyHomeState extends State<MyHome> {
                                               customdatepicker(
                                                 context: context,
                                                 hijiri: ishijiri,
-                                                selectedGeorgianDate:
-                                                    selectedFromGeorgianDate,
-                                                selectedHijriDate:
-                                                    selectedFromHijriDate,
+                                                selectedGeorgianDate: selectedFromGeorgianDate,
+                                                selectedHijriDate: selectedFromHijriDate,
                                                 onchange: (hdate) {
                                                   date = hdate.date;
-                                                  hdate.jhijri.fDisplay =
-                                                      DisplayFormat.MMDDYYYY;
+                                                  hdate.jhijri.fDisplay = DisplayFormat.MMDDYYYY;
 
                                                   ishijiri
-                                                      ? selectedDatefrom = hdate
-                                                          .jhijri
-                                                          .toString()
+                                                      ? selectedDatefrom = hdate.jhijri.toString()
                                                       : selectedDatefrom =
-                                                          intl.DateFormat(
-                                                                  'MM-dd-yyyy')
-                                                              .format(date!)
-                                                              .toString();
+                                                          intl.DateFormat('MM-dd-yyyy').format(date!).toString();
 
                                                   if (ishijiri) {
-                                                    selectedFromHijriDate =
-                                                        hdate.jhijri;
-                                                    selectedFromGeorgianDate =
-                                                        null;
+                                                    selectedFromHijriDate = hdate.jhijri;
+                                                    selectedFromGeorgianDate = null;
                                                   } else {
-                                                    selectedFromHijriDate =
-                                                        null;
-                                                    selectedFromGeorgianDate =
-                                                        hdate.date;
+                                                    selectedFromHijriDate = null;
+                                                    selectedFromGeorgianDate = hdate.date;
                                                   }
                                                   setState(() {});
                                                   Navigator.pop(context);
@@ -1052,48 +927,34 @@ class _MyHomeState extends State<MyHome> {
                                               );
                                             },
                                             child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
                                                   children: [
                                                     Icon(
                                                       Icons.date_range_outlined,
-                                                      color:
-                                                          AppColors.blackColor,
+                                                      color: AppColors.blackColor,
                                                       size: 16,
                                                     ),
                                                     SizedBox(
                                                       width: sizeWidth * 0.01,
                                                     ),
                                                     Text(
-                                                      LanguageClass.isEnglish
-                                                          ? "DEPART ON GO"
-                                                          : " تغادر من ذهاب",
+                                                      LanguageClass.isEnglish ? "DEPART ON GO" : " تغادر من ذهاب",
                                                       style: fontStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: AppColors
-                                                              .blackColor,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: AppColors.blackColor,
                                                           fontSize: 12),
                                                     )
                                                   ],
                                                 ),
                                                 InkWell(
-                                                  child: Text(
-                                                      "\n$selectedDatefrom",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: fontStyle(
-                                                          color: AppColors
-                                                              .blackColor,
-                                                          fontSize: 14)),
+                                                  child: Text("\n$selectedDatefrom",
+                                                      textAlign: TextAlign.center,
+                                                      style: fontStyle(color: AppColors.blackColor, fontSize: 14)),
                                                 ),
                                               ],
                                             ),
@@ -1108,34 +969,23 @@ class _MyHomeState extends State<MyHome> {
                                               customdatepicker(
                                                 context: context,
                                                 hijiri: ishijiri,
-                                                selectedGeorgianDate:
-                                                    selectedToGeorgianDate,
-                                                selectedHijriDate:
-                                                    selectedToHijriDate,
+                                                selectedGeorgianDate: selectedToGeorgianDate,
+                                                selectedHijriDate: selectedToHijriDate,
                                                 onchange: (hdate) {
                                                   date = hdate.date;
-                                                  hdate.jhijri.fDisplay =
-                                                      DisplayFormat.MMDDYYYY;
+                                                  hdate.jhijri.fDisplay = DisplayFormat.MMDDYYYY;
 
                                                   ishijiri
-                                                      ? selectedDateto = hdate
-                                                          .jhijri
-                                                          .toString()
+                                                      ? selectedDateto = hdate.jhijri.toString()
                                                       : selectedDateto =
-                                                          intl.DateFormat(
-                                                                  'MM-dd-yyyy')
-                                                              .format(date!)
-                                                              .toString();
+                                                          intl.DateFormat('MM-dd-yyyy').format(date!).toString();
 
                                                   if (ishijiri) {
-                                                    selectedToHijriDate =
-                                                        hdate.jhijri;
-                                                    selectedToGeorgianDate =
-                                                        null;
+                                                    selectedToHijriDate = hdate.jhijri;
+                                                    selectedToGeorgianDate = null;
                                                   } else {
                                                     selectedToHijriDate = null;
-                                                    selectedToGeorgianDate =
-                                                        hdate.date;
+                                                    selectedToGeorgianDate = hdate.date;
                                                   }
                                                   setState(() {});
                                                   Navigator.pop(context);
@@ -1143,48 +993,34 @@ class _MyHomeState extends State<MyHome> {
                                               );
                                             },
                                             child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
                                                   children: [
                                                     Icon(
                                                       Icons.date_range_outlined,
-                                                      color:
-                                                          AppColors.blackColor,
+                                                      color: AppColors.blackColor,
                                                       size: 16,
                                                     ),
                                                     SizedBox(
                                                       width: sizeWidth * 0.01,
                                                     ),
                                                     Text(
-                                                      LanguageClass.isEnglish
-                                                          ? "DEPART ON BACK"
-                                                          : " تغادر من عودة",
+                                                      LanguageClass.isEnglish ? "DEPART ON BACK" : " تغادر من عودة",
                                                       style: fontStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: AppColors
-                                                              .blackColor,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: AppColors.blackColor,
                                                           fontSize: 12),
                                                     )
                                                   ],
                                                 ),
                                                 InkWell(
-                                                  child: Text(
-                                                      "\n$selectedDateto",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: fontStyle(
-                                                          color: AppColors
-                                                              .blackColor,
-                                                          fontSize: 14)),
+                                                  child: Text("\n$selectedDateto",
+                                                      textAlign: TextAlign.center,
+                                                      style: fontStyle(color: AppColors.blackColor, fontSize: 14)),
                                                 ),
                                               ],
                                             ),
@@ -1196,46 +1032,31 @@ class _MyHomeState extends State<MyHome> {
                                 height: 15,
                               ),
                               Container(
-                                child: BlocListener<TimesTripsCubit,
-                                    TimesTripsStates>(
-                                  bloc:
-                                      BlocProvider.of<TimesTripsCubit>(context),
+                                child: BlocListener<TimesTripsCubit, TimesTripsStates>(
+                                  bloc: BlocProvider.of<TimesTripsCubit>(context),
                                   listener: (context, state) {
                                     if (state is LoadingTimesTrips) {
                                       Constants.showLoadingDialog(context);
                                     } else if (state is LoadedTimesTrips) {
-                                      tripListBack = state.timesTripsResponse
-                                              .message!.tripListBack ??
-                                          [];
+                                      tripListBack = state.timesTripsResponse.message!.tripListBack ?? [];
                                       Constants.hideLoadingDialog(context);
 
-                                      if (state.timesTripsResponse.message!
-                                          .tripList!.isNotEmpty) {
+                                      if (state.timesTripsResponse.message!.tripList!.isNotEmpty) {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                settings: RouteSettings(
-                                                    name: 'TimesScreen'),
+                                                settings: RouteSettings(name: 'TimesScreen'),
                                                 builder: (context) {
                                                   return TimesScreen(
-                                                    tripList: state
-                                                        .timesTripsResponse
-                                                        .message!
-                                                        .tripList,
+                                                    tripList: state.timesTripsResponse.message!.tripList,
                                                     tripTypeId: tripTypeId,
-                                                    tripListBack: state
-                                                            .timesTripsResponse
-                                                            .message!
-                                                            .tripListBack ??
-                                                        [],
+                                                    tripListBack: state.timesTripsResponse.message!.tripListBack ?? [],
                                                   );
                                                 })).then((value) {
                                           Reservationtimer.stoptimer();
 
-                                          Ticketreservation.Seatsnumbers1
-                                              .clear();
-                                          Ticketreservation.Seatsnumbers2
-                                              .clear();
+                                          Ticketreservation.Seatsnumbers1.clear();
+                                          Ticketreservation.Seatsnumbers2.clear();
                                         });
                                       } else {
                                         Constants.showDefaultSnackBar(
@@ -1246,14 +1067,12 @@ class _MyHomeState extends State<MyHome> {
                                       }
                                     } else if (state is ErrorTimesTrips) {
                                       Constants.hideLoadingDialog(context);
-                                      Constants.showDefaultSnackBar(
-                                          context: context, text: state.msg);
+                                      Constants.showDefaultSnackBar(context: context, text: state.msg);
                                     }
                                   },
                                   child: InkWell(
                                     onTap: () {
-                                      if (_fromStationId == null ||
-                                          _toStationId == null) {
+                                      if (_fromStationId == null || _toStationId == null) {
                                         Constants.showDefaultSnackBar(
                                             context: context,
                                             text: LanguageClass.isEnglish
@@ -1264,27 +1083,19 @@ class _MyHomeState extends State<MyHome> {
                                             "tripTypeIdBassant    ${_fromStationId.toString()}  ${_toStationId.toString()}"
                                             "  ${selectedDatefrom.toString()}  ${selectedDateto.toString()}");
                                         CacheHelper.setDataToSharedPref(
-                                            key: 'fromStationId',
-                                            value: _fromStationId.toString());
+                                            key: 'fromStationId', value: _fromStationId.toString());
                                         CacheHelper.setDataToSharedPref(
-                                            key: 'toStationId',
-                                            value: _toStationId.toString());
+                                            key: 'toStationId', value: _toStationId.toString());
                                         CacheHelper.setDataToSharedPref(
-                                            key: 'selectedDayTo',
-                                            value: selectedDateto.toString());
+                                            key: 'selectedDayTo', value: selectedDateto.toString());
                                         CacheHelper.setDataToSharedPref(
-                                            key: 'selectedDayFrom',
-                                            value: selectedDatefrom.toString());
+                                            key: 'selectedDayFrom', value: selectedDatefrom.toString());
                                         print("===}======");
 
-                                        UmraDetails.dateTypeID =
-                                            ishijiri ? 112 : 113;
-                                        BlocProvider.of<TimesTripsCubit>(
-                                                context)
-                                            .getTimes(
+                                        UmraDetails.dateTypeID = ishijiri ? 112 : 113;
+                                        BlocProvider.of<TimesTripsCubit>(context).getTimes(
                                           tripType: tripTypeId.toString(),
-                                          fromStationID:
-                                              _fromStationId.toString(),
+                                          fromStationID: _fromStationId.toString(),
                                           toStationID: _toStationId.toString(),
                                           dateGo: selectedDatefrom.toString(),
                                           dateBack: selectedDateto.toString(),
@@ -1297,18 +1108,12 @@ class _MyHomeState extends State<MyHome> {
                                       //padding:  EdgeInsets.symmetric(horizontal: 10,vertical:20),
                                       //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
                                       decoration: BoxDecoration(
-                                          color: AppColors.primaryColor,
-                                          borderRadius:
-                                              BorderRadius.circular(41)),
+                                          color: AppColors.primaryColor, borderRadius: BorderRadius.circular(41)),
                                       child: Center(
                                         child: Text(
-                                          LanguageClass.isEnglish
-                                              ? "Search Bus"
-                                              : "بحث عن الاتوبيس",
+                                          LanguageClass.isEnglish ? "Search Bus" : "بحث عن الاتوبيس",
                                           style: fontStyle(
-                                              color: AppColors.white,
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 20),
+                                              color: AppColors.white, fontWeight: FontWeight.normal, fontSize: 20),
                                         ),
                                       ),
                                     ),
@@ -1390,21 +1195,11 @@ class _MyHomeState extends State<MyHome> {
               selectedToGeorgianDate = null;
               selectedToHijriDate = null;
               selectedDatefrom = ishijiri
-                  ? JHijri(
-                          fDisplay: DisplayFormat.MMDDYYYY,
-                          fDate: DateTime.now())
-                      .toString()
-                  : intl.DateFormat('yyyy-MM-dd')
-                      .format(DateTime.now())
-                      .toString();
+                  ? JHijri(fDisplay: DisplayFormat.MMDDYYYY, fDate: DateTime.now()).toString()
+                  : intl.DateFormat('yyyy-MM-dd').format(DateTime.now()).toString();
               selectedDateto = ishijiri
-                  ? JHijri(
-                          fDisplay: DisplayFormat.MMDDYYYY,
-                          fDate: DateTime.now().add(Duration(days: 1)))
-                      .toString()
-                  : intl.DateFormat('yyyy-MM-dd')
-                      .format(DateTime.now().add(Duration(days: 1)))
-                      .toString();
+                  ? JHijri(fDisplay: DisplayFormat.MMDDYYYY, fDate: DateTime.now().add(Duration(days: 1))).toString()
+                  : intl.DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 1))).toString();
 
               customdatepicker(
                 selectedGeorgianDate: selectedGeorgianDate,
@@ -1428,10 +1223,7 @@ class _MyHomeState extends State<MyHome> {
                           ? 'Gregorian'
                           : "ميلادي",
                   style: fontStyle(
-                      height: 1.2,
-                      fontFamily: FontFamily.medium,
-                      fontSize: 14.sp,
-                      color: AppColors.blackColor),
+                      height: 1.2, fontFamily: FontFamily.medium, fontSize: 14.sp, color: AppColors.blackColor),
                 ),
                 5.horizontalSpace,
                 Icon(
@@ -1446,12 +1238,10 @@ class _MyHomeState extends State<MyHome> {
           ? null
           : JDateModel(
               jhijri: hijiri ? selectedHijriDate ?? JHijri.now() : null,
-              dateTime:
-                  !hijiri ? selectedGeorgianDate ?? DateTime.now() : null),
+              dateTime: !hijiri ? selectedGeorgianDate ?? DateTime.now() : null),
       pickerMode: DatePickerMode.day,
       pickerTheme: Theme.of(context),
-      startDate: JDateModel(
-          dateTime: DateTime.now().subtract(Duration(days: ishijiri ? 1 : 0))),
+      startDate: JDateModel(dateTime: DateTime.now().subtract(Duration(days: ishijiri ? 1 : 0))),
       textDirection: TextDirection.ltr,
       buttons: Container(),
       locale: LanguageClass.isEnglish ? Locale("en", "US") : Locale("ar", ""),

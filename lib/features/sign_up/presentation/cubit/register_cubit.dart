@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swa/core/error/failures.dart';
+import 'package:swa/features/bus_reservation_layout/data/models/Exist_customer_model.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/documentType_model.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/id_textfield_model.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/phoneCode_model.dart';
@@ -58,6 +59,16 @@ class RegisterCubit extends Cubit<RegisterState> {
       }
     } else {
       emit(RegisterErrorState(error: res ?? ""));
+    }
+  }
+
+  Future<void> checkuser({String? phone}) async {
+    var res = await ticketRepo.checkuserphone(phone: phone);
+
+    if (res is CustomerExistmodel) {
+      if (res.status == "success") {
+        emit(ExistuserState(existcustomerModel: res));
+      }
     }
   }
 

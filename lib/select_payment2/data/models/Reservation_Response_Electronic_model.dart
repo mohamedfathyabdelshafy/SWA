@@ -6,14 +6,17 @@ class ReservationResponseElectronicModel {
     this.balance,
     this.object,
     this.obj,
+    this.data,
+    this.text,
+    this.isAuthorized,
   });
 
   ReservationResponseElectronicModel.fromJson(dynamic json) {
     status = json['status'];
 
-    if (json['status'] == 'success') {
+    if (status == 'success') {
       message = Message.fromJson(json['message']);
-    } else if (json['status' == 'failed']) {
+    } else {
       errormessage = json['message'];
     }
 
@@ -21,6 +24,9 @@ class ReservationResponseElectronicModel {
     object = json['Object'];
     obj = json['Obj'];
     text = json['Text'] ?? '';
+
+    data = json['data'];
+    isAuthorized = json['isAuthorized'];
   }
   String? status;
   Message? message;
@@ -29,6 +35,9 @@ class ReservationResponseElectronicModel {
   dynamic object;
   dynamic obj;
   dynamic text;
+
+  dynamic data;
+  bool? isAuthorized;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -40,6 +49,11 @@ class ReservationResponseElectronicModel {
     map['Object'] = object;
     map['Obj'] = obj;
     map['Text'] = text;
+
+    map['data'] = data;
+    map['isAuthorized'] = isAuthorized;
+    map['Obj'] = obj;
+
     return map;
   }
 }

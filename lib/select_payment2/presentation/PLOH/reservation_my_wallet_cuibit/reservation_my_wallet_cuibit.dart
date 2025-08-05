@@ -24,10 +24,7 @@ class ReservationCubit extends Cubit<ReservationStates> {
 
       log(trips.toString());
       final res = await reservationRepo.addReservationMyWallet(
-          custId: custId,
-          paymentTypeID: paymentTypeID,
-          promoid: promocodeid,
-          trips: trips);
+          custId: custId, paymentTypeID: paymentTypeID, promoid: promocodeid, trips: trips);
 
       if (res != null) {
         switch (res.status) {
@@ -35,9 +32,7 @@ class ReservationCubit extends Cubit<ReservationStates> {
             emit(LoadedMyWalletState(reservationResponseMyWalletModel: res));
             break;
           case 'failed':
-            emit(ErrorMyWalletState(
-                error: res.message
-                    .toString())); // Assuming message carries error for failed
+            emit(ErrorMyWalletState(error: res.message.toString())); // Assuming message carries error for failed
             break;
           case 'confirmation':
             emit(ConfirmationMyWalletState(message: res.message.toString()));
@@ -52,8 +47,7 @@ class ReservationCubit extends Cubit<ReservationStates> {
             emit(ImageWithGiftMyWalletState(message: res.message.toString()));
             break;
           default:
-            emit(ErrorMyWalletState(
-                error: res.message.toString())); // Default error handling
+            emit(ErrorMyWalletState(error: res.message.toString())); // Default error handling
         }
       } else {
         emit(ErrorMyWalletState(error: "Unknown error occurred."));
@@ -87,32 +81,26 @@ class ReservationCubit extends Cubit<ReservationStates> {
       if (res != null) {
         switch (res.status) {
           case 'success':
-            emit(LoadedElectronicWalletState(
-                reservationResponseElectronicModel: res));
+            emit(LoadedElectronicWalletState(reservationResponseElectronicModel: res));
             break;
           case 'failed':
-            emit(
-                ErrorElectronicWalletState(error: res.errormessage.toString()));
+            print("A77778888");
+            emit(ErrorElectronicWalletState(error: res.errormessage.toString()));
             break;
           case 'confirmation':
-            emit(ConfirmationElectronicWalletState(
-                message: res.message?.statusDescription ?? ""));
+            emit(ConfirmationElectronicWalletState(message: res.message?.statusDescription ?? ""));
             break;
           case 'warning':
-            emit(WarningElectronicWalletState(
-                message: res.message?.statusDescription ?? ""));
+            emit(WarningElectronicWalletState(message: res.message?.statusDescription ?? ""));
             break;
           case 'image':
-            emit(ImageElectronicWalletState(
-                message: res.message?.statusDescription ?? ""));
+            emit(ImageElectronicWalletState(message: res.message?.statusDescription ?? ""));
             break;
           case 'imagewithgift':
-            emit(ImageWithGiftElectronicWalletState(
-                message: res.message?.statusDescription ?? ""));
+            emit(ImageWithGiftElectronicWalletState(message: res.message?.statusDescription ?? ""));
             break;
           default:
-            emit(ErrorElectronicWalletState(
-                error: res.message?.statusDescription ?? "Unknown status"));
+            emit(ErrorElectronicWalletState(error: res.message?.statusDescription ?? "Unknown status"));
         }
       } else {
         emit(ErrorElectronicWalletState(error: "Unknown error occurred."));
@@ -138,31 +126,25 @@ class ReservationCubit extends Cubit<ReservationStates> {
         // Assuming fawrycharge also returns status field
         switch (res.status) {
           case 'success':
-            emit(LoadedElectronicWalletState(
-                reservationResponseElectronicModel: res));
+            emit(LoadedElectronicWalletState(reservationResponseElectronicModel: res));
             break;
           case 'failed':
             emit(ErrorMyWalletState(error: res.errormessage.toString()));
             break;
           case 'confirmation':
-            emit(ConfirmationElectronicWalletState(
-                message: res.message?.statusDescription ?? ""));
+            emit(ConfirmationElectronicWalletState(message: res.message?.statusDescription ?? ""));
             break;
           case 'warning':
-            emit(WarningElectronicWalletState(
-                message: res.message?.statusDescription ?? ""));
+            emit(WarningElectronicWalletState(message: res.message?.statusDescription ?? ""));
             break;
           case 'image':
-            emit(ImageElectronicWalletState(
-                message: res.message?.statusDescription ?? ""));
+            emit(ImageElectronicWalletState(message: res.message?.statusDescription ?? ""));
             break;
           case 'imagewithgift':
-            emit(ImageWithGiftElectronicWalletState(
-                message: res.message?.statusDescription ?? ""));
+            emit(ImageWithGiftElectronicWalletState(message: res.message?.statusDescription ?? ""));
             break;
           default:
-            emit(ErrorElectronicWalletState(
-                error: res.message?.statusDescription ?? "Unknown status"));
+            emit(ErrorElectronicWalletState(error: res.message?.statusDescription ?? "Unknown status"));
         }
       } else {
         emit(ErrorElectronicWalletState(error: "Unknown error occurred."));
@@ -191,31 +173,25 @@ class ReservationCubit extends Cubit<ReservationStates> {
       if (res != null) {
         switch (res.status) {
           case 'success':
-            emit(LoadedElectronicWalletState(
-                reservationResponseElectronicModel: res));
+            emit(LoadedElectronicWalletState(reservationResponseElectronicModel: res));
             break;
           case 'failed':
             emit(ErrorMyWalletState(error: res.errormessage.toString()));
             break;
           case 'confirmation':
-            emit(ConfirmationElectronicWalletState(
-                message: res.message?.statusDescription ?? ""));
+            emit(ConfirmationElectronicWalletState(message: res.message?.statusDescription ?? ""));
             break;
           case 'warning':
-            emit(WarningElectronicWalletState(
-                message: res.message?.statusDescription ?? ""));
+            emit(WarningElectronicWalletState(message: res.message?.statusDescription ?? ""));
             break;
           case 'image':
-            emit(ImageElectronicWalletState(
-                message: res.message?.statusDescription ?? ""));
+            emit(ImageElectronicWalletState(message: res.message?.statusDescription ?? ""));
             break;
           case 'imagewithgift':
-            emit(ImageWithGiftElectronicWalletState(
-                message: res.message?.statusDescription ?? ""));
+            emit(ImageWithGiftElectronicWalletState(message: res.message?.statusDescription ?? ""));
             break;
           default:
-            emit(ErrorElectronicWalletState(
-                error: res.message?.statusDescription ?? "Unknown status"));
+            emit(ErrorElectronicWalletState(error: res.message?.statusDescription ?? "Unknown status"));
         }
       } else {
         emit(ErrorElectronicWalletState(error: "Unknown error occurred."));
@@ -263,30 +239,20 @@ class ReservationCubit extends Cubit<ReservationStates> {
             break;
           case 'confirmation':
             emit(ConfirmationCreditCardState(
-                message: res.errormessage ??
-                    res.message?.statusDescription ??
-                    "")); // Use errormessage or statusDescription
+                message:
+                    res.errormessage ?? res.message?.statusDescription ?? "")); // Use errormessage or statusDescription
             break;
           case 'warning':
-            emit(WarningCreditCardState(
-                message:
-                    res.errormessage ?? res.message?.statusDescription ?? ""));
+            emit(WarningCreditCardState(message: res.errormessage ?? res.message?.statusDescription ?? ""));
             break;
           case 'image':
-            emit(ImageCreditCardState(
-                message:
-                    res.errormessage ?? res.message?.statusDescription ?? ""));
+            emit(ImageCreditCardState(message: res.errormessage ?? res.message?.statusDescription ?? ""));
             break;
           case 'imagewithgift':
-            emit(ImageWithGiftCreditCardState(
-                message:
-                    res.errormessage ?? res.message?.statusDescription ?? ""));
+            emit(ImageWithGiftCreditCardState(message: res.errormessage ?? res.message?.statusDescription ?? ""));
             break;
           default:
-            emit(ErrorCreditCardState(
-                error: res.errormessage ??
-                    res.message?.statusDescription ??
-                    "Unknown status"));
+            emit(ErrorCreditCardState(error: res.errormessage ?? res.message?.statusDescription ?? "Unknown status"));
         }
       } else {
         emit(ErrorCreditCardState(error: "Unknown error occurred."));
@@ -327,30 +293,19 @@ class ReservationCubit extends Cubit<ReservationStates> {
             emit(ErrorCreditCardState(error: res.errormessage.toString()));
             break;
           case 'confirmation':
-            emit(ConfirmationCreditCardState(
-                message:
-                    res.errormessage ?? res.message?.statusDescription ?? ""));
+            emit(ConfirmationCreditCardState(message: res.errormessage ?? res.message?.statusDescription ?? ""));
             break;
           case 'warning':
-            emit(WarningCreditCardState(
-                message:
-                    res.errormessage ?? res.message?.statusDescription ?? ""));
+            emit(WarningCreditCardState(message: res.errormessage ?? res.message?.statusDescription ?? ""));
             break;
           case 'image':
-            emit(ImageCreditCardState(
-                message:
-                    res.errormessage ?? res.message?.statusDescription ?? ""));
+            emit(ImageCreditCardState(message: res.errormessage ?? res.message?.statusDescription ?? ""));
             break;
           case 'imagewithgift':
-            emit(ImageWithGiftCreditCardState(
-                message:
-                    res.errormessage ?? res.message?.statusDescription ?? ""));
+            emit(ImageWithGiftCreditCardState(message: res.errormessage ?? res.message?.statusDescription ?? ""));
             break;
           default:
-            emit(ErrorCreditCardState(
-                error: res.errormessage ??
-                    res.message?.statusDescription ??
-                    "Unknown status"));
+            emit(ErrorCreditCardState(error: res.errormessage ?? res.message?.statusDescription ?? "Unknown status"));
         }
       } else {
         emit(ErrorCreditCardState(error: "Unknown error occurred."));

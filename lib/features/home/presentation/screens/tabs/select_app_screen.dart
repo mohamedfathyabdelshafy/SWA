@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ import 'package:swa/features/app_info/presentation/cubit/get_available_countries
 import 'package:swa/features/home/presentation/cubit/home_cubit.dart';
 import 'package:swa/features/home/presentation/screens/Notification/bloc/notification_bloc.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/Country_list.dart';
 import 'package:swa/features/home/presentation/screens/tabs/my_home.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/presentation/PLOH/ticket_history_cubit.dart';
 import 'package:swa/features/payment/fawry2/presentation/PLOH/fawry_Reservation_cubit.dart';
@@ -27,6 +29,7 @@ import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/features/sign_in/presentation/cubit/login_cubit.dart';
 import 'package:swa/features/times_trips/presentation/PLOH/times_trips_cubit.dart';
 import 'package:swa/main.dart';
+import 'package:swa/select_payment2/presentation/credit_card/presentation/navigation_helper.dart';
 
 import '../../../../../core/utils/huawei_notification_service.dart';
 
@@ -41,10 +44,15 @@ class _SelectappScreenState extends State<SelectappScreen> {
   PackagesBloc packagesBloc = PackagesBloc();
   User? _user;
   bool isHuawei = false;
+
   Future<bool> isHuaweiDevice() async {
     final deviceInfo = DeviceInfoPlugin();
-    final androidInfo = await deviceInfo.androidInfo;
-    return androidInfo.manufacturer.toLowerCase() == 'huawei';
+    if (Platform.isIOS) {
+      return false;
+    } else {
+      final androidInfo = await deviceInfo.androidInfo;
+      return androidInfo.manufacturer.toLowerCase() == 'huawei';
+    }
   }
 
   void checkDeviceType() async {
@@ -65,8 +73,7 @@ class _SelectappScreenState extends State<SelectappScreen> {
 
     super.initState();
     packagesBloc.add(selectappevent());
-    BlocProvider.of<GetAvailableCountriesCubit>(context)
-        .getAvailableCountries();
+    BlocProvider.of<GetAvailableCountriesCubit>(context).getAvailableCountries();
     // determinePosition(context).then((value) {
     //
     // });
@@ -348,16 +355,36 @@ class _SelectappScreenState extends State<SelectappScreen> {
             bloc: BlocProvider.of<GetAvailableCountriesCubit>(context),
             listener: (context, state) async {
               if (state is GetAvailableCountriesLoadedState) {
-                final isFirstTime =
-                    CacheHelper.getDataToSharedPref(key: 'locationPermission');
-                if (isFirstTime == null) {
-                  await determinePosition(context, state.countries);
-                }
+                await determinePosition(context, state.countries).then(
+                  (value) async {
+                    LocationPermission permission = await Geolocator.checkPermission();
 
-                final countryId =
-                    CacheHelper.getDataToSharedPref(key: 'countryid');
-                final flag =
-                    CacheHelper.getDataToSharedPref(key: 'countryflag');
+                    if (permission == LocationPermission.denied ||
+                        permission == LocationPermission.deniedForever ||
+                        permission == LocationPermission.unableToDetermine) {
+                      print("A77med permission: ${permission}");
+                      // permission = await Geolocator.requestPermission();
+
+                      var countryid = CacheHelper.getDataToSharedPref(
+                        key: 'countryid',
+                      );
+                      if (countryid == null) {
+                        Navigator.pushAndRemoveUntil(
+                          navigatorKey.currentContext!,
+                          MaterialPageRoute(
+                              builder: (context) => BlocProvider<GetAvailableCountriesCubit>(
+                                    create: (context) => sl<GetAvailableCountriesCubit>(),
+                                    child: CountryListScreen(),
+                                  )),
+                          (route) => false,
+                        );
+                      }
+                    }
+                  },
+                );
+
+                final countryId = CacheHelper.getDataToSharedPref(key: 'countryid');
+                final flag = CacheHelper.getDataToSharedPref(key: 'countryflag');
 
                 if (countryId != null && flag != null) {
                   final selectedCountry = state.countries.firstWhere(
@@ -370,16 +397,12 @@ class _SelectappScreenState extends State<SelectappScreen> {
                         curruncy: state.countries.first.curruncy),
                   );
 
-                  Routes.curruncy =
-                      CacheHelper.getDataToSharedPref(key: 'curruncycode') ??
-                          selectedCountry.curruncy;
+                  Routes.curruncy = CacheHelper.getDataToSharedPref(key: 'curruncycode') ?? selectedCountry.curruncy;
                   Routes.country = selectedCountry.countryName;
                   Routes.countryflag = selectedCountry.Flag;
 
                   log('Country selected: ${Routes.country}, ${Routes.curruncy}');
                 }
-
-                setState(() {});
               }
             },
           )
@@ -393,173 +416,137 @@ class _SelectappScreenState extends State<SelectappScreen> {
                   color: AppColors.primaryColor,
                 ));
               } else {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: sizeHeight * 0.1,
-                    ),
-                    Text(
-                      state.selectappmodel?.message?.title ?? '',
-                      style: fontStyle(
-                          color: Colors.black,
-                          fontFamily: FontFamily.bold,
-                          fontSize: 24),
-                    ),
-                    Spacer(),
-                    state.selectappmodel?.message != null
-                        ? ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            physics: ScrollPhysics(),
-                            itemCount:
-                                state.selectappmodel!.message!.appList!.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Padding(
-                                padding: EdgeInsets.only(bottom: 50.h),
-                                child: InkWell(
-                                  onTap: () {
-                                    var countryId =
-                                        CacheHelper.getDataToSharedPref(
-                                              key: 'countryid',
-                                            ) ??
-                                            "3";
-                                    if (countryId != null) {
-                                      if (state.selectappmodel!.message!
-                                              .appList![index].orderIndex ==
-                                          1) {
-                                        Routes.isomra = false;
+                return PopScope(
+                  canPop: false,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: sizeHeight * 0.1,
+                      ),
+                      Text(
+                        state.selectappmodel?.message?.title ?? '',
+                        style: fontStyle(color: Colors.black, fontFamily: FontFamily.bold, fontSize: 24),
+                      ),
+                      Spacer(),
+                      state.selectappmodel?.message != null
+                          ? ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              physics: ScrollPhysics(),
+                              itemCount: state.selectappmodel!.message!.appList!.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                  padding: EdgeInsets.only(bottom: 50.h),
+                                  child: InkWell(
+                                    onTap: () {
+                                      var countryId = CacheHelper.getDataToSharedPref(
+                                            key: 'countryid',
+                                          ) ??
+                                          "3";
+                                      if (countryId != null) {
+                                        if (state.selectappmodel!.message!.appList![index].orderIndex == 1) {
+                                          Routes.isomra = false;
 
-                                        Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MultiBlocProvider(providers: [
-                                                    BlocProvider<LoginCubit>(
-                                                      create: (context) =>
-                                                          sl<LoginCubit>(),
-                                                    ),
-                                                    BlocProvider<PackagesBloc>(
-                                                      create: (context) =>
-                                                          PackagesBloc(),
-                                                    ),
-                                                    BlocProvider<
-                                                        FawryReservation>(
-                                                      create: (context) => sl<
-                                                          FawryReservation>(),
-                                                    ),
-                                                    BlocProvider<
-                                                        GetAvailableCountriesCubit>(
-                                                      create: (context) => sl<
-                                                          GetAvailableCountriesCubit>(),
-                                                    ),
-                                                    BlocProvider<HomeCubit>(
-                                                      create: (context) =>
-                                                          sl<HomeCubit>(),
-                                                    ),
-                                                    BlocProvider<
-                                                            TimesTripsCubit>(
-                                                        create: (context) => sl<
-                                                            TimesTripsCubit>()),
-                                                    BlocProvider<TicketCubit>(
-                                                        create: (context) =>
-                                                            sl<TicketCubit>()),
-                                                  ], child: MyHome())),
-                                          (route) => false,
-                                        );
-                                      } else if (state.selectappmodel!.message!
-                                              .appList![index].orderIndex ==
-                                          2) {
-                                        Routes.isomra = true;
+                                          Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => MultiBlocProvider(providers: [
+                                                      BlocProvider<LoginCubit>(
+                                                        create: (context) => sl<LoginCubit>(),
+                                                      ),
+                                                      BlocProvider<PackagesBloc>(
+                                                        create: (context) => PackagesBloc(),
+                                                      ),
+                                                      BlocProvider<FawryReservation>(
+                                                        create: (context) => sl<FawryReservation>(),
+                                                      ),
+                                                      BlocProvider<GetAvailableCountriesCubit>(
+                                                        create: (context) => sl<GetAvailableCountriesCubit>(),
+                                                      ),
+                                                      BlocProvider<HomeCubit>(
+                                                        create: (context) => sl<HomeCubit>(),
+                                                      ),
+                                                      BlocProvider<TimesTripsCubit>(
+                                                          create: (context) => sl<TimesTripsCubit>()),
+                                                      BlocProvider<TicketCubit>(create: (context) => sl<TicketCubit>()),
+                                                    ], child: MyHome())),
+                                            (route) => false,
+                                          );
+                                        } else if (state.selectappmodel!.message!.appList![index].orderIndex == 2) {
+                                          Routes.isomra = true;
 
-                                        Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                MultiBlocProvider(
-                                              providers: [
-                                                BlocProvider<LoginCubit>(
-                                                  create: (context) =>
-                                                      sl<LoginCubit>(),
-                                                ),
-                                                BlocProvider<PackagesBloc>(
-                                                  create: (context) =>
-                                                      PackagesBloc(),
-                                                ),
-                                                BlocProvider<FawryReservation>(
-                                                  create: (context) =>
-                                                      sl<FawryReservation>(),
-                                                ),
-                                                BlocProvider<
-                                                    GetAvailableCountriesCubit>(
-                                                  create: (context) => sl<
-                                                      GetAvailableCountriesCubit>(),
-                                                ),
-                                                BlocProvider<HomeCubit>(
-                                                  create: (context) =>
-                                                      sl<HomeCubit>(),
-                                                ),
-                                                BlocProvider<TimesTripsCubit>(
-                                                    create: (context) =>
-                                                        sl<TimesTripsCubit>()),
-                                                BlocProvider<TicketCubit>(
-                                                    create: (context) =>
-                                                        sl<TicketCubit>()),
-                                              ],
-                                              child: SelectUmratypeScreen(),
+                                          Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => MultiBlocProvider(
+                                                providers: [
+                                                  BlocProvider<LoginCubit>(
+                                                    create: (context) => sl<LoginCubit>(),
+                                                  ),
+                                                  BlocProvider<PackagesBloc>(
+                                                    create: (context) => PackagesBloc(),
+                                                  ),
+                                                  BlocProvider<FawryReservation>(
+                                                    create: (context) => sl<FawryReservation>(),
+                                                  ),
+                                                  BlocProvider<GetAvailableCountriesCubit>(
+                                                    create: (context) => sl<GetAvailableCountriesCubit>(),
+                                                  ),
+                                                  BlocProvider<HomeCubit>(
+                                                    create: (context) => sl<HomeCubit>(),
+                                                  ),
+                                                  BlocProvider<TimesTripsCubit>(
+                                                      create: (context) => sl<TimesTripsCubit>()),
+                                                  BlocProvider<TicketCubit>(create: (context) => sl<TicketCubit>()),
+                                                ],
+                                                child: SelectUmratypeScreen(),
+                                              ),
                                             ),
-                                          ),
-                                          (route) => false,
-                                        );
+                                            (route) => false,
+                                          );
+                                        }
+                                      } else {
+                                        // var isFirstTime =
+                                        //     CacheHelper.getDataToSharedPref(
+                                        //   key: 'locationPermission',
+                                        // );
+                                        // if (isFirstTime == null) {
+                                        //   determinePosition(context,state.c);
+                                        // }
                                       }
-                                    } else {
-                                      // var isFirstTime =
-                                      //     CacheHelper.getDataToSharedPref(
-                                      //   key: 'locationPermission',
-                                      // );
-                                      // if (isFirstTime == null) {
-                                      //   determinePosition(context,state.c);
-                                      // }
-                                    }
-                                  },
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 156.w,
-                                        height: 156.w,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(16)),
-                                        alignment: Alignment.center,
-                                        child: Image.network(
-                                          state.selectappmodel!.message!
-                                              .appList![index].image!,
-                                          fit: BoxFit.cover,
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          width: 156.w,
+                                          height: 156.w,
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                                          alignment: Alignment.center,
+                                          child: Image.network(
+                                            state.selectappmodel!.message!.appList![index].image!,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
-                                      ),
-                                      5.verticalSpace,
-                                      Text(
-                                        state.selectappmodel?.message
-                                                ?.appList?[index].description ??
-                                            '',
-                                        style: fontStyle(
-                                            color: Color(0xffa3a3a3),
-                                            fontFamily: FontFamily.medium,
-                                            fontSize: 13.sp),
-                                      ),
-                                    ],
+                                        5.verticalSpace,
+                                        Text(
+                                          state.selectappmodel?.message?.appList?[index].description ?? '',
+                                          style: fontStyle(
+                                              color: Color(0xffa3a3a3), fontFamily: FontFamily.medium, fontSize: 13.sp),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                          )
-                        : SizedBox(),
-                    Spacer(),
-                  ],
+                                );
+                              },
+                            )
+                          : SizedBox(),
+                      Spacer(),
+                    ],
+                  ),
                 );
               }
             }),

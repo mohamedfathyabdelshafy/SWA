@@ -1,9 +1,12 @@
 import 'dart:developer';
 
+import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:swa/core/local_cache_helper.dart';
 import 'package:swa/core/utils/Navigaton_bottombar.dart';
@@ -21,6 +24,7 @@ import 'package:swa/features/bus_reservation_layout/presentation/screens/bus_lay
 import 'package:swa/features/bus_reservation_layout/presentation/screens/bus_layout_back.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/bus_seat_widget/seat_layout_model.dart';
 import 'package:swa/features/bus_reservation_layout/presentation/widgets/bus_seat_widget/seat_layout_widget.dart';
+import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/promocode_model.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
 import 'package:swa/features/sign_in/presentation/screens/login.dart';
 import 'package:swa/features/times_trips/data/models/TimesTripsResponsedart.dart';
@@ -74,9 +78,16 @@ class _ReservationTicketState extends State<ReservationTicket> {
   String accessBusTime = "";
   TextEditingController _promocodetext = new TextEditingController();
   String accessDate = '';
+  String arrivaldate = '';
+
   String accessDate2 = '';
+  String arrivaldate2 = '';
+
+  var institutionid;
 
   String lineName = "";
+
+  final formKey = GlobalKey<FormState>();
   ReservationRepo reservationCubit = ReservationRepo(apiConsumer: sl());
   Policyticketmodel policy = Policyticketmodel();
   int? numberTrip2;
@@ -97,6 +108,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
   double afterdiscount = 0;
 
   double afterdiscount2 = 0;
+  int matchedSeats = 0;
 
   PackagesBloc _packagesBloc = new PackagesBloc();
 
@@ -105,19 +117,18 @@ class _ReservationTicketState extends State<ReservationTicket> {
     log("ReservationTicket Init State - Trip Type ID: ${widget.tripTypeId}");
     log("ReservationTicket Init State - Actual Discount Received: ${widget.actualDiscount}");
 
+    Routes.PromoCodeID = '';
     // Calculate realprice for the 'go' trip
-    realprice =
-        (Ticketreservation.countSeats1.length * Ticketreservation.priceticket1);
+    realprice = (Ticketreservation.countSeats1.length * Ticketreservation.priceticket1);
     afterdiscount = realprice; // Initialize afterdiscount with realprice
     log("ReservationTicket Init State - Real Price Go: $realprice");
 
     // --- UPDATED LOGIC FOR MATCHED SEATS DISCOUNT ---
     // Calculate the number of matched seats.
     // This is the minimum number of seats selected for the 'go' trip and the 'back' trip.
-    int matchedSeats = 0;
     if (widget.tripTypeId == '2') {
-      matchedSeats = (Ticketreservation.countSeats1.length <
-              Ticketreservation.countSeats2.length
+      log("A7777med");
+      matchedSeats = (Ticketreservation.countSeats1.length < Ticketreservation.countSeats2.length
           ? Ticketreservation.countSeats1.length
           : Ticketreservation.countSeats2.length);
     } else {
@@ -134,8 +145,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
     if (widget.tripTypeId == '2') {
       // Round trip case
       // Calculate realprice2 for the 'back' trip
-      realprice2 = (Ticketreservation.countSeats2.length *
-          Ticketreservation.priceticket2);
+      realprice2 = (Ticketreservation.countSeats2.length * Ticketreservation.priceticket2);
       afterdiscount2 = realprice2; // Initialize afterdiscount2 with realprice2
       log("ReservationTicket Init State - Real Price Back: $realprice2");
 
@@ -171,18 +181,22 @@ class _ReservationTicketState extends State<ReservationTicket> {
     numberTrip = CacheHelper.getDataToSharedPref(key: 'numberTrip') ?? 0;
     elite = CacheHelper.getDataToSharedPref(key: "elite") ?? '';
     accessDate = CacheHelper.getDataToSharedPref(key: "accessBusDate") ?? '';
+    arrivaldate = CacheHelper.getDataToSharedPref(key: "arrivaldate") ?? '';
+
     accessBusTime = CacheHelper.getDataToSharedPref(key: "accessBusTime") ?? '';
     lineName = CacheHelper.getDataToSharedPref(key: "lineName") ?? '';
     if (widget.tripTypeId == '2') {
       numberTrip2 = CacheHelper.getDataToSharedPref(key: 'numberTrip2');
       elite2 = CacheHelper.getDataToSharedPref(key: "elite2");
-      accessDate2 =
-          CacheHelper.getDataToSharedPref(key: "accessBusDate2") != null
-              ? CacheHelper.getDataToSharedPref(key: "accessBusDate2")
-              : "";
+      accessDate2 = CacheHelper.getDataToSharedPref(key: "accessBusDate2") != null
+          ? CacheHelper.getDataToSharedPref(key: "accessBusDate2")
+          : "";
 
-      accessBusTime2 =
-          CacheHelper.getDataToSharedPref(key: "accessBusTime2") ?? "";
+      arrivaldate2 = CacheHelper.getDataToSharedPref(key: "arrivalDate2") != null
+          ? CacheHelper.getDataToSharedPref(key: "arrivalDate2")
+          : "";
+
+      accessBusTime2 = CacheHelper.getDataToSharedPref(key: "accessBusTime2") ?? "";
       lineName2 = CacheHelper.getDataToSharedPref(key: "lineName2") ?? "";
     }
     super.initState();
@@ -200,36 +214,50 @@ class _ReservationTicketState extends State<ReservationTicket> {
         listener: (context, PackagesState state) {
           if (state.promocodemodel?.status == 'failed') {
             _promocodetext.text = '';
-            discount =
-                0; // This `discount` variable is for the promo code specific logic
-            totaldiscount = 0; // Reset totaldiscount if promo fails
+            Routes.PromoCodeID = '';
+            institutionid = null;
+            discount = 0; // This `discount` variable is for the promo code specific logic
+            // Reset totaldiscount if promo fails
 
-            afterdiscount = realprice;
-            afterdiscount2 = realprice2;
+            matchedSeats = 0;
+            if (widget.tripTypeId == '2') {
+              matchedSeats = (Ticketreservation.countSeats1.length < Ticketreservation.countSeats2.length
+                  ? Ticketreservation.countSeats1.length
+                  : Ticketreservation.countSeats2.length);
+            } else {
+              // For a one-way trip, there are no 'matched' seats in the same sense as a round trip.
+              // The discount will apply per selected seat for the single trip.
+              matchedSeats = Ticketreservation.countSeats1.length;
+            }
+
+            totaldiscount = (widget.actualDiscount?.toDouble() ?? 0.0) * matchedSeats;
+
+            if (widget.tripTypeId == '2') {
+              afterdiscount = realprice - (totaldiscount / 2);
+              afterdiscount2 = realprice2 - (totaldiscount / 2);
+            } else {
+              // For a one-way trip, there are no 'matched' seats in the same sense as a round trip.
+              // The discount will apply per selected seat for the single trip.
+              afterdiscount = realprice - totaldiscount;
+            }
+
             Constants.showDefaultSnackBar(
-                color: Colors.red,
-                context: context,
-                text: state.promocodemodel!.errormessage ?? ' ');
+                color: Colors.red, context: context, text: state.promocodemodel!.errormessage ?? ' ');
           } else if (state.promocodemodel?.status == 'success') {
-            discount = state.promocodemodel!.message!
-                .discount!; // This `discount` is from promo code
-            totaldiscount = state.promocodemodel!.message!
-                .discount!; // Override totaldiscount with promo discount
+            discount = state.promocodemodel!.message!.discount!; // This `discount` is from promo code
+            totaldiscount = state.promocodemodel!.message!.discount!; // Override totaldiscount with promo discount
 
             promocodid = state.promocodemodel!.message!.promoCodeId.toString();
 
-            Routes.PromoCodeID =
-                state.promocodemodel!.message!.promoCodeId.toString();
+            Routes.PromoCodeID = state.promocodemodel!.message!.promoCodeId.toString();
 
-            if (widget.tripTypeId == '2' &&
-                state.promocodemodel!.message!.isPrecentage == false) {
+            if (widget.tripTypeId == '2' && state.promocodemodel!.message!.isPrecentage == false) {
               // This part of the logic handles if the promo code is a fixed amount
               // and needs to be split for round trip.
               // Note: This logic might conflict with the `actualDiscount` passed in widget.
               // We'll rely on the `actualDiscount` for the initial calculation.
               // This `discount` here is specifically for the promo code.
-              discount = discount /
-                  2; // For promotional fixed discount per trip in round trip
+              discount = discount / 2; // For promotional fixed discount per trip in round trip
 
               Routes.discount = discount;
             }
@@ -237,9 +265,19 @@ class _ReservationTicketState extends State<ReservationTicket> {
             if (state.promocodemodel!.message!.isPrecentage == true) {
               Routes.ispercentage = true;
 
-              minusdiscount = ((realprice) * totaldiscount) /
-                  100; // Use totaldiscount from promo here
-              minusdiscount2 = ((realprice2) * totaldiscount) / 100;
+              if (widget.tripTypeId == '2') {
+                minusdiscount = (((afterdiscount) * totaldiscount) / 100) +
+                    ((widget.actualDiscount?.toDouble() ?? 0.0) *
+                        matchedSeats /
+                        2); // Use totaldiscount from promo here
+                minusdiscount2 = (((afterdiscount2) * totaldiscount) / 100) +
+                    ((widget.actualDiscount?.toDouble() ?? 0.0) * matchedSeats / 2);
+              } else {
+                minusdiscount = (((afterdiscount) * totaldiscount) / 100) +
+                    ((widget.actualDiscount?.toDouble() ?? 0.0) * matchedSeats); // Use totaldiscount from promo here
+                minusdiscount2 = (((afterdiscount2) * totaldiscount) / 100) +
+                    ((widget.actualDiscount?.toDouble() ?? 0.0) * matchedSeats);
+              }
 
               afterdiscount = realprice - minusdiscount;
               afterdiscount2 = realprice2 - minusdiscount2;
@@ -247,6 +285,19 @@ class _ReservationTicketState extends State<ReservationTicket> {
               // For fixed amount promo code, `totaldiscount` already holds the full discount.
               // We should apply it to the overall total price and then distribute.
               double currentOverallPrice = realprice + realprice2;
+              matchedSeats = 0;
+              if (widget.tripTypeId == '2') {
+                matchedSeats = (Ticketreservation.countSeats1.length < Ticketreservation.countSeats2.length
+                    ? Ticketreservation.countSeats1.length
+                    : Ticketreservation.countSeats2.length);
+              } else {
+                // For a one-way trip, there are no 'matched' seats in the same sense as a round trip.
+                // The discount will apply per selected seat for the single trip.
+                matchedSeats = Ticketreservation.countSeats1.length;
+              }
+
+              totaldiscount = totaldiscount + ((widget.actualDiscount?.toDouble() ?? 0.0) * matchedSeats);
+
               if (currentOverallPrice > 0) {
                 double discountFactor = totaldiscount / currentOverallPrice;
                 afterdiscount = realprice * (1 - discountFactor);
@@ -255,6 +306,353 @@ class _ReservationTicketState extends State<ReservationTicket> {
                 afterdiscount = 0;
                 afterdiscount2 = 0;
               }
+            }
+          } else if (state.institutionsmodel?.status == 'success') {
+            if (state.institutionsmodel!.message!.isNotEmpty) {
+              ihaveprocode = false;
+              _packagesBloc.emit(state.update(
+                  isloading: false,
+                  promocodemodel: Promocodemodel(status: "failed", errormessage: LanguageClass.isEnglish ? "" : "")));
+              showModalBottomSheet(
+                context: context,
+                isDismissible: false,
+                enableDrag: false,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                barrierColor: Colors.black.withOpacity(0.5),
+                useRootNavigator: true,
+                builder: (BuildContext context) {
+                  return Form(
+                    key: formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(
+                              left: 16.w, right: 16.w, top: 20.h, bottom: MediaQuery.of(context).viewInsets.bottom),
+                          margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
+                          width: double.infinity,
+                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    LanguageClass.isEnglish ? 'Select institution' : 'اختار الهيئة',
+                                    style: fontStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontFamily: FontFamily.medium,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      institutionid = null;
+                                      _promocodetext.text = '';
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      LanguageClass.isEnglish ? 'cancel' : ' الغاء',
+                                      style: fontStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: FontFamily.medium,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              20.verticalSpace,
+                              Container(
+                                  alignment: Alignment.center,
+                                  child: DropDownTextField(
+                                      padding: EdgeInsets.zero,
+                                      initialValue: null,
+                                      onChanged: (value) {
+                                        institutionid = value.value;
+                                      },
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      textFieldDecoration: InputDecoration(
+                                        fillColor: Colors.white,
+                                        enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(33),
+                                            borderSide: BorderSide(color: Colors.grey, width: 0)),
+                                        disabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(33),
+                                            borderSide: BorderSide(color: Colors.grey, width: 0)),
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(33),
+                                            borderSide: BorderSide(color: Colors.grey, width: 0)),
+                                        filled: true,
+                                        iconColor: Colors.red,
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 25),
+                                        suffixIcon: Icon(
+                                          Icons.keyboard_arrow_down_rounded,
+                                          color: Color(0xff898989),
+                                        ),
+                                        hintText:
+                                            '${LanguageClass.isEnglish ? "Select institution " : "اختار الهيئة"}',
+                                        errorStyle: fontStyle(
+                                            fontSize: 10.sp,
+                                            fontFamily: FontFamily.regular,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.red),
+                                        hintStyle: fontStyle(
+                                          color: Color(0xffA2A2A2),
+                                          fontFamily: FontFamily.medium,
+                                          height: 1.2,
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                      readOnly: true,
+                                      validator: (value) {
+                                        if (value == null || value == "") {
+                                          return LanguageClass.isEnglish
+                                              ? "Please select institution"
+                                              : "الرجاء اختيار  الهيئة";
+                                        } else {
+                                          return null;
+                                        }
+                                      },
+                                      listTextStyle: fontStyle(
+                                        color: Colors.black,
+                                        fontFamily: FontFamily.medium,
+                                        height: 1.2,
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      textStyle: fontStyle(
+                                        color: Colors.black,
+                                        fontFamily: FontFamily.medium,
+                                        height: 1.2,
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      dropDownList: [
+                                        for (int i = 0; i < state.institutionsmodel!.message!.length; i++)
+                                          DropDownValueModel(
+                                              name: state.institutionsmodel!.message![i].name!,
+                                              value: state.institutionsmodel!.message![i].id),
+                                      ])),
+                              16.verticalSpace,
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  LanguageClass.isEnglish ? "institution's promo code" : "برومو كود الهيئة",
+                                  style: fontStyle(
+                                      color: Color(0xff969696),
+                                      fontSize: 16,
+                                      fontFamily: FontFamily.medium,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                              2.verticalSpace,
+                              Container(
+                                height: 48,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffDEDEDE),
+                                    borderRadius: BorderRadius.circular(22),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Color(0xffa7a7a7).withOpacity(0.1),
+                                          blurRadius: 3,
+                                          offset: Offset(0, 3))
+                                    ]),
+                                child: TextField(
+                                  controller: _promocodetext,
+                                  style: fontStyle(
+                                      color: Color(0xff969696),
+                                      fontSize: 14,
+                                      fontFamily: FontFamily.bold,
+                                      fontWeight: FontWeight.bold),
+                                  decoration: InputDecoration(
+                                    hintText: LanguageClass.isEnglish
+                                        ? "Enter institution's Promocode "
+                                        : "ادخل برومو كود الهيئة",
+                                    hintStyle: fontStyle(
+                                        color: Color(0xff969696),
+                                        fontSize: 14,
+                                        fontFamily: FontFamily.bold,
+                                        fontWeight: FontWeight.bold),
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                                  ),
+                                ),
+                              ),
+                              16.verticalSpace,
+                              InkWell(
+                                onTap: () {
+                                  if (Routes.user == null) {
+                                    Fluttertoast.showToast(
+                                        msg: LanguageClass.isEnglish ? 'Please login' : 'من فضلك سجل الدخول ',
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.black,
+                                        textColor: Colors.red,
+                                        fontSize: 16.0);
+                                  } else {
+                                    if (_promocodetext.text != "") {
+                                      Routes.resrvedtrips.clear();
+                                      if (widget.tripTypeId == '2') {
+                                        final toStationId = CacheHelper.getDataToSharedPref(key: 'toStationId');
+                                        final fromStationId = CacheHelper.getDataToSharedPref(key: 'fromStationId');
+
+                                        final busdate = CacheHelper.getDataToSharedPref(key: 'accessBusDate');
+
+                                        final lineid = CacheHelper.getDataToSharedPref(key: 'lineid');
+                                        final serviceTypeID = CacheHelper.getDataToSharedPref(key: 'serviceTypeID');
+
+                                        final busdate2 = CacheHelper.getDataToSharedPref(key: 'accessBusDate2');
+
+                                        final lineid2 = CacheHelper.getDataToSharedPref(key: 'lineid2');
+                                        final serviceTypeID2 = CacheHelper.getDataToSharedPref(key: 'serviceTypeID2');
+
+                                        TripReservationList trip = TripReservationList(
+                                            busId: Ticketreservation.busid1,
+                                            discount: discount.toString(),
+                                            fromStationId: fromStationId,
+                                            lineId: lineid,
+                                            price: afterdiscount,
+                                            seatIds: Ticketreservation.countSeats1,
+                                            serviceTypeId: serviceTypeID,
+                                            toStationId: toStationId,
+                                            tripDate: DateTime.parse(busdate),
+                                            tripId: Ticketreservation.tripid1);
+
+                                        TripReservationList trip2 = TripReservationList(
+                                            busId: Ticketreservation.busid2,
+                                            discount: discount.toString(),
+                                            fromStationId: toStationId,
+                                            lineId: lineid2,
+                                            price: afterdiscount2,
+                                            seatIds: Ticketreservation.countSeats2,
+                                            serviceTypeId: serviceTypeID2,
+                                            toStationId: fromStationId,
+                                            tripDate: DateTime.parse(busdate2),
+                                            tripId: Ticketreservation.tripid2);
+
+                                        Routes.resrvedtrips.add(trip);
+
+                                        Routes.resrvedtrips.add(trip2);
+
+                                        if (Routes.user == null) {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => MultiBlocProvider(
+                                                  providers: [
+                                                    BlocProvider<LoginCubit>(
+                                                      create: (context) => sl<LoginCubit>(),
+                                                    ),
+                                                  ],
+                                                  child: LoginScreen(
+                                                    isback: true,
+                                                  ),
+                                                ),
+                                              ));
+                                        } else if (formKey.currentState!.validate()) {
+                                          CacheHelper.setDataToSharedPref(
+                                            key: 'price',
+                                            value: afterdiscount,
+                                          );
+
+                                          _packagesBloc.add(PromocodReservationEvent(
+                                              promocode: _promocodetext.text,
+                                              promocodeid: '',
+                                              institutionID: institutionid,
+                                              custId: widget.user!.customerId!,
+                                              paymentTypeID: 67,
+                                              trips: Routes.resrvedtrips));
+
+                                          Navigator.pop(context);
+                                        }
+                                      } else {
+                                        if (formKey.currentState!.validate()) {
+                                          final toStationId = CacheHelper.getDataToSharedPref(key: 'toStationId');
+                                          final fromStationId = CacheHelper.getDataToSharedPref(key: 'fromStationId');
+
+                                          final busdate = CacheHelper.getDataToSharedPref(key: 'accessBusDate');
+
+                                          final lineid = CacheHelper.getDataToSharedPref(key: 'lineid');
+                                          final serviceTypeID = CacheHelper.getDataToSharedPref(key: 'serviceTypeID');
+
+                                          TripReservationList trip = TripReservationList(
+                                              busId: Ticketreservation.busid1,
+                                              discount: discount.toString(),
+                                              fromStationId: fromStationId,
+                                              lineId: lineid,
+                                              price: afterdiscount,
+                                              seatIds: Ticketreservation.countSeats1,
+                                              serviceTypeId: serviceTypeID,
+                                              toStationId: toStationId,
+                                              tripDate: DateTime.parse(busdate),
+                                              tripId: Ticketreservation.tripid1);
+
+                                          Routes.resrvedtrips.add(trip);
+
+                                          _packagesBloc.add(PromocodReservationEvent(
+                                              promocode: _promocodetext.text,
+                                              promocodeid: '',
+                                              institutionID: institutionid,
+                                              custId: widget.user!.customerId!,
+                                              paymentTypeID: 67,
+                                              trips: Routes.resrvedtrips));
+
+                                          Navigator.pop(context);
+                                        }
+                                      }
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg: LanguageClass.isEnglish ? 'Please enter code' : 'من فضلك  ادخل الكود ',
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.black,
+                                          textColor: Colors.red,
+                                          fontSize: 16.0);
+                                    }
+                                  }
+                                },
+                                child: Container(
+                                  height: 44,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: AppColors.primaryColor,
+                                      borderRadius: BorderRadius.circular(22),
+                                      boxShadow: [
+                                        BoxShadow(color: AppColors.primaryColor, blurRadius: 3, offset: Offset(0, 3))
+                                      ]),
+                                  child: Text(
+                                    LanguageClass.isEnglish ? "Apply" : "تطبيق",
+                                    style: fontStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontFamily: FontFamily.bold,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                },
+              );
+            } else {
+              _packagesBloc.emit(state.update(
+                  isloading: false,
+                  promocodemodel: Promocodemodel(
+                    status: "failed",
+                    errormessage: LanguageClass.isEnglish ? "There is no Institutions" : "لا يوجد مؤسسات",
+                  )));
             }
           }
         },
@@ -269,9 +667,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                 );
               } else {
                 return Directionality(
-                  textDirection: LanguageClass.isEnglish
-                      ? TextDirection.ltr
-                      : TextDirection.rtl,
+                  textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: ListView(
@@ -281,9 +677,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                           height: sizeHeight * 0.08,
                         ),
                         Container(
-                          alignment: LanguageClass.isEnglish
-                              ? Alignment.topLeft
-                              : Alignment.topRight,
+                          alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
                           child: InkWell(
                             onTap: () {
                               Navigator.pop(context);
@@ -323,9 +717,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                           margin: EdgeInsets.symmetric(horizontal: 0),
                           padding: EdgeInsets.all(15),
                           width: double.infinity,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Color(0xffFF5D4B)),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Color(0xffFF5D4B)),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -334,8 +726,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                   flex: 2,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       // Text(
                                       //   LanguageClass.isEnglish
@@ -351,30 +742,47 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                           child: Row(
                                         children: [
                                           Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(
+                                                LanguageClass.isEnglish ? "Departure" : "تغادر في",
+                                                style: fontStyle(
+                                                    color: Colors.white, fontFamily: FontFamily.bold, fontSize: 13.sp),
+                                              ),
+                                              Text(
                                                 intl.DateFormat('dd-MM-yyyy')
-                                                    .format(DateTime.parse(
-                                                        accessDate))
+                                                    .format(DateTime.parse(accessDate))
                                                     .toString(),
                                                 style: fontStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: FontFamily.bold,
-                                                    fontSize: 13),
+                                                    color: Colors.white, fontFamily: FontFamily.bold, fontSize: 12.sp),
                                               ),
                                               Text(
                                                 intl.DateFormat('hh:mm a')
-                                                    .format(DateTime.parse(
-                                                        accessDate))
+                                                    .format(DateTime.parse(accessDate))
                                                     .toString(),
                                                 style: fontStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: FontFamily.bold,
-                                                    fontSize: 13.sp),
+                                                    color: Colors.white, fontFamily: FontFamily.bold, fontSize: 12.sp),
+                                              ),
+                                              5.verticalSpace,
+                                              Text(
+                                                LanguageClass.isEnglish ? "Arrival" : "الوصول",
+                                                style: fontStyle(
+                                                    color: Colors.white, fontFamily: FontFamily.bold, fontSize: 13.sp),
+                                              ),
+                                              Text(
+                                                intl.DateFormat('dd-MM-yyyy')
+                                                    .format(DateTime.parse(arrivaldate))
+                                                    .toString(),
+                                                style: fontStyle(
+                                                    color: Colors.white, fontFamily: FontFamily.bold, fontSize: 12.sp),
+                                              ),
+                                              Text(
+                                                intl.DateFormat('hh:mm a')
+                                                    .format(DateTime.parse(arrivaldate))
+                                                    .toString(),
+                                                style: fontStyle(
+                                                    color: Colors.white, fontFamily: FontFamily.bold, fontSize: 12.sp),
                                               ),
                                             ],
                                           ),
@@ -384,65 +792,45 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                           Container(
                                             width: 5,
                                             decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(2),
+                                                borderRadius: BorderRadius.circular(2),
                                                 gradient: LinearGradient(
                                                     begin: Alignment.topCenter,
                                                     end: Alignment.bottomCenter,
-                                                    colors: [
-                                                      AppColors.white,
-                                                      AppColors.yellow2
-                                                    ])),
+                                                    colors: [AppColors.white, AppColors.yellow2])),
                                           ),
                                           SizedBox(
                                             width: 10,
                                           ),
                                           Expanded(
                                             child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  LanguageClass.isEnglish
-                                                      ? "From"
-                                                      : "من",
+                                                  LanguageClass.isEnglish ? "From" : "من",
                                                   style: fontStyle(
-                                                      color: Colors.white,
-                                                      fontFamily:
-                                                          FontFamily.bold,
-                                                      fontSize: 12),
+                                                      color: Colors.white, fontFamily: FontFamily.bold, fontSize: 12),
                                                 ),
                                                 Text(
-                                                  Ticketreservation
-                                                      .fromcitystation1,
+                                                  Ticketreservation.fromcitystation1,
                                                   style: fontStyle(
                                                       color: Colors.white,
-                                                      fontFamily:
-                                                          FontFamily.bold,
+                                                      fontFamily: FontFamily.bold,
                                                       fontSize: 10.sp),
                                                 ),
                                                 SizedBox(
                                                   height: 5,
                                                 ),
                                                 Text(
-                                                  LanguageClass.isEnglish
-                                                      ? "To"
-                                                      : "الي",
+                                                  LanguageClass.isEnglish ? "To" : "الي",
                                                   style: fontStyle(
-                                                      color: Colors.white,
-                                                      fontFamily:
-                                                          FontFamily.bold,
-                                                      fontSize: 12),
+                                                      color: Colors.white, fontFamily: FontFamily.bold, fontSize: 12),
                                                 ),
                                                 Text(
-                                                  Ticketreservation
-                                                      .tocitystation1,
+                                                  Ticketreservation.tocitystation1,
                                                   style: fontStyle(
                                                       color: Colors.white,
-                                                      fontFamily:
-                                                          FontFamily.bold,
+                                                      fontFamily: FontFamily.bold,
                                                       fontSize: 10.sp),
                                                 ),
                                               ],
@@ -453,10 +841,8 @@ class _ReservationTicketState extends State<ReservationTicket> {
 
                                       Text(
                                         "${Routes.curruncy ?? ""} ${realprice.toStringAsFixed(2)}",
-                                        style: fontStyle(
-                                            color: Colors.white,
-                                            fontFamily: FontFamily.bold,
-                                            fontSize: 16),
+                                        style:
+                                            fontStyle(color: Colors.white, fontFamily: FontFamily.bold, fontSize: 16),
                                       ),
                                     ],
                                   )),
@@ -467,15 +853,13 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                 children: [
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Container(
                                         width: 14,
                                         height: 14,
                                         alignment: Alignment.center,
-                                        child: Image.asset(
-                                            "assets/images/Icon fa-solid-bus.png"),
+                                        child: Image.asset("assets/images/Icon fa-solid-bus.png"),
                                       ),
                                       SizedBox(
                                         width: 5,
@@ -483,77 +867,40 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                       Text(
                                         numberTrip.toString(),
                                         style: fontStyle(
-                                            color: Colors.white,
-                                            fontFamily: FontFamily.bold,
-                                            fontSize: 14.sp),
+                                            color: Colors.white, fontFamily: FontFamily.bold, fontSize: 14.sp),
                                       ),
                                     ],
                                   ),
                                   InkWell(
                                     onTap: () {
                                       busLayoutRepo
-                                          .getBusSeatsData(
-                                              tripId: Ticketreservation.tripid1)
+                                          .getBusSeatsData(tripId: Ticketreservation.tripid1)
                                           .then((value) async {
                                         busSeatsModel = await value;
 
                                         if (busSeatsModel != null) {
                                           for (int i = 0;
-                                              i <
-                                                  busSeatsModel!.busSeatDetails!
-                                                      .busDetails!.totalRow!;
+                                              i < busSeatsModel!.busSeatDetails!.busDetails!.totalRow!;
                                               i++) {
                                             for (int j = 0;
-                                                j <
-                                                    busSeatsModel!
-                                                        .busSeatDetails!
-                                                        .busDetails!
-                                                        .rowList![i]
-                                                        .seats
-                                                        .length;
+                                                j < busSeatsModel!.busSeatDetails!.busDetails!.rowList![i].seats.length;
                                                 j++) {
-                                              if (busSeatsModel
-                                                          ?.busSeatDetails
-                                                          ?.busDetails
-                                                          ?.rowList?[i]
-                                                          .seats[j]
+                                              if (busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j]
                                                           .isReserved ==
                                                       true ||
-                                                  busSeatsModel
-                                                          ?.busSeatDetails
-                                                          ?.busDetails
-                                                          ?.rowList?[i]
-                                                          .seats[j]
+                                                  busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j]
                                                           .isAvailable ==
                                                       true) {
-                                                busSeatsModel
-                                                    ?.busSeatDetails
-                                                    ?.busDetails
-                                                    ?.rowList?[i]
-                                                    .seats[j]
+                                                busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j]
                                                     .seatState = SeatState.sold;
                                               }
 
-                                              for (var n = 0;
-                                                  n <
-                                                      Ticketreservation
-                                                          .Seatsnumbers1.length;
-                                                  n++) {
+                                              for (var n = 0; n < Ticketreservation.Seatsnumbers1.length; n++) {
                                                 if (busSeatsModel
-                                                        ?.busSeatDetails
-                                                        ?.busDetails
-                                                        ?.rowList?[i]
-                                                        .seats[j]
-                                                        .seatNo ==
-                                                    Ticketreservation
-                                                        .Seatsnumbers1[n]) {
-                                                  busSeatsModel
-                                                          ?.busSeatDetails
-                                                          ?.busDetails
-                                                          ?.rowList?[i]
-                                                          .seats[j]
-                                                          .seatState =
-                                                      SeatState.booked;
+                                                        ?.busSeatDetails?.busDetails?.rowList?[i].seats[j].seatNo ==
+                                                    Ticketreservation.Seatsnumbers1[n]) {
+                                                  busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j]
+                                                      .seatState = SeatState.booked;
                                                 }
                                               }
                                             }
@@ -565,103 +912,59 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                         showGeneralDialog(
                                             context: context,
                                             barrierDismissible: true,
-                                            barrierLabel:
-                                                MaterialLocalizations.of(
-                                                        context)
-                                                    .modalBarrierDismissLabel,
-                                            barrierColor:
-                                                Colors.black.withOpacity(0.5),
-                                            transitionDuration: const Duration(
-                                                milliseconds: 200),
-                                            pageBuilder: (context,
-                                                Animation<double> animation,
-                                                Animation<double>
-                                                    secondaryAnimation) {
+                                            barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                                            barrierColor: Colors.black.withOpacity(0.5),
+                                            transitionDuration: const Duration(milliseconds: 200),
+                                            pageBuilder: (context, Animation<double> animation,
+                                                Animation<double> secondaryAnimation) {
                                               return Material(
                                                 child: SafeArea(
                                                   child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
                                                     children: [
                                                       InkWell(
                                                         onTap: () {
-                                                          Navigator.pop(
-                                                              context);
+                                                          Navigator.pop(context);
                                                         },
                                                         child: Container(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  10),
-                                                          alignment:
-                                                              Alignment.topLeft,
+                                                          padding: EdgeInsets.all(10),
+                                                          alignment: Alignment.topLeft,
                                                           child: Icon(
                                                             Icons.close,
-                                                            color: AppColors
-                                                                .primaryColor,
+                                                            color: AppColors.primaryColor,
                                                           ),
                                                         ),
                                                       ),
                                                       Expanded(
                                                         child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
                                                           children: [
                                                             SeatLayoutWidget(
-                                                              seatHeight:
-                                                                  sizeHeight *
-                                                                      .036,
-                                                              onSeatStateChanged:
-                                                                  (rowI,
-                                                                      colI,
-                                                                      seatState,
-                                                                      seat) {},
-                                                              stateModel:
-                                                                  SeatLayoutStateModel(
+                                                              seatHeight: sizeHeight * .036,
+                                                              onSeatStateChanged: (rowI, colI, seatState, seat) {},
+                                                              stateModel: SeatLayoutStateModel(
                                                                 rows: busSeatsModel
-                                                                        ?.busSeatDetails
-                                                                        ?.busDetails
-                                                                        ?.rowList
-                                                                        ?.length ??
+                                                                        ?.busSeatDetails?.busDetails?.rowList?.length ??
                                                                     0,
                                                                 cols: busSeatsModel
-                                                                        ?.busSeatDetails
-                                                                        ?.busDetails
-                                                                        ?.totalColumn ??
+                                                                        ?.busSeatDetails?.busDetails?.totalColumn ??
                                                                     5,
-                                                                seatSvgSize: 30
-                                                                    .sp
-                                                                    .toInt(),
-                                                                pathSelectedSeat:
-                                                                    'assets/images/unavailable_seats.svg',
-                                                                pathDisabledSeat:
-                                                                    'assets/images/unavailable_seats.svg',
-                                                                pathSoldSeat:
-                                                                    'assets/images/disabled_seats.svg',
+                                                                seatSvgSize: 30.sp.toInt(),
+                                                                pathSelectedSeat: 'assets/images/unavailable_seats.svg',
+                                                                pathDisabledSeat: 'assets/images/unavailable_seats.svg',
+                                                                pathSoldSeat: 'assets/images/disabled_seats.svg',
                                                                 pathUnSelectedSeat:
                                                                     'assets/images/unavailable_seats.svg',
-                                                                currentSeats:
-                                                                    List.generate(
-                                                                  busSeatsModel
-                                                                          ?.busSeatDetails
-                                                                          ?.busDetails
-                                                                          ?.rowList
+                                                                currentSeats: List.generate(
+                                                                  busSeatsModel?.busSeatDetails?.busDetails?.rowList
                                                                           ?.length ??
                                                                       0,
 
                                                                   // Number of rows based on totalSeats
                                                                   (row) => busSeatsModel!
-                                                                      .busSeatDetails!
-                                                                      .busDetails!
-                                                                      .rowList![
-                                                                          row]
-                                                                      .seats,
+                                                                      .busSeatDetails!.busDetails!.rowList![row].seats,
                                                                 ),
                                                               ),
                                                             ),
@@ -677,15 +980,13 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                     },
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Container(
                                           width: 14,
                                           height: 14,
                                           alignment: Alignment.center,
-                                          child: Image.asset(
-                                              "assets/images/chairs.png"),
+                                          child: Image.asset("assets/images/chairs.png"),
                                         ),
                                         SizedBox(
                                           width: 5,
@@ -693,9 +994,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                         Text(
                                           ' ${Ticketreservation.Seatsnumbers1.length.toString()} ${LanguageClass.isEnglish ? ' Seats' : ' كرسي'}',
                                           style: fontStyle(
-                                              color: AppColors.white,
-                                              fontFamily: FontFamily.bold,
-                                              fontSize: 14.sp),
+                                              color: AppColors.white, fontFamily: FontFamily.bold, fontSize: 14.sp),
                                         )
                                       ],
                                     ),
@@ -704,103 +1003,73 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                     height: 10,
                                   ),
                                   Container(
-                                    alignment: LanguageClass.isEnglish
-                                        ? Alignment.centerRight
-                                        : Alignment.centerLeft,
+                                    alignment: LanguageClass.isEnglish ? Alignment.centerRight : Alignment.centerLeft,
                                     child: InkWell(
                                       onTap: () {
-                                        print(
-                                            "Tik Tik Trip id: ${widget.tripTypeId}");
-                                        if (widget.tripTypeId == '2' ||
-                                            widget.tripTypeId == '1') {
+                                        print("Tik Tik Trip id: ${widget.tripTypeId}");
+                                        if (widget.tripTypeId == '2' || widget.tripTypeId == '1') {
                                           Navigator.push(
                                             context,
-                                            MaterialPageRoute(
-                                                builder: (context) {
+                                            MaterialPageRoute(builder: (context) {
                                               return BlocProvider(
-                                                create: (context) =>
-                                                    BusLayoutCubit(),
+                                                create: (context) => BusLayoutCubit(),
                                                 child: BusLayoutScreen(
                                                   isedit: true,
                                                   isEditFromTicket: true,
-                                                  busdate: DateTime.parse(
-                                                      Ticketreservation
-                                                          .accessDate1),
-                                                  busttime: Ticketreservation
-                                                      .accessBusTime1,
-                                                  to: Ticketreservation
-                                                          .tocitystation1 ??
-                                                      "",
-                                                  from: Ticketreservation
-                                                          .fromcitystation1 ??
-                                                      "",
+                                                  busdate: DateTime.parse(Ticketreservation.accessDate1),
+                                                  arrivalDate: DateTime.parse(Ticketreservation.arrivaldate1!),
+                                                  busttime: Ticketreservation.accessBusTime1,
+                                                  to: Ticketreservation.tocitystation1 ?? "",
+                                                  from: Ticketreservation.fromcitystation1 ?? "",
                                                   triTypeId: widget.tripTypeId,
-                                                  tripListBack:
-                                                      widget.tripListBack,
-                                                  price: Ticketreservation
-                                                      .priceticket1,
+                                                  tripListBack: widget.tripListBack,
+                                                  price: Ticketreservation.priceticket1,
                                                   user: Routes.user,
-                                                  tripId:
-                                                      Ticketreservation.tripid1,
-                                                  tocity: Ticketreservation
-                                                          .tocity1 ??
-                                                      '',
-                                                  fromcity: Ticketreservation
-                                                          .fromcity1 ??
-                                                      '',
+                                                  tripId: Ticketreservation.tripid1,
+                                                  tocity: Ticketreservation.tocity1 ?? '',
+                                                  fromcity: Ticketreservation.fromcity1 ?? '',
                                                 ),
                                               );
                                             }),
                                           ).then((value) {
                                             // Ensure price variables are updated after returning from edit screen
-                                            realprice = (Ticketreservation
-                                                    .countSeats1.length *
-                                                Ticketreservation.priceticket1);
-                                            afterdiscount = realprice;
-                                            // --- RECALCULATE DISCOUNT ON RETURN ---
-                                            int matchedSeats = 0;
-                                            if (widget.tripTypeId == '2') {
-                                              matchedSeats = (Ticketreservation
-                                                          .countSeats1.length <
-                                                      Ticketreservation
-                                                          .countSeats2.length
-                                                  ? Ticketreservation
-                                                      .countSeats1.length
-                                                  : Ticketreservation
-                                                      .countSeats2.length);
-                                            } else {
-                                              matchedSeats = Ticketreservation
-                                                  .countSeats1.length;
-                                            }
-                                            totaldiscount = (widget
-                                                        .actualDiscount
-                                                        ?.toDouble() ??
-                                                    0.0) *
-                                                matchedSeats;
-                                            // --- END RECALCULATION ---
+                                            realprice =
+                                                (Ticketreservation.countSeats1.length * Ticketreservation.priceticket1);
+                                            // afterdiscount = realprice;
+                                            // // --- RECALCULATE DISCOUNT ON RETURN ---
+                                            // int matchedSeats = 0;
+                                            // if (widget.tripTypeId == '2') {
+                                            //   matchedSeats = (Ticketreservation.countSeats1.length <
+                                            //           Ticketreservation.countSeats2.length
+                                            //       ? Ticketreservation.countSeats1.length
+                                            //       : Ticketreservation.countSeats2.length);
+                                            // } else {
+                                            //   matchedSeats = Ticketreservation.countSeats1.length;
+                                            // }
+                                            // totaldiscount = (widget.actualDiscount?.toDouble() ?? 0.0) * matchedSeats;
+                                            // // --- END RECALCULATION ---
 
-                                            if (widget.tripTypeId == '2' &&
-                                                totaldiscount > 0) {
-                                              double combinedRealPrice =
-                                                  realprice + realprice2;
-                                              if (combinedRealPrice > 0) {
-                                                double discountFactor =
-                                                    totaldiscount /
-                                                        combinedRealPrice;
-                                                afterdiscount = realprice *
-                                                    (1 - discountFactor);
-                                                afterdiscount2 = realprice2 *
-                                                    (1 - discountFactor);
-                                              } else {
-                                                afterdiscount = 0;
-                                                afterdiscount2 = 0;
-                                              }
-                                            } else if (widget.tripTypeId !=
-                                                '2') {
-                                              // One-way trip
-                                              afterdiscount =
-                                                  realprice - totaldiscount;
-                                            }
+                                            // if (widget.tripTypeId == '2' && totaldiscount > 0) {
+                                            //   double combinedRealPrice = realprice + realprice2;
+                                            //   if (combinedRealPrice > 0) {
+                                            //     double discountFactor = totaldiscount / combinedRealPrice;
+                                            //     afterdiscount = realprice * (1 - discountFactor);
+                                            //     afterdiscount2 = realprice2 * (1 - discountFactor);
+                                            //   } else {
+                                            //     afterdiscount = 0;
+                                            //     afterdiscount2 = 0;
+                                            //   }
+                                            // } else if (widget.tripTypeId != '2') {
+                                            //   // One-way trip
+                                            //   afterdiscount = realprice - totaldiscount;
+                                            // }
+
+                                            _packagesBloc.emit(state.update(
+                                                isloading: false,
+                                                promocodemodel: Promocodemodel(
+                                                    status: "failed",
+                                                    errormessage:
+                                                        LanguageClass.isEnglish ? "has been updated" : "تم التعديل")));
 
                                             ihaveprocode = false;
                                             setState(() {});
@@ -810,23 +1079,16 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                         }
                                       },
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 15, vertical: 5),
-                                        decoration: BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: AppColors.white,
-                                                  offset: Offset(0, 0),
-                                                  spreadRadius: 0,
-                                                  blurRadius: 15)
-                                            ],
-                                            color: AppColors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(12)),
+                                        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                                        decoration: BoxDecoration(boxShadow: [
+                                          BoxShadow(
+                                              color: AppColors.white,
+                                              offset: Offset(0, 0),
+                                              spreadRadius: 0,
+                                              blurRadius: 15)
+                                        ], color: AppColors.white, borderRadius: BorderRadius.circular(12)),
                                         child: Text(
-                                          LanguageClass.isEnglish
-                                              ? 'Edit '
-                                              : 'تعديل ',
+                                          LanguageClass.isEnglish ? 'Edit' : 'تعديل ',
                                           style: fontStyle(
                                             color: AppColors.primaryColor,
                                             fontWeight: FontWeight.bold,
@@ -839,15 +1101,11 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                   ),
                                   Expanded(
                                       child: Container(
-                                    alignment: LanguageClass.isEnglish
-                                        ? Alignment.bottomRight
-                                        : Alignment.bottomLeft,
+                                    alignment: LanguageClass.isEnglish ? Alignment.bottomRight : Alignment.bottomLeft,
                                     child: Text(
                                       elite,
                                       style: fontStyle(
-                                          fontFamily: FontFamily.bold,
-                                          fontSize: 15.sp,
-                                          color: Color(0xfff7f8f9)),
+                                          fontFamily: FontFamily.bold, fontSize: 15.sp, color: Color(0xfff7f8f9)),
                                     ),
                                   ))
                                 ],
@@ -864,9 +1122,8 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                 margin: EdgeInsets.symmetric(horizontal: 0),
                                 padding: EdgeInsets.all(15),
                                 width: double.infinity,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Color(0xffFF5D4B)),
+                                decoration:
+                                    BoxDecoration(borderRadius: BorderRadius.circular(12), color: Color(0xffFF5D4B)),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -874,42 +1131,66 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                     Expanded(
                                         flex: 2,
                                         child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
                                                 child: Row(
                                               children: [
                                                 Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.end,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
+                                                    Text(
+                                                      LanguageClass.isEnglish ? "Departure" : "تغادر في",
+                                                      style: fontStyle(
+                                                          color: Colors.white,
+                                                          fontFamily: FontFamily.bold,
+                                                          fontSize: 13.sp),
+                                                    ),
                                                     Text(
                                                       '${accessDate2 != "" ? DateTime.parse(accessDate2!).day.toString() : ""}/${accessDate2 != "" ? DateTime.parse(accessDate2!).month.toString() : ""}/${accessDate2 != "" ? DateTime.parse(accessDate2!).year.toString() : ""}',
                                                       style: fontStyle(
                                                           color: Colors.white,
-                                                          fontFamily:
-                                                              FontFamily.bold,
+                                                          fontFamily: FontFamily.bold,
                                                           fontSize: 13.sp),
                                                     ),
                                                     Text(
                                                       accessDate2 != ""
-                                                          ? intl.DateFormat(
-                                                                  'hh:mm a')
-                                                              .format(DateTime
-                                                                  .parse(
-                                                                      accessDate2))
+                                                          ? intl.DateFormat('hh:mm a')
+                                                              .format(DateTime.parse(accessDate2))
                                                               .toString()
                                                           : "",
                                                       style: fontStyle(
                                                           color: Colors.white,
-                                                          fontFamily:
-                                                              FontFamily.bold,
+                                                          fontFamily: FontFamily.bold,
                                                           fontSize: 13.sp),
+                                                    ),
+                                                    5.verticalSpace,
+                                                    Text(
+                                                      LanguageClass.isEnglish ? "Arrival" : "الوصول",
+                                                      style: fontStyle(
+                                                          color: Colors.white,
+                                                          fontFamily: FontFamily.bold,
+                                                          fontSize: 13.sp),
+                                                    ),
+                                                    Text(
+                                                      intl.DateFormat('dd-MM-yyyy')
+                                                          .format(DateTime.parse(arrivaldate2))
+                                                          .toString(),
+                                                      style: fontStyle(
+                                                          color: Colors.white,
+                                                          fontFamily: FontFamily.bold,
+                                                          fontSize: 12.sp),
+                                                    ),
+                                                    Text(
+                                                      intl.DateFormat('hh:mm a')
+                                                          .format(DateTime.parse(arrivaldate2))
+                                                          .toString(),
+                                                      style: fontStyle(
+                                                          color: Colors.white,
+                                                          fontFamily: FontFamily.bold,
+                                                          fontSize: 12.sp),
                                                     ),
                                                   ],
                                                 ),
@@ -919,70 +1200,49 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                 Container(
                                                   width: 5,
                                                   decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              2),
+                                                      borderRadius: BorderRadius.circular(2),
                                                       gradient: LinearGradient(
-                                                          begin: Alignment
-                                                              .topCenter,
-                                                          end: Alignment
-                                                              .bottomCenter,
-                                                          colors: [
-                                                            AppColors.white,
-                                                            AppColors.yellow2
-                                                          ])),
+                                                          begin: Alignment.topCenter,
+                                                          end: Alignment.bottomCenter,
+                                                          colors: [AppColors.white, AppColors.yellow2])),
                                                 ),
                                                 SizedBox(
                                                   width: 10,
                                                 ),
                                                 Expanded(
                                                   child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Text(
-                                                        LanguageClass.isEnglish
-                                                            ? "From"
-                                                            : "من",
+                                                        LanguageClass.isEnglish ? "From" : "من",
                                                         style: fontStyle(
                                                             color: Colors.white,
-                                                            fontFamily:
-                                                                FontFamily.bold,
+                                                            fontFamily: FontFamily.bold,
                                                             fontSize: 12.sp),
                                                       ),
                                                       Text(
-                                                        Ticketreservation
-                                                            .fromcitystation2,
+                                                        Ticketreservation.fromcitystation2,
                                                         style: fontStyle(
                                                             color: Colors.white,
-                                                            fontFamily:
-                                                                FontFamily.bold,
+                                                            fontFamily: FontFamily.bold,
                                                             fontSize: 10.sp),
                                                       ),
                                                       SizedBox(
                                                         height: 5,
                                                       ),
                                                       Text(
-                                                        LanguageClass.isEnglish
-                                                            ? "To"
-                                                            : "الي",
+                                                        LanguageClass.isEnglish ? "To" : "الي",
                                                         style: fontStyle(
                                                             color: Colors.white,
-                                                            fontFamily:
-                                                                FontFamily.bold,
+                                                            fontFamily: FontFamily.bold,
                                                             fontSize: 12.sp),
                                                       ),
                                                       Text(
-                                                        Ticketreservation
-                                                            .tocitystation2,
+                                                        Ticketreservation.tocitystation2,
                                                         style: fontStyle(
                                                             color: Colors.white,
-                                                            fontFamily:
-                                                                FontFamily
-                                                                    .medium,
+                                                            fontFamily: FontFamily.medium,
                                                             fontSize: 10.sp),
                                                       ),
                                                     ],
@@ -993,31 +1253,24 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                             Text(
                                               "${Routes.curruncy ?? ""} ${realprice2.toStringAsFixed(2)}",
                                               style: fontStyle(
-                                                  color: Colors.white,
-                                                  fontFamily: FontFamily.medium,
-                                                  fontSize: 16.sp),
+                                                  color: Colors.white, fontFamily: FontFamily.medium, fontSize: 16.sp),
                                             ),
                                           ],
                                         )),
                                     Expanded(
                                         child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
                                       children: [
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             Container(
                                               width: 14,
                                               height: 14,
                                               alignment: Alignment.center,
-                                              child: Image.asset(
-                                                  "assets/images/Icon fa-solid-bus.png"),
+                                              child: Image.asset("assets/images/Icon fa-solid-bus.png"),
                                             ),
                                             SizedBox(
                                               width: 5,
@@ -1025,83 +1278,42 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                             Text(
                                               numberTrip2.toString(),
                                               style: fontStyle(
-                                                  color: Colors.white,
-                                                  fontFamily: FontFamily.medium,
-                                                  fontSize: 14.sp),
+                                                  color: Colors.white, fontFamily: FontFamily.medium, fontSize: 14.sp),
                                             ),
                                           ],
                                         ),
                                         InkWell(
                                           onTap: () {
                                             busLayoutRepo
-                                                .getBusSeatsData(
-                                                    tripId: Ticketreservation
-                                                        .tripid1)
+                                                .getBusSeatsData(tripId: Ticketreservation.tripid1)
                                                 .then((value) async {
                                               busSeatsModel = await value;
 
                                               if (busSeatsModel != null) {
                                                 for (int i = 0;
-                                                    i <
-                                                        busSeatsModel!
-                                                            .busSeatDetails!
-                                                            .busDetails!
-                                                            .totalRow!;
+                                                    i < busSeatsModel!.busSeatDetails!.busDetails!.totalRow!;
                                                     i++) {
                                                   for (int j = 0;
                                                       j <
                                                           busSeatsModel!
-                                                              .busSeatDetails!
-                                                              .busDetails!
-                                                              .rowList![i]
-                                                              .seats
-                                                              .length;
+                                                              .busSeatDetails!.busDetails!.rowList![i].seats.length;
                                                       j++) {
-                                                    if (busSeatsModel
-                                                                ?.busSeatDetails
-                                                                ?.busDetails
-                                                                ?.rowList?[i]
-                                                                .seats[j]
+                                                    if (busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j]
                                                                 .isReserved ==
                                                             true ||
-                                                        busSeatsModel
-                                                                ?.busSeatDetails
-                                                                ?.busDetails
-                                                                ?.rowList?[i]
-                                                                .seats[j]
+                                                        busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j]
                                                                 .isAvailable ==
                                                             true) {
-                                                      busSeatsModel
-                                                              ?.busSeatDetails
-                                                              ?.busDetails
-                                                              ?.rowList?[i]
-                                                              .seats[j]
-                                                              .seatState =
-                                                          SeatState.sold;
+                                                      busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j]
+                                                          .seatState = SeatState.sold;
                                                     }
 
-                                                    for (var n = 0;
-                                                        n <
-                                                            Ticketreservation
-                                                                .Seatsnumbers2
-                                                                .length;
-                                                        n++) {
-                                                      if (busSeatsModel
-                                                              ?.busSeatDetails
-                                                              ?.busDetails
-                                                              ?.rowList?[i]
-                                                              .seats[j]
-                                                              .seatNo ==
-                                                          Ticketreservation
-                                                                  .Seatsnumbers2[
-                                                              n]) {
-                                                        busSeatsModel
-                                                                ?.busSeatDetails
-                                                                ?.busDetails
-                                                                ?.rowList?[i]
-                                                                .seats[j]
-                                                                .seatState =
-                                                            SeatState.booked;
+                                                    for (var n = 0; n < Ticketreservation.Seatsnumbers2.length; n++) {
+                                                      if (busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i]
+                                                              .seats[j].seatNo ==
+                                                          Ticketreservation.Seatsnumbers2[n]) {
+                                                        busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i].seats[j]
+                                                            .seatState = SeatState.booked;
                                                       }
                                                     }
                                                   }
@@ -1114,101 +1326,62 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                   context: context,
                                                   barrierDismissible: true,
                                                   barrierLabel:
-                                                      MaterialLocalizations.of(
-                                                              context)
-                                                          .modalBarrierDismissLabel,
-                                                  barrierColor: Colors.black
-                                                      .withOpacity(0.5),
-                                                  transitionDuration:
-                                                      const Duration(
-                                                          milliseconds: 200),
-                                                  pageBuilder: (context,
-                                                      Animation<double>
-                                                          animation,
-                                                      Animation<double>
-                                                          secondaryAnimation) {
+                                                      MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                                                  barrierColor: Colors.black.withOpacity(0.5),
+                                                  transitionDuration: const Duration(milliseconds: 200),
+                                                  pageBuilder: (context, Animation<double> animation,
+                                                      Animation<double> secondaryAnimation) {
                                                     return Material(
                                                       child: SafeArea(
                                                         child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
+                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
                                                           children: [
                                                             InkWell(
                                                               onTap: () {
-                                                                Navigator.pop(
-                                                                    context);
+                                                                Navigator.pop(context);
                                                               },
                                                               child: Container(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            10),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .topLeft,
+                                                                padding: EdgeInsets.all(10),
+                                                                alignment: Alignment.topLeft,
                                                                 child: Icon(
                                                                   Icons.close,
-                                                                  color: AppColors
-                                                                      .primaryColor,
+                                                                  color: AppColors.primaryColor,
                                                                 ),
                                                               ),
                                                             ),
                                                             Expanded(
                                                               child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
+                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                                 children: [
                                                                   SeatLayoutWidget(
-                                                                    seatHeight:
-                                                                        sizeHeight *
-                                                                            .036,
-                                                                    onSeatStateChanged: (rowI,
-                                                                        colI,
-                                                                        seatState,
-                                                                        seat) {},
-                                                                    stateModel:
-                                                                        SeatLayoutStateModel(
-                                                                      rows: busSeatsModel
-                                                                              ?.busSeatDetails
-                                                                              ?.busDetails
-                                                                              ?.rowList
-                                                                              ?.length ??
+                                                                    seatHeight: sizeHeight * .036,
+                                                                    onSeatStateChanged:
+                                                                        (rowI, colI, seatState, seat) {},
+                                                                    stateModel: SeatLayoutStateModel(
+                                                                      rows: busSeatsModel?.busSeatDetails?.busDetails
+                                                                              ?.rowList?.length ??
                                                                           0,
-                                                                      cols: busSeatsModel
-                                                                              ?.busSeatDetails
-                                                                              ?.busDetails
+                                                                      cols: busSeatsModel?.busSeatDetails?.busDetails
                                                                               ?.totalColumn ??
                                                                           5,
-                                                                      seatSvgSize: 30
-                                                                          .sp
-                                                                          .toInt(),
+                                                                      seatSvgSize: 30.sp.toInt(),
                                                                       pathSelectedSeat:
                                                                           'assets/images/unavailable_seats.svg',
                                                                       pathDisabledSeat:
                                                                           'assets/images/unavailable_seats.svg',
-                                                                      pathSoldSeat:
-                                                                          'assets/images/disabled_seats.svg',
+                                                                      pathSoldSeat: 'assets/images/disabled_seats.svg',
                                                                       pathUnSelectedSeat:
                                                                           'assets/images/unavailable_seats.svg',
-                                                                      currentSeats:
-                                                                          List.generate(
-                                                                        busSeatsModel?.busSeatDetails?.busDetails?.rowList?.length ??
+                                                                      currentSeats: List.generate(
+                                                                        busSeatsModel?.busSeatDetails?.busDetails
+                                                                                ?.rowList?.length ??
                                                                             0,
 
                                                                         // Number of rows based on totalSeats
-                                                                        (row) => busSeatsModel!
-                                                                            .busSeatDetails!
-                                                                            .busDetails!
-                                                                            .rowList![row]
-                                                                            .seats,
+                                                                        (row) => busSeatsModel!.busSeatDetails!
+                                                                            .busDetails!.rowList![row].seats,
                                                                       ),
                                                                     ),
                                                                   ),
@@ -1223,17 +1396,14 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                             });
                                           },
                                           child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Container(
                                                 width: 14,
                                                 height: 14,
                                                 alignment: Alignment.center,
-                                                child: Image.asset(
-                                                    "assets/images/chairs.png"),
+                                                child: Image.asset("assets/images/chairs.png"),
                                               ),
                                               SizedBox(
                                                 width: 5,
@@ -1242,8 +1412,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                 ' ${Ticketreservation.Seatsnumbers2.length.toString()} ${LanguageClass.isEnglish ? ' Seats' : ' كرسي'}',
                                                 style: fontStyle(
                                                     color: AppColors.white,
-                                                    fontFamily:
-                                                        FontFamily.medium,
+                                                    fontFamily: FontFamily.medium,
                                                     fontSize: 14.sp),
                                               )
                                             ],
@@ -1253,146 +1422,97 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                           height: 10,
                                         ),
                                         Container(
-                                          alignment: LanguageClass.isEnglish
-                                              ? Alignment.centerRight
-                                              : Alignment.centerLeft,
+                                          alignment:
+                                              LanguageClass.isEnglish ? Alignment.centerRight : Alignment.centerLeft,
                                           child: InkWell(
                                             onTap: () {
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        MultiBlocProvider(
+                                                    builder: (context) => MultiBlocProvider(
                                                             providers: [
-                                                              BlocProvider<
-                                                                      LoginCubit>(
-                                                                  create: (context) =>
-                                                                      sl<LoginCubit>()),
-                                                              BlocProvider<
-                                                                  TimesTripsCubit>(
-                                                                create: (context) =>
-                                                                    TimesTripsCubit(),
+                                                              BlocProvider<LoginCubit>(
+                                                                  create: (context) => sl<LoginCubit>()),
+                                                              BlocProvider<TimesTripsCubit>(
+                                                                create: (context) => TimesTripsCubit(),
                                                               ),
-                                                              BlocProvider<
-                                                                  BusLayoutCubit>(
-                                                                create: (context) =>
-                                                                    BusLayoutCubit(),
+                                                              BlocProvider<BusLayoutCubit>(
+                                                                create: (context) => BusLayoutCubit(),
                                                               )
                                                             ],
                                                             // Replace with your actual cubit creation logic
-                                                            child:
-                                                                BusLayoutScreenBack(
+                                                            child: BusLayoutScreenBack(
                                                               isedit: true,
-                                                              to: Ticketreservation
-                                                                      .tocitystation2 ??
-                                                                  "",
-                                                              from: Ticketreservation
-                                                                      .fromcitystation2 ??
-                                                                  "",
-                                                              triTypeId: widget
-                                                                  .tripTypeId,
-                                                              price: Ticketreservation
-                                                                  .priceticket2,
+                                                              arrivaltime:
+                                                                  DateTime.parse(Ticketreservation.arrivaldate2!),
+                                                              to: Ticketreservation.tocitystation2 ?? "",
+                                                              from: Ticketreservation.fromcitystation2 ?? "",
+                                                              triTypeId: widget.tripTypeId,
+                                                              price: Ticketreservation.priceticket2,
                                                               user: Routes.user,
-                                                              tripId:
-                                                                  Ticketreservation
-                                                                      .tripid2,
-                                                              tocity: Ticketreservation
-                                                                      .tocity2 ??
-                                                                  '',
-                                                              fromcity:
-                                                                  Ticketreservation
-                                                                          .fromcity2 ??
-                                                                      '',
-                                                              busdate: DateTime.parse(
-                                                                  Ticketreservation
-                                                                      .accessDate2),
-                                                              busttime:
-                                                                  Ticketreservation
-                                                                      .accessBusTime2,
+                                                              tripId: Ticketreservation.tripid2,
+                                                              tocity: Ticketreservation.tocity2 ?? '',
+                                                              fromcity: Ticketreservation.fromcity2 ?? '',
+                                                              busdate: DateTime.parse(Ticketreservation.accessDate2),
+                                                              busttime: Ticketreservation.accessBusTime2,
                                                             ))),
                                               ).then((value) {
                                                 // Recalculate prices after potential seat changes
-                                                realprice2 = (Ticketreservation
-                                                        .countSeats2.length *
-                                                    Ticketreservation
-                                                        .priceticket2);
-                                                afterdiscount2 = realprice2;
-                                                // --- RECALCULATE DISCOUNT ON RETURN ---
-                                                int matchedSeats = 0;
-                                                if (widget.tripTypeId == '2') {
-                                                  matchedSeats =
-                                                      (Ticketreservation
-                                                                  .countSeats1
-                                                                  .length <
-                                                              Ticketreservation
-                                                                  .countSeats2
-                                                                  .length
-                                                          ? Ticketreservation
-                                                              .countSeats1
-                                                              .length
-                                                          : Ticketreservation
-                                                              .countSeats2
-                                                              .length);
-                                                } else {
-                                                  matchedSeats =
-                                                      Ticketreservation
-                                                          .countSeats1.length;
-                                                }
-                                                totaldiscount = (widget
-                                                            .actualDiscount
-                                                            ?.toDouble() ??
-                                                        0.0) *
-                                                    matchedSeats;
-                                                // --- END RECALCULATION ---
-                                                if (widget.tripTypeId == '2' &&
-                                                    totaldiscount > 0) {
-                                                  double combinedRealPrice =
-                                                      realprice + realprice2;
-                                                  if (combinedRealPrice > 0) {
-                                                    double discountFactor =
-                                                        totaldiscount /
-                                                            combinedRealPrice;
-                                                    afterdiscount = realprice *
-                                                        (1 - discountFactor);
-                                                    afterdiscount2 =
-                                                        realprice2 *
-                                                            (1 -
-                                                                discountFactor);
-                                                  } else {
-                                                    afterdiscount = 0;
-                                                    afterdiscount2 = 0;
-                                                  }
-                                                } else if (widget.tripTypeId !=
-                                                    '2') {
-                                                  // One-way trip
-                                                  afterdiscount =
-                                                      realprice - totaldiscount;
-                                                }
+                                                realprice2 = (Ticketreservation.countSeats2.length *
+                                                    Ticketreservation.priceticket2);
+
+                                                // afterdiscount2 = realprice2;
+                                                // // --- RECALCULATE DISCOUNT ON RETURN ---
+                                                // int matchedSeats = 0;
+                                                // if (widget.tripTypeId == '2') {
+                                                //   matchedSeats = (Ticketreservation.countSeats1.length <
+                                                //           Ticketreservation.countSeats2.length
+                                                //       ? Ticketreservation.countSeats1.length
+                                                //       : Ticketreservation.countSeats2.length);
+                                                // } else {
+                                                //   matchedSeats = Ticketreservation.countSeats1.length;
+                                                // }
+                                                // totaldiscount =
+                                                //     (widget.actualDiscount?.toDouble() ?? 0.0) * matchedSeats;
+                                                // // --- END RECALCULATION ---
+                                                // if (widget.tripTypeId == '2' && totaldiscount > 0) {
+                                                //   double combinedRealPrice = realprice + realprice2;
+                                                //   if (combinedRealPrice > 0) {
+                                                //     double discountFactor = totaldiscount / combinedRealPrice;
+                                                //     afterdiscount = realprice * (1 - discountFactor);
+                                                //     afterdiscount2 = realprice2 * (1 - discountFactor);
+                                                //   } else {
+                                                //     afterdiscount = 0;
+                                                //     afterdiscount2 = 0;
+                                                //   }
+                                                // } else if (widget.tripTypeId != '2') {
+                                                //   // One-way trip
+                                                //   afterdiscount = realprice - totaldiscount;
+                                                // }
+
+                                                _packagesBloc.emit(state.update(
+                                                    isloading: false,
+                                                    promocodemodel: Promocodemodel(
+                                                        status: "failed",
+                                                        errormessage: LanguageClass.isEnglish
+                                                            ? "has been updated"
+                                                            : "تم التعديل")));
 
                                                 ihaveprocode = false;
                                                 setState(() {});
                                               });
                                             },
                                             child: Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 15, vertical: 5),
-                                              decoration: BoxDecoration(
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                        color: AppColors.white,
-                                                        offset: Offset(0, 0),
-                                                        spreadRadius: 0,
-                                                        blurRadius: 15)
-                                                  ],
-                                                  color: AppColors.white,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          12)),
+                                              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                                              decoration: BoxDecoration(boxShadow: [
+                                                BoxShadow(
+                                                    color: AppColors.white,
+                                                    offset: Offset(0, 0),
+                                                    spreadRadius: 0,
+                                                    blurRadius: 15)
+                                              ], color: AppColors.white, borderRadius: BorderRadius.circular(12)),
                                               child: Text(
-                                                LanguageClass.isEnglish
-                                                    ? 'Edit '
-                                                    : 'تعديل ',
+                                                LanguageClass.isEnglish ? 'Edit ' : 'تعديل ',
                                                 style: fontStyle(
                                                   color: AppColors.primaryColor,
                                                   fontWeight: FontWeight.bold,
@@ -1409,9 +1529,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                           child: Text(
                                             elite2 ?? "",
                                             style: fontStyle(
-                                                fontFamily: FontFamily.medium,
-                                                fontSize: 15,
-                                                color: Color(0xfff7f8f9)),
+                                                fontFamily: FontFamily.medium, fontSize: 15, color: Color(0xfff7f8f9)),
                                           ),
                                         ))
                                       ],
@@ -1425,7 +1543,49 @@ class _ReservationTicketState extends State<ReservationTicket> {
                         SizedBox(
                           height: 20,
                         ),
-                        ihaveprocode == false
+                        InkWell(
+                          onTap: () {
+                            _packagesBloc.add(getinstitutionevent());
+                          },
+                          child: Container(
+                            height: 44,
+                            padding: EdgeInsets.symmetric(horizontal: 5.w),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: AppColors.primaryColor,
+                                borderRadius: BorderRadius.circular(22),
+                                boxShadow: [
+                                  BoxShadow(color: AppColors.primaryColor, blurRadius: 3, offset: Offset(0, 3))
+                                ]),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.discount_rounded,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                                8.horizontalSpace,
+                                FittedBox(
+                                  fit: BoxFit.fitWidth,
+                                  child: Text(
+                                    LanguageClass.isEnglish ? 'Discount for organizations' : 'خصم للهيئات ',
+                                    style: fontStyle(
+                                        color: Colors.white,
+                                        fontSize: 14.sp,
+                                        fontFamily: FontFamily.bold,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        ihaveprocode == false || institutionid != null
                             ? InkWell(
                                 onTap: (() {
                                   setState(() {
@@ -1439,15 +1599,10 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                       color: AppColors.primaryColor,
                                       borderRadius: BorderRadius.circular(22),
                                       boxShadow: [
-                                        BoxShadow(
-                                            color: AppColors.primaryColor,
-                                            blurRadius: 3,
-                                            offset: Offset(0, 3))
+                                        BoxShadow(color: AppColors.primaryColor, blurRadius: 3, offset: Offset(0, 3))
                                       ]),
                                   child: Text(
-                                    LanguageClass.isEnglish
-                                        ? 'I have a Promocode !'
-                                        : 'لدي كود خصم ',
+                                    LanguageClass.isEnglish ? 'I have a Promocode !' : 'لدي كود خصم ',
                                     style: fontStyle(
                                         color: Colors.white,
                                         fontSize: 16,
@@ -1463,8 +1618,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                     borderRadius: BorderRadius.circular(22),
                                     boxShadow: [
                                       BoxShadow(
-                                          color: Color(0xffa7a7a7)
-                                              .withOpacity(0.1),
+                                          color: Color(0xffa7a7a7).withOpacity(0.1),
                                           blurRadius: 3,
                                           offset: Offset(0, 3))
                                     ]),
@@ -1476,99 +1630,64 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                       fontFamily: FontFamily.bold,
                                       fontWeight: FontWeight.bold),
                                   decoration: InputDecoration(
-                                    hintText: LanguageClass.isEnglish
-                                        ? 'Enter Promocode !'
-                                        : ' كود الخصم ',
+                                    hintText: LanguageClass.isEnglish ? 'Enter Promocode !' : ' كود الخصم ',
                                     hintStyle: fontStyle(
                                         color: Color(0xff969696),
                                         fontSize: 14,
                                         fontFamily: FontFamily.bold,
                                         fontWeight: FontWeight.bold),
                                     border: InputBorder.none,
-                                    contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 25, vertical: 10),
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                                     suffixIcon: InkWell(
                                       onTap: () {
                                         if (Routes.user == null) {
                                           Constants.showDefaultSnackBar(
                                               color: Colors.red,
                                               context: context,
-                                              text: LanguageClass.isEnglish
-                                                  ? 'Please login'
-                                                  : 'من فضلك سجل الدخول ');
+                                              text: LanguageClass.isEnglish ? 'Please login' : 'من فضلك سجل الدخول ');
                                         } else {
                                           if (_promocodetext.text != "") {
                                             Routes.resrvedtrips.clear();
                                             if (widget.tripTypeId == '2') {
-                                              final toStationId = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'toStationId');
-                                              final fromStationId = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'fromStationId');
+                                              final toStationId = CacheHelper.getDataToSharedPref(key: 'toStationId');
+                                              final fromStationId =
+                                                  CacheHelper.getDataToSharedPref(key: 'fromStationId');
 
-                                              final busdate = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'accessBusDate');
+                                              final busdate = CacheHelper.getDataToSharedPref(key: 'accessBusDate');
 
-                                              final lineid = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'lineid');
-                                              final serviceTypeID = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'serviceTypeID');
+                                              final lineid = CacheHelper.getDataToSharedPref(key: 'lineid');
+                                              final serviceTypeID =
+                                                  CacheHelper.getDataToSharedPref(key: 'serviceTypeID');
 
-                                              final busdate2 = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'accessBusDate2');
+                                              final busdate2 = CacheHelper.getDataToSharedPref(key: 'accessBusDate2');
 
-                                              final lineid2 = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'lineid2');
-                                              final serviceTypeID2 = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'serviceTypeID2');
+                                              final lineid2 = CacheHelper.getDataToSharedPref(key: 'lineid2');
+                                              final serviceTypeID2 =
+                                                  CacheHelper.getDataToSharedPref(key: 'serviceTypeID2');
 
-                                              TripReservationList trip =
-                                                  TripReservationList(
-                                                      busId: Ticketreservation
-                                                          .busid1,
-                                                      discount:
-                                                          discount.toString(),
-                                                      fromStationId:
-                                                          fromStationId,
-                                                      lineId: lineid,
-                                                      price: afterdiscount,
-                                                      seatIds: Ticketreservation
-                                                          .countSeats1,
-                                                      serviceTypeId:
-                                                          serviceTypeID,
-                                                      toStationId: toStationId,
-                                                      tripDate: DateTime.parse(
-                                                          busdate),
-                                                      tripId: Ticketreservation
-                                                          .tripid1);
+                                              TripReservationList trip = TripReservationList(
+                                                  busId: Ticketreservation.busid1,
+                                                  discount: discount.toString(),
+                                                  fromStationId: fromStationId,
+                                                  lineId: lineid,
+                                                  price: afterdiscount,
+                                                  seatIds: Ticketreservation.countSeats1,
+                                                  serviceTypeId: serviceTypeID,
+                                                  toStationId: toStationId,
+                                                  tripDate: DateTime.parse(busdate),
+                                                  tripId: Ticketreservation.tripid1);
 
-                                              TripReservationList trip2 =
-                                                  TripReservationList(
-                                                      busId: Ticketreservation
-                                                          .busid2,
-                                                      discount:
-                                                          discount.toString(),
-                                                      fromStationId:
-                                                          toStationId,
-                                                      lineId: lineid2,
-                                                      price: afterdiscount2,
-                                                      seatIds: Ticketreservation
-                                                          .countSeats2,
-                                                      serviceTypeId:
-                                                          serviceTypeID2,
-                                                      toStationId:
-                                                          fromStationId,
-                                                      tripDate: DateTime.parse(
-                                                          busdate2),
-                                                      tripId: Ticketreservation
-                                                          .tripid2);
+                                              TripReservationList trip2 = TripReservationList(
+                                                  busId: Ticketreservation.busid2,
+                                                  discount: discount.toString(),
+                                                  fromStationId: toStationId,
+                                                  lineId: lineid2,
+                                                  price: afterdiscount2,
+                                                  seatIds: Ticketreservation.countSeats2,
+                                                  serviceTypeId: serviceTypeID2,
+                                                  toStationId: fromStationId,
+                                                  tripDate: DateTime.parse(busdate2),
+                                                  tripId: Ticketreservation.tripid2);
 
                                               Routes.resrvedtrips.add(trip);
 
@@ -1578,13 +1697,10 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          MultiBlocProvider(
+                                                      builder: (context) => MultiBlocProvider(
                                                         providers: [
-                                                          BlocProvider<
-                                                              LoginCubit>(
-                                                            create: (context) =>
-                                                                sl<LoginCubit>(),
+                                                          BlocProvider<LoginCubit>(
+                                                            create: (context) => sl<LoginCubit>(),
                                                           ),
                                                         ],
                                                         child: LoginScreen(
@@ -1597,68 +1713,44 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                   key: 'price',
                                                   value: afterdiscount,
                                                 );
-                                                _packagesBloc.add(
-                                                    PromocodReservationEvent(
-                                                        promocode:
-                                                            _promocodetext.text,
-                                                        promocodeid: '',
-                                                        custId: widget
-                                                            .user!.customerId!,
-                                                        paymentTypeID: 67,
-                                                        trips: Routes
-                                                            .resrvedtrips));
+                                                _packagesBloc.add(PromocodReservationEvent(
+                                                    promocode: _promocodetext.text,
+                                                    promocodeid: '',
+                                                    custId: widget.user!.customerId!,
+                                                    paymentTypeID: 67,
+                                                    trips: Routes.resrvedtrips));
                                               }
                                             } else {
-                                              final toStationId = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'toStationId');
-                                              final fromStationId = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'fromStationId');
+                                              final toStationId = CacheHelper.getDataToSharedPref(key: 'toStationId');
+                                              final fromStationId =
+                                                  CacheHelper.getDataToSharedPref(key: 'fromStationId');
 
-                                              final busdate = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'accessBusDate');
+                                              final busdate = CacheHelper.getDataToSharedPref(key: 'accessBusDate');
 
-                                              final lineid = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'lineid');
-                                              final serviceTypeID = CacheHelper
-                                                  .getDataToSharedPref(
-                                                      key: 'serviceTypeID');
+                                              final lineid = CacheHelper.getDataToSharedPref(key: 'lineid');
+                                              final serviceTypeID =
+                                                  CacheHelper.getDataToSharedPref(key: 'serviceTypeID');
 
-                                              TripReservationList trip =
-                                                  TripReservationList(
-                                                      busId: Ticketreservation
-                                                          .busid1,
-                                                      discount:
-                                                          discount.toString(),
-                                                      fromStationId:
-                                                          fromStationId,
-                                                      lineId: lineid,
-                                                      price: afterdiscount,
-                                                      seatIds: Ticketreservation
-                                                          .countSeats1,
-                                                      serviceTypeId:
-                                                          serviceTypeID,
-                                                      toStationId: toStationId,
-                                                      tripDate: DateTime.parse(
-                                                          busdate),
-                                                      tripId: Ticketreservation
-                                                          .tripid1);
+                                              TripReservationList trip = TripReservationList(
+                                                  busId: Ticketreservation.busid1,
+                                                  discount: discount.toString(),
+                                                  fromStationId: fromStationId,
+                                                  lineId: lineid,
+                                                  price: afterdiscount,
+                                                  seatIds: Ticketreservation.countSeats1,
+                                                  serviceTypeId: serviceTypeID,
+                                                  toStationId: toStationId,
+                                                  tripDate: DateTime.parse(busdate),
+                                                  tripId: Ticketreservation.tripid1);
 
                                               Routes.resrvedtrips.add(trip);
 
-                                              _packagesBloc.add(
-                                                  PromocodReservationEvent(
-                                                      promocode:
-                                                          _promocodetext.text,
-                                                      promocodeid: '',
-                                                      custId: widget
-                                                          .user!.customerId!,
-                                                      paymentTypeID: 67,
-                                                      trips:
-                                                          Routes.resrvedtrips));
+                                              _packagesBloc.add(PromocodReservationEvent(
+                                                  promocode: _promocodetext.text,
+                                                  promocodeid: '',
+                                                  custId: widget.user!.customerId!,
+                                                  paymentTypeID: 67,
+                                                  trips: Routes.resrvedtrips));
                                             }
                                           } else {
                                             Constants.showDefaultSnackBar(
@@ -1673,15 +1765,11 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                       child: Container(
                                         width: 100,
                                         decoration: BoxDecoration(
-                                            color: Color(0xffFF5D4B),
-                                            borderRadius:
-                                                BorderRadius.circular(22)),
+                                            color: Color(0xffFF5D4B), borderRadius: BorderRadius.circular(22)),
                                         padding: EdgeInsets.only(left: 0),
                                         alignment: Alignment.center,
                                         child: Text(
-                                          LanguageClass.isEnglish
-                                              ? 'Apply'
-                                              : "تطبيق",
+                                          LanguageClass.isEnglish ? 'Apply' : "تطبيق",
                                           style: fontStyle(
                                               color: Colors.white,
                                               fontFamily: FontFamily.bold,
@@ -1740,9 +1828,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                             Text(
                               // Display totaldiscount from the widget.actualDiscount calculation OR from the promo code calculation
                               state.promocodemodel?.status == 'success'
-                                  ? state.promocodemodel!.message
-                                              ?.isPrecentage ==
-                                          true
+                                  ? state.promocodemodel!.message?.isPrecentage == true
                                       ? widget.tripTypeId == '2'
                                           ? "${(minusdiscount + minusdiscount2).toStringAsFixed(2)} ${Routes.curruncy ?? ""}"
                                           : "${minusdiscount.toStringAsFixed(2)} ${Routes.curruncy ?? ""}"
@@ -1763,9 +1849,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              LanguageClass.isEnglish
-                                  ? 'Total Price'
-                                  : "السعر الكلي",
+                              LanguageClass.isEnglish ? 'Total Price' : "السعر الكلي",
                               textAlign: TextAlign.center,
                               style: fontStyle(
                                   color: Colors.black,
@@ -1805,12 +1889,10 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                   border: Border.all(
                                     color: accept
                                         ? Colors.black
-                                        : Colors
-                                            .transparent, // Border color changes based on selection
+                                        : Colors.transparent, // Border color changes based on selection
                                     width: 1,
                                   ),
-                                  borderRadius: BorderRadius.circular(
-                                      4), // Optional: rounded corners
+                                  borderRadius: BorderRadius.circular(4), // Optional: rounded corners
                                 ),
                                 child: Checkbox(
                                     value: accept,
@@ -1830,102 +1912,60 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                     //   width: 2,
                                     // ),
                                     activeColor: Colors.black,
-                                    fillColor:
-                                        MaterialStatePropertyAll(Colors.white),
+                                    fillColor: MaterialStatePropertyAll(Colors.white),
                                     onChanged: (value) {
                                       accept == false
                                           ? showAdaptiveDialog(
                                               context: context,
-                                              builder:
-                                                  (BuildContext buildContext) {
-                                                print(
-                                                    " Tik Tik POLICY ${policy.message}");
+                                              builder: (BuildContext buildContext) {
+                                                print(" Tik Tik POLICY ${policy.message}");
                                                 return Directionality(
                                                   textDirection:
-                                                      LanguageClass.isEnglish
-                                                          ? TextDirection.ltr
-                                                          : TextDirection.rtl,
+                                                      LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
                                                   child: Material(
                                                     color: Colors.transparent,
                                                     child: Container(
                                                       color: Colors.white,
-                                                      margin:
-                                                          EdgeInsets.all(20),
-                                                      padding:
-                                                          EdgeInsets.all(30),
+                                                      margin: EdgeInsets.all(20),
+                                                      padding: EdgeInsets.all(30),
                                                       child: ListView(
                                                         children: [
                                                           Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
+                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                             children: [
                                                               Text(
-                                                                LanguageClass
-                                                                        .isEnglish
+                                                                LanguageClass.isEnglish
                                                                     ? 'Terms and conditions '
                                                                     : "الشروط والأحكام",
-                                                                textAlign: LanguageClass
-                                                                        .isEnglish
-                                                                    ? TextAlign
-                                                                        .left
-                                                                    : TextAlign
-                                                                        .right,
-                                                                textDirection: LanguageClass
-                                                                        .isEnglish
-                                                                    ? TextDirection
-                                                                        .ltr
-                                                                    : TextDirection
-                                                                        .rtl,
-                                                                style:
-                                                                    fontStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontFamily:
-                                                                      FontFamily
-                                                                          .medium,
+                                                                textAlign: LanguageClass.isEnglish
+                                                                    ? TextAlign.left
+                                                                    : TextAlign.right,
+                                                                textDirection: LanguageClass.isEnglish
+                                                                    ? TextDirection.ltr
+                                                                    : TextDirection.rtl,
+                                                                style: fontStyle(
+                                                                  color: Colors.black,
+                                                                  fontFamily: FontFamily.medium,
                                                                   fontSize: 20,
                                                                 ),
                                                               ),
                                                               IconButton(
-                                                                  onPressed:
-                                                                      () {
-                                                                    Navigator.pop(
-                                                                        context);
+                                                                  onPressed: () {
+                                                                    Navigator.pop(context);
                                                                   },
-                                                                  icon: Icon(Icons
-                                                                      .cancel_outlined)),
+                                                                  icon: Icon(Icons.cancel_outlined)),
                                                             ],
                                                           ),
                                                           Padding(
                                                             padding:
-                                                                const EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal:
-                                                                        10,
-                                                                    vertical:
-                                                                        0),
-                                                            child: ListView
-                                                                .builder(
-                                                              itemCount: policy
-                                                                      .message
-                                                                      ?.length ??
-                                                                  0,
+                                                                const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                                                            child: ListView.builder(
+                                                              itemCount: policy.message?.length ?? 0,
                                                               shrinkWrap: true,
-                                                              physics:
-                                                                  ScrollPhysics(),
-                                                              itemBuilder:
-                                                                  (BuildContext
-                                                                          context,
-                                                                      int index) {
-                                                                return policy
-                                                                        .message![
-                                                                            index]
-                                                                        .contains(
-                                                                            "div")
-                                                                    ? Html(
-                                                                        data: policy
-                                                                            .message![index])
+                                                              physics: ScrollPhysics(),
+                                                              itemBuilder: (BuildContext context, int index) {
+                                                                return policy.message![index].contains("div")
+                                                                    ? Html(data: policy.message![index])
                                                                     : Text(
                                                                         "${index + 1} - ${policy.message![index]}",
                                                                         textAlign: LanguageClass.isEnglish
@@ -1934,14 +1974,10 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                                         textDirection: LanguageClass.isEnglish
                                                                             ? TextDirection.ltr
                                                                             : TextDirection.rtl,
-                                                                        style:
-                                                                            fontStyle(
-                                                                          color:
-                                                                              Color(0xff818181),
-                                                                          fontSize:
-                                                                              14,
-                                                                          fontFamily:
-                                                                              FontFamily.medium,
+                                                                        style: fontStyle(
+                                                                          color: Color(0xff818181),
+                                                                          fontSize: 14,
+                                                                          fontFamily: FontFamily.medium,
                                                                         ),
                                                                       );
                                                               },
@@ -1955,39 +1991,21 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                               setState(() {
                                                                 accept = value!;
                                                               });
-                                                              Navigator.pop(
-                                                                  context);
+                                                              Navigator.pop(context);
                                                             },
                                                             child: Container(
-                                                                margin: EdgeInsets
-                                                                    .symmetric(
-                                                                        horizontal:
-                                                                            30),
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            10),
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              15),
-                                                                  color: AppColors
-                                                                      .primaryColor,
+                                                                margin: EdgeInsets.symmetric(horizontal: 30),
+                                                                padding: EdgeInsets.all(10),
+                                                                decoration: BoxDecoration(
+                                                                  borderRadius: BorderRadius.circular(15),
+                                                                  color: AppColors.primaryColor,
                                                                 ),
                                                                 child: Center(
                                                                   child: Text(
-                                                                    LanguageClass
-                                                                            .isEnglish
-                                                                        ? "Done"
-                                                                        : 'تم',
+                                                                    LanguageClass.isEnglish ? "Done" : 'تم',
                                                                     style: fontStyle(
-                                                                        fontFamily:
-                                                                            FontFamily
-                                                                                .medium,
-                                                                        color: Colors
-                                                                            .white),
+                                                                        fontFamily: FontFamily.medium,
+                                                                        color: Colors.white),
                                                                   ),
                                                                 )),
                                                           )
@@ -1998,12 +2016,8 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                 );
                                               },
                                               barrierDismissible: true,
-                                              barrierLabel:
-                                                  MaterialLocalizations.of(
-                                                          context)
-                                                      .modalBarrierDismissLabel,
-                                              barrierColor:
-                                                  Colors.black.withOpacity(0.5),
+                                              barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                                              barrierColor: Colors.black.withOpacity(0.5),
                                             )
                                           : setState(() {
                                               accept = value!;
@@ -2016,13 +2030,8 @@ class _ReservationTicketState extends State<ReservationTicket> {
                               Padding(
                                 padding: EdgeInsets.only(bottom: 6.0),
                                 child: Text(
-                                  LanguageClass.isEnglish
-                                      ? 'Accept reservation policy'
-                                      : 'قبول سياسة الحجز',
-                                  style: fontStyle(
-                                      fontFamily: FontFamily.medium,
-                                      color: Colors.black,
-                                      fontSize: 14),
+                                  LanguageClass.isEnglish ? 'Accept reservation policy' : 'قبول سياسة الحجز',
+                                  style: fontStyle(fontFamily: FontFamily.medium, color: Colors.black, fontSize: 14),
                                 ),
                               )
                             ],
@@ -2031,69 +2040,45 @@ class _ReservationTicketState extends State<ReservationTicket> {
                         InkWell(
                             onTap: accept
                                 ? () {
+                                    Routes.institutionID = institutionid;
                                     Routes.resrvedtrips.clear();
                                     if (widget.tripTypeId == '2') {
-                                      final toStationId =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'toStationId');
-                                      final fromStationId =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'fromStationId');
+                                      final toStationId = CacheHelper.getDataToSharedPref(key: 'toStationId');
+                                      final fromStationId = CacheHelper.getDataToSharedPref(key: 'fromStationId');
 
-                                      final busdate =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'accessBusDate');
+                                      final busdate = CacheHelper.getDataToSharedPref(key: 'accessBusDate');
 
-                                      final lineid =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'lineid');
-                                      final serviceTypeID =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'serviceTypeID');
+                                      final lineid = CacheHelper.getDataToSharedPref(key: 'lineid');
+                                      final serviceTypeID = CacheHelper.getDataToSharedPref(key: 'serviceTypeID');
 
-                                      final busdate2 =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'accessBusDate2');
+                                      final busdate2 = CacheHelper.getDataToSharedPref(key: 'accessBusDate2');
 
-                                      final lineid2 =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'lineid2');
-                                      final serviceTypeID2 =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'serviceTypeID2');
+                                      final lineid2 = CacheHelper.getDataToSharedPref(key: 'lineid2');
+                                      final serviceTypeID2 = CacheHelper.getDataToSharedPref(key: 'serviceTypeID2');
 
-                                      TripReservationList trip =
-                                          TripReservationList(
-                                              busId: Ticketreservation.busid1,
-                                              discount: totaldiscount
-                                                  .toString(), // Use totaldiscount here
-                                              fromStationId: fromStationId,
-                                              lineId: lineid,
-                                              price: afterdiscount,
-                                              seatIds:
-                                                  Ticketreservation.countSeats1,
-                                              serviceTypeId: serviceTypeID,
-                                              toStationId: toStationId,
-                                              tripDate: DateTime.parse(busdate),
-                                              tripId:
-                                                  Ticketreservation.tripid1);
+                                      TripReservationList trip = TripReservationList(
+                                          busId: Ticketreservation.busid1,
+                                          discount: totaldiscount.toString(), // Use totaldiscount here
+                                          fromStationId: fromStationId,
+                                          lineId: lineid,
+                                          price: afterdiscount,
+                                          seatIds: Ticketreservation.countSeats1,
+                                          serviceTypeId: serviceTypeID,
+                                          toStationId: toStationId,
+                                          tripDate: DateTime.parse(busdate),
+                                          tripId: Ticketreservation.tripid1);
 
-                                      TripReservationList trip2 =
-                                          TripReservationList(
-                                              busId: Ticketreservation.busid2,
-                                              discount: totaldiscount
-                                                  .toString(), // Use totaldiscount here
-                                              fromStationId: toStationId,
-                                              lineId: lineid2,
-                                              price: afterdiscount2,
-                                              seatIds:
-                                                  Ticketreservation.countSeats2,
-                                              serviceTypeId: serviceTypeID2,
-                                              toStationId: fromStationId,
-                                              tripDate:
-                                                  DateTime.parse(busdate2),
-                                              tripId:
-                                                  Ticketreservation.tripid2);
+                                      TripReservationList trip2 = TripReservationList(
+                                          busId: Ticketreservation.busid2,
+                                          discount: totaldiscount.toString(), // Use totaldiscount here
+                                          fromStationId: toStationId,
+                                          lineId: lineid2,
+                                          price: afterdiscount2,
+                                          seatIds: Ticketreservation.countSeats2,
+                                          serviceTypeId: serviceTypeID2,
+                                          toStationId: fromStationId,
+                                          tripDate: DateTime.parse(busdate2),
+                                          tripId: Ticketreservation.tripid2);
 
                                       Routes.resrvedtrips.add(trip);
 
@@ -2103,12 +2088,10 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MultiBlocProvider(
+                                              builder: (context) => MultiBlocProvider(
                                                 providers: [
                                                   BlocProvider<LoginCubit>(
-                                                    create: (context) =>
-                                                        sl<LoginCubit>(),
+                                                    create: (context) => sl<LoginCubit>(),
                                                   ),
                                                 ],
                                                 child: LoginScreen(
@@ -2124,13 +2107,10 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                BlocProvider<ReservationCubit>(
-                                              create: (context) =>
-                                                  ReservationCubit(),
+                                            builder: (context) => BlocProvider<ReservationCubit>(
+                                              create: (context) => ReservationCubit(),
                                               child: SelectPaymentScreen2(
-                                                  discount: totaldiscount
-                                                      .toString(), // Pass totaldiscount
+                                                  discount: totaldiscount.toString(), // Pass totaldiscount
                                                   promcodeid: promocodid,
                                                   user: Routes.user),
                                             ),
@@ -2138,39 +2118,25 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                         );
                                       }
                                     } else {
-                                      final toStationId =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'toStationId');
-                                      final fromStationId =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'fromStationId');
-                                      final busdate =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'accessBusDate');
+                                      final toStationId = CacheHelper.getDataToSharedPref(key: 'toStationId');
+                                      final fromStationId = CacheHelper.getDataToSharedPref(key: 'fromStationId');
+                                      final busdate = CacheHelper.getDataToSharedPref(key: 'accessBusDate');
 
-                                      final lineid =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'lineid');
-                                      final serviceTypeID =
-                                          CacheHelper.getDataToSharedPref(
-                                              key: 'serviceTypeID');
+                                      final lineid = CacheHelper.getDataToSharedPref(key: 'lineid');
+                                      final serviceTypeID = CacheHelper.getDataToSharedPref(key: 'serviceTypeID');
 
-                                      TripReservationList trip =
-                                          TripReservationList(
-                                              busId: Ticketreservation.busid1,
-                                              discount:
-                                                  (totaldiscount) // Use totaldiscount
-                                                      .toString(),
-                                              fromStationId: fromStationId,
-                                              lineId: lineid,
-                                              price: afterdiscount,
-                                              seatIds:
-                                                  Ticketreservation.countSeats1,
-                                              serviceTypeId: serviceTypeID,
-                                              toStationId: toStationId,
-                                              tripDate: DateTime.parse(busdate),
-                                              tripId:
-                                                  Ticketreservation.tripid1);
+                                      TripReservationList trip = TripReservationList(
+                                          busId: Ticketreservation.busid1,
+                                          discount: (totaldiscount) // Use totaldiscount
+                                              .toString(),
+                                          fromStationId: fromStationId,
+                                          lineId: lineid,
+                                          price: afterdiscount,
+                                          seatIds: Ticketreservation.countSeats1,
+                                          serviceTypeId: serviceTypeID,
+                                          toStationId: toStationId,
+                                          tripDate: DateTime.parse(busdate),
+                                          tripId: Ticketreservation.tripid1);
 
                                       Routes.resrvedtrips.add(trip);
 
@@ -2178,12 +2144,10 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MultiBlocProvider(
+                                              builder: (context) => MultiBlocProvider(
                                                 providers: [
                                                   BlocProvider<LoginCubit>(
-                                                    create: (context) =>
-                                                        sl<LoginCubit>(),
+                                                    create: (context) => sl<LoginCubit>(),
                                                   ),
                                                 ],
                                                 child: LoginScreen(
@@ -2195,14 +2159,11 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                BlocProvider<ReservationCubit>(
-                                              create: (context) =>
-                                                  ReservationCubit(),
+                                            builder: (context) => BlocProvider<ReservationCubit>(
+                                              create: (context) => ReservationCubit(),
                                               child: SelectPaymentScreen2(
-                                                  discount:
-                                                      (totaldiscount) // Use totaldiscount
-                                                          .toString(),
+                                                  discount: (totaldiscount) // Use totaldiscount
+                                                      .toString(),
                                                   promcodeid: promocodid,
                                                   user: Routes.user),
                                             ),
@@ -2213,15 +2174,10 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                   }
                                 : null,
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 40),
+                              padding: const EdgeInsets.symmetric(horizontal: 40),
                               child: Constants.customButton(
-                                  text: LanguageClass.isEnglish
-                                      ? "Reservation"
-                                      : "حجز",
-                                  color: accept
-                                      ? AppColors.primaryColor
-                                      : AppColors.darkGrey),
+                                  text: LanguageClass.isEnglish ? "Reservation" : "حجز",
+                                  color: accept ? AppColors.primaryColor : AppColors.darkGrey),
                             ))
                       ],
                     ),

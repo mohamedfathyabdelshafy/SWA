@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:swa/core/api/api_consumer.dart';
 import 'package:swa/core/api/end_points.dart';
 import 'package:swa/features/forgot_password/data/models/message_response_model.dart';
@@ -10,24 +11,22 @@ abstract class ForgotPasswordRemoteDataSource {
   Future<MessageResponseModel> submitPassword(SubmitPasswordParams params);
 }
 
-class ForgotPasswordRemoteDataSourceImpl
-    implements ForgotPasswordRemoteDataSource {
+class ForgotPasswordRemoteDataSourceImpl implements ForgotPasswordRemoteDataSource {
   final ApiConsumer apiConsumer;
   ForgotPasswordRemoteDataSourceImpl({required this.apiConsumer});
 
   @override
-  Future<MessageResponseModel> forgotPassword(
-      ForgotPasswordParams params) async {
-    final response = await apiConsumer
-        .get('${EndPoints.resetPassword}?email=${params.email}');
+  Future<MessageResponseModel> forgotPassword(ForgotPasswordParams params) async {
+    final response = await apiConsumer.get('${EndPoints.resetPassword}?email=${params.email}');
     return MessageResponseModel.fromJson(json.decode(response.body.toString()));
   }
 
   @override
-  Future<MessageResponseModel> submitPassword(
-      SubmitPasswordParams params) async {
+  Future<MessageResponseModel> submitPassword(SubmitPasswordParams params) async {
     final response = await apiConsumer.post(
         '${EndPoints.submitResetPassword}?userId=${params.userId}&code=${params.code}&newPassword=${params.newPassword}');
+
+    log("forgot password" + response.body.toString());
     return MessageResponseModel.fromJson(json.decode(response.body.toString()));
   }
 }

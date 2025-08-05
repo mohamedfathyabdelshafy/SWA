@@ -109,7 +109,8 @@ class _EmailscreenState extends State<Emailscreen> {
                             if (validator == null || validator.isEmpty) {
                               return LanguageClass.isEnglish ? "Enter Email" : "ادخل الايميل";
                             }
-                            String pattern = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+                            String pattern = r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+$";
+
                             RegExp regex = RegExp(pattern);
                             if (!regex.hasMatch(validator)) {
                               return LanguageClass.isEnglish ? "Your Email is invalid" : "هذا الايميل غير صالح";
