@@ -159,12 +159,6 @@ class _MyHomeState extends State<MyHome> {
     ) {
       // Requested tokens can be obtained here
 
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: Text("Token: ${token} end from _onToken"),
-        ),
-      );
       log("TokenEvent: " + token);
     }
 
@@ -217,12 +211,6 @@ class _MyHomeState extends State<MyHome> {
 
       print("EVENT INITIATED");
 
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: Text("Token: ${_token} end from _onToken"),
-        ),
-      );
       print("TokenEvent: " + _token);
     }
 
