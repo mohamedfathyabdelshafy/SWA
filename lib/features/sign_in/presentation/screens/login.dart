@@ -39,10 +39,10 @@ class LoginScreen extends StatelessWidget {
           child: Form(
             key: formKey,
             child: SingleChildScrollView(
+              padding: EdgeInsets.zero,
               child: SizedBox(
                 height: sizeHeight,
-                child: ListView(
-                  padding: EdgeInsets.zero,
+                child: Column(
                   children: [
                     SizedBox(
                       height: 30,
@@ -139,6 +139,8 @@ class LoginScreen extends StatelessWidget {
                                   context, Routes.home, (route) => false,
                                   arguments: Routes.isomra);
                             }
+
+                            log("A7777777a ${state.userResponse.user!.customerId}");
 
                             Routes.customerid =
                                 state.userResponse.user!.customerId;

@@ -27,7 +27,8 @@ class TimesTripsResponse {
     status = json["status"];
 
     if (status == "success") {
-      message = json["message"] == null ? null : Message.fromJson(json["message"]);
+      message =
+          json["message"] == null ? null : Message.fromJson(json["message"]);
     } else {
       failureMessage = json["message"];
     }
@@ -40,19 +41,24 @@ class TimesTripsResponse {
 }
 
 class Message {
-  Message({
-    required this.tripList,
-    required this.tripListBack,
-    required this.fromStationIdGo,
-    required this.toStationIdGo,
-    required this.tripDateGo,
-    required this.fromStationIdBack,
-    required this.toStationIdBack,
-    required this.tripDateBack,
-  });
+  Message(
+      {required this.tripList,
+      required this.tripListBack,
+      required this.fromStationIdGo,
+      required this.toStationIdGo,
+      required this.tripDateGo,
+      required this.fromStationIdBack,
+      required this.toStationIdBack,
+      required this.tripDateBack,
+      this.timeSlotsBack,
+      this.timeSlotsGo});
 
   List<TripList> tripList;
   List<TripList> tripListBack;
+
+  List<TimeSlots>? timeSlotsGo;
+  List<TimeSlots>? timeSlotsBack;
+
   dynamic fromStationIdGo;
   dynamic toStationIdGo;
   dynamic tripDateGo;
@@ -62,12 +68,24 @@ class Message {
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-      tripList: json["TripList"] == null ? [] : List<TripList>.from(json["TripList"]!.map((x) => TripList.fromJson(x))),
+      tripList: json["TripList"] == null
+          ? []
+          : List<TripList>.from(
+              json["TripList"]!.map((x) => TripList.fromJson(x))),
       tripListBack: json["TripListBack"] == null
           ? []
-          : List<TripList>.from(json["TripListBack"]!.map((x) => TripList.fromJson(x))),
+          : List<TripList>.from(
+              json["TripListBack"]!.map((x) => TripList.fromJson(x))),
       fromStationIdGo: json["FromStationIDGo"],
       toStationIdGo: json["ToStationIDGo"],
+      timeSlotsGo: json["TimeSlotsGo"] == null
+          ? []
+          : List<TimeSlots>.from(
+              json["TimeSlotsGo"]!.map((x) => TimeSlots.fromJson(x))),
+      timeSlotsBack: json["TimeSlotsBack"] == null
+          ? []
+          : List<TimeSlots>.from(
+              json["TimeSlotsBack"]!.map((x) => TimeSlots.fromJson(x))),
       tripDateGo: json["TripDateGo"],
       fromStationIdBack: json["FromStationIDBack"],
       toStationIdBack: json["ToStationIDBack"],
@@ -144,6 +162,13 @@ class TripList {
     required this.currencySymbole,
     required this.discount,
     required this.isArabic,
+    this.companyName,
+    this.logo,
+    this.IsSPonsored,
+    this.IsCheapeast,
+    this.IsBestValue,
+    this.BusPhotos,
+    this.imageMap,
   });
 
   dynamic fromStationId;
@@ -198,6 +223,7 @@ class TripList {
   int? emptySeat;
   int? countryId;
   dynamic price;
+  dynamic imageMap;
   List<dynamic> busList;
   List<dynamic> tripTypeList;
   List<dynamic> lineList;
@@ -211,7 +237,13 @@ class TripList {
   dynamic currencyName;
   dynamic currencySymbole;
   dynamic discount;
+  String? companyName;
+  String? logo;
+  bool? IsSPonsored;
+  bool? IsCheapeast;
+  bool? IsBestValue;
   bool? isArabic;
+  List<String>? BusPhotos;
 
   factory TripList.fromJson(Map<String, dynamic> json) {
     return TripList(
@@ -221,6 +253,7 @@ class TripList {
       toCityId: json["ToCityID"],
       arrivalDate: DateTime.tryParse(json["ArrivalDate"] ?? ""),
       tripId: json["TripId"],
+      imageMap: json["ImageMap"],
       accessBusTime: json["AccessBusTime"],
       busId: json["BusId"],
       busModel: json["BusModel"],
@@ -247,7 +280,9 @@ class TripList {
       busSupervisorId: json["BusSupervisorId"],
       busSupervisorManagerId: json["BusSupervisorManagerId"],
       officeId: json["OfficeID"],
-      settingList: json["SettingList"] == null ? [] : List<dynamic>.from(json["SettingList"]!.map((x) => x)),
+      settingList: json["SettingList"] == null
+          ? []
+          : List<dynamic>.from(json["SettingList"]!.map((x) => x)),
       isMoved: json["IsMoved"],
       moveTime: json["MoveTime"],
       confirmFromDriver: json["ConfirmFromDriver"],
@@ -267,22 +302,79 @@ class TripList {
       emptySeat: json["EmptySeat"],
       countryId: json["CountryID"],
       price: json["Price"],
-      busList: json["BusList"] == null ? [] : List<dynamic>.from(json["BusList"]!.map((x) => x)),
-      tripTypeList: json["TripTypeList"] == null ? [] : List<dynamic>.from(json["TripTypeList"]!.map((x) => x)),
-      lineList: json["LineList"] == null ? [] : List<dynamic>.from(json["LineList"]!.map((x) => x)),
-      serviceList: json["ServiceList"] == null ? [] : List<dynamic>.from(json["ServiceList"]!.map((x) => x)),
+      busList: json["BusList"] == null
+          ? []
+          : List<dynamic>.from(json["BusList"]!.map((x) => x)),
+      tripTypeList: json["TripTypeList"] == null
+          ? []
+          : List<dynamic>.from(json["TripTypeList"]!.map((x) => x)),
+      lineList: json["LineList"] == null
+          ? []
+          : List<dynamic>.from(json["LineList"]!.map((x) => x)),
+      serviceList: json["ServiceList"] == null
+          ? []
+          : List<dynamic>.from(json["ServiceList"]!.map((x) => x)),
       tripNumber: json["TripNumber"],
       priceAfterDiscount: json["PriceAfterDiscount"],
       pickupTime: json["PickupTime"],
       arrivalTime: json["ArrivalTime"],
-      lineCity: json["LineCity"] == null ? [] : List<LineCity>.from(json["LineCity"]!.map((x) => LineCity.fromJson(x))),
+      lineCity: json["LineCity"] == null
+          ? []
+          : List<LineCity>.from(
+              json["LineCity"]!.map((x) => LineCity.fromJson(x))),
       timeOfCustomerStation: json["TimeOfCustomerStation"],
       currencyName: json["CurrencyName"],
       currencySymbole: json["CurrencySymbole"],
       discount: json["Discount"],
       isArabic: json["IsArabic"],
+      companyName: json["CompanyName"],
+      logo: json["Logo"],
+      IsSPonsored: json["IsSPonsored"],
+      IsCheapeast: json["IsCheapeast"],
+      IsBestValue: json["IsBestValue"],
+      BusPhotos: json["BusPhotos"] == null
+          ? []
+          : List<String>.from(json["BusPhotos"]!.map((x) => x)),
     );
   }
+}
+
+class TimeSlots {
+  TimeSlots({
+    required this.startTime,
+    required this.endTime,
+    required this.display,
+    required this.hasTrips,
+    required this.tripCount,
+    required this.isSelected,
+  });
+
+  final String? startTime;
+  final String? endTime;
+  final String? display;
+  final bool? hasTrips;
+  final int? tripCount;
+  final bool? isSelected;
+
+  factory TimeSlots.fromJson(Map<String, dynamic> json) {
+    return TimeSlots(
+      startTime: json["StartTime"],
+      endTime: json["EndTime"],
+      display: json["Display"],
+      hasTrips: json["HasTrips"],
+      tripCount: json["TripCount"],
+      isSelected: json["IsSelected"],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        "StartTime": startTime,
+        "EndTime": endTime,
+        "Display": display,
+        "HasTrips": hasTrips,
+        "TripCount": tripCount,
+        "IsSelected": isSelected,
+      };
 }
 
 class LineCity {
@@ -348,13 +440,16 @@ class LineCity {
       isActive: json["IsActive"],
       lineStationList: json["LineStationList"] == null
           ? []
-          : List<LineStationList>.from(json["LineStationList"]!.map((x) => LineStationList.fromJson(x))),
+          : List<LineStationList>.from(
+              json["LineStationList"]!.map((x) => LineStationList.fromJson(x))),
       governorateId: json["GovernorateID"],
       lineId: json["LineID"],
       partnerId: json["PartnerID"],
       lineName: json["LineName"],
       stationIdList: json["StationIDList"],
-      stationList: json["StationList"] == null ? [] : List<dynamic>.from(json["StationList"]!.map((x) => x)),
+      stationList: json["StationList"] == null
+          ? []
+          : List<dynamic>.from(json["StationList"]!.map((x) => x)),
       cityName: json["CityName"],
       userLogInId: json["UserLogInID"],
       lineType: json["LineType"],
@@ -392,6 +487,8 @@ class LineStationList {
     required this.countryId,
     required this.accessTime,
     required this.isArabic,
+    this.companyName,
+    this.logo,
   });
 
   int? lineCityStationId;
@@ -419,6 +516,8 @@ class LineStationList {
   int? afterMins;
   int? countryId;
   String? accessTime;
+  String? companyName;
+  String? logo;
   bool? isArabic;
 
   factory LineStationList.fromJson(Map<String, dynamic> json) {
@@ -436,7 +535,8 @@ class LineStationList {
       cityId: json["CityID"],
       cityName: json["CityName"],
       afterMinuts: json["AfterMinuts"],
-      station: json["Station"] == null ? null : Station.fromJson(json["Station"]),
+      station:
+          json["Station"] == null ? null : Station.fromJson(json["Station"]),
       accessPoinName: json["AccessPoinName"],
       createdBy: json["CreatedBy"],
       creationDate: DateTime.tryParse(json["CreationDate"] ?? ""),
@@ -449,6 +549,8 @@ class LineStationList {
       countryId: json["CountryID"],
       accessTime: json["AccessTime"],
       isArabic: json["IsArabic"],
+      companyName: json["CompanyName"],
+      logo: json["Logo"],
     );
   }
 }
@@ -535,11 +637,18 @@ class Station {
       city: json["City"],
       governorate: json["Governorate"],
       country: json["Country"],
-      cityList: json["CityList"] == null ? [] : List<dynamic>.from(json["CityList"]!.map((x) => x)),
-      countryList: json["CountryList"] == null ? [] : List<dynamic>.from(json["CountryList"]!.map((x) => x)),
-      governorateList:
-          json["GovernorateList"] == null ? [] : List<dynamic>.from(json["GovernorateList"]!.map((x) => x)),
-      universityList: json["UniversityList"] == null ? [] : List<dynamic>.from(json["UniversityList"]!.map((x) => x)),
+      cityList: json["CityList"] == null
+          ? []
+          : List<dynamic>.from(json["CityList"]!.map((x) => x)),
+      countryList: json["CountryList"] == null
+          ? []
+          : List<dynamic>.from(json["CountryList"]!.map((x) => x)),
+      governorateList: json["GovernorateList"] == null
+          ? []
+          : List<dynamic>.from(json["GovernorateList"]!.map((x) => x)),
+      universityList: json["UniversityList"] == null
+          ? []
+          : List<dynamic>.from(json["UniversityList"]!.map((x) => x)),
       isDeleted: json["IsDeleted"],
       createdBy: json["CreatedBy"],
       creationDate: DateTime.tryParse(json["CreationDate"] ?? ""),
@@ -548,8 +657,9 @@ class Station {
       updateDate: DateTime.tryParse(json["UpdateDate"] ?? ""),
       nameAr: json["NameAr"],
       nameEn: json["NameEn"],
-      stationTypeList:
-          json["StationTypeList"] == null ? [] : List<dynamic>.from(json["StationTypeList"]!.map((x) => x)),
+      stationTypeList: json["StationTypeList"] == null
+          ? []
+          : List<dynamic>.from(json["StationTypeList"]!.map((x) => x)),
       stationTypeId: json["StationTypeID"],
       stationType: json["StationType"],
     );

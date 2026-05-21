@@ -73,7 +73,8 @@ class _SelectappScreenState extends State<SelectappScreen> {
 
     super.initState();
     packagesBloc.add(selectappevent());
-    BlocProvider.of<GetAvailableCountriesCubit>(context).getAvailableCountries();
+    BlocProvider.of<GetAvailableCountriesCubit>(context)
+        .getAvailableCountries();
     // determinePosition(context).then((value) {
     //
     // });
@@ -357,7 +358,8 @@ class _SelectappScreenState extends State<SelectappScreen> {
               if (state is GetAvailableCountriesLoadedState) {
                 await determinePosition(context, state.countries).then(
                   (value) async {
-                    LocationPermission permission = await Geolocator.checkPermission();
+                    LocationPermission permission =
+                        await Geolocator.checkPermission();
 
                     if (permission == LocationPermission.denied ||
                         permission == LocationPermission.deniedForever ||
@@ -372,8 +374,10 @@ class _SelectappScreenState extends State<SelectappScreen> {
                         Navigator.pushAndRemoveUntil(
                           navigatorKey.currentContext!,
                           MaterialPageRoute(
-                              builder: (context) => BlocProvider<GetAvailableCountriesCubit>(
-                                    create: (context) => sl<GetAvailableCountriesCubit>(),
+                              builder: (context) =>
+                                  BlocProvider<GetAvailableCountriesCubit>(
+                                    create: (context) =>
+                                        sl<GetAvailableCountriesCubit>(),
                                     child: CountryListScreen(),
                                   )),
                           (route) => false,
@@ -383,8 +387,10 @@ class _SelectappScreenState extends State<SelectappScreen> {
                   },
                 );
 
-                final countryId = CacheHelper.getDataToSharedPref(key: 'countryid');
-                final flag = CacheHelper.getDataToSharedPref(key: 'countryflag');
+                final countryId =
+                    CacheHelper.getDataToSharedPref(key: 'countryid');
+                final flag =
+                    CacheHelper.getDataToSharedPref(key: 'countryflag');
 
                 if (countryId != null && flag != null) {
                   final selectedCountry = state.countries.firstWhere(
@@ -397,7 +403,9 @@ class _SelectappScreenState extends State<SelectappScreen> {
                         curruncy: state.countries.first.curruncy),
                   );
 
-                  Routes.curruncy = CacheHelper.getDataToSharedPref(key: 'curruncycode') ?? selectedCountry.curruncy;
+                  Routes.curruncy =
+                      CacheHelper.getDataToSharedPref(key: 'curruncycode') ??
+                          selectedCountry.curruncy;
                   Routes.country = selectedCountry.countryName;
                   Routes.countryflag = selectedCountry.Flag;
 
@@ -427,7 +435,10 @@ class _SelectappScreenState extends State<SelectappScreen> {
                       ),
                       Text(
                         state.selectappmodel?.message?.title ?? '',
-                        style: fontStyle(color: Colors.black, fontFamily: FontFamily.bold, fontSize: 24),
+                        style: fontStyle(
+                            color: Colors.black,
+                            fontFamily: FontFamily.bold,
+                            fontSize: 24),
                       ),
                       Spacer(),
                       state.selectappmodel?.message != null
@@ -435,71 +446,109 @@ class _SelectappScreenState extends State<SelectappScreen> {
                               scrollDirection: Axis.vertical,
                               shrinkWrap: true,
                               physics: ScrollPhysics(),
-                              itemCount: state.selectappmodel!.message!.appList!.length,
+                              itemCount: state
+                                  .selectappmodel!.message!.appList!.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return Padding(
                                   padding: EdgeInsets.only(bottom: 50.h),
                                   child: InkWell(
                                     onTap: () {
-                                      var countryId = CacheHelper.getDataToSharedPref(
-                                            key: 'countryid',
-                                          ) ??
-                                          "3";
+                                      var countryId =
+                                          CacheHelper.getDataToSharedPref(
+                                                key: 'countryid',
+                                              ) ??
+                                              "3";
                                       if (countryId != null) {
-                                        if (state.selectappmodel!.message!.appList![index].orderIndex == 1) {
+                                        if (state.selectappmodel!.message!
+                                                .appList![index].orderIndex ==
+                                            1) {
                                           Routes.isomra = false;
 
                                           Navigator.pushAndRemoveUntil(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) => MultiBlocProvider(providers: [
-                                                      BlocProvider<LoginCubit>(
-                                                        create: (context) => sl<LoginCubit>(),
-                                                      ),
-                                                      BlocProvider<PackagesBloc>(
-                                                        create: (context) => PackagesBloc(),
-                                                      ),
-                                                      BlocProvider<FawryReservation>(
-                                                        create: (context) => sl<FawryReservation>(),
-                                                      ),
-                                                      BlocProvider<GetAvailableCountriesCubit>(
-                                                        create: (context) => sl<GetAvailableCountriesCubit>(),
-                                                      ),
-                                                      BlocProvider<HomeCubit>(
-                                                        create: (context) => sl<HomeCubit>(),
-                                                      ),
-                                                      BlocProvider<TimesTripsCubit>(
-                                                          create: (context) => sl<TimesTripsCubit>()),
-                                                      BlocProvider<TicketCubit>(create: (context) => sl<TicketCubit>()),
-                                                    ], child: MyHome())),
+                                                builder: (context) =>
+                                                    MultiBlocProvider(
+                                                        providers: [
+                                                          BlocProvider<
+                                                              LoginCubit>(
+                                                            create: (context) =>
+                                                                sl<LoginCubit>(),
+                                                          ),
+                                                          BlocProvider<
+                                                              PackagesBloc>(
+                                                            create: (context) =>
+                                                                PackagesBloc(),
+                                                          ),
+                                                          BlocProvider<
+                                                              FawryReservation>(
+                                                            create: (context) =>
+                                                                sl<FawryReservation>(),
+                                                          ),
+                                                          BlocProvider<
+                                                              GetAvailableCountriesCubit>(
+                                                            create: (context) =>
+                                                                sl<GetAvailableCountriesCubit>(),
+                                                          ),
+                                                          BlocProvider<
+                                                              HomeCubit>(
+                                                            create: (context) =>
+                                                                sl<HomeCubit>(),
+                                                          ),
+                                                          BlocProvider<
+                                                                  TimesTripsCubit>(
+                                                              create: (context) =>
+                                                                  sl<TimesTripsCubit>()),
+                                                          BlocProvider<
+                                                                  TicketCubit>(
+                                                              create: (context) =>
+                                                                  sl<TicketCubit>()),
+                                                        ],
+                                                        child: MyHome())),
                                             (route) => false,
                                           );
-                                        } else if (state.selectappmodel!.message!.appList![index].orderIndex == 2) {
+                                        } else if (state
+                                                .selectappmodel!
+                                                .message!
+                                                .appList![index]
+                                                .orderIndex ==
+                                            2) {
                                           Routes.isomra = true;
 
                                           Navigator.pushAndRemoveUntil(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => MultiBlocProvider(
+                                              builder: (context) =>
+                                                  MultiBlocProvider(
                                                 providers: [
                                                   BlocProvider<LoginCubit>(
-                                                    create: (context) => sl<LoginCubit>(),
+                                                    create: (context) =>
+                                                        sl<LoginCubit>(),
                                                   ),
                                                   BlocProvider<PackagesBloc>(
-                                                    create: (context) => PackagesBloc(),
+                                                    create: (context) =>
+                                                        PackagesBloc(),
                                                   ),
-                                                  BlocProvider<FawryReservation>(
-                                                    create: (context) => sl<FawryReservation>(),
+                                                  BlocProvider<
+                                                      FawryReservation>(
+                                                    create: (context) =>
+                                                        sl<FawryReservation>(),
                                                   ),
-                                                  BlocProvider<GetAvailableCountriesCubit>(
-                                                    create: (context) => sl<GetAvailableCountriesCubit>(),
+                                                  BlocProvider<
+                                                      GetAvailableCountriesCubit>(
+                                                    create: (context) => sl<
+                                                        GetAvailableCountriesCubit>(),
                                                   ),
                                                   BlocProvider<HomeCubit>(
-                                                    create: (context) => sl<HomeCubit>(),
+                                                    create: (context) =>
+                                                        sl<HomeCubit>(),
                                                   ),
                                                   BlocProvider<TimesTripsCubit>(
-                                                      create: (context) => sl<TimesTripsCubit>()),
-                                                  BlocProvider<TicketCubit>(create: (context) => sl<TicketCubit>()),
+                                                      create: (context) => sl<
+                                                          TimesTripsCubit>()),
+                                                  BlocProvider<TicketCubit>(
+                                                      create: (context) =>
+                                                          sl<TicketCubit>()),
                                                 ],
                                                 child: SelectUmratypeScreen(),
                                               ),
@@ -518,24 +567,36 @@ class _SelectappScreenState extends State<SelectappScreen> {
                                       }
                                     },
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Container(
                                           width: 156.w,
                                           height: 156.w,
-                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(16)),
                                           alignment: Alignment.center,
                                           child: Image.network(
-                                            state.selectappmodel!.message!.appList![index].image!,
+                                            state.selectappmodel!.message!
+                                                .appList![index].image!,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
                                         5.verticalSpace,
                                         Text(
-                                          state.selectappmodel?.message?.appList?[index].description ?? '',
+                                          state
+                                                  .selectappmodel
+                                                  ?.message
+                                                  ?.appList?[index]
+                                                  .description ??
+                                              '',
                                           style: fontStyle(
-                                              color: Color(0xffa3a3a3), fontFamily: FontFamily.medium, fontSize: 13.sp),
+                                              color: Color(0xffa3a3a3),
+                                              fontFamily: FontFamily.medium,
+                                              fontSize: 13.sp),
                                         ),
                                       ],
                                     ),

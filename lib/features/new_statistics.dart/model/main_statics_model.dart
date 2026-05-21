@@ -23,7 +23,8 @@ class MainStaticsModel {
     return MainStaticsModel(
       data: json["data"],
       status: json["status"],
-      message: json["message"] == null ? null : Message.fromJson(json["message"]),
+      message:
+          json["message"] == null ? null : Message.fromJson(json["message"]),
       balance: json["balance"],
       object: json["Object"],
       text: json["Text"],

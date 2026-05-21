@@ -44,11 +44,12 @@ dependencies:
   html_unescape: ^2.0.0
   http: null
   http_interceptor: null
-  huawei_push: ^6.12.0+303
+  huawei_push: ^6.13.0+300
+#  huawei_push: ^6.12.0+303
   indexed: ^0.0.8
   injectable: null
   internet_connection_checker: null
-  intl: ^0.19.0
+  intl: any
   intl_phone_field: ^3.2.0
   jhijri_picker: ^1.0.1
   lottie: ^2.7.0
@@ -67,6 +68,8 @@ dependencies:
   sizer: ^3.0.5
   url_launcher: ^6.0.13
   webview_flutter: ^4.4.2
+  google_maps_flutter: ^2.14.0
+  flutter_polyline_points: ^3.1.0
 book_my_seat: null
 dev_dependencies:
   flutter_lints: ^5.0.0

@@ -42,7 +42,8 @@ import 'features/times_trips/times_trips_injection_container.dart';
 
 final sl = GetIt.instance;
 
-final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -82,7 +83,8 @@ Future<void> main() async {
   await dependencyInjectionInit();
   //For initializing network info and shared preferences
   await CacheHelper.init();
-  LanguageClass.isEnglish = await CacheHelper.getDataToSharedPref(key: 'language') ?? true;
+  LanguageClass.isEnglish =
+      await CacheHelper.getDataToSharedPref(key: 'language') ?? true;
   await CacheHelper.deleteDataToSharedPref(key: 'tripOneId');
   await CacheHelper.deleteDataToSharedPref(key: 'tripRoundId');
   await CacheHelper.deleteDataToSharedPref(key: 'countSeats');
@@ -121,15 +123,21 @@ class MyApp extends StatelessWidget {
           return MultiBlocProvider(
             providers: [
               BlocProvider<PaymentMethodsCubit>(
-                create: (context) => PaymentMethodsCubit(sl<PaymentMethodsRepo>(), sl<MyWalletRepo>())..init(),
+                create: (context) => PaymentMethodsCubit(
+                    sl<PaymentMethodsRepo>(), sl<MyWalletRepo>())
+                  ..init(),
               ),
               BlocProvider<WalletCubit>(
-                create: (context) => WalletCubit(MyWalletRepo(sl<ApiConsumer>()), PackagesRespo()),
+                create: (context) => WalletCubit(
+                    MyWalletRepo(sl<ApiConsumer>()), PackagesRespo()),
               ),
               BlocProvider<NotificationBloc>(
-                create: (context) => NotificationBloc()..add(getNotificationlist()),
+                create: (context) =>
+                    NotificationBloc()..add(getNotificationlist()),
               ),
-              BlocProvider(create: (context) => RegisterCubit(registerUserUseCase: sl())),
+              BlocProvider(
+                  create: (context) =>
+                      RegisterCubit(registerUserUseCase: sl())),
             ],
             child: MaterialApp(
               localizationsDelegates: [GlobalMaterialLocalizations.delegate],

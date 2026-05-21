@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:swa/core/utils/language.dart';
 
 const dynamic enFontRegular = 'regular';
-const dynamic enFontBold = 'bold';
+const dynamic enFontBold = 'meduim';
+// const dynamic enFontBold = 'bold';
 const dynamic enFontLight = 'English_Black';
 const dynamic enFontMediuem = 'meduim';
 
 const dynamic arFontMedium = "Arabic_Medium";
-const dynamic arFontBold = "Arabic_Bold";
+const dynamic arFontBold = "Arabic_Medium";
+// const dynamic arFontBold = "Arabic_Bold";
 const dynamic arFontRegular = "Arabic_Regular";
 
 enum FontFamily { regular, bold, medium, arFontMedium }
@@ -44,7 +46,7 @@ TextStyle fontStyle(
     color: color,
     overflow: overflow,
     decoration: decoration ?? null,
-    height: 1.2,
+    height: height ?? 1.2,
     fontWeight: fontWeight,
   );
 }
