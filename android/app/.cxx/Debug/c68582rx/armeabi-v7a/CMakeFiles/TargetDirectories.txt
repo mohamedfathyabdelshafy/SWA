@@ -1,0 +1,2 @@
+D:/DMJ/DMJ Projects Last/SWA/Mobile Code/SWA/android/app/.cxx/Debug/c68582rx/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/DMJ/DMJ Projects Last/SWA/Mobile Code/SWA/android/app/.cxx/Debug/c68582rx/armeabi-v7a/CMakeFiles/rebuild_cache.dir
