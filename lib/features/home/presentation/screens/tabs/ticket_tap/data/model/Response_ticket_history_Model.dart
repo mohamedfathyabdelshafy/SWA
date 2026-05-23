@@ -1,5 +1,11 @@
 class ResponseTicketHistoryModel {
-  ResponseTicketHistoryModel({this.status, this.message, this.balance, this.object, this.obj, this.errorMassage});
+  ResponseTicketHistoryModel(
+      {this.status,
+      this.message,
+      this.balance,
+      this.object,
+      this.obj,
+      this.errorMassage});
 
   ResponseTicketHistoryModel.fromJson(dynamic json) {
     status = json['status'];
@@ -26,64 +32,6 @@ class ResponseTicketHistoryModel {
 }
 
 class Message {
-  Message(
-      {this.seatBusNo,
-      this.reservationId,
-      this.tripId,
-      this.lineName,
-      this.busId,
-      this.plateNo,
-      this.status,
-      this.from,
-      this.to,
-      this.creationDate,
-      this.price,
-      this.seatNo,
-      this.seatNumberReserved,
-      this.ticketNumber,
-      this.tripNumber,
-      this.fromStationID,
-      this.toStationID,
-      this.tripDate,
-      this.accessBusTime,
-      this.tripType,
-      this.seatNoList,
-      this.statusName,
-      this.isPaid,
-      this.reservationDate,
-      this.CanEditOrCancel,
-      this.Penalty,
-      this.servecietype});
-
-  Message.fromJson(dynamic json) {
-    seatBusNo = json['SeatBusNo'];
-    reservationId = json['ReservationID'];
-    tripId = json['TripID'];
-    lineName = json['LineName'];
-    busId = json['BusID'];
-    seatNoList = json['SeatNoList'];
-    plateNo = json['PlateNo'];
-    status = json['Status'];
-    from = json['From'];
-    to = json['To'];
-    creationDate = DateTime.parse(json["CreationDate"]);
-    price = json['Price'];
-    seatNo = json['SeatNo'];
-    seatNumberReserved = json['SeatNumberReserved'];
-    ticketNumber = json['TicketNumber'];
-    tripNumber = json['TripNumber'];
-    fromStationID = json['FromStationID'];
-    toStationID = json['ToStationID'];
-    servecietype = json['ServiceType'] ?? '';
-    tripDate = DateTime.parse(json["TripDate"]);
-    accessBusTime = json['AccessBusTime'];
-    tripType = json['TripType'];
-    statusName = json['StatusName'];
-    reservationDate = DateTime.parse(json["ReservationDate"]);
-    isPaid = json["IsPaid"];
-    CanEditOrCancel = json['CanEditOrCancel'];
-    Penalty = json['Penalty'] ?? 0.0;
-  }
   String? phoneNumber;
   String? customerName;
   dynamic seatBusNo;
@@ -114,4 +62,69 @@ class Message {
   bool? isPaid;
   bool? CanEditOrCancel;
   dynamic Penalty;
+  String? companyName;
+  String? logo;
+  Message({
+    this.seatBusNo,
+    this.reservationId,
+    this.tripId,
+    this.lineName,
+    this.busId,
+    this.plateNo,
+    this.status,
+    this.from,
+    this.to,
+    this.creationDate,
+    this.price,
+    this.seatNo,
+    this.seatNumberReserved,
+    this.ticketNumber,
+    this.tripNumber,
+    this.fromStationID,
+    this.toStationID,
+    this.tripDate,
+    this.accessBusTime,
+    this.tripType,
+    this.seatNoList,
+    this.statusName,
+    this.isPaid,
+    this.reservationDate,
+    this.CanEditOrCancel,
+    this.Penalty,
+    this.servecietype,
+    this.companyName,
+    this.logo,
+  });
+
+  Message.fromJson(dynamic json) {
+    seatBusNo = json['SeatBusNo'];
+    reservationId = json['ReservationID'];
+    tripId = json['TripID'];
+    lineName = json['LineName'];
+    busId = json['BusID'];
+    seatNoList = json['SeatNoList'];
+    plateNo = json['PlateNo'];
+    status = json['Status'];
+    from = json['From'];
+    to = json['To'];
+    creationDate = DateTime.parse(json["CreationDate"]);
+    price = json['Price'];
+    seatNo = json['SeatNo'];
+    seatNumberReserved = json['SeatNumberReserved'];
+    ticketNumber = json['TicketNumber'];
+    tripNumber = json['TripNumber'];
+    fromStationID = json['FromStationID'];
+    toStationID = json['ToStationID'];
+    servecietype = json['ServiceType'] ?? '';
+    tripDate = DateTime.parse(json["TripDate"]);
+    accessBusTime = json['AccessBusTime'];
+    tripType = json['TripType'];
+    statusName = json['StatusName'];
+    reservationDate = DateTime.parse(json["ReservationDate"]);
+    isPaid = json["IsPaid"];
+    CanEditOrCancel = json['CanEditOrCancel'];
+    Penalty = json['Penalty'] ?? 0.0;
+    companyName = json["CompanyName"];
+    logo = json["Logo"];
+  }
 }

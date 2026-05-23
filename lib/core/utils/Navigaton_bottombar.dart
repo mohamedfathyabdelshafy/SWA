@@ -43,9 +43,14 @@ class _NavigationbottombarState extends State<Navigationbottombar> {
       children: [
         Container(
           alignment: Alignment.bottomCenter,
-          margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+          margin: EdgeInsets.only(
+              left: 20,
+              right: 20,
+              // bottom: 10 ,
+              bottom: MediaQuery.of(context).viewPadding.bottom),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(41), color: Routes.isomra ? AppColors.umragold : Color(0xffFF5D4B)),
+              borderRadius: BorderRadius.circular(41),
+              color: Routes.isomra ? AppColors.umragold : Color(0xffFF5D4B)),
           transformAlignment: Alignment.center,
           child: SalomonBottomBar(
             duration: Duration(microseconds: 200),
@@ -75,15 +80,21 @@ class _NavigationbottombarState extends State<Navigationbottombar> {
                                     create: (context) => sl<FawryReservation>(),
                                   ),
                                   BlocProvider<GetAvailableCountriesCubit>(
-                                    create: (context) => sl<GetAvailableCountriesCubit>(),
+                                    create: (context) =>
+                                        sl<GetAvailableCountriesCubit>(),
                                   ),
                                   BlocProvider<HomeCubit>(
                                     create: (context) => sl<HomeCubit>(),
                                   ),
-                                  BlocProvider<TimesTripsCubit>(create: (context) => sl<TimesTripsCubit>()),
-                                  BlocProvider<TicketCubit>(create: (context) => sl<TicketCubit>()),
+                                  BlocProvider<TimesTripsCubit>(
+                                      create: (context) =>
+                                          sl<TimesTripsCubit>()),
+                                  BlocProvider<TicketCubit>(
+                                      create: (context) => sl<TicketCubit>()),
                                 ],
-                                child: Routes.isomra ? SelectUmratypeScreen() : MyHome(),
+                                child: Routes.isomra
+                                    ? SelectUmratypeScreen()
+                                    : MyHome(),
                               )),
                       (route) => false,
                     );
@@ -105,15 +116,21 @@ class _NavigationbottombarState extends State<Navigationbottombar> {
                                     create: (context) => sl<FawryReservation>(),
                                   ),
                                   BlocProvider<GetAvailableCountriesCubit>(
-                                    create: (context) => sl<GetAvailableCountriesCubit>(),
+                                    create: (context) =>
+                                        sl<GetAvailableCountriesCubit>(),
                                   ),
                                   BlocProvider<HomeCubit>(
                                     create: (context) => sl<HomeCubit>(),
                                   ),
-                                  BlocProvider<TimesTripsCubit>(create: (context) => sl<TimesTripsCubit>()),
-                                  BlocProvider<TicketCubit>(create: (context) => sl<TicketCubit>()),
+                                  BlocProvider<TimesTripsCubit>(
+                                      create: (context) =>
+                                          sl<TimesTripsCubit>()),
+                                  BlocProvider<TicketCubit>(
+                                      create: (context) => sl<TicketCubit>()),
                                 ],
-                                child: Routes.isomra ? UmraBookedScreen() : TicketHistory(user: Routes.user),
+                                child: Routes.isomra
+                                    ? UmraBookedScreen()
+                                    : TicketHistory(user: Routes.user),
                               )),
                       (route) => false,
                     );
@@ -151,13 +168,17 @@ class _NavigationbottombarState extends State<Navigationbottombar> {
                                     create: (context) => sl<FawryReservation>(),
                                   ),
                                   BlocProvider<GetAvailableCountriesCubit>(
-                                    create: (context) => sl<GetAvailableCountriesCubit>(),
+                                    create: (context) =>
+                                        sl<GetAvailableCountriesCubit>(),
                                   ),
                                   BlocProvider<HomeCubit>(
                                     create: (context) => sl<HomeCubit>(),
                                   ),
-                                  BlocProvider<TimesTripsCubit>(create: (context) => sl<TimesTripsCubit>()),
-                                  BlocProvider<TicketCubit>(create: (context) => sl<TicketCubit>()),
+                                  BlocProvider<TimesTripsCubit>(
+                                      create: (context) =>
+                                          sl<TimesTripsCubit>()),
+                                  BlocProvider<TicketCubit>(
+                                      create: (context) => sl<TicketCubit>()),
                                 ],
                                 child: MoreScreen(),
                               )),
@@ -185,7 +206,10 @@ class _NavigationbottombarState extends State<Navigationbottombar> {
                   padding: const EdgeInsets.only(top: 2),
                   child: Text(
                     LanguageClass.isEnglish ? "Book Now" : "حجز الان",
-                    style: fontStyle(color: Colors.black, fontSize: 13, fontFamily: FontFamily.bold),
+                    style: fontStyle(
+                        color: Colors.black,
+                        fontSize: 13,
+                        fontFamily: FontFamily.bold),
                   ),
                 ),
                 selectedColor: Colors.white,
@@ -203,7 +227,10 @@ class _NavigationbottombarState extends State<Navigationbottombar> {
                 ),
                 title: Text(
                   LanguageClass.isEnglish ? "Ticket" : "تذكرة",
-                  style: fontStyle(color: Colors.black, fontSize: 13, fontFamily: FontFamily.bold),
+                  style: fontStyle(
+                      color: Colors.black,
+                      fontSize: 13,
+                      fontFamily: FontFamily.bold),
                 ),
                 selectedColor: Colors.white,
               ),
@@ -220,7 +247,10 @@ class _NavigationbottombarState extends State<Navigationbottombar> {
                 ),
                 title: Text(
                   LanguageClass.isEnglish ? "My account" : "حسابي",
-                  style: fontStyle(color: Colors.black, fontSize: 13, fontFamily: FontFamily.bold),
+                  style: fontStyle(
+                      color: Colors.black,
+                      fontSize: 13,
+                      fontFamily: FontFamily.bold),
                 ),
                 selectedColor: Colors.white,
               ),
@@ -237,7 +267,10 @@ class _NavigationbottombarState extends State<Navigationbottombar> {
                 ),
                 title: Text(
                   LanguageClass.isEnglish ? "More" : "المزيد",
-                  style: fontStyle(color: Colors.black, fontSize: 13, fontFamily: FontFamily.bold),
+                  style: fontStyle(
+                      color: Colors.black,
+                      fontSize: 13,
+                      fontFamily: FontFamily.bold),
                 ),
                 selectedColor: Colors.white,
               ),

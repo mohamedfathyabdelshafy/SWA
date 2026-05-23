@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
@@ -59,11 +60,13 @@ class _TicketHistoryState extends State<TicketHistory> {
   }
 
   get() async {
-    BlocProvider.of<TicketCubit>(context).getTicketHistory(customerId: widget.user?.customerId ?? 0);
+    BlocProvider.of<TicketCubit>(context)
+        .getTicketHistory(customerId: widget.user?.customerId ?? 0);
   }
 
   cancelticket(int id) async {
-    BlocProvider.of<TicketCubit>(context).cancelticket(id: id, customerId: widget.user?.customerId ?? 0);
+    BlocProvider.of<TicketCubit>(context)
+        .cancelticket(id: id, customerId: widget.user?.customerId ?? 0);
   }
 
   BusLayoutRepo busLayoutRepo = BusLayoutRepo(apiConsumer: (sl()));
@@ -78,13 +81,16 @@ class _TicketHistoryState extends State<TicketHistory> {
         bloc: BlocProvider.of<TicketCubit>(context),
         listener: (context, state) {
           if (state is Cancelticketstate) {
-            Constants.showDefaultSnackBar(context: context, color: Colors.green, text: state.message);
+            Constants.showDefaultSnackBar(
+                context: context, color: Colors.green, text: state.message);
 
-            BlocProvider.of<TicketCubit>(context).getTicketHistory(customerId: widget.user?.customerId ?? 0);
+            BlocProvider.of<TicketCubit>(context)
+                .getTicketHistory(customerId: widget.user?.customerId ?? 0);
 
             print("cancelled");
           } else if (state is CancelticketErrorstate) {
-            Constants.showDefaultSnackBar(context: context, color: Colors.red, text: state.errormessage);
+            Constants.showDefaultSnackBar(
+                context: context, color: Colors.red, text: state.errormessage);
           }
 
           if (state is LoadedTicketHistory) {
@@ -95,10 +101,12 @@ class _TicketHistoryState extends State<TicketHistory> {
             showGeneralDialog(
               context: context,
               barrierDismissible: true,
-              barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+              barrierLabel:
+                  MaterialLocalizations.of(context).modalBarrierDismissLabel,
               barrierColor: Colors.black.withOpacity(0.5),
               transitionDuration: const Duration(milliseconds: 200),
-              pageBuilder: (context, Animation<double> animation, Animation<double> secondaryAnimation) {
+              pageBuilder: (context, Animation<double> animation,
+                  Animation<double> secondaryAnimation) {
                 return Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Center(
@@ -131,19 +139,26 @@ class _TicketHistoryState extends State<TicketHistory> {
                                   ),
                                 ),
                                 state.message[0].contains('div')
-                                    ? SingleChildScrollView(child: Html(data: state.message[0]))
+                                    ? SingleChildScrollView(
+                                        child: Html(data: state.message[0]))
                                     : ListView.builder(
                                         shrinkWrap: true,
-                                        physics: const NeverScrollableScrollPhysics(),
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
                                         itemCount: state.message.length,
                                         itemBuilder: (context, int index) {
                                           return Container(
-                                            margin: const EdgeInsets.symmetric(horizontal: 5),
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 5),
                                             child: Text(
                                               "${index + 1}- ${state.message[index]}",
-                                              textAlign: LanguageClass.isEnglish ? TextAlign.left : TextAlign.right,
+                                              textAlign: LanguageClass.isEnglish
+                                                  ? TextAlign.left
+                                                  : TextAlign.right,
                                               textDirection:
-                                                  LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+                                                  LanguageClass.isEnglish
+                                                      ? TextDirection.ltr
+                                                      : TextDirection.rtl,
                                               style: fontStyle(
                                                 color: const Color(0xff818181),
                                                 fontSize: 14,
@@ -164,14 +179,17 @@ class _TicketHistoryState extends State<TicketHistory> {
                                             builder: (context) {
                                               return AlertDialog(
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(16),
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
                                                 ),
                                                 title: Text(
                                                   LanguageClass.isEnglish
                                                       ? 'Are you sure you want to cancel the ticket?'
                                                       : "هل أنت متأكد أنك تريد إلغاء التذكرة؟",
                                                   textDirection:
-                                                      LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+                                                      LanguageClass.isEnglish
+                                                          ? TextDirection.ltr
+                                                          : TextDirection.rtl,
                                                   style: fontStyle(
                                                     color: Colors.black,
                                                     fontSize: 20,
@@ -183,21 +201,37 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                     Expanded(
                                                       child: ElevatedButton(
                                                         onPressed: () {
-                                                          Navigator.pop(context);
-                                                          Navigator.pop(context);
-                                                          cancelticket(reservationid);
+                                                          Navigator.pop(
+                                                              context);
+                                                          Navigator.pop(
+                                                              context);
+                                                          cancelticket(
+                                                              reservationid);
                                                         },
-                                                        style: ElevatedButton.styleFrom(
-                                                          shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(12),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        12),
                                                           ),
-                                                          backgroundColor: AppColors.primaryColor,
+                                                          backgroundColor:
+                                                              AppColors
+                                                                  .primaryColor,
                                                         ),
                                                         child: Text(
-                                                          LanguageClass.isEnglish ? 'Yes' : 'نعم',
+                                                          LanguageClass
+                                                                  .isEnglish
+                                                              ? 'Yes'
+                                                              : 'نعم',
                                                           style: fontStyle(
-                                                            color: AppColors.white,
-                                                            fontFamily: FontFamily.medium,
+                                                            color:
+                                                                AppColors.white,
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
                                                             fontSize: 14.sp,
                                                           ),
                                                         ),
@@ -207,19 +241,32 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                     Expanded(
                                                       child: ElevatedButton(
                                                         onPressed: () {
-                                                          Navigator.pop(context);
+                                                          Navigator.pop(
+                                                              context);
                                                         },
-                                                        style: ElevatedButton.styleFrom(
-                                                          shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(12),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        12),
                                                           ),
-                                                          backgroundColor: AppColors.blue,
+                                                          backgroundColor:
+                                                              AppColors.blue,
                                                         ),
                                                         child: Text(
-                                                          LanguageClass.isEnglish ? 'No' : 'لا',
+                                                          LanguageClass
+                                                                  .isEnglish
+                                                              ? 'No'
+                                                              : 'لا',
                                                           style: fontStyle(
-                                                            color: AppColors.white,
-                                                            fontFamily: FontFamily.medium,
+                                                            color:
+                                                                AppColors.white,
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
                                                             fontSize: 14.sp,
                                                           ),
                                                         ),
@@ -233,14 +280,18 @@ class _TicketHistoryState extends State<TicketHistory> {
                                         },
                                         style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                           ),
-                                          backgroundColor: AppColors.primaryColor,
+                                          backgroundColor:
+                                              AppColors.primaryColor,
                                         ),
                                         child: FittedBox(
                                           fit: BoxFit.fitWidth,
                                           child: Text(
-                                            LanguageClass.isEnglish ? 'Cancel ticket' : 'إلغاء التذكرة',
+                                            LanguageClass.isEnglish
+                                                ? 'Cancel ticket'
+                                                : 'إلغاء التذكرة',
                                             style: fontStyle(
                                               color: AppColors.white,
                                               fontFamily: FontFamily.medium,
@@ -257,10 +308,12 @@ class _TicketHistoryState extends State<TicketHistory> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => MultiBlocProvider(
+                                              builder: (context) =>
+                                                  MultiBlocProvider(
                                                 providers: [
                                                   BlocProvider<BusLayoutCubit>(
-                                                    create: (context) => BusLayoutCubit(),
+                                                    create: (context) =>
+                                                        BusLayoutCubit(),
                                                   ),
                                                 ],
                                                 child: BusLayoutEditScreen(
@@ -278,14 +331,17 @@ class _TicketHistoryState extends State<TicketHistory> {
                                         },
                                         style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                           ),
                                           backgroundColor: AppColors.blue,
                                         ),
                                         child: FittedBox(
                                           fit: BoxFit.fitWidth,
                                           child: Text(
-                                            LanguageClass.isEnglish ? 'Edit ticket' : 'تعديل التذكرة',
+                                            LanguageClass.isEnglish
+                                                ? 'Edit ticket'
+                                                : 'تعديل التذكرة',
                                             style: fontStyle(
                                               color: AppColors.white,
                                               fontFamily: FontFamily.medium,
@@ -309,56 +365,174 @@ class _TicketHistoryState extends State<TicketHistory> {
             );
           }
           if (state is LoadedTicketdetails && !dawnload) {
-            showGeneralDialog(
-                context: context,
-                barrierDismissible: true,
-                barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-                barrierColor: Colors.black.withOpacity(0.5),
-                transitionDuration: const Duration(milliseconds: 200),
-                pageBuilder: (context, Animation<double> animation, Animation<double> secondaryAnimation) {
-                  return Material(
-                      color: Colors.transparent,
-                      child: Container(
-                        color: Colors.white,
-                        margin: EdgeInsets.all(20),
-                        padding: EdgeInsets.all(30),
-                        height: MediaQuery.of(context).size.height,
-                        width: MediaQuery.of(context).size.width - 50,
-                        child: Scrollbar(
-                          thumbVisibility: true,
-                          child: ListView(
+            showDialog(
+              context: context,
+              builder: (BuildContext buildContext) {
+                return Dialog(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0.0,
+                  insetPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+                  child: Directionality(
+                    textDirection: LanguageClass.isEnglish
+                        ? TextDirection.ltr
+                        : TextDirection.rtl,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+                        child: Container(
+                          constraints: BoxConstraints(
+                            maxHeight: MediaQuery.of(context).size.height * 0.8,
+                            maxWidth: MediaQuery.of(context).size.width * 0.9,
+                          ),
+                          decoration: BoxDecoration(
+                              // color: Colors.white
+                              //     .withValues(
+                              //         alpha: 0.7),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color:
+                                    AppColors.greyLight.withValues(alpha: 0.7),
+                              )),
+                          // margin:
+                          //     EdgeInsets.all(
+                          //         25),
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(
-                                LanguageClass.isEnglish ? 'Terms and conditions ' : "الشروط والأحكام",
-                                textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
-                                style: fontStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    LanguageClass.isEnglish
+                                        ? 'Terms & Conditions of Booking'
+                                        : "الشروط والأحكام",
+                                    textAlign: LanguageClass.isEnglish
+                                        ? TextAlign.left
+                                        : TextAlign.right,
+                                    textDirection: LanguageClass.isEnglish
+                                        ? TextDirection.ltr
+                                        : TextDirection.rtl,
+                                    style: fontStyle(
+                                      color: Colors.black,
+                                      fontFamily: FontFamily.medium,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  IconButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      icon: Icon(
+                                        Icons.cancel,
+                                        color: Color(0xffFF0000),
+                                      )),
+                                ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(0),
+                              Flexible(
                                 child: ListView.builder(
+                                  itemCount: state.ticketdetailsModel.message!
+                                      .policy!.length,
                                   shrinkWrap: true,
-                                  physics: const ScrollPhysics(),
-                                  itemCount: state.ticketdetailsModel.message!.policy!.length,
-                                  itemBuilder: (context, int index) {
-                                    return Container(
-                                      margin: const EdgeInsets.symmetric(horizontal: 5),
-                                      child: state.ticketdetailsModel.message!.policy![index].contains("div")
-                                          ? Html(data: state.ticketdetailsModel.message!.policy![index])
-                                          : Text(
-                                              "${index + 1}- ${state.ticketdetailsModel.message!.policy![index]}",
-                                              textDirection:
-                                                  LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
-                                              style: fontStyle(
-                                                  color: Color(0xff818181),
-                                                  fontSize: 14,
-                                                  fontFamily: FontFamily.regular),
+                                  padding: EdgeInsets.symmetric(horizontal: 15),
+                                  physics: ScrollPhysics(),
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    String htmlData = state.ticketdetailsModel
+                                        .message!.policy![index];
+
+                                    final liRegex = RegExp(
+                                        r'<li[^>]*>(.*?)</li>',
+                                        dotAll: true);
+                                    final matches =
+                                        liRegex.allMatches(htmlData);
+
+                                    int counter = 1;
+                                    matches.forEach((match) {
+                                      String originalLi = match.group(0)!;
+                                      String liContent = match.group(1)!;
+                                      String newLi = originalLi.replaceFirst(
+                                        liContent,
+                                        '$counter. $liContent',
+                                      );
+                                      htmlData = htmlData.replaceFirst(
+                                          originalLi, newLi);
+                                      counter++;
+                                    });
+
+                                    return state.ticketdetailsModel.message!
+                                            .policy![index]
+                                            .contains("div")
+                                        ? Html(
+                                            data: htmlData,
+                                            style: {
+                                              "body": Style(
+                                                  margin: Margins.zero,
+                                                  padding: HtmlPaddings.zero,
+                                                  fontSize: FontSize(10),
+                                                  border: Border.all(
+                                                      color:
+                                                          Colors.transparent)),
+                                              "div": Style(
+                                                  margin: Margins.zero,
+                                                  padding: HtmlPaddings.zero,
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  fontSize: FontSize(10),
+                                                  border: Border.all(
+                                                      color:
+                                                          Colors.transparent)),
+                                              "h2": Style(
+                                                  display: Display.none,
+                                                  fontSize: FontSize(10),
+                                                  border: Border.all(
+                                                      color:
+                                                          Colors.transparent)),
+                                              "ul": Style(
+                                                  listStyleType:
+                                                      ListStyleType.none,
+                                                  padding: HtmlPaddings.zero,
+                                                  margin: Margins.zero,
+                                                  fontSize: FontSize(10),
+                                                  border: Border.all(
+                                                      color:
+                                                          Colors.transparent)),
+                                              "li": Style(
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                padding: HtmlPaddings.all(0),
+                                                margin: Margins.symmetric(
+                                                    vertical: 0),
+                                                border: Border.all(
+                                                    color: Colors.transparent),
+                                                fontSize: FontSize(10),
+                                                color: AppColors.blackColor,
+                                                // color: Color(0xFF333333),
+                                              ),
+                                            },
+                                          )
+                                        : Text(
+                                            "${index + 1} - ${state.ticketdetailsModel.message!.policy![index]}",
+                                            textAlign: LanguageClass.isEnglish
+                                                ? TextAlign.left
+                                                : TextAlign.right,
+                                            textDirection:
+                                                LanguageClass.isEnglish
+                                                    ? TextDirection.ltr
+                                                    : TextDirection.rtl,
+                                            style: fontStyle(
+                                              color: Color(0xff818181),
+                                              fontSize: 14,
+                                              fontFamily: FontFamily.medium,
                                             ),
-                                    );
+                                          );
                                   },
                                 ),
                               ),
-
-                              const SizedBox(
+                              SizedBox(
                                 height: 20,
                               ),
                               InkWell(
@@ -366,37 +540,154 @@ class _TicketHistoryState extends State<TicketHistory> {
                                   Navigator.pop(context);
                                 },
                                 child: Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 30),
-                                    padding: const EdgeInsets.all(10),
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 30),
+                                    padding: EdgeInsets.all(10),
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
+                                      borderRadius: BorderRadius.circular(8),
                                       color: AppColors.primaryColor,
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(0xFFFE5D4B),
+                                          Color(0xFFFFA57E),
+                                        ],
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                      ),
                                     ),
                                     child: Center(
                                       child: Text(
                                         LanguageClass.isEnglish ? "Done" : 'تم',
                                         style: fontStyle(
-                                            fontFamily: FontFamily.bold, fontSize: 14.sp, color: Colors.white),
+                                          fontFamily: FontFamily.medium,
+                                          color: Colors.white,
+                                          fontSize: 12.sp,
+                                        ),
                                       ),
                                     )),
                               )
-                              // Padding(
-                              //   padding: const EdgeInsets.symmetric(horizontal: 40),
-                              //   child: ElevatedButton(
-                              //
-                              //       onPressed: () {
-                              //         Navigator.pop(context);
-                              //       },
-                              //       child: Text(LanguageClass.isEnglish
-                              //           ? "Done"
-                              //           : 'تم',
-                              //       style: fontStyle(color: Colors.black),)),
-                              // )
                             ],
                           ),
                         ),
-                      ));
-                });
+                      ),
+                    ),
+                  ),
+                );
+              },
+              barrierDismissible: true,
+              barrierLabel:
+                  MaterialLocalizations.of(context).modalBarrierDismissLabel,
+              barrierColor: Colors.transparent,
+            );
+            // showGeneralDialog(
+            //     context: context,
+            //     barrierDismissible: true,
+            //     barrierLabel:
+            //         MaterialLocalizations.of(context).modalBarrierDismissLabel,
+            //     barrierColor: Colors.black.withOpacity(0.5),
+            //     transitionDuration: const Duration(milliseconds: 200),
+            //     pageBuilder: (context, Animation<double> animation,
+            //         Animation<double> secondaryAnimation) {
+            //       return Material(
+            //           color: Colors.transparent,
+            //           child: Container(
+            //             color: Colors.white,
+            //             margin: EdgeInsets.all(20),
+            //             padding: EdgeInsets.all(30),
+            //             height: MediaQuery.of(context).size.height,
+            //             width: MediaQuery.of(context).size.width - 50,
+            //             child: Scrollbar(
+            //               thumbVisibility: true,
+            //               child: ListView(
+            //                 children: [
+            //                   Text(
+            //                     LanguageClass.isEnglish
+            //                         ? 'Terms and conditions '
+            //                         : "الشروط والأحكام",
+            //                     textDirection: LanguageClass.isEnglish
+            //                         ? TextDirection.ltr
+            //                         : TextDirection.rtl,
+            //                     style: fontStyle(
+            //                         color: Colors.black,
+            //                         fontSize: 20,
+            //                         fontWeight: FontWeight.bold),
+            //                   ),
+            //                   Padding(
+            //                     padding: const EdgeInsets.all(0),
+            //                     child: ListView.builder(
+            //                       shrinkWrap: true,
+            //                       physics: const ScrollPhysics(),
+            //                       itemCount: state.ticketdetailsModel.message!
+            //                           .policy!.length,
+            //                       itemBuilder: (context, int index) {
+            //                         return Container(
+            //                           margin: const EdgeInsets.symmetric(
+            //                               horizontal: 5),
+            //                           child: state.ticketdetailsModel.message!
+            //                                   .policy![index]
+            //                                   .contains("div")
+            //                               ? Html(
+            //                                   data: state.ticketdetailsModel
+            //                                       .message!.policy![index])
+            //                               : Text(
+            //                                   "${index + 1}- ${state.ticketdetailsModel.message!.policy![index]}",
+            //                                   textDirection:
+            //                                       LanguageClass.isEnglish
+            //                                           ? TextDirection.ltr
+            //                                           : TextDirection.rtl,
+            //                                   style: fontStyle(
+            //                                       color: Color(0xff818181),
+            //                                       fontSize: 14,
+            //                                       fontFamily:
+            //                                           FontFamily.regular),
+            //                                 ),
+            //                         );
+            //                       },
+            //                     ),
+            //                   ),
+            //
+            //                   const SizedBox(
+            //                     height: 20,
+            //                   ),
+            //                   InkWell(
+            //                     onTap: () {
+            //                       Navigator.pop(context);
+            //                     },
+            //                     child: Container(
+            //                         margin: const EdgeInsets.symmetric(
+            //                             horizontal: 30),
+            //                         padding: const EdgeInsets.all(10),
+            //                         decoration: BoxDecoration(
+            //                           borderRadius: BorderRadius.circular(15),
+            //                           color: AppColors.primaryColor,
+            //                         ),
+            //                         child: Center(
+            //                           child: Text(
+            //                             LanguageClass.isEnglish ? "Done" : 'تم',
+            //                             style: fontStyle(
+            //                                 fontFamily: FontFamily.bold,
+            //                                 fontSize: 14.sp,
+            //                                 color: Colors.white),
+            //                           ),
+            //                         )),
+            //                   )
+            //                   // Padding(
+            //                   //   padding: const EdgeInsets.symmetric(horizontal: 40),
+            //                   //   child: ElevatedButton(
+            //                   //
+            //                   //       onPressed: () {
+            //                   //         Navigator.pop(context);
+            //                   //       },
+            //                   //       child: Text(LanguageClass.isEnglish
+            //                   //           ? "Done"
+            //                   //           : 'تم',
+            //                   //       style: fontStyle(color: Colors.black),)),
+            //                   // )
+            //                 ],
+            //               ),
+            //             ),
+            //           ));
+            //     });
           } else if (state is LoadedTicketdetails && dawnload) {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
               return PdfPreviewPage(
@@ -412,12 +703,16 @@ class _TicketHistoryState extends State<TicketHistory> {
             if (state is LoadingTicketHistory) {
               return Center(
                 child: CircularProgressIndicator(
-                  color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
+                  color: Routes.isomra
+                      ? AppColors.umragold
+                      : AppColors.primaryColor,
                 ),
               );
             } else if (state is ErrorTicketHistory) {
               return Directionality(
-                textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+                textDirection: LanguageClass.isEnglish
+                    ? TextDirection.ltr
+                    : TextDirection.rtl,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -427,15 +722,20 @@ class _TicketHistoryState extends State<TicketHistory> {
                     ),
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 15),
-                      alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
+                      alignment: LanguageClass.isEnglish
+                          ? Alignment.topLeft
+                          : Alignment.topRight,
                       child: InkWell(
                         onTap: () {
-                          Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false,
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, Routes.home, (route) => false,
                               arguments: Routes.isomra);
                         },
                         child: Icon(
                           Icons.arrow_back_rounded,
-                          color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
+                          color: Routes.isomra
+                              ? AppColors.umragold
+                              : AppColors.primaryColor,
                           size: 35,
                         ),
                       ),
@@ -445,10 +745,14 @@ class _TicketHistoryState extends State<TicketHistory> {
                     ),
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 40),
-                      alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
+                      alignment: LanguageClass.isEnglish
+                          ? Alignment.topLeft
+                          : Alignment.topRight,
                       child: Text(
                         LanguageClass.isEnglish ? "Ticket" : "تذاكارك",
-                        textAlign: LanguageClass.isEnglish ? TextAlign.left : TextAlign.right,
+                        textAlign: LanguageClass.isEnglish
+                            ? TextAlign.left
+                            : TextAlign.right,
                         style: fontStyle(
                             color: AppColors.blackColor,
                             fontSize: 25,
@@ -462,8 +766,13 @@ class _TicketHistoryState extends State<TicketHistory> {
                     Container(
                       child: Center(
                         child: Text(
-                          LanguageClass.isEnglish ? "You have no ticket available" : "لا يوجد تزاكر",
-                          style: fontStyle(color: Color(0xffA3A3A3), fontSize: 21, fontFamily: FontFamily.regular),
+                          LanguageClass.isEnglish
+                              ? "You have no ticket available"
+                              : "لا يوجد تزاكر",
+                          style: fontStyle(
+                              color: Color(0xffA3A3A3),
+                              fontSize: 21,
+                              fontFamily: FontFamily.regular),
                         ),
                       ),
                     ),
@@ -484,12 +793,15 @@ class _TicketHistoryState extends State<TicketHistory> {
                       alignment: Alignment.topLeft,
                       child: InkWell(
                         onTap: () {
-                          Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false,
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, Routes.home, (route) => false,
                               arguments: Routes.isomra);
                         },
                         child: Icon(
                           Icons.arrow_back_rounded,
-                          color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
+                          color: Routes.isomra
+                              ? AppColors.umragold
+                              : AppColors.primaryColor,
                           size: 35,
                         ),
                       ),
@@ -501,7 +813,9 @@ class _TicketHistoryState extends State<TicketHistory> {
                       margin: const EdgeInsets.symmetric(horizontal: 24),
                       child: Text(
                         LanguageClass.isEnglish ? "Ticket" : "تذاكارك",
-                        textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+                        textDirection: LanguageClass.isEnglish
+                            ? TextDirection.ltr
+                            : TextDirection.rtl,
                         style: fontStyle(
                             color: AppColors.blackColor,
                             fontSize: 25,
@@ -513,29 +827,83 @@ class _TicketHistoryState extends State<TicketHistory> {
                         child: ListView.builder(
                             shrinkWrap: true,
                             physics: const ScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                            itemCount: state.responseTicketHistoryModel.message?.length ?? 0,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 0),
+                            itemCount: state.responseTicketHistoryModel.message
+                                    ?.length ??
+                                0,
                             itemBuilder: (context, index) {
-                              final ticket = state.responseTicketHistoryModel.message![index];
+                              final ticket = state
+                                  .responseTicketHistoryModel.message![index];
                               return Container(
-                                height: 230,
+                                height: 260,
                                 margin: EdgeInsets.symmetric(vertical: 5),
                                 padding: EdgeInsets.all(10),
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
-                                    color: state.responseTicketHistoryModel.message![index].isPaid == false ||
-                                            state.responseTicketHistoryModel.message![index].status == 61
+                                    color: state.responseTicketHistoryModel
+                                                    .message![index].isPaid ==
+                                                false ||
+                                            state.responseTicketHistoryModel
+                                                    .message![index].status ==
+                                                61
                                         ? AppColors.darkGrey
                                         : Color(0xffFF5D4B)),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    state.responseTicketHistoryModel.message![index].isPaid == false
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        spacing: 10,
+                                        children: [
+                                          Container(
+                                            height: 30,
+                                            width: 30,
+                                            clipBehavior:
+                                                Clip.antiAliasWithSaveLayer,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              // border: Border.all(
+                                              //     color: Colors.white,
+                                              // width: 2
+                                              // )
+                                            ),
+                                            child: Image.network(
+                                              state.responseTicketHistoryModel
+                                                  .message![index].logo
+                                                  .toString(),
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (_, __, trace) {
+                                                return Image.network(
+                                                  "https://api.swabus.com/CompanyPhoto/Swa.jpg",
+                                                  fit: BoxFit.cover,
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                          Expanded(
+                                              child: Text(
+                                            state.responseTicketHistoryModel
+                                                .message![index].companyName
+                                                .toString(),
+                                            style: fontStyle(
+                                                fontSize: 12,
+                                                color: Colors.white),
+                                          ))
+                                        ],
+                                      ),
+                                    ),
+                                    state.responseTicketHistoryModel
+                                                .message![index].isPaid ==
+                                            false
                                         ? DateTime.now()
                                                     .difference(state
-                                                        .responseTicketHistoryModel.message![index].reservationDate!)
+                                                        .responseTicketHistoryModel
+                                                        .message![index]
+                                                        .reservationDate!)
                                                     .inMinutes >
                                                 60
                                             ? Text(
@@ -548,13 +916,17 @@ class _TicketHistoryState extends State<TicketHistory> {
                                             : Container(
                                                 alignment: Alignment.center,
                                                 child: TimerCountdown(
-                                                  format: CountDownTimerFormat.minutesSeconds,
+                                                  format: CountDownTimerFormat
+                                                      .minutesSeconds,
                                                   endTime: DateTime.now().add(
                                                     Duration(
                                                       minutes: (59 -
                                                           DateTime.now()
-                                                              .difference(state.responseTicketHistoryModel
-                                                                  .message![index].reservationDate!)
+                                                              .difference(state
+                                                                  .responseTicketHistoryModel
+                                                                  .message![
+                                                                      index]
+                                                                  .reservationDate!)
                                                               .inMinutes),
                                                       seconds: 59,
                                                     ),
@@ -562,19 +934,25 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                   onEnd: () {
                                                     print("Timer finished");
                                                   },
-                                                  descriptionTextStyle: fontStyle(
-                                                      color: AppColors.yellow2,
-                                                      fontFamily: FontFamily.medium,
-                                                      fontSize: 12),
+                                                  descriptionTextStyle:
+                                                      fontStyle(
+                                                          color:
+                                                              AppColors.yellow2,
+                                                          fontFamily:
+                                                              FontFamily.medium,
+                                                          fontSize: 12),
                                                   minutesDescription:
                                                       '${LanguageClass.isEnglish ? 'remaining' : 'للدفع'}',
-                                                  secondsDescription: '${LanguageClass.isEnglish ? 'to pay' : 'متبقي'}',
+                                                  secondsDescription:
+                                                      '${LanguageClass.isEnglish ? 'to pay' : 'متبقي'}',
                                                   spacerWidth: 0,
-                                                  colonsTextStyle: fontStyle(color: Colors.white),
+                                                  colonsTextStyle: fontStyle(
+                                                      color: Colors.white),
                                                   timeTextStyle: fontStyle(
                                                       color: AppColors.yellow2,
                                                       fontSize: 13,
-                                                      fontFamily: FontFamily.medium),
+                                                      fontFamily:
+                                                          FontFamily.medium),
                                                 ),
                                               )
                                         : SizedBox(),
@@ -583,41 +961,61 @@ class _TicketHistoryState extends State<TicketHistory> {
                                     ),
                                     Expanded(
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Expanded(
                                               flex: 2,
                                               child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(
                                                     height: 17,
                                                   ),
                                                   Expanded(
                                                       child: Row(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Column(
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .end,
                                                         children: [
                                                           Text(
                                                             '${state.responseTicketHistoryModel.message![index].tripDate!.day.toString()}/${state.responseTicketHistoryModel.message![index].tripDate!.month.toString()}/${state.responseTicketHistoryModel.message![index].tripDate!.year.toString()}',
                                                             style: fontStyle(
-                                                                color: Colors.white,
-                                                                fontFamily: FontFamily.medium,
+                                                                color: Colors
+                                                                    .white,
+                                                                fontFamily:
+                                                                    FontFamily
+                                                                        .medium,
                                                                 fontSize: 13),
                                                           ),
                                                           Text(
-                                                            init.DateFormat('hh:mm a')
-                                                                .format(state.responseTicketHistoryModel.message![index]
+                                                            init.DateFormat(
+                                                                    'hh:mm a')
+                                                                .format(state
+                                                                    .responseTicketHistoryModel
+                                                                    .message![
+                                                                        index]
                                                                     .tripDate!)
                                                                 .toString(),
                                                             style: fontStyle(
-                                                                color: Colors.white,
-                                                                fontFamily: FontFamily.medium,
+                                                                color: Colors
+                                                                    .white,
+                                                                fontFamily:
+                                                                    FontFamily
+                                                                        .medium,
                                                                 fontSize: 13),
                                                           ),
                                                         ],
@@ -628,49 +1026,88 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                       Container(
                                                         width: 5,
                                                         decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(2),
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                    2),
                                                             gradient: LinearGradient(
-                                                                begin: Alignment.topCenter,
-                                                                end: Alignment.bottomCenter,
-                                                                colors: [AppColors.white, AppColors.yellow2])),
+                                                                begin: Alignment
+                                                                    .topCenter,
+                                                                end: Alignment
+                                                                    .bottomCenter,
+                                                                colors: [
+                                                                  AppColors
+                                                                      .white,
+                                                                  AppColors
+                                                                      .yellow2
+                                                                ])),
                                                       ),
                                                       SizedBox(
                                                         width: 10,
                                                       ),
                                                       Expanded(
                                                         child: Column(
-                                                          mainAxisAlignment: MainAxisAlignment.start,
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
                                                           children: [
                                                             Text(
-                                                              LanguageClass.isEnglish ? "From" : "من",
+                                                              LanguageClass
+                                                                      .isEnglish
+                                                                  ? "From"
+                                                                  : "من",
                                                               style: fontStyle(
-                                                                  color: Colors.white,
-                                                                  fontFamily: FontFamily.medium,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontFamily:
+                                                                      FontFamily
+                                                                          .medium,
                                                                   fontSize: 12),
                                                             ),
                                                             Text(
-                                                              state.responseTicketHistoryModel.message![index].from!,
+                                                              state
+                                                                  .responseTicketHistoryModel
+                                                                  .message![
+                                                                      index]
+                                                                  .from!,
                                                               style: fontStyle(
-                                                                  color: Colors.white,
-                                                                  fontFamily: FontFamily.medium,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontFamily:
+                                                                      FontFamily
+                                                                          .medium,
                                                                   fontSize: 12),
                                                             ),
                                                             SizedBox(
                                                               height: 10,
                                                             ),
                                                             Text(
-                                                              LanguageClass.isEnglish ? "To" : "الي",
+                                                              LanguageClass
+                                                                      .isEnglish
+                                                                  ? "To"
+                                                                  : "الي",
                                                               style: fontStyle(
-                                                                  color: Colors.white,
-                                                                  fontFamily: FontFamily.medium,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontFamily:
+                                                                      FontFamily
+                                                                          .medium,
                                                                   fontSize: 12),
                                                             ),
                                                             Text(
-                                                              state.responseTicketHistoryModel.message![index].to!,
+                                                              state
+                                                                  .responseTicketHistoryModel
+                                                                  .message![
+                                                                      index]
+                                                                  .to!,
                                                               style: fontStyle(
-                                                                  color: Colors.white,
-                                                                  fontFamily: FontFamily.medium,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontFamily:
+                                                                      FontFamily
+                                                                          .medium,
                                                                   fontSize: 12),
                                                             ),
                                                           ],
@@ -682,35 +1119,47 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                     "${Routes.curruncy ?? ""} ${state.responseTicketHistoryModel.message![index].price}",
                                                     style: fontStyle(
                                                         color: Colors.white,
-                                                        fontFamily: FontFamily.medium,
+                                                        fontFamily:
+                                                            FontFamily.medium,
                                                         fontSize: 14),
                                                   ),
                                                 ],
                                               )),
                                           Expanded(
                                               child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Row(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
                                                 children: [
                                                   Container(
-                                                      alignment: Alignment.center,
+                                                      alignment:
+                                                          Alignment.center,
                                                       child: Icon(
-                                                        Icons.airplane_ticket_rounded,
+                                                        Icons
+                                                            .airplane_ticket_rounded,
                                                         color: Colors.white,
                                                       )),
                                                   SizedBox(
                                                     width: 5,
                                                   ),
                                                   Text(
-                                                    state.responseTicketHistoryModel.message![index].ticketNumber
+                                                    state
+                                                        .responseTicketHistoryModel
+                                                        .message![index]
+                                                        .ticketNumber
                                                         .toString(),
                                                     style: fontStyle(
                                                         color: Colors.white,
-                                                        fontFamily: FontFamily.medium,
+                                                        fontFamily:
+                                                            FontFamily.medium,
                                                         fontSize: 14),
                                                   ),
                                                 ],
@@ -719,24 +1168,31 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                 height: 5,
                                               ),
                                               Row(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
                                                 children: [
                                                   Container(
                                                     width: 14,
                                                     height: 14,
                                                     alignment: Alignment.center,
-                                                    child: Image.asset("assets/images/Icon fa-solid-bus.png"),
+                                                    child: Image.asset(
+                                                        "assets/images/Icon fa-solid-bus.png"),
                                                   ),
                                                   SizedBox(
                                                     width: 5,
                                                   ),
                                                   Text(
-                                                    state.responseTicketHistoryModel.message![index].tripNumber
+                                                    state
+                                                        .responseTicketHistoryModel
+                                                        .message![index]
+                                                        .tripNumber
                                                         .toString(),
                                                     style: fontStyle(
                                                         color: Colors.white,
-                                                        fontFamily: FontFamily.medium,
+                                                        fontFamily:
+                                                            FontFamily.medium,
                                                         fontSize: 14),
                                                   ),
                                                 ],
@@ -748,41 +1204,84 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                 onTap: () {
                                                   busLayoutRepo
                                                       .getBusSeatsData(
-                                                          tripId:
-                                                              state.responseTicketHistoryModel.message![index].tripId!)
+                                                          tripId: state
+                                                              .responseTicketHistoryModel
+                                                              .message![index]
+                                                              .tripId!)
                                                       .then((value) async {
                                                     busSeatsModel = await value;
 
                                                     if (busSeatsModel != null) {
                                                       for (int i = 0;
-                                                          i < busSeatsModel!.busSeatDetails!.busDetails!.totalRow!;
+                                                          i <
+                                                              busSeatsModel!
+                                                                  .busSeatDetails!
+                                                                  .busDetails!
+                                                                  .totalRow!;
                                                           i++) {
                                                         for (int j = 0;
                                                             j <
-                                                                busSeatsModel!.busSeatDetails!.busDetails!.rowList![i]
-                                                                    .seats.length;
+                                                                busSeatsModel!
+                                                                    .busSeatDetails!
+                                                                    .busDetails!
+                                                                    .rowList![i]
+                                                                    .seats
+                                                                    .length;
                                                             j++) {
-                                                          if (busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i]
-                                                                      .seats[j].isReserved ==
+                                                          if (busSeatsModel
+                                                                      ?.busSeatDetails
+                                                                      ?.busDetails
+                                                                      ?.rowList?[
+                                                                          i]
+                                                                      .seats[j]
+                                                                      .isReserved ==
                                                                   true ||
-                                                              busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i]
-                                                                      .seats[j].isAvailable ==
+                                                              busSeatsModel
+                                                                      ?.busSeatDetails
+                                                                      ?.busDetails
+                                                                      ?.rowList?[
+                                                                          i]
+                                                                      .seats[j]
+                                                                      .isAvailable ==
                                                                   true) {
-                                                            busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i]
-                                                                .seats[j].seatState = SeatState.sold;
+                                                            busSeatsModel
+                                                                    ?.busSeatDetails
+                                                                    ?.busDetails
+                                                                    ?.rowList?[i]
+                                                                    .seats[j]
+                                                                    .seatState =
+                                                                SeatState.sold;
                                                           }
 
                                                           for (var n = 0;
                                                               n <
-                                                                  state.responseTicketHistoryModel.message![index]
-                                                                      .seatNoList!.length;
+                                                                  state
+                                                                      .responseTicketHistoryModel
+                                                                      .message![
+                                                                          index]
+                                                                      .seatNoList!
+                                                                      .length;
                                                               n++) {
-                                                            if (busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i]
-                                                                    .seats[j].seatNo ==
-                                                                state.responseTicketHistoryModel.message![index]
+                                                            if (busSeatsModel
+                                                                    ?.busSeatDetails
+                                                                    ?.busDetails
+                                                                    ?.rowList?[
+                                                                        i]
+                                                                    .seats[j]
+                                                                    .seatNo ==
+                                                                state
+                                                                    .responseTicketHistoryModel
+                                                                    .message![
+                                                                        index]
                                                                     .seatNoList![n]) {
-                                                              busSeatsModel?.busSeatDetails?.busDetails?.rowList?[i]
-                                                                  .seats[j].seatState = SeatState.booked;
+                                                              busSeatsModel
+                                                                      ?.busSeatDetails
+                                                                      ?.busDetails
+                                                                      ?.rowList?[i]
+                                                                      .seats[j]
+                                                                      .seatState =
+                                                                  SeatState
+                                                                      .booked;
                                                             }
                                                           }
                                                         }
@@ -793,48 +1292,79 @@ class _TicketHistoryState extends State<TicketHistory> {
 
                                                     showGeneralDialog(
                                                         context: context,
-                                                        barrierDismissible: true,
+                                                        barrierDismissible:
+                                                            true,
                                                         barrierLabel:
-                                                            MaterialLocalizations.of(context).modalBarrierDismissLabel,
-                                                        barrierColor: Colors.black.withOpacity(0.5),
-                                                        transitionDuration: const Duration(milliseconds: 200),
-                                                        pageBuilder: (context, Animation<double> animation,
-                                                            Animation<double> secondaryAnimation) {
+                                                            MaterialLocalizations
+                                                                    .of(context)
+                                                                .modalBarrierDismissLabel,
+                                                        barrierColor: Colors
+                                                            .black
+                                                            .withOpacity(0.5),
+                                                        transitionDuration:
+                                                            const Duration(
+                                                                milliseconds:
+                                                                    200),
+                                                        pageBuilder: (context,
+                                                            Animation<double>
+                                                                animation,
+                                                            Animation<double>
+                                                                secondaryAnimation) {
                                                           return Material(
                                                               child: SafeArea(
                                                                   child: Column(
-                                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .start,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
                                                                       children: [
                                                                 InkWell(
                                                                   onTap: () {
-                                                                    Navigator.pop(context);
+                                                                    Navigator.pop(
+                                                                        context);
                                                                   },
-                                                                  child: Container(
-                                                                    padding: EdgeInsets.all(10),
-                                                                    alignment: Alignment.topLeft,
+                                                                  child:
+                                                                      Container(
+                                                                    padding:
+                                                                        EdgeInsets.all(
+                                                                            10),
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .topLeft,
                                                                     child: Icon(
-                                                                      Icons.close,
-                                                                      color: AppColors.primaryColor,
+                                                                      Icons
+                                                                          .close,
+                                                                      color: AppColors
+                                                                          .primaryColor,
                                                                     ),
                                                                   ),
                                                                 ),
                                                                 Row(
-                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
                                                                   children: [
                                                                     SizedBox(
-                                                                      child: SeatLayoutWidget(
-                                                                        seatHeight: sizeHeight * .036,
-                                                                        onSeatStateChanged:
-                                                                            (rowI, colI, seatState, seat) {},
-                                                                        stateModel: SeatLayoutStateModel(
-                                                                          rows: busSeatsModel?.busSeatDetails
-                                                                                  ?.busDetails?.rowList?.length ??
+                                                                      child:
+                                                                          SeatLayoutWidget(
+                                                                        seatHeight:
+                                                                            sizeHeight *
+                                                                                .036,
+                                                                        onSeatStateChanged: (rowI,
+                                                                            colI,
+                                                                            seatState,
+                                                                            seat) {},
+                                                                        stateModel:
+                                                                            SeatLayoutStateModel(
+                                                                          rows: busSeatsModel?.busSeatDetails?.busDetails?.rowList?.length ??
                                                                               0,
-                                                                          cols: busSeatsModel?.busSeatDetails
-                                                                                  ?.busDetails?.totalColumn ??
+                                                                          cols: busSeatsModel?.busSeatDetails?.busDetails?.totalColumn ??
                                                                               5,
-                                                                          seatSvgSize: 30.sp.toInt(),
+                                                                          seatSvgSize: 30
+                                                                              .sp
+                                                                              .toInt(),
                                                                           pathSelectedSeat:
                                                                               'assets/images/unavailable_seats.svg',
                                                                           pathDisabledSeat:
@@ -843,14 +1373,14 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                                               'assets/images/disabled_seats.svg',
                                                                           pathUnSelectedSeat:
                                                                               'assets/images/unavailable_seats.svg',
-                                                                          currentSeats: List.generate(
-                                                                            busSeatsModel?.busSeatDetails?.busDetails
-                                                                                    ?.rowList?.length ??
+                                                                          currentSeats:
+                                                                              List.generate(
+                                                                            busSeatsModel?.busSeatDetails?.busDetails?.rowList?.length ??
                                                                                 0,
 
                                                                             // Number of rows based on totalSeats
-                                                                            (row) => busSeatsModel!.busSeatDetails!
-                                                                                .busDetails!.rowList![row].seats,
+                                                                            (row) =>
+                                                                                busSeatsModel!.busSeatDetails!.busDetails!.rowList![row].seats,
                                                                           ),
                                                                         ),
                                                                       ),
@@ -862,16 +1392,21 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                   });
                                                 },
                                                 child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Container(
-                                                      alignment: Alignment.centerRight,
+                                                      alignment:
+                                                          Alignment.centerRight,
                                                       child: Container(
                                                         width: 14,
                                                         height: 14,
-                                                        alignment: Alignment.center,
-                                                        child: Image.asset("assets/images/chairs.png"),
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Image.asset(
+                                                            "assets/images/chairs.png"),
                                                       ),
                                                     ),
                                                     SizedBox(
@@ -879,20 +1414,30 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                     ),
                                                     Container(
                                                         width: 70,
-                                                        alignment: Alignment.centerRight,
+                                                        alignment: Alignment
+                                                            .centerRight,
                                                         child: Wrap(
-                                                          direction: Axis.horizontal,
+                                                          direction:
+                                                              Axis.horizontal,
                                                           children: [
                                                             Container(
                                                               child: Padding(
-                                                                padding: const EdgeInsets.all(0.0),
-                                                                child: Container(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        0.0),
+                                                                child:
+                                                                    Container(
                                                                   child: Text(
                                                                     '${state.responseTicketHistoryModel.message![index].seatNoList!.length} ${LanguageClass.isEnglish ? ' Seats' : ' كرسي'}',
                                                                     style: fontStyle(
-                                                                        color: AppColors.white,
-                                                                        fontFamily: FontFamily.bold,
-                                                                        fontSize: 12),
+                                                                        color: AppColors
+                                                                            .white,
+                                                                        fontFamily:
+                                                                            FontFamily
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            12),
                                                                   ),
                                                                 ),
                                                               ),
@@ -903,61 +1448,113 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                 ),
                                               ),
                                               Container(
-                                                alignment: Alignment.centerRight,
+                                                alignment:
+                                                    Alignment.centerRight,
                                                 child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
                                                     children: [
                                                       Text(
-                                                        state.responseTicketHistoryModel.message![index].statusName!,
+                                                        state
+                                                            .responseTicketHistoryModel
+                                                            .message![index]
+                                                            .statusName!,
                                                         style: fontStyle(
-                                                            fontFamily: FontFamily.bold,
+                                                            fontFamily:
+                                                                FontFamily.bold,
                                                             fontSize: 12,
-                                                            color: Color(0xfff7f8f9)),
+                                                            color: Color(
+                                                                0xfff7f8f9)),
                                                       ),
-                                                      state.responseTicketHistoryModel.message![index].isPaid == true
+                                                      state
+                                                                  .responseTicketHistoryModel
+                                                                  .message![
+                                                                      index]
+                                                                  .isPaid ==
+                                                              true
                                                           ? SizedBox()
                                                           : Text(
                                                               '${LanguageClass.isEnglish ? 'Not paid' : 'لم يتم الدفع'}',
                                                               style: fontStyle(
-                                                                  fontFamily: FontFamily.medium,
+                                                                  fontFamily:
+                                                                      FontFamily
+                                                                          .medium,
                                                                   fontSize: 12,
-                                                                  color: AppColors.yellow2),
+                                                                  color: AppColors
+                                                                      .yellow2),
                                                             ),
                                                     ]),
                                               ),
-                                              state.responseTicketHistoryModel.message![index].CanEditOrCancel == true
+                                              state
+                                                          .responseTicketHistoryModel
+                                                          .message![index]
+                                                          .CanEditOrCancel ==
+                                                      true
                                                   ? SizedBox(
                                                       height: 8,
                                                     )
                                                   : SizedBox.shrink(),
-                                              state.responseTicketHistoryModel.message![index].CanEditOrCancel == true
+                                              state
+                                                          .responseTicketHistoryModel
+                                                          .message![index]
+                                                          .CanEditOrCancel ==
+                                                      true
                                                   ? InkWell(
                                                       onTap: () {
                                                         reservationid = state
-                                                            .responseTicketHistoryModel.message![index].reservationId!;
+                                                            .responseTicketHistoryModel
+                                                            .message![index]
+                                                            .reservationId!;
 
-                                                        from = state.responseTicketHistoryModel.message![index].from!;
-                                                        to = state.responseTicketHistoryModel.message![index].to!;
-                                                        BlocProvider.of<TicketCubit>(context).geteditpolicy();
+                                                        from = state
+                                                            .responseTicketHistoryModel
+                                                            .message![index]
+                                                            .from!;
+                                                        to = state
+                                                            .responseTicketHistoryModel
+                                                            .message![index]
+                                                            .to!;
+                                                        BlocProvider.of<
+                                                                    TicketCubit>(
+                                                                context)
+                                                            .geteditpolicy();
                                                       },
                                                       child: Container(
-                                                        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 15,
+                                                                vertical: 5),
                                                         decoration: BoxDecoration(
                                                             boxShadow: [
                                                               BoxShadow(
-                                                                  color: AppColors.white,
-                                                                  offset: Offset(0, 0),
-                                                                  spreadRadius: 0,
-                                                                  blurRadius: 15)
+                                                                  color: AppColors
+                                                                      .white,
+                                                                  offset:
+                                                                      Offset(
+                                                                          0, 0),
+                                                                  spreadRadius:
+                                                                      0,
+                                                                  blurRadius:
+                                                                      15)
                                                             ],
-                                                            color: AppColors.white,
-                                                            borderRadius: BorderRadius.circular(12)),
+                                                            color:
+                                                                AppColors.white,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        12)),
                                                         child: Text(
-                                                          LanguageClass.isEnglish ? 'Edit / Cancel' : 'تعديل / إلغاء',
+                                                          LanguageClass
+                                                                  .isEnglish
+                                                              ? 'Edit / Cancel'
+                                                              : 'تعديل / إلغاء',
                                                           style: fontStyle(
-                                                            color: AppColors.primaryColor,
-                                                            fontWeight: FontWeight.bold,
+                                                            color: AppColors
+                                                                .primaryColor,
+                                                            fontWeight:
+                                                                FontWeight.bold,
                                                             fontSize: 12,
                                                           ),
                                                         ),
@@ -966,29 +1563,51 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                   : SizedBox(),
                                               Expanded(
                                                   child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
                                                 children: [
                                                   Container(
-                                                    alignment: Alignment.bottomCenter,
+                                                    alignment:
+                                                        Alignment.bottomCenter,
                                                     child: Text(
-                                                      state.responseTicketHistoryModel.message![index].servecietype!,
+                                                      state
+                                                          .responseTicketHistoryModel
+                                                          .message![index]
+                                                          .servecietype!,
                                                       style: fontStyle(
-                                                          fontFamily: FontFamily.bold,
+                                                          fontFamily:
+                                                              FontFamily.bold,
                                                           fontSize: 15,
-                                                          color: Color(0xfff7f8f9)),
+                                                          color: Color(
+                                                              0xfff7f8f9)),
                                                     ),
                                                   ),
-                                                  state.responseTicketHistoryModel.message![index].status == 61 &&
-                                                          state.responseTicketHistoryModel.message![index].Penalty != 0
+                                                  state
+                                                                  .responseTicketHistoryModel
+                                                                  .message![
+                                                                      index]
+                                                                  .status ==
+                                                              61 &&
+                                                          state
+                                                                  .responseTicketHistoryModel
+                                                                  .message![
+                                                                      index]
+                                                                  .Penalty !=
+                                                              0
                                                       ? Container(
-                                                          alignment: Alignment.bottomCenter,
+                                                          alignment: Alignment
+                                                              .bottomCenter,
                                                           child: Text(
                                                             "${LanguageClass.isEnglish ? 'Penalty' : 'الغرامة'} ${state.responseTicketHistoryModel.message![index].Penalty} ${Routes.curruncy}",
                                                             style: fontStyle(
-                                                                fontFamily: FontFamily.bold,
+                                                                fontFamily:
+                                                                    FontFamily
+                                                                        .bold,
                                                                 fontSize: 15,
-                                                                color: Color(0xfff7f8f9)),
+                                                                color: Color(
+                                                                    0xfff7f8f9)),
                                                           ),
                                                         )
                                                       : SizedBox(),
@@ -999,8 +1618,12 @@ class _TicketHistoryState extends State<TicketHistory> {
                                         ],
                                       ),
                                     ),
-                                    state.responseTicketHistoryModel.message![index].isPaid == false ||
-                                            state.responseTicketHistoryModel.message![index].status == 61
+                                    state.responseTicketHistoryModel
+                                                    .message![index].isPaid ==
+                                                false ||
+                                            state.responseTicketHistoryModel
+                                                    .message![index].status ==
+                                                61
                                         ? SizedBox()
                                         : Container(
                                             height: 30,
@@ -1010,22 +1633,37 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                 Expanded(
                                                   child: InkWell(
                                                     onTap: () {
-                                                      BlocProvider.of<TicketCubit>(context)
-                                                          .getTicketdetails(tekitid: ticket!.reservationId! ?? 0);
+                                                      BlocProvider.of<
+                                                                  TicketCubit>(
+                                                              context)
+                                                          .getTicketdetails(
+                                                              tekitid: ticket!
+                                                                      .reservationId! ??
+                                                                  0);
                                                     },
                                                     child: Container(
                                                       height: 30,
-                                                      alignment: Alignment.center,
+                                                      alignment:
+                                                          Alignment.center,
                                                       decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(12),
-                                                          color: AppColors.white),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(12),
+                                                          color:
+                                                              AppColors.white),
                                                       child: Text(
-                                                        LanguageClass.isEnglish ? "Policy" : "الخصوصية",
-                                                        textAlign: TextAlign.end,
+                                                        LanguageClass.isEnglish
+                                                            ? "Policy"
+                                                            : "الخصوصية",
+                                                        textAlign:
+                                                            TextAlign.end,
                                                         style: fontStyle(
-                                                            color: AppColors.primaryColor,
+                                                            color: AppColors
+                                                                .primaryColor,
                                                             fontSize: 20,
-                                                            fontFamily: FontFamily.bold),
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .bold),
                                                       ),
                                                     ),
                                                   ),
@@ -1038,22 +1676,37 @@ class _TicketHistoryState extends State<TicketHistory> {
                                                     onTap: () {
                                                       dawnload = true;
 
-                                                      BlocProvider.of<TicketCubit>(context)
-                                                          .getTicketdetails(tekitid: ticket!.reservationId! ?? 0);
+                                                      BlocProvider.of<
+                                                                  TicketCubit>(
+                                                              context)
+                                                          .getTicketdetails(
+                                                              tekitid: ticket!
+                                                                      .reservationId! ??
+                                                                  0);
                                                     },
                                                     child: Container(
                                                       height: 30,
-                                                      alignment: Alignment.center,
+                                                      alignment:
+                                                          Alignment.center,
                                                       decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(12),
-                                                          color: AppColors.darkPurple),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(12),
+                                                          color: AppColors
+                                                              .darkPurple),
                                                       child: Text(
-                                                        LanguageClass.isEnglish ? "Download" : "تنزيل",
-                                                        textAlign: TextAlign.end,
+                                                        LanguageClass.isEnglish
+                                                            ? "Download"
+                                                            : "تنزيل",
+                                                        textAlign:
+                                                            TextAlign.end,
                                                         style: fontStyle(
-                                                            color: AppColors.white,
+                                                            color:
+                                                                AppColors.white,
                                                             fontSize: 20,
-                                                            fontFamily: FontFamily.bold),
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .bold),
                                                       ),
                                                     ),
                                                   ),

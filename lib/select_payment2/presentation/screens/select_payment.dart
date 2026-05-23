@@ -34,10 +34,15 @@ import '../../../config/routes/app_routes.dart';
 
 class SelectPaymentScreen2 extends StatefulWidget {
   const SelectPaymentScreen2(
-      {super.key, this.user, required this.promcodeid, required this.discount});
+      {super.key,
+      this.user,
+      required this.promcodeid,
+      required this.discount,
+      this.totalAmount});
   final User? user;
   final String promcodeid;
   final String discount;
+  final String? totalAmount;
   @override
   State<SelectPaymentScreen2> createState() => _SelectPaymentScreen2State();
 }
@@ -80,6 +85,7 @@ class _SelectPaymentScreen2State extends State<SelectPaymentScreen2> {
           shouldHideOtherPaymentMethodsIfWalletSelected: true,
           hasTimer: true,
           walletBalance: balance,
+          totalAmount: widget.totalAmount,
         ),
       ),
     );

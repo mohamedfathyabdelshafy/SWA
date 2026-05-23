@@ -19,12 +19,13 @@ class StatistictsRepostary {
         ) ??
         3;
 
-    final response = await apiConsumer
-        .get('${EndPoints.baseUrl}Customer/GetMainStatics?CustomerID=${Routes.customerid}&countryID=$countryid');
+    final response = await apiConsumer.get(
+        '${EndPoints.baseUrl}Customer/GetMainStatics?CustomerID=${Routes.customerid}&countryID=$countryid');
 
     log(response.body);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 &&
+        jsonDecode(response.body)['status'] == 'success') {
       return MainStaticsModel.fromJson(json.decode(response.body));
     } else {
       return response.body['message'];
@@ -55,8 +56,8 @@ class StatistictsRepostary {
         ) ??
         3;
 
-    final response = await apiConsumer
-        .get('${EndPoints.baseUrl}Partner/ReservationDetails?ReservationID=$reservationID&PageSize=10&PageNumber=1');
+    final response = await apiConsumer.get(
+        '${EndPoints.baseUrl}Partner/ReservationDetails?ReservationID=$reservationID&PageSize=10&PageNumber=1');
 
     log(response.body);
 
