@@ -21,9 +21,9 @@ class LoginScreen extends StatelessWidget {
   bool? isback = false;
 
   LoginScreen({
-    Key? key,
+    super.key,
     this.isback,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -13,6 +13,7 @@ import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/location.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
+import 'package:swa/core/widgets/app_dialog.dart';
 import 'package:swa/core/widgets/currency_selector.dart';
 import 'package:swa/features/Swa_umra/bloc/umra_bloc.dart';
 import 'package:swa/features/Swa_umra/models/umra_detail.dart';
@@ -1154,23 +1155,13 @@ Future<dynamic> showDoneConfirmationCardDialog(BuildContext context,
     bool isError = false,
     Widget? body,
     required Function callback}) async {
-  return CoolAlert.show(
-    barrierDismissible: false,
+  return AppDialog.show(
     context: context,
-    confirmBtnText: "OK",
-    title: isError
-        ? LanguageClass.isEnglish
-            ? 'Error'
-            : 'حدث خطأ'
-        : '',
-    lottieAsset: isError ? 'assets/json/error.json' : 'assets/json/done.json',
-    type: isError ? CoolAlertType.error : CoolAlertType.success,
-    loopAnimation: false,
-    backgroundColor: Colors.white,
-    text: message,
-    widget: body,
-    onConfirmBtnTap: () {
-      callback(); // Execute the callback function after tapping OK
-    },
+    message: message,
+    type: isError ? AppDialogType.failed : AppDialogType.success,
+    body: body,
+    barrierDismissible: false,
+    confirmText: 'OK',
+    onConfirm: () => callback(),
   );
 }

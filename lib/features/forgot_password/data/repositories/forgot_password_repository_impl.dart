@@ -26,6 +26,8 @@ class ForgotPasswordRepositoryImpl implements ForgotPasswordRepository {
       return Right(forgotPassword);
     } on ServerException catch (error) {
       return Left(ServerFailure(error.toString()));
+    } catch (error) {
+      return Left(ServerFailure(error.toString()));
     }
   }
 }

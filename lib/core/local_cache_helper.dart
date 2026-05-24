@@ -13,7 +13,7 @@ class CacheHelper {
     required dynamic value,
   }) async {
     if (pref == null) {
-      init();
+      await init();
     }
 
     if (value is String)
@@ -33,7 +33,7 @@ class CacheHelper {
     required String key,
   }) {
     if (pref == null) {
-      init();
+      return null;
     }
     return pref!.get(key);
   }
@@ -41,11 +41,17 @@ class CacheHelper {
   //this to remove from shared by key
   static Future<bool> deleteDataToSharedPref({
     required String key,
-  }) {
+  }) async {
+    if (pref == null) {
+      await init();
+    }
     return pref!.remove(key);
   }
 
   static Future<void> clearAllData() async {
+    if (pref == null) {
+      await init();
+    }
     pref!.clear();
   }
 }

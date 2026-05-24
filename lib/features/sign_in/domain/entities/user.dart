@@ -15,37 +15,35 @@ class User extends Equatable {
   final dynamic nameEn;
   final dynamic nameAr;
 
-  User({
-    this.token,
-    this.userId,
-    this.qRCode,
-    this.qRImg,
-    this.pinCode,
-    this.customerId,
-    this.isActive,
-    this.walletBalance,
-    this.userName,
-    this.email,
-    this.name,
-    this.nameEn,
-    this.nameAr
-  });
-
+  const User(
+      {this.token,
+      this.userId,
+      this.qRCode,
+      this.qRImg,
+      this.pinCode,
+      this.customerId,
+      this.isActive,
+      this.walletBalance,
+      this.userName,
+      this.email,
+      this.name,
+      this.nameEn,
+      this.nameAr});
 
   @override
   List<Object?> get props => [
-    token,
-    userId,
-    qRCode,
-    qRImg,
-    pinCode,
-    customerId,
-    isActive,
-    walletBalance,
-    userName,
-    email,
-    name,
-    nameEn,
-    nameAr
-  ];
+        token,
+        userId,
+        qRCode,
+        qRImg,
+        pinCode,
+        customerId,
+        isActive,
+        walletBalance,
+        userName,
+        email,
+        name,
+        nameEn,
+        nameAr
+      ];
 }

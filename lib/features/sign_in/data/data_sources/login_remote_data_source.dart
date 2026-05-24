@@ -6,7 +6,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:huawei_push/huawei_push.dart';
 import 'package:swa/core/api/api_consumer.dart';
 import 'package:swa/core/api/end_points.dart';
-import 'package:swa/features/sign_in/data/models/user_model.dart';
 import 'package:swa/features/sign_in/data/models/user_response_model.dart';
 import 'package:swa/features/sign_in/domain/use_cases/login.dart';
 

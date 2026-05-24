@@ -26,7 +26,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     );
   }
 
-  StatistictsRepostary _repostary = StatistictsRepostary();
+  final StatistictsRepostary _repostary = StatistictsRepostary();
 
   Future Getmainstatistics(event, Emitter<StatisticsState> emit) async {
     emit(Loading());
@@ -46,12 +46,15 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     }
   }
 
-  Future getreservationdetails(getReservationdetailsEvent event, Emitter<StatisticsState> emit) async {
+  Future getreservationdetails(
+      getReservationdetailsEvent event, Emitter<StatisticsState> emit) async {
     emit(Loading());
 
-    final res = await _repostary.getReservationsDetails(reservationID: event.id);
+    final res =
+        await _repostary.getReservationsDetails(reservationID: event.id);
     if (res is ReservationDetailsModel) {
-      emit(ReservationdetailsState(reservationdetailsModel: res, reservation: event.reservation));
+      emit(ReservationdetailsState(
+          reservationdetailsModel: res, reservation: event.reservation));
     }
   }
 }

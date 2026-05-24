@@ -8,7 +8,7 @@ import 'package:swa/core/utils/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UpdateAppScreen extends StatefulWidget {
-  const UpdateAppScreen({Key? key}) : super(key: key);
+  const UpdateAppScreen({super.key});
 
   @override
   State<UpdateAppScreen> createState() => _UpdateAppScreenState();

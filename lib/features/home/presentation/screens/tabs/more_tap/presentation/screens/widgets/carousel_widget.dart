@@ -6,7 +6,7 @@ import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/
 
 class CarouselWidget extends StatefulWidget {
   final List<Widget> items;
-  const CarouselWidget({required this.items, Key? key}) : super(key: key);
+  const CarouselWidget({required this.items, super.key});
 
   @override
   State<CarouselWidget> createState() => _CarouselWidgetState();

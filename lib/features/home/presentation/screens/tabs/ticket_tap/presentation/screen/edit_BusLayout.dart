@@ -30,7 +30,12 @@ import 'package:swa/main.dart';
 import 'package:swa/select_payment2/data/models/trip_reservartion_model.dart';
 
 class BusLayoutEditScreen extends StatefulWidget {
-  BusLayoutEditScreen({super.key, required this.to, required this.from, this.user, required this.reservationID});
+  BusLayoutEditScreen(
+      {super.key,
+      required this.to,
+      required this.from,
+      this.user,
+      required this.reservationID});
   String from;
   String to;
 
@@ -54,7 +59,8 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
   int countSeatesNum = 0;
   @override
   void initState() {
-    BlocProvider.of<BusLayoutCubit>(context).getBusSeatsedit(reservationID: widget.reservationID);
+    BlocProvider.of<BusLayoutCubit>(context)
+        .getBusSeatsedit(reservationID: widget.reservationID);
     // busLayoutRepo?.getBusSeatsData();
     get();
     super.initState();
@@ -62,25 +68,38 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
 
   void get() async {
     print("DDttttttttttttt${widget.reservationID}");
-    busLayoutRepo.getReservationSeatsData(reservationID: widget.reservationID).then((value) async {
-      busSeatsModel = await value;
+    busLayoutRepo
+        .getReservationSeatsData(reservationID: widget.reservationID)
+        .then((value) async {
+      busSeatsModel = value;
       print("Tik Tik Bus seat model: ${busSeatsModel!.message}");
 
       if (busSeatsModel != null) {
-        unavailable = await busSeatsModel!.message.totalSeats - busSeatsModel!.message.emptySeats;
+        unavailable = busSeatsModel!.message.totalSeats -
+            busSeatsModel!.message.emptySeats;
 
         for (int i = 0; i < busSeatsModel!.message.busDetailsVm.totalRow; i++) {
-          for (int j = 0; j < busSeatsModel!.message.busDetailsVm.rowList[i].seats.length; j++) {
-            if (busSeatsModel!.message.busDetailsVm.rowList[i].seats[j].isReserved == true) {
-              busSeatsModel!.message.busDetailsVm.rowList[i].seats[j].seatState = SeatState.sold;
-              for (int n = 0; n < busSeatsModel!.message.mySeatListId.length; n++) {
+          for (int j = 0;
+              j < busSeatsModel!.message.busDetailsVm.rowList[i].seats.length;
+              j++) {
+            if (busSeatsModel!
+                    .message.busDetailsVm.rowList[i].seats[j].isReserved ==
+                true) {
+              busSeatsModel!.message.busDetailsVm.rowList[i].seats[j]
+                  .seatState = SeatState.sold;
+              for (int n = 0;
+                  n < busSeatsModel!.message.mySeatListId.length;
+                  n++) {
                 countSeatesNum = busSeatsModel!.message.mySeatListId.length;
-                if (busSeatsModel!.message.busDetailsVm.rowList[i].seats[j].seatBusID ==
+                if (busSeatsModel!
+                        .message.busDetailsVm.rowList[i].seats[j].seatBusID ==
                     busSeatsModel!.message.mySeatListId[n]) {
-                  busSeatsModel!.message.busDetailsVm.rowList[i].seats[j].seatState = SeatState.selected;
+                  busSeatsModel!.message.busDetailsVm.rowList[i].seats[j]
+                      .seatState = SeatState.selected;
                   countSeats.add(busSeatsModel!.message.mySeatListId[n]);
 
-                  Seatsnumbers.add(busSeatsModel!.message.busDetailsVm.rowList[i].seats[j].seatNo!);
+                  Seatsnumbers.add(busSeatsModel!
+                      .message.busDetailsVm.rowList[i].seats[j].seatNo!);
 
                   setState(() {});
                 }
@@ -110,12 +129,17 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
         listener: (BuildContext context, state) {
           if (state is GetAdReservationLoadedState) {
             Constants.showDefaultSnackBar(
-                context: context, color: Colors.green, text: state.reservationResponse.toString());
+                context: context,
+                color: Colors.green,
+                text: state.reservationResponse.toString());
 
             Navigator.pop(context);
           } else if (state is ReservationErrorState) {
             log('message');
-            Constants.showDefaultSnackBar(context: context, color: Colors.red, text: state.message.toString());
+            Constants.showDefaultSnackBar(
+                context: context,
+                color: Colors.red,
+                text: state.message.toString());
 
             Navigator.pop(context);
           }
@@ -158,13 +182,17 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     child: Directionality(
-                      textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+                      textDirection: LanguageClass.isEnglish
+                          ? TextDirection.ltr
+                          : TextDirection.rtl,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            LanguageClass.isEnglish ? "Select seats" : "حدد كراسيك",
+                            LanguageClass.isEnglish
+                                ? "Select seats"
+                                : "حدد كراسيك",
                             style: fontStyle(
                                 color: AppColors.blackColor,
                                 fontSize: 25.sp,
@@ -180,12 +208,16 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                     height: 5,
                   ),
                   Directionality(
-                    textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+                    textDirection: LanguageClass.isEnglish
+                        ? TextDirection.ltr
+                        : TextDirection.rtl,
                     child: Container(
                       height: 60.sp,
                       padding: const EdgeInsets.all(0),
                       margin: const EdgeInsets.symmetric(horizontal: 0),
-                      decoration: BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(10)),
+                      decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(10)),
                       width: double.infinity,
                       child: Column(
                         children: [
@@ -197,29 +229,43 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                 children: [
                                   Text(
                                     intl.DateFormat('dd-MM-yyyy')
-                                        .format(busSeatsModel?.message.tripDate ?? DateTime.now())
+                                        .format(
+                                            busSeatsModel?.message.tripDate ??
+                                                DateTime.now())
                                         .toString(),
-                                    style: fontStyle(fontSize: 12.sp, fontFamily: FontFamily.bold, color: Colors.black),
+                                    style: fontStyle(
+                                        fontSize: 12.sp,
+                                        fontFamily: FontFamily.bold,
+                                        color: Colors.black),
                                   ),
                                   Text(
                                     intl.DateFormat('hh:mm a')
-                                        .format(busSeatsModel?.message.tripDate ?? DateTime.now())
+                                        .format(
+                                            busSeatsModel?.message.tripDate ??
+                                                DateTime.now())
                                         .toString(),
                                     style: fontStyle(
-                                        fontSize: 12.sp, height: 1, fontFamily: FontFamily.bold, color: Colors.black),
+                                        fontSize: 12.sp,
+                                        height: 1,
+                                        fontFamily: FontFamily.bold,
+                                        color: Colors.black),
                                   ),
                                 ],
                               ),
                               Container(
                                 height: 50.sp,
                                 width: 4,
-                                margin: const EdgeInsetsDirectional.symmetric(horizontal: 12),
+                                margin: const EdgeInsetsDirectional.symmetric(
+                                    horizontal: 12),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
                                   gradient: LinearGradient(
                                     begin: AlignmentDirectional.topStart,
                                     end: AlignmentDirectional.bottomStart,
-                                    colors: [AppColors.primaryColor, AppColors.primaryColor],
+                                    colors: [
+                                      AppColors.primaryColor,
+                                      AppColors.primaryColor
+                                    ],
                                   ),
                                 ),
                               ),
@@ -230,13 +276,17 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                   children: [
                                     Text(
                                       widget.from,
-                                      style:
-                                          fontStyle(fontSize: 12.sp, fontFamily: FontFamily.bold, color: Colors.black),
+                                      style: fontStyle(
+                                          fontSize: 12.sp,
+                                          fontFamily: FontFamily.bold,
+                                          color: Colors.black),
                                     ),
                                     Text(
                                       widget.to,
-                                      style:
-                                          fontStyle(fontSize: 12.sp, fontFamily: FontFamily.bold, color: Colors.black),
+                                      style: fontStyle(
+                                          fontSize: 12.sp,
+                                          fontFamily: FontFamily.bold,
+                                          color: Colors.black),
                                     ),
                                   ],
                                 ),
@@ -255,23 +305,38 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                             shrinkWrap: true,
                             children: [
                               Text(
-                                LanguageClass.isEnglish ? 'Available' : 'المتاح',
-                                style: fontStyle(fontSize: 12.sp, fontFamily: FontFamily.medium, color: Colors.black),
+                                LanguageClass.isEnglish
+                                    ? 'Available'
+                                    : 'المتاح',
+                                style: fontStyle(
+                                    fontSize: 12.sp,
+                                    fontFamily: FontFamily.medium,
+                                    color: Colors.black),
                               ),
                               Padding(
                                 padding: EdgeInsets.zero,
                                 child: Text(
                                   busSeatsModel!.message.emptySeats > 0
-                                      ? ((busSeatsModel?.message.emptySeats ?? 0)).toString() ?? " "
+                                      ? ((busSeatsModel?.message.emptySeats ??
+                                                  0))
+                                              .toString() ??
+                                          " "
                                       : " ",
                                   style: fontStyle(
-                                      fontSize: 30.sp, fontFamily: FontFamily.bold, color: AppColors.primaryColor),
+                                      fontSize: 30.sp,
+                                      fontFamily: FontFamily.bold,
+                                      color: AppColors.primaryColor),
                                 ),
                               ),
                               const SizedBox(height: 20),
                               Text(
-                                LanguageClass.isEnglish ? 'Selected' : 'تم تحديده',
-                                style: fontStyle(fontSize: 12.sp, fontFamily: FontFamily.medium, color: Colors.black),
+                                LanguageClass.isEnglish
+                                    ? 'Selected'
+                                    : 'تم تحديده',
+                                style: fontStyle(
+                                    fontSize: 12.sp,
+                                    fontFamily: FontFamily.medium,
+                                    color: Colors.black),
                               ),
                               Text(
                                 countSeatesNum.toString(),
@@ -283,12 +348,20 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                LanguageClass.isEnglish ? 'Unavailable' : 'غير متاح',
-                                style: fontStyle(fontSize: 12.sp, fontFamily: FontFamily.medium, color: Colors.black),
+                                LanguageClass.isEnglish
+                                    ? 'Unavailable'
+                                    : 'غير متاح',
+                                style: fontStyle(
+                                    fontSize: 12.sp,
+                                    fontFamily: FontFamily.medium,
+                                    color: Colors.black),
                               ),
                               Text(
                                 (unavailable).toString(),
-                                style: fontStyle(fontSize: 30.sp, fontFamily: FontFamily.bold, color: Colors.grey),
+                                style: fontStyle(
+                                    fontSize: 30.sp,
+                                    fontFamily: FontFamily.bold,
+                                    color: Colors.grey),
                               ),
                               SizedBox(
                                 height: 10,
@@ -297,16 +370,21 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                 onTap: () {
                                   if (Seatsnumbers.isNotEmpty) {
                                     log(countSeats.toString());
-                                    print("Tik Tik seat price: ${busSeatsModel?.message.seatPrice}");
-                                    BlocProvider.of<BusLayoutCubit>(context).SaveticketEdit(
-                                        reservationID: widget.reservationID,
-                                        Seatsnumbers: countSeats,
-                                        price: busSeatsModel?.message.seatPrice);
+                                    print(
+                                        "Tik Tik seat price: ${busSeatsModel?.message.seatPrice}");
+                                    BlocProvider.of<BusLayoutCubit>(context)
+                                        .SaveticketEdit(
+                                            reservationID: widget.reservationID,
+                                            Seatsnumbers: countSeats,
+                                            price: busSeatsModel
+                                                ?.message.seatPrice);
                                   } else {
                                     Constants.showDefaultSnackBar(
                                         color: Colors.red,
                                         context: context,
-                                        text: LanguageClass.isEnglish ? 'Select Seats' : 'اختر الكراسي');
+                                        text: LanguageClass.isEnglish
+                                            ? 'Select Seats'
+                                            : 'اختر الكراسي');
                                   }
                                 },
                                 child: Container(
@@ -322,8 +400,10 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                     child: Text(
                                       LanguageClass.isEnglish ? "Save" : "تم",
                                       textAlign: TextAlign.center,
-                                      style:
-                                          fontStyle(color: Colors.white, fontFamily: FontFamily.bold, fontSize: 16.sp),
+                                      style: fontStyle(
+                                          color: Colors.white,
+                                          fontFamily: FontFamily.bold,
+                                          fontSize: 16.sp),
                                     ),
                                   ),
                                 ),
@@ -390,7 +470,8 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                   : Positioned(
                                       top: seatheight < 10
                                           ? ((sizeHeight * .036) * seatheight)
-                                          : ((sizeHeight * .036) * seatheight) - 30.sp,
+                                          : ((sizeHeight * .036) * seatheight) -
+                                              30.sp,
                                       bottom: 5,
                                       left: 5,
                                       right: 5,
@@ -405,7 +486,9 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                           )),
                                     ),
                               Positioned(
-                                top: seatheight < 10 ? (sizeHeight / 9) : (sizeHeight / 5) - 30.sp,
+                                top: seatheight < 10
+                                    ? (sizeHeight / 9)
+                                    : (sizeHeight / 5) - 30.sp,
                                 left: 0,
                                 right: 0,
                                 bottom: 0,
@@ -414,46 +497,80 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                   width: sizeWidth - (sizeWidth / 4),
                                   child: SeatLayoutWidget(
                                     seatHeight: (sizeHeight * .036),
-                                    onSeatStateChanged: (rowI, colI, seatState, seat) {
+                                    onSeatStateChanged:
+                                        (rowI, colI, seatState, seat) {
                                       print("set ");
                                       print("seatstate ");
                                       print("rowI , column1 ");
                                       if (seatState == SeatState.selected) {
                                         print("I am here");
-                                        countSeats.add(
-                                            busSeatsModel!.message.busDetailsVm.rowList[rowI].seats[colI].seatBusID!);
-                                        Seatsnumbers.add(
-                                            busSeatsModel!.message.busDetailsVm.rowList[rowI].seats[colI].seatNo!);
+                                        countSeats.add(busSeatsModel!
+                                            .message
+                                            .busDetailsVm
+                                            .rowList[rowI]
+                                            .seats[colI]
+                                            .seatBusID!);
+                                        Seatsnumbers.add(busSeatsModel!
+                                            .message
+                                            .busDetailsVm
+                                            .rowList[rowI]
+                                            .seats[colI]
+                                            .seatNo!);
                                         print("countSeats");
                                         countSeatesNum = countSeats.length;
-                                        CacheHelper.setDataToSharedPref(key: 'countSeats', value: countSeats);
+                                        CacheHelper.setDataToSharedPref(
+                                            key: 'countSeats',
+                                            value: countSeats);
 
                                         setState(() {});
                                       } else {
                                         print("I am there");
                                         selectedSeats = null;
-                                        busSeatsModel!.message.busDetailsVm.rowList[rowI].seats[colI].seatState =
-                                            SeatState.available;
-                                        countSeats.remove(
-                                            busSeatsModel!.message.busDetailsVm.rowList[rowI].seats[colI].seatBusID!);
-                                        Seatsnumbers.remove(
-                                            busSeatsModel!.message.busDetailsVm.rowList[rowI].seats[colI].seatNo!);
+                                        busSeatsModel!
+                                            .message
+                                            .busDetailsVm
+                                            .rowList[rowI]
+                                            .seats[colI]
+                                            .seatState = SeatState.available;
+                                        countSeats.remove(busSeatsModel!
+                                            .message
+                                            .busDetailsVm
+                                            .rowList[rowI]
+                                            .seats[colI]
+                                            .seatBusID!);
+                                        Seatsnumbers.remove(busSeatsModel!
+                                            .message
+                                            .busDetailsVm
+                                            .rowList[rowI]
+                                            .seats[colI]
+                                            .seatNo!);
                                         countSeatesNum = countSeats.length;
                                         setState(() {});
                                       }
                                     },
                                     stateModel: SeatLayoutStateModel(
-                                      rows: busSeatsModel?.message.busDetailsVm.rowList.length ?? 0,
-                                      cols: busSeatsModel?.message.busDetailsVm.totalColumn ?? 5,
+                                      rows: busSeatsModel?.message.busDetailsVm
+                                              .rowList.length ??
+                                          0,
+                                      cols: busSeatsModel?.message.busDetailsVm
+                                              .totalColumn ??
+                                          5,
                                       seatSvgSize: 35.sp.toInt(),
-                                      pathSelectedSeat: 'assets/images/unavailable_seats.svg',
-                                      pathDisabledSeat: 'assets/images/unavailable_seats.svg',
-                                      pathSoldSeat: 'assets/images/disabled_seats.svg',
-                                      pathUnSelectedSeat: 'assets/images/unavailable_seats.svg',
+                                      pathSelectedSeat:
+                                          'assets/images/unavailable_seats.svg',
+                                      pathDisabledSeat:
+                                          'assets/images/unavailable_seats.svg',
+                                      pathSoldSeat:
+                                          'assets/images/disabled_seats.svg',
+                                      pathUnSelectedSeat:
+                                          'assets/images/unavailable_seats.svg',
                                       currentSeats: List.generate(
-                                        busSeatsModel?.message.busDetailsVm.rowList.length ?? 0,
+                                        busSeatsModel?.message.busDetailsVm
+                                                .rowList.length ??
+                                            0,
                                         // Number of rows based on totalSeats
-                                        (row) => busSeatsModel!.message.busDetailsVm.rowList[row].seats,
+                                        (row) => busSeatsModel!.message
+                                            .busDetailsVm.rowList[row].seats,
                                       ),
                                     ),
                                   ),
@@ -479,12 +596,17 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
         listener: (BuildContext context, state) {
           if (state is GetAdReservationLoadedState) {
             Constants.showDefaultSnackBar(
-                context: context, color: Colors.green, text: state.reservationResponse.toString());
+                context: context,
+                color: Colors.green,
+                text: state.reservationResponse.toString());
 
             Navigator.pop(context);
           } else if (state is ReservationErrorState) {
             log('message');
-            Constants.showDefaultSnackBar(context: context, color: Colors.red, text: state.message.toString());
+            Constants.showDefaultSnackBar(
+                context: context,
+                color: Colors.red,
+                text: state.message.toString());
 
             Navigator.pop(context);
           }
@@ -536,7 +658,9 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       //margin: const EdgeInsets.symmetric(horizontal: 15),
-                      decoration: BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(10)),
+                      decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(10)),
                       width: double.infinity,
                       child: Column(
                         children: [
@@ -545,13 +669,17 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                               Container(
                                 height: 50,
                                 width: 4,
-                                margin: const EdgeInsetsDirectional.symmetric(horizontal: 12),
+                                margin: const EdgeInsetsDirectional.symmetric(
+                                    horizontal: 12),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
                                   gradient: LinearGradient(
                                     begin: AlignmentDirectional.topStart,
                                     end: AlignmentDirectional.bottomStart,
-                                    colors: [AppColors.primaryColor, AppColors.primaryColor],
+                                    colors: [
+                                      AppColors.primaryColor,
+                                      AppColors.primaryColor
+                                    ],
                                   ),
                                 ),
                               ),
@@ -561,11 +689,17 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                 children: [
                                   Text(
                                     widget.from,
-                                    style: fontStyle(fontSize: 16, fontFamily: FontFamily.bold, color: Colors.black),
+                                    style: fontStyle(
+                                        fontSize: 16,
+                                        fontFamily: FontFamily.bold,
+                                        color: Colors.black),
                                   ),
                                   Text(
                                     widget.to,
-                                    style: fontStyle(fontSize: 16, fontFamily: FontFamily.bold, color: Colors.black),
+                                    style: fontStyle(
+                                        fontSize: 16,
+                                        fontFamily: FontFamily.bold,
+                                        color: Colors.black),
                                   ),
                                 ],
                               ),
@@ -585,16 +719,26 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                 shrinkWrap: true,
                                 children: [
                                   Text(
-                                    LanguageClass.isEnglish ? 'Available' : 'المتاح',
-                                    style: fontStyle(fontSize: 20, fontFamily: FontFamily.regular, color: Colors.black),
+                                    LanguageClass.isEnglish
+                                        ? 'Available'
+                                        : 'المتاح',
+                                    style: fontStyle(
+                                        fontSize: 20,
+                                        fontFamily: FontFamily.regular,
+                                        color: Colors.black),
                                   ),
                                   busSeatsModel == null
                                       ? SizedBox()
                                       : Padding(
                                           padding: EdgeInsets.zero,
                                           child: Text(
-                                            busSeatsModel!.message.emptySeats > 0
-                                                ? ((busSeatsModel?.message.emptySeats ?? 0)).toString() ?? " "
+                                            busSeatsModel!.message.emptySeats >
+                                                    0
+                                                ? ((busSeatsModel?.message
+                                                                .emptySeats ??
+                                                            0))
+                                                        .toString() ??
+                                                    " "
                                                 : " ",
                                             style: fontStyle(
                                                 fontSize: 45,
@@ -604,8 +748,13 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                         ),
                                   const SizedBox(height: 20),
                                   Text(
-                                    LanguageClass.isEnglish ? 'Selected' : 'تم تحديده',
-                                    style: fontStyle(fontSize: 20, fontFamily: FontFamily.regular, color: Colors.black),
+                                    LanguageClass.isEnglish
+                                        ? 'Selected'
+                                        : 'تم تحديده',
+                                    style: fontStyle(
+                                        fontSize: 20,
+                                        fontFamily: FontFamily.regular,
+                                        color: Colors.black),
                                   ),
                                   Text(
                                     Seatsnumbers.length.toString(),
@@ -617,13 +766,23 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                   ),
                                   const SizedBox(height: 10),
                                   Text(
-                                    LanguageClass.isEnglish ? 'Unavailable' : 'غير متاح',
-                                    style: fontStyle(fontSize: 20, fontFamily: FontFamily.regular, color: Colors.black),
+                                    LanguageClass.isEnglish
+                                        ? 'Unavailable'
+                                        : 'غير متاح',
+                                    style: fontStyle(
+                                        fontSize: 20,
+                                        fontFamily: FontFamily.regular,
+                                        color: Colors.black),
                                   ),
                                   Text(
                                     // unavailable.toString(),
-                                    unavailable > 0 ? ((unavailable ?? 0)).toString() ?? " " : " ",
-                                    style: fontStyle(fontSize: 45, fontFamily: FontFamily.medium, color: Colors.grey),
+                                    unavailable > 0
+                                        ? ((unavailable ?? 0)).toString() ?? " "
+                                        : " ",
+                                    style: fontStyle(
+                                        fontSize: 45,
+                                        fontFamily: FontFamily.medium,
+                                        color: Colors.grey),
                                   ),
                                   SizedBox(
                                     height: 10,
@@ -632,16 +791,22 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                     onTap: () {
                                       if (Seatsnumbers.isNotEmpty) {
                                         log(countSeats.toString());
-                                        print("Tik Tik seat price: ${busSeatsModel?.message.seatPrice}");
-                                        BlocProvider.of<BusLayoutCubit>(context).SaveticketEdit(
-                                            reservationID: widget.reservationID,
-                                            Seatsnumbers: countSeats,
-                                            price: busSeatsModel?.message.seatPrice);
+                                        print(
+                                            "Tik Tik seat price: ${busSeatsModel?.message.seatPrice}");
+                                        BlocProvider.of<BusLayoutCubit>(context)
+                                            .SaveticketEdit(
+                                                reservationID:
+                                                    widget.reservationID,
+                                                Seatsnumbers: countSeats,
+                                                price: busSeatsModel
+                                                    ?.message.seatPrice);
                                       } else {
                                         Constants.showDefaultSnackBar(
                                             color: Colors.red,
                                             context: context,
-                                            text: LanguageClass.isEnglish ? 'Select Seats' : 'اختر الكراسي');
+                                            text: LanguageClass.isEnglish
+                                                ? 'Select Seats'
+                                                : 'اختر الكراسي');
                                       }
                                     },
                                     child: Container(
@@ -653,9 +818,13 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                       ),
                                       child: Center(
                                         child: Text(
-                                          LanguageClass.isEnglish ? "Save" : "تم",
-                                          style:
-                                              fontStyle(color: Colors.white, fontFamily: FontFamily.bold, fontSize: 18),
+                                          LanguageClass.isEnglish
+                                              ? "Save"
+                                              : "تم",
+                                          style: fontStyle(
+                                              color: Colors.white,
+                                              fontFamily: FontFamily.bold,
+                                              fontSize: 18),
                                         ),
                                       ),
                                     ),
@@ -673,7 +842,8 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                 child: Stack(
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 0),
                                       child: Container(
                                           alignment: Alignment.topRight,
                                           height: sizeHeight * 0.23,
@@ -690,46 +860,93 @@ class _BusLayoutScreenState extends State<BusLayoutEditScreen> {
                                       child: SizedBox(
                                         child: SeatLayoutWidget(
                                           seatHeight: sizeHeight * .030,
-                                          onSeatStateChanged: (rowI, colI, seatState, seat) {
+                                          onSeatStateChanged:
+                                              (rowI, colI, seatState, seat) {
                                             print("set ");
                                             print("seatstate ");
                                             print("rowI , column1 ");
-                                            if (seatState == SeatState.selected) {
+                                            if (seatState ==
+                                                SeatState.selected) {
                                               print("I am here");
                                               countSeats.add(busSeatsModel!
-                                                  .message.busDetailsVm.rowList[rowI].seats[colI].seatBusID!);
+                                                  .message
+                                                  .busDetailsVm
+                                                  .rowList[rowI]
+                                                  .seats[colI]
+                                                  .seatBusID!);
                                               Seatsnumbers.add(busSeatsModel!
-                                                  .message.busDetailsVm.rowList[rowI].seats[colI].seatNo!);
+                                                  .message
+                                                  .busDetailsVm
+                                                  .rowList[rowI]
+                                                  .seats[colI]
+                                                  .seatNo!);
                                               print("countSeats");
-                                              countSeatesNum = countSeats.length;
-                                              CacheHelper.setDataToSharedPref(key: 'countSeats', value: countSeats);
+                                              countSeatesNum =
+                                                  countSeats.length;
+                                              CacheHelper.setDataToSharedPref(
+                                                  key: 'countSeats',
+                                                  value: countSeats);
 
                                               setState(() {});
                                             } else {
                                               print("I am there");
                                               selectedSeats = null;
-                                              busSeatsModel!.message.busDetailsVm.rowList[rowI].seats[colI].seatState =
+                                              busSeatsModel!
+                                                      .message
+                                                      .busDetailsVm
+                                                      .rowList[rowI]
+                                                      .seats[colI]
+                                                      .seatState =
                                                   SeatState.available;
                                               countSeats.remove(busSeatsModel!
-                                                  .message.busDetailsVm.rowList[rowI].seats[colI].seatBusID!);
+                                                  .message
+                                                  .busDetailsVm
+                                                  .rowList[rowI]
+                                                  .seats[colI]
+                                                  .seatBusID!);
                                               Seatsnumbers.remove(busSeatsModel!
-                                                  .message.busDetailsVm.rowList[rowI].seats[colI].seatNo!);
-                                              countSeatesNum = countSeats.length;
+                                                  .message
+                                                  .busDetailsVm
+                                                  .rowList[rowI]
+                                                  .seats[colI]
+                                                  .seatNo!);
+                                              countSeatesNum =
+                                                  countSeats.length;
                                               setState(() {});
                                             }
                                           },
                                           stateModel: SeatLayoutStateModel(
-                                            rows: busSeatsModel?.message.busDetailsVm.rowList.length ?? 0,
-                                            cols: busSeatsModel?.message.busDetailsVm.totalColumn ?? 5,
+                                            rows: busSeatsModel
+                                                    ?.message
+                                                    .busDetailsVm
+                                                    .rowList
+                                                    .length ??
+                                                0,
+                                            cols: busSeatsModel?.message
+                                                    .busDetailsVm.totalColumn ??
+                                                5,
                                             seatSvgSize: 35,
-                                            pathSelectedSeat: 'assets/images/unavailable_seats.svg',
-                                            pathDisabledSeat: 'assets/images/unavailable_seats.svg',
-                                            pathSoldSeat: 'assets/images/disabled_seats.svg',
-                                            pathUnSelectedSeat: 'assets/images/unavailable_seats.svg',
+                                            pathSelectedSeat:
+                                                'assets/images/unavailable_seats.svg',
+                                            pathDisabledSeat:
+                                                'assets/images/unavailable_seats.svg',
+                                            pathSoldSeat:
+                                                'assets/images/disabled_seats.svg',
+                                            pathUnSelectedSeat:
+                                                'assets/images/unavailable_seats.svg',
                                             currentSeats: List.generate(
-                                              busSeatsModel?.message.busDetailsVm.rowList.length ?? 0,
+                                              busSeatsModel
+                                                      ?.message
+                                                      .busDetailsVm
+                                                      .rowList
+                                                      .length ??
+                                                  0,
                                               // Number of rows based on totalSeats
-                                              (row) => busSeatsModel!.message.busDetailsVm.rowList[row].seats,
+                                              (row) => busSeatsModel!
+                                                  .message
+                                                  .busDetailsVm
+                                                  .rowList[row]
+                                                  .seats,
                                             ),
                                           ),
                                         ),

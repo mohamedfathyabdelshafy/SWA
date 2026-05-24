@@ -11,6 +11,7 @@ import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
 import 'package:swa/core/widgets/Timer_widget.dart';
+import 'package:swa/core/widgets/app_dialog.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
 import '../PLOH/reservation_my_wallet_cuibit/reservation_states_my_wallet.dart';
@@ -41,27 +42,15 @@ class _FawryScreenReservationState extends State<FawryScreenReservation> {
       bool isError = false,
       Widget? body,
       required Function callback}) async {
-    return CoolAlert.show(
-        barrierDismissible: true,
-        context: context,
-        confirmBtnText: "ok",
-        title: isError ? 'error' : '',
-        lottieAsset:
-            isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
-        type: CoolAlertType.custom,
-        loopAnimation: false,
-        backgroundColor: isError ? Colors.red : Colors.white,
-        text: message,
-        widget: body,
-        textTextStyle: fontStyle(
-          fontSize: 13.sp,
-          fontFamily: FontFamily.medium,
-        ),
-        titleTextStyle: fontStyle(
-          fontSize: 13.sp,
-          fontFamily: FontFamily.regular,
-        ),
-        onConfirmBtnTap: callback());
+    return AppDialog.show(
+      context: context,
+      message: message,
+      type: isError ? AppDialogType.failed : AppDialogType.warning,
+      body: body,
+      barrierDismissible: true,
+      confirmText: 'ok',
+      onConfirm: () => callback(),
+    );
   }
 
   // TextEditingController amountController = TextEditingController();

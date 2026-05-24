@@ -1,18 +1,14 @@
+
 import 'package:swa/features/sign_up/domain/entities/message_response.dart';
 
 class MessageResponseModel extends MessageResponse {
   const MessageResponseModel({
-    required var massage,
-    required String? status,
-    required dynamic balance,
-    required dynamic object,
-    required dynamic obj,
-  }) : super(
-            status: status,
-            massage: massage,
-            balance: balance,
-            object: object,
-            obj: obj);
+    required super.massage,
+    required super.status,
+    required super.balance,
+    required super.object,
+    required super.obj,
+  });
 
   factory MessageResponseModel.fromJson(Map<String, dynamic> json) =>
       MessageResponseModel(

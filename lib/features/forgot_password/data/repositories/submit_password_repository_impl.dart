@@ -27,6 +27,8 @@ class SubmitPasswordRepositoryImpl implements SubmitPasswordRepository {
       return Right(submitPassword);
     } on ServerException catch (error) {
       return Left(ServerFailure(error.toString()));
+    } catch (error) {
+      return Left(ServerFailure(error.toString()));
     }
   }
 }

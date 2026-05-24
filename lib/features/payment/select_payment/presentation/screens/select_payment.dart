@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/local_cache_helper.dart';
+import 'package:swa/core/utils/app_colors.dart';
+import 'package:swa/core/utils/language.dart';
 import 'package:swa/features/payment/electronic_wallet/presentation/cubit/eWallet_cubit.dart';
 import 'package:swa/features/payment/electronic_wallet/presentation/screens/electronic_screens.dart';
 import 'package:swa/features/payment/fawry/presentation/cubit/fawry_cubit.dart';
@@ -34,22 +37,43 @@ class _SelectPaymentScreenState extends State<SelectPaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ReusablePaymentMethodSelectionScreen(
-      countryid: countryid,
-      onBackPressed: _onBackPressed,
-      onVisaPaymentPressed: _onVisaPaymentPressed,
-      onElectronicWalletPressed: _onElectronicWalletPressed,
-      onFawryPressed: _onFawryPaymentPressed,
+    return Scaffold(
+      backgroundColor: const Color(0xfff3f3f3),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InkWell(
+                onTap: () => _onBackPressed(context),
+                child: Icon(
+                  LanguageClass.isEnglish
+                      ? Icons.arrow_back_rounded
+                      : Icons.arrow_forward_rounded,
+                  color: Routes.isomra
+                      ? AppColors.umragold
+                      : AppColors.primaryColor,
+                  size: 34,
+                ),
+              ),
+              const SizedBox(height: 28),
+              ReusablePaymentMethodSelectionScreen(
+                countryid: countryid,
+                onBackPressed: _onBackPressed,
+                onVisaPaymentPressed: _onVisaPaymentPressed,
+                onElectronicWalletPressed: _onElectronicWalletPressed,
+                onFawryPressed: _onFawryPaymentPressed,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
   void _onBackPressed(context) {
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      Routes.home,
-      (route) => false,
-      arguments: Routes.isomra,
-    );
+    Navigator.pop(context);
   }
 
   void _onVisaPaymentPressed(context) {

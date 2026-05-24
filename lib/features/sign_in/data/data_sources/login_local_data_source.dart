@@ -19,7 +19,7 @@ class LoginLocalDataSourceImpl implements LoginLocalDataSource {
     final jsonString =
         sharedPreferences.getString(AppStrings.cachedUserLoginData);
     if (jsonString != null && jsonString != '') {
-      print('Ahmed data ' + jsonString.toString());
+      print('Ahmed data $jsonString');
       final cachedUserData =
           Future.value(UserResponseModel.fromJson(json.decode(jsonString)));
       return cachedUserData;

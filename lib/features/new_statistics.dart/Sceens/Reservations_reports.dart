@@ -15,26 +15,37 @@ class ReservationsReportsScreen extends StatefulWidget {
   ReservationsReportsScreen({super.key, required this.allStaticsModel});
 
   @override
-  State<ReservationsReportsScreen> createState() => _ReservationsReportsScreenState();
+  State<ReservationsReportsScreen> createState() =>
+      _ReservationsReportsScreenState();
 }
 
 class _ReservationsReportsScreenState extends State<ReservationsReportsScreen> {
-  Widget _buildCell(String text, {bool isHeader = false, bool isfirst = false, bool islast = false}) {
+  Widget _buildCell(String text,
+      {bool isHeader = false, bool isfirst = false, bool islast = false}) {
     return Container(
       height: 50.h,
       alignment: Alignment.center,
-      padding: isHeader ? EdgeInsets.all(12) : EdgeInsets.symmetric(horizontal: 12.w, vertical: 0.h),
+      padding: isHeader
+          ? EdgeInsets.all(12)
+          : EdgeInsets.symmetric(horizontal: 12.w, vertical: 0.h),
       margin: isHeader ? EdgeInsets.only(bottom: 5.h) : EdgeInsets.zero,
       decoration: BoxDecoration(
-          color: isHeader ? AppColors.primaryColor.withOpacity(0.3) : Colors.blue[50],
+          color: isHeader
+              ? AppColors.primaryColor.withOpacity(0.3)
+              : Colors.blue[50],
           borderRadius: isfirst
-              ? BorderRadius.only(topRight: Radius.circular(8), bottomRight: Radius.circular(8))
+              ? BorderRadius.only(
+                  topRight: Radius.circular(8), bottomRight: Radius.circular(8))
               : islast
-                  ? BorderRadius.only(topLeft: Radius.circular(8), bottomLeft: Radius.circular(8))
+                  ? BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      bottomLeft: Radius.circular(8))
                   : null),
       child: Text(
         text,
-        style: fontStyle(fontFamily: isHeader ? FontFamily.bold : FontFamily.medium, fontSize: 12.sp),
+        style: fontStyle(
+            fontFamily: isHeader ? FontFamily.bold : FontFamily.medium,
+            fontSize: 12.sp),
       ),
     );
   }
@@ -52,7 +63,9 @@ class _ReservationsReportsScreenState extends State<ReservationsReportsScreen> {
           bloc: BlocProvider.of<StatisticsBloc>(context),
           builder: (context, state) {
             return Directionality(
-              textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+              textDirection: LanguageClass.isEnglish
+                  ? TextDirection.ltr
+                  : TextDirection.rtl,
               child: SafeArea(
                 child: Padding(
                   padding: EdgeInsets.symmetric(
@@ -66,10 +79,15 @@ class _ReservationsReportsScreenState extends State<ReservationsReportsScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(width: 34.w, child: iconBack(context)),
+                          SizedBox(width: 34.w, child: iconBack(context)),
                           Text(
-                            LanguageClass.isEnglish ? "Reservations reports" : "تقارير الحجوزات",
-                            style: fontStyle(color: Colors.black, fontSize: 16.sp, fontFamily: FontFamily.bold),
+                            LanguageClass.isEnglish
+                                ? "Reservations reports"
+                                : "تقارير الحجوزات",
+                            style: fontStyle(
+                                color: Colors.black,
+                                fontSize: 16.sp,
+                                fontFamily: FontFamily.bold),
                           ),
                           Container(
                             width: 34.w,
@@ -82,7 +100,9 @@ class _ReservationsReportsScreenState extends State<ReservationsReportsScreen> {
                           LanguageClass.isEnglish
                               ? "View and analyze detailed reports related to flight reservations."
                               : "عرض وتحليل التقارير المفصلة المتعلقة بحجوزات الرحلات.",
-                          style: fontStyle(color: Colors.black.withOpacity(0.6), fontSize: 12.sp),
+                          style: fontStyle(
+                              color: Colors.black.withOpacity(0.6),
+                              fontSize: 12.sp),
                         ),
                       ),
                       10.verticalSpace,
@@ -111,17 +131,23 @@ class _ReservationsReportsScreenState extends State<ReservationsReportsScreen> {
                                     labelPadding: EdgeInsets.zero,
                                     indicator: null,
                                     labelStyle: fontStyle(
-                                        fontFamily: FontFamily.bold, fontSize: 12.sp, fontWeight: FontWeight.w600),
+                                        fontFamily: FontFamily.bold,
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w600),
                                     indicatorWeight: 0.1,
                                     indicatorColor: AppColors.primaryColor,
                                     labelColor: Colors.black,
                                     unselectedLabelColor: Colors.grey[500],
                                     tabs: [
                                       Tab(
-                                        text: LanguageClass.isEnglish ? "Total Reservations" : "اجمالي الحجوزات",
+                                        text: LanguageClass.isEnglish
+                                            ? "Total Reservations"
+                                            : "اجمالي الحجوزات",
                                       ),
                                       Tab(
-                                        text: LanguageClass.isEnglish ? "Detailed trips" : "الرحلات المفصلة",
+                                        text: LanguageClass.isEnglish
+                                            ? "Detailed trips"
+                                            : "الرحلات المفصلة",
                                       ),
                                     ]),
                               ),
@@ -130,19 +156,24 @@ class _ReservationsReportsScreenState extends State<ReservationsReportsScreen> {
                                 child: TabBarView(children: [
                                   Container(
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Container(
                                           padding: EdgeInsets.all(5.w),
                                           decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(8),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                               border: Border.all(
-                                                color: Colors.black.withOpacity(0.4),
+                                                color: Colors.black
+                                                    .withOpacity(0.4),
                                               )),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
                                             children: [
                                               Icon(
                                                 Icons.calendar_today,
@@ -150,40 +181,61 @@ class _ReservationsReportsScreenState extends State<ReservationsReportsScreen> {
                                               ),
                                               5.horizontalSpace,
                                               Text(
-                                                LanguageClass.isEnglish ? "Select date range" : "اختر نطاق التاريخ",
-                                                style: fontStyle(fontFamily: FontFamily.medium, fontSize: 12.sp),
+                                                LanguageClass.isEnglish
+                                                    ? "Select date range"
+                                                    : "اختر نطاق التاريخ",
+                                                style: fontStyle(
+                                                    fontFamily:
+                                                        FontFamily.medium,
+                                                    fontSize: 12.sp),
                                               )
                                             ],
                                           ),
                                         ),
                                         15.verticalSpace,
                                         Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           children: [
                                             Expanded(
                                               child: InkWell(
                                                 onTap: () {},
                                                 child: Container(
-                                                  padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 5.w,
+                                                      vertical: 5.h),
                                                   decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(8),
-                                                    color: AppColors.primaryColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                    color:
+                                                        AppColors.primaryColor,
                                                   ),
                                                   child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
                                                     children: [
                                                       Icon(
-                                                        Icons.picture_as_pdf_rounded,
+                                                        Icons
+                                                            .picture_as_pdf_rounded,
                                                         color: Colors.white,
                                                       ),
                                                       5.horizontalSpace,
                                                       Text(
-                                                        LanguageClass.isEnglish ? "Export to pdf" : "تصدير إلى pdf",
+                                                        LanguageClass.isEnglish
+                                                            ? "Export to pdf"
+                                                            : "تصدير إلى pdf",
                                                         style: fontStyle(
-                                                            fontFamily: FontFamily.medium,
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
                                                             fontSize: 12.sp,
-                                                            color: Colors.white),
+                                                            color:
+                                                                Colors.white),
                                                       )
                                                     ],
                                                   ),
@@ -195,14 +247,23 @@ class _ReservationsReportsScreenState extends State<ReservationsReportsScreen> {
                                               child: InkWell(
                                                 onTap: () {},
                                                 child: Container(
-                                                  padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 5.w,
+                                                      vertical: 5.h),
                                                   decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(8),
-                                                    color: AppColors.primaryColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                    color:
+                                                        AppColors.primaryColor,
                                                   ),
                                                   child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
                                                     children: [
                                                       Icon(
                                                         Icons.download,
@@ -210,11 +271,16 @@ class _ReservationsReportsScreenState extends State<ReservationsReportsScreen> {
                                                       ),
                                                       5.horizontalSpace,
                                                       Text(
-                                                        LanguageClass.isEnglish ? "Export to Excel" : "تصدير إلى Excel",
+                                                        LanguageClass.isEnglish
+                                                            ? "Export to Excel"
+                                                            : "تصدير إلى Excel",
                                                         style: fontStyle(
-                                                            fontFamily: FontFamily.medium,
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
                                                             fontSize: 12.sp,
-                                                            color: Colors.white),
+                                                            color:
+                                                                Colors.white),
                                                       )
                                                     ],
                                                   ),
@@ -226,94 +292,179 @@ class _ReservationsReportsScreenState extends State<ReservationsReportsScreen> {
                                         20.verticalSpace,
                                         Flexible(
                                           child: ListView.separated(
-                                            itemCount: widget.allStaticsModel.message!.reservations!.length,
+                                            itemCount: widget.allStaticsModel
+                                                .message!.reservations!.length,
                                             shrinkWrap: true,
                                             scrollDirection: Axis.vertical,
-                                            itemBuilder: (BuildContext context, int index) {
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
                                               var formatter =
-                                                  intl.DateFormat.yMMMEd(LanguageClass.isEnglish ? 'en_US' : 'ar_SA');
+                                                  intl.DateFormat.yMMMEd(
+                                                      LanguageClass.isEnglish
+                                                          ? 'en_US'
+                                                          : 'ar_SA');
 
                                               return Column(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     "${LanguageClass.isEnglish ? "Date" : "التاريخ"} : ${formatter.format(
-                                                      widget.allStaticsModel.message!.reservations![index].tripDate!,
+                                                      widget
+                                                          .allStaticsModel
+                                                          .message!
+                                                          .reservations![index]
+                                                          .tripDate!,
                                                     )}",
                                                     style: fontStyle(
-                                                        color: AppColors.primaryColor,
+                                                        color: AppColors
+                                                            .primaryColor,
                                                         fontSize: 14.sp,
-                                                        fontFamily: FontFamily.bold),
+                                                        fontFamily:
+                                                            FontFamily.bold),
                                                   ),
                                                   5.verticalSpace,
                                                   SingleChildScrollView(
-                                                    scrollDirection: Axis.horizontal,
+                                                    scrollDirection:
+                                                        Axis.horizontal,
                                                     child: Table(
-                                                      defaultColumnWidth: FixedColumnWidth(120.0),
+                                                      defaultColumnWidth:
+                                                          FixedColumnWidth(
+                                                              120.0),
                                                       children: [
                                                         TableRow(children: [
-                                                          _buildCell(LanguageClass.isEnglish ? "Time" : 'الوقت',
-                                                              isHeader: true, isfirst: true),
                                                           _buildCell(
-                                                              LanguageClass.isEnglish ? "Trip Number" : 'رقم الرحلة',
+                                                              LanguageClass
+                                                                      .isEnglish
+                                                                  ? "Time"
+                                                                  : 'الوقت',
+                                                              isHeader: true,
+                                                              isfirst: true),
+                                                          _buildCell(
+                                                              LanguageClass
+                                                                      .isEnglish
+                                                                  ? "Trip Number"
+                                                                  : 'رقم الرحلة',
                                                               isHeader: true),
                                                           _buildCell(
-                                                              LanguageClass.isEnglish ? "Trip Type" : 'نوع الرحلة',
-                                                              isHeader: true),
-                                                          _buildCell(LanguageClass.isEnglish ? "From" : 'من',
-                                                              isHeader: true),
-                                                          _buildCell(LanguageClass.isEnglish ? "To" : 'إلى',
+                                                              LanguageClass
+                                                                      .isEnglish
+                                                                  ? "Trip Type"
+                                                                  : 'نوع الرحلة',
                                                               isHeader: true),
                                                           _buildCell(
-                                                              LanguageClass.isEnglish
+                                                              LanguageClass
+                                                                      .isEnglish
+                                                                  ? "From"
+                                                                  : 'من',
+                                                              isHeader: true),
+                                                          _buildCell(
+                                                              LanguageClass
+                                                                      .isEnglish
+                                                                  ? "To"
+                                                                  : 'إلى',
+                                                              isHeader: true),
+                                                          _buildCell(
+                                                              LanguageClass
+                                                                      .isEnglish
                                                                   ? 'Number of Reservations'
                                                                   : 'عدد الحجوزات',
                                                               isHeader: true),
-                                                          _buildCell(LanguageClass.isEnglish ? "Options" : 'خيارات',
-                                                              isHeader: true, islast: true),
+                                                          _buildCell(
+                                                              LanguageClass
+                                                                      .isEnglish
+                                                                  ? "Options"
+                                                                  : 'خيارات',
+                                                              isHeader: true,
+                                                              islast: true),
                                                         ]),
                                                         TableRow(children: [
                                                           _buildCell(
-                                                              intl.DateFormat('hh:mm a')
-                                                                  .format(widget.allStaticsModel.message!
-                                                                      .reservations![index].tripDate!)
+                                                              intl.DateFormat(
+                                                                      'hh:mm a')
+                                                                  .format(widget
+                                                                      .allStaticsModel
+                                                                      .message!
+                                                                      .reservations![
+                                                                          index]
+                                                                      .tripDate!)
                                                                   .toString(),
                                                               isfirst: true),
-                                                          _buildCell(widget.allStaticsModel.message!
-                                                              .reservations![index].ticketNumber
+                                                          _buildCell(widget
+                                                              .allStaticsModel
+                                                              .message!
+                                                              .reservations![
+                                                                  index]
+                                                              .ticketNumber
                                                               .toString()),
                                                           _buildCell("Null"),
-                                                          _buildCell(widget.allStaticsModel.message!
-                                                              .reservations![index].fromStation!),
-                                                          _buildCell(widget.allStaticsModel.message!
-                                                              .reservations![index].toStation!),
                                                           _buildCell(widget
-                                                              .allStaticsModel.message!.reservations![index].seatNo
+                                                              .allStaticsModel
+                                                              .message!
+                                                              .reservations![
+                                                                  index]
+                                                              .fromStation!),
+                                                          _buildCell(widget
+                                                              .allStaticsModel
+                                                              .message!
+                                                              .reservations![
+                                                                  index]
+                                                              .toStation!),
+                                                          _buildCell(widget
+                                                              .allStaticsModel
+                                                              .message!
+                                                              .reservations![
+                                                                  index]
+                                                              .seatNo
                                                               .toString()),
                                                           InkWell(
                                                             child: Container(
                                                               height: 50.h,
-                                                              padding:
-                                                                  EdgeInsets.symmetric(horizontal: 12, vertical: 10.h),
-                                                              margin: EdgeInsets.zero,
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          12,
+                                                                      vertical:
+                                                                          10.h),
+                                                              margin: EdgeInsets
+                                                                  .zero,
                                                               decoration: BoxDecoration(
-                                                                  color: Colors.blue[50],
+                                                                  color: Colors
+                                                                      .blue[50],
                                                                   borderRadius: BorderRadius.only(
-                                                                      topLeft: Radius.circular(8),
-                                                                      bottomLeft: Radius.circular(8))),
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              8),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              8))),
                                                               child: Container(
                                                                 height: 40.h,
                                                                 decoration: BoxDecoration(
-                                                                    borderRadius: BorderRadius.circular(8),
-                                                                    color: AppColors.primaryColor),
-                                                                alignment: Alignment.center,
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(
+                                                                                8),
+                                                                    color: AppColors
+                                                                        .primaryColor),
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
                                                                 child: Text(
-                                                                  LanguageClass.isEnglish ? "View" : "عرض",
+                                                                  LanguageClass
+                                                                          .isEnglish
+                                                                      ? "View"
+                                                                      : "عرض",
                                                                   style: fontStyle(
-                                                                      color: Colors.white,
-                                                                      fontSize: 12.sp,
-                                                                      fontFamily: FontFamily.bold),
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          12.sp,
+                                                                      fontFamily:
+                                                                          FontFamily
+                                                                              .bold),
                                                                 ),
                                                               ),
                                                             ),
@@ -325,7 +476,9 @@ class _ReservationsReportsScreenState extends State<ReservationsReportsScreen> {
                                                 ],
                                               );
                                             },
-                                            separatorBuilder: (BuildContext context, int index) {
+                                            separatorBuilder:
+                                                (BuildContext context,
+                                                    int index) {
                                               return Divider();
                                             },
                                           ),

@@ -13,12 +13,12 @@ class StatisticsInitial extends StatisticsState {}
 
 class MainstatisticsState extends StatisticsState {
   final MainStaticsModel? mainStaticsModel;
-  MainstatisticsState({this.mainStaticsModel});
+  const MainstatisticsState({this.mainStaticsModel});
 }
 
 class AllstatisticsState extends StatisticsState {
   final AllStaticsModel? allStaticsModel;
-  AllstatisticsState({this.allStaticsModel});
+  const AllstatisticsState({this.allStaticsModel});
 }
 
 class ReservationdetailsState extends StatisticsState {

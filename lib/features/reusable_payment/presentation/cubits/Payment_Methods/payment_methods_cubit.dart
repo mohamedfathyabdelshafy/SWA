@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/features/payment/wallet/data/repo/my_wallet_repo.dart';
 import 'package:swa/features/reusable_payment/data/models/payment_method.dart';
 import 'package:swa/features/reusable_payment/data/repo/payment_methods_repo.dart';

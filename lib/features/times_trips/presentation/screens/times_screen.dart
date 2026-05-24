@@ -78,7 +78,8 @@ class TimesScreen extends StatefulWidget {
   State<TimesScreen> createState() => _TimesScreenState();
 }
 
-class _TimesScreenState extends State<TimesScreen> {
+class _TimesScreenState extends State<TimesScreen>
+    with SingleTickerProviderStateMixin {
   int selected = -1;
   int selectedback = -1;
   BusSeatsModel? busSeatsModel;
@@ -115,10 +116,42 @@ class _TimesScreenState extends State<TimesScreen> {
   late DateTime selectedDate;
 
   final double itemWidth = 95;
+  late final TimesTripsCubit _timesTripsCubit;
+  late final AnimationController _roundTripHintController;
+  late final Animation<double> _roundTripHintAnimation;
+
+  bool get _hasBackTrips => widget.tripListBack?.isNotEmpty == true;
+
+  bool get _isReturnSelectionView =>
+      widget.tripTypeId == '2' &&
+      Ticketreservation.Seatsnumbers1.isNotEmpty &&
+      _hasBackTrips;
+
+  bool get _isShowingBackTrips =>
+      _isReturnSelectionView || (!isgotrip && _hasBackTrips);
+
+  String get _currentTripTitle {
+    if (LanguageClass.isEnglish) {
+      return _isShowingBackTrips ? "Back" : "Go";
+    }
+
+    return _isShowingBackTrips ? "عوده" : "ذهاب";
+  }
 
   @override
   void initState() {
     super.initState();
+    _timesTripsCubit = TimesTripsCubit()
+      ..getCompaniesList()
+      ..getRecomendedList();
+    _roundTripHintController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    )..repeat(reverse: true);
+    _roundTripHintAnimation = CurvedAnimation(
+      parent: _roundTripHintController,
+      curve: Curves.easeInOut,
+    );
     // BlocProvider.of<TimesTripsCubit>(context).getCompaniesList();
 
     // WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -149,6 +182,13 @@ class _TimesScreenState extends State<TimesScreen> {
       LanguageClass.isEnglish ? 'en' : 'ar',
     ).format(
         widget.tripList.isNotEmpty ? widget.tripList.first.accessDate! : now);
+  }
+
+  @override
+  void dispose() {
+    _timesTripsCubit.close();
+    _roundTripHintController.dispose();
+    super.dispose();
   }
 
   void _scrollToCenter() {
@@ -265,10 +305,8 @@ class _TimesScreenState extends State<TimesScreen> {
       body: Directionality(
         textDirection:
             (LanguageClass.isEnglish) ? TextDirection.ltr : TextDirection.rtl,
-        child: BlocProvider(
-          create: (context) => TimesTripsCubit()
-            ..getCompaniesList()
-            ..getRecomendedList(),
+        child: BlocProvider.value(
+          value: _timesTripsCubit,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -334,18 +372,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                           : element.textAr == p0).first.id;
 
                                   recommendeID = recomededid;
-                                  context.read<TimesTripsCubit>().getTimes(
-                                      tripType: widget.tripTypeId.toString(),
-                                      companeyid: companyID,
-                                      recommendeID: recommendeID,
-                                      fromStationID:
-                                          widget.fromStationID.toString(),
-                                      toStationID:
-                                          widget.toStationID.toString(),
-                                      dateGo: DateGo,
-                                      dateBack: DateBack,
-                                      startTime: startTime,
-                                      endTime: endTime);
+                                  _fetchTripsForSelectedDay();
                                 },
                                 onOpenChanged: (isOpen) {
                                   setState(() {
@@ -430,19 +457,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                       .CompanyID;
 
                                   companyID = companyid;
-                                  context.read<TimesTripsCubit>().getTimes(
-                                        tripType: widget.tripTypeId.toString(),
-                                        companeyid: companyID,
-                                        startTime: startTime,
-                                        endTime: endTime,
-                                        recommendeID: recommendeID,
-                                        dateGo: DateGo,
-                                        dateBack: DateBack,
-                                        fromStationID:
-                                            widget.fromStationID.toString(),
-                                        toStationID:
-                                            widget.toStationID.toString(),
-                                      );
+                                  _fetchTripsForSelectedDay();
                                 },
                                 dropdownItems: companies
                                     .map((e) => e.Name.toString())
@@ -501,179 +516,105 @@ class _TimesScreenState extends State<TimesScreen> {
                               // ),
                             );
                           })),
-                      Expanded(
-                        flex: 2,
-                        child: Builder(builder: (context) {
-                          return MultiBlocListener(
-                            listeners: [
-                              BlocListener<TimesTripsCubit, TimesTripsStates>(
-                                listener: (context, state) {
-                                  if (state is LoadingTimesTrips) {
-                                    Constants.showLoadingDialog(context);
-                                  } else if (state is LoadedTimesTrips) {
-                                    Constants.hideLoadingDialog(context);
+                      if (_hasBackTrips)
+                        Expanded(
+                          flex: 2,
+                          child: Builder(builder: (context) {
+                            return MultiBlocListener(
+                              listeners: [
+                                BlocListener<TimesTripsCubit, TimesTripsStates>(
+                                  listener: (context, state) {
+                                    if (state is LoadingTimesTrips) {
+                                      Constants.showLoadingDialog(context);
+                                    } else if (state is LoadedTimesTrips) {
+                                      Constants.hideLoadingDialog(context);
 
-                                    timeSlotsGo = state.timesTripsResponse
-                                        .message?.timeSlotsGo;
-                                    timeSlotsBack = state.timesTripsResponse
-                                        .message?.timeSlotsBack;
-                                    print(
-                                        "${state.timesTripsResponse.message!.tripList.length} list");
-                                    print(
-                                        "${state.timesTripsResponse.message!.tripListBack.length} back list");
-                                    if (state.timesTripsResponse.message!
-                                        .tripList.isNotEmpty) {
-                                      setState(() {
-                                        widget.tripList = state
-                                            .timesTripsResponse
-                                            .message!
-                                            .tripList;
-
-                                        widget.tripTypeId = '1';
-                                        if (widget.tripTypeId == '1') {
-                                          widget.tripListBack?.clear();
-                                          widget.tripTypeId = '1';
-                                        }
-                                        print(widget.tripTypeId.toString());
-                                        if (state.timesTripsResponse.message!
-                                            .tripListBack.isNotEmpty) {
-                                          widget.tripTypeId = '2';
-                                          widget.tripListBack = state
+                                      timeSlotsGo = state.timesTripsResponse
+                                          .message?.timeSlotsGo;
+                                      timeSlotsBack = state.timesTripsResponse
+                                          .message?.timeSlotsBack;
+                                      print(
+                                          "${state.timesTripsResponse.message!.tripList.length} list");
+                                      print(
+                                          "${state.timesTripsResponse.message!.tripListBack.length} back list");
+                                      if (state.timesTripsResponse.message!
+                                          .tripList.isNotEmpty) {
+                                        setState(() {
+                                          widget.tripList = state
                                               .timesTripsResponse
                                               .message!
-                                              .tripListBack;
-                                        }
-                                      });
+                                              .tripList;
 
-                                      Reservationtimer.stoptimer();
+                                          widget.tripTypeId = '1';
+                                          if (widget.tripTypeId == '1') {
+                                            widget.tripListBack?.clear();
+                                            widget.tripTypeId = '1';
+                                          }
+                                          print(widget.tripTypeId.toString());
+                                          if (state.timesTripsResponse.message!
+                                              .tripListBack.isNotEmpty) {
+                                            widget.tripTypeId = '2';
+                                            widget.tripListBack = state
+                                                .timesTripsResponse
+                                                .message!
+                                                .tripListBack;
+                                          }
+                                        });
 
-                                      Ticketreservation.Seatsnumbers1.clear();
-                                      Ticketreservation.Seatsnumbers2.clear();
-                                    } else {
+                                        Reservationtimer.stoptimer();
+
+                                        Ticketreservation.Seatsnumbers1.clear();
+                                        Ticketreservation.Seatsnumbers2.clear();
+                                      } else {
+                                        setState(() {
+                                          widget.tripList.clear();
+                                          widget.tripListBack?.clear();
+                                          timeSlotsGo = state.timesTripsResponse
+                                              .message?.timeSlotsGo;
+                                          timeSlotsBack = state
+                                              .timesTripsResponse
+                                              .message
+                                              ?.timeSlotsBack;
+                                        });
+                                        Constants.showDefaultSnackBar(
+                                            context: context,
+                                            text: LanguageClass.isEnglish
+                                                ? "No trips in this date"
+                                                : "لا يوجد مواعيد في هذا الموعد");
+                                      }
+                                    } else if (state is ErrorTimesTrips) {
+                                      widget.tripList.clear();
+                                      setState(() {});
+                                      Constants.hideLoadingDialog(context);
                                       Constants.showDefaultSnackBar(
-                                          context: context,
-                                          text: LanguageClass.isEnglish
-                                              ? "No trips in this date"
-                                              : "لا يوجد مواعيد في هذا الموعد");
+                                          context: context, text: state.msg);
                                     }
-                                  } else if (state is ErrorTimesTrips) {
-                                    widget.tripList.clear();
-                                    setState(() {});
-                                    Constants.hideLoadingDialog(context);
-                                    Constants.showDefaultSnackBar(
-                                        context: context, text: state.msg);
-                                  }
-                                },
-                              ),
-                              // BlocListener<TimesTripsCubit, TimesTripsStates>(
-                              //     listener: (context, state) {
-                              //   if (state is LoadedCompaniesList) {
-                              //     compaiesModel = state.compaiesModel;
-                              //     print(compaiesModel?.message.toString());
-                              //   }
-                              // }),
-                            ],
-                            child: _buildFilterCard(
-                                onTap: () {
-                                  isgotrip = !isgotrip;
-
-                                  if (widget.tripListBack?.isNotEmpty == true) {
-                                    final parts = widget.dateGo!.split('-');
-
-                                    final year = int.parse(parts[0]); // 2026
-                                    final month = int.parse(parts[1]); // 2
-                                    final day = int.parse(parts[2]); // 3
-
-                                    print(
-                                        "Original date string: ${widget.dateGo}");
-                                    print(
-                                        "Parsed as: year=$year, month=$month, day=$day");
-
-                                    final date = DateTime(year, month,
-                                        day); // DateTime(2026, 2, 3)
-                                    print("DateTime object: $date");
-
-                                    final newDate =
-                                        date.add(const Duration(days: 1));
-                                    print("After adding 1 day: $newDate");
-
-                                    final formattedDate = "${newDate.year}-"
-                                        "${newDate.month.toString().padLeft(2, '0')}-"
-                                        "${newDate.day.toString().padLeft(2, '0')}";
-
-                                    print(
-                                        "Final formatted date: $formattedDate");
-
-                                    isgotrip
-                                        ? context
-                                            .read<TimesTripsCubit>()
-                                            .getTimes(
-                                              tripType: "2",
-                                              fromStationID: widget
-                                                  .fromStationID
-                                                  .toString(),
-                                              toStationID:
-                                                  widget.toStationID.toString(),
-                                              dateGo: DateGo,
-                                              dateBack: DateBack,
-                                              companeyid: companyID,
-                                              endTime: endTime,
-                                              startTime: startTime,
-                                              recommendeID: recommendeID,
-                                            )
-                                        : context
-                                            .read<TimesTripsCubit>()
-                                            .getTimes(
-                                              tripType: "2",
-                                              fromStationID:
-                                                  widget.toStationID.toString(),
-                                              toStationID: widget.fromStationID
-                                                  .toString(),
-                                              dateGo: DateBack,
-                                              dateBack: DateGo,
-                                              companeyid: companyID,
-                                              endTime: endTime,
-                                              startTime: startTime,
-                                              recommendeID: recommendeID,
-                                            );
-                                  } else {
-                                    context.read<TimesTripsCubit>().getTimes(
-                                          tripType: "1",
-                                          // widget.tripTypeId.toString(),
-                                          fromStationID:
-                                              widget.fromStationID.toString(),
-
-                                          companeyid: companyID,
-                                          endTime: endTime,
-                                          startTime: startTime,
-                                          recommendeID: recommendeID,
-                                          dateGo: DateGo,
-                                          dateBack: DateBack,
-
-                                          toStationID:
-                                              widget.toStationID.toString(),
-
-                                          // dateBack: "",
-                                        );
-                                  }
-                                },
-                                title: (LanguageClass.isEnglish)
-                                    ? (isgotrip ? "Go" : "Back")
-                                    : (isgotrip ? "ذهاب" : "عوده"),
-                                icon: Icons.keyboard_arrow_down_outlined,
-                                iconCustom: true,
-                                widget: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 3.0),
-                                  child: Image.asset(
-                                    height: 8,
-                                    width: 8,
-                                    "assets/images/arrow_toggle.png",
-                                  ),
-                                )),
-                          );
-                        }),
-                      ),
+                                  },
+                                ),
+                                // BlocListener<TimesTripsCubit, TimesTripsStates>(
+                                //     listener: (context, state) {
+                                //   if (state is LoadedCompaniesList) {
+                                //     compaiesModel = state.compaiesModel;
+                                //     print(compaiesModel?.message.toString());
+                                //   }
+                                // }),
+                              ],
+                              child: _buildFilterCard(
+                                  onTap: () {
+                                    if (!_isReturnSelectionView) {
+                                      setState(() {
+                                        isgotrip = !isgotrip;
+                                      });
+                                    }
+                                    _fetchTripsForSelectedDay();
+                                  },
+                                  title: _currentTripTitle,
+                                  icon: Icons.keyboard_arrow_down_outlined,
+                                  iconCustom: true,
+                                  widget: _buildTripToggleHintIcon()),
+                            );
+                          }),
+                        ),
                     ],
                   ),
                 ),
@@ -1753,6 +1694,7 @@ class _TimesScreenState extends State<TimesScreen> {
                                                             // });
 
                                                             setState(() {
+                                                              isgotrip = false;
                                                               Ticketreservation
                                                                       .Seatsnumbers1
                                                                       .isNotEmpty
@@ -3132,7 +3074,7 @@ class _TimesScreenState extends State<TimesScreen> {
 
   Widget _buildTimeWidget(String day, String time) {
     final locale = LanguageClass.isEnglish ? 'en' : 'ar';
-    List<TimeSlots>? times = isgotrip ? timeSlotsGo : timeSlotsBack;
+    List<TimeSlots>? times = _isShowingBackTrips ? timeSlotsBack : timeSlotsGo;
 
     return SizedBox(
       height: 30,
@@ -3172,17 +3114,7 @@ class _TimesScreenState extends State<TimesScreen> {
                   onTap: () {
                     startTime = times[index].startTime;
                     endTime = times[index].endTime;
-                    context.read<TimesTripsCubit>().getTimes(
-                          tripType: widget.tripTypeId.toString(),
-                          fromStationID: widget.fromStationID.toString(),
-                          toStationID: widget.toStationID.toString(),
-                          startTime: startTime,
-                          endTime: endTime,
-                          companeyid: companyID,
-                          recommendeID: recommendeID,
-                          dateGo: DateGo,
-                          dateBack: DateBack,
-                        );
+                    _fetchTripsForSelectedDay();
                     setState(() {
                       selectedIndex = index;
                     });
@@ -3268,21 +3200,45 @@ class _TimesScreenState extends State<TimesScreen> {
   }
 
   void _changeDay(int value) {
-    setState(() {
-      selectedDate = selectedDate.add(Duration(days: value));
+    _selectDay(selectedDate.add(Duration(days: value)));
+    _scrollToCenter();
+    _fetchTripsForSelectedDay();
+  }
 
-      final locale = LanguageClass.isEnglish ? 'en' : 'ar';
+  void _selectDay(DateTime date) {
+    final locale = LanguageClass.isEnglish ? 'en' : 'ar';
+
+    setState(() {
+      selectedDate = date;
 
       DateGo = intl.DateFormat(
         'yyyy-MM-dd',
         locale,
-      ).format(selectedDate);
+      ).format(date);
 
       DateBack = intl.DateFormat(
         'yyyy-MM-dd',
         locale,
-      ).format(selectedDate);
+      ).format(date);
     });
+  }
+
+  void _fetchTripsForSelectedDay() {
+    _timesTripsCubit.getTimes(
+      tripType: _hasBackTrips ? "2" : widget.tripTypeId.toString(),
+      fromStationID: _isShowingBackTrips
+          ? widget.toStationID.toString()
+          : widget.fromStationID.toString(),
+      toStationID: _isShowingBackTrips
+          ? widget.fromStationID.toString()
+          : widget.toStationID.toString(),
+      dateGo: _isShowingBackTrips ? DateBack : DateGo,
+      dateBack: _isShowingBackTrips ? DateGo : DateBack,
+      startTime: startTime,
+      endTime: endTime,
+      companeyid: companyID,
+      recommendeID: recommendeID,
+    );
   }
 
   Widget _buildDayWidget() {
@@ -3317,37 +3273,11 @@ class _TimesScreenState extends State<TimesScreen> {
                 final dayText =
                     intl.DateFormat('EEE, d MMM', locale).format(date);
 
-                final dateText = intl.DateFormat('d MMM', locale).format(date);
-
                 return GestureDetector(
                   onTap: () {
-                    setState(() {
-                      selectedDate = date;
-
-                      DateGo = intl.DateFormat(
-                        'yyyy-MM-dd',
-                        locale,
-                      ).format(date);
-
-                      DateBack = intl.DateFormat(
-                        'yyyy-MM-dd',
-                        locale,
-                      ).format(date);
-                    });
-
+                    _selectDay(date);
                     _scrollToCenter();
-
-                    context.read<TimesTripsCubit>().getTimes(
-                          tripType: widget.tripTypeId.toString(),
-                          fromStationID: widget.fromStationID.toString(),
-                          toStationID: widget.toStationID.toString(),
-                          dateGo: DateGo,
-                          dateBack: DateBack,
-                          startTime: startTime,
-                          endTime: endTime,
-                          companeyid: companyID,
-                          recommendeID: recommendeID,
-                        );
+                    _fetchTripsForSelectedDay();
                   },
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -3684,6 +3614,71 @@ class _TimesScreenState extends State<TimesScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTripToggleHintIcon() {
+    const green = Color(0xff14A44D);
+
+    if (!_hasBackTrips) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 3.0),
+        child: Icon(
+          Icons.sync_alt_rounded,
+          color: Color(0xff717171),
+          size: 15,
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 3.0),
+      child: AnimatedBuilder(
+        animation: _roundTripHintAnimation,
+        builder: (context, child) {
+          final value = _roundTripHintAnimation.value;
+
+          return Transform.scale(
+            scale: 1 + (value * 0.12),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Opacity(
+                  opacity: 0.16 + (value * 0.18),
+                  child: Container(
+                    height: 24,
+                    width: 24,
+                    decoration: const BoxDecoration(
+                      color: green,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 18,
+                  width: 18,
+                  decoration: BoxDecoration(
+                    color: green,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: green.withValues(alpha: 0.25 + (value * 0.2)),
+                        blurRadius: 6 + (value * 5),
+                        spreadRadius: value * 1.5,
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.sync_alt_rounded,
+                    color: Colors.white,
+                    size: 13,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

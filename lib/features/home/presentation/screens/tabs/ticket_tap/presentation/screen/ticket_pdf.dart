@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:html/parser.dart' as html_parser;
@@ -9,12 +7,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'package:pdf/widgets.dart' as pw;
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:sizer/sizer.dart';
 import 'package:swa/config/routes/app_routes.dart';
-import 'package:swa/core/utils/Navigaton_bottombar.dart';
-import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
-import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/more_screen.dart';
 import 'package:swa/features/home/presentation/screens/tabs/ticket_tap/data/model/Ticketdetails_model.dart';
 
 class PdfPreviewPage extends StatelessWidget {
@@ -185,9 +179,9 @@ class PdfPreviewPage extends StatelessWidget {
       patrnerlogo = await networkImage(ticket!.logoFilePath!);
     }
 
-    final parsedHtml = html_parser.parse(ticket!.policy!.first);
-
-    List policyString = extractListItems(ticket!.policy!.first!);
+    final policyString = (ticket?.policy ?? [])
+        .expand((html) => extractListItems(html))
+        .toList();
 
     print(policyString.length);
 
@@ -195,15 +189,20 @@ class PdfPreviewPage extends StatelessWidget {
     final sortedCities = (ticketDetails.cities ?? []).toList()
       ..sort((a, b) => (a.orderIndex ?? 0).compareTo(b.orderIndex ?? 0));
 
-    pdf.addPage(pw.MultiPage(
+    const pageMargin = 12.0;
+    final availablePageWidth = PdfPageFormat.a4.width - (pageMargin * 2);
+
+    pdf.addPage(pw.Page(
         pageFormat: PdfPageFormat.a4,
         theme: pw.ThemeData.withFont(base: ttf, bold: ttfBold),
-        margin: const pw.EdgeInsets.all(18),
+        margin: const pw.EdgeInsets.all(pageMargin),
         build: (context) {
-          return List<pw.Widget>.generate(
-            1,
-            (index) {
-              return pw.Directionality(
+          return pw.FittedBox(
+            fit: pw.BoxFit.scaleDown,
+            alignment: pw.Alignment.topCenter,
+            child: pw.SizedBox(
+              width: availablePageWidth,
+              child: pw.Directionality(
                 textDirection:
                     isAr ? pw.TextDirection.rtl : pw.TextDirection.ltr,
                 child: pw.Container(
@@ -394,9 +393,7 @@ class PdfPreviewPage extends StatelessWidget {
                           children: [
                             pw.Center(
                               child: pw.Text(
-                                isAr
-                                    ? 'شروط الحجز'
-                                    : 'Booking Terms & Conditions',
+                                'شروط الحجز / Booking Terms & Conditions',
                                 style: pw.TextStyle(
                                   fontSize: 10,
                                   fontWeight: pw.FontWeight.bold,
@@ -417,16 +414,12 @@ class PdfPreviewPage extends StatelessWidget {
                                   ),
                                 ),
                                 child: pw.Directionality(
-                                  textDirection: isAr
-                                      ? pw.TextDirection.rtl
-                                      : pw.TextDirection.ltr,
+                                  textDirection: pw.TextDirection.rtl,
                                   child: pw.Text(
                                     text,
                                     style:
                                         pw.TextStyle(fontSize: 10, font: ttf),
-                                    textAlign: isAr
-                                        ? pw.TextAlign.right
-                                        : pw.TextAlign.left,
+                                    textAlign: pw.TextAlign.right,
                                   ),
                                 ),
                               ),
@@ -437,8 +430,8 @@ class PdfPreviewPage extends StatelessWidget {
                     ],
                   ),
                 ),
-              );
-            },
+              ),
+            ),
           );
         }));
 
@@ -531,7 +524,22 @@ class PdfPreviewPage extends StatelessWidget {
   List<String> extractListItems(String html) {
     final document = html_parser.parse(html);
     final listItems = document.getElementsByTagName('li');
-    return listItems.map((e) => e.text.trim()).toList();
+    return listItems
+        .map((e) {
+          final paragraphs = e
+              .getElementsByTagName('p')
+              .map((p) => p.text.trim())
+              .where((text) => text.isNotEmpty)
+              .toList();
+
+          if (paragraphs.isNotEmpty) {
+            return paragraphs.join('\n');
+          }
+
+          return e.text.trim();
+        })
+        .where((text) => text.isNotEmpty)
+        .toList();
   }
 
   Future<Uint8List> makePdf() async {

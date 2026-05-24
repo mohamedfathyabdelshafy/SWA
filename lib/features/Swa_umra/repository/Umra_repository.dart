@@ -40,7 +40,8 @@ class UmraRepos {
 
     print("GET TRIP UMRA TYPE Start");
 
-    var response = await apiConsumer.get("${EndPoints.baseUrl}TripUmraType/GetList?countryID=$countryid");
+    var response = await apiConsumer
+        .get("${EndPoints.baseUrl}TripUmraType/GetList?countryID=$countryid");
 
     log(" station from" + response.body);
     var decode = json.decode(response.body);
@@ -49,7 +50,8 @@ class UmraRepos {
   }
 
   Future getcity() async {
-    var response = await apiConsumer.get("${EndPoints.baseUrl}TripUmra/GetCityList?countryID=3");
+    var response = await apiConsumer
+        .get("${EndPoints.baseUrl}TripUmra/GetCityList?countryID=3");
 
     log(" station from" + response.body);
     var decode = json.decode(response.body);
@@ -63,7 +65,8 @@ class UmraRepos {
         //   key: 'countryid',
         // ) ??
         3;
-    var response = await apiConsumer.get("${EndPoints.baseUrl}TripUmra/GetCompainList?countryID=$countryid");
+    var response = await apiConsumer.get(
+        "${EndPoints.baseUrl}TripUmra/GetCompainList?countryID=$countryid");
 
     log(" campain " + response.body);
     var decode = json.decode(response.body);
@@ -80,12 +83,12 @@ class UmraRepos {
     print("Tik Tik Country id: $countryid");
     print("Tik Tik Trip id $tripid");
 
-    var response =
-        await apiConsumer.get("${EndPoints.baseUrl}Trip/GetSingleTripDetails?tripId=$tripid&countryID=$countryid");
+    var response = await apiConsumer.get(
+        "${EndPoints.baseUrl}Trip/GetSingleTripDetails?tripId=$tripid&countryID=$countryid");
 
     var decode = json.decode(response.body);
 
-    print("TikTik Get seat response ${decode}");
+    print("TikTik Get seat response $decode");
 
     Seatsmodel seatsmodel = Seatsmodel.fromJson(decode);
 
@@ -98,7 +101,8 @@ class UmraRepos {
         //   key: 'countryid',
         // ) ??
         3;
-    var response = await apiConsumer.post("${EndPoints.baseUrl}TripUmra/HoldSeat?seatId=$seatId&tripId=$tripid");
+    var response = await apiConsumer.post(
+        "${EndPoints.baseUrl}TripUmra/HoldSeat?seatId=$seatId&tripId=$tripid");
 
     log(" hold seat " + response.body);
     var decode = json.decode(response.body);
@@ -137,19 +141,24 @@ class UmraRepos {
         for (int i = 0; i < UmraDetails.finaltransportation!.length; i++)
           {
             "SeatIds": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .seatsnumber,
             "TripID": UmraDetails.finaltransportation![i].tripId,
             "FromStationID": UmraDetails.finaltransportation![i].fromStationId,
             "ToStationID": UmraDetails.finaltransportation![i].toStationId,
             "TripDate": UmraDetails.finaltransportation![i].tripDate.toString(),
             "Price": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .totalprice,
             "LineID": UmraDetails.finaltransportation![i].lineId,
             "ServiceTypeID": UmraDetails.finaltransportation![i].serviceTypeId,
             "BusID": UmraDetails.finaltransportation![i].busId,
-            "TripUmrahTransportationID": UmraDetails.finaltransportation![i].tripUmrahTransportationId
+            "TripUmrahTransportationID":
+                UmraDetails.finaltransportation![i].tripUmrahTransportationId
           },
       ],
       "TripUmrahID": UmraDetails.tripUmrahID,
@@ -210,7 +219,8 @@ class UmraRepos {
         // ) ??
         3;
 
-    var response = await apiConsumer.get("${EndPoints.baseUrl}TripUmra/GetCompainList?countryID=$countryid");
+    var response = await apiConsumer.get(
+        "${EndPoints.baseUrl}TripUmra/GetCompainList?countryID=$countryid");
 
     log(" campains " + response.body);
     var decode = json.decode(response.body);
@@ -269,13 +279,19 @@ class UmraRepos {
         for (int i = 0; i < UmraDetails.finaltransportation!.length; i++)
           {
             "SeatIds": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .seatsnumber,
             "Price": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .totalprice,
             "PersonCount": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .seatsnumber
                 .length,
             "TripID": UmraDetails.finaltransportation![i].tripId,
@@ -285,28 +301,36 @@ class UmraRepos {
             "LineID": UmraDetails.finaltransportation![i].lineId,
             "ServiceTypeID": UmraDetails.finaltransportation![i].serviceTypeId,
             "BusID": UmraDetails.finaltransportation![i].busId,
-            "TripUmrahTransportationID": UmraDetails.finaltransportation![i].tripUmrahTransportationId,
+            "TripUmrahTransportationID":
+                UmraDetails.finaltransportation![i].tripUmrahTransportationId,
             "Discount": 0.0
           }
       ],
       "AccommodationList": [
         for (int i = 0; i < UmraDetails.finalaccomidationRoom.length; i++)
-          for (int j = 0; j < UmraDetails.finalaccomidationRoom[i].customernumbers.length; j++)
+          for (int j = 0;
+              j < UmraDetails.finalaccomidationRoom[i].customernumbers.length;
+              j++)
             if (UmraDetails.finalaccomidationRoom[i].customernumbers[j] > 0)
               {
                 "Price": UmraDetails.finalaccomidationRoom[i].room[j].price *
                     UmraDetails.finalaccomidationRoom[i].customernumbers[j],
-                "PersonCount": UmraDetails.finalaccomidationRoom[i].customernumbers[j],
-                "TripUmrahAccommodationID": UmraDetails.finalaccomidationRoom[i].room[j].accomdationId,
-                "AccommodationRoomID": UmraDetails.finalaccomidationRoom[i].room[j].accomodationRoomTypeId
+                "PersonCount":
+                    UmraDetails.finalaccomidationRoom[i].customernumbers[j],
+                "TripUmrahAccommodationID":
+                    UmraDetails.finalaccomidationRoom[i].room[j].accomdationId,
+                "AccommodationRoomID": UmraDetails
+                    .finalaccomidationRoom[i].room[j].accomodationRoomTypeId
               }
       ],
       "ProgramList": [
         for (int i = 0; i < UmraDetails.finalprogramslist.length; i++)
           {
-            "Price": UmraDetails.finalprogramslist[i].price * UmraDetails.finalcustomersprograms[i],
+            "Price": UmraDetails.finalprogramslist[i].price *
+                UmraDetails.finalcustomersprograms[i],
             "PersonCount": UmraDetails.finalcustomersprograms[i],
-            "TripUmrahProgramID": UmraDetails.finalprogramslist[i].tripUnrahProgramId
+            "TripUmrahProgramID":
+                UmraDetails.finalprogramslist[i].tripUnrahProgramId
           }
       ],
       "CompanionList": UmraDetails.companionDetails,
@@ -371,13 +395,19 @@ class UmraRepos {
         for (int i = 0; i < UmraDetails.finaltransportation!.length; i++)
           {
             "SeatIds": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .seatsnumber,
             "Price": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .totalprice,
             "PersonCount": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .seatsnumber
                 .length,
             "TripID": UmraDetails.finaltransportation![i].tripId,
@@ -387,27 +417,35 @@ class UmraRepos {
             "LineID": UmraDetails.finaltransportation![i].lineId,
             "ServiceTypeID": UmraDetails.finaltransportation![i].serviceTypeId,
             "BusID": UmraDetails.finaltransportation![i].busId,
-            "TripUmrahTransportationID": UmraDetails.finaltransportation![i].tripUmrahTransportationId,
+            "TripUmrahTransportationID":
+                UmraDetails.finaltransportation![i].tripUmrahTransportationId,
           }
       ],
       "AccommodationList": [
         for (int i = 0; i < UmraDetails.finalaccomidationRoom.length; i++)
-          for (int j = 0; j < UmraDetails.finalaccomidationRoom[i].customernumbers.length; j++)
+          for (int j = 0;
+              j < UmraDetails.finalaccomidationRoom[i].customernumbers.length;
+              j++)
             if (UmraDetails.finalaccomidationRoom[i].customernumbers[j] > 0)
               {
                 "Price": UmraDetails.finalaccomidationRoom[i].room[j].price *
                     UmraDetails.finalaccomidationRoom[i].customernumbers[j],
-                "PersonCount": UmraDetails.finalaccomidationRoom[i].customernumbers[j],
-                "TripUmrahAccommodationID": UmraDetails.finalaccomidationRoom[i].room[j].accomdationId,
-                "AccommodationRoomID": UmraDetails.finalaccomidationRoom[i].room[j].accomodationRoomTypeId
+                "PersonCount":
+                    UmraDetails.finalaccomidationRoom[i].customernumbers[j],
+                "TripUmrahAccommodationID":
+                    UmraDetails.finalaccomidationRoom[i].room[j].accomdationId,
+                "AccommodationRoomID": UmraDetails
+                    .finalaccomidationRoom[i].room[j].accomodationRoomTypeId
               }
       ],
       "ProgramList": [
         for (int i = 0; i < UmraDetails.finalprogramslist.length; i++)
           {
-            "Price": UmraDetails.finalprogramslist[i].price * UmraDetails.finalcustomersprograms[i],
+            "Price": UmraDetails.finalprogramslist[i].price *
+                UmraDetails.finalcustomersprograms[i],
             "PersonCount": UmraDetails.finalcustomersprograms[i],
-            "TripUmrahProgramID": UmraDetails.finalprogramslist[i].tripUnrahProgramId
+            "TripUmrahProgramID":
+                UmraDetails.finalprogramslist[i].tripUnrahProgramId
           }
       ],
       "UmrahReservationID": resrvationid,
@@ -417,7 +455,7 @@ class UmraRepos {
       EndPoints.editreservation,
       body: datapayment,
     );
-    log('body 2' + datapayment.toString());
+    log('body 2$datapayment');
 
     log('ReservationResponse ' + response.body);
 
@@ -472,13 +510,19 @@ class UmraRepos {
         for (int i = 0; i < UmraDetails.finaltransportation!.length; i++)
           {
             "SeatIds": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .seatsnumber,
             "Price": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .totalprice,
             "PersonCount": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .seatsnumber
                 .length,
             "TripID": UmraDetails.finaltransportation![i].tripId,
@@ -488,27 +532,35 @@ class UmraRepos {
             "LineID": UmraDetails.finaltransportation![i].lineId,
             "ServiceTypeID": UmraDetails.finaltransportation![i].serviceTypeId,
             "BusID": UmraDetails.finaltransportation![i].busId,
-            "TripUmrahTransportationID": UmraDetails.finaltransportation![i].tripUmrahTransportationId,
+            "TripUmrahTransportationID":
+                UmraDetails.finaltransportation![i].tripUmrahTransportationId,
           }
       ],
       "AccommodationList": [
         for (int i = 0; i < UmraDetails.finalaccomidationRoom.length; i++)
-          for (int j = 0; j < UmraDetails.finalaccomidationRoom[i].customernumbers.length; j++)
+          for (int j = 0;
+              j < UmraDetails.finalaccomidationRoom[i].customernumbers.length;
+              j++)
             if (UmraDetails.finalaccomidationRoom[i].customernumbers[j] > 0)
               {
                 "Price": UmraDetails.finalaccomidationRoom[i].room[j].price *
                     UmraDetails.finalaccomidationRoom[i].customernumbers[j],
-                "PersonCount": UmraDetails.finalaccomidationRoom[i].customernumbers[j],
-                "TripUmrahAccommodationID": UmraDetails.finalaccomidationRoom[i].room[j].accomdationId,
-                "AccommodationRoomID": UmraDetails.finalaccomidationRoom[i].room[j].accomodationRoomTypeId
+                "PersonCount":
+                    UmraDetails.finalaccomidationRoom[i].customernumbers[j],
+                "TripUmrahAccommodationID":
+                    UmraDetails.finalaccomidationRoom[i].room[j].accomdationId,
+                "AccommodationRoomID": UmraDetails
+                    .finalaccomidationRoom[i].room[j].accomodationRoomTypeId
               }
       ],
       "ProgramList": [
         for (int i = 0; i < UmraDetails.finalprogramslist.length; i++)
           {
-            "Price": UmraDetails.finalprogramslist[i].price * UmraDetails.finalcustomersprograms[i],
+            "Price": UmraDetails.finalprogramslist[i].price *
+                UmraDetails.finalcustomersprograms[i],
             "PersonCount": UmraDetails.finalcustomersprograms[i],
-            "TripUmrahProgramID": UmraDetails.finalprogramslist[i].tripUnrahProgramId
+            "TripUmrahProgramID":
+                UmraDetails.finalprogramslist[i].tripUnrahProgramId
           }
       ],
       "cardPaymentModel": {
@@ -524,7 +576,7 @@ class UmraRepos {
       EndPoints.reservationUmra,
       body: data,
     );
-    log('body 3' + data.toString());
+    log('body 3$data');
 
     log('ReservationResponse ' + response.body);
 
@@ -578,13 +630,19 @@ class UmraRepos {
         for (int i = 0; i < UmraDetails.finaltransportation!.length; i++)
           {
             "SeatIds": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .seatsnumber,
             "Price": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .totalprice,
             "PersonCount": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .seatsnumber
                 .length,
             "TripID": UmraDetails.finaltransportation![i].tripId,
@@ -594,27 +652,35 @@ class UmraRepos {
             "LineID": UmraDetails.finaltransportation![i].lineId,
             "ServiceTypeID": UmraDetails.finaltransportation![i].serviceTypeId,
             "BusID": UmraDetails.finaltransportation![i].busId,
-            "TripUmrahTransportationID": UmraDetails.finaltransportation![i].tripUmrahTransportationId,
+            "TripUmrahTransportationID":
+                UmraDetails.finaltransportation![i].tripUmrahTransportationId,
           }
       ],
       "AccommodationList": [
         for (int i = 0; i < UmraDetails.finalaccomidationRoom.length; i++)
-          for (int j = 0; j < UmraDetails.finalaccomidationRoom[i].customernumbers.length; j++)
+          for (int j = 0;
+              j < UmraDetails.finalaccomidationRoom[i].customernumbers.length;
+              j++)
             if (UmraDetails.finalaccomidationRoom[i].customernumbers[j] > 0)
               {
                 "Price": UmraDetails.finalaccomidationRoom[i].room[j].price *
                     UmraDetails.finalaccomidationRoom[i].customernumbers[j],
-                "PersonCount": UmraDetails.finalaccomidationRoom[i].customernumbers[j],
-                "TripUmrahAccommodationID": UmraDetails.finalaccomidationRoom[i].room[j].accomdationId,
-                "AccommodationRoomID": UmraDetails.finalaccomidationRoom[i].room[j].accomodationRoomTypeId
+                "PersonCount":
+                    UmraDetails.finalaccomidationRoom[i].customernumbers[j],
+                "TripUmrahAccommodationID":
+                    UmraDetails.finalaccomidationRoom[i].room[j].accomdationId,
+                "AccommodationRoomID": UmraDetails
+                    .finalaccomidationRoom[i].room[j].accomodationRoomTypeId
               }
       ],
       "ProgramList": [
         for (int i = 0; i < UmraDetails.finalprogramslist.length; i++)
           {
-            "Price": UmraDetails.finalprogramslist[i].price * UmraDetails.finalcustomersprograms[i],
+            "Price": UmraDetails.finalprogramslist[i].price *
+                UmraDetails.finalcustomersprograms[i],
             "PersonCount": UmraDetails.finalcustomersprograms[i],
-            "TripUmrahProgramID": UmraDetails.finalprogramslist[i].tripUnrahProgramId
+            "TripUmrahProgramID":
+                UmraDetails.finalprogramslist[i].tripUnrahProgramId
           }
       ],
       "UmrahReservationID": umrareservationid,
@@ -632,7 +698,7 @@ class UmraRepos {
       EndPoints.editreservation,
       body: data,
     );
-    log('body 4' + data.toString());
+    log('body 4$data');
 
     log('ReservationResponse ' + response.body);
 
@@ -681,13 +747,19 @@ class UmraRepos {
         for (int i = 0; i < UmraDetails.finaltransportation!.length; i++)
           {
             "SeatIds": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .seatsnumber,
             "Price": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .totalprice,
             "PersonCount": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .seatsnumber
                 .length,
             "TripID": UmraDetails.finaltransportation![i].tripId,
@@ -697,27 +769,35 @@ class UmraRepos {
             "LineID": UmraDetails.finaltransportation![i].lineId,
             "ServiceTypeID": UmraDetails.finaltransportation![i].serviceTypeId,
             "BusID": UmraDetails.finaltransportation![i].busId,
-            "TripUmrahTransportationID": UmraDetails.finaltransportation![i].tripUmrahTransportationId,
+            "TripUmrahTransportationID":
+                UmraDetails.finaltransportation![i].tripUmrahTransportationId,
           }
       ],
       "AccommodationList": [
         for (int i = 0; i < UmraDetails.finalaccomidationRoom.length; i++)
-          for (int j = 0; j < UmraDetails.finalaccomidationRoom[i].customernumbers.length; j++)
+          for (int j = 0;
+              j < UmraDetails.finalaccomidationRoom[i].customernumbers.length;
+              j++)
             if (UmraDetails.finalaccomidationRoom[i].customernumbers[j] > 0)
               {
                 "Price": UmraDetails.finalaccomidationRoom[i].room[j].price *
                     UmraDetails.finalaccomidationRoom[i].customernumbers[j],
-                "PersonCount": UmraDetails.finalaccomidationRoom[i].customernumbers[j],
-                "TripUmrahAccommodationID": UmraDetails.finalaccomidationRoom[i].room[j].accomdationId,
-                "AccommodationRoomID": UmraDetails.finalaccomidationRoom[i].room[j].accomodationRoomTypeId
+                "PersonCount":
+                    UmraDetails.finalaccomidationRoom[i].customernumbers[j],
+                "TripUmrahAccommodationID":
+                    UmraDetails.finalaccomidationRoom[i].room[j].accomdationId,
+                "AccommodationRoomID": UmraDetails
+                    .finalaccomidationRoom[i].room[j].accomodationRoomTypeId
               }
       ],
       "ProgramList": [
         for (int i = 0; i < UmraDetails.finalprogramslist.length; i++)
           {
-            "Price": UmraDetails.finalprogramslist[i].price * UmraDetails.finalcustomersprograms[i],
+            "Price": UmraDetails.finalprogramslist[i].price *
+                UmraDetails.finalcustomersprograms[i],
             "PersonCount": UmraDetails.finalcustomersprograms[i],
-            "TripUmrahProgramID": UmraDetails.finalprogramslist[i].tripUnrahProgramId
+            "TripUmrahProgramID":
+                UmraDetails.finalprogramslist[i].tripUnrahProgramId
           }
       ],
       "RefNoModel": {
@@ -729,7 +809,7 @@ class UmraRepos {
       EndPoints.reservationUmra,
       body: data,
     );
-    log('body 5' + data.toString());
+    log('body 5$data');
 
     log('ReservationResponse ' + response.body);
 
@@ -781,13 +861,19 @@ class UmraRepos {
         for (int i = 0; i < UmraDetails.finaltransportation!.length; i++)
           {
             "SeatIds": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .seatsnumber,
             "Price": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .totalprice,
             "PersonCount": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .seatsnumber
                 .length,
             "TripID": UmraDetails.finaltransportation![i].tripId,
@@ -797,27 +883,35 @@ class UmraRepos {
             "LineID": UmraDetails.finaltransportation![i].lineId,
             "ServiceTypeID": UmraDetails.finaltransportation![i].serviceTypeId,
             "BusID": UmraDetails.finaltransportation![i].busId,
-            "TripUmrahTransportationID": UmraDetails.finaltransportation![i].tripUmrahTransportationId,
+            "TripUmrahTransportationID":
+                UmraDetails.finaltransportation![i].tripUmrahTransportationId,
           }
       ],
       "AccommodationList": [
         for (int i = 0; i < UmraDetails.finalaccomidationRoom.length; i++)
-          for (int j = 0; j < UmraDetails.finalaccomidationRoom[i].customernumbers.length; j++)
+          for (int j = 0;
+              j < UmraDetails.finalaccomidationRoom[i].customernumbers.length;
+              j++)
             if (UmraDetails.finalaccomidationRoom[i].customernumbers[j] > 0)
               {
                 "Price": UmraDetails.finalaccomidationRoom[i].room[j].price *
                     UmraDetails.finalaccomidationRoom[i].customernumbers[j],
-                "PersonCount": UmraDetails.finalaccomidationRoom[i].customernumbers[j],
-                "TripUmrahAccommodationID": UmraDetails.finalaccomidationRoom[i].room[j].accomdationId,
-                "AccommodationRoomID": UmraDetails.finalaccomidationRoom[i].room[j].accomodationRoomTypeId
+                "PersonCount":
+                    UmraDetails.finalaccomidationRoom[i].customernumbers[j],
+                "TripUmrahAccommodationID":
+                    UmraDetails.finalaccomidationRoom[i].room[j].accomdationId,
+                "AccommodationRoomID": UmraDetails
+                    .finalaccomidationRoom[i].room[j].accomodationRoomTypeId
               }
       ],
       "ProgramList": [
         for (int i = 0; i < UmraDetails.finalprogramslist.length; i++)
           {
-            "Price": UmraDetails.finalprogramslist[i].price * UmraDetails.finalcustomersprograms[i],
+            "Price": UmraDetails.finalprogramslist[i].price *
+                UmraDetails.finalcustomersprograms[i],
             "PersonCount": UmraDetails.finalcustomersprograms[i],
-            "TripUmrahProgramID": UmraDetails.finalprogramslist[i].tripUnrahProgramId
+            "TripUmrahProgramID":
+                UmraDetails.finalprogramslist[i].tripUnrahProgramId
           }
       ],
       "UmrahReservationID": umrahReservationID,
@@ -831,7 +925,7 @@ class UmraRepos {
       EndPoints.editreservation,
       body: data,
     );
-    log('body 6' + data.toString());
+    log('body 6$data');
 
     log('ReservationResponse ' + response.body);
 
@@ -847,7 +941,8 @@ class UmraRepos {
           key: 'countryid',
         ) ??
         3;
-    final res = await apiConsumer.get("${EndPoints.baseUrl}TripUmra/$type?countryID=$countryid");
+    final res = await apiConsumer
+        .get("${EndPoints.baseUrl}TripUmra/$type?countryID=$countryid");
 
     log("policy" + res.body);
     var decode = json.decode(res.body);
@@ -860,8 +955,8 @@ class UmraRepos {
           key: 'countryid',
         ) ??
         3;
-    final res = await apiConsumer
-        .post("${EndPoints.baseUrl}TripUmra/CancelReservation?umrahReservation=$reservationID&countryID=$countryid");
+    final res = await apiConsumer.post(
+        "${EndPoints.baseUrl}TripUmra/CancelReservation?umrahReservation=$reservationID&countryID=$countryid");
 
     log("policy" + res.body);
     var decode = json.decode(res.body);
@@ -875,7 +970,8 @@ class UmraRepos {
         //   key: 'countryid',
         // ) ??
         3;
-    final res = await apiConsumer.get("${EndPoints.baseUrl}TripUmra/GetPageList?countryID=$countryid");
+    final res = await apiConsumer
+        .get("${EndPoints.baseUrl}TripUmra/GetPageList?countryID=$countryid");
 
     log("Pagelistmodel " + res.body);
     var decode = json.decode(res.body);
@@ -883,7 +979,8 @@ class UmraRepos {
     return linesModel;
   }
 
-  Future getTransportation({required int tripUmrahID, int? reservationID}) async {
+  Future getTransportation(
+      {required int tripUmrahID, int? reservationID}) async {
     var countryid =
         // CacheHelper.getDataToSharedPref(
         //   key: 'countryid',
@@ -897,11 +994,13 @@ class UmraRepos {
 
     log("TIK TIK Transportation  response: " + res.body);
     var decode = json.decode(res.body);
-    TransportationListModel linesModel = TransportationListModel.fromJson(decode);
+    TransportationListModel linesModel =
+        TransportationListModel.fromJson(decode);
     return linesModel;
   }
 
-  Future getAccomidation({required int tripUmrahID, int? umrahReservationID}) async {
+  Future getAccomidation(
+      {required int tripUmrahID, int? umrahReservationID}) async {
     var countryid =
         // CacheHelper.getDataToSharedPref(
         //   key: 'countryid',
@@ -917,7 +1016,8 @@ class UmraRepos {
     return linesModel;
   }
 
-  Future getPrograms({required int tripUmrahID, int? umrahReservationID}) async {
+  Future getPrograms(
+      {required int tripUmrahID, int? umrahReservationID}) async {
     var countryid =
         // CacheHelper.getDataToSharedPref(
         //   key: 'countryid',
@@ -938,8 +1038,8 @@ class UmraRepos {
           key: 'countryid',
         ) ??
         3;
-    final res =
-        await apiConsumer.get("${EndPoints.baseUrl}Payment/GetPageList?countryID=$countryid&includWallet=false");
+    final res = await apiConsumer.get(
+        "${EndPoints.baseUrl}Payment/GetPageList?countryID=$countryid&includWallet=false");
 
     log("payment type  " + res.body);
     var decode = json.decode(res.body);
@@ -987,13 +1087,19 @@ class UmraRepos {
         for (int i = 0; i < UmraDetails.finaltransportation!.length; i++)
           {
             "SeatIds": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .seatsnumber,
             "Price": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .totalprice,
             "PersonCount": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .seatsnumber
                 .length,
             "TripID": UmraDetails.finaltransportation![i].tripId,
@@ -1003,27 +1109,35 @@ class UmraRepos {
             "LineID": UmraDetails.finaltransportation![i].lineId,
             "ServiceTypeID": UmraDetails.finaltransportation![i].serviceTypeId,
             "BusID": UmraDetails.finaltransportation![i].busId,
-            "TripUmrahTransportationID": UmraDetails.finaltransportation![i].tripUmrahTransportationId,
+            "TripUmrahTransportationID":
+                UmraDetails.finaltransportation![i].tripUmrahTransportationId,
           }
       ],
       "AccommodationList": [
         for (int i = 0; i < UmraDetails.finalaccomidationRoom.length; i++)
-          for (int j = 0; j < UmraDetails.finalaccomidationRoom[i].customernumbers.length; j++)
+          for (int j = 0;
+              j < UmraDetails.finalaccomidationRoom[i].customernumbers.length;
+              j++)
             if (UmraDetails.finalaccomidationRoom[i].customernumbers[j] > 0)
               {
                 "Price": UmraDetails.finalaccomidationRoom[i].room[j].price *
                     UmraDetails.finalaccomidationRoom[i].customernumbers[j],
-                "PersonCount": UmraDetails.finalaccomidationRoom[i].customernumbers[j],
-                "TripUmrahAccommodationID": UmraDetails.finalaccomidationRoom[i].room[j].accomdationId,
-                "AccommodationRoomID": UmraDetails.finalaccomidationRoom[i].room[j].accomodationRoomTypeId
+                "PersonCount":
+                    UmraDetails.finalaccomidationRoom[i].customernumbers[j],
+                "TripUmrahAccommodationID":
+                    UmraDetails.finalaccomidationRoom[i].room[j].accomdationId,
+                "AccommodationRoomID": UmraDetails
+                    .finalaccomidationRoom[i].room[j].accomodationRoomTypeId
               }
       ],
       "ProgramList": [
         for (int i = 0; i < UmraDetails.finalprogramslist.length; i++)
           {
-            "Price": UmraDetails.finalprogramslist[i].price * UmraDetails.finalcustomersprograms[i],
+            "Price": UmraDetails.finalprogramslist[i].price *
+                UmraDetails.finalcustomersprograms[i],
             "PersonCount": UmraDetails.finalcustomersprograms[i],
-            "TripUmrahProgramID": UmraDetails.finalprogramslist[i].tripUnrahProgramId
+            "TripUmrahProgramID":
+                UmraDetails.finalprogramslist[i].tripUnrahProgramId
           }
       ],
       "ewalletModel": {
@@ -1036,7 +1150,7 @@ class UmraRepos {
       EndPoints.reservationUmra,
       body: data,
     );
-    log('body 7' + data.toString());
+    log('body 7$data');
 
     log('Tik Tik ReservationResponse ' + response.body);
 
@@ -1088,13 +1202,19 @@ class UmraRepos {
         for (int i = 0; i < UmraDetails.finaltransportation!.length; i++)
           {
             "SeatIds": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .seatsnumber,
             "Price": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .totalprice,
             "PersonCount": UmraDetails.reservedseats
-                .firstWhere((element) => element.tripid == UmraDetails.finaltransportation![i].tripId)
+                .firstWhere((element) =>
+                    element.tripid ==
+                    UmraDetails.finaltransportation![i].tripId)
                 .seatsnumber
                 .length,
             "TripID": UmraDetails.finaltransportation![i].tripId,
@@ -1104,27 +1224,35 @@ class UmraRepos {
             "LineID": UmraDetails.finaltransportation![i].lineId,
             "ServiceTypeID": UmraDetails.finaltransportation![i].serviceTypeId,
             "BusID": UmraDetails.finaltransportation![i].busId,
-            "TripUmrahTransportationID": UmraDetails.finaltransportation![i].tripUmrahTransportationId,
+            "TripUmrahTransportationID":
+                UmraDetails.finaltransportation![i].tripUmrahTransportationId,
           }
       ],
       "AccommodationList": [
         for (int i = 0; i < UmraDetails.finalaccomidationRoom.length; i++)
-          for (int j = 0; j < UmraDetails.finalaccomidationRoom[i].customernumbers.length; j++)
+          for (int j = 0;
+              j < UmraDetails.finalaccomidationRoom[i].customernumbers.length;
+              j++)
             if (UmraDetails.finalaccomidationRoom[i].customernumbers[j] > 0)
               {
                 "Price": UmraDetails.finalaccomidationRoom[i].room[j].price *
                     UmraDetails.finalaccomidationRoom[i].customernumbers[j],
-                "PersonCount": UmraDetails.finalaccomidationRoom[i].customernumbers[j],
-                "TripUmrahAccommodationID": UmraDetails.finalaccomidationRoom[i].room[j].accomdationId,
-                "AccommodationRoomID": UmraDetails.finalaccomidationRoom[i].room[j].accomodationRoomTypeId
+                "PersonCount":
+                    UmraDetails.finalaccomidationRoom[i].customernumbers[j],
+                "TripUmrahAccommodationID":
+                    UmraDetails.finalaccomidationRoom[i].room[j].accomdationId,
+                "AccommodationRoomID": UmraDetails
+                    .finalaccomidationRoom[i].room[j].accomodationRoomTypeId
               }
       ],
       "ProgramList": [
         for (int i = 0; i < UmraDetails.finalprogramslist.length; i++)
           {
-            "Price": UmraDetails.finalprogramslist[i].price * UmraDetails.finalcustomersprograms[i],
+            "Price": UmraDetails.finalprogramslist[i].price *
+                UmraDetails.finalcustomersprograms[i],
             "PersonCount": UmraDetails.finalcustomersprograms[i],
-            "TripUmrahProgramID": UmraDetails.finalprogramslist[i].tripUnrahProgramId
+            "TripUmrahProgramID":
+                UmraDetails.finalprogramslist[i].tripUnrahProgramId
           }
       ],
       "UmrahReservationID": umrareservationid,
@@ -1139,7 +1267,7 @@ class UmraRepos {
       EndPoints.editreservation,
       body: data,
     );
-    log('body 8' + data.toString());
+    log('body 8$data');
 
     log('ReservationResponse ' + response.body);
 

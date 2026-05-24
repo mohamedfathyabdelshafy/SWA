@@ -34,7 +34,7 @@ import 'package:swa/select_payment2/presentation/credit_card/presentation/naviga
 import '../../../../../core/utils/huawei_notification_service.dart';
 
 class SelectappScreen extends StatefulWidget {
-  SelectappScreen({super.key});
+  const SelectappScreen({super.key});
 
   @override
   State<SelectappScreen> createState() => _SelectappScreenState();
@@ -364,7 +364,7 @@ class _SelectappScreenState extends State<SelectappScreen> {
                     if (permission == LocationPermission.denied ||
                         permission == LocationPermission.deniedForever ||
                         permission == LocationPermission.unableToDetermine) {
-                      print("A77med permission: ${permission}");
+                      print("A77med permission: $permission");
                       // permission = await Geolocator.requestPermission();
 
                       var countryid = CacheHelper.getDataToSharedPref(

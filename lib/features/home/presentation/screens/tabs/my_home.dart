@@ -102,6 +102,47 @@ class _MyHomeState extends State<MyHome> {
 
   bool opencountrydialog = false;
 
+  DateTime _dateOnly(DateTime value) {
+    return DateTime(value.year, value.month, value.day);
+  }
+
+  DateTime get _selectedDepartureDate {
+    return _dateOnly(selectedFromGeorgianDate ??
+        selectedFromHijriDate?.dateTime ??
+        DateTime.now());
+  }
+
+  DateTime get _firstReturnDate {
+    return _selectedDepartureDate.add(const Duration(days: 1));
+  }
+
+  void _setReturnDate(DateTime value) {
+    final returnDate = _dateOnly(value);
+
+    if (ishijiri) {
+      final hijriDate =
+          JHijri(fDisplay: DisplayFormat.MMDDYYYY, fDate: returnDate);
+      selectedDateto = hijriDate.toString();
+      selectedToHijriDate = hijriDate;
+      selectedToGeorgianDate = null;
+    } else {
+      selectedDateto = intl.DateFormat('MM-dd-yyyy').format(returnDate);
+      selectedToHijriDate = null;
+      selectedToGeorgianDate = returnDate;
+    }
+  }
+
+  void _ensureReturnDateAfterDeparture() {
+    final firstReturnDate = _firstReturnDate;
+    final selectedReturnDate = _dateOnly(selectedToGeorgianDate ??
+        selectedToHijriDate?.dateTime ??
+        firstReturnDate);
+
+    if (selectedReturnDate.isBefore(firstReturnDate)) {
+      _setReturnDate(firstReturnDate);
+    }
+  }
+
   Future<void> _launchInWebView(Uri url) async {
     if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
       throw Exception('Could not launch $url');
@@ -485,24 +526,6 @@ class _MyHomeState extends State<MyHome> {
                               children: [
                                 Row(
                                   children: [
-                                    InkWell(
-                                      onTap: () {
-                                        if (widget.showNavBar == true) {
-                                          Navigator.pop(context);
-                                        } else {
-                                          Navigator.pushNamedAndRemoveUntil(
-                                              context,
-                                              Routes.initialRoute,
-                                              (route) => false);
-                                        }
-                                      },
-                                      child: Icon(
-                                        Icons.arrow_back_rounded,
-                                        color: AppColors.white,
-                                        size: 25,
-                                      ),
-                                    ),
-                                    5.horizontalSpace,
                                     Container(
                                       width: sizeWidth * 0.18,
                                       alignment: Alignment.center,
@@ -1011,6 +1034,7 @@ class _MyHomeState extends State<MyHome> {
                                               selectedFromGeorgianDate,
                                           selectedHijriDate:
                                               selectedFromHijriDate,
+                                          startDate: DateTime.now(),
                                           onchange: (hdate) {
                                             date = hdate.date;
                                             hdate.jhijri.fDisplay =
@@ -1139,6 +1163,8 @@ class _MyHomeState extends State<MyHome> {
                                                     selectedFromGeorgianDate =
                                                         hdate.date;
                                                   }
+                                                  _setReturnDate(
+                                                      _firstReturnDate);
                                                   setState(() {});
                                                   Navigator.pop(context);
                                                 },
@@ -1213,6 +1239,7 @@ class _MyHomeState extends State<MyHome> {
                                                     selectedToGeorgianDate,
                                                 selectedHijriDate:
                                                     selectedToHijriDate,
+                                                startDate: _firstReturnDate,
                                                 onchange: (hdate) {
                                                   date = hdate.date;
                                                   hdate.jhijri.fDisplay =
@@ -1521,8 +1548,16 @@ class _MyHomeState extends State<MyHome> {
     required bool hijiri,
     DateTime? selectedGeorgianDate,
     JHijri? selectedHijriDate,
+    DateTime? startDate,
     required Function(JPickerValue date) onchange,
   }) async {
+    final firstDate = _dateOnly(
+        startDate ?? DateTime.now().subtract(Duration(days: ishijiri ? 1 : 0)));
+    final currentDate = _dateOnly(
+        selectedGeorgianDate ?? selectedHijriDate?.dateTime ?? DateTime.now());
+    final safeSelectedDate =
+        currentDate.isBefore(firstDate) ? firstDate : currentDate;
+
     return await showGlobalDatePicker(
       context: context,
       headerTitle: Container(
@@ -1562,6 +1597,7 @@ class _MyHomeState extends State<MyHome> {
               customdatepicker(
                 selectedGeorgianDate: selectedGeorgianDate,
                 selectedHijriDate: selectedHijriDate,
+                startDate: startDate,
                 context: context,
                 hijiri: ishijiri,
                 onchange: onchange,
@@ -1599,12 +1635,8 @@ class _MyHomeState extends State<MyHome> {
             )),
       ),
       selectedDate: JDateModel(
-        jhijri: hijiri ? (selectedHijriDate ?? JHijri.now()) : null,
-        dateTime: !hijiri
-            ? (selectedGeorgianDate ??
-                DateTime(DateTime.now().year, DateTime.now().month,
-                    DateTime.now().day))
-            : null,
+        jhijri: hijiri ? JHijri(fDate: safeSelectedDate) : null,
+        dateTime: !hijiri ? safeSelectedDate : null,
       ),
       pickerMode: DatePickerMode.day,
       pickerTheme: Theme.of(context).copyWith(
@@ -1634,8 +1666,7 @@ class _MyHomeState extends State<MyHome> {
           ),
         ),
       ),
-      startDate: JDateModel(
-          dateTime: DateTime.now().subtract(Duration(days: ishijiri ? 1 : 0))),
+      startDate: JDateModel(dateTime: firstDate),
       textDirection: TextDirection.ltr,
       buttons: Container(),
       locale: LanguageClass.isEnglish ? Locale("en", "US") : Locale("ar", ""),

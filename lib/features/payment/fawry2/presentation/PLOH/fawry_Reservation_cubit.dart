@@ -6,25 +6,26 @@ import '../../../../bus_reservation_layout/data/repo/bus_reservation_repo.dart';
 import '../../../select_payment/domain/entities/payment_message_response.dart';
 import 'fawry_Reservation_states.dart';
 
-class FawryReservation extends Cubit<FawryReservationState>{
-  FawryReservation():super(FawryReservationInitial());
+class FawryReservation extends Cubit<FawryReservationState> {
+  FawryReservation() : super(FawryReservationInitial());
   BusLayoutRepo busLayoutRepo = BusLayoutRepo(apiConsumer: sl());
 
-  Future<PaymentMessageResponse?>addReservation({
-    required List<dynamic> seatIdsOneTrip,
-    List<dynamic>? seatIdsRoundTrip,
-    required int custId,
-    required String oneTripID,
-    String? roundTripID,
-    int? paymentMethodID,
-    required int paymentTypeID,
-    required String amount,
-    String? cardNumber,
-    String? cardExpiryYear,
-    String? cardExpiryMonth,
-    String? cvv,
-    String? mobile
-  })async {
+  Future<PaymentMessageResponse?> addReservation(
+      {required List<dynamic> seatIdsOneTrip,
+      List<dynamic>? seatIdsRoundTrip,
+      required int custId,
+      required String oneTripID,
+      String? roundTripID,
+      int? paymentMethodID,
+      required int paymentTypeID,
+      required String amount,
+      String? cardNumber,
+      String? cardExpiryYear,
+      String? cardExpiryMonth,
+      String? cvv,
+      String? mobile}) async {
+    return null;
+
     // try{
     //   emit(FawryLoadingReservationState());
     //   final res = await busLayoutRepo.addReservation(
@@ -52,5 +53,4 @@ class FawryReservation extends Cubit<FawryReservationState>{
     //   emit(FawryErrorReservationState(error: e.toString()));
     // }
   }
-
 }

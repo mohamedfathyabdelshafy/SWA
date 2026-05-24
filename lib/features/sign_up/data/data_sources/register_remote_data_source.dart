@@ -41,7 +41,8 @@ class RegisterRemoteDataSourceImpl implements RegisterRemoteDataSource {
       'CurrencyID': params.currencyId,
     });
 
-    var request = http.Request('POST', Uri.parse('${EndPoints.baseUrl}Customer/AddCustomer'));
+    var request = http.Request(
+        'POST', Uri.parse('${EndPoints.baseUrl}Customer/AddCustomer'));
     request.body = json.encode({
       "Name": params.name,
       "Mobile": params.mobile,
@@ -53,24 +54,26 @@ class RegisterRemoteDataSourceImpl implements RegisterRemoteDataSource {
       "TempCustomerID": params.tempCustomerId,
       "IdentificationNumber": params.identificationNumber,
       "IndentificationtypeID": params.indentificationtypeID,
-      "DefaultCountry": defaultId != null ? defaultId : params.countryId,
+      "DefaultCountry": defaultId ?? params.countryId,
       'CurrencyID': params.currencyId,
     });
     request.headers.addAll(headers);
 
-    print(' body ' + request.body);
+    print(' body ${request.body}');
 
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      Map<String, dynamic> jsonResponse = jsonDecode(await response.stream.bytesToString());
+      Map<String, dynamic> jsonResponse =
+          jsonDecode(await response.stream.bytesToString());
 
       print(jsonResponse);
       return MessageResponseModel.fromJson(jsonResponse);
     } else {
       print(response.reasonPhrase);
 
-      return const MessageResponseModel(balance: '', massage: 222, obj: '', status: 'error', object: '');
+      return const MessageResponseModel(
+          balance: '', massage: 222, obj: '', status: 'error', object: '');
     }
   }
 }

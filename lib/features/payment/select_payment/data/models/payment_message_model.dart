@@ -2,40 +2,33 @@ import 'package:swa/features/payment/select_payment/domain/entities/payment_mess
 
 class PaymentMessageModel extends PaymentMessage {
   const PaymentMessageModel({
-    required String type,
-    required dynamic referenceNumber,
-    required dynamic merchantRefNumber,
-    required dynamic orderStatus,
-    required int statusCode,
-    required String statusDescription,
-    required dynamic nextAction,
-  }) : super(
-            type: type,
-            referenceNumber: referenceNumber,
-            merchantRefNumber: merchantRefNumber,
-            orderStatus: orderStatus,
-            statusCode: statusCode,
-            statusDescription: statusDescription,
-            nextAction: nextAction);
+    required super.type,
+    required super.referenceNumber,
+    required super.merchantRefNumber,
+    required super.orderStatus,
+    required super.statusCode,
+    required super.statusDescription,
+    required super.nextAction,
+  });
 
-  factory PaymentMessageModel.fromJson(Map<String, dynamic> json) => PaymentMessageModel(
-    type: json["type"],
-    referenceNumber: json["ReferenceNumber"],
-    merchantRefNumber: json["MerchantRefNumber"],
-    orderStatus: json["OrderStatus"],
-    statusCode: json["statusCode"],
-    statusDescription: json["statusDescription"],
-    nextAction: json["nextAction"],
-  );
+  factory PaymentMessageModel.fromJson(Map<String, dynamic> json) =>
+      PaymentMessageModel(
+        type: json["type"],
+        referenceNumber: json["ReferenceNumber"],
+        merchantRefNumber: json["MerchantRefNumber"],
+        orderStatus: json["OrderStatus"],
+        statusCode: json["statusCode"],
+        statusDescription: json["statusDescription"],
+        nextAction: json["nextAction"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "type": type,
-    "ReferenceNumber": referenceNumber,
-    "MerchantRefNumber": merchantRefNumber,
-    "OrderStatus": orderStatus,
-    "statusCode": statusCode,
-    "statusDescription": statusDescription,
-    "nextAction": nextAction,
-  };
-
+        "type": type,
+        "ReferenceNumber": referenceNumber,
+        "MerchantRefNumber": merchantRefNumber,
+        "OrderStatus": orderStatus,
+        "statusCode": statusCode,
+        "statusDescription": statusDescription,
+        "nextAction": nextAction,
+      };
 }

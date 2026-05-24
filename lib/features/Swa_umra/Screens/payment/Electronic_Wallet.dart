@@ -9,6 +9,7 @@ import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
+import 'package:swa/core/widgets/app_dialog.dart';
 import 'package:swa/features/Swa_umra/bloc/umra_bloc.dart';
 import 'package:swa/features/Swa_umra/models/umra_detail.dart';
 import 'package:swa/features/payment/electronic_wallet/domain/use_cases/ewallet_use_case.dart';
@@ -493,20 +494,14 @@ class _ElectronicUmraScreenState extends State<ElectronicUmraScreen> {
       bool isError = false,
       Widget? body,
       required Function callback}) async {
-    return CoolAlert.show(
-        barrierDismissible: true,
-        context: context,
-        confirmBtnText: "ok",
-        title: isError ? 'error' : '',
-        lottieAsset:
-            isError ? 'assets/json/error.json' : 'assets/json/Warning.json',
-        type: CoolAlertType.custom,
-        loopAnimation: false,
-        backgroundColor: isError ? Colors.red : Colors.white,
-        text: message,
-        widget: body,
-        onConfirmBtnTap: () {
-          callback();
-        });
+    return AppDialog.show(
+      context: context,
+      message: message,
+      type: isError ? AppDialogType.failed : AppDialogType.warning,
+      body: body,
+      barrierDismissible: true,
+      confirmText: 'ok',
+      onConfirm: () => callback(),
+    );
   }
 }

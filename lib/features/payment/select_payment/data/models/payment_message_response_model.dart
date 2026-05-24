@@ -4,21 +4,14 @@ import 'package:swa/features/payment/select_payment/domain/entities/payment_mess
 
 class PaymentMessageResponseModel extends PaymentMessageResponse {
   const PaymentMessageResponseModel({
-    required String? message,
-    required String? status,
-    required PaymentMessage? paymentMessage,
-    required dynamic balance,
-    required dynamic object,
-    required dynamic obj,
-    required dynamic text,
-  }) : super(
-            status: status,
-            message: message,
-            paymentMessage: paymentMessage,
-            balance: balance,
-            object: object,
-            obj: obj,
-            text: text);
+    required super.message,
+    required super.status,
+    required super.paymentMessage,
+    required super.balance,
+    required super.object,
+    required super.obj,
+    required super.text,
+  });
 
   factory PaymentMessageResponseModel.fromJson(Map<String, dynamic> json) =>
       PaymentMessageResponseModel(

@@ -9,6 +9,7 @@ import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
+import 'package:swa/core/widgets/app_dialog.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_bloc.dart';
 import 'package:swa/features/sign_in/domain/entities/user.dart';
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
@@ -40,21 +41,15 @@ class _FawrypayScreenState extends State<FawrypayScreen> {
       bool isError = false,
       Widget? body,
       required Function callback}) async {
-    return CoolAlert.show(
-        barrierDismissible: true,
-        context: context,
-        confirmBtnText: "ok",
-        title: isError ? 'error' : 'success',
-        lottieAsset:
-            isError ? 'assets/json/error.json' : 'assets/json/done.json',
-        type: isError ? CoolAlertType.error : CoolAlertType.success,
-        loopAnimation: false,
-        backgroundColor: isError ? Colors.red : Colors.white,
-        text: message,
-        widget: body,
-        onConfirmBtnTap: () {
-          callback();
-        });
+    return AppDialog.show(
+      context: context,
+      message: message,
+      type: isError ? AppDialogType.failed : AppDialogType.success,
+      body: body,
+      barrierDismissible: true,
+      confirmText: 'ok',
+      onConfirm: () => callback(),
+    );
   }
 
   // TextEditingController amountController = TextEditingController();

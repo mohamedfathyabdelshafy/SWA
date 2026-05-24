@@ -16,20 +16,19 @@ class CityDropDownTextFieldButton extends StatelessWidget {
   TextEditingController? controller;
 
   CityDropDownTextFieldButton(
-      {Key? key,
+      {super.key,
       required this.hintText,
       required this.onSelect,
       required this.countries,
       this.bgcolor,
       this.controller,
-      this.borderradias})
-      : super(key: key);
+      this.borderradias});
 
   @override
   Widget build(BuildContext context) {
     double sizeHeight = context.height;
 
-    TextEditingController _controller = new TextEditingController(text: '');
+    TextEditingController _controller = TextEditingController(text: '');
 
     List<City> searchlist = countries;
 
@@ -125,7 +124,7 @@ class CityDropDownTextFieldButton extends StatelessWidget {
                                         final list2 =
                                             countries.where((element) {
                                           final title =
-                                              element.cityName!.toLowerCase();
+                                              element.cityName.toLowerCase();
 
                                           final searc = v.toLowerCase();
                                           return title.contains(searc);
@@ -149,7 +148,9 @@ class CityDropDownTextFieldButton extends StatelessWidget {
                                     color: Color(0xffDDDDDD),
                                     bordercolor: Colors.black,
                                     controller: _controller,
-                                    validator: (validator) {},
+                                    validator: (validator) {
+                                      return null;
+                                    },
                                   ),
                                   Expanded(
                                     child: ListView.separated(

@@ -24,7 +24,7 @@ class Ticketpdfdetails extends StatelessWidget {
 
   List<Transactions>? reservations;
 
-  Ticketpdfdetails(this.ticket, this.reservations, {Key? key}) : super(key: key);
+  Ticketpdfdetails(this.ticket, this.reservations, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,8 @@ class Ticketpdfdetails extends StatelessWidget {
           textDirection: isRtl ? pw.TextDirection.rtl : pw.TextDirection.ltr,
         ),
         pw.Directionality(
-          textDirection: _isArabic(value1) ? pw.TextDirection.rtl : pw.TextDirection.ltr,
+          textDirection:
+              _isArabic(value1) ? pw.TextDirection.rtl : pw.TextDirection.ltr,
           child: pw.Text(
             value1,
             style: pw.TextStyle(font: ttf, fontSize: 9),
@@ -87,7 +88,8 @@ class Ticketpdfdetails extends StatelessWidget {
     );
 
     // Create the content for the second column (label2 + value2)
-    pw.Widget column2Content = pw.SizedBox.shrink(); // Default to empty if label2 is empty
+    pw.Widget column2Content =
+        pw.SizedBox.shrink(); // Default to empty if label2 is empty
     if (label2.isNotEmpty) {
       column2Content = pw.Row(
         mainAxisAlignment: pw.MainAxisAlignment.start,
@@ -100,7 +102,8 @@ class Ticketpdfdetails extends StatelessWidget {
             textDirection: isRtl ? pw.TextDirection.rtl : pw.TextDirection.ltr,
           ),
           pw.Directionality(
-            textDirection: _isArabic(value2) ? pw.TextDirection.rtl : pw.TextDirection.ltr,
+            textDirection:
+                _isArabic(value2) ? pw.TextDirection.rtl : pw.TextDirection.ltr,
             child: pw.Text(
               value2,
               style: pw.TextStyle(font: ttf, fontSize: 9),
@@ -154,7 +157,7 @@ class Ticketpdfdetails extends StatelessWidget {
 
     final DateTime reservationDateTime = intl.DateFormat(
       'dd/MM/yyyy',
-    ).parse(ticketDetails!.creationDate!);
+    ).parse(ticketDetails.creationDate!);
 
     final String formattedReservationDate = intl.DateFormat(
       'yyyy-MM-dd',
@@ -166,7 +169,8 @@ class Ticketpdfdetails extends StatelessWidget {
     final String tripReservationDate = intl.DateFormat(
       'yyyy-MM-dd',
     ).format(tripDateTime);
-    final String qrCodeData = "Ticket Number: ${ticketDetails.ticketNumber.toString()}\n"
+    final String qrCodeData =
+        "Ticket Number: ${ticketDetails.ticketNumber.toString()}\n"
         "Customer Name: ${ticketDetails.customerName}\n"
         "Reservation Date: $formattedReservationDate\n"
         "Trip Date: $tripReservationDate\n"
@@ -180,7 +184,7 @@ class Ticketpdfdetails extends StatelessWidget {
 
     final qrImage = pw.MemoryImage(qrData!.buffer.asUint8List());
 
-    var patrnerlogo = null;
+    var patrnerlogo;
 
     if (ticket?.logoFilePath != null) {
       patrnerlogo = await networkImage(ticket!.logoFilePath!);
@@ -205,12 +209,14 @@ class Ticketpdfdetails extends StatelessWidget {
             1,
             (index) {
               return pw.Directionality(
-                textDirection: isAr ? pw.TextDirection.rtl : pw.TextDirection.ltr,
+                textDirection:
+                    isAr ? pw.TextDirection.rtl : pw.TextDirection.ltr,
                 child: pw.Container(
                   decoration: pw.BoxDecoration(
                     border: pw.Border.all(color: PdfColors.black, width: 1),
                   ),
-                  padding: const pw.EdgeInsets.all(10), // Inner padding from border
+                  padding:
+                      const pw.EdgeInsets.all(10), // Inner padding from border
                   child: pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.stretch,
                     children: [
@@ -223,7 +229,9 @@ class Ticketpdfdetails extends StatelessWidget {
                           pw.Column(
                             crossAxisAlignment: pw.CrossAxisAlignment.end,
                             children: [
-                              patrnerlogo != null ? pw.Image(patrnerlogo!, height: 20) : pw.SizedBox(),
+                              patrnerlogo != null
+                                  ? pw.Image(patrnerlogo!, height: 20)
+                                  : pw.SizedBox(),
                               pw.Text(
                                 '${isAr ? "رقم التذكرة" : "Ticket Num"}: ${ticketDetails.ticketNumber}',
                                 style: pw.TextStyle(fontSize: 8),
@@ -299,7 +307,7 @@ class Ticketpdfdetails extends StatelessWidget {
                         ttfBold,
                         isAr,
                         isAr ? 'عدد المقاعد' : 'Seats count',
-                        '${ticketDetails.seatNo.toString()}',
+                        ticketDetails.seatNo.toString(),
                         ticketDetails.seatNumbers!.split(',').length == 2
                             ? isAr
                                 ? 'رقم المقعد'
@@ -333,7 +341,9 @@ class Ticketpdfdetails extends StatelessWidget {
                       pw.SizedBox(height: 4),
                       if (reservations!.isNotEmpty)
                         pw.Directionality(
-                          textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
+                          textDirection: LanguageClass.isEnglish
+                              ? pw.TextDirection.ltr
+                              : pw.TextDirection.rtl,
                           child: pw.Table.fromTextArray(
                             headers: isAr
                                 ? ["النوع", "المبلغ", 'التاريخ', 'الملاحظات']
@@ -356,7 +366,9 @@ class Ticketpdfdetails extends StatelessWidget {
                             headerDecoration: const pw.BoxDecoration(
                               color: PdfColors.grey300,
                             ),
-                            cellAlignment: isAr ? pw.Alignment.centerRight : pw.Alignment.centerLeft,
+                            cellAlignment: isAr
+                                ? pw.Alignment.centerRight
+                                : pw.Alignment.centerLeft,
                             cellStyle: pw.TextStyle(fontSize: 8, font: ttf),
                             columnWidths: {
                               0: const pw.FlexColumnWidth(1.0),
@@ -380,8 +392,9 @@ class Ticketpdfdetails extends StatelessWidget {
                       pw.SizedBox(height: 4),
                       if (sortedCities.isNotEmpty)
                         pw.Table.fromTextArray(
-                          headers:
-                              isAr ? ['المدينة والمحطات', 'المدينة والمحطات'] : ['City & Stations', 'City & Stations'],
+                          headers: isAr
+                              ? ['المدينة والمحطات', 'المدينة والمحطات']
+                              : ['City & Stations', 'City & Stations'],
                           data: _createCityStationTableData(
                             sortedCities,
                             isAr,
@@ -400,7 +413,9 @@ class Ticketpdfdetails extends StatelessWidget {
                           headerDecoration: const pw.BoxDecoration(
                             color: PdfColors.grey300,
                           ),
-                          cellAlignment: isAr ? pw.Alignment.centerRight : pw.Alignment.centerLeft,
+                          cellAlignment: isAr
+                              ? pw.Alignment.centerRight
+                              : pw.Alignment.centerLeft,
                           cellStyle: pw.TextStyle(fontSize: 8, font: ttf),
                           columnWidths: {
                             0: const pw.FlexColumnWidth(1.0),
@@ -411,7 +426,9 @@ class Ticketpdfdetails extends StatelessWidget {
                         )
                       else
                         pw.Text(
-                          isAr ? 'لا توجد معلومات عن مسار الحافلة.' : 'No bus route information available.',
+                          isAr
+                              ? 'لا توجد معلومات عن مسار الحافلة.'
+                              : 'No bus route information available.',
                           style: pw.TextStyle(fontSize: 8),
                         ),
 
@@ -444,7 +461,9 @@ class Ticketpdfdetails extends StatelessWidget {
       final city1 = cities[i];
       final sortedStations1 = city1.lineStationList!.toList()
         ..sort((a, b) => (a.orderIndex ?? 0).compareTo(b.orderIndex ?? 0));
-      final stationsText1 = sortedStations1.map((s) => '${s.station!.name}').join(isAr ? ' - ' : ' - ');
+      final stationsText1 = sortedStations1
+          .map((s) => '${s.station!.name}')
+          .join(isAr ? ' - ' : ' - ');
       rowWidgets.add(
         pw.RichText(
           text: pw.TextSpan(
@@ -464,7 +483,9 @@ class Ticketpdfdetails extends StatelessWidget {
           ..sort(
             (a, b) => (a.orderIndex ?? 0).compareTo(b.orderIndex ?? 0),
           );
-        final stationsText2 = sortedStations2.map((s) => '${s.station!.name}').join(isAr ? ' - ' : ' - ');
+        final stationsText2 = sortedStations2
+            .map((s) => '${s.station!.name}')
+            .join(isAr ? ' - ' : ' - ');
         rowWidgets.add(
           pw.RichText(
             text: pw.TextSpan(
@@ -558,7 +579,8 @@ class Ticketpdfdetails extends StatelessWidget {
   }
 
   Future<Uint8List> makePdf() async {
-    final imageLogo = (await rootBundle.load('assets/images/Logo.png')).buffer.asUint8List();
+    final imageLogo =
+        (await rootBundle.load('assets/images/Logo.png')).buffer.asUint8List();
 
     final parsedHtml = html_parser.parse(ticket!.policy!.first);
     final textContent = parsedHtml.body?.text ?? 'No content';
@@ -576,7 +598,9 @@ class Ticketpdfdetails extends StatelessWidget {
             1,
             (index) {
               return pw.Directionality(
-                textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
+                textDirection: LanguageClass.isEnglish
+                    ? pw.TextDirection.ltr
+                    : pw.TextDirection.rtl,
                 child: pw.Column(
                   mainAxisAlignment: pw.MainAxisAlignment.start,
                   children: [
@@ -585,11 +609,17 @@ class Ticketpdfdetails extends StatelessWidget {
                       children: [
                         pw.Column(
                           children: [
-                            pw.Text("Ticket Num: ${ticket!.ticketNumber.toString()}",
-                                textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl),
-                            pw.Text("${ticket!.statusName.toString()}",
-                                textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                                style: pw.TextStyle(color: PdfColor.fromHex("#ff5d4b"))),
+                            pw.Text(
+                                "Ticket Num: ${ticket!.ticketNumber.toString()}",
+                                textDirection: LanguageClass.isEnglish
+                                    ? pw.TextDirection.ltr
+                                    : pw.TextDirection.rtl),
+                            pw.Text(ticket!.statusName.toString(),
+                                textDirection: LanguageClass.isEnglish
+                                    ? pw.TextDirection.ltr
+                                    : pw.TextDirection.rtl,
+                                style: pw.TextStyle(
+                                    color: PdfColor.fromHex("#ff5d4b"))),
                           ],
                           crossAxisAlignment: pw.CrossAxisAlignment.start,
                         ),
@@ -599,15 +629,17 @@ class Ticketpdfdetails extends StatelessWidget {
                             child: pw.BarcodeWidget(
                               color: PdfColor.fromHex("#000000"),
                               barcode: pw.Barcode.qrCode(),
-                              data: 'TicketNumber:${ticket!.ticketNumber.toString()},Status:${ticket!.statusName}',
+                              data:
+                                  'TicketNumber:${ticket!.ticketNumber.toString()},Status:${ticket!.statusName}',
                             )),
                         pw.Container(
                           alignment: pw.Alignment.topRight,
                           child: pw.Container(
                               width: 50,
                               height: 50,
-                              decoration:
-                                  pw.BoxDecoration(image: pw.DecorationImage(image: pw.MemoryImage(imageLogo)))),
+                              decoration: pw.BoxDecoration(
+                                  image: pw.DecorationImage(
+                                      image: pw.MemoryImage(imageLogo)))),
                         ),
                       ],
                     ),
@@ -622,17 +654,29 @@ class Ticketpdfdetails extends StatelessWidget {
                               padding: const pw.EdgeInsets.all(10),
                               child: pw.Text(
                                   '${LanguageClass.isEnglish ? 'Cunstomer Name' : 'اسم العميل'} :  ${ticket!.customerName.toString()}',
-                                  textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                                  textAlign: LanguageClass.isEnglish ? pw.TextAlign.left : pw.TextAlign.right,
-                                  style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.normal)),
+                                  textDirection: LanguageClass.isEnglish
+                                      ? pw.TextDirection.ltr
+                                      : pw.TextDirection.rtl,
+                                  textAlign: LanguageClass.isEnglish
+                                      ? pw.TextAlign.left
+                                      : pw.TextAlign.right,
+                                  style: pw.TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: pw.FontWeight.normal)),
                             ),
                             pw.Padding(
                               padding: const pw.EdgeInsets.all(10),
                               child: pw.Text(
                                   '${LanguageClass.isEnglish ? 'Mobile' : 'تليفون'} :  ${ticket!.customerPhone.toString()}',
-                                  textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                                  textAlign: LanguageClass.isEnglish ? pw.TextAlign.left : pw.TextAlign.right,
-                                  style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.normal)),
+                                  textDirection: LanguageClass.isEnglish
+                                      ? pw.TextDirection.ltr
+                                      : pw.TextDirection.rtl,
+                                  textAlign: LanguageClass.isEnglish
+                                      ? pw.TextAlign.left
+                                      : pw.TextAlign.right,
+                                  style: pw.TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: pw.FontWeight.normal)),
                             ),
                           ],
                         ),
@@ -642,36 +686,59 @@ class Ticketpdfdetails extends StatelessWidget {
                               padding: const pw.EdgeInsets.all(10),
                               child: pw.Text(
                                   '${LanguageClass.isEnglish ? 'From' : ' من'} :  ${ticket!.from.toString()}',
-                                  textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                                  textAlign: LanguageClass.isEnglish ? pw.TextAlign.left : pw.TextAlign.right,
-                                  style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.normal)),
+                                  textDirection: LanguageClass.isEnglish
+                                      ? pw.TextDirection.ltr
+                                      : pw.TextDirection.rtl,
+                                  textAlign: LanguageClass.isEnglish
+                                      ? pw.TextAlign.left
+                                      : pw.TextAlign.right,
+                                  style: pw.TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: pw.FontWeight.normal)),
                             ),
                             pw.Padding(
                               padding: const pw.EdgeInsets.all(10),
-                              child: pw.Text('${LanguageClass.isEnglish ? 'To' : 'الي'} :  ${ticket!.to.toString()}',
-                                  textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                                  textAlign: LanguageClass.isEnglish ? pw.TextAlign.left : pw.TextAlign.right,
-                                  style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.normal)),
+                              child: pw.Text(
+                                  '${LanguageClass.isEnglish ? 'To' : 'الي'} :  ${ticket!.to.toString()}',
+                                  textDirection: LanguageClass.isEnglish
+                                      ? pw.TextDirection.ltr
+                                      : pw.TextDirection.rtl,
+                                  textAlign: LanguageClass.isEnglish
+                                      ? pw.TextAlign.left
+                                      : pw.TextAlign.right,
+                                  style: pw.TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: pw.FontWeight.normal)),
                             ),
                           ],
                         ),
                       ],
                     ),
-                    pw.Table(border: pw.TableBorder.all(color: PdfColors.black), children: [
-                      pw.TableRow(children: [
-                        pw.Container(
-                          padding: const pw.EdgeInsets.all(10),
-                          color: PdfColor.fromHex("#e5e7e9"),
-                          alignment: pw.Alignment.center,
-                          child: pw.Text('${LanguageClass.isEnglish ? "Cities & Stations" : 'المدن والمحطات'} ',
-                              textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                              textAlign: LanguageClass.isEnglish ? pw.TextAlign.left : pw.TextAlign.right,
-                              style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.normal)),
-                        ),
-                      ])
-                    ]),
+                    pw.Table(
+                        border: pw.TableBorder.all(color: PdfColors.black),
+                        children: [
+                          pw.TableRow(children: [
+                            pw.Container(
+                              padding: const pw.EdgeInsets.all(10),
+                              color: PdfColor.fromHex("#e5e7e9"),
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                  '${LanguageClass.isEnglish ? "Cities & Stations" : 'المدن والمحطات'} ',
+                                  textDirection: LanguageClass.isEnglish
+                                      ? pw.TextDirection.ltr
+                                      : pw.TextDirection.rtl,
+                                  textAlign: LanguageClass.isEnglish
+                                      ? pw.TextAlign.left
+                                      : pw.TextAlign.right,
+                                  style: pw.TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: pw.FontWeight.normal)),
+                            ),
+                          ])
+                        ]),
                     pw.Container(
-                      decoration: pw.BoxDecoration(border: pw.Border.all(color: PdfColors.black)),
+                      decoration: pw.BoxDecoration(
+                          border: pw.Border.all(color: PdfColors.black)),
                       padding: const pw.EdgeInsets.all(10),
                       width: double.infinity,
                       child: pw.Wrap(
@@ -687,21 +754,38 @@ class Ticketpdfdetails extends StatelessWidget {
                               pw.Container(
                                   width: 230,
                                   child: pw.Row(
-                                      mainAxisAlignment: pw.MainAxisAlignment.start,
-                                      crossAxisAlignment: pw.CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          pw.MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          pw.CrossAxisAlignment.center,
                                       mainAxisSize: pw.MainAxisSize.min,
                                       children: [
                                         pw.Text(
                                             '${ticket!.cities![i].orderIndex}- ${ticket!.cities![i].governorateName ?? ''}',
                                             textDirection:
-                                                LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                                            textAlign: LanguageClass.isEnglish ? pw.TextAlign.left : pw.TextAlign.right,
-                                            style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.normal)),
-                                        pw.Text('  ${ticket!.cities![i].cityName ?? ''}',
+                                                LanguageClass.isEnglish
+                                                    ? pw.TextDirection.ltr
+                                                    : pw.TextDirection.rtl,
+                                            textAlign: LanguageClass.isEnglish
+                                                ? pw.TextAlign.left
+                                                : pw.TextAlign.right,
+                                            style: pw.TextStyle(
+                                                fontSize: 16,
+                                                fontWeight:
+                                                    pw.FontWeight.normal)),
+                                        pw.Text(
+                                            '  ${ticket!.cities![i].cityName ?? ''}',
                                             textDirection:
-                                                LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                                            textAlign: LanguageClass.isEnglish ? pw.TextAlign.left : pw.TextAlign.right,
-                                            style: pw.TextStyle(fontSize: 13, fontWeight: pw.FontWeight.normal)),
+                                                LanguageClass.isEnglish
+                                                    ? pw.TextDirection.ltr
+                                                    : pw.TextDirection.rtl,
+                                            textAlign: LanguageClass.isEnglish
+                                                ? pw.TextAlign.left
+                                                : pw.TextAlign.right,
+                                            style: pw.TextStyle(
+                                                fontSize: 13,
+                                                fontWeight:
+                                                    pw.FontWeight.normal)),
                                       ]))
                           ]),
                     ),
@@ -714,17 +798,29 @@ class Ticketpdfdetails extends StatelessWidget {
                               padding: const pw.EdgeInsets.all(10),
                               child: pw.Text(
                                   '${LanguageClass.isEnglish ? "Line" : 'المسار'} :  ${ticket!.lineName ?? ''}',
-                                  textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                                  textAlign: LanguageClass.isEnglish ? pw.TextAlign.left : pw.TextAlign.right,
-                                  style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.normal)),
+                                  textDirection: LanguageClass.isEnglish
+                                      ? pw.TextDirection.ltr
+                                      : pw.TextDirection.rtl,
+                                  textAlign: LanguageClass.isEnglish
+                                      ? pw.TextAlign.left
+                                      : pw.TextAlign.right,
+                                  style: pw.TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: pw.FontWeight.normal)),
                             ),
                             pw.Padding(
                               padding: const pw.EdgeInsets.all(10),
                               child: pw.Text(
                                   '${LanguageClass.isEnglish ? "Penalty" : 'غرامة'} :  ${ticket!.penalty.toString() ?? ''}',
-                                  textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                                  textAlign: LanguageClass.isEnglish ? pw.TextAlign.left : pw.TextAlign.right,
-                                  style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.normal)),
+                                  textDirection: LanguageClass.isEnglish
+                                      ? pw.TextDirection.ltr
+                                      : pw.TextDirection.rtl,
+                                  textAlign: LanguageClass.isEnglish
+                                      ? pw.TextAlign.left
+                                      : pw.TextAlign.right,
+                                  style: pw.TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: pw.FontWeight.normal)),
                             ),
                           ],
                         ),
@@ -734,17 +830,29 @@ class Ticketpdfdetails extends StatelessWidget {
                               padding: const pw.EdgeInsets.all(10),
                               child: pw.Text(
                                   '${LanguageClass.isEnglish ? "Trip date" : 'تاريخ الرحلة'} :  ${ticket!.tripDate.toString()}',
-                                  textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                                  textAlign: LanguageClass.isEnglish ? pw.TextAlign.left : pw.TextAlign.right,
-                                  style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.normal)),
+                                  textDirection: LanguageClass.isEnglish
+                                      ? pw.TextDirection.ltr
+                                      : pw.TextDirection.rtl,
+                                  textAlign: LanguageClass.isEnglish
+                                      ? pw.TextAlign.left
+                                      : pw.TextAlign.right,
+                                  style: pw.TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: pw.FontWeight.normal)),
                             ),
                             pw.Padding(
                               padding: const pw.EdgeInsets.all(10),
                               child: pw.Text(
                                   '${LanguageClass.isEnglish ? "Trip type" : ' نوع الرحلة'} :  ${ticket!.serviceType.toString()}',
-                                  textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                                  textAlign: LanguageClass.isEnglish ? pw.TextAlign.left : pw.TextAlign.right,
-                                  style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.normal)),
+                                  textDirection: LanguageClass.isEnglish
+                                      ? pw.TextDirection.ltr
+                                      : pw.TextDirection.rtl,
+                                  textAlign: LanguageClass.isEnglish
+                                      ? pw.TextAlign.left
+                                      : pw.TextAlign.right,
+                                  style: pw.TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: pw.FontWeight.normal)),
                             ),
                           ],
                         ),
@@ -754,17 +862,29 @@ class Ticketpdfdetails extends StatelessWidget {
                               padding: const pw.EdgeInsets.all(10),
                               child: pw.Text(
                                   '${LanguageClass.isEnglish ? "Trip time" : 'وقت القيام '} :  ${ticket!.accessBusTime.toString()}',
-                                  textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                                  textAlign: LanguageClass.isEnglish ? pw.TextAlign.left : pw.TextAlign.right,
-                                  style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.normal)),
+                                  textDirection: LanguageClass.isEnglish
+                                      ? pw.TextDirection.ltr
+                                      : pw.TextDirection.rtl,
+                                  textAlign: LanguageClass.isEnglish
+                                      ? pw.TextAlign.left
+                                      : pw.TextAlign.right,
+                                  style: pw.TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: pw.FontWeight.normal)),
                             ),
                             pw.Padding(
                               padding: const pw.EdgeInsets.all(10),
                               child: pw.Text(
                                   '${LanguageClass.isEnglish ? "Price" : 'السعر'} :  ${ticket!.price.toString()}',
-                                  textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                                  textAlign: LanguageClass.isEnglish ? pw.TextAlign.left : pw.TextAlign.right,
-                                  style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.normal)),
+                                  textDirection: LanguageClass.isEnglish
+                                      ? pw.TextDirection.ltr
+                                      : pw.TextDirection.rtl,
+                                  textAlign: LanguageClass.isEnglish
+                                      ? pw.TextAlign.left
+                                      : pw.TextAlign.right,
+                                  style: pw.TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: pw.FontWeight.normal)),
                             ),
                           ],
                         ),
@@ -774,17 +894,29 @@ class Ticketpdfdetails extends StatelessWidget {
                               padding: const pw.EdgeInsets.all(10),
                               child: pw.Text(
                                   '${LanguageClass.isEnglish ? "Trip  num" : 'رقم الرحلة'} :  ${ticket!.tripNumber.toString()}',
-                                  textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                                  textAlign: LanguageClass.isEnglish ? pw.TextAlign.left : pw.TextAlign.right,
-                                  style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.normal)),
+                                  textDirection: LanguageClass.isEnglish
+                                      ? pw.TextDirection.ltr
+                                      : pw.TextDirection.rtl,
+                                  textAlign: LanguageClass.isEnglish
+                                      ? pw.TextAlign.left
+                                      : pw.TextAlign.right,
+                                  style: pw.TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: pw.FontWeight.normal)),
                             ),
                             pw.Padding(
                               padding: const pw.EdgeInsets.all(10),
                               child: pw.Text(
                                   '${LanguageClass.isEnglish ? "Ticket num" : 'رقم التذكرة'} :  ${ticket!.ticketNumber.toString()}',
-                                  textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                                  textAlign: LanguageClass.isEnglish ? pw.TextAlign.left : pw.TextAlign.right,
-                                  style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.normal)),
+                                  textDirection: LanguageClass.isEnglish
+                                      ? pw.TextDirection.ltr
+                                      : pw.TextDirection.rtl,
+                                  textAlign: LanguageClass.isEnglish
+                                      ? pw.TextAlign.left
+                                      : pw.TextAlign.right,
+                                  style: pw.TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: pw.FontWeight.normal)),
                             ),
                           ],
                         ),
@@ -794,17 +926,29 @@ class Ticketpdfdetails extends StatelessWidget {
                               padding: const pw.EdgeInsets.all(10),
                               child: pw.Text(
                                   '${LanguageClass.isEnglish ? "Created by" : 'مكتب الاصدار'} :  ${ticket!.createdBy.toString()}',
-                                  textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                                  textAlign: LanguageClass.isEnglish ? pw.TextAlign.left : pw.TextAlign.right,
-                                  style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.normal)),
+                                  textDirection: LanguageClass.isEnglish
+                                      ? pw.TextDirection.ltr
+                                      : pw.TextDirection.rtl,
+                                  textAlign: LanguageClass.isEnglish
+                                      ? pw.TextAlign.left
+                                      : pw.TextAlign.right,
+                                  style: pw.TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: pw.FontWeight.normal)),
                             ),
                             pw.Padding(
                               padding: const pw.EdgeInsets.all(10),
                               child: pw.Text(
                                   '${LanguageClass.isEnglish ? "Seat numbers" : 'رقم المقعد'} :  ${ticket!.seatNumbers.toString()}',
-                                  textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                                  textAlign: LanguageClass.isEnglish ? pw.TextAlign.left : pw.TextAlign.right,
-                                  style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.normal)),
+                                  textDirection: LanguageClass.isEnglish
+                                      ? pw.TextDirection.ltr
+                                      : pw.TextDirection.rtl,
+                                  textAlign: LanguageClass.isEnglish
+                                      ? pw.TextAlign.left
+                                      : pw.TextAlign.right,
+                                  style: pw.TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: pw.FontWeight.normal)),
                             ),
                           ],
                         ),
@@ -813,9 +957,15 @@ class Ticketpdfdetails extends StatelessWidget {
                     pw.Table(children: [
                       pw.TableRow(children: [
                         pw.Text(textContent,
-                            textDirection: LanguageClass.isEnglish ? pw.TextDirection.ltr : pw.TextDirection.rtl,
-                            textAlign: LanguageClass.isEnglish ? pw.TextAlign.start : pw.TextAlign.start,
-                            style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.normal)),
+                            textDirection: LanguageClass.isEnglish
+                                ? pw.TextDirection.ltr
+                                : pw.TextDirection.rtl,
+                            textAlign: LanguageClass.isEnglish
+                                ? pw.TextAlign.start
+                                : pw.TextAlign.start,
+                            style: pw.TextStyle(
+                                fontSize: 14,
+                                fontWeight: pw.FontWeight.normal)),
                       ])
                     ]),
                   ],

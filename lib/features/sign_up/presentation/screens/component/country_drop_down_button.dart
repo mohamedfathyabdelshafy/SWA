@@ -16,14 +16,14 @@ class CountryDropDownTextFieldButton extends StatelessWidget {
   Color? bgcolor;
 
   CountryDropDownTextFieldButton({
-    Key? key,
+    super.key,
     this.borderradias,
     this.controller,
     required this.hintText,
     required this.onSelect,
     required this.countries,
     this.bgcolor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

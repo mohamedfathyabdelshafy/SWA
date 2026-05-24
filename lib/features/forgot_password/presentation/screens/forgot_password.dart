@@ -43,7 +43,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: Directionality(
-        textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+        textDirection:
+            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: sizeWidth / 10),
@@ -54,23 +55,31 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 children: [
                   SizedBox(height: context.height * 0.05),
                   Container(
-                    alignment: LanguageClass.isEnglish ? Alignment.topLeft : Alignment.topRight,
+                    alignment: LanguageClass.isEnglish
+                        ? Alignment.topLeft
+                        : Alignment.topRight,
                     child: InkWell(
                       onTap: () {
                         Navigator.pop(context);
                       },
                       child: Icon(
                         Icons.arrow_back_rounded,
-                        color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
+                        color: Routes.isomra
+                            ? AppColors.umragold
+                            : AppColors.primaryColor,
                         size: 35,
                       ),
                     ),
                   ),
                   SizedBox(height: context.height * 0.08),
-                  Image.asset(Routes.isomra ? 'assets/images/swaumra.png' : "assets/images/applogo.png"),
+                  Image.asset(Routes.isomra
+                      ? 'assets/images/swaumra.png'
+                      : "assets/images/applogo.png"),
                   SizedBox(height: context.height * 0.1),
                   Text(
-                    LanguageClass.isEnglish ? "Forgot Password" : "نسيت كلمه المرور",
+                    LanguageClass.isEnglish
+                        ? "Forgot Password"
+                        : "نسيت كلمه المرور",
                     style: fontStyle(
                         color: AppColors.blackColor,
                         fontWeight: FontWeight.bold,
@@ -100,18 +109,25 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     isPassword: false,
                     obscureText: false,
                     color: Color(0xffDDDDDD),
-                    hintText: LanguageClass.isEnglish ? "Enter Email" : "ادخل الايميل",
+                    hintText: LanguageClass.isEnglish
+                        ? "Enter Email"
+                        : "ادخل الايميل",
                     controller: emailController,
                     validator: (validator) {
                       if (validator == null || validator.isEmpty) {
-                        return LanguageClass.isEnglish ? "Enter Email" : "ادخل الايميل";
+                        return LanguageClass.isEnglish
+                            ? "Enter Email"
+                            : "ادخل الايميل";
                       }
 
-                      String pattern = r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+$";
+                      String pattern =
+                          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+$";
 
                       RegExp regex = RegExp(pattern);
                       if (!regex.hasMatch(validator)) {
-                        return LanguageClass.isEnglish ? "Your Email is invalid" : "ايميلك غير صحيح";
+                        return LanguageClass.isEnglish
+                            ? "Your Email is invalid"
+                            : "ايميلك غير صحيح";
                       } else {
                         return null;
                       }
@@ -127,45 +143,65 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         Constants.showLoadingDialog(context);
                       } else if (state is ForgotPasswordLoadedState) {
                         Constants.hideLoadingDialog(context);
-                        if (state.messageResponse.status == 'failed') {
+                        final status =
+                            state.messageResponse.status?.toLowerCase();
+                        if (status == 'failed') {
                           Constants.showDefaultSnackBar(
-                              context: context, text: state.messageResponse.massage.toString());
-                        } else if (state.messageResponse.status == 'success') {
+                              context: context,
+                              text: state.messageResponse.massage.toString());
+                        } else if (status == 'success') {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => MultiBlocProvider(
                                           providers: [
                                             BlocProvider<LoginCubit>(
-                                              create: (context) => sl<LoginCubit>(),
+                                              create: (context) =>
+                                                  sl<LoginCubit>(),
                                             ),
                                             BlocProvider<NewPasswordCubit>(
-                                              create: (context) => sl<NewPasswordCubit>(),
+                                              create: (context) =>
+                                                  sl<NewPasswordCubit>(),
                                             ),
                                             BlocProvider<ForgotPasswordCubit>(
-                                              create: (context) => sl<ForgotPasswordCubit>(),
+                                              create: (context) =>
+                                                  sl<ForgotPasswordCubit>(),
                                             )
                                           ],
                                           child: ForgetCodeScreen(
-                                            userId: state.messageResponse.massage!,
+                                            userId:
+                                                state.messageResponse.massage!,
                                           ))));
+                        } else {
+                          Constants.showDefaultSnackBar(
+                              context: context,
+                              text: state.messageResponse.massage ??
+                                  (LanguageClass.isEnglish
+                                      ? "Unable to send code"
+                                      : "تعذر إرسال الكود"));
                         }
                       } else if (state is ForgotPasswordErrorState) {
                         Constants.hideLoadingDialog(context);
-                        Constants.showDefaultSnackBar(context: context, text: state.error.toString());
+                        Constants.showDefaultSnackBar(
+                            context: context, text: state.error.toString());
                       }
                     },
                     child: InkWell(
                         onTap: () {
                           if (formKey.currentState!.validate()) {
                             BlocProvider.of<ForgotPasswordCubit>(context)
-                                .forgotPassword(ForgotPasswordParams(email: emailController.text));
+                                .forgotPassword(ForgotPasswordParams(
+                                    email: emailController.text.trim()));
                           }
                         },
                         child: Constants.customButton(
                             borderradias: 41,
-                            color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
-                            text: LanguageClass.isEnglish ? "Send Code" : "ارسال الكود")),
+                            color: Routes.isomra
+                                ? AppColors.umragold
+                                : AppColors.primaryColor,
+                            text: LanguageClass.isEnglish
+                                ? "Send Code"
+                                : "ارسال الكود")),
                   )
                 ],
               ),

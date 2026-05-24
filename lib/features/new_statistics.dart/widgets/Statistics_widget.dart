@@ -39,27 +39,39 @@ Widget StatisticsWidget(
               ontap: () {
                 switch (index) {
                   case 0:
-                    showPaymentDetails(context: context, payment: allStaticsModel.message!.payments!);
+                    showPaymentDetails(
+                        context: context,
+                        payment: allStaticsModel.message!.payments!);
 
                     break;
 
                   case 1:
-                    showReservationsDetails(context: context, payment: allStaticsModel.message!.reservations!);
+                    showReservationsDetails(
+                        context: context,
+                        payment: allStaticsModel.message!.reservations!);
                     break;
                   case 2:
-                    showRewardsDetails(context: context, payment: allStaticsModel.message!.rewards!);
+                    showRewardsDetails(
+                        context: context,
+                        payment: allStaticsModel.message!.rewards!);
                     break;
 
                   case 3:
-                    showPenaltyDetails(context: context, payment: allStaticsModel.message!.penalties!);
+                    showPenaltyDetails(
+                        context: context,
+                        payment: allStaticsModel.message!.penalties!);
                     break;
 
                   case 4:
-                    showFeesDetails(context: context, payment: allStaticsModel.message!.fees!);
+                    showFeesDetails(
+                        context: context,
+                        payment: allStaticsModel.message!.fees!);
                     break;
 
                   case 5:
-                    showRefundsDetails(context: context, payment: allStaticsModel.message!.refunds!);
+                    showRefundsDetails(
+                        context: context,
+                        payment: allStaticsModel.message!.refunds!);
                     break;
 
                   default:
@@ -73,14 +85,17 @@ Widget StatisticsWidget(
       Container(
           margin: EdgeInsets.symmetric(horizontal: 16.w),
           padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8), boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 4,
-              spreadRadius: 1,
-              offset: const Offset(0, 0),
-            )
-          ]),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 4,
+                  spreadRadius: 1,
+                  offset: const Offset(0, 0),
+                )
+              ]),
           child: Column(
             children: [
               Row(
@@ -95,8 +110,14 @@ Widget StatisticsWidget(
                     ),
                   ),
                   10.horizontalSpace,
-                  Text(LanguageClass.isEnglish ? "Wallet Details" : "تفاصيل المحفظة",
-                      style: fontStyle(fontWeight: FontWeight.bold, fontSize: 16.sp, fontFamily: FontFamily.bold)),
+                  Text(
+                      LanguageClass.isEnglish
+                          ? "Wallet Details"
+                          : "تفاصيل المحفظة",
+                      style: fontStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.sp,
+                          fontFamily: FontFamily.bold)),
                 ],
               ),
               10.verticalSpace,
@@ -106,7 +127,8 @@ Widget StatisticsWidget(
                       child: Container(
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8), color: AppColors.primaryColor.withOpacity(0.3)),
+                              borderRadius: BorderRadius.circular(8),
+                              color: AppColors.primaryColor.withOpacity(0.3)),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,7 +144,9 @@ Widget StatisticsWidget(
                                   ),
                                   5.horizontalSpace,
                                   Text(
-                                    LanguageClass.isEnglish ? "Recharge Wallet" : "شحن المحفظة",
+                                    LanguageClass.isEnglish
+                                        ? "Recharge Wallet"
+                                        : "شحن المحفظة",
                                     style: fontStyle(
                                         fontFamily: FontFamily.medium,
                                         fontSize: 14.sp,
@@ -135,7 +159,10 @@ Widget StatisticsWidget(
                                 "${allStaticsModel.message!.payments!.fold(
                                       0.0,
                                       (previousValue, element) =>
-                                          previousValue + (element.statusId == 22 ? element.amount : 0),
+                                          previousValue +
+                                          (element.statusId == 22
+                                              ? element.amount
+                                              : 0),
                                     ).toStringAsFixed(2)} ${Routes.curruncy}",
                                 style: fontStyle(
                                     fontFamily: FontFamily.bold,
@@ -150,7 +177,8 @@ Widget StatisticsWidget(
                       child: Container(
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8), color: AppColors.primaryColor.withOpacity(0.3)),
+                              borderRadius: BorderRadius.circular(8),
+                              color: AppColors.primaryColor.withOpacity(0.3)),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,7 +194,9 @@ Widget StatisticsWidget(
                                   ),
                                   5.horizontalSpace,
                                   Text(
-                                    LanguageClass.isEnglish ? "Booked Seats" : "حجز المقاعد",
+                                    LanguageClass.isEnglish
+                                        ? "Booked Seats"
+                                        : "حجز المقاعد",
                                     style: fontStyle(
                                         fontFamily: FontFamily.medium,
                                         fontSize: 14.sp,
@@ -179,7 +209,10 @@ Widget StatisticsWidget(
                                 "${allStaticsModel.message!.reservations!.fold(
                                       0.0,
                                       (previousValue, element) =>
-                                          previousValue + (element.status != 61 ? element.price : 0),
+                                          previousValue +
+                                          (element.status != 61
+                                              ? element.price
+                                              : 0),
                                     ).toStringAsFixed(2)} ${Routes.curruncy}",
                                 style: fontStyle(
                                     fontFamily: FontFamily.bold,
@@ -198,7 +231,8 @@ Widget StatisticsWidget(
                       child: Container(
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8), color: AppColors.primaryColor.withOpacity(0.3)),
+                              borderRadius: BorderRadius.circular(8),
+                              color: AppColors.primaryColor.withOpacity(0.3)),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,7 +248,9 @@ Widget StatisticsWidget(
                                   ),
                                   5.horizontalSpace,
                                   Text(
-                                    LanguageClass.isEnglish ? "Penalties" : "الغرامات",
+                                    LanguageClass.isEnglish
+                                        ? "Penalties"
+                                        : "الغرامات",
                                     style: fontStyle(
                                         fontFamily: FontFamily.medium,
                                         fontSize: 14.sp,
@@ -238,7 +274,8 @@ Widget StatisticsWidget(
                       child: Container(
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8), color: AppColors.primaryColor.withOpacity(0.3)),
+                              borderRadius: BorderRadius.circular(8),
+                              color: AppColors.primaryColor.withOpacity(0.3)),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -254,7 +291,9 @@ Widget StatisticsWidget(
                                   ),
                                   5.horizontalSpace,
                                   Text(
-                                    LanguageClass.isEnglish ? "Umra Trips" : "رحلات العمرة ",
+                                    LanguageClass.isEnglish
+                                        ? "Umra Trips"
+                                        : "رحلات العمرة ",
                                     style: fontStyle(
                                         fontFamily: FontFamily.medium,
                                         fontSize: 14.sp,
@@ -281,14 +320,17 @@ Widget StatisticsWidget(
       Container(
           margin: EdgeInsets.symmetric(horizontal: 16.w),
           padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8), boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 4,
-              spreadRadius: 1,
-              offset: const Offset(0, 0),
-            )
-          ]),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 4,
+                  spreadRadius: 1,
+                  offset: const Offset(0, 0),
+                )
+              ]),
           child: Column(children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -301,20 +343,28 @@ Widget StatisticsWidget(
                   ),
                 ),
                 10.horizontalSpace,
-                Text(LanguageClass.isEnglish ? "Favorite Routes" : "الخطوط المفضلة",
-                    style: fontStyle(fontWeight: FontWeight.bold, fontSize: 16.sp, fontFamily: FontFamily.bold)),
+                Text(
+                    LanguageClass.isEnglish
+                        ? "Favorite Routes"
+                        : "الخطوط المفضلة",
+                    style: fontStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.sp,
+                        fontFamily: FontFamily.bold)),
               ],
             ),
             10.verticalSpace,
             ListView.builder(
               shrinkWrap: true,
               physics: ScrollPhysics(),
-              itemCount: allStaticsModel?.message?.topRoutes?.length,
+              itemCount: allStaticsModel.message?.topRoutes?.length,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   padding: EdgeInsets.all(10.w),
                   margin: EdgeInsets.only(top: 10.h),
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.grey[100]),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.grey[100]),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -322,7 +372,8 @@ Widget StatisticsWidget(
                         width: 30.w,
                         height: 30.w,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8), color: AppColors.primaryColor.withOpacity(0.3)),
+                            borderRadius: BorderRadius.circular(8),
+                            color: AppColors.primaryColor.withOpacity(0.3)),
                         alignment: Alignment.center,
                         child: SvgPicture.asset(
                           "assets/images/bus24.svg",
@@ -335,14 +386,21 @@ Widget StatisticsWidget(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(allStaticsModel?.message?.topRoutes?[index].routeName ?? "",
+                            Text(
+                                allStaticsModel
+                                        .message?.topRoutes?[index].routeName ??
+                                    "",
                                 style: fontStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 14.sp, fontFamily: FontFamily.bold)),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14.sp,
+                                    fontFamily: FontFamily.bold)),
                             3.verticalSpace,
                             Text(
-                                "${allStaticsModel?.message?.topRoutes?[index].tripCount.toString()} ${LanguageClass.isEnglish ? "Trips" : "رحلات"}",
+                                "${allStaticsModel.message?.topRoutes?[index].tripCount.toString()} ${LanguageClass.isEnglish ? "Trips" : "رحلات"}",
                                 style: fontStyle(
-                                    fontWeight: FontWeight.normal, fontSize: 12.sp, fontFamily: FontFamily.regular)),
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 12.sp,
+                                    fontFamily: FontFamily.regular)),
                           ],
                         ),
                       ),
@@ -351,7 +409,7 @@ Widget StatisticsWidget(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                              "${allStaticsModel?.message?.topRoutes?[index].totalPrice.toString()} ${Routes.curruncy}",
+                              "${allStaticsModel.message?.topRoutes?[index].totalPrice.toString()} ${Routes.curruncy}",
                               style: fontStyle(
                                   color: AppColors.primaryColor,
                                   fontWeight: FontWeight.bold,
@@ -359,16 +417,20 @@ Widget StatisticsWidget(
                                   fontFamily: FontFamily.medium)),
                           5.verticalSpace,
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 2.h),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 7.w, vertical: 2.h),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: AppColors.blackColor, width: 0.5),
+                                border: Border.all(
+                                    color: AppColors.blackColor, width: 0.5),
                                 color: Colors.white),
                             child: Text(
                               "#${index + 1}",
                               style: fontStyle(
-                                  color: Colors.black.withOpacity(0.5), fontSize: 10.sp, fontFamily: FontFamily.bold),
+                                  color: Colors.black.withOpacity(0.5),
+                                  fontSize: 10.sp,
+                                  fontFamily: FontFamily.bold),
                             ),
                           )
                         ],
@@ -383,14 +445,17 @@ Widget StatisticsWidget(
       Container(
           margin: EdgeInsets.symmetric(horizontal: 16.w),
           padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8), boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 4,
-              spreadRadius: 1,
-              offset: const Offset(0, 0),
-            )
-          ]),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 4,
+                  spreadRadius: 1,
+                  offset: const Offset(0, 0),
+                )
+              ]),
           child: Column(children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -403,20 +468,28 @@ Widget StatisticsWidget(
                   ),
                 ),
                 10.horizontalSpace,
-                Text(LanguageClass.isEnglish ? "Monthly Statistics" : "الاحصائيات الشهرية",
-                    style: fontStyle(fontWeight: FontWeight.bold, fontSize: 16.sp, fontFamily: FontFamily.bold)),
+                Text(
+                    LanguageClass.isEnglish
+                        ? "Monthly Statistics"
+                        : "الاحصائيات الشهرية",
+                    style: fontStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.sp,
+                        fontFamily: FontFamily.bold)),
               ],
             ),
             10.verticalSpace,
             ListView.builder(
               shrinkWrap: true,
               physics: ScrollPhysics(),
-              itemCount: allStaticsModel?.message?.monthlyStats?.length,
+              itemCount: allStaticsModel.message?.monthlyStats?.length,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   padding: EdgeInsets.all(10.w),
                   margin: EdgeInsets.only(top: 10.h),
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.grey[100]),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.grey[100]),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -424,7 +497,8 @@ Widget StatisticsWidget(
                         width: 30.w,
                         height: 30.w,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8), color: AppColors.primaryColor.withOpacity(0.3)),
+                            borderRadius: BorderRadius.circular(8),
+                            color: AppColors.primaryColor.withOpacity(0.3)),
                         alignment: Alignment.center,
                         child: SvgPicture.asset(
                           "assets/images/Calendar-24px.svg",
@@ -437,14 +511,21 @@ Widget StatisticsWidget(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(allStaticsModel?.message!.monthlyStats![index].monthName ?? "",
+                            Text(
+                                allStaticsModel.message!.monthlyStats![index]
+                                        .monthName ??
+                                    "",
                                 style: fontStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 14.sp, fontFamily: FontFamily.bold)),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14.sp,
+                                    fontFamily: FontFamily.bold)),
                             3.verticalSpace,
                             Text(
-                                "${allStaticsModel?.message!.monthlyStats![index].reservationCount.toString()} ${LanguageClass.isEnglish ? "Reservations" : "حجز"}",
+                                "${allStaticsModel.message!.monthlyStats![index].reservationCount.toString()} ${LanguageClass.isEnglish ? "Reservations" : "حجز"}",
                                 style: fontStyle(
-                                    fontWeight: FontWeight.normal, fontSize: 12.sp, fontFamily: FontFamily.regular)),
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 12.sp,
+                                    fontFamily: FontFamily.regular)),
                           ],
                         ),
                       ),
@@ -452,7 +533,8 @@ Widget StatisticsWidget(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text("${allStaticsModel?.message!.monthlyStats![index].reservationTotal} ${Routes.curruncy}",
+                          Text(
+                              "${allStaticsModel.message!.monthlyStats![index].reservationTotal} ${Routes.curruncy}",
                               style: fontStyle(
                                   color: AppColors.primaryColor,
                                   fontWeight: FontWeight.bold,
@@ -505,141 +587,161 @@ Future _printPaymentsReport({
               textDirection: isAr ? pw.TextDirection.rtl : pw.TextDirection.ltr,
               child: pw.Container(
                 alignment: pw.Alignment.topRight,
-                padding: const pw.EdgeInsets.all(10), // Inner padding from border
+                padding:
+                    const pw.EdgeInsets.all(10), // Inner padding from border
                 child: pw.Column(
                   mainAxisAlignment: pw.MainAxisAlignment.start,
                   children: [
                     pw.Center(
-                      child: pw.Text(LanguageClass.isEnglish ? "Total Payment" : "إجمالي المدفوعات",
+                      child: pw.Text(
+                          LanguageClass.isEnglish
+                              ? "Total Payment"
+                              : "إجمالي المدفوعات",
                           style: pw.TextStyle(font: ttfBold, fontSize: 12)),
                     ),
                     pw.SizedBox(height: 20),
                     pw.Table(border: pw.TableBorder.all(width: 0.5), children: [
-                      pw.TableRow(verticalAlignment: pw.TableCellVerticalAlignment.middle, children: [
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Description" : 'تفاصيل',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                      pw.TableRow(
+                          verticalAlignment:
+                              pw.TableCellVerticalAlignment.middle,
+                          children: [
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish
+                                    ? "Description"
+                                    : 'تفاصيل',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Amount" : 'القيمة',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish ? "Amount" : 'القيمة',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Payment Method" : 'طريقة الدفع',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish
+                                    ? "Payment Method"
+                                    : 'طريقة الدفع',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Date" : 'تاريخ الدفع',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish
+                                    ? "Date"
+                                    : 'تاريخ الدفع',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Status" : 'الحالة',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish ? "Status" : 'الحالة',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ]),
+                          ]),
                       for (int i = 0; i < chunks[index].length; i++)
-                        pw.TableRow(verticalAlignment: pw.TableCellVerticalAlignment.middle, children: [
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              chunks[index][i].description!,
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                        pw.TableRow(
+                            verticalAlignment:
+                                pw.TableCellVerticalAlignment.middle,
+                            children: [
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  chunks[index][i].description!,
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              chunks[index][i].amount.toString(),
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  chunks[index][i].amount.toString(),
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              chunks[index][i].paymentMethod!,
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  chunks[index][i].paymentMethod!,
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              intl.DateFormat('dd-MM-yyyy hh:mm a').format(chunks[index][i].creationDate!).toString(),
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  intl.DateFormat('dd-MM-yyyy hh:mm a')
+                                      .format(chunks[index][i].creationDate!)
+                                      .toString(),
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              LanguageClass.isEnglish ? 'Confirmed' : 'مؤكد',
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  LanguageClass.isEnglish
+                                      ? 'Confirmed'
+                                      : 'مؤكد',
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ]),
+                            ]),
                     ])
                   ],
                 ),
@@ -687,119 +789,135 @@ Future _printPenaltieyReport({
               textDirection: isAr ? pw.TextDirection.rtl : pw.TextDirection.ltr,
               child: pw.Container(
                 alignment: pw.Alignment.topRight,
-                padding: const pw.EdgeInsets.all(10), // Inner padding from border
+                padding:
+                    const pw.EdgeInsets.all(10), // Inner padding from border
                 child: pw.Column(
                   mainAxisAlignment: pw.MainAxisAlignment.start,
                   children: [
                     pw.Center(
-                      child: pw.Text(LanguageClass.isEnglish ? "Total Penalties" : "اجمالي الغرامات",
+                      child: pw.Text(
+                          LanguageClass.isEnglish
+                              ? "Total Penalties"
+                              : "اجمالي الغرامات",
                           style: pw.TextStyle(font: ttfBold, fontSize: 12)),
                     ),
                     pw.SizedBox(height: 20),
                     pw.Table(border: pw.TableBorder.all(width: 0.5), children: [
-                      pw.TableRow(verticalAlignment: pw.TableCellVerticalAlignment.middle, children: [
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Line name" : ' الخط',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                      pw.TableRow(
+                          verticalAlignment:
+                              pw.TableCellVerticalAlignment.middle,
+                          children: [
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish ? "Line name" : ' الخط',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Amount" : 'القيمة',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish ? "Amount" : 'القيمة',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Date" : 'تاريخ الدفع',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish
+                                    ? "Date"
+                                    : 'تاريخ الدفع',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Status" : 'الحالة',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish ? "Status" : 'الحالة',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ]),
+                          ]),
                       for (int i = 0; i < chunks[index].length; i++)
-                        pw.TableRow(verticalAlignment: pw.TableCellVerticalAlignment.middle, children: [
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              LanguageClass.isEnglish ? chunks[index][i].lineNameEn! : chunks[index][i].lineNameAr!,
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                        pw.TableRow(
+                            verticalAlignment:
+                                pw.TableCellVerticalAlignment.middle,
+                            children: [
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  LanguageClass.isEnglish
+                                      ? chunks[index][i].lineNameEn!
+                                      : chunks[index][i].lineNameAr!,
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              "${chunks[index][i].penalty.toString()} ${Routes.curruncy}",
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  "${chunks[index][i].penalty.toString()} ${Routes.curruncy}",
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              intl.DateFormat('dd-MM-yyyy hh:mm a')
-                                  .format(chunks[index][i].transactionDate!)
-                                  .toString(),
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  intl.DateFormat('dd-MM-yyyy hh:mm a')
+                                      .format(chunks[index][i].transactionDate!)
+                                      .toString(),
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              LanguageClass.isEnglish ? 'Confirmed' : 'مؤكد',
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  LanguageClass.isEnglish
+                                      ? 'Confirmed'
+                                      : 'مؤكد',
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ]),
+                            ]),
                     ])
                   ],
                 ),
@@ -847,119 +965,135 @@ Future _printFeesReport({
               textDirection: isAr ? pw.TextDirection.rtl : pw.TextDirection.ltr,
               child: pw.Container(
                 alignment: pw.Alignment.topRight,
-                padding: const pw.EdgeInsets.all(10), // Inner padding from border
+                padding:
+                    const pw.EdgeInsets.all(10), // Inner padding from border
                 child: pw.Column(
                   mainAxisAlignment: pw.MainAxisAlignment.start,
                   children: [
                     pw.Center(
-                      child: pw.Text(LanguageClass.isEnglish ? "Administrative Fees" : "المصاريف الادارية",
+                      child: pw.Text(
+                          LanguageClass.isEnglish
+                              ? "Administrative Fees"
+                              : "المصاريف الادارية",
                           style: pw.TextStyle(font: ttfBold, fontSize: 12)),
                     ),
                     pw.SizedBox(height: 20),
                     pw.Table(border: pw.TableBorder.all(width: 0.5), children: [
-                      pw.TableRow(verticalAlignment: pw.TableCellVerticalAlignment.middle, children: [
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Description" : 'تفاصيل',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                      pw.TableRow(
+                          verticalAlignment:
+                              pw.TableCellVerticalAlignment.middle,
+                          children: [
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish
+                                    ? "Description"
+                                    : 'تفاصيل',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Amount" : 'القيمة',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish ? "Amount" : 'القيمة',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Date" : 'تاريخ الدفع',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish
+                                    ? "Date"
+                                    : 'تاريخ الدفع',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Status" : 'الحالة',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish ? "Status" : 'الحالة',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ]),
+                          ]),
                       for (int i = 0; i < chunks[index].length; i++)
-                        pw.TableRow(verticalAlignment: pw.TableCellVerticalAlignment.middle, children: [
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              " description"!,
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                        pw.TableRow(
+                            verticalAlignment:
+                                pw.TableCellVerticalAlignment.middle,
+                            children: [
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  " description",
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              "${chunks[index][i].feeAmount.toString()} ${Routes.curruncy}",
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  "${chunks[index][i].feeAmount.toString()} ${Routes.curruncy}",
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              intl.DateFormat('dd-MM-yyyy hh:mm a')
-                                  .format(chunks[index][i].transactionDate!)
-                                  .toString(),
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  intl.DateFormat('dd-MM-yyyy hh:mm a')
+                                      .format(chunks[index][i].transactionDate!)
+                                      .toString(),
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              LanguageClass.isEnglish ? 'Confirmed' : 'مؤكد',
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  LanguageClass.isEnglish
+                                      ? 'Confirmed'
+                                      : 'مؤكد',
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ]),
+                            ]),
                     ])
                   ],
                 ),
@@ -1007,117 +1141,135 @@ Future _printRefundReport({
               textDirection: isAr ? pw.TextDirection.rtl : pw.TextDirection.ltr,
               child: pw.Container(
                 alignment: pw.Alignment.topRight,
-                padding: const pw.EdgeInsets.all(10), // Inner padding from border
+                padding:
+                    const pw.EdgeInsets.all(10), // Inner padding from border
                 child: pw.Column(
                   mainAxisAlignment: pw.MainAxisAlignment.start,
                   children: [
                     pw.Center(
-                      child: pw.Text(LanguageClass.isEnglish ? "Total Refund" : "اجمالي الاسترداد",
+                      child: pw.Text(
+                          LanguageClass.isEnglish
+                              ? "Total Refund"
+                              : "اجمالي الاسترداد",
                           style: pw.TextStyle(font: ttfBold, fontSize: 12)),
                     ),
                     pw.SizedBox(height: 20),
                     pw.Table(border: pw.TableBorder.all(width: 0.5), children: [
-                      pw.TableRow(verticalAlignment: pw.TableCellVerticalAlignment.middle, children: [
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Description" : 'تفاصيل',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                      pw.TableRow(
+                          verticalAlignment:
+                              pw.TableCellVerticalAlignment.middle,
+                          children: [
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish
+                                    ? "Description"
+                                    : 'تفاصيل',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Amount" : 'القيمة',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish ? "Amount" : 'القيمة',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Date" : 'تاريخ الدفع',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish
+                                    ? "Date"
+                                    : 'تاريخ الدفع',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Status" : 'الحالة',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish ? "Status" : 'الحالة',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ]),
+                          ]),
                       for (int i = 0; i < chunks[index].length; i++)
-                        pw.TableRow(verticalAlignment: pw.TableCellVerticalAlignment.middle, children: [
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              " description"!,
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                        pw.TableRow(
+                            verticalAlignment:
+                                pw.TableCellVerticalAlignment.middle,
+                            children: [
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  " description",
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              "${chunks[index][i].amount.toString()} ${Routes.curruncy}",
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  "${chunks[index][i].amount.toString()} ${Routes.curruncy}",
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              intl.DateFormat('dd-MM-yyyy hh:mm a').format(chunks[index][i].paymentDate!).toString(),
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  intl.DateFormat('dd-MM-yyyy hh:mm a')
+                                      .format(chunks[index][i].paymentDate!)
+                                      .toString(),
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              LanguageClass.isEnglish ? 'Confirmed' : 'مؤكد',
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  LanguageClass.isEnglish
+                                      ? 'Confirmed'
+                                      : 'مؤكد',
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ]),
+                            ]),
                     ])
                   ],
                 ),
@@ -1176,165 +1328,185 @@ Future _printReservattionReport({
               textDirection: isAr ? pw.TextDirection.rtl : pw.TextDirection.ltr,
               child: pw.Container(
                 alignment: pw.Alignment.topRight,
-                padding: const pw.EdgeInsets.all(10), // Inner padding from border
+                padding:
+                    const pw.EdgeInsets.all(10), // Inner padding from border
                 child: pw.Column(
                   mainAxisAlignment: pw.MainAxisAlignment.start,
                   children: [
                     pw.Center(
-                      child: pw.Text(LanguageClass.isEnglish ? "Total reservations" : "إجمالي الحجوزات",
+                      child: pw.Text(
+                          LanguageClass.isEnglish
+                              ? "Total reservations"
+                              : "إجمالي الحجوزات",
                           style: pw.TextStyle(font: ttfBold, fontSize: 12)),
                     ),
                     pw.SizedBox(height: 20),
                     pw.Table(border: pw.TableBorder.all(width: 0.5), children: [
-                      pw.TableRow(verticalAlignment: pw.TableCellVerticalAlignment.middle, children: [
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Ticket number" : 'رقم التذكرة',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                      pw.TableRow(
+                          verticalAlignment:
+                              pw.TableCellVerticalAlignment.middle,
+                          children: [
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish
+                                    ? "Ticket number"
+                                    : 'رقم التذكرة',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Trip date" : 'تاريخ الرحلة',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish
+                                    ? "Trip date"
+                                    : 'تاريخ الرحلة',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Trip time" : 'وقت القيام',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish
+                                    ? "Trip time"
+                                    : 'وقت القيام',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "From" : "من",
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish ? "From" : "من",
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "To" : 'الى',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish ? "To" : 'الى',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Price" : 'السعر',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish ? "Price" : 'السعر',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ]),
+                          ]),
                       for (int i = 0; i < chunks[index].length; i++)
-                        pw.TableRow(verticalAlignment: pw.TableCellVerticalAlignment.middle, children: [
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              chunks[index][i].ticketNumber.toString()!,
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                        pw.TableRow(
+                            verticalAlignment:
+                                pw.TableCellVerticalAlignment.middle,
+                            children: [
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  chunks[index][i].ticketNumber.toString(),
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              intl.DateFormat('dd-MM-yyyy').format(chunks[index][i].tripDate!).toString(),
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  intl.DateFormat('dd-MM-yyyy')
+                                      .format(chunks[index][i].tripDate!)
+                                      .toString(),
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              intl.DateFormat('hh:mm a').format(chunks[index][i].tripDate!).toString(),
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  intl.DateFormat('hh:mm a')
+                                      .format(chunks[index][i].tripDate!)
+                                      .toString(),
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              chunks[index][i].fromStation!,
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  chunks[index][i].fromStation!,
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              chunks[index][i].toStation!,
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  chunks[index][i].toStation!,
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              "${chunks[index][i].price} ${Routes.curruncy}",
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  "${chunks[index][i].price} ${Routes.curruncy}",
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ]),
+                            ]),
                     ])
                   ],
                 ),
@@ -1382,93 +1554,107 @@ Future _printRewardsReport({
               textDirection: isAr ? pw.TextDirection.rtl : pw.TextDirection.ltr,
               child: pw.Container(
                 alignment: pw.Alignment.topRight,
-                padding: const pw.EdgeInsets.all(10), // Inner padding from border
+                padding:
+                    const pw.EdgeInsets.all(10), // Inner padding from border
                 child: pw.Column(
                   mainAxisAlignment: pw.MainAxisAlignment.start,
                   children: [
                     pw.Center(
-                      child: pw.Text(LanguageClass.isEnglish ? "Rewards" : "ارصدة الهدايا",
+                      child: pw.Text(
+                          LanguageClass.isEnglish ? "Rewards" : "ارصدة الهدايا",
                           style: pw.TextStyle(font: ttfBold, fontSize: 12)),
                     ),
                     pw.SizedBox(height: 20),
                     pw.Table(border: pw.TableBorder.all(width: 0.5), children: [
-                      pw.TableRow(verticalAlignment: pw.TableCellVerticalAlignment.middle, children: [
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Description" : 'التفاصيل',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                      pw.TableRow(
+                          verticalAlignment:
+                              pw.TableCellVerticalAlignment.middle,
+                          children: [
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish
+                                    ? "Description"
+                                    : 'التفاصيل',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "date" : 'تاريخ ',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish ? "date" : 'تاريخ ',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        pw.Container(
-                          height: 30,
-                          alignment: pw.Alignment.center,
-                          child: pw.Text(
-                            LanguageClass.isEnglish ? "Amount" : ' المبلغ',
-                            style: pw.TextStyle(
-                              font: ttfBold,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 10,
+                            pw.Container(
+                              height: 30,
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                LanguageClass.isEnglish ? "Amount" : ' المبلغ',
+                                style: pw.TextStyle(
+                                  font: ttfBold,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ]),
+                          ]),
                       for (int i = 0; i < chunks[index].length; i++)
-                        pw.TableRow(verticalAlignment: pw.TableCellVerticalAlignment.middle, children: [
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              LanguageClass.isEnglish ? chunks[index][i].nameEn! : chunks[index][i].nameAr!,
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                        pw.TableRow(
+                            verticalAlignment:
+                                pw.TableCellVerticalAlignment.middle,
+                            children: [
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  LanguageClass.isEnglish
+                                      ? chunks[index][i].nameEn!
+                                      : chunks[index][i].nameAr!,
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              intl.DateFormat('dd-MM-yyyy').format(chunks[index][i].creationDate!).toString(),
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  intl.DateFormat('dd-MM-yyyy')
+                                      .format(chunks[index][i].creationDate!)
+                                      .toString(),
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          pw.Container(
-                            height: 30,
-                            alignment: pw.Alignment.center,
-                            child: pw.Text(
-                              "${chunks[index][i].amount} ${Routes.curruncy}",
-                              style: pw.TextStyle(
-                                font: ttf,
-                                fontWeight: pw.FontWeight.normal,
-                                fontSize: 10,
+                              pw.Container(
+                                height: 30,
+                                alignment: pw.Alignment.center,
+                                child: pw.Text(
+                                  "${chunks[index][i].amount} ${Routes.curruncy}",
+                                  style: pw.TextStyle(
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.normal,
+                                    fontSize: 10,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ]),
+                            ]),
                     ])
                   ],
                 ),
@@ -1510,17 +1696,24 @@ Widget buildCard(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(title,
-                  style:
-                      fontStyle(color: Colors.black.withOpacity(0.5), fontSize: 12.sp, fontFamily: FontFamily.medium)),
+                  style: fontStyle(
+                      color: Colors.black.withOpacity(0.5),
+                      fontSize: 12.sp,
+                      fontFamily: FontFamily.medium)),
               SizedBox(height: 4),
-              Text(value, style: fontStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, fontFamily: FontFamily.bold)),
+              Text(value,
+                  style: fontStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: FontFamily.bold)),
             ],
           ),
         ),
         InkWell(
             onTap: ontap,
-            child:
-                Text(LanguageClass.isEnglish ? "Show details" : "عرض التفاصيل", style: TextStyle(color: Colors.black))),
+            child: Text(
+                LanguageClass.isEnglish ? "Show details" : "عرض التفاصيل",
+                style: TextStyle(color: Colors.black))),
       ],
     ),
   );
@@ -1540,7 +1733,8 @@ Future showPaymentDetails({
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Directionality(
-          textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+          textDirection:
+              LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
           child: Container(
             width: double.infinity,
             color: Colors.white,
@@ -1550,7 +1744,9 @@ Future showPaymentDetails({
               children: [
                 Container(
                   alignment: Alignment.topRight,
-                  child: InkWell(onTap: () => Navigator.pop(context), child: Icon(Icons.close)),
+                  child: InkWell(
+                      onTap: () => Navigator.pop(context),
+                      child: Icon(Icons.close)),
                 ),
                 5.verticalSpace,
                 Row(
@@ -1573,8 +1769,13 @@ Future showPaymentDetails({
                     ),
                     5.horizontalSpace,
                     Text(
-                      LanguageClass.isEnglish ? "Total Payment" : "إجمالي المدفوعات",
-                      style: fontStyle(fontFamily: FontFamily.bold, fontSize: 14.sp, fontWeight: FontWeight.w500),
+                      LanguageClass.isEnglish
+                          ? "Total Payment"
+                          : "إجمالي المدفوعات",
+                      style: fontStyle(
+                          fontFamily: FontFamily.bold,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
@@ -1614,7 +1815,8 @@ Future showPaymentDetails({
                       Text(
                           "${payment.fold(
                                 0.0,
-                                (previousValue, element) => previousValue + element.amount,
+                                (previousValue, element) =>
+                                    previousValue + element.amount,
                               ).toString()} ${Routes.curruncy}",
                           style: fontStyle(
                               fontFamily: FontFamily.bold,
@@ -1674,9 +1876,11 @@ Future showPaymentDetails({
                                   ),
                                   2.verticalSpace,
                                   Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 5.w, vertical: 2.h),
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8), border: Border.all(color: Colors.grey)),
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(color: Colors.grey)),
                                     child: Text(
                                       payment[index].paymentMethod!,
                                       style: fontStyle(
@@ -1703,14 +1907,17 @@ Future showPaymentDetails({
                                 ),
                                 10.verticalSpace,
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 4.w, vertical: 2.h),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(100),
                                       color: Colors.green.withOpacity(0.2),
                                       border: Border.all(color: Colors.green)),
                                   child: Text(
-                                    LanguageClass.isEnglish ? "Completed" : "مكتمل",
+                                    LanguageClass.isEnglish
+                                        ? "Completed"
+                                        : "مكتمل",
                                     style: fontStyle(
                                         fontSize: 8.sp,
                                         fontFamily: FontFamily.bold,
@@ -1738,9 +1945,12 @@ Future showPaymentDetails({
                                 alignment: Alignment.center,
                                 padding: EdgeInsets.symmetric(vertical: 10.h),
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8), color: AppColors.primaryColor),
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: AppColors.primaryColor),
                                 child: Text(
-                                  LanguageClass.isEnglish ? "Export" : "تصدير تقرير",
+                                  LanguageClass.isEnglish
+                                      ? "Export"
+                                      : "تصدير تقرير",
                                   style: fontStyle(
                                       color: Colors.white,
                                       fontSize: 14.sp,
@@ -1791,7 +2001,8 @@ Future showReservationsDetails({
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Directionality(
-          textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+          textDirection:
+              LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
           child: Container(
             width: double.infinity,
             color: Colors.white,
@@ -1801,7 +2012,9 @@ Future showReservationsDetails({
               children: [
                 Container(
                   alignment: Alignment.topRight,
-                  child: InkWell(onTap: () => Navigator.pop(context), child: Icon(Icons.close)),
+                  child: InkWell(
+                      onTap: () => Navigator.pop(context),
+                      child: Icon(Icons.close)),
                 ),
                 5.verticalSpace,
                 Row(
@@ -1824,8 +2037,13 @@ Future showReservationsDetails({
                     ),
                     5.horizontalSpace,
                     Text(
-                      LanguageClass.isEnglish ? "Total Reservations" : "إجمالي الحجوزات",
-                      style: fontStyle(fontFamily: FontFamily.bold, fontSize: 14.sp, fontWeight: FontWeight.w500),
+                      LanguageClass.isEnglish
+                          ? "Total Reservations"
+                          : "إجمالي الحجوزات",
+                      style: fontStyle(
+                          fontFamily: FontFamily.bold,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
@@ -1862,7 +2080,8 @@ Future showReservationsDetails({
                               fontWeight: FontWeight.w500,
                               color: Colors.black.withOpacity(0.6))),
                       5.verticalSpace,
-                      Text("${payment.length} ${LanguageClass.isEnglish ? "Reservations" : "حجز"}",
+                      Text(
+                          "${payment.length} ${LanguageClass.isEnglish ? "Reservations" : "حجز"}",
                           style: fontStyle(
                               fontFamily: FontFamily.bold,
                               fontSize: 16.sp,
@@ -1910,7 +2129,9 @@ Future showReservationsDetails({
                                         color: Colors.black.withOpacity(0.6)),
                                   ),
                                   Text(
-                                    intl.DateFormat('dd-MM-yyyy hh:mm a').format(payment[index].tripDate!).toString(),
+                                    intl.DateFormat('dd-MM-yyyy hh:mm a')
+                                        .format(payment[index].tripDate!)
+                                        .toString(),
                                     style: fontStyle(
                                         fontSize: 12.sp,
                                         fontFamily: FontFamily.medium,
@@ -1933,16 +2154,22 @@ Future showReservationsDetails({
                                       color: AppColors.primaryColor),
                                 ),
                                 10.verticalSpace,
-                                payment![index].status == 60
+                                payment[index].status == 60
                                     ? Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 4.w, vertical: 2.h),
                                         alignment: Alignment.center,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(100),
-                                            color: Colors.green.withOpacity(0.2),
-                                            border: Border.all(color: Colors.green)),
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            color:
+                                                Colors.green.withOpacity(0.2),
+                                            border: Border.all(
+                                                color: Colors.green)),
                                         child: Text(
-                                          LanguageClass.isEnglish ? "Confirmed" : "مؤكد",
+                                          LanguageClass.isEnglish
+                                              ? "Confirmed"
+                                              : "مؤكد",
                                           style: fontStyle(
                                               fontSize: 8.sp,
                                               fontFamily: FontFamily.bold,
@@ -1952,14 +2179,20 @@ Future showReservationsDetails({
                                       )
                                     : payment[index].status == 61
                                         ? Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 4.w, vertical: 2.h),
                                             alignment: Alignment.center,
                                             decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(100),
-                                                color: Colors.red.withOpacity(0.2),
-                                                border: Border.all(color: Colors.red)),
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                color:
+                                                    Colors.red.withOpacity(0.2),
+                                                border: Border.all(
+                                                    color: Colors.red)),
                                             child: Text(
-                                              LanguageClass.isEnglish ? "Canceled" : "ملغى",
+                                              LanguageClass.isEnglish
+                                                  ? "Canceled"
+                                                  : "ملغى",
                                               style: fontStyle(
                                                   fontSize: 8.sp,
                                                   fontFamily: FontFamily.bold,
@@ -1969,37 +2202,57 @@ Future showReservationsDetails({
                                           )
                                         : payment[index].status == 62
                                             ? Container(
-                                                padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 4.w,
+                                                    vertical: 2.h),
                                                 alignment: Alignment.center,
                                                 decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(100),
-                                                    color: Colors.orange.withOpacity(0.2),
-                                                    border: Border.all(color: Colors.orange)),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            100),
+                                                    color: Colors.orange
+                                                        .withOpacity(0.2),
+                                                    border: Border.all(
+                                                        color: Colors.orange)),
                                                 child: Text(
-                                                  LanguageClass.isEnglish ? "Edited" : "تم التعديل",
+                                                  LanguageClass.isEnglish
+                                                      ? "Edited"
+                                                      : "تم التعديل",
                                                   style: fontStyle(
                                                       fontSize: 8.sp,
-                                                      fontFamily: FontFamily.bold,
-                                                      fontWeight: FontWeight.w600,
+                                                      fontFamily:
+                                                          FontFamily.bold,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                       color: Colors.orange),
                                                 ),
                                               )
                                             : payment[index].status == 63
                                                 ? Container(
-                                                    padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 4.w,
+                                                            vertical: 2.h),
                                                     alignment: Alignment.center,
                                                     decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(100),
-                                                        color: Colors.amber.withOpacity(0.2),
-                                                        border: Border.all(color: Colors.amber)),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(100),
+                                                        color: Colors.amber
+                                                            .withOpacity(0.2),
+                                                        border: Border.all(
+                                                            color:
+                                                                Colors.amber)),
                                                     child: Text(
                                                       LanguageClass.isEnglish
                                                           ? "Edited with penalty"
                                                           : "تم التعديل بغرامة",
                                                       style: fontStyle(
                                                           fontSize: 8.sp,
-                                                          fontFamily: FontFamily.bold,
-                                                          fontWeight: FontWeight.w600,
+                                                          fontFamily:
+                                                              FontFamily.bold,
+                                                          fontWeight:
+                                                              FontWeight.w600,
                                                           color: Colors.amber),
                                                     ),
                                                   )
@@ -2024,9 +2277,12 @@ Future showReservationsDetails({
                                 alignment: Alignment.center,
                                 padding: EdgeInsets.symmetric(vertical: 10.h),
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8), color: AppColors.primaryColor),
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: AppColors.primaryColor),
                                 child: Text(
-                                  LanguageClass.isEnglish ? "Export" : "تصدير تقرير",
+                                  LanguageClass.isEnglish
+                                      ? "Export"
+                                      : "تصدير تقرير",
                                   style: fontStyle(
                                       color: Colors.white,
                                       fontSize: 14.sp,
@@ -2077,7 +2333,8 @@ Future showRewardsDetails({
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Directionality(
-          textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+          textDirection:
+              LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
           child: Container(
             width: double.infinity,
             color: Colors.white,
@@ -2087,7 +2344,9 @@ Future showRewardsDetails({
               children: [
                 Container(
                   alignment: Alignment.topRight,
-                  child: InkWell(onTap: () => Navigator.pop(context), child: Icon(Icons.close)),
+                  child: InkWell(
+                      onTap: () => Navigator.pop(context),
+                      child: Icon(Icons.close)),
                 ),
                 5.verticalSpace,
                 Row(
@@ -2111,7 +2370,10 @@ Future showRewardsDetails({
                     5.horizontalSpace,
                     Text(
                       LanguageClass.isEnglish ? "Rewards" : "ارصدة الهدايا",
-                      style: fontStyle(fontFamily: FontFamily.bold, fontSize: 14.sp, fontWeight: FontWeight.w500),
+                      style: fontStyle(
+                          fontFamily: FontFamily.bold,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
@@ -2151,7 +2413,8 @@ Future showRewardsDetails({
                       Text(
                           "${payment.fold(
                                 0.0,
-                                (previousValue, element) => previousValue + element.amount,
+                                (previousValue, element) =>
+                                    previousValue + element.amount,
                               ).toString()} ${Routes.curruncy}",
                           style: fontStyle(
                               fontFamily: FontFamily.bold,
@@ -2192,7 +2455,9 @@ Future showRewardsDetails({
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    LanguageClass.isEnglish ? payment[index].nameEn! : payment[index].nameAr!,
+                                    LanguageClass.isEnglish
+                                        ? payment[index].nameEn!
+                                        : payment[index].nameAr!,
                                     style: fontStyle(
                                         fontSize: 14.sp,
                                         fontFamily: FontFamily.medium,
@@ -2211,9 +2476,11 @@ Future showRewardsDetails({
                                   ),
                                   2.verticalSpace,
                                   Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 5.w, vertical: 2.h),
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8), border: Border.all(color: Colors.grey)),
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(color: Colors.grey)),
                                     child: Text(
                                       payment[index].rewardsId.toString(),
                                       style: fontStyle(
@@ -2240,14 +2507,17 @@ Future showRewardsDetails({
                                 ),
                                 10.verticalSpace,
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 4.w, vertical: 2.h),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(100),
                                       color: Colors.green.withOpacity(0.2),
                                       border: Border.all(color: Colors.green)),
                                   child: Text(
-                                    LanguageClass.isEnglish ? "Completed" : "مكتمل",
+                                    LanguageClass.isEnglish
+                                        ? "Completed"
+                                        : "مكتمل",
                                     style: fontStyle(
                                         fontSize: 8.sp,
                                         fontFamily: FontFamily.bold,
@@ -2275,9 +2545,12 @@ Future showRewardsDetails({
                                 alignment: Alignment.center,
                                 padding: EdgeInsets.symmetric(vertical: 10.h),
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8), color: AppColors.primaryColor),
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: AppColors.primaryColor),
                                 child: Text(
-                                  LanguageClass.isEnglish ? "Export" : "تصدير تقرير",
+                                  LanguageClass.isEnglish
+                                      ? "Export"
+                                      : "تصدير تقرير",
                                   style: fontStyle(
                                       color: Colors.white,
                                       fontSize: 14.sp,
@@ -2328,7 +2601,8 @@ Future showPenaltyDetails({
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Directionality(
-          textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+          textDirection:
+              LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
           child: Container(
             width: double.infinity,
             color: Colors.white,
@@ -2338,7 +2612,9 @@ Future showPenaltyDetails({
               children: [
                 Container(
                   alignment: Alignment.topRight,
-                  child: InkWell(onTap: () => Navigator.pop(context), child: Icon(Icons.close)),
+                  child: InkWell(
+                      onTap: () => Navigator.pop(context),
+                      child: Icon(Icons.close)),
                 ),
                 5.verticalSpace,
                 Row(
@@ -2361,8 +2637,13 @@ Future showPenaltyDetails({
                     ),
                     5.horizontalSpace,
                     Text(
-                      LanguageClass.isEnglish ? "Total penalties" : "اجمالي الغرامات",
-                      style: fontStyle(fontFamily: FontFamily.bold, fontSize: 14.sp, fontWeight: FontWeight.w500),
+                      LanguageClass.isEnglish
+                          ? "Total penalties"
+                          : "اجمالي الغرامات",
+                      style: fontStyle(
+                          fontFamily: FontFamily.bold,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
@@ -2402,7 +2683,8 @@ Future showPenaltyDetails({
                       Text(
                           "${payment.fold(
                                 0.0,
-                                (previousValue, element) => previousValue + element.penalty,
+                                (previousValue, element) =>
+                                    previousValue + element.penalty,
                               ).toString()} ${Routes.curruncy}",
                           style: fontStyle(
                               fontFamily: FontFamily.bold,
@@ -2443,7 +2725,9 @@ Future showPenaltyDetails({
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    LanguageClass.isEnglish ? payment[index].lineNameEn! : payment[index].lineNameAr!,
+                                    LanguageClass.isEnglish
+                                        ? payment[index].lineNameEn!
+                                        : payment[index].lineNameAr!,
                                     style: fontStyle(
                                         fontSize: 14.sp,
                                         fontFamily: FontFamily.medium,
@@ -2478,14 +2762,17 @@ Future showPenaltyDetails({
                                 ),
                                 10.verticalSpace,
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 4.w, vertical: 2.h),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(100),
                                       color: Colors.green.withOpacity(0.2),
                                       border: Border.all(color: Colors.green)),
                                   child: Text(
-                                    LanguageClass.isEnglish ? "Completed" : "مكتمل",
+                                    LanguageClass.isEnglish
+                                        ? "Completed"
+                                        : "مكتمل",
                                     style: fontStyle(
                                         fontSize: 8.sp,
                                         fontFamily: FontFamily.bold,
@@ -2513,9 +2800,12 @@ Future showPenaltyDetails({
                                 alignment: Alignment.center,
                                 padding: EdgeInsets.symmetric(vertical: 10.h),
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8), color: AppColors.primaryColor),
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: AppColors.primaryColor),
                                 child: Text(
-                                  LanguageClass.isEnglish ? "Export" : "تصدير تقرير",
+                                  LanguageClass.isEnglish
+                                      ? "Export"
+                                      : "تصدير تقرير",
                                   style: fontStyle(
                                       color: Colors.white,
                                       fontSize: 14.sp,
@@ -2566,7 +2856,8 @@ Future showFeesDetails({
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Directionality(
-          textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+          textDirection:
+              LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
           child: Container(
             width: double.infinity,
             color: Colors.white,
@@ -2576,7 +2867,9 @@ Future showFeesDetails({
               children: [
                 Container(
                   alignment: Alignment.topRight,
-                  child: InkWell(onTap: () => Navigator.pop(context), child: Icon(Icons.close)),
+                  child: InkWell(
+                      onTap: () => Navigator.pop(context),
+                      child: Icon(Icons.close)),
                 ),
                 5.verticalSpace,
                 Row(
@@ -2599,8 +2892,13 @@ Future showFeesDetails({
                     ),
                     5.horizontalSpace,
                     Text(
-                      LanguageClass.isEnglish ? "Administrative Fees" : "المصاريف الادارية",
-                      style: fontStyle(fontFamily: FontFamily.bold, fontSize: 14.sp, fontWeight: FontWeight.w500),
+                      LanguageClass.isEnglish
+                          ? "Administrative Fees"
+                          : "المصاريف الادارية",
+                      style: fontStyle(
+                          fontFamily: FontFamily.bold,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
@@ -2608,7 +2906,9 @@ Future showFeesDetails({
                 Container(
                   alignment: Alignment.center,
                   child: Text(
-                    LanguageClass.isEnglish ? "Details of all fees in this batch" : "تفاصيل جميع المصاريف في هذه الفئة",
+                    LanguageClass.isEnglish
+                        ? "Details of all fees in this batch"
+                        : "تفاصيل جميع المصاريف في هذه الفئة",
                     style: fontStyle(
                         fontFamily: FontFamily.regular,
                         fontSize: 12.sp,
@@ -2638,7 +2938,8 @@ Future showFeesDetails({
                       Text(
                           "${payment.fold(
                                 0.0,
-                                (previousValue, element) => previousValue + element.feeAmount,
+                                (previousValue, element) =>
+                                    previousValue + element.feeAmount,
                               ).toString()} ${Routes.curruncy}",
                           style: fontStyle(
                               fontFamily: FontFamily.bold,
@@ -2698,9 +2999,11 @@ Future showFeesDetails({
                                   ),
                                   2.verticalSpace,
                                   Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 5.w, vertical: 2.h),
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8), border: Border.all(color: Colors.grey)),
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(color: Colors.grey)),
                                     child: Text(
                                       payment[index].transactionId.toString(),
                                       style: fontStyle(
@@ -2727,14 +3030,17 @@ Future showFeesDetails({
                                 ),
                                 10.verticalSpace,
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 4.w, vertical: 2.h),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(100),
                                       color: Colors.green.withOpacity(0.2),
                                       border: Border.all(color: Colors.green)),
                                   child: Text(
-                                    LanguageClass.isEnglish ? "Completed" : "مكتمل",
+                                    LanguageClass.isEnglish
+                                        ? "Completed"
+                                        : "مكتمل",
                                     style: fontStyle(
                                         fontSize: 8.sp,
                                         fontFamily: FontFamily.bold,
@@ -2762,9 +3068,12 @@ Future showFeesDetails({
                                 alignment: Alignment.center,
                                 padding: EdgeInsets.symmetric(vertical: 10.h),
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8), color: AppColors.primaryColor),
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: AppColors.primaryColor),
                                 child: Text(
-                                  LanguageClass.isEnglish ? "Export" : "تصدير تقرير",
+                                  LanguageClass.isEnglish
+                                      ? "Export"
+                                      : "تصدير تقرير",
                                   style: fontStyle(
                                       color: Colors.white,
                                       fontSize: 14.sp,
@@ -2815,7 +3124,8 @@ Future showRefundsDetails({
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Directionality(
-          textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+          textDirection:
+              LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
           child: Container(
             width: double.infinity,
             color: Colors.white,
@@ -2825,7 +3135,9 @@ Future showRefundsDetails({
               children: [
                 Container(
                   alignment: Alignment.topRight,
-                  child: InkWell(onTap: () => Navigator.pop(context), child: Icon(Icons.close)),
+                  child: InkWell(
+                      onTap: () => Navigator.pop(context),
+                      child: Icon(Icons.close)),
                 ),
                 5.verticalSpace,
                 Row(
@@ -2848,8 +3160,13 @@ Future showRefundsDetails({
                     ),
                     5.horizontalSpace,
                     Text(
-                      LanguageClass.isEnglish ? "Total Refund" : "اجمالي الاسترداد",
-                      style: fontStyle(fontFamily: FontFamily.bold, fontSize: 14.sp, fontWeight: FontWeight.w500),
+                      LanguageClass.isEnglish
+                          ? "Total Refund"
+                          : "اجمالي الاسترداد",
+                      style: fontStyle(
+                          fontFamily: FontFamily.bold,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
@@ -2889,7 +3206,8 @@ Future showRefundsDetails({
                       Text(
                           "${payment.fold(
                                 0.0,
-                                (previousValue, element) => previousValue + element.amount,
+                                (previousValue, element) =>
+                                    previousValue + element.amount,
                               ).toString()} ${Routes.curruncy}",
                           style: fontStyle(
                               fontFamily: FontFamily.bold,
@@ -2949,11 +3267,15 @@ Future showRefundsDetails({
                                   ),
                                   2.verticalSpace,
                                   Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 5.w, vertical: 2.h),
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8), border: Border.all(color: Colors.grey)),
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(color: Colors.grey)),
                                     child: Text(
-                                      payment[index].paymentToCustomerId.toString(),
+                                      payment[index]
+                                          .paymentToCustomerId
+                                          .toString(),
                                       style: fontStyle(
                                           fontSize: 12.sp,
                                           fontFamily: FontFamily.medium,
@@ -2978,14 +3300,17 @@ Future showRefundsDetails({
                                 ),
                                 10.verticalSpace,
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 4.w, vertical: 2.h),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(100),
                                       color: Colors.green.withOpacity(0.2),
                                       border: Border.all(color: Colors.green)),
                                   child: Text(
-                                    LanguageClass.isEnglish ? "Completed" : "مكتمل",
+                                    LanguageClass.isEnglish
+                                        ? "Completed"
+                                        : "مكتمل",
                                     style: fontStyle(
                                         fontSize: 8.sp,
                                         fontFamily: FontFamily.bold,
@@ -3013,9 +3338,12 @@ Future showRefundsDetails({
                                 alignment: Alignment.center,
                                 padding: EdgeInsets.symmetric(vertical: 10.h),
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8), color: AppColors.primaryColor),
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: AppColors.primaryColor),
                                 child: Text(
-                                  LanguageClass.isEnglish ? "Export" : "تصدير تقرير",
+                                  LanguageClass.isEnglish
+                                      ? "Export"
+                                      : "تصدير تقرير",
                                   style: fontStyle(
                                       color: Colors.white,
                                       fontSize: 14.sp,

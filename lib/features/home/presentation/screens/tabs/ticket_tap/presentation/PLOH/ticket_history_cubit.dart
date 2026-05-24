@@ -13,11 +13,17 @@ class TicketCubit extends Cubit<TicketStates> {
   TicketCubit() : super(InitialTicketHistory());
   TicketRepo ticketRepo = TicketRepo(sl());
 
-  Future<ResponseTicketHistoryModel?> getTicketHistory({required int customerId}) async {
+  Future<ResponseTicketHistoryModel?> getTicketHistory({
+    required int customerId,
+    int? year,
+  }) async {
     try {
       emit(LoadingTicketHistory());
 
-      final res = await ticketRepo.getTicketHistory(customerId: customerId);
+      final res = await ticketRepo.getTicketHistory(
+        customerId: customerId,
+        year: year,
+      );
       if (res?.status == "success") {
         emit(LoadedTicketHistory(responseTicketHistoryModel: res!));
       } else {
@@ -27,7 +33,8 @@ class TicketCubit extends Cubit<TicketStates> {
     } catch (e) {
       print(e.toString());
       if (!isClosed) {
-        emit(ErrorTicketHistory(msg: "Failed to load ticket history: ${e.toString()}"));
+        emit(ErrorTicketHistory(
+            msg: "Failed to load ticket history: ${e.toString()}"));
       }
 
       return null;
@@ -47,7 +54,8 @@ class TicketCubit extends Cubit<TicketStates> {
       return res; // Return the response
     } catch (e) {
       print(e.toString());
-      emit(ErrorTicketHistory(msg: "Failed to load ticket details: ${e.toString()}"));
+      emit(ErrorTicketHistory(
+          msg: "Failed to load ticket details: ${e.toString()}"));
       return null;
     }
   }
@@ -65,13 +73,15 @@ class TicketCubit extends Cubit<TicketStates> {
       }
     } catch (e) {
       print(e.toString());
-      emit(ErrorTicketHistory(msg: "Failed to load edit policy: ${e.toString()}"));
+      emit(ErrorTicketHistory(
+          msg: "Failed to load edit policy: ${e.toString()}"));
     }
   }
 
   Future cancelticket({required int id, required customerId}) async {
     try {
-      emit(LoadingTicketHistory()); // Show loading indicator during cancellation
+      emit(
+          LoadingTicketHistory()); // Show loading indicator during cancellation
 
       final res = await ticketRepo.cancelticketfun(resrvationid: id);
       if (res is ReservationResponseModel) {
@@ -84,11 +94,13 @@ class TicketCubit extends Cubit<TicketStates> {
         }
       } else {
         // If cancellation fails, still attempt to refresh history to show latest state
-        emit(CancelticketErrorstate(errormessage: res ?? "Cancellation failed"));
+        emit(
+            CancelticketErrorstate(errormessage: res ?? "Cancellation failed"));
       }
     } catch (e) {
       print(e.toString());
-      emit(ErrorTicketHistory(msg: "Error during ticket cancellation: ${e.toString()}"));
+      emit(ErrorTicketHistory(
+          msg: "Error during ticket cancellation: ${e.toString()}"));
       // Even on error, try to refresh the list in case some data changed
       await getTicketHistory(customerId: customerId);
     }

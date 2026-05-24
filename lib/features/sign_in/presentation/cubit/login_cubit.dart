@@ -5,7 +5,6 @@ import 'package:swa/core/usecases/usecase.dart';
 import 'package:swa/features/sign_in/domain/entities/user_response.dart';
 import 'package:swa/features/sign_in/domain/use_cases/get_user_data.dart';
 import 'package:swa/features/sign_in/domain/use_cases/login.dart';
-import 'package:swa/features/sign_in/presentation/cubit/dete_respo.dart';
 
 part 'login_state.dart';
 

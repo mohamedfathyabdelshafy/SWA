@@ -13,8 +13,8 @@ class Userdeleterespo {
       'APIKey': '546548dwfdfsd3f4sdfhgat52',
       "Accept-Language": LanguageClass.isEnglish ? "en" : "ar"
     };
-    var request = http.Request('POST',
-        Uri.parse('http://API.SWABUS.COM/APi/Customer/Delete?id=${id}'));
+    var request = http.Request(
+        'POST', Uri.parse('http://API.SWABUS.COM/APi/Customer/Delete?id=$id'));
 
     request.headers.addAll(headers);
 

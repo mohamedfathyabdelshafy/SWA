@@ -241,8 +241,7 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                               style: fontStyle(
                                   color: AppColors.blackColor,
                                   fontSize: 25.sp,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: FontFamily.regular),
+                                  fontFamily: FontFamily.medium),
                             ),
                             showtimer ? Timerwidget() : SizedBox()
                           ],
@@ -322,25 +321,34 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                     ),
                                   ),
                                 ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      widget.from,
-                                      style: fontStyle(
-                                          fontSize: 16.sp,
-                                          fontFamily: FontFamily.bold,
-                                          color: Colors.black),
-                                    ),
-                                    Text(
-                                      widget.to,
-                                      style: fontStyle(
-                                          fontSize: 16.sp,
-                                          fontFamily: FontFamily.bold,
-                                          color: Colors.black),
-                                    ),
-                                  ],
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        widget.from,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: fontStyle(
+                                            fontSize: 14.sp,
+                                            height: 1.25,
+                                            fontFamily: FontFamily.medium,
+                                            color: Colors.black),
+                                      ),
+                                      Text(
+                                        widget.to,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: fontStyle(
+                                            fontSize: 14.sp,
+                                            height: 1.25,
+                                            fontFamily: FontFamily.medium,
+                                            color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             )
@@ -780,10 +788,10 @@ class _BusLayoutScreenState extends State<BusLayoutScreen> {
                                                 color: Colors.red,
                                                 context: context,
                                                 text: LanguageClass.isEnglish
-                                                    ? 'You have 120 seconds to select your seats'
-                                                    : 'لديك ١٢٠ ثانية لاختيار مقاعدك');
+                                                    ? 'You have 4 minutes to select your seats'
+                                                    : 'لديك 4 دقائق لاختيار مقاعدك');
                                             showtimer = true;
-                                            Reservationtimer.start = 120;
+                                            Reservationtimer.start = 240;
 
                                             Reservationtimer.startTimer(
                                               context,

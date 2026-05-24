@@ -10,7 +10,7 @@ class TextWidget extends StatelessWidget {
       this.color});
   String text;
   double? fontSize;
-  String? fontFamily;
+  FontFamily? fontFamily;
   Color? color;
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class TextWidget extends StatelessWidget {
       style: fontStyle(
           color: color ?? Colors.white,
           fontSize: fontSize ?? 18,
-          fontFamily: FontFamily.regular),
+          fontFamily: fontFamily ?? FontFamily.regular),
     );
   }
 }

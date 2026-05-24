@@ -9,7 +9,6 @@ import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/model/
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/data/repo/more_repo.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/PLOH/more_cubit.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/PLOH/more_states.dart';
-import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/screens/abous_us.dart';
 import 'package:swa/main.dart';
 
 class PrivacyScreen extends StatefulWidget {

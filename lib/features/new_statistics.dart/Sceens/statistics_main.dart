@@ -16,7 +16,7 @@ import 'package:swa/features/new_statistics.dart/bloc/statistics_bloc.dart';
 import 'package:swa/features/new_statistics.dart/model/All_statics_model.dart';
 
 class statisticsMainScreen extends StatefulWidget {
-  statisticsMainScreen({super.key});
+  const statisticsMainScreen({super.key});
 
   @override
   State<statisticsMainScreen> createState() => _statisticsMainScreenState();
@@ -60,11 +60,14 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
         ),
         backgroundColor: Colors.white,
         body: Directionality(
-            textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+            textDirection:
+                LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
             child: Routes.user == null
                 ? Center(
                     child: Text(
-                      LanguageClass.isEnglish ? "Please Login" : "يرجى تسجيل الدخول",
+                      LanguageClass.isEnglish
+                          ? "Please Login"
+                          : "يرجى تسجيل الدخول",
                       style: fontStyle(
                         color: Colors.black.withOpacity(0.8),
                         fontFamily: FontFamily.medium,
@@ -77,31 +80,52 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                         bloc: BlocProvider.of<StatisticsBloc>(context),
                         listener: (context, state) {
                           if (state is MainstatisticsState) {
-                            walletbalance = state.mainStaticsModel?.message?.walletBalance.toString();
+                            walletbalance = state
+                                .mainStaticsModel?.message?.walletBalance
+                                .toString();
 
                             statisticslist = [
                               statistics(
-                                title: LanguageClass.isEnglish ? "Wallet Balance" : "رصيد المحفظة",
+                                title: LanguageClass.isEnglish
+                                    ? "Wallet Balance"
+                                    : "رصيد المحفظة",
                                 subtitle: Routes.curruncy,
-                                value: state.mainStaticsModel?.message?.walletBalance.toString(),
+                                value: state
+                                    .mainStaticsModel?.message?.walletBalance
+                                    .toString(),
                                 image: 'assets/images/wallet.svg',
                               ),
                               statistics(
-                                title: LanguageClass.isEnglish ? "Total Reservation" : "اجمالي الحجوزات",
-                                subtitle: LanguageClass.isEnglish ? "reservation" : "حجز",
-                                value: state.mainStaticsModel?.message?.totalReservationCount.toString(),
+                                title: LanguageClass.isEnglish
+                                    ? "Total Reservation"
+                                    : "اجمالي الحجوزات",
+                                subtitle: LanguageClass.isEnglish
+                                    ? "reservation"
+                                    : "حجز",
+                                value: state.mainStaticsModel?.message
+                                    ?.totalReservationCount
+                                    .toString(),
                                 image: 'assets/images/bus24.svg',
                               ),
                               statistics(
-                                title: LanguageClass.isEnglish ? "Total spend" : "اجمالي النفقات",
+                                title: LanguageClass.isEnglish
+                                    ? "Total spend"
+                                    : "اجمالي النفقات",
                                 subtitle: Routes.curruncy,
-                                value: state.mainStaticsModel?.message?.totalReservationAmount.toString(),
+                                value: state.mainStaticsModel?.message
+                                    ?.totalReservationAmount
+                                    .toString(),
                                 image: 'assets/images/CreditCard-24px.svg',
                               ),
                               statistics(
-                                title: LanguageClass.isEnglish ? "Total Loyalty" : "نقاظ الولاء",
-                                subtitle: LanguageClass.isEnglish ? "point" : "نقطة",
-                                value: state.mainStaticsModel?.message?.totalLoyalty.toString(),
+                                title: LanguageClass.isEnglish
+                                    ? "Total Loyalty"
+                                    : "نقاظ الولاء",
+                                subtitle:
+                                    LanguageClass.isEnglish ? "point" : "نقطة",
+                                value: state
+                                    .mainStaticsModel?.message?.totalLoyalty
+                                    .toString(),
                                 image: 'assets/images/Calendar-24px.svg',
                               ),
                             ];
@@ -109,39 +133,70 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                             allStaticsModel = state.allStaticsModel;
                             Allstatisticslist = [
                               statistics(
-                                title: LanguageClass.isEnglish ? "Total Payment" : "إجمالي المدفوعات",
-                                subtitle: LanguageClass.isEnglish ? "reservation" : "حجز",
-                                value: state.allStaticsModel!.message?.summary?.totalPayment.toString(),
+                                title: LanguageClass.isEnglish
+                                    ? "Total Payment"
+                                    : "إجمالي المدفوعات",
+                                subtitle: LanguageClass.isEnglish
+                                    ? "reservation"
+                                    : "حجز",
+                                value: state.allStaticsModel!.message?.summary
+                                    ?.totalPayment
+                                    .toString(),
                                 image: 'assets/images/CreditCard-24px.svg',
                               ),
                               statistics(
-                                title: LanguageClass.isEnglish ? "Total Reservation" : "إجمالي الحجوزات",
-                                subtitle: LanguageClass.isEnglish ? "reservation" : "حجز",
-                                value: state.allStaticsModel!.message?.summary?.totalReservationCount.toString(),
+                                title: LanguageClass.isEnglish
+                                    ? "Total Reservation"
+                                    : "إجمالي الحجوزات",
+                                subtitle: LanguageClass.isEnglish
+                                    ? "reservation"
+                                    : "حجز",
+                                value: state.allStaticsModel!.message?.summary
+                                    ?.totalReservationCount
+                                    .toString(),
                                 image: 'assets/images/bus24.svg',
                               ),
                               statistics(
-                                title: LanguageClass.isEnglish ? "Total Gifts" : "أرصدة الهدايا",
+                                title: LanguageClass.isEnglish
+                                    ? "Total Gifts"
+                                    : "أرصدة الهدايا",
                                 subtitle: Routes.curruncy,
-                                value: state.allStaticsModel!.message?.summary?.totalReward.toString(),
+                                value: state.allStaticsModel!.message?.summary
+                                    ?.totalReward
+                                    .toString(),
                                 image: 'assets/images/Gift-24px.svg',
                               ),
                               statistics(
-                                title: LanguageClass.isEnglish ? "Total Penalty" : "إجمالي الغرامات",
-                                subtitle: LanguageClass.isEnglish ? "point" : "نقطة",
-                                value: state.allStaticsModel!.message?.summary?.totalPenalty.toString(),
+                                title: LanguageClass.isEnglish
+                                    ? "Total Penalty"
+                                    : "إجمالي الغرامات",
+                                subtitle:
+                                    LanguageClass.isEnglish ? "point" : "نقطة",
+                                value: state.allStaticsModel!.message?.summary
+                                    ?.totalPenalty
+                                    .toString(),
                                 image: 'assets/images/warning.svg',
                               ),
                               statistics(
-                                title: LanguageClass.isEnglish ? "Administrative Expenses" : "المصاريف الإدارية",
-                                subtitle: LanguageClass.isEnglish ? "point" : "نقطة",
-                                value: state.allStaticsModel!.message?.summary?.totalFees.toString(),
+                                title: LanguageClass.isEnglish
+                                    ? "Administrative Expenses"
+                                    : "المصاريف الإدارية",
+                                subtitle:
+                                    LanguageClass.isEnglish ? "point" : "نقطة",
+                                value: state.allStaticsModel!.message?.summary
+                                    ?.totalFees
+                                    .toString(),
                                 image: 'assets/images/DollarSign-24px.svg',
                               ),
                               statistics(
-                                title: LanguageClass.isEnglish ? "Total Refund" : "اجمالي الاسترداد",
-                                subtitle: LanguageClass.isEnglish ? "point" : "نقطة",
-                                value: state.allStaticsModel!.message?.summary?.totalRefund.toString(),
+                                title: LanguageClass.isEnglish
+                                    ? "Total Refund"
+                                    : "اجمالي الاسترداد",
+                                subtitle:
+                                    LanguageClass.isEnglish ? "point" : "نقطة",
+                                value: state.allStaticsModel!.message?.summary
+                                    ?.totalRefund
+                                    .toString(),
                                 image: 'assets/images/TrendingDown-24px.svg',
                               ),
                             ];
@@ -149,14 +204,17 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                             showReservationspopDetails(
                                 reservation: state.reservation!,
                                 context: context,
-                                reservationdetails: state.reservationdetailsModel!);
+                                reservationdetails:
+                                    state.reservationdetailsModel!);
                           }
                         },
                         child: BlocBuilder<StatisticsBloc, StatisticsState>(
                             bloc: BlocProvider.of<StatisticsBloc>(context),
                             builder: (context, state) {
                               if (state is Loading) {
-                                return Center(child: CircularProgressIndicator(color: AppColors.primaryColor));
+                                return Center(
+                                    child: CircularProgressIndicator(
+                                        color: AppColors.primaryColor));
                               } else {
                                 return Column(
                                   children: [
@@ -167,22 +225,29 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                                       ),
                                       height: 80,
                                       alignment: Alignment.center,
-                                      decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                                        BoxShadow(
-                                            color: Colors.black.withOpacity(0.09),
-                                            blurRadius: 14,
-                                            offset: const Offset(0, 15),
-                                            spreadRadius: 1)
-                                      ]),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.09),
+                                                blurRadius: 14,
+                                                offset: const Offset(0, 15),
+                                                spreadRadius: 1)
+                                          ]),
                                       child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           Container(
                                             width: 45.w,
                                             height: 45.w,
                                             decoration: BoxDecoration(
-                                                color: Colors.grey[100], borderRadius: BorderRadius.circular(100)),
+                                                color: Colors.grey[100],
+                                                borderRadius:
+                                                    BorderRadius.circular(100)),
                                             child: Container(
                                               alignment: Alignment.center,
                                               child: Icon(
@@ -193,8 +258,10 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                                           ),
                                           15.horizontalSpace,
                                           Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 Routes.user!.name!,
@@ -205,7 +272,7 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                                                 ),
                                               ),
                                               Text(
-                                                Routes.user!.pinCode.toString()!,
+                                                Routes.user!.pinCode.toString(),
                                                 style: fontStyle(
                                                   color: Colors.black,
                                                   fontSize: 13.sp,
@@ -221,34 +288,47 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                                     Expanded(
                                       child: GridView.builder(
                                         shrinkWrap: true,
-                                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 16.w),
                                         physics: ScrollPhysics(),
-                                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                            childAspectRatio: 1.8,
-                                            crossAxisCount: 2,
-                                            crossAxisSpacing: 7,
-                                            mainAxisSpacing: 7),
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                childAspectRatio: 1.8,
+                                                crossAxisCount: 2,
+                                                crossAxisSpacing: 7,
+                                                mainAxisSpacing: 7),
                                         itemCount: statisticslist.length,
-                                        itemBuilder: (BuildContext context, int index) {
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
                                           return Container(
                                             padding: EdgeInsets.all(10),
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
-                                                borderRadius: BorderRadius.circular(12),
-                                                border: Border.all(color: AppColors.primaryColor)),
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                border: Border.all(
+                                                    color: AppColors
+                                                        .primaryColor)),
                                             child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
                                               children: [
                                                 Container(
                                                   alignment: Alignment.center,
                                                   width: 30.w,
                                                   height: 30.w,
                                                   decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(12),
-                                                      color: AppColors.primaryColor.withOpacity(0.4)),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
+                                                      color: AppColors
+                                                          .primaryColor
+                                                          .withOpacity(0.4)),
                                                   child: SvgPicture.asset(
-                                                    statisticslist[index].image!,
+                                                    statisticslist[index]
+                                                        .image!,
                                                     width: 15.w,
                                                     color: Colors.white,
                                                   ),
@@ -256,34 +336,49 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                                                 10.horizontalSpace,
                                                 Expanded(
                                                   child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Text(
-                                                        statisticslist[index].title!,
+                                                        statisticslist[index]
+                                                            .title!,
                                                         style: fontStyle(
                                                           color: Colors.black,
                                                           fontSize: 12.sp,
-                                                          fontFamily: FontFamily.bold,
-                                                          fontWeight: FontWeight.w600,
+                                                          fontFamily:
+                                                              FontFamily.bold,
+                                                          fontWeight:
+                                                              FontWeight.w600,
                                                         ),
                                                       ),
                                                       Text(
-                                                        statisticslist[index].value!,
+                                                        statisticslist[index]
+                                                            .value!,
                                                         style: fontStyle(
-                                                          color: AppColors.primaryColor,
+                                                          color: AppColors
+                                                              .primaryColor,
                                                           fontSize: 14.sp,
-                                                          fontFamily: FontFamily.bold,
-                                                          fontWeight: FontWeight.w600,
+                                                          fontFamily:
+                                                              FontFamily.bold,
+                                                          fontWeight:
+                                                              FontWeight.w600,
                                                         ),
                                                       ),
                                                       Text(
-                                                        statisticslist[index].subtitle!,
+                                                        statisticslist[index]
+                                                            .subtitle!,
                                                         style: fontStyle(
-                                                          color: AppColors.blackColor,
+                                                          color: AppColors
+                                                              .blackColor,
                                                           fontSize: 10.sp,
-                                                          fontFamily: FontFamily.medium,
-                                                          fontWeight: FontWeight.w600,
+                                                          fontFamily:
+                                                              FontFamily.medium,
+                                                          fontWeight:
+                                                              FontWeight.w600,
                                                         ),
                                                       ),
                                                     ],
@@ -299,47 +394,72 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                                         flex: 2,
                                         child: DefaultTabController(
                                           length: 3,
+                                          initialIndex: 1,
                                           child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
                                             children: [
                                               Container(
-                                                margin: EdgeInsets.symmetric(horizontal: 16.w),
-                                                padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal: 16.w),
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 5.h,
+                                                    horizontal: 10.w),
                                                 decoration: BoxDecoration(
                                                     color: Colors.white,
                                                     boxShadow: [
                                                       BoxShadow(
-                                                          color: Colors.black.withOpacity(0.1),
+                                                          color: Colors.black
+                                                              .withOpacity(0.1),
                                                           offset: Offset(0, 4),
                                                           blurRadius: 4,
                                                           spreadRadius: 1)
                                                     ],
-                                                    borderRadius: BorderRadius.circular(8)),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8)),
                                                 child: TabBar(
-                                                    dividerColor: Colors.transparent,
+                                                    dividerColor:
+                                                        Colors.transparent,
                                                     dividerHeight: 0,
-                                                    indicatorSize: TabBarIndicatorSize.tab,
-                                                    indicatorPadding: EdgeInsets.zero,
+                                                    indicatorSize:
+                                                        TabBarIndicatorSize.tab,
+                                                    indicatorPadding:
+                                                        EdgeInsets.zero,
                                                     padding: EdgeInsets.zero,
-                                                    labelPadding: EdgeInsets.zero,
+                                                    labelPadding:
+                                                        EdgeInsets.zero,
                                                     indicator: null,
                                                     labelStyle: fontStyle(
-                                                        fontFamily: FontFamily.bold,
+                                                        fontFamily:
+                                                            FontFamily.bold,
                                                         fontSize: 14.sp,
-                                                        fontWeight: FontWeight.w600),
+                                                        fontWeight:
+                                                            FontWeight.w600),
                                                     indicatorWeight: 0.1,
-                                                    indicatorColor: Colors.transparent,
+                                                    indicatorColor:
+                                                        Colors.transparent,
                                                     labelColor: Colors.black,
-                                                    unselectedLabelColor: Colors.grey[500],
+                                                    unselectedLabelColor:
+                                                        Colors.grey[500],
                                                     tabs: [
                                                       Tab(
-                                                        text: LanguageClass.isEnglish ? "Statistics" : "الاحصائيات",
+                                                        text: LanguageClass
+                                                                .isEnglish
+                                                            ? "Statistics"
+                                                            : "الاحصائيات",
                                                       ),
                                                       Tab(
-                                                        text: LanguageClass.isEnglish ? "Transactions" : "المعاملات",
+                                                        text: LanguageClass
+                                                                .isEnglish
+                                                            ? "Transactions"
+                                                            : "المعاملات",
                                                       ),
                                                       Tab(
-                                                        text: LanguageClass.isEnglish ? "Reservations" : "الحجوزات",
+                                                        text: LanguageClass
+                                                                .isEnglish
+                                                            ? "Reservations"
+                                                            : "الحجوزات",
                                                       ),
                                                     ]),
                                               ),
@@ -349,16 +469,22 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                                                   children: [
                                                     StatisticsWidget(
                                                         context: context,
-                                                        statisticslist: Allstatisticslist,
-                                                        allStaticsModel: allStaticsModel!),
+                                                        statisticslist:
+                                                            Allstatisticslist,
+                                                        allStaticsModel:
+                                                            allStaticsModel!),
                                                     paymentWidget(
                                                         context: context,
-                                                        allStatics: allStaticsModel!,
-                                                        walletbalance: walletbalance!),
+                                                        allStatics:
+                                                            allStaticsModel!,
+                                                        walletbalance:
+                                                            walletbalance!),
                                                     ReservationWidget(
                                                         context: context,
-                                                        allStaticsModel: allStaticsModel!,
-                                                        walletbalance: walletbalance!),
+                                                        allStaticsModel:
+                                                            allStaticsModel!,
+                                                        walletbalance:
+                                                            walletbalance!),
                                                   ],
                                                 ),
                                               )

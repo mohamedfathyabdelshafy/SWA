@@ -14,7 +14,9 @@ import 'package:swa/features/payment/select_payment/presentation/screens/select_
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
 
 Widget paymentWidget(
-    {required AllStaticsModel allStatics, required String walletbalance, required BuildContext context}) {
+    {required AllStaticsModel allStatics,
+    required String walletbalance,
+    required BuildContext context}) {
   return StatefulBuilder(builder: (context, setState) {
     AllStaticsModel allStaticsModel = allStatics;
 
@@ -40,7 +42,7 @@ Widget paymentWidget(
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                       width: 20.w,
                       child: SvgPicture.asset(
                         "assets/images/wallet.svg",
@@ -49,7 +51,9 @@ Widget paymentWidget(
                     ),
                     5.horizontalSpace,
                     Text(
-                      LanguageClass.isEnglish ? "Current Balance" : "رصيد المحفظة الحالي",
+                      LanguageClass.isEnglish
+                          ? "Current Balance"
+                          : "رصيد المحفظة الحالي",
                       style: fontStyle(
                           fontSize: 14.sp,
                           fontFamily: FontFamily.bold,
@@ -90,9 +94,11 @@ Widget paymentWidget(
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => BlocProvider<ReservationCubit>(
+                                  builder: (context) =>
+                                      BlocProvider<ReservationCubit>(
                                     create: (context) => ReservationCubit(),
-                                    child: SelectPaymentScreen(user: Routes.user),
+                                    child:
+                                        SelectPaymentScreen(user: Routes.user),
                                   ),
                                 ),
                               );
@@ -100,9 +106,13 @@ Widget paymentWidget(
                             child: Container(
                                 alignment: Alignment.center,
                                 padding: EdgeInsets.symmetric(vertical: 5.h),
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.green),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Colors.green),
                                 child: Text(
-                                  LanguageClass.isEnglish ? "charge  +" : "شحن  +",
+                                  LanguageClass.isEnglish
+                                      ? "charge  +"
+                                      : "شحن  +",
                                   style: fontStyle(
                                       color: Colors.white,
                                       fontSize: 14.sp,
@@ -147,7 +157,9 @@ Widget paymentWidget(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          LanguageClass.isEnglish ? "Total Deposits" : "اجمالي الايداعات",
+                          LanguageClass.isEnglish
+                              ? "Total Deposits"
+                              : "اجمالي الايداعات",
                           style: fontStyle(
                             color: Colors.blue,
                             fontSize: 12.sp,
@@ -209,7 +221,9 @@ Widget paymentWidget(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          LanguageClass.isEnglish ? "Total Withdrawals" : "اجمالي المسحوبات",
+                          LanguageClass.isEnglish
+                              ? "Total Withdrawals"
+                              : "اجمالي المسحوبات",
                           style: fontStyle(
                             color: Colors.brown,
                             fontSize: 12.sp,
@@ -384,7 +398,9 @@ Widget paymentWidget(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          LanguageClass.isEnglish ? "Transactions" : "سجل المعاملات",
+                          LanguageClass.isEnglish
+                              ? "Transactions"
+                              : "سجل المعاملات",
                           style: fontStyle(
                               fontSize: 14.sp,
                               fontFamily: FontFamily.bold,
@@ -429,9 +445,11 @@ Widget paymentWidget(
                                 width: 25.w,
                                 height: 25.w,
                                 alignment: Alignment.center,
-                                decoration:
-                                    BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.grey[350]),
-                                child: SvgPicture.asset("assets/images/DollarSign-24px.svg"),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Colors.grey[350]),
+                                child: SvgPicture.asset(
+                                    "assets/images/DollarSign-24px.svg"),
                               ),
                               5.horizontalSpace,
                               Expanded(
@@ -440,26 +458,35 @@ Widget paymentWidget(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      allStaticsModel.message!.payments![index].description.toString(),
+                                      allStaticsModel
+                                          .message!.payments![index].description
+                                          .toString(),
                                       style: fontStyle(
-                                          color: AppColors.blackColor.withOpacity(0.6),
+                                          color: AppColors.blackColor
+                                              .withOpacity(0.6),
                                           fontFamily: FontFamily.medium,
                                           fontWeight: FontWeight.w600),
                                     ),
                                     5.verticalSpace,
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text(
                                           intl.DateFormat('dd-MM-yyyy hh:mm a')
-                                              .format(allStaticsModel.message!.payments![index].creationDate!)
+                                              .format(allStaticsModel
+                                                  .message!
+                                                  .payments![index]
+                                                  .creationDate!)
                                               .toString(),
                                           style: fontStyle(
                                               fontSize: 12.sp,
                                               fontFamily: FontFamily.medium,
                                               fontWeight: FontWeight.w600,
-                                              color: Colors.black.withOpacity(0.6)),
+                                              color: Colors.black
+                                                  .withOpacity(0.6)),
                                         ),
                                       ],
                                     )
@@ -471,7 +498,9 @@ Widget paymentWidget(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    allStaticsModel.message!.payments![index].amount!.toString(),
+                                    allStaticsModel
+                                        .message!.payments![index].amount!
+                                        .toString(),
                                     style: fontStyle(
                                         fontSize: 14.sp,
                                         fontFamily: FontFamily.bold,

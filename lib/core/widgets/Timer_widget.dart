@@ -7,6 +7,7 @@ import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/styles.dart';
+import 'package:swa/core/widgets/app_dialog.dart';
 import 'package:swa/core/widgets/timer.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/Ticket_class.dart';
 import 'package:swa/features/bus_reservation_layout/data/repo/bus_reservation_repo.dart';
@@ -25,7 +26,7 @@ class _TimerwidgetState extends State<Timerwidget> {
   Widget build(BuildContext context) {
     return Container(
       child: CircularCountDownTimer(
-        duration: Reservationtimer.start ?? 120,
+        duration: Reservationtimer.start ?? 240,
         initialDuration: 0,
         controller: Reservationtimer.controller,
         width: 40,
@@ -59,33 +60,33 @@ class _TimerwidgetState extends State<Timerwidget> {
             Reservationtimer.controller.pause();
           }
 
-          BusLayoutRepo(apiConsumer: sl())
-              .Removeholdfun(tripid: Ticketreservation.tripid1, Seatsnumbers: Ticketreservation.countSeats1);
+          BusLayoutRepo(apiConsumer: sl()).Removeholdfun(
+              tripid: Ticketreservation.tripid1,
+              Seatsnumbers: Ticketreservation.countSeats1);
 
-          BusLayoutRepo(apiConsumer: sl())
-              .Removeholdfun(tripid: Ticketreservation.tripid2, Seatsnumbers: Ticketreservation.countSeats2);
+          BusLayoutRepo(apiConsumer: sl()).Removeholdfun(
+              tripid: Ticketreservation.tripid2,
+              Seatsnumbers: Ticketreservation.countSeats2);
 
           bool ishow = false;
 
           if (ishow == false) {
             ishow = true;
-            Navigator.pushNamedAndRemoveUntil(context, Routes.home, (r) => false, arguments: false);
-            CoolAlert.show(
-                barrierDismissible: false,
-                context: context,
-                confirmBtnText: "ok",
-                title: LanguageClass.isEnglish ? 'Info' : 'انتباه',
-                lottieAsset: 'assets/json/Warning.json',
-                type: CoolAlertType.error,
-                loopAnimation: false,
-                backgroundColor: Colors.white,
-                text: LanguageClass.isEnglish
-                    ? 'Time for reservation has been finished start again'
-                    : "لقد انتهى وقت الحجز، ابدأ من جديد",
-                widget: Container(),
-                onConfirmBtnTap: () {
-                  Reservationtimer.stoptimer();
-                });
+            Navigator.pushNamedAndRemoveUntil(
+                context, Routes.home, (r) => false,
+                arguments: false);
+            AppDialog.show(
+              barrierDismissible: false,
+              context: context,
+              confirmText: "ok",
+              type: AppDialogType.warning,
+              message: LanguageClass.isEnglish
+                  ? 'Time for reservation has been finished start again'
+                  : "??? ????? ??? ?????? ???? ?? ????",
+              onConfirm: () {
+                Reservationtimer.stoptimer();
+              },
+            );
           }
         },
         onChange: (String timeStamp) {

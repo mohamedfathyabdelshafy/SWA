@@ -14,6 +14,7 @@ import 'package:swa/core/utils/constants.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/media_query_values.dart';
 import 'package:swa/core/utils/styles.dart';
+import 'package:swa/core/widgets/app_dialog.dart';
 import 'package:swa/core/widgets/currency_selector.dart';
 import 'package:swa/features/Swa_umra/Screens/Select_type.dart';
 import 'package:swa/features/app_info/presentation/cubit/get_available_countries/get_available_countries_cubit.dart';
@@ -33,7 +34,8 @@ import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuib
 import 'package:swa/select_payment2/presentation/credit_card/presentation/navigation_helper.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:intl/intl.dart' as intl; // Import for NumberFormat in NumericTextFormatter
+import 'package:intl/intl.dart'
+    as intl; // Import for NumberFormat in NumericTextFormatter
 
 import '../../../PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
 import '../../model/card_model.dart';
@@ -44,13 +46,16 @@ class AddWalletBalanceWithCreditCardScreen extends StatefulWidget {
   int index; // Index of the selected card in the list.
   User user; // User object for customerId.
 
-  AddWalletBalanceWithCreditCardScreen({super.key, required this.index, required this.user});
+  AddWalletBalanceWithCreditCardScreen(
+      {super.key, required this.index, required this.user});
 
   @override
-  State<AddWalletBalanceWithCreditCardScreen> createState() => _AddWalletBalanceWithCreditCardScreenState();
+  State<AddWalletBalanceWithCreditCardScreen> createState() =>
+      _AddWalletBalanceWithCreditCardScreenState();
 }
 
-class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceWithCreditCardScreen> {
+class _AddWalletBalanceWithCreditCardScreenState
+    extends State<AddWalletBalanceWithCreditCardScreen> {
   // Removed unused 'price' variable if it's not directly used here.
   // final price = CacheHelper.getDataToSharedPref(key: 'price');
 
@@ -58,10 +63,12 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
   // String expiryDate = '';
   String cvv = ''; // This is used for input.
   List<CardModel> cards = []; // List to store saved cards.
-  TextEditingController cardHolderName = TextEditingController(); // Not used in this screen for input.
+  TextEditingController cardHolderName =
+      TextEditingController(); // Not used in this screen for input.
   // TextEditingController expiryFieldCtrl = TextEditingController(); // Not used directly for input in this screen.
   // TextEditingController cardNumberCtrl = TextEditingController(); // Not used directly for input in this screen.
-  TextEditingController amountController = TextEditingController(); // For amount input.
+  TextEditingController amountController =
+      TextEditingController(); // For amount input.
   final formKey = GlobalKey<FormState>();
   bool showCardBack = false; // Controls visibility of CVV field.
   // int selectedIndex = 0; // Duplicates widget.index, using widget.index directly.
@@ -104,10 +111,13 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
         if (jsonData is String) {
           final decodedData = json.decode(jsonData);
           if (decodedData is List) {
-            cards = decodedData.map<CardModel>((e) => CardModel.fromJsom(e)).toList();
+            cards = decodedData
+                .map<CardModel>((e) => CardModel.fromJsom(e))
+                .toList();
           }
         } else if (jsonData is List) {
-          cards = jsonData.map<CardModel>((e) => CardModel.fromJsom(e)).toList();
+          cards =
+              jsonData.map<CardModel>((e) => CardModel.fromJsom(e)).toList();
         }
       } catch (e) {
         log("Error decoding cached cards: $e");
@@ -118,14 +128,17 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
     log("cached cards: ${cards.length} cards loaded.");
 
     // Ensure selected card index is valid if cards were loaded.
-    if (cards.isNotEmpty && (widget.index < 0 || widget.index >= cards.length)) {
-      widget.index = 0; // Default to the first card if the index is out of bounds.
+    if (cards.isNotEmpty &&
+        (widget.index < 0 || widget.index >= cards.length)) {
+      widget.index =
+          0; // Default to the first card if the index is out of bounds.
     } else if (cards.isEmpty) {
       widget.index = -1; // Indicate no card is selected if the list is empty.
     }
 
     getwalllet(); // Fetch currency list.
-    selectedcurruncy = Routes.curruncy ?? "EGP"; // Default currency if not set in Routes.
+    selectedcurruncy =
+        Routes.curruncy ?? "EGP"; // Default currency if not set in Routes.
 
     super.initState();
   }
@@ -139,19 +152,24 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
         // Handle unexpected response type
         Constants.showDefaultSnackBar(
             context: context,
-            text: LanguageClass.isEnglish ? "Failed to load currencies data" : "فشل في تحميل بيانات العملات",
+            text: LanguageClass.isEnglish
+                ? "Failed to load currencies data"
+                : "فشل في تحميل بيانات العملات",
             color: Colors.red);
       }
     } catch (e) {
       log("Error fetching currencies: $e");
       Constants.showDefaultSnackBar(
           context: context,
-          text: LanguageClass.isEnglish ? "Failed to load currencies" : "فشل تحميل العملات",
+          text: LanguageClass.isEnglish
+              ? "Failed to load currencies"
+              : "فشل تحميل العملات",
           color: Colors.red);
     } finally {}
   }
 
-  Future<void> convertcurruncy({String? from, String? to, double? amount}) async {
+  Future<void> convertcurruncy(
+      {String? from, String? to, double? amount}) async {
     if (amount == null || amount <= 0) {
       payamount = 0.0;
       return;
@@ -160,7 +178,8 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
       isloading = true;
     });
     try {
-      var response = await PackagesRespo().Convertcurrency(amount: amount, from: from, to: to);
+      var response = await PackagesRespo()
+          .Convertcurrency(amount: amount, from: from, to: to);
       setState(() {
         if (response is double) {
           // Ensure the response is a double
@@ -216,7 +235,8 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
     return Scaffold(
       backgroundColor: Colors.white,
       body: Directionality(
-        textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+        textDirection:
+            LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
         child: Form(
           key: formKey,
           child: SizedBox(
@@ -241,8 +261,12 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                   Navigator.pop(context);
                                 },
                                 child: Icon(
-                                  LanguageClass.isEnglish ? Icons.arrow_back_rounded : Icons.arrow_forward,
-                                  color: Routes.isomra ? AppColors.umragold : AppColors.primaryColor,
+                                  LanguageClass.isEnglish
+                                      ? Icons.arrow_back_rounded
+                                      : Icons.arrow_forward,
+                                  color: Routes.isomra
+                                      ? AppColors.umragold
+                                      : AppColors.primaryColor,
                                   size: 35,
                                 ),
                               ),
@@ -251,8 +275,13 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                               height: 10,
                             ),
                             Text(
-                              LanguageClass.isEnglish ? 'Debit/Credit Card' : "بطاقة خصم / ائتمان",
-                              style: fontStyle(color: AppColors.blackColor, fontSize: 30, fontFamily: FontFamily.bold),
+                              LanguageClass.isEnglish
+                                  ? 'Debit/Credit Card'
+                                  : "بطاقة خصم / ائتمان",
+                              style: fontStyle(
+                                  color: AppColors.blackColor,
+                                  fontSize: 30,
+                                  fontFamily: FontFamily.bold),
                             ),
                             const SizedBox(height: 40),
                             InkWell(
@@ -271,9 +300,13 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                   );
                                   if (card != null) {
                                     cards.add(card);
-                                    widget.index = cards.length - 1; // Select the newly added card
+                                    widget.index = cards.length -
+                                        1; // Select the newly added card
                                     CacheHelper.setDataToSharedPref(
-                                        key: "cards", value: json.encode(cards.map((e) => e.toJson()).toList()));
+                                        key: "cards",
+                                        value: json.encode(cards
+                                            .map((e) => e.toJson())
+                                            .toList()));
                                     setState(() {});
                                   }
                                 }
@@ -295,17 +328,24 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                     const SizedBox(
                                       width: 5,
                                     ),
-                                    (cards.isNotEmpty && widget.index >= 0 && widget.index < cards.length) //
+                                    (cards.isNotEmpty &&
+                                            widget.index >= 0 &&
+                                            widget.index < cards.length) //
                                         ? Expanded(
                                             child: Text(
                                               "XXXX-XXXX-XXXX-${cards[widget.index].cardNumber!.substring(cards[widget.index].cardNumber!.length - 4)}",
                                               style: fontStyle(
-                                                  fontSize: 18, fontFamily: FontFamily.regular, color: Colors.black),
+                                                  fontSize: 18,
+                                                  fontFamily:
+                                                      FontFamily.regular,
+                                                  color: Colors.black),
                                             ),
                                           )
                                         : Expanded(
                                             child: Text(
-                                              LanguageClass.isEnglish ? 'Add credit Card' : "اضافة كارت جديد",
+                                              LanguageClass.isEnglish
+                                                  ? 'Add credit Card'
+                                                  : "اضافة كارت جديد",
                                               style: fontStyle(
                                                   fontSize: 15.45,
                                                   fontFamily: FontFamily.bold,
@@ -332,7 +372,9 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                     height: 20,
                                     width: 1,
                                     color: const Color(0xff47A9EB),
-                                    hint: LanguageClass.isEnglish ? 'CVV' : 'رقم السري',
+                                    hint: LanguageClass.isEnglish
+                                        ? 'CVV'
+                                        : 'رقم السري',
                                     textInputType: TextInputType.number,
                                     onChange: (value) {
                                       setState(() {
@@ -349,8 +391,11 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                       });
                                     },
                                   )
-                                : const SizedBox.shrink(), // Use SizedBox.shrink()
-                            const SizedBox(height: 10), // Small space between CVV and Amount
+                                : const SizedBox
+                                    .shrink(), // Use SizedBox.shrink()
+                            const SizedBox(
+                                height:
+                                    10), // Small space between CVV and Amount
                             // Conditionally render amount field if a card is selected
                             (widget.index >= 0 && cards.isNotEmpty)
                                 ? Row(
@@ -358,61 +403,89 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                       Container(
                                         height: 20,
                                         width: 1,
-                                        decoration: const BoxDecoration(color: Color(0xffD865A4)),
+                                        decoration: const BoxDecoration(
+                                            color: Color(0xffD865A4)),
                                       ),
                                       Expanded(
                                         //
                                         child: Container(
                                             height: sizeHeight * 0.07,
-                                            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 2, horizontal: 18),
                                             child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
                                               children: [
                                                 Flexible(
                                                   child: TextFormField(
                                                     autofocus: true,
-                                                    style: fontStyle(color: AppColors.blackColor, fontSize: 16),
+                                                    style: fontStyle(
+                                                        color: AppColors
+                                                            .blackColor,
+                                                        fontSize: 16),
                                                     cursorColor: AppColors.blue,
-                                                    controller: amountController,
+                                                    controller:
+                                                        amountController,
                                                     inputFormatters: [
                                                       NumericTextFormatter(),
-                                                      FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+                                                      FilteringTextInputFormatter
+                                                          .allow(RegExp(
+                                                              r'[0-9,]')),
                                                     ],
-                                                    keyboardType: TextInputType.number,
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     decoration: InputDecoration(
                                                       border: InputBorder.none,
-                                                      hintText: LanguageClass.isEnglish ? 'Amount' : 'القيمة',
+                                                      hintText: LanguageClass
+                                                              .isEnglish
+                                                          ? 'Amount'
+                                                          : 'القيمة',
                                                       errorStyle: fontStyle(
                                                         color: Colors.red,
                                                         fontSize: 11,
                                                       ),
                                                       hintStyle: fontStyle(
-                                                          color: AppColors.greyLight,
+                                                          color: AppColors
+                                                              .greyLight,
                                                           fontSize: 15,
-                                                          fontFamily: FontFamily.bold),
+                                                          fontFamily:
+                                                              FontFamily.bold),
                                                       labelStyle: fontStyle(
                                                           color: AppColors.grey,
                                                           fontSize: 12,
-                                                          fontFamily: FontFamily.bold),
+                                                          fontFamily:
+                                                              FontFamily.bold),
                                                     ),
                                                     validator: (value) {
                                                       if (value!.isEmpty) {
-                                                        return LanguageClass.isEnglish
+                                                        return LanguageClass
+                                                                .isEnglish
                                                             ? 'This Field is Required'
                                                             : 'هذا الحقل مطلوب';
                                                       }
                                                       // Remove commas for validation
-                                                      String cleanedValue = value.replaceAll(',', '');
-                                                      final double? parsedAmount = double.tryParse(cleanedValue);
+                                                      String cleanedValue =
+                                                          value.replaceAll(
+                                                              ',', '');
+                                                      final double?
+                                                          parsedAmount =
+                                                          double.tryParse(
+                                                              cleanedValue);
 
-                                                      if (parsedAmount == null || parsedAmount <= 0) {
-                                                        return LanguageClass.isEnglish
+                                                      if (parsedAmount ==
+                                                              null ||
+                                                          parsedAmount <= 0) {
+                                                        return LanguageClass
+                                                                .isEnglish
                                                             ? 'Enter a valid amount'
                                                             : 'من فضلك ادخل قيمة صحيحة';
-                                                      } else if (parsedAmount < 10) {
+                                                      } else if (parsedAmount <
+                                                          10) {
                                                         // Check for minimum amount
-                                                        return LanguageClass.isEnglish
+                                                        return LanguageClass
+                                                                .isEnglish
                                                             ? 'The least amount for charge is 10 EGP'
                                                             : 'اقل قيمة للشحن 10 جنيهات';
                                                       } else {
@@ -426,20 +499,29 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                                 InkWell(
                                                   onTap: () {
                                                     // Ensure curruncylist.message is not null before showing selector
-                                                    if (curruncylist?.message != null) {
-                                                      showCurrencySelector(context,
-                                                          currencyList: curruncylist!.message!,
-                                                          onCurrencySelected: (currency) {
+                                                    if (curruncylist?.message !=
+                                                        null) {
+                                                      showCurrencySelector(
+                                                          context,
+                                                          currencyList:
+                                                              curruncylist!
+                                                                  .message!,
+                                                          onCurrencySelected:
+                                                              (currency) {
                                                         setState(() {
-                                                          amountController.text = ''; // Clear amount on currency change
-                                                          selectedcurruncy = currency.symbol!;
+                                                          amountController
+                                                                  .text =
+                                                              ''; // Clear amount on currency change
+                                                          selectedcurruncy =
+                                                              currency.symbol!;
                                                         });
                                                         Navigator.pop(context);
                                                       });
                                                     } else {
                                                       Constants.showDefaultSnackBar(
                                                           context: context,
-                                                          text: LanguageClass.isEnglish
+                                                          text: LanguageClass
+                                                                  .isEnglish
                                                               ? "Currencies not loaded yet"
                                                               : "لم يتم تحميل العملات بعد",
                                                           color: Colors.orange);
@@ -447,18 +529,28 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                                   },
                                                   child: Container(
                                                     child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
                                                       children: [
                                                         Text(
                                                           selectedcurruncy,
                                                           style: fontStyle(
-                                                              color: Colors.black, fontFamily: FontFamily.bold),
+                                                              color:
+                                                                  Colors.black,
+                                                              fontFamily:
+                                                                  FontFamily
+                                                                      .bold),
                                                         ),
                                                         4.horizontalSpace,
                                                         Icon(
-                                                          Icons.arrow_drop_down_rounded,
-                                                          color: AppColors.umragold,
+                                                          Icons
+                                                              .arrow_drop_down_rounded,
+                                                          color: AppColors
+                                                              .umragold,
                                                           size: 20,
                                                         )
                                                       ],
@@ -470,32 +562,49 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                       ),
                                     ],
                                   )
-                                : const SizedBox.shrink(), // Use SizedBox.shrink()
+                                : const SizedBox
+                                    .shrink(), // Use SizedBox.shrink()
                             const SizedBox(
                               height: 50,
                             ),
                             BlocListener<ReservationCubit, ReservationStates>(
                               // Specify Cubit and State types
                               listener: (context, state) {
-                                if (state is LoadingCreditCardState || isloading) {
+                                if (state is LoadingCreditCardState ||
+                                    isloading) {
                                   // Check both internal loading and cubit loading
                                   Constants.showLoadingDialog(context);
                                 } else {
-                                  Constants.hideLoadingDialog(context); // Hide loading for all other states
+                                  Constants.hideLoadingDialog(
+                                      context); // Hide loading for all other states
 
                                   if (state is LoadedCreditCardState) {
-                                    if (state.reservationResponseCreditCard.message?.nextAction?.redirectUrl != null &&
-                                        state.reservationResponseCreditCard.message!.nextAction!.redirectUrl!
+                                    if (state
+                                                .reservationResponseCreditCard
+                                                .message
+                                                ?.nextAction
+                                                ?.redirectUrl !=
+                                            null &&
+                                        state
+                                            .reservationResponseCreditCard
+                                            .message!
+                                            .nextAction!
+                                            .redirectUrl!
                                             .isNotEmpty) {
                                       //
                                       NavHelper().navigate(ConfirmPayWebView(
-                                        webViewLink:
-                                            state.reservationResponseCreditCard.message!.nextAction!.redirectUrl!,
+                                        webViewLink: state
+                                            .reservationResponseCreditCard
+                                            .message!
+                                            .nextAction!
+                                            .redirectUrl!,
                                       ));
                                     } else {
                                       // Handle cases where redirectUrl is null or empty but status is 'success'
                                       showDoneConfirmationDialog(context,
-                                          message: LanguageClass.isEnglish ? 'Payment successful!' : 'تم الدفع بنجاح!',
+                                          message: LanguageClass.isEnglish
+                                              ? 'Payment successful!'
+                                              : 'تم الدفع بنجاح!',
                                           callback: () {
                                         Navigator.pop(context); // Close dialog
                                         // Optionally navigate to home or success screen
@@ -505,22 +614,30 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                     // Handle error string from state.error
                                     String errorMessage;
                                     if (state.error is ServerFailure) {
-                                      errorMessage = (state.error as ServerFailure).message!;
+                                      errorMessage =
+                                          (state.error as ServerFailure)
+                                              .message!;
                                     } else if (state.error is String) {
                                       var x = jsonDecode(state.error);
                                       print(x['statusDescription']);
-                                      errorMessage = x['statusDescription'] as String;
-                                    } else {
                                       errorMessage =
-                                          LanguageClass.isEnglish ? "An unknown error occurred." : "حدث خطأ غير معروف.";
+                                          x['statusDescription'] as String;
+                                    } else {
+                                      errorMessage = LanguageClass.isEnglish
+                                          ? "An unknown error occurred."
+                                          : "حدث خطأ غير معروف.";
                                     }
                                     Constants.showDefaultSnackBar(
-                                        context: context, text: errorMessage, color: Colors.red);
-                                  } else if (state is ConfirmationCreditCardState) {
+                                        context: context,
+                                        text: errorMessage,
+                                        color: Colors.red);
+                                  } else if (state
+                                      is ConfirmationCreditCardState) {
                                     // Handle confirmation
                                     showDoneConfirmationDialog(
                                       context,
-                                      isError: false, // Not an error type of alert
+                                      isError:
+                                          false, // Not an error type of alert
                                       message: state.message,
                                       callback: () {
                                         Navigator.pop(context); // Close dialog
@@ -530,7 +647,8 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                     // Handle warning
                                     showDoneConfirmationDialog(
                                       context,
-                                      isError: true, // Treat warnings as errors for visual alert
+                                      isError:
+                                          true, // Treat warnings as errors for visual alert
                                       message: state.message,
                                       callback: () {
                                         Navigator.pop(context); // Close dialog
@@ -540,51 +658,79 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                     // Handle image
                                     showGeneralDialog(
                                       context: context,
-                                      pageBuilder: (BuildContext buildContext, Animation<double> animation,
-                                          Animation<double> secondaryAnimation) {
-                                        return StatefulBuilder(builder: (context, setStater) {
+                                      pageBuilder: (BuildContext buildContext,
+                                          Animation<double> animation,
+                                          Animation<double>
+                                              secondaryAnimation) {
+                                        return StatefulBuilder(
+                                            builder: (context, setStater) {
                                           return Container(
                                             color: Colors.transparent,
-                                            height: MediaQuery.of(context).size.height,
-                                            width: MediaQuery.of(context).size.width,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
                                             alignment: Alignment.center,
-                                            padding: EdgeInsets.symmetric(horizontal: 20),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 20),
                                             child: Material(
                                               color: Colors.transparent,
                                               elevation: 0,
                                               child: InkWell(
                                                 child: Container(
-                                                  height: MediaQuery.of(context).size.height / 1.4,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      1.4,
                                                   alignment: Alignment.center,
                                                   decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(10),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
                                                   ),
                                                   child: Stack(
-                                                    alignment: Alignment.topCenter,
+                                                    alignment:
+                                                        Alignment.topCenter,
                                                     children: [
                                                       Container(
-                                                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                vertical: 10,
+                                                                horizontal: 5),
                                                         child: Image.network(
                                                           state.message,
-                                                          height: MediaQuery.of(context).size.height / 1.4,
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height /
+                                                              1.4,
                                                           fit: BoxFit.fill,
                                                         ),
                                                       ),
                                                       Container(
-                                                        alignment: Alignment.topLeft,
+                                                        alignment:
+                                                            Alignment.topLeft,
                                                         child: InkWell(
                                                           onTap: () {
-                                                            Navigator.pop(context);
+                                                            Navigator.pop(
+                                                                context);
                                                           },
                                                           child: Container(
                                                             width: 25,
                                                             height: 25,
                                                             decoration: BoxDecoration(
-                                                                color: Colors.black,
-                                                                borderRadius: BorderRadius.circular(100)),
+                                                                color: Colors
+                                                                    .black,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            100)),
                                                             child: Icon(
                                                               Icons.close,
-                                                              color: Colors.white,
+                                                              color:
+                                                                  Colors.white,
                                                             ),
                                                           ),
                                                         ),
@@ -599,80 +745,127 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                       },
                                     ).then((value) {
                                       // This block will execute when the dialog is dismissed
-                                      Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false,
+                                      Navigator.pushNamedAndRemoveUntil(context,
+                                          Routes.home, (route) => false,
                                           arguments: Routes.isomra);
                                     });
-                                  } else if (state is ImageWithGiftCreditCardState) {
+                                  } else if (state
+                                      is ImageWithGiftCreditCardState) {
                                     // Handle image with gift
-                                    late ConfettiController _controllerTopCenter;
-                                    _controllerTopCenter = ConfettiController(duration: const Duration(seconds: 3));
+                                    late ConfettiController
+                                        _controllerTopCenter;
+                                    _controllerTopCenter = ConfettiController(
+                                        duration: const Duration(seconds: 3));
 
                                     showGeneralDialog(
                                         context: context,
-                                        pageBuilder: (BuildContext buildContext, Animation<double> animation,
-                                            Animation<double> secondaryAnimation) {
-                                          return StatefulBuilder(builder: (context, setStater) {
+                                        pageBuilder: (BuildContext buildContext,
+                                            Animation<double> animation,
+                                            Animation<double>
+                                                secondaryAnimation) {
+                                          return StatefulBuilder(
+                                              builder: (context, setStater) {
                                             _controllerTopCenter.play();
 
                                             return Container(
                                               color: Colors.transparent,
-                                              height: MediaQuery.of(context).size.height,
-                                              width: MediaQuery.of(context).size.width,
+                                              height: MediaQuery.of(context)
+                                                  .size
+                                                  .height,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
                                               alignment: Alignment.center,
-                                              padding: EdgeInsets.symmetric(horizontal: 20),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 20),
                                               child: Material(
                                                 color: Colors.transparent,
                                                 elevation: 0,
                                                 child: InkWell(
                                                   child: Container(
-                                                    height: MediaQuery.of(context).size.height / 1.4,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            1.4,
                                                     alignment: Alignment.center,
                                                     decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(10),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
                                                     ),
                                                     child: Stack(
-                                                      alignment: Alignment.topCenter,
+                                                      alignment:
+                                                          Alignment.topCenter,
                                                       children: [
                                                         Container(
-                                                          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  vertical: 10,
+                                                                  horizontal:
+                                                                      5),
                                                           child: Image.network(
                                                             state.message,
-                                                            height: MediaQuery.of(context).size.height / 1.4,
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height /
+                                                                1.4,
                                                             fit: BoxFit.fill,
                                                           ),
                                                         ),
                                                         Align(
-                                                          alignment: Alignment.topCenter,
+                                                          alignment: Alignment
+                                                              .topCenter,
                                                           child: ConfettiWidget(
                                                             shouldLoop: false,
 
-                                                            confettiController: _controllerTopCenter,
-                                                            blastDirection: math.pi,
-                                                            maxBlastForce: 2, // set a lower max blast force
-                                                            minBlastForce: 1, // set a lower min blast force
-                                                            emissionFrequency: 0.05,
-                                                            blastDirectionality: BlastDirectionality.explosive,
+                                                            confettiController:
+                                                                _controllerTopCenter,
+                                                            blastDirection:
+                                                                math.pi,
+                                                            maxBlastForce:
+                                                                2, // set a lower max blast force
+                                                            minBlastForce:
+                                                                1, // set a lower min blast force
+                                                            emissionFrequency:
+                                                                0.05,
+                                                            blastDirectionality:
+                                                                BlastDirectionality
+                                                                    .explosive,
 
-                                                            numberOfParticles: 20, // a lot of particles at once
+                                                            numberOfParticles:
+                                                                20, // a lot of particles at once
                                                             gravity: 0.2,
-                                                            colors: [AppColors.primaryColor, AppColors.umragold],
+                                                            colors: [
+                                                              AppColors
+                                                                  .primaryColor,
+                                                              AppColors.umragold
+                                                            ],
                                                           ),
                                                         ),
                                                         Container(
-                                                          alignment: Alignment.topLeft,
+                                                          alignment:
+                                                              Alignment.topLeft,
                                                           child: InkWell(
                                                             onTap: () {
-                                                              Navigator.pop(context);
+                                                              Navigator.pop(
+                                                                  context);
                                                             },
                                                             child: Container(
                                                               width: 25,
                                                               height: 25,
                                                               decoration: BoxDecoration(
-                                                                  color: Colors.black,
-                                                                  borderRadius: BorderRadius.circular(100)),
+                                                                  color: Colors
+                                                                      .black,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              100)),
                                                               child: Icon(
                                                                 Icons.close,
-                                                                color: Colors.white,
+                                                                color: Colors
+                                                                    .white,
                                                               ),
                                                             ),
                                                           ),
@@ -692,11 +885,14 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                 onTap: cards.isNotEmpty &&
                                         widget.index >= 0 &&
                                         widget.index <
-                                            cards.length // Only enable tap if there are cards and index is valid
+                                            cards
+                                                .length // Only enable tap if there are cards and index is valid
                                     ? () async {
                                         // Make it async since convertcurruncy is async
                                         if (formKey.currentState!.validate()) {
-                                          double? amount = double.tryParse(amountController.text.replaceAll(',', ''));
+                                          double? amount = double.tryParse(
+                                              amountController.text
+                                                  .replaceAll(',', ''));
 
                                           if (amount != null && amount > 0) {
                                             await convertcurruncy(
@@ -708,20 +904,30 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                             // Only proceed if conversion was successful and payamount is valid
                                             if (payamount > 0) {
                                               log("expiry ${cards[widget.index].month}");
-                                              BlocProvider.of<ReservationCubit>(context).chargebycard(
+                                              BlocProvider.of<ReservationCubit>(
+                                                      context)
+                                                  .chargebycard(
                                                 custId: widget.user.customerId!,
-                                                curruncy: selectedcurruncy, // Pass the selected currency symbol
-                                                amount: payamount.toStringAsFixed(2),
+                                                curruncy:
+                                                    selectedcurruncy, // Pass the selected currency symbol
+                                                amount: payamount
+                                                    .toStringAsFixed(2),
                                                 cvv: cvv,
-                                                cardNumber: cards[widget.index].cardNumber!.replaceAll(" ", ""),
-                                                cardExpiryYear: cards[widget.index]
+                                                cardNumber: cards[widget.index]
+                                                    .cardNumber!
+                                                    .replaceAll(" ", ""),
+                                                cardExpiryYear: cards[
+                                                        widget.index]
                                                     .month! // Assumes 'month' format is "MM/YY"
-                                                    .substring(3) // Extracts "YY"
+                                                    .substring(
+                                                        3) // Extracts "YY"
                                                     .toString(),
-                                                cardExpiryMonth: cards[widget.index]
-                                                    .month!
-                                                    .substring(0, 2) // Extracts "MM"
-                                                    .toString(),
+                                                cardExpiryMonth:
+                                                    cards[widget.index]
+                                                        .month!
+                                                        .substring(0,
+                                                            2) // Extracts "MM"
+                                                        .toString(),
                                               );
                                             } else {
                                               Constants.showDefaultSnackBar(
@@ -748,7 +954,8 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                     width: 200,
                                     height: 70,
                                     decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(50)),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(50)),
                                     ),
                                     child: Container(
                                       height: 65,
@@ -756,17 +963,21 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                           color: cards.isEmpty ||
                                                   (widget.index < 0 ||
                                                       widget.index >=
-                                                          cards.length) // Grey out if no cards or invalid index
+                                                          cards
+                                                              .length) // Grey out if no cards or invalid index
                                               ? Colors.grey
                                               : Routes.isomra
                                                   ? AppColors.umragold
                                                   : AppColors.primaryColor,
-                                          borderRadius: BorderRadius.circular(15)),
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
                                       child: Center(
                                         child: Padding(
                                           padding: EdgeInsets.all(8.0),
                                           child: Text(
-                                            LanguageClass.isEnglish ? 'Charge' : 'شحن',
+                                            LanguageClass.isEnglish
+                                                ? 'Charge'
+                                                : 'شحن',
                                             style: fontStyle(
                                                 color: Colors.white,
                                                 fontSize: 20,
@@ -802,7 +1013,8 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
       builder: (BuildContext context) {
         return StatefulBuilder(
           // Use StatefulBuilder to update bottom sheet content
-          builder: (BuildContext context, StateSetter setStateInsideBottomSheet) {
+          builder:
+              (BuildContext context, StateSetter setStateInsideBottomSheet) {
             return Padding(
               padding: const EdgeInsets.all(30),
               child: Container(
@@ -812,7 +1024,10 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                   children: [
                     Text(
                       LanguageClass.isEnglish ? 'Choose Card' : 'اختر كارت ',
-                      style: fontStyle(fontSize: 15, fontFamily: FontFamily.bold, color: AppColors.blackColor),
+                      style: fontStyle(
+                          fontSize: 15,
+                          fontFamily: FontFamily.bold,
+                          color: AppColors.blackColor),
                     ),
                     const SizedBox(height: 5),
                     Divider(thickness: 0.5, color: AppColors.grey),
@@ -834,12 +1049,14 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                 Checkbox(
                                   value: widget.index == index,
                                   activeColor: Colors.yellow,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(100)),
                                   onChanged: (value) {
                                     setStateInsideBottomSheet(() {
                                       widget.index = index;
                                     });
-                                    Navigator.pop(context); // Close bottom sheet
+                                    Navigator.pop(
+                                        context); // Close bottom sheet
                                     setState(() {}); // Update parent widget
                                   },
                                 ),
@@ -867,23 +1084,31 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                                       }
                                       // Adjust selected index if the removed card was selected or before the selected one
                                       if (widget.index == index) {
-                                        widget.index = 0; // Default to first card
-                                        if (cards.isEmpty) widget.index = -1; // If list becomes empty
+                                        widget.index =
+                                            0; // Default to first card
+                                        if (cards.isEmpty)
+                                          widget.index =
+                                              -1; // If list becomes empty
                                       } else if (widget.index > index) {
-                                        widget.index--; // Shift index if a card before it was removed
+                                        widget
+                                            .index--; // Shift index if a card before it was removed
                                       }
                                       CacheHelper.setDataToSharedPref(
                                         key: "cards",
-                                        value: json.encode(cards.map((e) => e.toJson()).toList()),
+                                        value: json.encode(cards
+                                            .map((e) => e.toJson())
+                                            .toList()),
                                       );
                                       // No pop here, allow user to continue interacting with the list in the bottom sheet.
                                       // If the last card is removed and you want to close the bottom sheet, add Navigator.pop(context) here.
                                       if (cards.isEmpty) {
                                         //
-                                        Navigator.pop(context); // Close if no cards left
+                                        Navigator.pop(
+                                            context); // Close if no cards left
                                         setState(() {}); // Update parent
                                       } else {
-                                        setState(() {}); // Update parent after removal
+                                        setState(
+                                            () {}); // Update parent after removal
                                       }
                                     });
                                   },
@@ -900,7 +1125,8 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                       children: [
                         SizedBox(width: sizeWidth * 0.03),
                         Container(
-                            decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.grey),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle, color: AppColors.grey),
                             child: const Icon(
                               Icons.add,
                               color: Colors.lightGreen,
@@ -921,15 +1147,24 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                             if (card != null) {
                               //
                               cards.add(card);
-                              widget.index = cards.length - 1; // Select the new card
+                              widget.index =
+                                  cards.length - 1; // Select the new card
                               CacheHelper.setDataToSharedPref(
-                                  key: "cards", value: json.encode(cards.map((e) => e.toJson()).toList()));
-                              setState(() {}); // Update parent widget after adding card
+                                  key: "cards",
+                                  value: json.encode(
+                                      cards.map((e) => e.toJson()).toList()));
+                              setState(
+                                  () {}); // Update parent widget after adding card
                             }
                           },
                           child: Text(
-                            LanguageClass.isEnglish ? 'Add New Card' : 'اضافة كارت جديد',
-                            style: fontStyle(fontSize: 15.45, fontFamily: FontFamily.bold, color: AppColors.blackColor),
+                            LanguageClass.isEnglish
+                                ? 'Add New Card'
+                                : 'اضافة كارت جديد',
+                            style: fontStyle(
+                                fontSize: 15.45,
+                                fontFamily: FontFamily.bold,
+                                color: AppColors.blackColor),
                           ),
                         ),
                       ],
@@ -950,31 +1185,18 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
       bool isError = false,
       bool isWarning = false,
       required VoidCallback? callback}) async {
-    return CoolAlert.show(
-        barrierDismissible: false,
-        context: context,
-        confirmBtnText: "ok",
-        title: isError
-            ? LanguageClass.isEnglish
-                ? 'Error'
-                : 'خطأ'
-            : isWarning
-                ? LanguageClass.isEnglish
-                    ? 'Please'
-                    : 'يرجى'
-                : LanguageClass.isEnglish
-                    ? 'Success'
-                    : 'تم بنجاح',
-        lottieAsset: isError
-            ? 'assets/json/error.json'
-            : isWarning
-                ? 'assets/json/Warning.json'
-                : 'assets/json/done.json',
-        type: isError ? CoolAlertType.error : CoolAlertType.success,
-        loopAnimation: false,
-        backgroundColor: isError ? Colors.red : Colors.white,
-        text: message,
-        onConfirmBtnTap: callback);
+    return AppDialog.show(
+      context: context,
+      message: message,
+      type: isError
+          ? AppDialogType.failed
+          : isWarning
+              ? AppDialogType.warning
+              : AppDialogType.success,
+      barrierDismissible: false,
+      confirmText: callbackTitle ?? 'ok',
+      onConfirm: callback,
+    );
   }
 
   // Helper method to show image dialog (copied from previous response)
@@ -984,42 +1206,50 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
     showGeneralDialog(
       context: context,
       barrierDismissible: false, // Ensure it's not dismissed by tapping outside
-      transitionDuration: const Duration(milliseconds: 200), // Optional: Add a transition duration
-      pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+      transitionDuration: const Duration(
+          milliseconds: 200), // Optional: Add a transition duration
+      pageBuilder: (BuildContext buildContext, Animation<double> animation,
+          Animation<double> secondaryAnimation) {
         return StatefulBuilder(builder: (context, setStater) {
           return Container(
-            color: Colors.transparent, // Transparent background for the dialog area
+            color: Colors
+                .transparent, // Transparent background for the dialog area
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             alignment: Alignment.center,
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Material(
-              color: Colors.transparent, // Transparent material to allow InkWell effect
+              color: Colors
+                  .transparent, // Transparent material to allow InkWell effect
               elevation: 0,
               child: InkWell(
                 onTap: () {
                   if (linkApi != null && linkApi.isNotEmpty) {
                     // Assuming _launchInWebView is defined elsewhere or use url_launcher
                     // Example: Launch URL in browser or in-app WebView
-                    launchUrl(Uri.parse(linkApi), mode: LaunchMode.externalApplication);
+                    launchUrl(Uri.parse(linkApi),
+                        mode: LaunchMode.externalApplication);
                   }
                 },
                 child: Container(
-                  height: MediaQuery.of(context).size.height / 1.4, // Max height like your example
+                  height: MediaQuery.of(context).size.height /
+                      1.4, // Max height like your example
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     // No explicit background color unless image doesn't cover
                   ),
                   child: Stack(
-                    alignment: Alignment.topCenter, // Align close button to top-center of the stack
+                    alignment: Alignment
+                        .topCenter, // Align close button to top-center of the stack
                     children: [
                       Container(
                         // Removed explicit padding here to allow image to fill more
                         child: Image.network(
                           imageUrlOrBase64, // Use imageUrlOrBase64 here
                           height: MediaQuery.of(context).size.height / 1.4,
-                          fit: BoxFit.fill, // Fill the container, might distort if aspect ratio is off
+                          fit: BoxFit
+                              .fill, // Fill the container, might distort if aspect ratio is off
                           errorBuilder: (context, error, stackTrace) {
                             return const Icon(
                               Icons.error,
@@ -1037,15 +1267,18 @@ class _AddWalletBalanceWithCreditCardScreenState extends State<AddWalletBalanceW
                         left: LanguageClass.isEnglish ? null : 10,
                         child: InkWell(
                           onTap: () {
-                            onCloseCallback?.call(); // Call the provided callback
+                            onCloseCallback
+                                ?.call(); // Call the provided callback
                             Navigator.pop(context); // Dismiss the dialog
                           },
                           child: Container(
                             width: 25,
                             height: 25,
                             decoration: BoxDecoration(
-                              color: Colors.black, // Dark background for close button
-                              borderRadius: BorderRadius.circular(100), // Circular shape
+                              color: Colors
+                                  .black, // Dark background for close button
+                              borderRadius:
+                                  BorderRadius.circular(100), // Circular shape
                             ),
                             child: Icon(
                               Icons.close,
@@ -1117,8 +1350,14 @@ class PayField extends StatelessWidget {
                   hintText: hint,
                   contentPadding: EdgeInsets.only(top: 10),
                   border: InputBorder.none,
-                  hintStyle: fontStyle(fontSize: 15, fontFamily: FontFamily.bold, color: AppColors.greyLight),
-                  labelStyle: fontStyle(color: AppColors.grey, fontSize: 12, fontFamily: FontFamily.bold),
+                  hintStyle: fontStyle(
+                      fontSize: 15,
+                      fontFamily: FontFamily.bold,
+                      color: AppColors.greyLight),
+                  labelStyle: fontStyle(
+                      color: AppColors.grey,
+                      fontSize: 12,
+                      fontFamily: FontFamily.bold),
                   errorStyle: fontStyle(
                     color: Colors.red,
                     fontSize: 11,
@@ -1129,7 +1368,9 @@ class PayField extends StatelessWidget {
                 focusNode: focusNode,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return LanguageClass.isEnglish ? 'This Field is Required' : 'هذا الحقل مطلوب';
+                    return LanguageClass.isEnglish
+                        ? 'This Field is Required'
+                        : 'هذا الحقل مطلوب';
                   } else {
                     return null;
                   }
@@ -1154,11 +1395,13 @@ class PayField extends StatelessWidget {
 // Re-defining NumericTextFormatter to ensure it's available
 class NumericTextFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     if (newValue.text.isEmpty) {
       return newValue.copyWith(text: '');
     } else if (newValue.text.compareTo(oldValue.text) != 0) {
-      final int selectionIndexFromTheRight = newValue.text.length - newValue.selection.end;
+      final int selectionIndexFromTheRight =
+          newValue.text.length - newValue.selection.end;
       var value = newValue.text;
       value = value.replaceAll(RegExp(r'\D'), ''); // Remove non-digits
 
@@ -1172,7 +1415,8 @@ class NumericTextFormatter extends TextInputFormatter {
       }
       return TextEditingValue(
         text: value,
-        selection: TextSelection.collapsed(offset: value.length - selectionIndexFromTheRight),
+        selection: TextSelection.collapsed(
+            offset: value.length - selectionIndexFromTheRight),
       );
     } else {
       return newValue;
@@ -1240,7 +1484,9 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
             Constants.showDefaultSnackBar(
                 //
                 context: context,
-                text: LanguageClass.isEnglish ? "Failed to load payment page." : "فشل تحميل صفحة الدفع.",
+                text: LanguageClass.isEnglish
+                    ? "Failed to load payment page."
+                    : "فشل تحميل صفحة الدفع.",
                 color: Colors.red);
           },
           onNavigationRequest: (NavigationRequest request) async {
@@ -1253,13 +1499,16 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
                   //
                   showDoneConfirmationDialog(context, //
                       isError: true,
-                      message: LanguageClass.isEnglish ? 'Payment Error' : 'حدث خطاء اثنا الدفع', callback: () {
+                      message: LanguageClass.isEnglish
+                          ? 'Payment Error'
+                          : 'حدث خطاء اثنا الدفع', callback: () {
                     NavHelper().goBack(); // Pop WebView
                     NavHelper().goBack(); // Pop Credit Card Screen
                   });
                 }
               });
-              return NavigationDecision.prevent; // Prevent navigation to this URL
+              return NavigationDecision
+                  .prevent; // Prevent navigation to this URL
             } else if (request.url.contains('99997')) {
               // Example for error URL
               await Future.delayed(const Duration(seconds: 2), () {
@@ -1267,48 +1516,61 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
                   //
                   showDoneConfirmationDialog(context, //
                       isError: true,
-                      message: LanguageClass.isEnglish ? 'Payment Error' : 'حدث خطاء اثنا الدفع', callback: () {
+                      message: LanguageClass.isEnglish
+                          ? 'Payment Error'
+                          : 'حدث خطاء اثنا الدفع', callback: () {
                     NavHelper().goBack(); // Pop WebView
                     NavHelper().goBack(); // Pop Credit Card Screen
                   });
                 }
               });
-              return NavigationDecision.prevent; // Prevent navigation to this URL
-            } else if (request.url.startsWith('https://swabus.com/Home/FawryCharge') ||
+              return NavigationDecision
+                  .prevent; // Prevent navigation to this URL
+            } else if (request.url
+                    .startsWith('https://swabus.com/Home/FawryCharge') ||
                 request.url.contains('success_callback_url')) {
               // Example for success URL or your actual success endpoint
               await Future.delayed(const Duration(seconds: 2), () {
                 if (mounted) {
                   //
                   showDoneConfirmationDialog(context, //
-                      message: LanguageClass.isEnglish ? 'Payment completed successfully' : 'تم عملية الدفع بنجاح',
-                      callback: () {
+                      message: LanguageClass.isEnglish
+                          ? 'Payment completed successfully'
+                          : 'تم عملية الدفع بنجاح', callback: () {
                     // Navigate to home or appropriate screen after successful payment
                     NavHelper().navigate(
-                        MultiBlocProvider(providers: [
-                          BlocProvider<LoginCubit>(
-                            create: (context) => sl<LoginCubit>(),
-                          ),
-                          BlocProvider<PackagesBloc>(
-                            create: (context) => PackagesBloc(),
-                          ),
-                          BlocProvider<FawryReservation>(
-                            create: (context) => sl<FawryReservation>(),
-                          ),
-                          BlocProvider<GetAvailableCountriesCubit>(
-                            create: (context) => sl<GetAvailableCountriesCubit>(),
-                          ),
-                          BlocProvider<HomeCubit>(
-                            create: (context) => sl<HomeCubit>(),
-                          ),
-                          BlocProvider<TimesTripsCubit>(create: (context) => sl<TimesTripsCubit>()),
-                          BlocProvider<TicketCubit>(create: (context) => sl<TicketCubit>()),
-                        ], child: Routes.isomra ? SelectUmratypeScreen() : MyHome()),
+                        MultiBlocProvider(
+                            providers: [
+                              BlocProvider<LoginCubit>(
+                                create: (context) => sl<LoginCubit>(),
+                              ),
+                              BlocProvider<PackagesBloc>(
+                                create: (context) => PackagesBloc(),
+                              ),
+                              BlocProvider<FawryReservation>(
+                                create: (context) => sl<FawryReservation>(),
+                              ),
+                              BlocProvider<GetAvailableCountriesCubit>(
+                                create: (context) =>
+                                    sl<GetAvailableCountriesCubit>(),
+                              ),
+                              BlocProvider<HomeCubit>(
+                                create: (context) => sl<HomeCubit>(),
+                              ),
+                              BlocProvider<TimesTripsCubit>(
+                                  create: (context) => sl<TimesTripsCubit>()),
+                              BlocProvider<TicketCubit>(
+                                  create: (context) => sl<TicketCubit>()),
+                            ],
+                            child: Routes.isomra
+                                ? SelectUmratypeScreen()
+                                : MyHome()),
                         replace: true);
                   });
                 }
               });
-              return NavigationDecision.prevent; // Prevent navigation to this URL
+              return NavigationDecision
+                  .prevent; // Prevent navigation to this URL
             }
             return NavigationDecision.navigate; // Allow other navigations
           },
@@ -1329,7 +1591,9 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
           context: context,
           builder: (BuildContext dialogContext) {
             return AlertDialog(
-              title: Text(LanguageClass.isEnglish ? "Exit Payment?" : "الخروج من الدفع؟"),
+              title: Text(LanguageClass.isEnglish
+                  ? "Exit Payment?"
+                  : "الخروج من الدفع؟"),
               content: Text(LanguageClass.isEnglish
                   ? "Are you sure you want to cancel the payment?"
                   : "هل أنت متأكد أنك تريد إلغاء عملية الدفع؟"),
@@ -1374,7 +1638,9 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false, arguments: Routes.isomra);
+                Navigator.pushNamedAndRemoveUntil(
+                    context, Routes.home, (route) => false,
+                    arguments: Routes.isomra);
               },
               icon: Icon(
                 Icons.home_outlined,
@@ -1408,30 +1674,17 @@ class _ConfirmPayWebViewState extends State<ConfirmPayWebView> {
       bool isError = false,
       bool isWarning = false,
       required VoidCallback? callback}) async {
-    return CoolAlert.show(
-        barrierDismissible: false,
-        context: context,
-        confirmBtnText: "ok",
-        title: isError
-            ? LanguageClass.isEnglish
-                ? 'Error'
-                : 'خطأ'
-            : isWarning
-                ? LanguageClass.isEnglish
-                    ? 'Please'
-                    : 'يرجى'
-                : LanguageClass.isEnglish
-                    ? 'Success'
-                    : 'تم بنجاح',
-        lottieAsset: isError
-            ? 'assets/json/error.json'
-            : isWarning
-                ? 'assets/json/Warning.json'
-                : 'assets/json/done.json',
-        type: isError ? CoolAlertType.error : CoolAlertType.success,
-        loopAnimation: false,
-        backgroundColor: isError ? Colors.red : Colors.white,
-        text: message,
-        onConfirmBtnTap: callback);
+    return AppDialog.show(
+      context: context,
+      message: message,
+      type: isError
+          ? AppDialogType.failed
+          : isWarning
+              ? AppDialogType.warning
+              : AppDialogType.success,
+      barrierDismissible: false,
+      confirmText: callbackTitle ?? 'ok',
+      onConfirm: callback,
+    );
   }
 }

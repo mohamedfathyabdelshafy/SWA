@@ -16,6 +16,7 @@ import 'package:swa/core/api/api_consumer.dart';
 import 'package:swa/core/utils/app_strings.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/notifcation_services.dart';
+import 'package:swa/core/utils/styles.dart';
 import 'package:swa/features/app_info/app_info_injection_container.dart';
 import 'package:swa/features/change_password/change_password_injection_container.dart';
 import 'package:swa/features/forgot_password/forgot_password_injection_container.dart';
@@ -143,6 +144,15 @@ class MyApp extends StatelessWidget {
               localizationsDelegates: [GlobalMaterialLocalizations.delegate],
               supportedLocales: [const Locale('en'), const Locale('ar')],
               title: AppStrings.appName,
+              theme: ThemeData(
+                fontFamily:
+                    LanguageClass.isEnglish ? enFontRegular : arFontRegular,
+                textTheme: Theme.of(context).textTheme.apply(
+                      fontFamily: LanguageClass.isEnglish
+                          ? enFontRegular
+                          : arFontRegular,
+                    ),
+              ),
               navigatorKey: navigatorKey,
               debugShowCheckedModeBanner: false,
               scaffoldMessengerKey: scaffoldMessengerKey,

@@ -125,6 +125,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
 
   PackagesBloc _packagesBloc = new PackagesBloc();
   final ScrollController _scrollController = ScrollController();
+  final GlobalKey _paymentMethodsKey = GlobalKey();
 
   @override
   void initState() {
@@ -234,6 +235,31 @@ class _ReservationTicketState extends State<ReservationTicket> {
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
+  }
+
+  void _scrollToPaymentMethods() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      final paymentContext = _paymentMethodsKey.currentContext;
+      if (paymentContext != null) {
+        Scrollable.ensureVisible(
+          paymentContext,
+          duration: const Duration(milliseconds: 550),
+          curve: Curves.easeInOutCubic,
+          alignment: 0.08,
+        );
+        return;
+      }
+
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 550),
+          curve: Curves.easeInOutCubic,
+        );
+      }
+    });
   }
 
   final Color _primaryColor = Color(0XFFf65702);
@@ -860,7 +886,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: ListView(
-                      padding: EdgeInsets.zero,
+                      padding: const EdgeInsets.only(bottom: 120),
                       controller: _scrollController,
                       children: [
                         Container(
@@ -1005,9 +1031,12 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                       ),
                                       Text(
                                         Ticketreservation.fromcitystation1,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         style: fontStyle(
                                             color: Colors.black,
                                             fontFamily: FontFamily.medium,
+                                            height: 1.25,
                                             fontSize: 10.sp),
                                       ),
                                       Text(
@@ -1079,9 +1108,12 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                       ),
                                       Text(
                                         Ticketreservation.tocitystation1,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         style: fontStyle(
                                             color: Colors.black,
                                             fontFamily: FontFamily.medium,
+                                            height: 1.25,
                                             fontSize: 10.sp),
                                       ),
                                       Text(
@@ -1651,9 +1683,12 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                             Text(
                                               Ticketreservation
                                                   .fromcitystation2,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                               style: fontStyle(
                                                   color: Colors.black,
                                                   fontFamily: FontFamily.medium,
+                                                  height: 1.25,
                                                   fontSize: 10.sp),
                                             ),
                                             Text(
@@ -1730,9 +1765,12 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                             ),
                                             Text(
                                               Ticketreservation.tocitystation2,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                               style: fontStyle(
                                                   color: Colors.black,
                                                   fontFamily: FontFamily.medium,
+                                                  height: 1.25,
                                                   fontSize: 10.sp),
                                             ),
                                             Text(
@@ -3399,49 +3437,16 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                                               context,
                                                                           int index) {
                                                                     String
-                                                                        htmlData =
+                                                                        policyText =
                                                                         policy.message![
                                                                             index];
-
-                                                                    final liRegex = RegExp(
-                                                                        r'<li[^>]*>(.*?)</li>',
-                                                                        dotAll:
-                                                                            true);
-                                                                    final matches =
-                                                                        liRegex.allMatches(
-                                                                            htmlData);
-
-                                                                    int counter =
-                                                                        1;
-                                                                    matches.forEach(
-                                                                        (match) {
-                                                                      String
-                                                                          originalLi =
-                                                                          match.group(
-                                                                              0)!;
-                                                                      String
-                                                                          liContent =
-                                                                          match.group(
-                                                                              1)!;
-                                                                      String
-                                                                          newLi =
-                                                                          originalLi
-                                                                              .replaceFirst(
-                                                                        liContent,
-                                                                        '$counter. $liContent',
-                                                                      );
-                                                                      htmlData = htmlData.replaceFirst(
-                                                                          originalLi,
-                                                                          newLi);
-                                                                      counter++;
-                                                                    });
 
                                                                     return policy
                                                                             .message![index]
                                                                             .contains("div")
                                                                         ? Html(
                                                                             data:
-                                                                                htmlData,
+                                                                                policyText,
                                                                             style: {
                                                                               "body": Style(margin: Margins.zero, padding: HtmlPaddings.zero, fontSize: FontSize(10), border: Border.all(color: Colors.transparent)),
                                                                               "div": Style(margin: Margins.zero, padding: HtmlPaddings.zero, backgroundColor: Colors.transparent, fontSize: FontSize(10), border: Border.all(color: Colors.transparent)),
@@ -3456,10 +3461,11 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                                                                 color: AppColors.blackColor,
                                                                                 // color: Color(0xFF333333),
                                                                               ),
+                                                                              "p": Style(margin: Margins.only(bottom: 4), fontSize: FontSize(10), color: AppColors.blackColor),
                                                                             },
                                                                           )
                                                                         : Text(
-                                                                            "${index + 1} - ${policy.message![index]}",
+                                                                            policyText,
                                                                             textAlign: LanguageClass.isEnglish
                                                                                 ? TextAlign.left
                                                                                 : TextAlign.right,
@@ -3687,14 +3693,8 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                           // );
                                           setState(() {
                                             showPaymentScreen = true;
-                                            _scrollController.animateTo(
-                                              _scrollController
-                                                  .position.maxScrollExtent,
-                                              duration: const Duration(
-                                                  milliseconds: 300),
-                                              curve: Curves.easeInOut,
-                                            );
                                           });
+                                          _scrollToPaymentMethods();
                                         }
                                       } else {
                                         final toStationId =
@@ -3771,14 +3771,8 @@ class _ReservationTicketState extends State<ReservationTicket> {
                                           // );
                                           setState(() {
                                             showPaymentScreen = true;
-                                            _scrollController.animateTo(
-                                              _scrollController
-                                                  .position.maxScrollExtent,
-                                              duration: const Duration(
-                                                  milliseconds: 300),
-                                              curve: Curves.easeInOut,
-                                            );
                                           });
+                                          _scrollToPaymentMethods();
                                         }
                                       }
                                     }
@@ -3827,6 +3821,7 @@ class _ReservationTicketState extends State<ReservationTicket> {
                         // if (accept)
                         if (showPaymentScreen && Routes.user != null) ...[
                           Padding(
+                            key: _paymentMethodsKey,
                             padding: const EdgeInsets.only(top: 20),
                             child: BlocProvider<ReservationCubit>(
                               create: (context) => ReservationCubit(),

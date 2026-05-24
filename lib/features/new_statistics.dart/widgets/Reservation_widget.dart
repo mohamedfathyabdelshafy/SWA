@@ -22,7 +22,9 @@ import 'package:swa/features/payment/select_payment/presentation/screens/select_
 import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
 
 Widget ReservationWidget(
-    {required AllStaticsModel allStaticsModel, required String walletbalance, required BuildContext context}) {
+    {required AllStaticsModel allStaticsModel,
+    required String walletbalance,
+    required BuildContext context}) {
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: 16.w),
     child: ListView(
@@ -130,7 +132,9 @@ Widget ReservationWidget(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          LanguageClass.isEnglish ? "Total Reservations" : "اجمالي الحجوزات",
+                          LanguageClass.isEnglish
+                              ? "Total Reservations"
+                              : "اجمالي الحجوزات",
                           style: fontStyle(
                             color: Colors.blue[600]!,
                             fontSize: 12.sp,
@@ -196,7 +200,8 @@ Widget ReservationWidget(
                   Text(
                     "${allStaticsModel.message!.reservations!.fold(
                           0.0,
-                          (previousValue, element) => previousValue + element.price,
+                          (previousValue, element) =>
+                              previousValue + element.price,
                         ).toStringAsFixed(2)} ${Routes.curruncy}",
                     style: fontStyle(
                       color: AppColors.primaryColor,
@@ -396,7 +401,9 @@ Widget ReservationWidget(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        LanguageClass.isEnglish ? "All Reservations" : "قائمة الحجوزات",
+                        LanguageClass.isEnglish
+                            ? "All Reservations"
+                            : "قائمة الحجوزات",
                         style: fontStyle(
                             fontSize: 14.sp,
                             fontFamily: FontFamily.bold,
@@ -445,7 +452,8 @@ Widget ReservationWidget(
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
-                                      color: AppColors.primaryColor.withOpacity(0.4)),
+                                      color: AppColors.primaryColor
+                                          .withOpacity(0.4)),
                                   child: SvgPicture.asset(
                                     "assets/images/bus24.svg",
                                     color: AppColors.primaryColor,
@@ -455,7 +463,8 @@ Widget ReservationWidget(
                                 Expanded(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
@@ -471,9 +480,12 @@ Widget ReservationWidget(
                                         ],
                                       ),
                                       Text(
-                                        LanguageClass.isEnglish ? "mobile app" : "تطبيق الجوال",
+                                        LanguageClass.isEnglish
+                                            ? "mobile app"
+                                            : "تطبيق الجوال",
                                         style: fontStyle(
-                                            color: AppColors.blackColor.withOpacity(0.6),
+                                            color: AppColors.blackColor
+                                                .withOpacity(0.6),
                                             fontFamily: FontFamily.medium,
                                             fontWeight: FontWeight.w600),
                                       ),
@@ -485,16 +497,24 @@ Widget ReservationWidget(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    allStaticsModel.message!.reservations![index].status == 60
+                                    allStaticsModel.message!
+                                                .reservations![index].status ==
+                                            60
                                         ? Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 4.w, vertical: 2.h),
                                             alignment: Alignment.center,
                                             decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(100),
-                                                color: Colors.green.withOpacity(0.2),
-                                                border: Border.all(color: Colors.green)),
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                color: Colors.green
+                                                    .withOpacity(0.2),
+                                                border: Border.all(
+                                                    color: Colors.green)),
                                             child: Text(
-                                              LanguageClass.isEnglish ? "Confirmed" : "مؤكد",
+                                              LanguageClass.isEnglish
+                                                  ? "Confirmed"
+                                                  : "مؤكد",
                                               style: fontStyle(
                                                   fontSize: 8.sp,
                                                   fontFamily: FontFamily.bold,
@@ -502,57 +522,109 @@ Widget ReservationWidget(
                                                   color: Colors.green),
                                             ),
                                           )
-                                        : allStaticsModel.message!.reservations![index].status == 61
+                                        : allStaticsModel
+                                                    .message!
+                                                    .reservations![index]
+                                                    .status ==
+                                                61
                                             ? Container(
-                                                padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 4.w,
+                                                    vertical: 2.h),
                                                 alignment: Alignment.center,
                                                 decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(100),
-                                                    color: Colors.red.withOpacity(0.2),
-                                                    border: Border.all(color: Colors.red)),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            100),
+                                                    color: Colors.red
+                                                        .withOpacity(0.2),
+                                                    border: Border.all(
+                                                        color: Colors.red)),
                                                 child: Text(
-                                                  LanguageClass.isEnglish ? "Canceled" : "ملغى",
+                                                  LanguageClass.isEnglish
+                                                      ? "Canceled"
+                                                      : "ملغى",
                                                   style: fontStyle(
                                                       fontSize: 8.sp,
-                                                      fontFamily: FontFamily.bold,
-                                                      fontWeight: FontWeight.w600,
+                                                      fontFamily:
+                                                          FontFamily.bold,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                       color: Colors.red),
                                                 ),
                                               )
-                                            : allStaticsModel.message!.reservations![index].status == 62
+                                            : allStaticsModel
+                                                        .message!
+                                                        .reservations![index]
+                                                        .status ==
+                                                    62
                                                 ? Container(
-                                                    padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 4.w,
+                                                            vertical: 2.h),
                                                     alignment: Alignment.center,
                                                     decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(100),
-                                                        color: Colors.orange.withOpacity(0.2),
-                                                        border: Border.all(color: Colors.orange)),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(100),
+                                                        color: Colors.orange
+                                                            .withOpacity(0.2),
+                                                        border: Border.all(
+                                                            color:
+                                                                Colors.orange)),
                                                     child: Text(
-                                                      LanguageClass.isEnglish ? "Edited" : "تم التعديل",
+                                                      LanguageClass.isEnglish
+                                                          ? "Edited"
+                                                          : "تم التعديل",
                                                       style: fontStyle(
                                                           fontSize: 8.sp,
-                                                          fontFamily: FontFamily.bold,
-                                                          fontWeight: FontWeight.w600,
+                                                          fontFamily:
+                                                              FontFamily.bold,
+                                                          fontWeight:
+                                                              FontWeight.w600,
                                                           color: Colors.orange),
                                                     ),
                                                   )
-                                                : allStaticsModel.message!.reservations![index].status == 63
+                                                : allStaticsModel
+                                                            .message!
+                                                            .reservations![
+                                                                index]
+                                                            .status ==
+                                                        63
                                                     ? Container(
-                                                        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-                                                        alignment: Alignment.center,
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 4.w,
+                                                                vertical: 2.h),
+                                                        alignment:
+                                                            Alignment.center,
                                                         decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(100),
-                                                            color: Colors.amber.withOpacity(0.2),
-                                                            border: Border.all(color: Colors.amber)),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        100),
+                                                            color: Colors.amber
+                                                                .withOpacity(
+                                                                    0.2),
+                                                            border: Border.all(
+                                                                color: Colors
+                                                                    .amber)),
                                                         child: Text(
-                                                          LanguageClass.isEnglish
+                                                          LanguageClass
+                                                                  .isEnglish
                                                               ? "Edited with penalty"
                                                               : "تم التعديل بغرامة",
                                                           style: fontStyle(
                                                               fontSize: 8.sp,
-                                                              fontFamily: FontFamily.bold,
-                                                              fontWeight: FontWeight.w600,
-                                                              color: Colors.amber),
+                                                              fontFamily:
+                                                                  FontFamily
+                                                                      .bold,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              color:
+                                                                  Colors.amber),
                                                         ),
                                                       )
                                                     : SizedBox(),
@@ -574,9 +646,10 @@ Widget ReservationWidget(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 20.w,
-                                  child: SvgPicture.asset("assets/images/MapPin-24px.svg"),
+                                  child: SvgPicture.asset(
+                                      "assets/images/MapPin-24px.svg"),
                                 ),
                                 5.horizontalSpace,
                                 Flexible(
@@ -592,7 +665,8 @@ Widget ReservationWidget(
                                 5.horizontalSpace,
                                 Transform.flip(
                                     flipX: !LanguageClass.isEnglish,
-                                    child: SvgPicture.asset("assets/images/longarrow.svg")),
+                                    child: SvgPicture.asset(
+                                        "assets/images/longarrow.svg")),
                                 5.horizontalSpace,
                                 Flexible(
                                   child: Text(
@@ -611,14 +685,16 @@ Widget ReservationWidget(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 20.w,
-                                  child: SvgPicture.asset("assets/images/Calendar-24px.svg"),
+                                  child: SvgPicture.asset(
+                                      "assets/images/Calendar-24px.svg"),
                                 ),
                                 5.horizontalSpace,
                                 Text(
                                   intl.DateFormat('dd-MM-yyyy hh:mm a')
-                                      .format(allStaticsModel.message!.reservations![index].tripDate!)
+                                      .format(allStaticsModel.message!
+                                          .reservations![index].tripDate!)
                                       .toString(),
                                   style: fontStyle(
                                       color: AppColors.blackColor,
@@ -633,9 +709,10 @@ Widget ReservationWidget(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 20.w,
-                                  child: SvgPicture.asset("assets/images/Users-24px.svg"),
+                                  child: SvgPicture.asset(
+                                      "assets/images/Users-24px.svg"),
                                 ),
                                 5.horizontalSpace,
                                 Text(
@@ -650,7 +727,8 @@ Widget ReservationWidget(
                             ),
                             10.verticalSpace,
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Divider(
                                 color: AppColors.blackColor.withOpacity(0.4),
                               ),
@@ -662,11 +740,14 @@ Widget ReservationWidget(
                                     flex: 2,
                                     child: Container(
                                         child: Text(
-                                      intl.DateFormat('dd-MM-yyyy hh:mm a').format(
-                                        allStaticsModel.message!.reservations![index].tripDate!,
+                                      intl.DateFormat('dd-MM-yyyy hh:mm a')
+                                          .format(
+                                        allStaticsModel.message!
+                                            .reservations![index].tripDate!,
                                       ),
                                       style: fontStyle(
-                                          color: AppColors.blackColor.withOpacity(0.6),
+                                          color: AppColors.blackColor
+                                              .withOpacity(0.6),
                                           fontSize: 13.sp,
                                           fontFamily: FontFamily.medium,
                                           fontWeight: FontWeight.w600),
@@ -674,31 +755,48 @@ Widget ReservationWidget(
                                 Expanded(
                                     child: InkWell(
                                         onTap: () {
-                                          BlocProvider.of<StatisticsBloc>(context).add(getReservationdetailsEvent(
-                                              reservation: allStaticsModel.message!.reservations![index],
-                                              id: allStaticsModel.message!.reservations![index].reservationId!));
+                                          BlocProvider.of<StatisticsBloc>(
+                                                  context)
+                                              .add(getReservationdetailsEvent(
+                                                  reservation: allStaticsModel
+                                                      .message!
+                                                      .reservations![index],
+                                                  id: allStaticsModel
+                                                      .message!
+                                                      .reservations![index]
+                                                      .reservationId!));
                                         },
                                         child: Container(
                                             alignment: Alignment.center,
-                                            padding: EdgeInsets.symmetric(vertical: 5.h),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 5.h),
                                             decoration: BoxDecoration(
-                                                border: Border.all(color: Colors.grey),
-                                                borderRadius: BorderRadius.circular(8),
+                                                border: Border.all(
+                                                    color: Colors.grey),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 color: AppColors.white),
                                             child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  LanguageClass.isEnglish ? "Details" : "تفاصيل",
+                                                  LanguageClass.isEnglish
+                                                      ? "Details"
+                                                      : "تفاصيل",
                                                   style: fontStyle(
                                                       color: Colors.black,
                                                       fontSize: 14.sp,
-                                                      fontFamily: FontFamily.bold,
-                                                      fontWeight: FontWeight.w600),
+                                                      fontFamily:
+                                                          FontFamily.bold,
+                                                      fontWeight:
+                                                          FontWeight.w600),
                                                 ),
                                                 5.horizontalSpace,
-                                                SvgPicture.asset("assets/images/Eye-24px.svg")
+                                                SvgPicture.asset(
+                                                    "assets/images/Eye-24px.svg")
                                               ],
                                             ))))
                               ],
@@ -730,13 +828,16 @@ Future showReservationspopDetails({
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Directionality(
-          textDirection: LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+          textDirection:
+              LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
           child: BlocListener(
             bloc: _ticketcubit,
             listener: (context, state) {
               if (state is LoadedTicketdetails) {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                  return Ticketpdfdetails(state.ticketdetailsModel.message, reservationdetails.message);
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return Ticketpdfdetails(state.ticketdetailsModel.message,
+                      reservationdetails.message);
                 })).then((value) {
                   Constants.hideLoadingDialog(context);
                 });
@@ -753,7 +854,9 @@ Future showReservationspopDetails({
                 children: [
                   Container(
                     alignment: Alignment.topRight,
-                    child: InkWell(onTap: () => Navigator.pop(context), child: Icon(Icons.close)),
+                    child: InkWell(
+                        onTap: () => Navigator.pop(context),
+                        child: Icon(Icons.close)),
                   ),
                   5.verticalSpace,
                   Row(
@@ -773,7 +876,10 @@ Future showReservationspopDetails({
                         LanguageClass.isEnglish
                             ? "Resrvation date TKT-${reservation.ticketNumber}"
                             : "تاريخ الحجز TKT-${reservation.ticketNumber}",
-                        style: fontStyle(fontFamily: FontFamily.bold, fontSize: 14.sp, fontWeight: FontWeight.w500),
+                        style: fontStyle(
+                            fontFamily: FontFamily.bold,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
@@ -794,7 +900,9 @@ Future showReservationspopDetails({
                   20.verticalSpace,
                   Container(
                     padding: EdgeInsetsDirectional.all(10.w),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.grey[200]),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.grey[200]),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -804,7 +912,8 @@ Future showReservationspopDetails({
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              child: SvgPicture.asset("assets/images/MapPin-24px.svg"),
+                              child: SvgPicture.asset(
+                                  "assets/images/MapPin-24px.svg"),
                             ),
                             5.horizontalSpace,
                             Row(
@@ -845,11 +954,13 @@ Future showReservationspopDetails({
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              child: SvgPicture.asset("assets/images/Calendar-24px.svg"),
+                              child: SvgPicture.asset(
+                                  "assets/images/Calendar-24px.svg"),
                             ),
                             5.horizontalSpace,
                             Text(
-                              "${intl.DateFormat('dd-MM-yyyy').format(reservation.tripDate!)}",
+                              intl.DateFormat('dd-MM-yyyy')
+                                  .format(reservation.tripDate!),
                               style: fontStyle(
                                   color: AppColors.blackColor,
                                   fontSize: 12.sp,
@@ -869,11 +980,13 @@ Future showReservationspopDetails({
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Container(
-                                    child: SvgPicture.asset("assets/images/Clock-24px.svg"),
+                                    child: SvgPicture.asset(
+                                        "assets/images/Clock-24px.svg"),
                                   ),
                                   5.horizontalSpace,
                                   Text(
-                                    "${intl.DateFormat('hh:mm a').format(reservation.tripDate!)}",
+                                    intl.DateFormat('hh:mm a')
+                                        .format(reservation.tripDate!),
                                     style: fontStyle(
                                         color: AppColors.blackColor,
                                         fontSize: 12.sp,
@@ -889,7 +1002,8 @@ Future showReservationspopDetails({
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Container(
-                                    child: SvgPicture.asset("assets/images/Users-24px.svg"),
+                                    child: SvgPicture.asset(
+                                        "assets/images/Users-24px.svg"),
                                   ),
                                   5.horizontalSpace,
                                   Text(
@@ -914,7 +1028,9 @@ Future showReservationspopDetails({
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        LanguageClass.isEnglish ? "Date of Operations" : "تاريخ العمليات",
+                        LanguageClass.isEnglish
+                            ? "Date of Operations"
+                            : "تاريخ العمليات",
                         style: fontStyle(
                             color: AppColors.blackColor,
                             fontSize: 14.sp,
@@ -934,26 +1050,32 @@ Future showReservationspopDetails({
                         return Container(
                           padding: EdgeInsets.all(10),
                           margin: EdgeInsets.only(bottom: 10.h),
-                          decoration:
-                              BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.white, boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.4),
-                              blurRadius: 4,
-                              spreadRadius: 0,
-                              offset: Offset(0, 0),
-                            )
-                          ]),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.4),
+                                  blurRadius: 4,
+                                  spreadRadius: 0,
+                                  offset: Offset(0, 0),
+                                )
+                              ]),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              reservationdetails.message[index].transactionTypeId == 7
+                              reservationdetails
+                                          .message[index].transactionTypeId ==
+                                      7
                                   ? Container(
                                       padding: EdgeInsets.all(5),
                                       width: 30.w,
                                       height: 30.w,
                                       decoration: BoxDecoration(
-                                          color: Colors.green[200], borderRadius: BorderRadius.circular(8)),
+                                          color: Colors.green[200],
+                                          borderRadius:
+                                              BorderRadius.circular(8)),
                                       child: SvgPicture.asset(
                                         "assets/images/CheckCircle-24px.svg",
                                         color: Colors.green[700],
@@ -963,8 +1085,10 @@ Future showReservationspopDetails({
                                       width: 30.w,
                                       height: 30.w,
                                       padding: EdgeInsets.all(5),
-                                      decoration:
-                                          BoxDecoration(color: Colors.red[200], borderRadius: BorderRadius.circular(8)),
+                                      decoration: BoxDecoration(
+                                          color: Colors.red[200],
+                                          borderRadius:
+                                              BorderRadius.circular(8)),
                                       child: SvgPicture.asset(
                                         "assets/images/warning.svg",
                                         color: Colors.red[700],
@@ -986,10 +1110,12 @@ Future showReservationspopDetails({
                                     ),
                                     Text(
                                       intl.DateFormat('dd-MM-yyyy hh:mm a')
-                                          .format(reservationdetails.message[index].tripDat!)
+                                          .format(reservationdetails
+                                              .message[index].tripDat!)
                                           .toString(),
                                       style: fontStyle(
-                                          color: AppColors.blackColor.withOpacity(0.6),
+                                          color: AppColors.blackColor
+                                              .withOpacity(0.6),
                                           fontSize: 12.sp,
                                           fontFamily: FontFamily.medium,
                                           fontWeight: FontWeight.w600),
@@ -999,11 +1125,15 @@ Future showReservationspopDetails({
                                       width: double.infinity,
                                       padding: EdgeInsets.all(5),
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(2), color: Colors.grey[100]),
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                          color: Colors.grey[100]),
                                       child: Text(
-                                        reservationdetails.message[index].notes!,
+                                        reservationdetails
+                                            .message[index].notes!,
                                         style: fontStyle(
-                                            color: AppColors.blackColor.withOpacity(0.5),
+                                            color: AppColors.blackColor
+                                                .withOpacity(0.5),
                                             fontSize: 12.sp,
                                             fontFamily: FontFamily.medium,
                                             fontWeight: FontWeight.w600),
@@ -1015,7 +1145,9 @@ Future showReservationspopDetails({
                               Text(
                                 "${reservationdetails.message[index].price!} ${reservationdetails.message[index].currencySymbole}",
                                 style: fontStyle(
-                                    color: reservationdetails.message[index].transactionTypeId == 7
+                                    color: reservationdetails.message[index]
+                                                .transactionTypeId ==
+                                            7
                                         ? Colors.green
                                         : Colors.red,
                                     fontSize: 14.sp,
@@ -1040,7 +1172,9 @@ Future showReservationspopDetails({
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          LanguageClass.isEnglish ? "Summary of amounts" : "ملخص المبالغ",
+                          LanguageClass.isEnglish
+                              ? "Summary of amounts"
+                              : "ملخص المبالغ",
                           style: fontStyle(
                               color: Colors.blue[700]!,
                               fontFamily: FontFamily.bold,
@@ -1053,7 +1187,9 @@ Future showReservationspopDetails({
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              LanguageClass.isEnglish ? "Total amount" : "المبلغ الإجمالي:",
+                              LanguageClass.isEnglish
+                                  ? "Total amount"
+                                  : "المبلغ الإجمالي:",
                               style: fontStyle(
                                   color: Colors.blue[700]!,
                                   fontFamily: FontFamily.medium,
@@ -1076,7 +1212,9 @@ Future showReservationspopDetails({
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              LanguageClass.isEnglish ? "Number of seats" : "عدد المقاعد:",
+                              LanguageClass.isEnglish
+                                  ? "Number of seats"
+                                  : "عدد المقاعد:",
                               style: fontStyle(
                                   color: Colors.blue[700]!,
                                   fontFamily: FontFamily.medium,
@@ -1099,7 +1237,9 @@ Future showReservationspopDetails({
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              LanguageClass.isEnglish ? "Average seat price" : "متوسط سعر المقعد:",
+                              LanguageClass.isEnglish
+                                  ? "Average seat price"
+                                  : "متوسط سعر المقعد:",
                               style: fontStyle(
                                   color: Colors.blue[700]!,
                                   fontFamily: FontFamily.medium,
@@ -1125,15 +1265,19 @@ Future showReservationspopDetails({
                       Expanded(
                           child: InkWell(
                               onTap: () {
-                                _ticketcubit.getTicketdetails(tekitid: reservation.reservationId!);
+                                _ticketcubit.getTicketdetails(
+                                    tekitid: reservation.reservationId!);
                               },
                               child: Container(
                                   alignment: Alignment.center,
                                   padding: EdgeInsets.symmetric(vertical: 10.h),
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8), color: AppColors.primaryColor),
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: AppColors.primaryColor),
                                   child: Text(
-                                    LanguageClass.isEnglish ? "Print" : "طباعة التفاصيل",
+                                    LanguageClass.isEnglish
+                                        ? "Print"
+                                        : "طباعة التفاصيل",
                                     style: fontStyle(
                                         color: Colors.white,
                                         fontSize: 14.sp,

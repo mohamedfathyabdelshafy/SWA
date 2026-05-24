@@ -18,21 +18,29 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
 
   Future<void> forgotPassword(ForgotPasswordParams params) async {
     emit(ForgotPasswordLoadingState());
-    Either<Failure, MessageResponse> response =
-        await forgotPasswordUseCase(params);
-    emit(response.fold(
-        (failure) => ForgotPasswordErrorState(error: failure),
-        (messageResponse) =>
-            ForgotPasswordLoadedState(messageResponse: messageResponse)));
+    try {
+      Either<Failure, MessageResponse> response =
+          await forgotPasswordUseCase(params);
+      emit(response.fold(
+          (failure) => ForgotPasswordErrorState(error: failure),
+          (messageResponse) =>
+              ForgotPasswordLoadedState(messageResponse: messageResponse)));
+    } catch (error) {
+      emit(ForgotPasswordErrorState(error: error));
+    }
   }
 
   Future<void> submitPassword(SubmitPasswordParams params) async {
     emit(ForgotPasswordLoadingState());
-    Either<Failure, MessageResponse> response =
-        await submitPasswordUseCase(params);
-    emit(response.fold(
-        (failure) => ForgotPasswordErrorState(error: failure),
-        (messageResponse) =>
-            ForgotPasswordLoadedState(messageResponse: messageResponse)));
+    try {
+      Either<Failure, MessageResponse> response =
+          await submitPasswordUseCase(params);
+      emit(response.fold(
+          (failure) => ForgotPasswordErrorState(error: failure),
+          (messageResponse) =>
+              ForgotPasswordLoadedState(messageResponse: messageResponse)));
+    } catch (error) {
+      emit(ForgotPasswordErrorState(error: error));
+    }
   }
 }

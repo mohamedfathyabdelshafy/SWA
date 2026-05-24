@@ -11,7 +11,7 @@ import 'package:swa/main.dart';
 
 class Reservationtimer {
   static Timer? timer;
-  static int start = 120;
+  static int start = 240;
 
   static CountDownController controller = CountDownController();
 

@@ -1,6 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/features/home/presentation/screens/tabs/more_tap/presentation/packages/bloc/packages_respo.dart';
 import 'package:swa/features/payment/wallet/data/repo/my_wallet_repo.dart';
 
@@ -23,8 +21,8 @@ class WalletCubit extends Cubit<WalletState> {
 
       double? convertedBalance;
       if (fromCurrency != null && toCurrency != null) {
-        convertedBalance =
-            await packagesRespo.Convertcurrency(from: fromCurrency, to: toCurrency, amount: state.walletBalance);
+        convertedBalance = await packagesRespo.Convertcurrency(
+            from: fromCurrency, to: toCurrency, amount: state.walletBalance);
       }
       emit(state.copyWith(
         status: WalletStatus.success,

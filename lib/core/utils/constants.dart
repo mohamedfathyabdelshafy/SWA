@@ -58,22 +58,116 @@ class Constants {
       VoidCallback? onPress,
       bool? showDuration,
       Color? color}) {
+    final Color statusColor = _snackBarStatusColor(text: text, color: color);
+
     scaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(
-        backgroundColor: AppColors.blackColor,
-        content: Text(
-          text,
-          textAlign: LanguageClass.isEnglish ? TextAlign.start : TextAlign.end,
-          style: fontStyle(
-              color: color ?? AppColors.primaryColor,
-              fontSize: 14,
-              fontFamily: FontFamily.bold,
-              fontWeight: FontWeight.bold),
-        ),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: statusColor,
         duration: (showDuration == null)
-            ? const Duration(seconds: 2)
-            : const Duration(seconds: 4),
+            ? const Duration(seconds: 5)
+            : const Duration(seconds: 7),
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 18),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        content: Directionality(
+          textDirection:
+              LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
+          child: Text(
+            _capitalizeFirstLetter(text),
+            textAlign:
+                LanguageClass.isEnglish ? TextAlign.start : TextAlign.end,
+            style: fontStyle(
+                color: AppColors.white,
+                fontSize: 14,
+                fontFamily: FontFamily.medium,
+                fontWeight: FontWeight.w600),
+          ),
+        ),
       ),
+    );
+  }
+
+  static Color _snackBarStatusColor({required String text, Color? color}) {
+    if (color != null) {
+      if (color == Colors.green || color == Colors.greenAccent) {
+        return const Color(0xff2E7D32);
+      }
+      if (color == Colors.red || color == Colors.redAccent) {
+        return const Color(0xffD32F2F);
+      }
+      if (color == Colors.orange || color == Colors.orangeAccent) {
+        return const Color(0xffEF6C00);
+      }
+
+      return color;
+    }
+
+    final lowerText = text.toLowerCase();
+    final successWords = [
+      'success',
+      'done',
+      'confirmed',
+      'completed',
+      'charged',
+      'تم',
+      'نجاح',
+      'بنجاح'
+    ];
+    final warningWords = [
+      'warning',
+      'required',
+      'select',
+      'choose',
+      'empty',
+      'تنبيه',
+      'مطلوب',
+      'اختار',
+      'اختر'
+    ];
+    final errorWords = [
+      'error',
+      'failed',
+      'fail',
+      'invalid',
+      'wrong',
+      'not',
+      'no ',
+      'cannot',
+      'can not',
+      'خطأ',
+      'فشل',
+      'غير',
+      'لا '
+    ];
+
+    if (successWords.any(lowerText.contains)) {
+      return const Color(0xff2E7D32);
+    }
+    if (warningWords.any(lowerText.contains)) {
+      return const Color(0xffEF6C00);
+    }
+    if (errorWords.any(lowerText.contains)) {
+      return const Color(0xffD32F2F);
+    }
+
+    return AppColors.primaryColor;
+  }
+
+  static String _capitalizeFirstLetter(String text) {
+    if (text.trim().isEmpty) return text;
+
+    final firstNonSpaceIndex = text.indexOf(RegExp(r'\S'));
+    if (firstNonSpaceIndex < 0) return text;
+
+    final firstChar = text[firstNonSpaceIndex];
+    final capitalizedFirstChar = firstChar.toUpperCase();
+
+    if (firstChar == capitalizedFirstChar) return text;
+
+    return text.replaceRange(
+      firstNonSpaceIndex,
+      firstNonSpaceIndex + 1,
+      capitalizedFirstChar,
     );
   }
 
