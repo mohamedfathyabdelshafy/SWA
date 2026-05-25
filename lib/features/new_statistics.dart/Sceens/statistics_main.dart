@@ -84,9 +84,9 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                      LanguageClass.isEnglish
-                          ? "Please Login"
-                          : "يرجى تسجيل الدخول",
+                            LanguageClass.isEnglish
+                                ? "Please Login"
+                                : "يرجى تسجيل الدخول",
                             textAlign: TextAlign.center,
                             style: fontStyle(
                               color: Colors.black.withOpacity(0.8),
@@ -354,7 +354,7 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return Container(
-                                            padding: EdgeInsets.all(10),
+                                            padding: EdgeInsets.all(8.w),
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
@@ -386,7 +386,7 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                                                     color: Colors.white,
                                                   ),
                                                 ),
-                                                10.horizontalSpace,
+                                                8.horizontalSpace,
                                                 Expanded(
                                                   child: Column(
                                                     mainAxisAlignment:
@@ -399,9 +399,12 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                                                       Text(
                                                         statisticslist[index]
                                                             .title!,
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                         style: fontStyle(
                                                           color: Colors.black,
-                                                          fontSize: 12.sp,
+                                                          fontSize: 11.sp,
                                                           fontFamily:
                                                               FontFamily.bold,
                                                           fontWeight:
@@ -411,10 +414,13 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                                                       Text(
                                                         statisticslist[index]
                                                             .value!,
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                         style: fontStyle(
                                                           color: AppColors
                                                               .primaryColor,
-                                                          fontSize: 14.sp,
+                                                          fontSize: 13.sp,
                                                           fontFamily:
                                                               FontFamily.bold,
                                                           fontWeight:
@@ -424,6 +430,9 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                                                       Text(
                                                         statisticslist[index]
                                                             .subtitle!,
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                         style: fontStyle(
                                                           color: AppColors
                                                               .blackColor,
@@ -438,7 +447,7 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                                                   ),
                                                 ),
                                                 if (index == 0) ...[
-                                                  8.horizontalSpace,
+                                                  4.horizontalSpace,
                                                   InkWell(
                                                     onTap:
                                                         _openChargePaymentScreen,
@@ -446,14 +455,13 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                                                         BorderRadius.circular(
                                                             18.r),
                                                     child: Container(
-                                                      width: 28.w,
-                                                      height: 28.w,
+                                                      width: 26.w,
+                                                      height: 26.w,
                                                       alignment:
                                                           Alignment.center,
                                                       decoration: BoxDecoration(
                                                         color: Colors.green,
-                                                        shape:
-                                                            BoxShape.circle,
+                                                        shape: BoxShape.circle,
                                                         boxShadow: [
                                                           BoxShadow(
                                                             color: Colors.green
@@ -469,7 +477,7 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                                                       child: Icon(
                                                         Icons.add_rounded,
                                                         color: Colors.white,
-                                                        size: 20.sp,
+                                                        size: 18.sp,
                                                       ),
                                                     ),
                                                   ),

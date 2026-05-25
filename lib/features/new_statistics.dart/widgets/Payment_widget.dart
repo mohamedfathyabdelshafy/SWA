@@ -129,7 +129,7 @@ Widget paymentWidget(
             children: [
               Expanded(
                   child: Container(
-                padding: EdgeInsets.all(10.w),
+                padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
@@ -151,41 +151,49 @@ Widget paymentWidget(
                         color: Colors.blue,
                       ),
                     ),
-                    10.horizontalSpace,
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          LanguageClass.isEnglish
-                              ? "Total Deposits"
-                              : "اجمالي الايداعات",
-                          style: fontStyle(
-                            color: Colors.blue,
-                            fontSize: 12.sp,
-                            fontFamily: FontFamily.regular,
-                            fontWeight: FontWeight.w600,
+                    8.horizontalSpace,
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            LanguageClass.isEnglish
+                                ? "Total Deposits"
+                                : "اجمالي الايداعات",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: fontStyle(
+                              color: Colors.blue,
+                              fontSize: 12.sp,
+                              fontFamily: FontFamily.regular,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                        Text(
-                          "${allStaticsModel.message!.payments!.fold(0.0, (double previousValue, Payment element) => previousValue + (element.statusId == 22 ? element.amount! : 0))}",
-                          style: fontStyle(
-                            color: Colors.blue,
-                            fontSize: 16.sp,
-                            fontFamily: FontFamily.bold,
-                            fontWeight: FontWeight.w600,
+                          Text(
+                            "${allStaticsModel.message!.payments!.fold(0.0, (double previousValue, Payment element) => previousValue + (element.statusId == 22 ? element.amount! : 0))}",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: fontStyle(
+                              color: Colors.blue,
+                              fontSize: 16.sp,
+                              fontFamily: FontFamily.bold,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                        Text(
-                          Routes.curruncy.toString(),
-                          style: fontStyle(
-                            color: Colors.blue,
-                            fontSize: 12.sp,
-                            fontFamily: FontFamily.regular,
-                            fontWeight: FontWeight.w600,
+                          Text(
+                            Routes.curruncy.toString(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: fontStyle(
+                              color: Colors.blue,
+                              fontSize: 12.sp,
+                              fontFamily: FontFamily.regular,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     )
                   ],
                 ),
@@ -193,7 +201,7 @@ Widget paymentWidget(
               10.horizontalSpace,
               Expanded(
                   child: Container(
-                padding: EdgeInsets.all(10.w),
+                padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
@@ -215,41 +223,49 @@ Widget paymentWidget(
                         color: Colors.brown,
                       ),
                     ),
-                    10.horizontalSpace,
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          LanguageClass.isEnglish
-                              ? "Total Withdrawals"
-                              : "اجمالي المسحوبات",
-                          style: fontStyle(
-                            color: Colors.brown,
-                            fontSize: 12.sp,
-                            fontFamily: FontFamily.regular,
-                            fontWeight: FontWeight.w600,
+                    8.horizontalSpace,
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            LanguageClass.isEnglish
+                                ? "Total Withdrawals"
+                                : "اجمالي المسحوبات",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: fontStyle(
+                              color: Colors.brown,
+                              fontSize: 12.sp,
+                              fontFamily: FontFamily.regular,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                        Text(
-                          "${allStaticsModel.message!.refunds!.fold(0.0, (double previousValue, Refund element) => previousValue + element.amount!)}",
-                          style: fontStyle(
-                            color: Colors.brown,
-                            fontSize: 16.sp,
-                            fontFamily: FontFamily.bold,
-                            fontWeight: FontWeight.w600,
+                          Text(
+                            "${allStaticsModel.message!.refunds!.fold(0.0, (double previousValue, Refund element) => previousValue + element.amount!)}",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: fontStyle(
+                              color: Colors.brown,
+                              fontSize: 16.sp,
+                              fontFamily: FontFamily.bold,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                        Text(
-                          Routes.curruncy.toString(),
-                          style: fontStyle(
-                            color: Colors.brown,
-                            fontSize: 12.sp,
-                            fontFamily: FontFamily.regular,
-                            fontWeight: FontWeight.w600,
+                          Text(
+                            Routes.curruncy.toString(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: fontStyle(
+                              color: Colors.brown,
+                              fontSize: 12.sp,
+                              fontFamily: FontFamily.regular,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     )
                   ],
                 ),
