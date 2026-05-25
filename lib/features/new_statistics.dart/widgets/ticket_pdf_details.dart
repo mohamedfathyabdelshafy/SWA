@@ -190,9 +190,9 @@ class Ticketpdfdetails extends StatelessWidget {
       patrnerlogo = await networkImage(ticket!.logoFilePath!);
     }
 
-    final parsedHtml = html_parser.parse(ticket!.policy!.first);
-
-    List policyString = extractListItems(ticket!.policy!.first);
+    final List<String> policyString = (ticket?.policy ?? [])
+        .expand((html) => extractListItems(html))
+        .toList();
 
     print(policyString.length);
 
@@ -432,7 +432,66 @@ class Ticketpdfdetails extends StatelessWidget {
                           style: pw.TextStyle(fontSize: 8),
                         ),
 
-                      // Policy Block
+                      if (policyString.isNotEmpty) ...[
+                        pw.SizedBox(height: 10),
+                        pw.Container(
+                          decoration: pw.BoxDecoration(
+                            border: pw.Border.all(
+                              color: PdfColors.grey,
+                              width: 0.5,
+                            ),
+                            borderRadius: pw.BorderRadius.circular(6),
+                          ),
+                          padding: const pw.EdgeInsets.all(8),
+                          child: pw.Column(
+                            crossAxisAlignment: pw.CrossAxisAlignment.start,
+                            children: [
+                              pw.Center(
+                                child: pw.Text(
+                                  isAr
+                                      ? 'شروط الحجز'
+                                      : 'Booking Terms & Conditions',
+                                  style: pw.TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: pw.FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              pw.SizedBox(height: 8),
+                              ...policyString.map(
+                                (text) => pw.Container(
+                                  margin:
+                                      const pw.EdgeInsets.only(bottom: 3),
+                                  padding: const pw.EdgeInsets.all(4),
+                                  decoration: pw.BoxDecoration(
+                                    color: PdfColors.grey200,
+                                    borderRadius: pw.BorderRadius.circular(6),
+                                    border: pw.Border.all(
+                                      color: PdfColors.grey300,
+                                      width: 0.5,
+                                    ),
+                                  ),
+                                  child: pw.Directionality(
+                                    textDirection: _isArabic(text)
+                                        ? pw.TextDirection.rtl
+                                        : pw.TextDirection.ltr,
+                                    child: pw.Text(
+                                      text,
+                                      style: pw.TextStyle(
+                                        fontSize: 9,
+                                        font: ttf,
+                                      ),
+                                      textAlign: _isArabic(text)
+                                          ? pw.TextAlign.right
+                                          : pw.TextAlign.left,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),

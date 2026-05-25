@@ -14,6 +14,8 @@ import 'package:swa/features/new_statistics.dart/widgets/Reservation_widget.dart
 import 'package:swa/features/new_statistics.dart/widgets/Statistics_widget.dart';
 import 'package:swa/features/new_statistics.dart/bloc/statistics_bloc.dart';
 import 'package:swa/features/new_statistics.dart/model/All_statics_model.dart';
+import 'package:swa/features/payment/select_payment/presentation/screens/select_payment.dart';
+import 'package:swa/select_payment2/presentation/PLOH/reservation_my_wallet_cuibit/reservation_my_wallet_cuibit.dart';
 
 class statisticsMainScreen extends StatefulWidget {
   const statisticsMainScreen({super.key});
@@ -52,6 +54,18 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
           rewards: [],
           summary: Summary()));
 
+  void _openChargePaymentScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider<ReservationCubit>(
+          create: (context) => ReservationCubit(),
+          child: SelectPaymentScreen(user: Routes.user),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,14 +78,53 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                 LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
             child: Routes.user == null
                 ? Center(
-                    child: Text(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24.w),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
                       LanguageClass.isEnglish
                           ? "Please Login"
                           : "يرجى تسجيل الدخول",
-                      style: fontStyle(
-                        color: Colors.black.withOpacity(0.8),
-                        fontFamily: FontFamily.medium,
-                        fontSize: 20.sp,
+                            textAlign: TextAlign.center,
+                            style: fontStyle(
+                              color: Colors.black.withOpacity(0.8),
+                              fontFamily: FontFamily.medium,
+                              fontSize: 20.sp,
+                            ),
+                          ),
+                          18.verticalSpace,
+                          SizedBox(
+                            width: double.infinity,
+                            height: 48.h,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                    context, Routes.signInRoute);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                backgroundColor: AppColors.primaryColor,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(24.r),
+                                ),
+                              ),
+                              child: Text(
+                                LanguageClass.isEnglish
+                                    ? "Login"
+                                    : "تسجيل الدخول",
+                                style: fontStyle(
+                                  color: Colors.white,
+                                  fontFamily: FontFamily.bold,
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   )
@@ -383,7 +436,44 @@ class _statisticsMainScreenState extends State<statisticsMainScreen> {
                                                       ),
                                                     ],
                                                   ),
-                                                )
+                                                ),
+                                                if (index == 0) ...[
+                                                  8.horizontalSpace,
+                                                  InkWell(
+                                                    onTap:
+                                                        _openChargePaymentScreen,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            18.r),
+                                                    child: Container(
+                                                      width: 28.w,
+                                                      height: 28.w,
+                                                      alignment:
+                                                          Alignment.center,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.green,
+                                                        shape:
+                                                            BoxShape.circle,
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            color: Colors.green
+                                                                .withOpacity(
+                                                                    0.25),
+                                                            blurRadius: 6,
+                                                            offset:
+                                                                const Offset(
+                                                                    0, 2),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      child: Icon(
+                                                        Icons.add_rounded,
+                                                        color: Colors.white,
+                                                        size: 20.sp,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ]
                                               ],
                                             ),
                                           );

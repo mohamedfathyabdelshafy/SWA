@@ -89,6 +89,7 @@ class _TimesScreenState extends State<TimesScreen>
   String? companyGo;
   bool showTime = false;
   bool isRecommended = false;
+  bool _showFilters = false;
 
   String selectedIndexDay = '';
   bool showCompanies = false;
@@ -112,6 +113,10 @@ class _TimesScreenState extends State<TimesScreen>
 
   String? recommendedvalue;
   String? companeyvalue;
+  final List<String> _recommendedFilterItems = [];
+  final List<String> _companyFilterItems = [];
+  final Map<String, int?> _recommendedFilterIds = {};
+  final Map<String, int?> _companyFilterIds = {};
 
   late DateTime selectedDate;
 
@@ -135,7 +140,7 @@ class _TimesScreenState extends State<TimesScreen>
       return _isShowingBackTrips ? "Back" : "Go";
     }
 
-    return _isShowingBackTrips ? "عوده" : "ذهاب";
+    return _isShowingBackTrips ? "Ø¹ÙˆØ¯Ù‡" : "Ø°Ù‡Ø§Ø¨";
   }
 
   @override
@@ -192,9 +197,16 @@ class _TimesScreenState extends State<TimesScreen>
   }
 
   void _scrollToCenter() {
-    final screenWidth = MediaQuery.of(context).size.width;
+    if (!_dayScrollController.hasClients) return;
 
-    final targetOffset = (6 * itemWidth) - (screenWidth / 2) + (itemWidth / 2);
+    final daysViewportWidth = MediaQuery.of(context).size.width - 96;
+    const selectedDayPosition = 5;
+    const unselectedDayExtent = 100.0;
+    const selectedDayExtent = 115.0;
+
+    final targetOffset = (selectedDayPosition * unselectedDayExtent) -
+        (daysViewportWidth / 2) +
+        (selectedDayExtent / 2);
 
     _dayScrollController.animateTo(
       targetOffset.clamp(
@@ -204,6 +216,14 @@ class _TimesScreenState extends State<TimesScreen>
       duration: const Duration(milliseconds: 350),
       curve: Curves.easeInOut,
     );
+  }
+
+  void _scrollSelectedDayToCenter() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _scrollToCenter();
+      }
+    });
   }
 
   CompaiesModel? compaiesModel;
@@ -271,7 +291,7 @@ class _TimesScreenState extends State<TimesScreen>
                               fontSize: 10.sp),
                         )
                       : Text(
-                          "\u202B${widget.numberOfAdults} بالغ - ${widget.dateTrip}",
+                          "\u202B${widget.numberOfAdults} Ø¨Ø§Ù„Øº - ${widget.dateTrip}",
                           style: fontStyle(
                               color: Colors.grey,
                               fontFamily: FontFamily.regular,
@@ -307,2757 +327,2823 @@ class _TimesScreenState extends State<TimesScreen>
             (LanguageClass.isEnglish) ? TextDirection.ltr : TextDirection.rtl,
         child: BlocProvider.value(
           value: _timesTripsCubit,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // todo : filter
-              SizedBox(
-                height: sizeHeight * 0.08,
-                child: Card(
-                  color: Colors.transparent,
-                  elevation: 0.0,
-                  child: Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Card(
-                        elevation: 0.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        // color: Color(0xfff3f3f3),
-                        color: AppColors.white,
+          child: BlocListener<TimesTripsCubit, TimesTripsStates>(
+            listenWhen: (previous, current) =>
+                current is LoadingTimesTrips ||
+                current is LoadedTimesTrips ||
+                current is ErrorTimesTrips ||
+                current is LoadedRecommendedList ||
+                current is LoadedCompaniesList,
+            listener: _handleTimesTripsState,
+            child: Stack(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (_showFilters)
+                      SizedBox(
+                        height: 50,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 6),
-                          child: Image.asset(
-                            height: 20,
-                            width: 20,
-                            "assets/images/filter.png",
+                          padding: const EdgeInsetsDirectional.only(
+                            start: 54,
+                            end: 4,
+                          ),
+                          child: Card(
+                            color: Colors.transparent,
+                            elevation: 0.0,
+                            child: Row(
+                              children: [
+                                if (_showFilters) ...[
+                                  Expanded(
+                                    flex: (Platform.isIOS) ? 4 : 3,
+                                    child: BlocBuilder<TimesTripsCubit,
+                                        TimesTripsStates>(
+                                      buildWhen: (previous, current) {
+                                        return current
+                                                is LoadedRecommendedList ||
+                                            current is ErrorCompaniesList;
+                                      },
+                                      builder: (context, state) {
+                                        if (state is LoadedRecommendedList &&
+                                            state.recommendedModel.status !=
+                                                "failed") {
+                                          final Recomended =
+                                              state.recommendedModel.message ??
+                                                  [];
+
+                                          return _buildFilterCard(
+                                            title: recommendedvalue != null
+                                                ? recommendedvalue!
+                                                : (LanguageClass.isEnglish)
+                                                    ? "Recommended"
+                                                    : "Ø§Ù„Ù…ÙˆØµÙŠ Ø¨Ù‡Ø§",
+                                            hasSelection:
+                                                recommendedvalue != null,
+                                            onClearSelection:
+                                                _clearRecommendedFilter,
+                                            dropdownItems: Recomended.map((e) =>
+                                                    LanguageClass.isEnglish
+                                                        ? e.textEn.toString()
+                                                        : e.textAr.toString())
+                                                .toList(),
+                                            onItemSelected: (p0) {
+                                              setState(() {
+                                                recommendedvalue = p0;
+                                              });
+                                              var recomededid =
+                                                  Recomended.where((element) =>
+                                                      LanguageClass.isEnglish
+                                                          ? element.textEn == p0
+                                                          : element.textAr ==
+                                                              p0).first.id;
+                                              recommendeID = recomededid;
+                                              _fetchTripsForSelectedDay();
+                                            },
+                                            onOpenChanged: (isOpen) {
+                                              setState(() {
+                                                isRecommended = isOpen;
+                                                if (isOpen) {
+                                                  showCompanies = false;
+                                                }
+                                              });
+                                            },
+                                            isRadiusActive: isRecommended,
+                                            icon: Icons
+                                                .keyboard_arrow_down_rounded,
+                                          );
+                                        }
+
+                                        if (state is LoadingCompaniesList) {
+                                          return const Center(
+                                            child: SizedBox(
+                                              height: 20,
+                                              width: 20,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                              ),
+                                            ),
+                                          );
+                                        }
+
+                                        if (state is ErrorCompaniesList) {
+                                          return _buildFilterCard(
+                                            title: LanguageClass.isEnglish
+                                                ? "Recommended"
+                                                : "Ø§Ù„Ù…ÙˆØµÙŠ Ø¨Ù‡Ø§",
+                                            icon: Icons
+                                                .keyboard_arrow_down_rounded,
+                                          );
+                                        }
+
+                                        return _buildFilterCard(
+                                          title: LanguageClass.isEnglish
+                                              ? "Recommended"
+                                              : "Ø§Ù„Ù…ÙˆØµÙŠ Ø¨Ù‡Ø§",
+                                          icon:
+                                              Icons.keyboard_arrow_down_rounded,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: (Platform.isIOS) ? 4 : 3,
+                                    child: BlocBuilder<TimesTripsCubit,
+                                        TimesTripsStates>(
+                                      buildWhen: (previous, current) {
+                                        return current is LoadedCompaniesList ||
+                                            current is ErrorCompaniesList;
+                                      },
+                                      builder: (context, state) {
+                                        if (state is LoadedCompaniesList &&
+                                            state.compaiesModel.status !=
+                                                "failed") {
+                                          final companies =
+                                              state.compaiesModel.message ?? [];
+
+                                          return _buildFilterCard(
+                                            onTap: () {},
+                                            isRadiusActive: showCompanies,
+                                            title: companeyvalue != null
+                                                ? companeyvalue!
+                                                : LanguageClass.isEnglish
+                                                    ? "Companies"
+                                                    : "Ø§Ù„Ø´Ø±ÙƒØ§Øª",
+                                            hasSelection:
+                                                companeyvalue != null,
+                                            onClearSelection:
+                                                _clearCompanyFilter,
+                                            onItemSelected: (p0) {
+                                              setState(() {
+                                                companeyvalue = p0;
+                                              });
+                                              var companyid = companies
+                                                  .where((element) =>
+                                                      element.Name == p0)
+                                                  .first
+                                                  .CompanyID;
+                                              companyID = companyid;
+                                              _fetchTripsForSelectedDay();
+                                            },
+                                            dropdownItems: companies
+                                                .map((e) => e.Name.toString())
+                                                .toList(),
+                                            onOpenChanged: (isOpen) {
+                                              setState(() {
+                                                showCompanies = isOpen;
+                                                if (isOpen) {
+                                                  isRecommended = false;
+                                                }
+                                              });
+                                            },
+                                            icon: Icons
+                                                .keyboard_arrow_down_rounded,
+                                          );
+                                        }
+
+                                        if (state is LoadingCompaniesList) {
+                                          return const Center(
+                                            child: SizedBox(
+                                              height: 20,
+                                              width: 20,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                              ),
+                                            ),
+                                          );
+                                        }
+
+                                        if (state is ErrorCompaniesList) {
+                                          return _buildFilterCard(
+                                            title: LanguageClass.isEnglish
+                                                ? "Companies"
+                                                : "Ø§Ù„Ø´Ø±ÙƒØ§Øª",
+                                            icon: Icons
+                                                .keyboard_arrow_down_rounded,
+                                          );
+                                        }
+
+                                        if (_companyFilterItems.isNotEmpty) {
+                                          return _buildCachedCompanyFilterCard();
+                                        }
+
+                                        return _buildFilterCard(
+                                          title: LanguageClass.isEnglish
+                                              ? "Companies"
+                                              : "Ø§Ù„Ø´Ø±ÙƒØ§Øª",
+                                          icon:
+                                              Icons.keyboard_arrow_down_rounded,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                                if (_showFilters && _hasBackTrips)
+                                  Expanded(
+                                    flex: 2,
+                                    child: _buildFilterCard(
+                                        onTap: () {
+                                          if (!_isReturnSelectionView) {
+                                            setState(() {
+                                              isgotrip = !isgotrip;
+                                            });
+                                          }
+                                          _fetchTripsForSelectedDay();
+                                        },
+                                        title: _currentTripTitle,
+                                        icon:
+                                            Icons.keyboard_arrow_down_outlined,
+                                        iconCustom: true,
+                                        widget: _buildTripToggleHintIcon()),
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                      Expanded(
-                        flex: (Platform.isIOS) ? 4 : 3,
-                        child: BlocBuilder<TimesTripsCubit, TimesTripsStates>(
-                          buildWhen: (previous, current) {
-                            return current is LoadedRecommendedList ||
-                                current is ErrorCompaniesList;
-                          },
-                          builder: (context, state) {
-                            if (state is LoadedRecommendedList &&
-                                state.recommendedModel.status != "failed") {
-                              final Recomended =
-                                  state.recommendedModel.message ?? [];
-
-                              return _buildFilterCard(
-                                title: recommendedvalue != null
-                                    ? recommendedvalue!
-                                    : (LanguageClass.isEnglish)
-                                        ? "Recommended"
-                                        : "الموصي بها",
-                                // widget: Container(),
-                                dropdownItems: Recomended.map((e) =>
-                                    LanguageClass.isEnglish
-                                        ? e.textEn.toString()
-                                        : e.textAr.toString()).toList(),
-
-                                onItemSelected: (p0) {
-                                  print(p0);
-
-                                  recommendedvalue = p0;
-
-                                  var recomededid = Recomended.where(
-                                      (element) => LanguageClass.isEnglish
-                                          ? element.textEn == p0
-                                          : element.textAr == p0).first.id;
-
-                                  recommendeID = recomededid;
-                                  _fetchTripsForSelectedDay();
-                                },
-                                onOpenChanged: (isOpen) {
-                                  setState(() {
-                                    isRecommended = isOpen;
-                                    print(isRecommended.toString());
-                                  });
-                                },
-                                isRadiusActive: isRecommended,
-                                icon: Icons.keyboard_arrow_down_rounded,
-                              );
-                            }
-
-                            if (state is LoadingCompaniesList) {
-                              return const Center(
-                                child: SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child:
-                                      CircularProgressIndicator(strokeWidth: 2),
-                                ),
-                              );
-                            }
-
-                            if (state is ErrorCompaniesList) {
-                              return _buildFilterCard(
-                                title: LanguageClass.isEnglish
-                                    ? "Recommended"
-                                    : "الموصي بها",
-                                icon: Icons.keyboard_arrow_down_rounded,
-                                // iconCustom: true,
-                                // widget: Icon(
-                                //   Icons.keyboard_arrow_down_rounded,
-                                //   color: AppColors.blackColor,
-                                //   size: 12,
-                                // ),
-                              );
-                            }
-
-                            return _buildFilterCard(
-                              title: LanguageClass.isEnglish
-                                  ? "Recommended"
-                                  : "الموصي بها",
-                              icon: Icons.keyboard_arrow_down_rounded,
-                              // iconCustom: true,
-                              // widget: Icon(
-                              //   Icons.keyboard_arrow_down_rounded,
-                              //   color: AppColors.blackColor,
-                              //   size: 12,
-                              // ),
-                            );
-                          },
-                        ),
-                      ),
-                      Expanded(
-                          flex: (Platform.isIOS) ? 4 : 3,
-                          child: BlocBuilder<TimesTripsCubit, TimesTripsStates>(
-                              buildWhen: (previous, current) {
-                            return current is LoadedCompaniesList ||
-                                current is ErrorCompaniesList;
-                          }, builder: (context, state) {
-                            if (state is LoadedCompaniesList &&
-                                state.compaiesModel.status != "failed") {
-                              final companies =
-                                  state.compaiesModel.message ?? [];
-
-                              return _buildFilterCard(
-                                onTap: () {},
-                                isRadiusActive: showCompanies,
-                                title: companeyvalue != null
-                                    ? companeyvalue!
-                                    : LanguageClass.isEnglish
-                                        ? "Companies"
-                                        : "الشركات",
-                                onItemSelected: (p0) {
-                                  print(p0);
-
-                                  companeyvalue = p0;
-
-                                  var companyid = companies
-                                      .where((element) => element.Name == p0)
-                                      .first
-                                      .CompanyID;
-
-                                  companyID = companyid;
-                                  _fetchTripsForSelectedDay();
-                                },
-                                dropdownItems: companies
-                                    .map((e) => e.Name.toString())
-                                    .toList(),
-                                onOpenChanged: (isOpen) {
-                                  setState(() {
-                                    showCompanies = isOpen;
-                                  });
-                                },
-                                icon: Icons.keyboard_arrow_down_rounded,
-                                // iconCustom: true,
-                                // widget: Icon(
-                                //   Icons.keyboard_arrow_down_rounded,
-                                //   color: AppColors.blackColor,
-                                //   size: 12,
-                                // ),
-                              );
-                            }
-
-                            if (state is LoadingCompaniesList) {
-                              return const Center(
-                                child: SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child:
-                                      CircularProgressIndicator(strokeWidth: 2),
-                                ),
-                              );
-                            }
-
-                            if (state is ErrorCompaniesList) {
-                              return _buildFilterCard(
-                                title: LanguageClass.isEnglish
-                                    ? "Companies"
-                                    : "الشركات",
-                                icon: Icons.keyboard_arrow_down_rounded,
-                                // iconCustom: true,
-                                // widget: Icon(
-                                //   Icons.keyboard_arrow_down_rounded,
-                                //   color: AppColors.blackColor,
-                                //   size: 12,
-                                // ),
-                              );
-                            }
-
-                            return _buildFilterCard(
-                              title: LanguageClass.isEnglish
-                                  ? "Companies"
-                                  : "الشركات",
-                              icon: Icons.keyboard_arrow_down_rounded,
-                              // iconCustom: true,
-                              // widget: Icon(
-                              //   Icons.keyboard_arrow_down_rounded,
-                              //   color: AppColors.blackColor,
-                              //   size: 12,
-                              // ),
-                            );
-                          })),
-                      if (_hasBackTrips)
-                        Expanded(
-                          flex: 2,
-                          child: Builder(builder: (context) {
-                            return MultiBlocListener(
-                              listeners: [
-                                BlocListener<TimesTripsCubit, TimesTripsStates>(
-                                  listener: (context, state) {
-                                    if (state is LoadingTimesTrips) {
-                                      Constants.showLoadingDialog(context);
-                                    } else if (state is LoadedTimesTrips) {
-                                      Constants.hideLoadingDialog(context);
-
-                                      timeSlotsGo = state.timesTripsResponse
-                                          .message?.timeSlotsGo;
-                                      timeSlotsBack = state.timesTripsResponse
-                                          .message?.timeSlotsBack;
-                                      print(
-                                          "${state.timesTripsResponse.message!.tripList.length} list");
-                                      print(
-                                          "${state.timesTripsResponse.message!.tripListBack.length} back list");
-                                      if (state.timesTripsResponse.message!
-                                          .tripList.isNotEmpty) {
+                    if (_showFilters) _buildDayWidget(),
+                    if (_showFilters) _buildTimeWidget("day", "time"),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.easeInOut,
+                      height: _showFilters ? 16 : 56,
+                    ),
+                    Ticketreservation.Seatsnumbers1.isNotEmpty
+                        ? SizedBox.shrink()
+                        : Expanded(
+                            flex: selected.isEven ? 7 : 1,
+                            child: ListView.separated(
+                              padding: EdgeInsets.zero,
+                              itemCount: widget.tripList.length,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
                                         setState(() {
-                                          widget.tripList = state
-                                              .timesTripsResponse
-                                              .message!
-                                              .tripList;
-
-                                          widget.tripTypeId = '1';
-                                          if (widget.tripTypeId == '1') {
-                                            widget.tripListBack?.clear();
-                                            widget.tripTypeId = '1';
-                                          }
-                                          print(widget.tripTypeId.toString());
-                                          if (state.timesTripsResponse.message!
-                                              .tripListBack.isNotEmpty) {
-                                            widget.tripTypeId = '2';
-                                            widget.tripListBack = state
-                                                .timesTripsResponse
-                                                .message!
-                                                .tripListBack;
-                                          }
+                                          selected == index
+                                              ? selected = -1
+                                              : selected = index;
                                         });
-
-                                        Reservationtimer.stoptimer();
-
-                                        Ticketreservation.Seatsnumbers1.clear();
-                                        Ticketreservation.Seatsnumbers2.clear();
-                                      } else {
-                                        setState(() {
-                                          widget.tripList.clear();
-                                          widget.tripListBack?.clear();
-                                          timeSlotsGo = state.timesTripsResponse
-                                              .message?.timeSlotsGo;
-                                          timeSlotsBack = state
-                                              .timesTripsResponse
-                                              .message
-                                              ?.timeSlotsBack;
-                                        });
-                                        Constants.showDefaultSnackBar(
-                                            context: context,
-                                            text: LanguageClass.isEnglish
-                                                ? "No trips in this date"
-                                                : "لا يوجد مواعيد في هذا الموعد");
-                                      }
-                                    } else if (state is ErrorTimesTrips) {
-                                      widget.tripList.clear();
-                                      setState(() {});
-                                      Constants.hideLoadingDialog(context);
-                                      Constants.showDefaultSnackBar(
-                                          context: context, text: state.msg);
-                                    }
-                                  },
-                                ),
-                                // BlocListener<TimesTripsCubit, TimesTripsStates>(
-                                //     listener: (context, state) {
-                                //   if (state is LoadedCompaniesList) {
-                                //     compaiesModel = state.compaiesModel;
-                                //     print(compaiesModel?.message.toString());
-                                //   }
-                                // }),
-                              ],
-                              child: _buildFilterCard(
-                                  onTap: () {
-                                    if (!_isReturnSelectionView) {
-                                      setState(() {
-                                        isgotrip = !isgotrip;
-                                      });
-                                    }
-                                    _fetchTripsForSelectedDay();
-                                  },
-                                  title: _currentTripTitle,
-                                  icon: Icons.keyboard_arrow_down_outlined,
-                                  iconCustom: true,
-                                  widget: _buildTripToggleHintIcon()),
-                            );
-                          }),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-              _buildDayWidget(),
-              _buildTimeWidget("day", "time"),
-              SizedBox(
-                height: 10,
-              ),
-              Ticketreservation.Seatsnumbers1.isNotEmpty
-                  ? SizedBox.shrink()
-                  : Expanded(
-                      flex: selected.isEven ? 7 : 1,
-                      child: ListView.separated(
-                        padding: EdgeInsets.zero,
-                        itemCount: widget.tripList.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    selected == index
-                                        ? selected = -1
-                                        : selected = index;
-                                  });
-                                },
-                                child: Container(
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  decoration: BoxDecoration(
-                                      borderRadius: selected != index
-                                          ? BorderRadius.circular(10)
-                                          : BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              topRight: Radius.circular(10),
+                                      },
+                                      child: Container(
+                                        clipBehavior:
+                                            Clip.antiAliasWithSaveLayer,
+                                        decoration: BoxDecoration(
+                                            borderRadius: selected != index
+                                                ? BorderRadius.circular(10)
+                                                : BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                  ),
+                                            color: AppColors.white
+                                            // color: Color(0xffF3F3F3)
                                             ),
-                                      color: AppColors.white
-                                      // color: Color(0xffF3F3F3)
-                                      ),
-                                  margin: const EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 10.0),
-                                  // padding: EdgeInsets.all(10),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      if (widget.tripList[index].IsSPonsored ==
-                                          true)
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              // gradient: const LinearGradient(
-                                              //   colors: [
-                                              //     Color(0xfffd634f),
-                                              //     Color(0xffff9976),
-                                              //   ],
-                                              // ),
-                                              color: _primaryColor),
-                                          padding: EdgeInsets.all(10),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    LanguageClass.isEnglish
-                                                        ? "Enjoy for less with ${widget.tripList[index].companyName}"
-                                                        : "استمتع بتكلفة أقل مع حافلات ${widget.tripList[index].companyName}",
-                                                    style: fontStyle(
-                                                        color: Colors.white,
-                                                        fontFamily:
-                                                            FontFamily.bold,
-                                                        fontSize: 12.sp),
-                                                  ),
-                                                  Text(
-                                                    LanguageClass.isEnglish
-                                                        ? "Unbeatable trips deals with ${widget.tripList[index].companyName}! "
-                                                        : "عروض رحلات لا تُضاهى مع ${widget.tripList[index].companyName}!",
-                                                    style: fontStyle(
-                                                        color: Colors.white,
-                                                        fontFamily:
-                                                            FontFamily.regular,
-                                                        fontSize: 10.sp),
-                                                  ),
-                                                ],
-                                              ),
-                                              Text(
-                                                LanguageClass.isEnglish
-                                                    ? "Sponsored"
-                                                    : "ممول",
-                                                style: fontStyle(
-                                                    color: Colors.white,
-                                                    fontFamily:
-                                                        FontFamily.regular,
-                                                    fontSize: 12.sp),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      // todo : logo and provider name
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0, vertical: 6),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Container(
-                                                  height: 38,
-                                                  width: 38,
-                                                  clipBehavior: Clip
-                                                      .antiAliasWithSaveLayer,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: _primaryColor,
-                                                  ),
-                                                  child: Image.network(
-                                                    widget.tripList[index]
-                                                                    .logo ==
-                                                                null ||
-                                                            widget
-                                                                    .tripList[
-                                                                        index]
-                                                                    .logo ==
-                                                                ""
-                                                        ? "https://play-lh.googleusercontent.com/ACfnkQHBH_KBNpqhaU2PkbNp1mcLeZtaOHHvKTSDHBEOD43QH9gB9nd5GQkWpfB9n7M=w480-h960-rw"
-                                                        : widget.tripList[index]
-                                                            .logo!,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                  widget.tripList[index]
-                                                          .companyName ??
-                                                      (LanguageClass.isEnglish
-                                                          ? "Swa"
-                                                          : "سوا"),
-                                                  style: fontStyle(
-                                                      color: Colors.black,
-                                                      fontFamily:
-                                                          FontFamily.medium,
-                                                      fontSize: 12.sp),
-                                                ),
-                                                SizedBox(
-                                                  width: 20,
-                                                ),
-                                                Icon(
-                                                  Icons.star,
-                                                  color: _primaryColor,
-                                                  // color: Color(0xffFC9900),
-                                                  size: 15,
-                                                ),
-                                                SizedBox(
-                                                  width: 2,
-                                                ),
-                                                Text(
-                                                  "4.5",
-                                                  style: fontStyle(
-                                                      color: Colors.black,
-                                                      fontFamily:
-                                                          FontFamily.medium,
-                                                      height: 0,
-                                                      fontSize: 12.sp),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          Expanded(
-                                              flex: 3,
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                spacing: 10,
-                                                children: [
-                                                  if (widget.tripList[index]
-                                                          .IsCheapeast ==
-                                                      true)
-                                                    Card(
-                                                      margin: EdgeInsets.zero,
-                                                      elevation: 0.0,
-                                                      color: Color(0xff381213),
-                                                      // color: Color(0xff05488F),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .only(
-                                                        bottomRight:
-                                                            Radius.circular(6),
-                                                        bottomLeft:
-                                                            Radius.circular(6),
-                                                      )),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                horizontal: 6.0,
-                                                                vertical: 2),
-                                                        child: Center(
-                                                            child: Text(
-                                                          "Cheapest",
-                                                          style: fontStyle(
-                                                              fontSize: 10.sp,
-                                                              color:
-                                                                  Colors.white),
-                                                        )),
-                                                      ),
-                                                    ),
-                                                  if (widget.tripList[index]
-                                                          .IsBestValue ==
-                                                      true)
-                                                    Card(
-                                                      margin: EdgeInsets.zero,
-                                                      elevation: 0.0,
-                                                      color: _primaryColor,
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .only(
-                                                        bottomRight:
-                                                            Radius.circular(6),
-                                                        bottomLeft:
-                                                            Radius.circular(6),
-                                                      )),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                horizontal: 6.0,
-                                                                vertical: 2),
-                                                        child: Center(
-                                                            child: Text(
-                                                          "Best Value",
-                                                          style: fontStyle(
-                                                              fontSize: 10.sp,
-                                                              color:
-                                                                  Colors.white),
-                                                        )),
-                                                      ),
-                                                    ),
-                                                  SizedBox(
-                                                    width: 0,
-                                                  ),
-                                                ],
-                                              ))
-                                        ],
-                                      ),
-                                      // todo : details from to
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 15.0),
-                                        child: Row(
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 0, horizontal: 10.0),
+                                        // padding: EdgeInsets.all(10),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              spacing: 5,
-                                              children: [
-                                                Text(
-                                                  widget.tripList[index].from!,
-                                                  style: fontStyle(
-                                                      color: Color(0xff858585),
-                                                      fontFamily:
-                                                          FontFamily.regular,
-                                                      fontSize: 10.sp),
-                                                ),
-                                                Text(
-                                                  intl.DateFormat('hh:mm a')
-                                                      .format(widget
-                                                          .tripList[index]
-                                                          .accessDate!)
-                                                      .toString(),
-                                                  style: fontStyle(
-                                                      color: Colors.black,
-                                                      fontFamily:
-                                                          FontFamily.medium,
-                                                      fontSize: 10.sp),
-                                                ),
-                                                Text(
-                                                  intl.DateFormat(
-                                                          'dd MMMM yyyy',
-                                                          LanguageClass
-                                                                  .isEnglish
-                                                              ? 'en'
-                                                              : 'ar')
-                                                      .format(widget
-                                                          .tripList[index]
-                                                          .accessDate!)
-                                                      .toString(),
-                                                  style: fontStyle(
-                                                      color: Color(0xff858585),
-                                                      fontFamily:
-                                                          FontFamily.regular,
-                                                      fontSize: 7.sp),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            RotatedBox(
-                                              quarterTurns:
-                                                  LanguageClass.isEnglish
-                                                      ? 90
-                                                      : 90,
-                                              child: Stack(
-                                                // alignment: Alignment.centerLeft,
-                                                children: [
-                                                  Container(
-                                                    width: 50,
-                                                    height: 1,
-                                                    margin: EdgeInsets.only(
-                                                        top: 10,
-                                                        right: 10,
-                                                        left: 10,
-                                                        bottom: 5),
-                                                    color: Color(0xff000000),
-                                                    // child: Icon(
-                                                    //   Icons.arrow_right_alt_rounded,
-                                                    //   size: 30,
+                                            if (widget.tripList[index]
+                                                    .IsSPonsored ==
+                                                true)
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    // gradient: const LinearGradient(
+                                                    //   colors: [
+                                                    //     Color(0xfffd634f),
+                                                    //     Color(0xffff9976),
+                                                    //   ],
                                                     // ),
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                      top: 2.3,
-                                                      right: LanguageClass
-                                                              .isEnglish
-                                                          ? 0
-                                                          : 2,
-                                                      left: LanguageClass
-                                                              .isEnglish
-                                                          ? 2
-                                                          : 0,
-                                                    ),
-                                                    child: Icon(
-                                                      LanguageClass.isEnglish
-                                                          ? Icons
-                                                              .keyboard_arrow_left_rounded
-                                                          : Icons
-                                                              .keyboard_arrow_right_rounded,
-                                                      size: 15.5,
-                                                      color: Color(0xff000000),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 2,
-                                            ),
-                                            Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              spacing: 5,
-                                              children: [
-                                                Text(
-                                                  widget.tripList[index].to!,
-                                                  style: fontStyle(
-                                                      color: Color(0xff858585),
-                                                      fontFamily:
-                                                          FontFamily.regular,
-                                                      fontSize: 10.sp),
-                                                ),
-                                                Text(
-                                                  intl.DateFormat('hh:mm a')
-                                                      .format(widget
-                                                          .tripList[index]
-                                                          .arrivalDate!)
-                                                      .toString(),
-                                                  style: fontStyle(
-                                                      color: Colors.black,
-                                                      fontFamily:
-                                                          FontFamily.medium,
-                                                      fontSize: 10.sp),
-                                                ),
-                                                Text(
-                                                  intl.DateFormat(
-                                                          'dd MMMM yyyy',
+                                                    color: _primaryColor),
+                                                padding: EdgeInsets.all(10),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
                                                           LanguageClass
                                                                   .isEnglish
-                                                              ? 'en'
-                                                              : 'ar')
-                                                      .format(widget
-                                                          .tripList[index]
-                                                          .arrivalDate!),
-                                                  style: fontStyle(
-                                                      color: Color(0xff858585),
-                                                      fontFamily:
-                                                          FontFamily.regular,
-                                                      fontSize: 7.sp),
-                                                ),
-                                              ],
-                                            ),
-                                            Expanded(
-                                              // fit: FlexFit.loose,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                spacing: 5,
-                                                children: [
-                                                  Text(
-                                                    '${widget.tripList[index].price.toString()} ${Routes.curruncy ?? ""}',
-                                                    style: fontStyle(
-                                                        color: Colors.black,
-                                                        fontFamily:
-                                                            FontFamily.medium,
-                                                        fontSize: 12.sp),
-                                                  ),
-                                                  // SizedBox(
-                                                  //   height: 10,
-                                                  // ),
-                                                  Row(
-                                                    spacing: 5,
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      // SvgPicture.asset(
-                                                      //   "assets/images/disabled_seats.svg",
-                                                      //   height: 15,
-                                                      //   width: 15,
-                                                      // ),
-                                                      Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  top: 0.0),
-                                                          child: Image.asset(
-                                                            "assets/images/img_1.png",
-                                                            width: 20,
-                                                            height: 20,
-                                                            filterQuality:
-                                                                FilterQuality
-                                                                    .high,
-                                                          )),
-                                                      Text(
-                                                        LanguageClass.isEnglish
-                                                            ? '${widget.tripList[index].emptySeat}'
-                                                            : '${widget.tripList[index].emptySeat}',
-                                                        style: fontStyle(
-                                                            color:
-                                                                AppColors.grey,
-                                                            fontFamily:
-                                                                FontFamily
-                                                                    .medium,
-                                                            fontSize: 13.sp),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  8.verticalSpace,
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              selected == index
-                                  ? Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                      decoration: BoxDecoration(
-                                          // color: Color(0xffF3F3F3),
-                                          color: AppColors.white,
-                                          borderRadius: BorderRadius.only(
-                                            bottomRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
-                                          )),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          SizedBox(
-                                              // height: 250,
-                                              width: double.infinity,
-                                              child: Stack(
-                                                alignment:
-                                                    Alignment.bottomCenter,
-                                                fit: StackFit.loose,
-                                                children: [
-                                                  widget.tripList[index]
-                                                              .imageMap ==
-                                                          null
-                                                      ? Image.asset(
-                                                          "assets/images/img.png",
-                                                          fit: BoxFit.cover,
-                                                        )
-                                                      : Image.network(
-                                                          widget.tripList[index]
-                                                              .imageMap!,
-                                                          fit: BoxFit.cover,
+                                                              ? "Enjoy for less with ${widget.tripList[index].companyName}"
+                                                              : "Ø§Ø³ØªÙ…ØªØ¹ Ø¨ØªÙƒÙ„ÙØ© Ø£Ù‚Ù„ Ù…Ø¹ Ø­Ø§ÙÙ„Ø§Øª ${widget.tripList[index].companyName}",
+                                                          style: fontStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontFamily:
+                                                                  FontFamily
+                                                                      .bold,
+                                                              fontSize: 12.sp),
                                                         ),
-                                                  SizedBox(
-                                                    height: 90,
-                                                    width: double.infinity,
-                                                    child: ListView.separated(
-                                                      shrinkWrap: true,
-                                                      padding:
-                                                          EdgeInsets.all(5),
-                                                      scrollDirection:
-                                                          Axis.horizontal,
-                                                      itemBuilder:
-                                                          (context, i) =>
-                                                              Container(
-                                                        height: 90,
-                                                        width: 120,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: _primaryColor,
-                                                          border: Border.all(
-                                                              color: AppColors
-                                                                  .white,
-                                                              width: 2),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(12),
-                                                          // image:
-                                                          //     DecorationImage(
-                                                          //   image: NetworkImage(widget
-                                                          //           .tripList[
-                                                          //               index]
-                                                          //           .BusPhotos?[
-                                                          //               i]
-                                                          //           .toString() ??
-                                                          //       ""),
-                                                          //   fit: BoxFit
-                                                          //       .cover,
-                                                          // )
+                                                        Text(
+                                                          LanguageClass
+                                                                  .isEnglish
+                                                              ? "Unbeatable trips deals with ${widget.tripList[index].companyName}! "
+                                                              : "Ø¹Ø±ÙˆØ¶ Ø±Ø­Ù„Ø§Øª Ù„Ø§ ØªÙØ¶Ø§Ù‡Ù‰ Ù…Ø¹ ${widget.tripList[index].companyName}!",
+                                                          style: fontStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontFamily:
+                                                                  FontFamily
+                                                                      .regular,
+                                                              fontSize: 10.sp),
                                                         ),
-                                                        clipBehavior:
-                                                            Clip.antiAlias,
-                                                        child: ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                          child: Image.network(
-                                                            widget
-                                                                    .tripList[
-                                                                        index]
-                                                                    .BusPhotos?[
-                                                                        i]
-                                                                    .toString() ??
-                                                                "",
-                                                            fit: BoxFit.cover,
-                                                            loadingBuilder:
-                                                                (context, child,
-                                                                    loadingProgress) {
-                                                              if (loadingProgress ==
-                                                                  null) {
-                                                                return child;
-                                                              }
-                                                              return Center(
-                                                                child:
-                                                                    CircularProgressIndicator(
-                                                                  value: loadingProgress
-                                                                              .expectedTotalBytes !=
-                                                                          null
-                                                                      ? loadingProgress
-                                                                              .cumulativeBytesLoaded /
-                                                                          loadingProgress
-                                                                              .expectedTotalBytes!
-                                                                      : null,
-                                                                  color: AppColors
-                                                                      .greyLight,
-                                                                ),
-                                                              );
-                                                            },
-                                                            errorBuilder:
-                                                                (context, error,
-                                                                    stackTrace) {
-                                                              return Icon(
-                                                                  Icons.error,
-                                                                  color: Colors
-                                                                      .red);
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      separatorBuilder:
-                                                          (context, index) =>
-                                                              SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      itemCount: widget
-                                                              .tripList[index]
-                                                              .BusPhotos
-                                                              ?.length ??
-                                                          0,
+                                                      ],
                                                     ),
-                                                  )
-                                                ],
-                                              )
-                                              //     MapRouteWidget(
-                                              //   routePoints: [
-                                              //     // LatLng(30.0444, 31.2357),
-                                              //     // LatLng(31.2001, 29.9187),
-                                              //     LatLng(30.0, 31.0),
-                                              //     LatLng(31.0, 30.0),
-                                              //   ],
-                                              //   googleApiKey:
-                                              //       'AIzaSyAipdrKwqPfmyfmzhZG1PZJJ8J61SM14i8',
-                                              //   useDirections: true,
-                                              // )
-                                              ),
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                flex: 5,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      margin:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 0),
-                                                      child: ListView.builder(
-                                                        itemCount: widget
-                                                            .tripList[index]
-                                                            .lineCity
-                                                            .length,
-                                                        shrinkWrap: true,
-                                                        physics:
-                                                            ScrollPhysics(),
-                                                        itemBuilder:
-                                                            (BuildContext
-                                                                    context,
-                                                                int index2) {
-                                                          final date = now.add(
-                                                              Duration(
-                                                                  days:
-                                                                      index2));
-                                                          final time = intl
-                                                              .DateFormat(
-                                                            'h:mm a',
-                                                            LanguageClass
-                                                                    .isEnglish
-                                                                ? 'en'
-                                                                : 'ar',
-                                                          ).format(date.add(
-                                                              Duration(
-                                                                  hours:
-                                                                      index2)));
-                                                          return Container(
-                                                            color:
-                                                                AppColors.white,
-                                                            child: Row(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 70,
-                                                                  child: Text(
-                                                                    // '${widget.tripList[index].lineCity[index2].lineStationList.first.accessTime!.split(':')[0]}:${widget.tripList[index].lineCity[index2].lineStationList.first.accessTime!.split(':')[1]}' ??
-                                                                    time,
-                                                                    style: fontStyle(
-                                                                        color: AppColors
-                                                                            .blackColor,
-                                                                        fontFamily:
-                                                                            FontFamily
-                                                                                .medium,
-                                                                        height:
-                                                                            0.5,
-                                                                        fontSize:
-                                                                            12.sp),
-                                                                  ),
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Column(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
-                                                                  children: [
-                                                                    Container(
-                                                                      height:
-                                                                          13,
-                                                                      width: 13,
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
-                                                                      padding: index2 ==
-                                                                              0
-                                                                          ? EdgeInsets.all(
-                                                                              1.2)
-                                                                          : EdgeInsets
-                                                                              .zero,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        shape: BoxShape
-                                                                            .circle,
-                                                                        border:
-                                                                            Border.all(
-                                                                          style:
-                                                                              BorderStyle.solid,
-                                                                          color: index2 == 0
-                                                                              ? _primaryColor
-                                                                              // ? Color(0xff007663)
-                                                                              : Colors.transparent,
-                                                                          width: index2 == 0
-                                                                              ? 1
-                                                                              : 0.0,
-                                                                        ),
-                                                                      ),
-                                                                      child: index2 ==
-                                                                              widget.tripList[index].lineCity.length - 1
-                                                                          ? Icon(
-                                                                              CupertinoIcons.location_solid,
-                                                                              size: 15,
-                                                                              color: Color(0xff7700FF),
-                                                                            )
-                                                                          : Container(
-                                                                              height: 11,
-                                                                              width: 11,
-                                                                              decoration: BoxDecoration(
-                                                                                shape: BoxShape.circle,
-                                                                                color: Colors.red,
-                                                                              ),
-                                                                              child: Icon(
-                                                                                Icons.circle,
-                                                                                size: 4,
-                                                                                color: Colors.white,
-                                                                              )),
-                                                                    ),
-                                                                    index2 ==
-                                                                            widget.tripList[index].lineCity.length -
-                                                                                1
-                                                                        ? SizedBox
-                                                                            .shrink()
-                                                                        : Container(
-                                                                            height:
-                                                                                20,
-                                                                            width:
-                                                                                1.1,
-                                                                            color:
-                                                                                AppColors.blackColor,
-                                                                          )
-                                                                  ],
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 20,
-                                                                ),
-                                                                Text(
-                                                                  '${widget.tripList[index].lineCity[index2].cityName}' ??
-                                                                      '',
-                                                                  style: fontStyle(
-                                                                      color:
-                                                                          AppColors
-                                                                              .blackColor,
-                                                                      fontFamily:
-                                                                          FontFamily
-                                                                              .bold,
-                                                                      decoration: index2 ==
-                                                                              0
-                                                                          ? TextDecoration
-                                                                              .underline
-                                                                          : TextDecoration
-                                                                              .none,
-                                                                      height:
-                                                                          0.5,
-                                                                      fontSize:
-                                                                          12.sp),
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          );
-                                                        },
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 25,
-                                                    ),
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 10.0),
-                                                      child: Text(
-                                                        'Premuim • AC • Bus',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: fontStyle(
-                                                          color:
-                                                              Color(0xff888888),
-                                                          fontWeight:
-                                                              FontWeight.w300,
+                                                    Text(
+                                                      LanguageClass.isEnglish
+                                                          ? "Sponsored"
+                                                          : "Ù…Ù…ÙˆÙ„",
+                                                      style: fontStyle(
+                                                          color: Colors.white,
                                                           fontFamily: FontFamily
                                                               .regular,
-                                                          fontSize: 9.sp,
-                                                        ),
-                                                      ),
+                                                          fontSize: 12.sp),
                                                     ),
-                                                    // SizedBox(
-                                                    //   height: 10,
-                                                    // ),
                                                   ],
                                                 ),
                                               ),
-                                              Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                children: [
-                                                  // _buildFilterCard(
-                                                  //   onTap: () {},
-                                                  //   icon: Icons
-                                                  //       .directions_car_filled,
-                                                  //   iconColor:
-                                                  //       Color(0xff007663),
-                                                  //   title: (LanguageClass
-                                                  //           .isEnglish)
-                                                  //       ? "1 min"
-                                                  //       : "20 دقيقة",
-                                                  //   padding: EdgeInsets.zero,
-                                                  //   iconCustom: true,
-                                                  //   widget: Icon(
-                                                  //     Icons
-                                                  //         .directions_car_filled,
-                                                  //     color: Color(0xff007663),
-                                                  //     size: 15,
-                                                  //   ),
-                                                  //   textStyle: fontStyle(
-                                                  //       color:
-                                                  //           Color(0xff717171),
-                                                  //       fontFamily:
-                                                  //           FontFamily.medium,
-                                                  //       fontSize: 11.sp),
-                                                  // ),
-                                                  // _buildFilterCard(
-                                                  //   onTap: () {},
-                                                  //   icon: Icons.directions_walk,
-                                                  //   iconColor:
-                                                  //       Color(0xff007663),
-                                                  //   title: (LanguageClass
-                                                  //           .isEnglish)
-                                                  //       ? "20 min"
-                                                  //       : "20 دقيقة",
-                                                  //   padding: EdgeInsets.zero,
-                                                  //   iconCustom: true,
-                                                  //   widget: Icon(
-                                                  //     Icons.directions_walk,
-                                                  //     color: Color(0xff007663),
-                                                  //     size: 15,
-                                                  //   ),
-                                                  //   textStyle: fontStyle(
-                                                  //       color:
-                                                  //           Color(0xff717171),
-                                                  //       fontFamily:
-                                                  //           FontFamily.medium,
-                                                  //       fontSize: 11.sp),
-                                                  // ),
-                                                  SizedBox(
-                                                    height: sizeHeight * 0.07,
-                                                  ),
-                                                  Container(
-                                                    alignment: Alignment.center,
-                                                    child: InkWell(
-                                                      onTap: () {
-                                                        CacheHelper
-                                                            .setDataToSharedPref(
-                                                                key:
-                                                                    'numberTrip',
-                                                                value: widget
-                                                                    .tripList[
-                                                                        index]
-                                                                    .tripNumber);
-                                                        CacheHelper
-                                                            .setDataToSharedPref(
-                                                                key: 'elite',
-                                                                value: widget
-                                                                    .tripList[
-                                                                        index]
-                                                                    .serviceType);
-                                                        CacheHelper.setDataToSharedPref(
-                                                            key:
-                                                                'accessBusTime',
-                                                            value: widget
-                                                                .tripList[index]
-                                                                .accessBusTime);
-                                                        CacheHelper
-                                                            .setDataToSharedPref(
-                                                                key:
-                                                                    'accessBusDate',
-                                                                value: widget
-                                                                    .tripList[
-                                                                        index]
-                                                                    .accessDate
-                                                                    .toString());
-
-                                                        CacheHelper
-                                                            .setDataToSharedPref(
-                                                                key:
-                                                                    'arrivaldate',
-                                                                value: widget
-                                                                    .tripList[
-                                                                        index]
-                                                                    .arrivalDate
-                                                                    .toString());
-                                                        CacheHelper
-                                                            .setDataToSharedPref(
-                                                                key: 'lineName',
-                                                                value: widget
-                                                                    .tripList[
-                                                                        index]
-                                                                    .lineName);
-                                                        CacheHelper
-                                                            .setDataToSharedPref(
-                                                                key:
-                                                                    'tripOneId',
-                                                                value: widget
-                                                                        .tripList[
-                                                                            index]
-                                                                        .tripId ??
-                                                                    0);
-
-                                                        CacheHelper
-                                                            .setDataToSharedPref(
-                                                                key: 'lineid',
-                                                                value: widget
-                                                                        .tripList[
-                                                                            index]
-                                                                        .lineId ??
-                                                                    0);
-
-                                                        CacheHelper.setDataToSharedPref(
-                                                            key:
-                                                                'serviceTypeID',
-                                                            value: widget
-                                                                    .tripList[
-                                                                        index]
-                                                                    .serviceTypeId ??
-                                                                0);
-
-                                                        CacheHelper
-                                                            .setDataToSharedPref(
-                                                                key: 'busId',
-                                                                value: widget
-                                                                        .tripList[
-                                                                            index]
-                                                                        .busId ??
-                                                                    0);
-                                                        print(
-                                                            " widget.tripList[index].tripId${widget.tripList[index].tripId}");
-                                                        var bookModel =
-                                                            BookingModel(
-                                                          departureCompanyLogo:
-                                                              widget
-                                                                  .tripList[
-                                                                      index]
-                                                                  .logo,
-                                                          departureCompanyName:
-                                                              widget
-                                                                  .tripList[
-                                                                      index]
-                                                                  .companyName,
-                                                        );
-
-                                                        logoGo = bookModel
-                                                            .departureCompanyLogo;
-                                                        companyGo = bookModel
-                                                            .departureCompanyName;
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder:
-                                                                  (context) {
-                                                            return BlocProvider(
-                                                              create: (context) =>
-                                                                  BusLayoutCubit(),
-                                                              child:
-                                                                  BusLayoutScreen(
-                                                                isedit: false,
-                                                                bookingModel:
-                                                                    bookModel,
-                                                                busdate: widget
-                                                                    .tripList[
-                                                                        index]
-                                                                    .accessDate,
-                                                                arrivalDate: widget
-                                                                    .tripList[
-                                                                        index]
-                                                                    .arrivalDate,
-                                                                busttime: widget
-                                                                    .tripList[
-                                                                        index]
-                                                                    .accessBusTime,
-                                                                discount: widget
-                                                                    .tripList[
-                                                                        index]
-                                                                    .discount,
-                                                                to: widget
-                                                                        .tripList[
-                                                                            index]
-                                                                        .to ??
-                                                                    "",
-                                                                from: widget
-                                                                        .tripList[
-                                                                            index]
-                                                                        .from ??
-                                                                    "",
-                                                                triTypeId: widget
-                                                                    .tripTypeId,
-                                                                tripListBack: widget
-                                                                    .tripListBack,
-                                                                price: widget
-                                                                    .tripList[
-                                                                        index]
-                                                                    .price!,
-                                                                user:
-                                                                    Routes.user,
-                                                                tripId: widget
-                                                                    .tripList[
-                                                                        index]
-                                                                    .tripId!,
-                                                                tocity: widget
-                                                                        .tripList[
-                                                                            index]
-                                                                        .toCityName ??
-                                                                    '',
-                                                                fromcity: widget
-                                                                        .tripList[
-                                                                            index]
-                                                                        .fromCityName ??
-                                                                    '',
-                                                              ),
-                                                            );
-                                                          }),
-                                                        ).then((value) {
-                                                          if (Ticketreservation
-                                                              .Seatsnumbers1
-                                                              .isNotEmpty) {
-                                                            // WidgetsBinding
-                                                            //     .instance
-                                                            //     .addPostFrameCallback(
-                                                            //         (_) {
-                                                            //   _dayScrollController
-                                                            //       .jumpTo(5 *
-                                                            //           65); // item width
-                                                            // });
-
-                                                            setState(() {
-                                                              isgotrip = false;
-                                                              Ticketreservation
-                                                                      .Seatsnumbers1
-                                                                      .isNotEmpty
-                                                                  ? selectedDate = widget
-                                                                          .tripListBack!
-                                                                          .isNotEmpty
-                                                                      ? widget
-                                                                          .tripListBack!
-                                                                          .first
-                                                                          .accessDate!
-                                                                      : now
-                                                                  : selectedDate = widget
-                                                                          .tripList
-                                                                          .isNotEmpty
-                                                                      ? widget
-                                                                          .tripList
-                                                                          .first
-                                                                          .accessDate!
-                                                                      : now;
-                                                            });
-                                                          }
-                                                        });
-
-                                                        UmraDetails.swatransportList!.add(TransportList(
-                                                            availability: widget
-                                                                .tripList[index]
-                                                                .emptySeat,
-                                                            busId: widget
-                                                                .tripList[index]
-                                                                .busId,
-                                                            from: widget
-                                                                .tripList[index]
-                                                                .fromCityName,
-                                                            fromStationName:
-                                                                widget
-                                                                    .tripList[
-                                                                        index]
-                                                                    .from,
-                                                            to: widget
-                                                                .tripList[index]
-                                                                .toCityName,
-                                                            isActive: true,
-                                                            isDelete: widget
-                                                                .tripList[index]
-                                                                .isDeleted,
-                                                            isAddedTrip: true,
-                                                            lineId: widget
-                                                                .tripList[index]
-                                                                .lineId,
-                                                            notes: '',
-                                                            priceSeat: widget
-                                                                .tripList[index]
-                                                                .price,
-                                                            toStationName:
-                                                                widget
-                                                                    .tripList[
-                                                                        index]
-                                                                    .to,
-                                                            tripDate:
-                                                                '${intl.DateFormat.d('en_US').format(widget.tripList[index].accessDate!)}${intl.DateFormat.MMM('en_US').format(widget.tripList[index].accessDate!)}',
-                                                            isreserved: false,
-                                                            tripId: widget
-                                                                .tripList[index]
-                                                                .tripId,
-                                                            personCountReserved:
-                                                                0,
-                                                            serviceTypeId: widget
-                                                                .tripList[index]
-                                                                .serviceTypeId,
-                                                            tripTime: widget
-                                                                .tripList[index]
-                                                                .accessBusTime
-                                                                .toString(),
-                                                            fromStationId: null,
-                                                            toStationId: null,
-                                                            tripUmrahTransportationId:
-                                                                null,
-                                                            reservationId:
-                                                                null));
-                                                      },
-                                                      child: Container(
-                                                        height: 30.sp,
-                                                        width: LanguageClass
-                                                                .isEnglish
-                                                            ? 60.sp
-                                                            : 48.sp,
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 10,
-                                                                vertical: 8),
+                                            // todo : logo and provider name
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 8.0,
+                                                      vertical: 6),
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Container(
+                                                        height: 38,
+                                                        width: 38,
+                                                        clipBehavior: Clip
+                                                            .antiAliasWithSaveLayer,
                                                         decoration:
                                                             BoxDecoration(
-                                                          boxShadow: [
-                                                            BoxShadow(
-                                                                color: AppColors
-                                                                    .white,
-                                                                offset: Offset(
-                                                                    0, 0),
-                                                                spreadRadius: 0,
-                                                                blurRadius: 8)
-                                                          ],
+                                                          shape:
+                                                              BoxShape.circle,
                                                           color: _primaryColor,
-                                                          // gradient:
-                                                          // const LinearGradient(
-                                                          //     colors: [
-                                                          //   Color(
-                                                          //       0xfffd634f),
-                                                          //   Color(
-                                                          //       0xffff9976),
-                                                          // ]),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(8),
                                                         ),
-                                                        child: Center(
-                                                          child: Text(
-                                                            LanguageClass
-                                                                    .isEnglish
-                                                                ? 'Book'
-                                                                : 'حجز',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: fontStyle(
-                                                              color: AppColors
-                                                                  .white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontFamily:
-                                                                  FontFamily
-                                                                      .medium,
-                                                              fontSize: 10.sp,
-                                                            ),
-                                                          ),
+                                                        child: Image.network(
+                                                          widget.tripList[index]
+                                                                          .logo ==
+                                                                      null ||
+                                                                  widget
+                                                                          .tripList[
+                                                                              index]
+                                                                          .logo ==
+                                                                      ""
+                                                              ? "https://play-lh.googleusercontent.com/ACfnkQHBH_KBNpqhaU2PkbNp1mcLeZtaOHHvKTSDHBEOD43QH9gB9nd5GQkWpfB9n7M=w480-h960-rw"
+                                                              : widget
+                                                                  .tripList[
+                                                                      index]
+                                                                  .logo!,
                                                         ),
                                                       ),
-                                                    ),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text(
+                                                        widget.tripList[index]
+                                                                .companyName ??
+                                                            (LanguageClass
+                                                                    .isEnglish
+                                                                ? "Swa"
+                                                                : "Ø³ÙˆØ§"),
+                                                        style: fontStyle(
+                                                            color: Colors.black,
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
+                                                            fontSize: 12.sp),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                      Icon(
+                                                        Icons.star,
+                                                        color: _primaryColor,
+                                                        // color: Color(0xffFC9900),
+                                                        size: 15,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 2,
+                                                      ),
+                                                      Text(
+                                                        "4.5",
+                                                        style: fontStyle(
+                                                            color: Colors.black,
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
+                                                            height: 0,
+                                                            fontSize: 12.sp),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Spacer(),
+                                                Expanded(
+                                                    flex: 3,
+                                                    child: Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      spacing: 10,
+                                                      children: [
+                                                        if (widget
+                                                                .tripList[index]
+                                                                .IsCheapeast ==
+                                                            true)
+                                                          Card(
+                                                            margin:
+                                                                EdgeInsets.zero,
+                                                            elevation: 0.0,
+                                                            color: Color(
+                                                                0xff381213),
+                                                            // color: Color(0xff05488F),
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          6),
+                                                              bottomLeft: Radius
+                                                                  .circular(6),
+                                                            )),
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          6.0,
+                                                                      vertical:
+                                                                          2),
+                                                              child: Center(
+                                                                  child: Text(
+                                                                "Cheapest",
+                                                                style: fontStyle(
+                                                                    fontSize:
+                                                                        10.sp,
+                                                                    color: Colors
+                                                                        .white),
+                                                              )),
+                                                            ),
+                                                          ),
+                                                        if (widget
+                                                                .tripList[index]
+                                                                .IsBestValue ==
+                                                            true)
+                                                          Card(
+                                                            margin:
+                                                                EdgeInsets.zero,
+                                                            elevation: 0.0,
+                                                            color:
+                                                                _primaryColor,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          6),
+                                                              bottomLeft: Radius
+                                                                  .circular(6),
+                                                            )),
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          6.0,
+                                                                      vertical:
+                                                                          2),
+                                                              child: Center(
+                                                                  child: Text(
+                                                                "Best Value",
+                                                                style: fontStyle(
+                                                                    fontSize:
+                                                                        10.sp,
+                                                                    color: Colors
+                                                                        .white),
+                                                              )),
+                                                            ),
+                                                          ),
+                                                        SizedBox(
+                                                          width: 0,
+                                                        ),
+                                                      ],
+                                                    ))
+                                              ],
+                                            ),
+                                            // todo : details from to
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15.0),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    spacing: 5,
+                                                    children: [
+                                                      Text(
+                                                        widget.tripList[index]
+                                                            .from!,
+                                                        style: fontStyle(
+                                                            color: Color(
+                                                                0xff858585),
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .regular,
+                                                            fontSize: 10.sp),
+                                                      ),
+                                                      Text(
+                                                        intl.DateFormat(
+                                                                'hh:mm a')
+                                                            .format(widget
+                                                                .tripList[index]
+                                                                .accessDate!)
+                                                            .toString(),
+                                                        style: fontStyle(
+                                                            color: Colors.black,
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
+                                                            fontSize: 10.sp),
+                                                      ),
+                                                      Text(
+                                                        intl.DateFormat(
+                                                                'dd MMMM yyyy',
+                                                                LanguageClass
+                                                                        .isEnglish
+                                                                    ? 'en'
+                                                                    : 'ar')
+                                                            .format(widget
+                                                                .tripList[index]
+                                                                .accessDate!)
+                                                            .toString(),
+                                                        style: fontStyle(
+                                                            color: Color(
+                                                                0xff858585),
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .regular,
+                                                            fontSize: 7.sp),
+                                                      ),
+                                                    ],
                                                   ),
                                                   SizedBox(
                                                     height: 10,
-                                                  )
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                width: 20,
-                                              )
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : SizedBox()
-                            ],
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) =>
-                            SizedBox(
-                          height: 10,
-                        ),
-                      ),
-                    ),
-
-              (widget.tripTypeId == '2' &&
-                      Ticketreservation.Seatsnumbers1.isNotEmpty)
-                  ? Expanded(
-                      flex: selectedback.isEven ? 7 : 1,
-                      child: ListView.separated(
-                        padding: EdgeInsets.zero,
-                        itemCount: widget.tripListBack?.length ?? 0,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    selectedback == index
-                                        ? selectedback = -1
-                                        : selectedback = index;
-                                  });
-                                },
-                                child: Container(
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  decoration: BoxDecoration(
-                                      borderRadius: selectedback != index
-                                          ? BorderRadius.circular(10)
-                                          : BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              topRight: Radius.circular(10),
-                                            ),
-                                      color: AppColors.white
-                                      // color: Color(0xffF3F3F3)
-                                      ),
-                                  margin: const EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 10.0),
-                                  // padding: EdgeInsets.all(10),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      if (widget.tripListBack?[index]
-                                              .IsSPonsored ==
-                                          true)
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            // gradient: const LinearGradient(
-                                            //   colors: [
-                                            //     Color(0xfffd634f),
-                                            //     Color(0xffff9976),
-                                            //   ],
-                                            // ),
-                                            color: _primaryColor,
-                                          ),
-                                          padding: EdgeInsets.all(10),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    LanguageClass.isEnglish
-                                                        ? "Enjoy for less with ${widget.tripListBack?[index].companyName}"
-                                                        : "استمتع بتكلفة أقل مع حافلات ${widget.tripListBack?[index].companyName}",
-                                                    style: fontStyle(
-                                                        color: Colors.white,
-                                                        fontFamily:
-                                                            FontFamily.bold,
-                                                        fontSize: 12.sp),
                                                   ),
-                                                  Text(
-                                                    LanguageClass.isEnglish
-                                                        ? "Unbeatable trips deals with ${widget.tripListBack?[index].companyName}! "
-                                                        : "عروض رحلات لا تُضاهى مع ${widget.tripListBack?[index].companyName}!",
-                                                    style: fontStyle(
-                                                        color: Colors.white,
-                                                        fontFamily:
-                                                            FontFamily.regular,
-                                                        fontSize: 10.sp),
-                                                  ),
-                                                ],
-                                              ),
-                                              Text(
-                                                LanguageClass.isEnglish
-                                                    ? "Sponsored"
-                                                    : "ممول",
-                                                style: fontStyle(
-                                                    color: Colors.white,
-                                                    fontFamily:
-                                                        FontFamily.regular,
-                                                    fontSize: 12.sp),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      // todo : logo and provider name
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0, vertical: 6),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Container(
-                                                  height: 38,
-                                                  width: 38,
-                                                  clipBehavior: Clip
-                                                      .antiAliasWithSaveLayer,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: _primaryColor,
-                                                  ),
-                                                  child: Image.network(
-                                                      // "https://play-lh.googleusercontent.com/hN3av1FyuynMPnXhnQsLh3DBPlIki4cxAoO77stXaNjS5PQ0GIBsP1IO4uY6hXWJRw=w480-h960-rw",
-                                                      widget
-                                                                      .tripListBack![
-                                                                          index]
-                                                                      .logo ==
-                                                                  null ||
-                                                              widget
-                                                                      .tripListBack![
-                                                                          index]
-                                                                      .logo ==
-                                                                  ""
-                                                          ? "https://play-lh.googleusercontent.com/ACfnkQHBH_KBNpqhaU2PkbNp1mcLeZtaOHHvKTSDHBEOD43QH9gB9nd5GQkWpfB9n7M=w480-h960-rw"
-                                                          : widget
-                                                              .tripListBack![
-                                                                  index]
-                                                              .logo!),
-                                                ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                  widget.tripListBack?[index]
-                                                          .companyName ??
-                                                      (LanguageClass.isEnglish
-                                                          ? "Swa"
-                                                          : "سوا"),
-                                                  style: fontStyle(
-                                                      color: Colors.black,
-                                                      fontFamily:
-                                                          FontFamily.medium,
-                                                      fontSize: 12.sp),
-                                                ),
-                                                SizedBox(
-                                                  width: 20,
-                                                ),
-                                                Icon(
-                                                  Icons.star,
-                                                  color: _primaryColor,
-                                                  // color: Color(0xffFC9900),
-                                                  size: 15,
-                                                ),
-                                                SizedBox(
-                                                  width: 2,
-                                                ),
-                                                Text(
-                                                  "4.5",
-                                                  style: fontStyle(
-                                                      color: Colors.black,
-                                                      fontFamily:
-                                                          FontFamily.medium,
-                                                      height: 0,
-                                                      fontSize: 12.sp),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          Expanded(
-                                              flex: 3,
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                spacing: 10,
-                                                children: [
-                                                  if (widget.tripList[index]
-                                                          .IsCheapeast ==
-                                                      true)
-                                                    Card(
-                                                      margin: EdgeInsets.zero,
-                                                      elevation: 0.0,
-                                                      color: Color(0xff381213),
-                                                      // color: Color(0xff05488F),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .only(
-                                                        bottomRight:
-                                                            Radius.circular(6),
-                                                        bottomLeft:
-                                                            Radius.circular(6),
-                                                      )),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                horizontal: 6.0,
-                                                                vertical: 2),
-                                                        child: Center(
-                                                            child: Text(
-                                                          "Cheapest",
-                                                          style: fontStyle(
-                                                              fontSize: 10.sp,
-                                                              color:
-                                                                  Colors.white),
-                                                        )),
-                                                      ),
+                                                  RotatedBox(
+                                                    quarterTurns:
+                                                        LanguageClass.isEnglish
+                                                            ? 90
+                                                            : 90,
+                                                    child: Stack(
+                                                      // alignment: Alignment.centerLeft,
+                                                      children: [
+                                                        Container(
+                                                          width: 50,
+                                                          height: 1,
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  top: 10,
+                                                                  right: 10,
+                                                                  left: 10,
+                                                                  bottom: 5),
+                                                          color:
+                                                              Color(0xff000000),
+                                                          // child: Icon(
+                                                          //   Icons.arrow_right_alt_rounded,
+                                                          //   size: 30,
+                                                          // ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                            top: 2.3,
+                                                            right: LanguageClass
+                                                                    .isEnglish
+                                                                ? 0
+                                                                : 2,
+                                                            left: LanguageClass
+                                                                    .isEnglish
+                                                                ? 2
+                                                                : 0,
+                                                          ),
+                                                          child: Icon(
+                                                            LanguageClass.isEnglish
+                                                                ? Icons
+                                                                    .keyboard_arrow_left_rounded
+                                                                : Icons
+                                                                    .keyboard_arrow_right_rounded,
+                                                            size: 15.5,
+                                                            color: Color(
+                                                                0xff000000),
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  if (widget.tripList[index]
-                                                          .IsBestValue ==
-                                                      true)
-                                                    Card(
-                                                      margin: EdgeInsets.zero,
-                                                      elevation: 0.0,
-                                                      color: _primaryColor,
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .only(
-                                                        bottomRight:
-                                                            Radius.circular(6),
-                                                        bottomLeft:
-                                                            Radius.circular(6),
-                                                      )),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                horizontal: 6.0,
-                                                                vertical: 2),
-                                                        child: Center(
-                                                            child: Text(
-                                                          "Best Value",
-                                                          style: fontStyle(
-                                                              fontSize: 10.sp,
-                                                              color:
-                                                                  Colors.white),
-                                                        )),
-                                                      ),
-                                                    ),
+                                                  ),
                                                   SizedBox(
-                                                    width: 0,
+                                                    height: 2,
                                                   ),
-                                                ],
-                                              ))
-                                        ],
-                                      ),
-                                      // todo : details from to
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          // mainAxisAlignment:
-                                          //     MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              spacing: 5,
-                                              children: [
-                                                Text(
-                                                  widget.tripListBack?[index]
-                                                          .from! ??
-                                                      "",
-                                                  style: fontStyle(
-                                                      color: Color(0xff858585),
-                                                      fontFamily:
-                                                          FontFamily.regular,
-                                                      fontSize: 10.sp),
-                                                ),
-                                                Text(
-                                                  intl.DateFormat('hh:mm a')
-                                                      .format(widget
-                                                          .tripListBack![index]
-                                                          .accessDate!)
-                                                      .toString(),
-                                                  style: fontStyle(
-                                                      color: Colors.black,
-                                                      fontFamily:
-                                                          FontFamily.medium,
-                                                      fontSize: 10.sp),
-                                                ),
-                                                Text(
-                                                  intl.DateFormat(
-                                                          'dd MMMM yyyy',
-                                                          LanguageClass
-                                                                  .isEnglish
-                                                              ? 'en'
-                                                              : 'ar')
-                                                      .format(widget
-                                                          .tripListBack![index]
-                                                          .accessDate!)
-                                                      .toString(),
-                                                  style: fontStyle(
-                                                      // color: Color(
-                                                      //     0xff858585),
-                                                      color: Color(0xff858585),
-                                                      fontFamily:
-                                                          FontFamily.regular,
-                                                      fontSize: 7.sp),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            RotatedBox(
-                                              quarterTurns:
-                                                  LanguageClass.isEnglish
-                                                      ? 90
-                                                      : 90,
-                                              child: Stack(
-                                                // alignment: Alignment.centerLeft,
-                                                children: [
-                                                  Container(
-                                                    width: 50,
-                                                    height: 1,
-                                                    margin: EdgeInsets.only(
-                                                        top: 10,
-                                                        right: 10,
-                                                        left: 10,
-                                                        bottom: 5),
-                                                    color: Color(0xff000000),
-                                                    // child: Icon(
-                                                    //   Icons.arrow_right_alt_rounded,
-                                                    //   size: 30,
-                                                    // ),
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                      top: 2.3,
-                                                      right: LanguageClass
-                                                              .isEnglish
-                                                          ? 0
-                                                          : 2,
-                                                      left: LanguageClass
-                                                              .isEnglish
-                                                          ? 2
-                                                          : 0,
-                                                    ),
-                                                    child: Icon(
-                                                      LanguageClass.isEnglish
-                                                          ? Icons
-                                                              .keyboard_arrow_left_rounded
-                                                          : Icons
-                                                              .keyboard_arrow_right_rounded,
-                                                      size: 15.5,
-                                                      color: Color(0xff000000),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 2,
-                                            ),
-                                            Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              spacing: 5,
-                                              children: [
-                                                Text(
-                                                  widget.tripListBack?[index]
-                                                          .to! ??
-                                                      "",
-                                                  style: fontStyle(
-                                                      color: Color(0xff858585),
-                                                      fontFamily:
-                                                          FontFamily.regular,
-                                                      fontSize: 10.sp),
-                                                ),
-                                                Text(
-                                                  intl.DateFormat('hh:mm a')
-                                                      .format(widget
-                                                          .tripListBack![index]
-                                                          .arrivalDate!)
-                                                      .toString(),
-                                                  style: fontStyle(
-                                                      color: Colors.black,
-                                                      fontFamily:
-                                                          FontFamily.medium,
-                                                      fontSize: 10.sp),
-                                                ),
-                                                Text(
-                                                  intl.DateFormat(
-                                                          'dd MMMM yyyy',
-                                                          LanguageClass
-                                                                  .isEnglish
-                                                              ? 'en'
-                                                              : 'ar')
-                                                      .format(widget
-                                                          .tripListBack![index]
-                                                          .arrivalDate!),
-                                                  style: fontStyle(
-                                                      color: Color(0xff858585),
-                                                      fontFamily:
-                                                          FontFamily.regular,
-                                                      fontSize: 7.sp),
-                                                ),
-                                              ],
-                                            ),
-                                            Expanded(
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                spacing: 5,
-                                                children: [
-                                                  Text(
-                                                    '${widget.tripListBack?[index].price.toString()} ${Routes.curruncy ?? ""}',
-                                                    style: fontStyle(
-                                                        color: Colors.black,
-                                                        fontFamily:
-                                                            FontFamily.medium,
-                                                        fontSize: 12.sp),
-                                                  ),
-                                                  Row(
-                                                    spacing: 5,
+                                                  Column(
                                                     mainAxisSize:
                                                         MainAxisSize.min,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    spacing: 5,
                                                     children: [
-                                                      Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  top: 0.0),
-                                                          child: Image.asset(
-                                                            height: 20,
-                                                            width: 20,
-                                                            "assets/images/img_1.png",
-                                                            filterQuality:
-                                                                FilterQuality
-                                                                    .high,
-                                                          )),
                                                       Text(
-                                                        LanguageClass.isEnglish
-                                                            ? '${widget.tripListBack?[index].emptySeat}'
-                                                            : '${widget.tripListBack?[index].emptySeat}',
+                                                        widget.tripList[index]
+                                                            .to!,
                                                         style: fontStyle(
-                                                            color:
-                                                                AppColors.grey,
+                                                            color: Color(
+                                                                0xff858585),
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .regular,
+                                                            fontSize: 10.sp),
+                                                      ),
+                                                      Text(
+                                                        intl.DateFormat(
+                                                                'hh:mm a')
+                                                            .format(widget
+                                                                .tripList[index]
+                                                                .arrivalDate!)
+                                                            .toString(),
+                                                        style: fontStyle(
+                                                            color: Colors.black,
                                                             fontFamily:
                                                                 FontFamily
                                                                     .medium,
-                                                            fontSize: 13.sp),
+                                                            fontSize: 10.sp),
+                                                      ),
+                                                      Text(
+                                                        intl.DateFormat(
+                                                                'dd MMMM yyyy',
+                                                                LanguageClass
+                                                                        .isEnglish
+                                                                    ? 'en'
+                                                                    : 'ar')
+                                                            .format(widget
+                                                                .tripList[index]
+                                                                .arrivalDate!),
+                                                        style: fontStyle(
+                                                            color: Color(
+                                                                0xff858585),
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .regular,
+                                                            fontSize: 7.sp),
                                                       ),
                                                     ],
                                                   ),
-                                                  8.verticalSpace,
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              selectedback == index
-                                  ? Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                      decoration: BoxDecoration(
-                                          // color: Color(0xffF3F3F3),
-                                          color: AppColors.white,
-                                          borderRadius: BorderRadius.only(
-                                            bottomRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
-                                          )),
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                              // height: 230,
-                                              width: double.infinity,
-                                              child: Stack(
-                                                alignment:
-                                                    Alignment.bottomCenter,
-                                                fit: StackFit.loose,
-                                                children: [
-                                                  widget.tripListBack![index]
-                                                              .imageMap ==
-                                                          null
-                                                      ? Image.asset(
-                                                          "assets/images/img.png",
-                                                          fit: BoxFit.cover,
-                                                        )
-                                                      : Image.network(
-                                                          widget
-                                                              .tripListBack![
-                                                                  index]
-                                                              .imageMap!,
-                                                          fit: BoxFit.cover,
+                                                  Expanded(
+                                                    // fit: FlexFit.loose,
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                      spacing: 5,
+                                                      children: [
+                                                        Text(
+                                                          '${widget.tripList[index].price.toString()} ${Routes.curruncy ?? ""}',
+                                                          style: fontStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontFamily:
+                                                                  FontFamily
+                                                                      .medium,
+                                                              fontSize: 12.sp),
                                                         ),
-                                                  SizedBox(
-                                                    height: 90,
-                                                    width: double.infinity,
-                                                    child: ListView.separated(
-                                                      shrinkWrap: true,
-                                                      padding:
-                                                          EdgeInsets.all(5),
-                                                      scrollDirection:
-                                                          Axis.horizontal,
-                                                      itemBuilder:
-                                                          (context, i) =>
-                                                              Container(
-                                                        height: 90,
-                                                        width: 120,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: AppColors
-                                                              .primaryColor,
-                                                          border: Border.all(
-                                                              color: AppColors
-                                                                  .white,
-                                                              width: 2),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(12),
-                                                          // image:
-                                                          //     DecorationImage(
-                                                          //   image: NetworkImage(widget
-                                                          //           .tripListBack?[
-                                                          //               index]
-                                                          //           .BusPhotos?[
-                                                          //               i]
-                                                          //           .toString() ??
-                                                          //       ""),
-                                                          //   fit: BoxFit
-                                                          //       .cover,
-                                                          // )
-                                                        ),
-                                                        child: ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                          child: Image.network(
-                                                            widget
-                                                                    .tripListBack?[
-                                                                        index]
-                                                                    .BusPhotos?[
-                                                                        i]
-                                                                    .toString() ??
-                                                                "",
-                                                            fit: BoxFit.cover,
-                                                            loadingBuilder:
-                                                                (context, child,
-                                                                    loadingProgress) {
-                                                              if (loadingProgress ==
-                                                                  null) {
-                                                                return child;
-                                                              }
-                                                              return Center(
+                                                        // SizedBox(
+                                                        //   height: 10,
+                                                        // ),
+                                                        Row(
+                                                          spacing: 5,
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            // SvgPicture.asset(
+                                                            //   "assets/images/disabled_seats.svg",
+                                                            //   height: 15,
+                                                            //   width: 15,
+                                                            // ),
+                                                            Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        top:
+                                                                            0.0),
                                                                 child:
-                                                                    CircularProgressIndicator(
-                                                                  value: loadingProgress
-                                                                              .expectedTotalBytes !=
-                                                                          null
-                                                                      ? loadingProgress
-                                                                              .cumulativeBytesLoaded /
-                                                                          loadingProgress
-                                                                              .expectedTotalBytes!
-                                                                      : null,
-                                                                  color: AppColors
-                                                                      .greyLight,
-                                                                ),
-                                                              );
-                                                            },
-                                                            errorBuilder:
-                                                                (context, error,
-                                                                    stackTrace) {
-                                                              return Icon(
-                                                                  Icons.error,
-                                                                  color: Colors
-                                                                      .red);
-                                                            },
-                                                          ),
+                                                                    Image.asset(
+                                                                  "assets/images/img_1.png",
+                                                                  width: 20,
+                                                                  height: 20,
+                                                                  filterQuality:
+                                                                      FilterQuality
+                                                                          .high,
+                                                                )),
+                                                            Text(
+                                                              LanguageClass
+                                                                      .isEnglish
+                                                                  ? '${widget.tripList[index].emptySeat}'
+                                                                  : '${widget.tripList[index].emptySeat}',
+                                                              style: fontStyle(
+                                                                  color:
+                                                                      AppColors
+                                                                          .grey,
+                                                                  fontFamily:
+                                                                      FontFamily
+                                                                          .medium,
+                                                                  fontSize:
+                                                                      13.sp),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      ),
-                                                      separatorBuilder:
-                                                          (context, index) =>
-                                                              SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      itemCount: widget
-                                                              .tripListBack?[
-                                                                  index]
-                                                              .BusPhotos
-                                                              ?.length ??
-                                                          0,
+                                                        8.verticalSpace,
+                                                      ],
                                                     ),
                                                   )
                                                 ],
-                                              )
-                                              //     MapRouteWidget(
-                                              //   routePoints: [
-                                              //     // LatLng(30.0444, 31.2357),
-                                              //     // LatLng(31.2001, 29.9187),
-                                              //     LatLng(30.0, 31.0),
-                                              //     LatLng(31.0, 30.0),
-                                              //   ],
-                                              //   googleApiKey:
-                                              //       'AIzaSyAipdrKwqPfmyfmzhZG1PZJJ8J61SM14i8',
-                                              //   useDirections: true,
-                                              // )
                                               ),
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                flex: 5,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      margin:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 0),
-                                                      child: ListView.builder(
-                                                        itemCount: widget
-                                                            .tripList[index]
-                                                            .lineCity
-                                                            .length,
-                                                        shrinkWrap: true,
-                                                        physics:
-                                                            ScrollPhysics(),
-                                                        itemBuilder:
-                                                            (BuildContext
-                                                                    context,
-                                                                int index2) {
-                                                          final date = now.add(
-                                                              Duration(
-                                                                  days:
-                                                                      index2));
-                                                          final time = intl
-                                                              .DateFormat(
-                                                            'h:mm a',
-                                                            LanguageClass
-                                                                    .isEnglish
-                                                                ? 'en'
-                                                                : 'ar',
-                                                          ).format(date.add(
-                                                              Duration(
-                                                                  hours:
-                                                                      index2)));
-                                                          return Container(
-                                                            // padding: EdgeInsets.all(10),
-                                                            // color: Color(
-                                                            //     0xffF3F3F3),
-                                                            color:
-                                                                AppColors.white,
-                                                            child: Row(
-                                                              // mainAxisAlignment:
-                                                              //     MainAxisAlignment
-                                                              //         .spaceBetween,
-
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 70,
-                                                                  child: Text(
-                                                                    // '${widget.tripList[index].lineCity[index2].lineStationList.first.accessTime!.split(':')[0]}:${widget.tripList[index].lineCity[index2].lineStationList.first.accessTime!.split(':')[1]}' ??
-                                                                    time,
-                                                                    style: fontStyle(
-                                                                        color: AppColors
-                                                                            .blackColor,
-                                                                        fontFamily:
-                                                                            FontFamily
-                                                                                .medium,
-                                                                        height:
-                                                                            0.5,
-                                                                        fontSize:
-                                                                            12.sp),
-                                                                  ),
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Column(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
-                                                                  children: [
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    selected == index
+                                        ? Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            decoration: BoxDecoration(
+                                                // color: Color(0xffF3F3F3),
+                                                color: AppColors.white,
+                                                borderRadius: BorderRadius.only(
+                                                  bottomRight:
+                                                      Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                )),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                SizedBox(
+                                                    // height: 250,
+                                                    width: double.infinity,
+                                                    child: Stack(
+                                                      alignment: Alignment
+                                                          .bottomCenter,
+                                                      fit: StackFit.loose,
+                                                      children: [
+                                                        widget.tripList[index]
+                                                                    .imageMap ==
+                                                                null
+                                                            ? Image.asset(
+                                                                "assets/images/img.png",
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              )
+                                                            : Image.network(
+                                                                widget
+                                                                    .tripList[
+                                                                        index]
+                                                                    .imageMap!,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                        SizedBox(
+                                                          height: 90,
+                                                          width:
+                                                              double.infinity,
+                                                          child: ListView
+                                                              .separated(
+                                                            shrinkWrap: true,
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    5),
+                                                            scrollDirection:
+                                                                Axis.horizontal,
+                                                            itemBuilder:
+                                                                (context, i) =>
                                                                     Container(
-                                                                      height:
-                                                                          13,
-                                                                      width: 13,
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
-                                                                      padding: index2 ==
-                                                                              0
-                                                                          ? EdgeInsets.all(
-                                                                              1.2)
-                                                                          : EdgeInsets
-                                                                              .zero,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        shape: BoxShape
-                                                                            .circle,
-                                                                        border:
-                                                                            Border.all(
-                                                                          style:
-                                                                              BorderStyle.solid,
-                                                                          color: index2 == 0
-                                                                              ? _primaryColor
-                                                                              // ? Color(0xff007663)
-                                                                              : Colors.transparent,
-                                                                          width: index2 == 0
-                                                                              ? 1
-                                                                              : 0.0,
+                                                              height: 90,
+                                                              width: 120,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color:
+                                                                    _primaryColor,
+                                                                border: Border.all(
+                                                                    color: AppColors
+                                                                        .white,
+                                                                    width: 2),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            12),
+                                                                // image:
+                                                                //     DecorationImage(
+                                                                //   image: NetworkImage(widget
+                                                                //           .tripList[
+                                                                //               index]
+                                                                //           .BusPhotos?[
+                                                                //               i]
+                                                                //           .toString() ??
+                                                                //       ""),
+                                                                //   fit: BoxFit
+                                                                //       .cover,
+                                                                // )
+                                                              ),
+                                                              clipBehavior: Clip
+                                                                  .antiAlias,
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                                child: Image
+                                                                    .network(
+                                                                  widget
+                                                                          .tripList[
+                                                                              index]
+                                                                          .BusPhotos?[
+                                                                              i]
+                                                                          .toString() ??
+                                                                      "",
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                  loadingBuilder:
+                                                                      (context,
+                                                                          child,
+                                                                          loadingProgress) {
+                                                                    if (loadingProgress ==
+                                                                        null) {
+                                                                      return child;
+                                                                    }
+                                                                    return Center(
+                                                                      child:
+                                                                          CircularProgressIndicator(
+                                                                        value: loadingProgress.expectedTotalBytes !=
+                                                                                null
+                                                                            ? loadingProgress.cumulativeBytesLoaded /
+                                                                                loadingProgress.expectedTotalBytes!
+                                                                            : null,
+                                                                        color: AppColors
+                                                                            .greyLight,
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                  errorBuilder:
+                                                                      (context,
+                                                                          error,
+                                                                          stackTrace) {
+                                                                    return Icon(
+                                                                        Icons
+                                                                            .error,
+                                                                        color: Colors
+                                                                            .red);
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            separatorBuilder:
+                                                                (context,
+                                                                        index) =>
+                                                                    SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            itemCount: widget
+                                                                    .tripList[
+                                                                        index]
+                                                                    .BusPhotos
+                                                                    ?.length ??
+                                                                0,
+                                                          ),
+                                                        )
+                                                      ],
+                                                    )
+                                                    //     MapRouteWidget(
+                                                    //   routePoints: [
+                                                    //     // LatLng(30.0444, 31.2357),
+                                                    //     // LatLng(31.2001, 29.9187),
+                                                    //     LatLng(30.0, 31.0),
+                                                    //     LatLng(31.0, 30.0),
+                                                    //   ],
+                                                    //   googleApiKey:
+                                                    //       'AIzaSyAipdrKwqPfmyfmzhZG1PZJJ8J61SM14i8',
+                                                    //   useDirections: true,
+                                                    // )
+                                                    ),
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 5,
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Container(
+                                                            margin: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        0),
+                                                            child: ListView
+                                                                .builder(
+                                                              itemCount: widget
+                                                                  .tripList[
+                                                                      index]
+                                                                  .lineCity
+                                                                  .length,
+                                                              shrinkWrap: true,
+                                                              physics:
+                                                                  ScrollPhysics(),
+                                                              itemBuilder:
+                                                                  (BuildContext
+                                                                          context,
+                                                                      int index2) {
+                                                                final date = now
+                                                                    .add(Duration(
+                                                                        days:
+                                                                            index2));
+                                                                final time = intl
+                                                                    .DateFormat(
+                                                                  'h:mm a',
+                                                                  LanguageClass
+                                                                          .isEnglish
+                                                                      ? 'en'
+                                                                      : 'ar',
+                                                                ).format(date.add(
+                                                                    Duration(
+                                                                        hours:
+                                                                            index2)));
+                                                                return Container(
+                                                                  color:
+                                                                      AppColors
+                                                                          .white,
+                                                                  child: Row(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      SizedBox(
+                                                                        width:
+                                                                            10,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width:
+                                                                            70,
+                                                                        child:
+                                                                            Text(
+                                                                          // '${widget.tripList[index].lineCity[index2].lineStationList.first.accessTime!.split(':')[0]}:${widget.tripList[index].lineCity[index2].lineStationList.first.accessTime!.split(':')[1]}' ??
+                                                                          time,
+                                                                          style: fontStyle(
+                                                                              color: AppColors.blackColor,
+                                                                              fontFamily: FontFamily.medium,
+                                                                              height: 0.5,
+                                                                              fontSize: 12.sp),
                                                                         ),
                                                                       ),
-                                                                      child: index2 ==
-                                                                              widget.tripListBack![index].lineCity.length - 1
-                                                                          ? Icon(
-                                                                              CupertinoIcons.location_solid,
-                                                                              size: 15,
-                                                                              color: Color(0xff7700FF),
-                                                                            )
-                                                                          : Container(
-                                                                              height: 11,
-                                                                              width: 11,
-                                                                              decoration: BoxDecoration(
-                                                                                shape: BoxShape.circle,
-                                                                                color: Colors.red,
-                                                                              ),
-                                                                              child: Icon(
-                                                                                Icons.circle,
-                                                                                size: 4,
-                                                                                color: Colors.white,
-                                                                              )),
-                                                                    ),
-                                                                    index2 ==
-                                                                            widget.tripListBack![index].lineCity.length -
-                                                                                1
-                                                                        ? SizedBox
-                                                                            .shrink()
-                                                                        : Container(
+                                                                      SizedBox(
+                                                                        width:
+                                                                            10,
+                                                                      ),
+                                                                      Column(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        children: [
+                                                                          Container(
                                                                             height:
-                                                                                20,
+                                                                                13,
                                                                             width:
-                                                                                1.1,
-                                                                            color:
-                                                                                AppColors.blackColor,
-                                                                          )
-                                                                  ],
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 20,
-                                                                ),
-                                                                Text(
-                                                                  '${widget.tripListBack![index].lineCity[index2].cityName}' ??
-                                                                      '',
-                                                                  style: fontStyle(
-                                                                      color:
-                                                                          AppColors
-                                                                              .blackColor,
-                                                                      fontFamily:
-                                                                          FontFamily
-                                                                              .bold,
-                                                                      decoration: index2 ==
-                                                                              0
-                                                                          ? TextDecoration
-                                                                              .underline
-                                                                          : TextDecoration
-                                                                              .none,
-                                                                      height:
-                                                                          0.5,
-                                                                      fontSize:
-                                                                          12.sp),
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                              ],
+                                                                                13,
+                                                                            alignment:
+                                                                                Alignment.center,
+                                                                            padding: index2 == 0
+                                                                                ? EdgeInsets.all(1.2)
+                                                                                : EdgeInsets.zero,
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              shape: BoxShape.circle,
+                                                                              border: Border.all(
+                                                                                style: BorderStyle.solid,
+                                                                                color: index2 == 0
+                                                                                    ? _primaryColor
+                                                                                    // ? Color(0xff007663)
+                                                                                    : Colors.transparent,
+                                                                                width: index2 == 0 ? 1 : 0.0,
+                                                                              ),
+                                                                            ),
+                                                                            child: index2 == widget.tripList[index].lineCity.length - 1
+                                                                                ? Icon(
+                                                                                    CupertinoIcons.location_solid,
+                                                                                    size: 15,
+                                                                                    color: Color(0xff7700FF),
+                                                                                  )
+                                                                                : Container(
+                                                                                    height: 11,
+                                                                                    width: 11,
+                                                                                    decoration: BoxDecoration(
+                                                                                      shape: BoxShape.circle,
+                                                                                      color: Colors.red,
+                                                                                    ),
+                                                                                    child: Icon(
+                                                                                      Icons.circle,
+                                                                                      size: 4,
+                                                                                      color: Colors.white,
+                                                                                    )),
+                                                                          ),
+                                                                          index2 == widget.tripList[index].lineCity.length - 1
+                                                                              ? SizedBox.shrink()
+                                                                              : Container(
+                                                                                  height: 20,
+                                                                                  width: 1.1,
+                                                                                  color: AppColors.blackColor,
+                                                                                )
+                                                                        ],
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width:
+                                                                            20,
+                                                                      ),
+                                                                      Text(
+                                                                        '${widget.tripList[index].lineCity[index2].cityName}' ??
+                                                                            '',
+                                                                        style: fontStyle(
+                                                                            color: AppColors
+                                                                                .blackColor,
+                                                                            fontFamily: FontFamily
+                                                                                .bold,
+                                                                            decoration: index2 == 0
+                                                                                ? TextDecoration.underline
+                                                                                : TextDecoration.none,
+                                                                            height: 0.5,
+                                                                            fontSize: 12.sp),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width:
+                                                                            10,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                );
+                                                              },
                                                             ),
-                                                          );
-                                                        },
+                                                          ),
+                                                          SizedBox(
+                                                            height: 25,
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        10.0),
+                                                            child: Text(
+                                                              'Premuim â€¢ AC â€¢ Bus',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: fontStyle(
+                                                                color: Color(
+                                                                    0xff888888),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                                fontFamily:
+                                                                    FontFamily
+                                                                        .regular,
+                                                                fontSize: 9.sp,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          // SizedBox(
+                                                          //   height: 10,
+                                                          // ),
+                                                        ],
                                                       ),
                                                     ),
-                                                    SizedBox(
-                                                      height: 25,
-                                                    ),
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 10.0),
-                                                      child: Text(
-                                                        'Premuim • AC • Bus',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: fontStyle(
-                                                          color:
-                                                              Color(0xff888888),
-                                                          fontWeight:
-                                                              FontWeight.w300,
-                                                          fontFamily: FontFamily
-                                                              .regular,
-                                                          fontSize: 9.sp,
+                                                    Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                      children: [
+                                                        // _buildFilterCard(
+                                                        //   onTap: () {},
+                                                        //   icon: Icons
+                                                        //       .directions_car_filled,
+                                                        //   iconColor:
+                                                        //       Color(0xff007663),
+                                                        //   title: (LanguageClass
+                                                        //           .isEnglish)
+                                                        //       ? "1 min"
+                                                        //       : "20 Ø¯Ù‚ÙŠÙ‚Ø©",
+                                                        //   padding: EdgeInsets.zero,
+                                                        //   iconCustom: true,
+                                                        //   widget: Icon(
+                                                        //     Icons
+                                                        //         .directions_car_filled,
+                                                        //     color: Color(0xff007663),
+                                                        //     size: 15,
+                                                        //   ),
+                                                        //   textStyle: fontStyle(
+                                                        //       color:
+                                                        //           Color(0xff717171),
+                                                        //       fontFamily:
+                                                        //           FontFamily.medium,
+                                                        //       fontSize: 11.sp),
+                                                        // ),
+                                                        // _buildFilterCard(
+                                                        //   onTap: () {},
+                                                        //   icon: Icons.directions_walk,
+                                                        //   iconColor:
+                                                        //       Color(0xff007663),
+                                                        //   title: (LanguageClass
+                                                        //           .isEnglish)
+                                                        //       ? "20 min"
+                                                        //       : "20 Ø¯Ù‚ÙŠÙ‚Ø©",
+                                                        //   padding: EdgeInsets.zero,
+                                                        //   iconCustom: true,
+                                                        //   widget: Icon(
+                                                        //     Icons.directions_walk,
+                                                        //     color: Color(0xff007663),
+                                                        //     size: 15,
+                                                        //   ),
+                                                        //   textStyle: fontStyle(
+                                                        //       color:
+                                                        //           Color(0xff717171),
+                                                        //       fontFamily:
+                                                        //           FontFamily.medium,
+                                                        //       fontSize: 11.sp),
+                                                        // ),
+                                                        SizedBox(
+                                                          height:
+                                                              sizeHeight * 0.07,
                                                         ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                children: [
-                                                  SizedBox(
-                                                    height: sizeHeight * 0.07,
-                                                  ),
-                                                  Container(
-                                                    alignment:
-                                                        Alignment.centerRight,
-                                                    child: InkWell(
-                                                      onTap: () {
-                                                        if (Ticketreservation
-                                                            .Seatsnumbers1
-                                                            .isNotEmpty) {
-                                                          CacheHelper.setDataToSharedPref(
-                                                              key:
-                                                                  'numberTrip2',
-                                                              value: widget
-                                                                  .tripListBack![
-                                                                      index]
-                                                                  .tripNumber);
-                                                          CacheHelper.setDataToSharedPref(
-                                                              key: 'elite2',
-                                                              value: widget
-                                                                  .tripListBack![
-                                                                      index]
-                                                                  .serviceType);
-                                                          CacheHelper.setDataToSharedPref(
-                                                              key:
-                                                                  'accessBusDate2',
-                                                              value: widget
-                                                                  .tripListBack![
-                                                                      index]
-                                                                  .accessDate
-                                                                  .toString());
-
-                                                          CacheHelper.setDataToSharedPref(
-                                                              key:
-                                                                  'arrivalDate2',
-                                                              value: widget
-                                                                  .tripListBack![
-                                                                      index]
-                                                                  .arrivalDate
-                                                                  .toString());
-                                                          CacheHelper.setDataToSharedPref(
-                                                              key:
-                                                                  'accessBusTime2',
-                                                              value: widget
-                                                                  .tripListBack![
-                                                                      index]
-                                                                  .accessBusTime);
-                                                          CacheHelper.setDataToSharedPref(
-                                                              key: 'lineName2',
-                                                              value: widget
-                                                                  .tripListBack![
-                                                                      index]
-                                                                  .lineName);
-                                                          CacheHelper.setDataToSharedPref(
-                                                              key: 'tripOneId',
-                                                              value: widget
-                                                                      .tripListBack![
+                                                        Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: InkWell(
+                                                            onTap: () {
+                                                              CacheHelper.setDataToSharedPref(
+                                                                  key:
+                                                                      'numberTrip',
+                                                                  value: widget
+                                                                      .tripList[
                                                                           index]
-                                                                      .tripId ??
-                                                                  0);
-
-                                                          CacheHelper.setDataToSharedPref(
-                                                              key:
-                                                                  'tripRoundId',
-                                                              value: widget
-                                                                  .tripListBack![
-                                                                      index]
-                                                                  .tripId
-                                                                  .toString());
-
-                                                          CacheHelper.setDataToSharedPref(
-                                                              key: 'lineid2',
-                                                              value: widget
-                                                                      .tripListBack![
+                                                                      .tripNumber);
+                                                              CacheHelper.setDataToSharedPref(
+                                                                  key: 'elite',
+                                                                  value: widget
+                                                                      .tripList[
                                                                           index]
-                                                                      .lineId ??
-                                                                  0);
-
-                                                          CacheHelper.setDataToSharedPref(
-                                                              key:
-                                                                  'serviceTypeID2',
-                                                              value: widget
-                                                                      .tripListBack![
+                                                                      .serviceType);
+                                                              CacheHelper.setDataToSharedPref(
+                                                                  key:
+                                                                      'accessBusTime',
+                                                                  value: widget
+                                                                      .tripList[
                                                                           index]
-                                                                      .serviceTypeId ??
-                                                                  0);
-
-                                                          CacheHelper.setDataToSharedPref(
-                                                              key: 'busId2',
-                                                              value: widget
-                                                                      .tripListBack![
+                                                                      .accessBusTime);
+                                                              CacheHelper.setDataToSharedPref(
+                                                                  key:
+                                                                      'accessBusDate',
+                                                                  value: widget
+                                                                      .tripList[
                                                                           index]
-                                                                      .busId ??
-                                                                  0);
+                                                                      .accessDate
+                                                                      .toString());
 
-                                                          UmraDetails.swatransportList!.add(TransportList(
-                                                              availability: widget
-                                                                  .tripListBack![
-                                                                      index]
-                                                                  .emptySeat,
-                                                              busId: widget
-                                                                  .tripListBack![
-                                                                      index]
-                                                                  .busId,
-                                                              from: widget
-                                                                  .tripListBack![
-                                                                      index]
-                                                                  .fromCityName,
-                                                              fromStationName:
-                                                                  widget
-                                                                      .tripListBack![
+                                                              CacheHelper.setDataToSharedPref(
+                                                                  key:
+                                                                      'arrivaldate',
+                                                                  value: widget
+                                                                      .tripList[
                                                                           index]
-                                                                      .from,
-                                                              to: widget
-                                                                  .tripListBack![
-                                                                      index]
-                                                                  .toCityName,
-                                                              isActive: true,
-                                                              isDelete: widget
-                                                                  .tripListBack![
-                                                                      index]
-                                                                  .isDeleted,
-                                                              isAddedTrip: true,
-                                                              lineId: widget
-                                                                  .tripListBack![
-                                                                      index]
-                                                                  .lineId,
-                                                              notes: '',
-                                                              priceSeat: widget
-                                                                  .tripListBack![
-                                                                      index]
-                                                                  .price,
-                                                              toStationName: widget
-                                                                  .tripListBack![index]
-                                                                  .to,
-                                                              tripDate: '${intl.DateFormat.d('en_US').format(widget.tripListBack![index].accessDate!)}${intl.DateFormat.MMM('en_US').format(widget.tripListBack![index].accessDate!)}',
-                                                              isreserved: false,
-                                                              tripId: widget.tripListBack![index].tripId,
-                                                              personCountReserved: 0,
-                                                              serviceTypeId: widget.tripListBack![index].serviceTypeId,
-                                                              tripTime: widget.tripListBack![index].accessBusTime.toString(),
-                                                              fromStationId: null,
-                                                              toStationId: null,
-                                                              tripUmrahTransportationId: null,
-                                                              reservationId: null));
-                                                          var bookModel =
-                                                              BookingModel(
-                                                            departureCompanyLogo:
-                                                                logoGo,
-                                                            departureCompanyName:
-                                                                companyGo,
-                                                            returnCompanyLogo:
-                                                                widget
-                                                                    .tripListBack?[
-                                                                        index]
-                                                                    .logo,
-                                                            returnCompanyName:
-                                                                widget
-                                                                    .tripListBack?[
+                                                                      .arrivalDate
+                                                                      .toString());
+                                                              CacheHelper.setDataToSharedPref(
+                                                                  key:
+                                                                      'lineName',
+                                                                  value: widget
+                                                                      .tripList[
+                                                                          index]
+                                                                      .lineName);
+                                                              CacheHelper.setDataToSharedPref(
+                                                                  key:
+                                                                      'tripOneId',
+                                                                  value: widget
+                                                                          .tripList[
+                                                                              index]
+                                                                          .tripId ??
+                                                                      0);
+
+                                                              CacheHelper.setDataToSharedPref(
+                                                                  key: 'lineid',
+                                                                  value: widget
+                                                                          .tripList[
+                                                                              index]
+                                                                          .lineId ??
+                                                                      0);
+
+                                                              CacheHelper.setDataToSharedPref(
+                                                                  key:
+                                                                      'serviceTypeID',
+                                                                  value: widget
+                                                                          .tripList[
+                                                                              index]
+                                                                          .serviceTypeId ??
+                                                                      0);
+
+                                                              CacheHelper.setDataToSharedPref(
+                                                                  key: 'busId',
+                                                                  value: widget
+                                                                          .tripList[
+                                                                              index]
+                                                                          .busId ??
+                                                                      0);
+                                                              print(
+                                                                  " widget.tripList[index].tripId${widget.tripList[index].tripId}");
+                                                              var bookModel =
+                                                                  BookingModel(
+                                                                departureCompanyLogo:
+                                                                    widget
+                                                                        .tripList[
+                                                                            index]
+                                                                        .logo,
+                                                                departureCompanyName: widget
+                                                                    .tripList[
                                                                         index]
                                                                     .companyName,
-                                                          );
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    MultiBlocProvider(
-                                                                        providers: [
-                                                                          BlocProvider<LoginCubit>(
-                                                                              create: (context) => sl<LoginCubit>()),
-                                                                          BlocProvider<
-                                                                              TimesTripsCubit>(
-                                                                            create: (context) =>
-                                                                                TimesTripsCubit(),
-                                                                          ),
-                                                                          BlocProvider<
-                                                                              BusLayoutCubit>(
-                                                                            create: (context) =>
-                                                                                BusLayoutCubit(),
-                                                                          )
-                                                                        ],
-                                                                        // Replace with your actual cubit creation logic
-                                                                        child:
-                                                                            BusLayoutScreenBack(
-                                                                          isedit:
-                                                                              false,
-                                                                          bookingModel:
-                                                                              bookModel,
-                                                                          arrivaltime: widget
-                                                                              .tripListBack?[index]
-                                                                              .arrivalDate,
-                                                                          busdate: widget
-                                                                              .tripListBack![index]
-                                                                              .accessDate,
-                                                                          busttime: widget
-                                                                              .tripListBack![index]
-                                                                              .accessBusTime,
-                                                                          to: widget.tripListBack![index].to ??
-                                                                              "",
-                                                                          from: widget.tripListBack![index].from ??
-                                                                              "",
-                                                                          triTypeId:
-                                                                              widget.tripTypeId,
-                                                                          price: widget
-                                                                              .tripListBack![index]
-                                                                              .price!,
-                                                                          user:
-                                                                              Routes.user,
-                                                                          discount: widget
-                                                                              .tripListBack![index]
-                                                                              .discount,
-                                                                          tripId: widget
-                                                                              .tripListBack![index]
-                                                                              .tripId!,
-                                                                          tocity:
-                                                                              widget.tripListBack![index].toCityName ?? '',
-                                                                          fromcity:
-                                                                              widget.tripListBack![index].fromCityName ?? '',
-                                                                        ))),
-                                                          ).then((value) {
-                                                            setState(() {});
-                                                          });
-                                                        } else {
-                                                          Constants.showDefaultSnackBar(
-                                                              context: context,
-                                                              text: LanguageClass
+                                                              );
+
+                                                              logoGo = bookModel
+                                                                  .departureCompanyLogo;
+                                                              companyGo = bookModel
+                                                                  .departureCompanyName;
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) {
+                                                                  return BlocProvider(
+                                                                    create: (context) =>
+                                                                        BusLayoutCubit(),
+                                                                    child:
+                                                                        BusLayoutScreen(
+                                                                      isedit:
+                                                                          false,
+                                                                      bookingModel:
+                                                                          bookModel,
+                                                                      busdate: widget
+                                                                          .tripList[
+                                                                              index]
+                                                                          .accessDate,
+                                                                      arrivalDate: widget
+                                                                          .tripList[
+                                                                              index]
+                                                                          .arrivalDate,
+                                                                      busttime: widget
+                                                                          .tripList[
+                                                                              index]
+                                                                          .accessBusTime,
+                                                                      discount: widget
+                                                                          .tripList[
+                                                                              index]
+                                                                          .discount,
+                                                                      to: widget
+                                                                              .tripList[index]
+                                                                              .to ??
+                                                                          "",
+                                                                      from: widget
+                                                                              .tripList[index]
+                                                                              .from ??
+                                                                          "",
+                                                                      triTypeId:
+                                                                          widget
+                                                                              .tripTypeId,
+                                                                      tripListBack:
+                                                                          widget
+                                                                              .tripListBack,
+                                                                      price: widget
+                                                                          .tripList[
+                                                                              index]
+                                                                          .price!,
+                                                                      user: Routes
+                                                                          .user,
+                                                                      tripId: widget
+                                                                          .tripList[
+                                                                              index]
+                                                                          .tripId!,
+                                                                      tocity: widget
+                                                                              .tripList[index]
+                                                                              .toCityName ??
+                                                                          '',
+                                                                      fromcity:
+                                                                          widget.tripList[index].fromCityName ??
+                                                                              '',
+                                                                    ),
+                                                                  );
+                                                                }),
+                                                              ).then((value) {
+                                                                if (Ticketreservation
+                                                                    .Seatsnumbers1
+                                                                    .isNotEmpty) {
+                                                                  // WidgetsBinding
+                                                                  //     .instance
+                                                                  //     .addPostFrameCallback(
+                                                                  //         (_) {
+                                                                  //   _dayScrollController
+                                                                  //       .jumpTo(5 *
+                                                                  //           65); // item width
+                                                                  // });
+
+                                                                  setState(() {
+                                                                    isgotrip =
+                                                                        false;
+                                                                    Ticketreservation
+                                                                            .Seatsnumbers1
+                                                                            .isNotEmpty
+                                                                        ? selectedDate = widget.tripListBack!.isNotEmpty
+                                                                            ? widget
+                                                                                .tripListBack!.first.accessDate!
+                                                                            : now
+                                                                        : selectedDate = widget.tripList.isNotEmpty
+                                                                            ? widget.tripList.first.accessDate!
+                                                                            : now;
+                                                                  });
+                                                                }
+                                                              });
+
+                                                              UmraDetails.swatransportList!.add(TransportList(
+                                                                  availability: widget
+                                                                      .tripList[
+                                                                          index]
+                                                                      .emptySeat,
+                                                                  busId: widget
+                                                                      .tripList[
+                                                                          index]
+                                                                      .busId,
+                                                                  from: widget
+                                                                      .tripList[
+                                                                          index]
+                                                                      .fromCityName,
+                                                                  fromStationName: widget
+                                                                      .tripList[
+                                                                          index]
+                                                                      .from,
+                                                                  to: widget
+                                                                      .tripList[
+                                                                          index]
+                                                                      .toCityName,
+                                                                  isActive:
+                                                                      true,
+                                                                  isDelete: widget
+                                                                      .tripList[
+                                                                          index]
+                                                                      .isDeleted,
+                                                                  isAddedTrip:
+                                                                      true,
+                                                                  lineId: widget
+                                                                      .tripList[
+                                                                          index]
+                                                                      .lineId,
+                                                                  notes: '',
+                                                                  priceSeat: widget
+                                                                      .tripList[
+                                                                          index]
+                                                                      .price,
+                                                                  toStationName: widget
+                                                                      .tripList[
+                                                                          index]
+                                                                      .to,
+                                                                  tripDate: '${intl.DateFormat.d('en_US').format(widget.tripList[index].accessDate!)}${intl.DateFormat.MMM('en_US').format(widget.tripList[index].accessDate!)}',
+                                                                  isreserved: false,
+                                                                  tripId: widget.tripList[index].tripId,
+                                                                  personCountReserved: 0,
+                                                                  serviceTypeId: widget.tripList[index].serviceTypeId,
+                                                                  tripTime: widget.tripList[index].accessBusTime.toString(),
+                                                                  fromStationId: null,
+                                                                  toStationId: null,
+                                                                  tripUmrahTransportationId: null,
+                                                                  reservationId: null));
+                                                            },
+                                                            child: Container(
+                                                              height: 30.sp,
+                                                              width: LanguageClass
                                                                       .isEnglish
-                                                                  ? "Please reserve go trip first"
-                                                                  : "برجاء اختيار رحلة ذهاب اولاً");
-                                                        }
-                                                      },
-                                                      child: Container(
-                                                        height: 30.sp,
-                                                        width: LanguageClass
-                                                                .isEnglish
-                                                            ? 60.sp
-                                                            : 48.sp,
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 10,
-                                                                vertical: 8),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          boxShadow: [
-                                                            BoxShadow(
-                                                                color: AppColors
-                                                                    .white,
-                                                                offset: Offset(
-                                                                    0, 0),
-                                                                spreadRadius: 0,
-                                                                blurRadius: 8)
-                                                          ],
-                                                          color: _primaryColor,
-                                                          // gradient:
-                                                          //     const LinearGradient(
-                                                          //         colors: [
-                                                          //       Color(
-                                                          //           0xfffd634f),
-                                                          //       Color(
-                                                          //           0xffff9976),
-                                                          //     ]),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(8),
-                                                        ),
-                                                        child: Center(
-                                                          child: Text(
-                                                            LanguageClass
-                                                                    .isEnglish
-                                                                ? 'Book'
-                                                                : 'حجز',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: fontStyle(
-                                                              color: AppColors
-                                                                  .white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontFamily:
-                                                                  FontFamily
-                                                                      .medium,
-                                                              fontSize: 12.sp,
+                                                                  ? 60.sp
+                                                                  : 48.sp,
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          10,
+                                                                      vertical:
+                                                                          8),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                boxShadow: [
+                                                                  BoxShadow(
+                                                                      color: AppColors
+                                                                          .white,
+                                                                      offset:
+                                                                          Offset(0,
+                                                                              0),
+                                                                      spreadRadius:
+                                                                          0,
+                                                                      blurRadius:
+                                                                          8)
+                                                                ],
+                                                                color:
+                                                                    _primaryColor,
+                                                                // gradient:
+                                                                // const LinearGradient(
+                                                                //     colors: [
+                                                                //   Color(
+                                                                //       0xfffd634f),
+                                                                //   Color(
+                                                                //       0xffff9976),
+                                                                // ]),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8),
+                                                              ),
+                                                              child: Center(
+                                                                child: Text(
+                                                                  LanguageClass
+                                                                          .isEnglish
+                                                                      ? 'Book'
+                                                                      : 'Ø­Ø¬Ø²',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      fontStyle(
+                                                                    color: AppColors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontFamily
+                                                                            .medium,
+                                                                    fontSize:
+                                                                        10.sp,
+                                                                  ),
+                                                                ),
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        )
+                                                      ],
                                                     ),
+                                                    SizedBox(
+                                                      width: 20,
+                                                    )
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : SizedBox()
+                                  ],
+                                );
+                              },
+                              separatorBuilder:
+                                  (BuildContext context, int index) => SizedBox(
+                                height: 10,
+                              ),
+                            ),
+                          ),
+
+                    (widget.tripTypeId == '2' &&
+                            Ticketreservation.Seatsnumbers1.isNotEmpty)
+                        ? Expanded(
+                            flex: selectedback.isEven ? 7 : 1,
+                            child: ListView.separated(
+                              padding: EdgeInsets.zero,
+                              itemCount: widget.tripListBack?.length ?? 0,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          selectedback == index
+                                              ? selectedback = -1
+                                              : selectedback = index;
+                                        });
+                                      },
+                                      child: Container(
+                                        clipBehavior:
+                                            Clip.antiAliasWithSaveLayer,
+                                        decoration: BoxDecoration(
+                                            borderRadius: selectedback != index
+                                                ? BorderRadius.circular(10)
+                                                : BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                  ),
+                                            color: AppColors.white
+                                            // color: Color(0xffF3F3F3)
+                                            ),
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 0, horizontal: 10.0),
+                                        // padding: EdgeInsets.all(10),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            if (widget.tripListBack?[index]
+                                                    .IsSPonsored ==
+                                                true)
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  // gradient: const LinearGradient(
+                                                  //   colors: [
+                                                  //     Color(0xfffd634f),
+                                                  //     Color(0xffff9976),
+                                                  //   ],
+                                                  // ),
+                                                  color: _primaryColor,
+                                                ),
+                                                padding: EdgeInsets.all(10),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          LanguageClass
+                                                                  .isEnglish
+                                                              ? "Enjoy for less with ${widget.tripListBack?[index].companyName}"
+                                                              : "Ø§Ø³ØªÙ…ØªØ¹ Ø¨ØªÙƒÙ„ÙØ© Ø£Ù‚Ù„ Ù…Ø¹ Ø­Ø§ÙÙ„Ø§Øª ${widget.tripListBack?[index].companyName}",
+                                                          style: fontStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontFamily:
+                                                                  FontFamily
+                                                                      .bold,
+                                                              fontSize: 12.sp),
+                                                        ),
+                                                        Text(
+                                                          LanguageClass
+                                                                  .isEnglish
+                                                              ? "Unbeatable trips deals with ${widget.tripListBack?[index].companyName}! "
+                                                              : "Ø¹Ø±ÙˆØ¶ Ø±Ø­Ù„Ø§Øª Ù„Ø§ ØªÙØ¶Ø§Ù‡Ù‰ Ù…Ø¹ ${widget.tripListBack?[index].companyName}!",
+                                                          style: fontStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontFamily:
+                                                                  FontFamily
+                                                                      .regular,
+                                                              fontSize: 10.sp),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Text(
+                                                      LanguageClass.isEnglish
+                                                          ? "Sponsored"
+                                                          : "Ù…Ù…ÙˆÙ„",
+                                                      style: fontStyle(
+                                                          color: Colors.white,
+                                                          fontFamily: FontFamily
+                                                              .regular,
+                                                          fontSize: 12.sp),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            // todo : logo and provider name
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 8.0,
+                                                      vertical: 6),
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Container(
+                                                        height: 38,
+                                                        width: 38,
+                                                        clipBehavior: Clip
+                                                            .antiAliasWithSaveLayer,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          color: _primaryColor,
+                                                        ),
+                                                        child: Image.network(
+                                                            // "https://play-lh.googleusercontent.com/hN3av1FyuynMPnXhnQsLh3DBPlIki4cxAoO77stXaNjS5PQ0GIBsP1IO4uY6hXWJRw=w480-h960-rw",
+                                                            widget.tripListBack![index].logo ==
+                                                                        null ||
+                                                                    widget
+                                                                            .tripListBack![
+                                                                                index]
+                                                                            .logo ==
+                                                                        ""
+                                                                ? "https://play-lh.googleusercontent.com/ACfnkQHBH_KBNpqhaU2PkbNp1mcLeZtaOHHvKTSDHBEOD43QH9gB9nd5GQkWpfB9n7M=w480-h960-rw"
+                                                                : widget
+                                                                    .tripListBack![
+                                                                        index]
+                                                                    .logo!),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text(
+                                                        widget
+                                                                .tripListBack?[
+                                                                    index]
+                                                                .companyName ??
+                                                            (LanguageClass
+                                                                    .isEnglish
+                                                                ? "Swa"
+                                                                : "Ø³ÙˆØ§"),
+                                                        style: fontStyle(
+                                                            color: Colors.black,
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
+                                                            fontSize: 12.sp),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                      Icon(
+                                                        Icons.star,
+                                                        color: _primaryColor,
+                                                        // color: Color(0xffFC9900),
+                                                        size: 15,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 2,
+                                                      ),
+                                                      Text(
+                                                        "4.5",
+                                                        style: fontStyle(
+                                                            color: Colors.black,
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
+                                                            height: 0,
+                                                            fontSize: 12.sp),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Spacer(),
+                                                Expanded(
+                                                    flex: 3,
+                                                    child: Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      spacing: 10,
+                                                      children: [
+                                                        if (widget
+                                                                .tripList[index]
+                                                                .IsCheapeast ==
+                                                            true)
+                                                          Card(
+                                                            margin:
+                                                                EdgeInsets.zero,
+                                                            elevation: 0.0,
+                                                            color: Color(
+                                                                0xff381213),
+                                                            // color: Color(0xff05488F),
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          6),
+                                                              bottomLeft: Radius
+                                                                  .circular(6),
+                                                            )),
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          6.0,
+                                                                      vertical:
+                                                                          2),
+                                                              child: Center(
+                                                                  child: Text(
+                                                                "Cheapest",
+                                                                style: fontStyle(
+                                                                    fontSize:
+                                                                        10.sp,
+                                                                    color: Colors
+                                                                        .white),
+                                                              )),
+                                                            ),
+                                                          ),
+                                                        if (widget
+                                                                .tripList[index]
+                                                                .IsBestValue ==
+                                                            true)
+                                                          Card(
+                                                            margin:
+                                                                EdgeInsets.zero,
+                                                            elevation: 0.0,
+                                                            color:
+                                                                _primaryColor,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          6),
+                                                              bottomLeft: Radius
+                                                                  .circular(6),
+                                                            )),
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          6.0,
+                                                                      vertical:
+                                                                          2),
+                                                              child: Center(
+                                                                  child: Text(
+                                                                "Best Value",
+                                                                style: fontStyle(
+                                                                    fontSize:
+                                                                        10.sp,
+                                                                    color: Colors
+                                                                        .white),
+                                                              )),
+                                                            ),
+                                                          ),
+                                                        SizedBox(
+                                                          width: 0,
+                                                        ),
+                                                      ],
+                                                    ))
+                                              ],
+                                            ),
+                                            // todo : details from to
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8.0),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                // mainAxisAlignment:
+                                                //     MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    spacing: 5,
+                                                    children: [
+                                                      Text(
+                                                        widget
+                                                                .tripListBack?[
+                                                                    index]
+                                                                .from! ??
+                                                            "",
+                                                        style: fontStyle(
+                                                            color: Color(
+                                                                0xff858585),
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .regular,
+                                                            fontSize: 10.sp),
+                                                      ),
+                                                      Text(
+                                                        intl.DateFormat(
+                                                                'hh:mm a')
+                                                            .format(widget
+                                                                .tripListBack![
+                                                                    index]
+                                                                .accessDate!)
+                                                            .toString(),
+                                                        style: fontStyle(
+                                                            color: Colors.black,
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
+                                                            fontSize: 10.sp),
+                                                      ),
+                                                      Text(
+                                                        intl.DateFormat(
+                                                                'dd MMMM yyyy',
+                                                                LanguageClass
+                                                                        .isEnglish
+                                                                    ? 'en'
+                                                                    : 'ar')
+                                                            .format(widget
+                                                                .tripListBack![
+                                                                    index]
+                                                                .accessDate!)
+                                                            .toString(),
+                                                        style: fontStyle(
+                                                            // color: Color(
+                                                            //     0xff858585),
+                                                            color: Color(
+                                                                0xff858585),
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .regular,
+                                                            fontSize: 7.sp),
+                                                      ),
+                                                    ],
                                                   ),
                                                   SizedBox(
                                                     height: 10,
+                                                  ),
+                                                  RotatedBox(
+                                                    quarterTurns:
+                                                        LanguageClass.isEnglish
+                                                            ? 90
+                                                            : 90,
+                                                    child: Stack(
+                                                      // alignment: Alignment.centerLeft,
+                                                      children: [
+                                                        Container(
+                                                          width: 50,
+                                                          height: 1,
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  top: 10,
+                                                                  right: 10,
+                                                                  left: 10,
+                                                                  bottom: 5),
+                                                          color:
+                                                              Color(0xff000000),
+                                                          // child: Icon(
+                                                          //   Icons.arrow_right_alt_rounded,
+                                                          //   size: 30,
+                                                          // ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                            top: 2.3,
+                                                            right: LanguageClass
+                                                                    .isEnglish
+                                                                ? 0
+                                                                : 2,
+                                                            left: LanguageClass
+                                                                    .isEnglish
+                                                                ? 2
+                                                                : 0,
+                                                          ),
+                                                          child: Icon(
+                                                            LanguageClass.isEnglish
+                                                                ? Icons
+                                                                    .keyboard_arrow_left_rounded
+                                                                : Icons
+                                                                    .keyboard_arrow_right_rounded,
+                                                            size: 15.5,
+                                                            color: Color(
+                                                                0xff000000),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 2,
+                                                  ),
+                                                  Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    spacing: 5,
+                                                    children: [
+                                                      Text(
+                                                        widget
+                                                                .tripListBack?[
+                                                                    index]
+                                                                .to! ??
+                                                            "",
+                                                        style: fontStyle(
+                                                            color: Color(
+                                                                0xff858585),
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .regular,
+                                                            fontSize: 10.sp),
+                                                      ),
+                                                      Text(
+                                                        intl.DateFormat(
+                                                                'hh:mm a')
+                                                            .format(widget
+                                                                .tripListBack![
+                                                                    index]
+                                                                .arrivalDate!)
+                                                            .toString(),
+                                                        style: fontStyle(
+                                                            color: Colors.black,
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .medium,
+                                                            fontSize: 10.sp),
+                                                      ),
+                                                      Text(
+                                                        intl.DateFormat(
+                                                                'dd MMMM yyyy',
+                                                                LanguageClass
+                                                                        .isEnglish
+                                                                    ? 'en'
+                                                                    : 'ar')
+                                                            .format(widget
+                                                                .tripListBack![
+                                                                    index]
+                                                                .arrivalDate!),
+                                                        style: fontStyle(
+                                                            color: Color(
+                                                                0xff858585),
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .regular,
+                                                            fontSize: 7.sp),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Expanded(
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                      spacing: 5,
+                                                      children: [
+                                                        Text(
+                                                          '${widget.tripListBack?[index].price.toString()} ${Routes.curruncy ?? ""}',
+                                                          style: fontStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontFamily:
+                                                                  FontFamily
+                                                                      .medium,
+                                                              fontSize: 12.sp),
+                                                        ),
+                                                        Row(
+                                                          spacing: 5,
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        top:
+                                                                            0.0),
+                                                                child:
+                                                                    Image.asset(
+                                                                  height: 20,
+                                                                  width: 20,
+                                                                  "assets/images/img_1.png",
+                                                                  filterQuality:
+                                                                      FilterQuality
+                                                                          .high,
+                                                                )),
+                                                            Text(
+                                                              LanguageClass
+                                                                      .isEnglish
+                                                                  ? '${widget.tripListBack?[index].emptySeat}'
+                                                                  : '${widget.tripListBack?[index].emptySeat}',
+                                                              style: fontStyle(
+                                                                  color:
+                                                                      AppColors
+                                                                          .grey,
+                                                                  fontFamily:
+                                                                      FontFamily
+                                                                          .medium,
+                                                                  fontSize:
+                                                                      13.sp),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        8.verticalSpace,
+                                                      ],
+                                                    ),
                                                   )
                                                 ],
                                               ),
-                                              SizedBox(
-                                                width: 20,
-                                              )
-                                            ],
-                                          ),
-                                        ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    )
-                                  : SizedBox()
-                            ],
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) =>
-                            SizedBox(
-                          height: 10,
-                        ),
-                      ),
-                    )
-                  : SizedBox.shrink(),
-              // todo :  button action next confirm
-              Ticketreservation.Seatsnumbers2.isNotEmpty &&
-                      Ticketreservation.Seatsnumbers1.isNotEmpty
-                  ? InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BlocProvider<LoginCubit>(
-                                create: (context) => sl<LoginCubit>(),
-                                child: ReservationTicket(
-                                  tripTypeId: "2",
-                                  actualDiscount:
-                                      Ticketreservation.discount * 2,
-                                  user: Routes.user,
-                                )),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        alignment: Alignment.centerRight,
-                        height: 50,
-                        //padding:  EdgeInsets.symmetric(horizontal: 10,vertical:20),
-                        //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
-                        decoration: BoxDecoration(
-                            color: AppColors.primaryColor,
-                            borderRadius: BorderRadius.circular(41)),
-                        child: Center(
-                          child: Text(
-                            LanguageClass.isEnglish ? "Continue" : "استمر",
-                            style: fontStyle(
-                                color: AppColors.white,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 20.sp),
-                          ),
-                        ),
-                      ),
-                    )
-                  : SizedBox()
-            ],
+                                    ),
+                                    selectedback == index
+                                        ? Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            decoration: BoxDecoration(
+                                                // color: Color(0xffF3F3F3),
+                                                color: AppColors.white,
+                                                borderRadius: BorderRadius.only(
+                                                  bottomRight:
+                                                      Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                )),
+                                            child: Column(
+                                              children: [
+                                                SizedBox(
+                                                    // height: 230,
+                                                    width: double.infinity,
+                                                    child: Stack(
+                                                      alignment: Alignment
+                                                          .bottomCenter,
+                                                      fit: StackFit.loose,
+                                                      children: [
+                                                        widget.tripListBack![index]
+                                                                    .imageMap ==
+                                                                null
+                                                            ? Image.asset(
+                                                                "assets/images/img.png",
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              )
+                                                            : Image.network(
+                                                                widget
+                                                                    .tripListBack![
+                                                                        index]
+                                                                    .imageMap!,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                        SizedBox(
+                                                          height: 90,
+                                                          width:
+                                                              double.infinity,
+                                                          child: ListView
+                                                              .separated(
+                                                            shrinkWrap: true,
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    5),
+                                                            scrollDirection:
+                                                                Axis.horizontal,
+                                                            itemBuilder:
+                                                                (context, i) =>
+                                                                    Container(
+                                                              height: 90,
+                                                              width: 120,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: AppColors
+                                                                    .primaryColor,
+                                                                border: Border.all(
+                                                                    color: AppColors
+                                                                        .white,
+                                                                    width: 2),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            12),
+                                                                // image:
+                                                                //     DecorationImage(
+                                                                //   image: NetworkImage(widget
+                                                                //           .tripListBack?[
+                                                                //               index]
+                                                                //           .BusPhotos?[
+                                                                //               i]
+                                                                //           .toString() ??
+                                                                //       ""),
+                                                                //   fit: BoxFit
+                                                                //       .cover,
+                                                                // )
+                                                              ),
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                                child: Image
+                                                                    .network(
+                                                                  widget
+                                                                          .tripListBack?[
+                                                                              index]
+                                                                          .BusPhotos?[
+                                                                              i]
+                                                                          .toString() ??
+                                                                      "",
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                  loadingBuilder:
+                                                                      (context,
+                                                                          child,
+                                                                          loadingProgress) {
+                                                                    if (loadingProgress ==
+                                                                        null) {
+                                                                      return child;
+                                                                    }
+                                                                    return Center(
+                                                                      child:
+                                                                          CircularProgressIndicator(
+                                                                        value: loadingProgress.expectedTotalBytes !=
+                                                                                null
+                                                                            ? loadingProgress.cumulativeBytesLoaded /
+                                                                                loadingProgress.expectedTotalBytes!
+                                                                            : null,
+                                                                        color: AppColors
+                                                                            .greyLight,
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                  errorBuilder:
+                                                                      (context,
+                                                                          error,
+                                                                          stackTrace) {
+                                                                    return Icon(
+                                                                        Icons
+                                                                            .error,
+                                                                        color: Colors
+                                                                            .red);
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            separatorBuilder:
+                                                                (context,
+                                                                        index) =>
+                                                                    SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            itemCount: widget
+                                                                    .tripListBack?[
+                                                                        index]
+                                                                    .BusPhotos
+                                                                    ?.length ??
+                                                                0,
+                                                          ),
+                                                        )
+                                                      ],
+                                                    )
+                                                    //     MapRouteWidget(
+                                                    //   routePoints: [
+                                                    //     // LatLng(30.0444, 31.2357),
+                                                    //     // LatLng(31.2001, 29.9187),
+                                                    //     LatLng(30.0, 31.0),
+                                                    //     LatLng(31.0, 30.0),
+                                                    //   ],
+                                                    //   googleApiKey:
+                                                    //       'AIzaSyAipdrKwqPfmyfmzhZG1PZJJ8J61SM14i8',
+                                                    //   useDirections: true,
+                                                    // )
+                                                    ),
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 5,
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Container(
+                                                            margin: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        0),
+                                                            child: ListView
+                                                                .builder(
+                                                              itemCount: widget
+                                                                  .tripList[
+                                                                      index]
+                                                                  .lineCity
+                                                                  .length,
+                                                              shrinkWrap: true,
+                                                              physics:
+                                                                  ScrollPhysics(),
+                                                              itemBuilder:
+                                                                  (BuildContext
+                                                                          context,
+                                                                      int index2) {
+                                                                final date = now
+                                                                    .add(Duration(
+                                                                        days:
+                                                                            index2));
+                                                                final time = intl
+                                                                    .DateFormat(
+                                                                  'h:mm a',
+                                                                  LanguageClass
+                                                                          .isEnglish
+                                                                      ? 'en'
+                                                                      : 'ar',
+                                                                ).format(date.add(
+                                                                    Duration(
+                                                                        hours:
+                                                                            index2)));
+                                                                return Container(
+                                                                  // padding: EdgeInsets.all(10),
+                                                                  // color: Color(
+                                                                  //     0xffF3F3F3),
+                                                                  color:
+                                                                      AppColors
+                                                                          .white,
+                                                                  child: Row(
+                                                                    // mainAxisAlignment:
+                                                                    //     MainAxisAlignment
+                                                                    //         .spaceBetween,
+
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      SizedBox(
+                                                                        width:
+                                                                            10,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width:
+                                                                            70,
+                                                                        child:
+                                                                            Text(
+                                                                          // '${widget.tripList[index].lineCity[index2].lineStationList.first.accessTime!.split(':')[0]}:${widget.tripList[index].lineCity[index2].lineStationList.first.accessTime!.split(':')[1]}' ??
+                                                                          time,
+                                                                          style: fontStyle(
+                                                                              color: AppColors.blackColor,
+                                                                              fontFamily: FontFamily.medium,
+                                                                              height: 0.5,
+                                                                              fontSize: 12.sp),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width:
+                                                                            10,
+                                                                      ),
+                                                                      Column(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        children: [
+                                                                          Container(
+                                                                            height:
+                                                                                13,
+                                                                            width:
+                                                                                13,
+                                                                            alignment:
+                                                                                Alignment.center,
+                                                                            padding: index2 == 0
+                                                                                ? EdgeInsets.all(1.2)
+                                                                                : EdgeInsets.zero,
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              shape: BoxShape.circle,
+                                                                              border: Border.all(
+                                                                                style: BorderStyle.solid,
+                                                                                color: index2 == 0
+                                                                                    ? _primaryColor
+                                                                                    // ? Color(0xff007663)
+                                                                                    : Colors.transparent,
+                                                                                width: index2 == 0 ? 1 : 0.0,
+                                                                              ),
+                                                                            ),
+                                                                            child: index2 == widget.tripListBack![index].lineCity.length - 1
+                                                                                ? Icon(
+                                                                                    CupertinoIcons.location_solid,
+                                                                                    size: 15,
+                                                                                    color: Color(0xff7700FF),
+                                                                                  )
+                                                                                : Container(
+                                                                                    height: 11,
+                                                                                    width: 11,
+                                                                                    decoration: BoxDecoration(
+                                                                                      shape: BoxShape.circle,
+                                                                                      color: Colors.red,
+                                                                                    ),
+                                                                                    child: Icon(
+                                                                                      Icons.circle,
+                                                                                      size: 4,
+                                                                                      color: Colors.white,
+                                                                                    )),
+                                                                          ),
+                                                                          index2 == widget.tripListBack![index].lineCity.length - 1
+                                                                              ? SizedBox.shrink()
+                                                                              : Container(
+                                                                                  height: 20,
+                                                                                  width: 1.1,
+                                                                                  color: AppColors.blackColor,
+                                                                                )
+                                                                        ],
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width:
+                                                                            20,
+                                                                      ),
+                                                                      Text(
+                                                                        '${widget.tripListBack![index].lineCity[index2].cityName}' ??
+                                                                            '',
+                                                                        style: fontStyle(
+                                                                            color: AppColors
+                                                                                .blackColor,
+                                                                            fontFamily: FontFamily
+                                                                                .bold,
+                                                                            decoration: index2 == 0
+                                                                                ? TextDecoration.underline
+                                                                                : TextDecoration.none,
+                                                                            height: 0.5,
+                                                                            fontSize: 12.sp),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width:
+                                                                            10,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 25,
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        10.0),
+                                                            child: Text(
+                                                              'Premuim â€¢ AC â€¢ Bus',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: fontStyle(
+                                                                color: Color(
+                                                                    0xff888888),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                                fontFamily:
+                                                                    FontFamily
+                                                                        .regular,
+                                                                fontSize: 9.sp,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                      children: [
+                                                        SizedBox(
+                                                          height:
+                                                              sizeHeight * 0.07,
+                                                        ),
+                                                        Container(
+                                                          alignment: Alignment
+                                                              .centerRight,
+                                                          child: InkWell(
+                                                            onTap: () {
+                                                              if (Ticketreservation
+                                                                  .Seatsnumbers1
+                                                                  .isNotEmpty) {
+                                                                CacheHelper.setDataToSharedPref(
+                                                                    key:
+                                                                        'numberTrip2',
+                                                                    value: widget
+                                                                        .tripListBack![
+                                                                            index]
+                                                                        .tripNumber);
+                                                                CacheHelper.setDataToSharedPref(
+                                                                    key:
+                                                                        'elite2',
+                                                                    value: widget
+                                                                        .tripListBack![
+                                                                            index]
+                                                                        .serviceType);
+                                                                CacheHelper.setDataToSharedPref(
+                                                                    key:
+                                                                        'accessBusDate2',
+                                                                    value: widget
+                                                                        .tripListBack![
+                                                                            index]
+                                                                        .accessDate
+                                                                        .toString());
+
+                                                                CacheHelper.setDataToSharedPref(
+                                                                    key:
+                                                                        'arrivalDate2',
+                                                                    value: widget
+                                                                        .tripListBack![
+                                                                            index]
+                                                                        .arrivalDate
+                                                                        .toString());
+                                                                CacheHelper.setDataToSharedPref(
+                                                                    key:
+                                                                        'accessBusTime2',
+                                                                    value: widget
+                                                                        .tripListBack![
+                                                                            index]
+                                                                        .accessBusTime);
+                                                                CacheHelper.setDataToSharedPref(
+                                                                    key:
+                                                                        'lineName2',
+                                                                    value: widget
+                                                                        .tripListBack![
+                                                                            index]
+                                                                        .lineName);
+                                                                CacheHelper.setDataToSharedPref(
+                                                                    key:
+                                                                        'tripOneId',
+                                                                    value: widget
+                                                                            .tripListBack![index]
+                                                                            .tripId ??
+                                                                        0);
+
+                                                                CacheHelper.setDataToSharedPref(
+                                                                    key:
+                                                                        'tripRoundId',
+                                                                    value: widget
+                                                                        .tripListBack![
+                                                                            index]
+                                                                        .tripId
+                                                                        .toString());
+
+                                                                CacheHelper.setDataToSharedPref(
+                                                                    key:
+                                                                        'lineid2',
+                                                                    value: widget
+                                                                            .tripListBack![index]
+                                                                            .lineId ??
+                                                                        0);
+
+                                                                CacheHelper.setDataToSharedPref(
+                                                                    key:
+                                                                        'serviceTypeID2',
+                                                                    value: widget
+                                                                            .tripListBack![index]
+                                                                            .serviceTypeId ??
+                                                                        0);
+
+                                                                CacheHelper.setDataToSharedPref(
+                                                                    key:
+                                                                        'busId2',
+                                                                    value: widget
+                                                                            .tripListBack![index]
+                                                                            .busId ??
+                                                                        0);
+
+                                                                UmraDetails.swatransportList!.add(TransportList(
+                                                                    availability: widget
+                                                                        .tripListBack![
+                                                                            index]
+                                                                        .emptySeat,
+                                                                    busId: widget
+                                                                        .tripListBack![
+                                                                            index]
+                                                                        .busId,
+                                                                    from: widget
+                                                                        .tripListBack![
+                                                                            index]
+                                                                        .fromCityName,
+                                                                    fromStationName: widget
+                                                                        .tripListBack![
+                                                                            index]
+                                                                        .from,
+                                                                    to: widget
+                                                                        .tripListBack![
+                                                                            index]
+                                                                        .toCityName,
+                                                                    isActive:
+                                                                        true,
+                                                                    isDelete: widget
+                                                                        .tripListBack![
+                                                                            index]
+                                                                        .isDeleted,
+                                                                    isAddedTrip:
+                                                                        true,
+                                                                    lineId: widget
+                                                                        .tripListBack![
+                                                                            index]
+                                                                        .lineId,
+                                                                    notes: '',
+                                                                    priceSeat: widget
+                                                                        .tripListBack![
+                                                                            index]
+                                                                        .price,
+                                                                    toStationName: widget
+                                                                        .tripListBack![
+                                                                            index]
+                                                                        .to,
+                                                                    tripDate:
+                                                                        '${intl.DateFormat.d('en_US').format(widget.tripListBack![index].accessDate!)}${intl.DateFormat.MMM('en_US').format(widget.tripListBack![index].accessDate!)}',
+                                                                    isreserved: false,
+                                                                    tripId: widget.tripListBack![index].tripId,
+                                                                    personCountReserved: 0,
+                                                                    serviceTypeId: widget.tripListBack![index].serviceTypeId,
+                                                                    tripTime: widget.tripListBack![index].accessBusTime.toString(),
+                                                                    fromStationId: null,
+                                                                    toStationId: null,
+                                                                    tripUmrahTransportationId: null,
+                                                                    reservationId: null));
+                                                                var bookModel =
+                                                                    BookingModel(
+                                                                  departureCompanyLogo:
+                                                                      logoGo,
+                                                                  departureCompanyName:
+                                                                      companyGo,
+                                                                  returnCompanyLogo: widget
+                                                                      .tripListBack?[
+                                                                          index]
+                                                                      .logo,
+                                                                  returnCompanyName: widget
+                                                                      .tripListBack?[
+                                                                          index]
+                                                                      .companyName,
+                                                                );
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) =>
+                                                                          MultiBlocProvider(
+                                                                              providers: [
+                                                                                BlocProvider<LoginCubit>(create: (context) => sl<LoginCubit>()),
+                                                                                BlocProvider<TimesTripsCubit>(
+                                                                                  create: (context) => TimesTripsCubit(),
+                                                                                ),
+                                                                                BlocProvider<BusLayoutCubit>(
+                                                                                  create: (context) => BusLayoutCubit(),
+                                                                                )
+                                                                              ],
+                                                                              // Replace with your actual cubit creation logic
+                                                                              child: BusLayoutScreenBack(
+                                                                                isedit: false,
+                                                                                bookingModel: bookModel,
+                                                                                arrivaltime: widget.tripListBack?[index].arrivalDate,
+                                                                                busdate: widget.tripListBack![index].accessDate,
+                                                                                busttime: widget.tripListBack![index].accessBusTime,
+                                                                                to: widget.tripListBack![index].to ?? "",
+                                                                                from: widget.tripListBack![index].from ?? "",
+                                                                                triTypeId: widget.tripTypeId,
+                                                                                price: widget.tripListBack![index].price!,
+                                                                                user: Routes.user,
+                                                                                discount: widget.tripListBack![index].discount,
+                                                                                tripId: widget.tripListBack![index].tripId!,
+                                                                                tocity: widget.tripListBack![index].toCityName ?? '',
+                                                                                fromcity: widget.tripListBack![index].fromCityName ?? '',
+                                                                              ))),
+                                                                ).then((value) {
+                                                                  setState(
+                                                                      () {});
+                                                                });
+                                                              } else {
+                                                                Constants.showDefaultSnackBar(
+                                                                    context:
+                                                                        context,
+                                                                    text: LanguageClass
+                                                                            .isEnglish
+                                                                        ? "Please reserve go trip first"
+                                                                        : "Ø¨Ø±Ø¬Ø§Ø¡ Ø§Ø®ØªÙŠØ§Ø± Ø±Ø­Ù„Ø© Ø°Ù‡Ø§Ø¨ Ø§ÙˆÙ„Ø§Ù‹");
+                                                              }
+                                                            },
+                                                            child: Container(
+                                                              height: 30.sp,
+                                                              width: LanguageClass
+                                                                      .isEnglish
+                                                                  ? 60.sp
+                                                                  : 48.sp,
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          10,
+                                                                      vertical:
+                                                                          8),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                boxShadow: [
+                                                                  BoxShadow(
+                                                                      color: AppColors
+                                                                          .white,
+                                                                      offset:
+                                                                          Offset(0,
+                                                                              0),
+                                                                      spreadRadius:
+                                                                          0,
+                                                                      blurRadius:
+                                                                          8)
+                                                                ],
+                                                                color:
+                                                                    _primaryColor,
+                                                                // gradient:
+                                                                //     const LinearGradient(
+                                                                //         colors: [
+                                                                //       Color(
+                                                                //           0xfffd634f),
+                                                                //       Color(
+                                                                //           0xffff9976),
+                                                                //     ]),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8),
+                                                              ),
+                                                              child: Center(
+                                                                child: Text(
+                                                                  LanguageClass
+                                                                          .isEnglish
+                                                                      ? 'Book'
+                                                                      : 'Ø­Ø¬Ø²',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      fontStyle(
+                                                                    color: AppColors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontFamily
+                                                                            .medium,
+                                                                    fontSize:
+                                                                        12.sp,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        )
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      width: 20,
+                                                    )
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : SizedBox()
+                                  ],
+                                );
+                              },
+                              separatorBuilder:
+                                  (BuildContext context, int index) => SizedBox(
+                                height: 10,
+                              ),
+                            ),
+                          )
+                        : SizedBox.shrink(),
+                    // todo :  button action next confirm
+                    Ticketreservation.Seatsnumbers2.isNotEmpty &&
+                            Ticketreservation.Seatsnumbers1.isNotEmpty
+                        ? InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      BlocProvider<LoginCubit>(
+                                          create: (context) => sl<LoginCubit>(),
+                                          child: ReservationTicket(
+                                            tripTypeId: "2",
+                                            actualDiscount:
+                                                Ticketreservation.discount * 2,
+                                            user: Routes.user,
+                                          )),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              alignment: Alignment.centerRight,
+                              height: 50,
+                              //padding:  EdgeInsets.symmetric(horizontal: 10,vertical:20),
+                              //margin: const EdgeInsets.symmetric(horizontal: 35,vertical: 5),
+                              decoration: BoxDecoration(
+                                  color: AppColors.primaryColor,
+                                  borderRadius: BorderRadius.circular(41)),
+                              child: Center(
+                                child: Text(
+                                  LanguageClass.isEnglish
+                                      ? "Continue"
+                                      : "Ø§Ø³ØªÙ…Ø±",
+                                  style: fontStyle(
+                                      color: AppColors.white,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 20.sp),
+                                ),
+                              ),
+                            ),
+                          )
+                        : SizedBox()
+                  ],
+                ),
+                PositionedDirectional(
+                  top: 4,
+                  start: 10,
+                  child: _buildFilterToggleButton(),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -3067,6 +3153,146 @@ class _TimesScreenState extends State<TimesScreen>
               currentIndex: 0,
             ),
     );
+  }
+
+  void _handleFilterListState(TimesTripsStates state) {
+    if (state is LoadedRecommendedList &&
+        state.recommendedModel.status != "failed") {
+      final items = state.recommendedModel.message ?? [];
+      setState(() {
+        _recommendedFilterItems
+          ..clear()
+          ..addAll(items.map((e) => LanguageClass.isEnglish
+              ? e.textEn.toString()
+              : e.textAr.toString()));
+        _recommendedFilterIds
+          ..clear()
+          ..addEntries(items.map((e) => MapEntry(
+                LanguageClass.isEnglish
+                    ? e.textEn.toString()
+                    : e.textAr.toString(),
+                e.id,
+              )));
+      });
+    } else if (state is LoadedCompaniesList &&
+        state.compaiesModel.status != "failed") {
+      final items = state.compaiesModel.message ?? [];
+      setState(() {
+        _companyFilterItems
+          ..clear()
+          ..addAll(items.map((e) => e.Name.toString()));
+        _companyFilterIds
+          ..clear()
+          ..addEntries(
+              items.map((e) => MapEntry(e.Name.toString(), e.CompanyID)));
+      });
+    }
+  }
+
+  Widget _buildFilterToggleButton() {
+    return InkWell(
+      onTap: () {
+        final willShowFilters = !_showFilters;
+        setState(() {
+          _showFilters = willShowFilters;
+        });
+        if (willShowFilters) {
+          _scrollSelectedDayToCenter();
+        }
+      },
+      borderRadius: BorderRadius.circular(22),
+      child: AnimatedScale(
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOutBack,
+        scale: _showFilters ? 1.08 : 1,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeInOut,
+          height: 40,
+          width: 40,
+          decoration: BoxDecoration(
+            color: _showFilters ? _primaryColor : AppColors.white,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 4,
+                offset: Offset(0, 1),
+              ),
+            ],
+          ),
+          child: AnimatedRotation(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeInOut,
+            turns: _showFilters ? -0.12 : 0,
+            child: Icon(
+              _showFilters ? Icons.filter_alt_off : Icons.filter_list,
+              color: _showFilters ? AppColors.white : AppColors.blackColor,
+              size: 20,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _handleTimesTripsState(BuildContext context, TimesTripsStates state) {
+    _handleFilterListState(state);
+
+    if (state is LoadingTimesTrips) {
+      Constants.showLoadingDialog(context);
+    } else if (state is LoadedTimesTrips) {
+      Constants.hideLoadingDialog(context);
+
+      timeSlotsGo = state.timesTripsResponse.message?.timeSlotsGo;
+      timeSlotsBack = state.timesTripsResponse.message?.timeSlotsBack;
+      print("${state.timesTripsResponse.message!.tripList.length} list");
+      print(
+          "${state.timesTripsResponse.message!.tripListBack.length} back list");
+
+      if (state.timesTripsResponse.message!.tripList.isNotEmpty) {
+        setState(() {
+          _keepSelectedDayVisible();
+          widget.tripList = state.timesTripsResponse.message!.tripList;
+
+          widget.tripTypeId = '1';
+          if (widget.tripTypeId == '1') {
+            widget.tripListBack?.clear();
+            widget.tripTypeId = '1';
+          }
+          print(widget.tripTypeId.toString());
+          if (state.timesTripsResponse.message!.tripListBack.isNotEmpty) {
+            widget.tripTypeId = '2';
+            widget.tripListBack =
+                state.timesTripsResponse.message!.tripListBack;
+          }
+        });
+
+        Reservationtimer.stoptimer();
+
+        Ticketreservation.Seatsnumbers1.clear();
+        Ticketreservation.Seatsnumbers2.clear();
+      } else {
+        setState(() {
+          _keepSelectedDayVisible();
+          widget.tripList.clear();
+          widget.tripListBack?.clear();
+          timeSlotsGo = state.timesTripsResponse.message?.timeSlotsGo;
+          timeSlotsBack = state.timesTripsResponse.message?.timeSlotsBack;
+        });
+        Constants.showDefaultSnackBar(
+          context: context,
+          text: LanguageClass.isEnglish
+              ? "No trips in this date"
+              : "Ã™â€žÃ˜Â§ Ã™Å Ã™Ë†Ã˜Â¬Ã˜Â¯ Ã™â€¦Ã™Ë†Ã˜Â§Ã˜Â¹Ã™Å Ã˜Â¯ Ã™ÂÃ™Å  Ã™â€¡Ã˜Â°Ã˜Â§ Ã˜Â§Ã™â€žÃ™â€¦Ã™Ë†Ã˜Â¹Ã˜Â¯",
+        );
+      }
+    } else if (state is ErrorTimesTrips) {
+      widget.tripList.clear();
+      setState(() {});
+      Constants.hideLoadingDialog(context);
+      Constants.showDefaultSnackBar(context: context, text: state.msg);
+    }
   }
 
   final now = DateTime.now();
@@ -3201,7 +3427,7 @@ class _TimesScreenState extends State<TimesScreen>
 
   void _changeDay(int value) {
     _selectDay(selectedDate.add(Duration(days: value)));
-    _scrollToCenter();
+    _scrollSelectedDayToCenter();
     _fetchTripsForSelectedDay();
   }
 
@@ -3210,6 +3436,7 @@ class _TimesScreenState extends State<TimesScreen>
 
     setState(() {
       selectedDate = date;
+      selectedIndexDay = intl.DateFormat('EEE, d MMM', locale).format(date);
 
       DateGo = intl.DateFormat(
         'yyyy-MM-dd',
@@ -3221,6 +3448,34 @@ class _TimesScreenState extends State<TimesScreen>
         locale,
       ).format(date);
     });
+  }
+
+  void _keepSelectedDayVisible() {
+    final locale = LanguageClass.isEnglish ? 'en' : 'ar';
+    selectedIndexDay =
+        intl.DateFormat('EEE, d MMM', locale).format(selectedDate);
+  }
+
+  void _clearRecommendedFilter() {
+    if (recommendedvalue == null && recommendeID == null) return;
+
+    setState(() {
+      recommendedvalue = null;
+      recommendeID = null;
+      isRecommended = false;
+    });
+    _fetchTripsForSelectedDay();
+  }
+
+  void _clearCompanyFilter() {
+    if (companeyvalue == null && companyID == null) return;
+
+    setState(() {
+      companeyvalue = null;
+      companyID = null;
+      showCompanies = false;
+    });
+    _fetchTripsForSelectedDay();
   }
 
   void _fetchTripsForSelectedDay() {
@@ -3276,7 +3531,7 @@ class _TimesScreenState extends State<TimesScreen>
                 return GestureDetector(
                   onTap: () {
                     _selectDay(date);
-                    _scrollToCenter();
+                    _scrollSelectedDayToCenter();
                     _fetchTripsForSelectedDay();
                   },
                   child: Column(
@@ -3539,6 +3794,37 @@ class _TimesScreenState extends State<TimesScreen>
   //   );
   // }
 
+  Widget _buildCachedCompanyFilterCard() {
+    return _buildFilterCard(
+      onTap: () {},
+      isRadiusActive: showCompanies,
+      title: companeyvalue != null
+          ? companeyvalue!
+          : LanguageClass.isEnglish
+              ? "Companies"
+              : "الشركات",
+      hasSelection: companeyvalue != null,
+      onClearSelection: _clearCompanyFilter,
+      dropdownItems: _companyFilterItems,
+      onItemSelected: (p0) {
+        setState(() {
+          companeyvalue = p0;
+        });
+        companyID = _companyFilterIds[p0];
+        _fetchTripsForSelectedDay();
+      },
+      onOpenChanged: (isOpen) {
+        setState(() {
+          showCompanies = isOpen;
+          if (isOpen) {
+            isRecommended = false;
+          }
+        });
+      },
+      icon: Icons.keyboard_arrow_down_rounded,
+    );
+  }
+
   Widget _buildFilterCard({
     required String title,
     required IconData icon,
@@ -3552,6 +3838,8 @@ class _TimesScreenState extends State<TimesScreen>
     EdgeInsetsGeometry? padding,
     TextStyle? textStyle,
     bool isRadiusActive = false,
+    bool hasSelection = false,
+    VoidCallback? onClearSelection,
   }) {
     if (dropdownItems != null && dropdownItems.isNotEmpty) {
       return FilterDropdownCard(
@@ -3567,6 +3855,8 @@ class _TimesScreenState extends State<TimesScreen>
         isOpen: isRadiusActive,
         onOpenChanged: onOpenChanged,
         textStyle: textStyle,
+        hasSelection: hasSelection,
+        onClearSelection: onClearSelection,
       );
     }
 
@@ -3697,6 +3987,8 @@ class FilterDropdownCard extends StatefulWidget {
   final TextStyle? textStyle;
   final ValueChanged<bool>? onOpenChanged;
   final bool isOpen;
+  final bool hasSelection;
+  final VoidCallback? onClearSelection;
   const FilterDropdownCard({
     required this.icon,
     required this.title,
@@ -3710,6 +4002,8 @@ class FilterDropdownCard extends StatefulWidget {
     this.textStyle,
     this.onOpenChanged,
     this.isOpen = false,
+    this.hasSelection = false,
+    this.onClearSelection,
   });
 
   @override
@@ -3721,8 +4015,16 @@ class _FilterDropdownCardState extends State<FilterDropdownCard> {
   final LayerLink _layerLink = LayerLink();
   bool _isOpen = false;
 
+  @override
+  void didUpdateWidget(covariant FilterDropdownCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!widget.isOpen && _isOpen) {
+      _hideDropdown(notifyParent: false);
+    }
+  }
+
   void _toggleDropdown() {
-    if (widget.isOpen) {
+    if (_isOpen) {
       _hideDropdown();
     } else {
       _showDropdown();
@@ -3731,24 +4033,32 @@ class _FilterDropdownCardState extends State<FilterDropdownCard> {
   }
 
   void _showDropdown() {
+    if (_isOpen) return;
     _overlayEntry = _createOverlayEntry();
-    Overlay.of(context).insert(_overlayEntry!);
+    Overlay.of(context, rootOverlay: true).insert(_overlayEntry!);
     setState(() {
       _isOpen = true;
     });
     widget.onOpenChanged?.call(true);
   }
 
-  void _hideDropdown() {
+  void _hideDropdown({bool notifyParent = true}) {
     _overlayEntry?.remove();
     _overlayEntry = null;
-    if (!mounted) {
+    if (mounted) {
       setState(() {
         _isOpen = false;
       });
     }
 
-    widget.onOpenChanged?.call(false);
+    if (notifyParent) {
+      widget.onOpenChanged?.call(false);
+    }
+  }
+
+  void _clearSelection() {
+    _hideDropdown();
+    widget.onClearSelection?.call();
   }
 
   OverlayEntry _createOverlayEntry() {
@@ -3757,7 +4067,7 @@ class _FilterDropdownCardState extends State<FilterDropdownCard> {
 
     return OverlayEntry(
       builder: (context) => GestureDetector(
-        onTap: _toggleDropdown,
+        onTap: _hideDropdown,
         behavior: HitTestBehavior.translucent,
         child: Stack(
           children: [
@@ -3792,7 +4102,8 @@ class _FilterDropdownCardState extends State<FilterDropdownCard> {
                       padding: EdgeInsets.only(bottom: 5),
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: widget.items.length,
+                      itemCount:
+                          widget.items.length + (widget.hasSelection ? 1 : 0),
                       separatorBuilder: (_, __) => Divider(
                         height: 1,
                         thickness: 0.5,
@@ -3802,10 +4113,49 @@ class _FilterDropdownCardState extends State<FilterDropdownCard> {
                         // color: Color(0xFFE0E0E0),
                       ),
                       itemBuilder: (context, index) {
+                        if (widget.hasSelection && index == 0) {
+                          return InkWell(
+                            onTap: _clearSelection,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 13,
+                                vertical: 7,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.close_rounded,
+                                    color: Color(0xfff65702),
+                                    size: 14,
+                                  ),
+                                  SizedBox(width: 4),
+                                  Flexible(
+                                    child: Text(
+                                      LanguageClass.isEnglish
+                                          ? "Clear selection"
+                                          : "إلغاء الاختيار",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: widget.textStyle ??
+                                          TextStyle(
+                                            color: Color(0xfff65702),
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+
+                        final itemIndex =
+                            widget.hasSelection ? index - 1 : index;
                         return InkWell(
                           onTap: () {
-                            widget.onItemSelected(widget.items[index]);
                             _hideDropdown();
+                            widget.onItemSelected(widget.items[itemIndex]);
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
@@ -3813,7 +4163,7 @@ class _FilterDropdownCardState extends State<FilterDropdownCard> {
                               vertical: 5,
                             ),
                             child: Text(
-                              widget.items[index],
+                              widget.items[itemIndex],
                               style: widget.textStyle ??
                                   TextStyle(
                                     color: Color(0xff717171),
@@ -3876,6 +4226,21 @@ class _FilterDropdownCardState extends State<FilterDropdownCard> {
                     ),
                   ),
                   SizedBox(width: 3),
+                  if (widget.hasSelection && widget.onClearSelection != null)
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: _clearSelection,
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Icon(
+                          Icons.close_rounded,
+                          color: Color(0xfff65702),
+                          size: 15,
+                        ),
+                      ),
+                    ),
+                  if (widget.hasSelection && widget.onClearSelection != null)
+                    SizedBox(width: 3),
                   if (!widget.iconCustom)
                     Icon(
                       _isOpen ? Icons.keyboard_arrow_up : widget.icon,
@@ -3894,7 +4259,8 @@ class _FilterDropdownCardState extends State<FilterDropdownCard> {
 
   @override
   void dispose() {
-    _hideDropdown();
+    _overlayEntry?.remove();
+    _overlayEntry = null;
     super.dispose();
   }
 }
