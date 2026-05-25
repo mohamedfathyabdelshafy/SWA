@@ -110,6 +110,8 @@ class _TimesScreenState extends State<TimesScreen>
   int? companyID;
   String? startTime;
   String? endTime;
+  int selectedGoTimeIndex = -1;
+  int selectedBackTimeIndex = -1;
 
   String? recommendedvalue;
   String? companeyvalue;
@@ -127,13 +129,75 @@ class _TimesScreenState extends State<TimesScreen>
 
   bool get _hasBackTrips => widget.tripListBack?.isNotEmpty == true;
 
-  bool get _isReturnSelectionView =>
-      widget.tripTypeId == '2' &&
-      Ticketreservation.Seatsnumbers1.isNotEmpty &&
-      _hasBackTrips;
+  bool get _hasSelectedGoSeats => Ticketreservation.Seatsnumbers1.isNotEmpty;
 
-  bool get _isShowingBackTrips =>
-      _isReturnSelectionView || (!isgotrip && _hasBackTrips);
+  bool get _hasSelectedBackSeats => Ticketreservation.Seatsnumbers2.isNotEmpty;
+
+  bool get _shouldShowBackTrips =>
+      _hasBackTrips &&
+      ((!isgotrip && !_hasSelectedBackSeats) ||
+          (isgotrip && _hasSelectedGoSeats && !_hasSelectedBackSeats));
+
+  bool get _shouldShowGoTrips =>
+      !_hasSelectedGoSeats &&
+      (!_hasBackTrips || isgotrip || _hasSelectedBackSeats);
+
+  bool get _isShowingBackTrips => _shouldShowBackTrips;
+
+  String _formatTripDate(DateTime date) {
+    return intl.DateFormat(
+      'yyyy-MM-dd',
+      LanguageClass.isEnglish ? 'en' : 'ar',
+    ).format(date);
+  }
+
+  void _setVisibleLegDate(DateTime date) {
+    final locale = LanguageClass.isEnglish ? 'en' : 'ar';
+    selectedDate = date;
+    selectedIndexDay = intl.DateFormat('EEE, d MMM', locale).format(date);
+
+    if (_isShowingBackTrips) {
+      DateBack = _formatTripDate(date);
+    } else {
+      DateGo = _formatTripDate(date);
+    }
+  }
+
+  void _syncSelectedDateWithVisibleLeg() {
+    final trips = _isShowingBackTrips ? widget.tripListBack : widget.tripList;
+    _setVisibleLegDate(
+      trips?.isNotEmpty == true ? trips!.first.accessDate! : now,
+    );
+  }
+
+  void _clearCurrentLegTimeFilter() {
+    startTime = null;
+    endTime = null;
+    if (_isShowingBackTrips) {
+      selectedBackTimeIndex = -1;
+    } else {
+      selectedGoTimeIndex = -1;
+    }
+  }
+
+  int _effectiveSelectedTimeIndex(List<TimeSlots> times) {
+    final selectedTimeIndex =
+        _isShowingBackTrips ? selectedBackTimeIndex : selectedGoTimeIndex;
+    if (selectedTimeIndex >= 0 &&
+        selectedTimeIndex < times.length &&
+        times[selectedTimeIndex].hasTrips == true) {
+      return selectedTimeIndex;
+    }
+
+    final apiSelectedIndex = times.indexWhere(
+      (time) => time.hasTrips == true && time.isSelected == true,
+    );
+    if (apiSelectedIndex != -1) {
+      return apiSelectedIndex;
+    }
+
+    return times.indexWhere((time) => time.hasTrips == true);
+  }
 
   String get _currentTripTitle {
     if (LanguageClass.isEnglish) {
@@ -425,6 +489,11 @@ class _TimesScreenState extends State<TimesScreen>
                                           );
                                         }
 
+                                        if (_recommendedFilterItems
+                                            .isNotEmpty) {
+                                          return _buildCachedRecommendedFilterCard();
+                                        }
+
                                         if (state is ErrorCompaniesList) {
                                           return _buildFilterCard(
                                             title: LanguageClass.isEnglish
@@ -468,8 +537,7 @@ class _TimesScreenState extends State<TimesScreen>
                                                 : LanguageClass.isEnglish
                                                     ? "Companies"
                                                     : "Ø§Ù„Ø´Ø±ÙƒØ§Øª",
-                                            hasSelection:
-                                                companeyvalue != null,
+                                            hasSelection: companeyvalue != null,
                                             onClearSelection:
                                                 _clearCompanyFilter,
                                             onItemSelected: (p0) {
@@ -542,9 +610,12 @@ class _TimesScreenState extends State<TimesScreen>
                                     flex: 2,
                                     child: _buildFilterCard(
                                         onTap: () {
-                                          if (!_isReturnSelectionView) {
+                                          if (!_hasSelectedGoSeats &&
+                                              !_hasSelectedBackSeats) {
                                             setState(() {
                                               isgotrip = !isgotrip;
+                                              _syncSelectedDateWithVisibleLeg();
+                                              _clearCurrentLegTimeFilter();
                                             });
                                           }
                                           _fetchTripsForSelectedDay();
@@ -567,9 +638,8 @@ class _TimesScreenState extends State<TimesScreen>
                       curve: Curves.easeInOut,
                       height: _showFilters ? 16 : 56,
                     ),
-                    Ticketreservation.Seatsnumbers1.isNotEmpty
-                        ? SizedBox.shrink()
-                        : Expanded(
+                    _shouldShowGoTrips
+                        ? Expanded(
                             flex: selected.isEven ? 7 : 1,
                             child: ListView.separated(
                               padding: EdgeInsets.zero,
@@ -1709,16 +1779,7 @@ class _TimesScreenState extends State<TimesScreen>
                                                                   setState(() {
                                                                     isgotrip =
                                                                         false;
-                                                                    Ticketreservation
-                                                                            .Seatsnumbers1
-                                                                            .isNotEmpty
-                                                                        ? selectedDate = widget.tripListBack!.isNotEmpty
-                                                                            ? widget
-                                                                                .tripListBack!.first.accessDate!
-                                                                            : now
-                                                                        : selectedDate = widget.tripList.isNotEmpty
-                                                                            ? widget.tripList.first.accessDate!
-                                                                            : now;
+                                                                    _syncSelectedDateWithVisibleLeg();
                                                                   });
                                                                 }
                                                               });
@@ -1866,10 +1927,10 @@ class _TimesScreenState extends State<TimesScreen>
                                 height: 10,
                               ),
                             ),
-                          ),
+                          )
+                        : SizedBox.shrink(),
 
-                    (widget.tripTypeId == '2' &&
-                            Ticketreservation.Seatsnumbers1.isNotEmpty)
+                    _shouldShowBackTrips
                         ? Expanded(
                             flex: selectedback.isEven ? 7 : 1,
                             child: ListView.separated(
@@ -2797,9 +2858,9 @@ class _TimesScreenState extends State<TimesScreen>
                                                               .centerRight,
                                                           child: InkWell(
                                                             onTap: () {
-                                                              if (Ticketreservation
-                                                                  .Seatsnumbers1
-                                                                  .isNotEmpty) {
+                                                              if (_hasSelectedGoSeats ||
+                                                                  (!isgotrip &&
+                                                                      !_hasSelectedBackSeats)) {
                                                                 CacheHelper.setDataToSharedPref(
                                                                     key:
                                                                         'numberTrip2',
@@ -2986,8 +3047,18 @@ class _TimesScreenState extends State<TimesScreen>
                                                                                 fromcity: widget.tripListBack![index].fromCityName ?? '',
                                                                               ))),
                                                                 ).then((value) {
-                                                                  setState(
-                                                                      () {});
+                                                                  if (_hasSelectedBackSeats &&
+                                                                      !_hasSelectedGoSeats) {
+                                                                    setState(
+                                                                        () {
+                                                                      isgotrip =
+                                                                          true;
+                                                                      _syncSelectedDateWithVisibleLeg();
+                                                                    });
+                                                                  } else {
+                                                                    setState(
+                                                                        () {});
+                                                                  }
                                                                 });
                                                               } else {
                                                                 Constants.showDefaultSnackBar(
@@ -3244,27 +3315,32 @@ class _TimesScreenState extends State<TimesScreen>
     } else if (state is LoadedTimesTrips) {
       Constants.hideLoadingDialog(context);
 
-      timeSlotsGo = state.timesTripsResponse.message?.timeSlotsGo;
-      timeSlotsBack = state.timesTripsResponse.message?.timeSlotsBack;
-      print("${state.timesTripsResponse.message!.tripList.length} list");
-      print(
-          "${state.timesTripsResponse.message!.tripListBack.length} back list");
+      final message = state.timesTripsResponse.message;
+      final goTrips = message?.tripList ?? <TripList>[];
+      final backTrips = message?.tripListBack ?? <TripList>[];
+      timeSlotsGo = message?.timeSlotsGo ?? timeSlotsGo;
+      timeSlotsBack = message?.timeSlotsBack ?? timeSlotsBack;
+      print("${goTrips.length} list");
+      print("${backTrips.length} back list");
 
-      if (state.timesTripsResponse.message!.tripList.isNotEmpty) {
+      if (goTrips.isNotEmpty || backTrips.isNotEmpty) {
         setState(() {
           _keepSelectedDayVisible();
-          widget.tripList = state.timesTripsResponse.message!.tripList;
+          if (goTrips.isNotEmpty) {
+            widget.tripList = goTrips;
+          } else if (!_isShowingBackTrips) {
+            widget.tripList.clear();
+          }
 
           widget.tripTypeId = '1';
-          if (widget.tripTypeId == '1') {
+          if (widget.tripTypeId == '1' && backTrips.isEmpty) {
             widget.tripListBack?.clear();
             widget.tripTypeId = '1';
           }
           print(widget.tripTypeId.toString());
-          if (state.timesTripsResponse.message!.tripListBack.isNotEmpty) {
+          if (backTrips.isNotEmpty) {
             widget.tripTypeId = '2';
-            widget.tripListBack =
-                state.timesTripsResponse.message!.tripListBack;
+            widget.tripListBack = backTrips;
           }
         });
 
@@ -3275,10 +3351,13 @@ class _TimesScreenState extends State<TimesScreen>
       } else {
         setState(() {
           _keepSelectedDayVisible();
-          widget.tripList.clear();
-          widget.tripListBack?.clear();
-          timeSlotsGo = state.timesTripsResponse.message?.timeSlotsGo;
-          timeSlotsBack = state.timesTripsResponse.message?.timeSlotsBack;
+          if (_isShowingBackTrips) {
+            widget.tripListBack?.clear();
+          } else {
+            widget.tripList.clear();
+          }
+          timeSlotsGo = message?.timeSlotsGo ?? timeSlotsGo;
+          timeSlotsBack = message?.timeSlotsBack ?? timeSlotsBack;
         });
         Constants.showDefaultSnackBar(
           context: context,
@@ -3288,62 +3367,49 @@ class _TimesScreenState extends State<TimesScreen>
         );
       }
     } else if (state is ErrorTimesTrips) {
-      widget.tripList.clear();
-      setState(() {});
+      setState(() {
+        if (_isShowingBackTrips) {
+          widget.tripListBack?.clear();
+        } else {
+          widget.tripList.clear();
+        }
+      });
       Constants.hideLoadingDialog(context);
       Constants.showDefaultSnackBar(context: context, text: state.msg);
     }
   }
 
   final now = DateTime.now();
-  int selectedIndex = 0;
 
   Widget _buildTimeWidget(String day, String time) {
     final locale = LanguageClass.isEnglish ? 'en' : 'ar';
-    List<TimeSlots>? times = _isShowingBackTrips ? timeSlotsBack : timeSlotsGo;
+    final times =
+        (_isShowingBackTrips ? timeSlotsBack : timeSlotsGo) ?? <TimeSlots>[];
+    final selectedTimeIndex = _effectiveSelectedTimeIndex(times);
 
     return SizedBox(
       height: 30,
       child: ListView.builder(
         shrinkWrap: true,
-        itemCount: times!.length,
+        itemCount: times.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          final date = widget.tripList.length > 0
-              ? widget.tripList.first.accessDate!.add(Duration(days: index))
-              : now.add(Duration(days: index));
-
-          final fromTime = intl.DateFormat(
-            'h a',
-            locale,
-          ).format(date.add(Duration(hours: index))).toLowerCase();
-          final toTime = intl.DateFormat(
-            'h a',
-            locale,
-          ).format(date.add(Duration(hours: index + 1))).toLowerCase();
-
-          final isSelected = selectedIndex == index;
-          final start = intl.DateFormat(
-            'HH',
-            locale,
-          ).format(
-            date.add(Duration(hours: index)),
-          );
-
-          final end = intl.DateFormat(
-            'HH',
-            locale,
-          ).format(date.add(Duration(hours: index + 1))).toLowerCase();
+          final isSelected =
+              selectedTimeIndex == index || times[index].isSelected == true;
 
           return times[index].hasTrips == true
               ? GestureDetector(
                   onTap: () {
-                    startTime = times[index].startTime;
-                    endTime = times[index].endTime;
-                    _fetchTripsForSelectedDay();
                     setState(() {
-                      selectedIndex = index;
+                      startTime = times[index].startTime;
+                      endTime = times[index].endTime;
+                      if (_isShowingBackTrips) {
+                        selectedBackTimeIndex = index;
+                      } else {
+                        selectedGoTimeIndex = index;
+                      }
                     });
+                    _fetchTripsForSelectedDay();
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0),
@@ -3432,21 +3498,8 @@ class _TimesScreenState extends State<TimesScreen>
   }
 
   void _selectDay(DateTime date) {
-    final locale = LanguageClass.isEnglish ? 'en' : 'ar';
-
     setState(() {
-      selectedDate = date;
-      selectedIndexDay = intl.DateFormat('EEE, d MMM', locale).format(date);
-
-      DateGo = intl.DateFormat(
-        'yyyy-MM-dd',
-        locale,
-      ).format(date);
-
-      DateBack = intl.DateFormat(
-        'yyyy-MM-dd',
-        locale,
-      ).format(date);
+      _setVisibleLegDate(date);
     });
   }
 
@@ -3481,14 +3534,10 @@ class _TimesScreenState extends State<TimesScreen>
   void _fetchTripsForSelectedDay() {
     _timesTripsCubit.getTimes(
       tripType: _hasBackTrips ? "2" : widget.tripTypeId.toString(),
-      fromStationID: _isShowingBackTrips
-          ? widget.toStationID.toString()
-          : widget.fromStationID.toString(),
-      toStationID: _isShowingBackTrips
-          ? widget.fromStationID.toString()
-          : widget.toStationID.toString(),
-      dateGo: _isShowingBackTrips ? DateBack : DateGo,
-      dateBack: _isShowingBackTrips ? DateGo : DateBack,
+      fromStationID: widget.fromStationID.toString(),
+      toStationID: widget.toStationID.toString(),
+      dateGo: DateGo,
+      dateBack: DateBack,
       startTime: startTime,
       endTime: endTime,
       companeyid: companyID,
@@ -3818,6 +3867,36 @@ class _TimesScreenState extends State<TimesScreen>
           showCompanies = isOpen;
           if (isOpen) {
             isRecommended = false;
+          }
+        });
+      },
+      icon: Icons.keyboard_arrow_down_rounded,
+    );
+  }
+
+  Widget _buildCachedRecommendedFilterCard() {
+    return _buildFilterCard(
+      isRadiusActive: isRecommended,
+      title: recommendedvalue != null
+          ? recommendedvalue!
+          : LanguageClass.isEnglish
+              ? "Recommended"
+              : "Ø§Ù„Ù…ÙˆØµÙŠ Ø¨Ù‡Ø§",
+      hasSelection: recommendedvalue != null,
+      onClearSelection: _clearRecommendedFilter,
+      dropdownItems: _recommendedFilterItems,
+      onItemSelected: (p0) {
+        setState(() {
+          recommendedvalue = p0;
+        });
+        recommendeID = _recommendedFilterIds[p0];
+        _fetchTripsForSelectedDay();
+      },
+      onOpenChanged: (isOpen) {
+        setState(() {
+          isRecommended = isOpen;
+          if (isOpen) {
+            showCompanies = false;
           }
         });
       },

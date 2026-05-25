@@ -29,7 +29,8 @@ class SeatLayoutWidget extends StatelessWidget {
               (rowI) => Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ...List<int>.generate(stateModel.cols, (colI) => colI)
+                  ...List<int>.generate(
+                          stateModel.currentSeats[rowI].length, (colI) => colI)
                       .map<SeatWidget>((colI) {
                     return SeatWidget(
                       model: SeatModel(

@@ -24,9 +24,11 @@ class Timerwidget extends StatefulWidget {
 class _TimerwidgetState extends State<Timerwidget> {
   @override
   Widget build(BuildContext context) {
+    final duration = Reservationtimer.start > 0 ? Reservationtimer.start : 240;
+
     return Container(
       child: CircularCountDownTimer(
-        duration: Reservationtimer.start ?? 240,
+        duration: duration,
         initialDuration: 0,
         controller: Reservationtimer.controller,
         width: 40,
