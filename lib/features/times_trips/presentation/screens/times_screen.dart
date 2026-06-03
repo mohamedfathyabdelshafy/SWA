@@ -129,26 +129,28 @@ class _TimesScreenState extends State<TimesScreen>
 
   bool get _hasBackTrips => widget.tripListBack?.isNotEmpty == true;
 
+  bool get _isRoundTripSearch =>
+      widget.tripType == "2" ||
+      widget.tripTypeId == "2" ||
+      (widget.dateBack?.isNotEmpty == true && widget.dateBack != widget.dateGo);
+
   bool get _hasSelectedGoSeats => Ticketreservation.Seatsnumbers1.isNotEmpty;
 
   bool get _hasSelectedBackSeats => Ticketreservation.Seatsnumbers2.isNotEmpty;
 
-  bool get _shouldShowBackTrips =>
-      _hasBackTrips &&
-      ((!isgotrip && !_hasSelectedBackSeats) ||
-          (isgotrip && _hasSelectedGoSeats && !_hasSelectedBackSeats));
+  bool get _isBackLegRequested =>
+      _isRoundTripSearch && !isgotrip && !_hasSelectedBackSeats;
+
+  bool get _shouldShowBackTrips => _isBackLegRequested && _hasBackTrips;
 
   bool get _shouldShowGoTrips =>
-      !_hasSelectedGoSeats &&
-      (!_hasBackTrips || isgotrip || _hasSelectedBackSeats);
+      !_isBackLegRequested &&
+      (widget.tripList.isNotEmpty || !_isRoundTripSearch);
 
-  bool get _isShowingBackTrips => _shouldShowBackTrips;
+  bool get _isShowingBackTrips => _isBackLegRequested;
 
   String _formatTripDate(DateTime date) {
-    return intl.DateFormat(
-      'yyyy-MM-dd',
-      LanguageClass.isEnglish ? 'en' : 'ar',
-    ).format(date);
+    return intl.DateFormat('MM-dd-yyyy', 'en').format(date);
   }
 
   void _setVisibleLegDate(DateTime date) {
@@ -165,8 +167,10 @@ class _TimesScreenState extends State<TimesScreen>
 
   void _syncSelectedDateWithVisibleLeg() {
     final trips = _isShowingBackTrips ? widget.tripListBack : widget.tripList;
+    final fallbackDate =
+        DateTime.tryParse(_isShowingBackTrips ? DateBack : DateGo) ?? now;
     _setVisibleLegDate(
-      trips?.isNotEmpty == true ? trips!.first.accessDate! : now,
+      trips?.isNotEmpty == true ? trips!.first.accessDate! : fallbackDate,
     );
   }
 
@@ -605,20 +609,19 @@ class _TimesScreenState extends State<TimesScreen>
                                     ),
                                   ),
                                 ],
-                                if (_showFilters && _hasBackTrips)
+                                if (_showFilters && _isRoundTripSearch)
                                   Expanded(
                                     flex: 2,
                                     child: _buildFilterCard(
                                         onTap: () {
-                                          if (!_hasSelectedGoSeats &&
-                                              !_hasSelectedBackSeats) {
+                                          if (!_hasSelectedBackSeats) {
                                             setState(() {
                                               isgotrip = !isgotrip;
                                               _syncSelectedDateWithVisibleLeg();
                                               _clearCurrentLegTimeFilter();
                                             });
+                                            _fetchTripsForSelectedDay();
                                           }
-                                          _fetchTripsForSelectedDay();
                                         },
                                         title: _currentTripTitle,
                                         icon:
@@ -3162,6 +3165,34 @@ class _TimesScreenState extends State<TimesScreen>
                             ),
                           )
                         : SizedBox.shrink(),
+                    _isRoundTripSearch &&
+                            ((_isShowingBackTrips && !_hasBackTrips) ||
+                                (!_isShowingBackTrips &&
+                                    widget.tripList.isEmpty))
+                        ? Expanded(
+                            child: Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 24),
+                                child: Text(
+                                  LanguageClass.isEnglish
+                                      ? (_isShowingBackTrips
+                                          ? "No return trips in this date"
+                                          : "No go trips in this date")
+                                      : (_isShowingBackTrips
+                                          ? "لا يوجد رحلات عودة في هذا التاريخ"
+                                          : "لا يوجد رحلات ذهاب في هذا التاريخ"),
+                                  textAlign: TextAlign.center,
+                                  style: fontStyle(
+                                    color: AppColors.blackColor,
+                                    fontFamily: FontFamily.medium,
+                                    fontSize: 14.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : SizedBox.shrink(),
                     // todo :  button action next confirm
                     Ticketreservation.Seatsnumbers2.isNotEmpty &&
                             Ticketreservation.Seatsnumbers1.isNotEmpty
@@ -3332,16 +3363,18 @@ class _TimesScreenState extends State<TimesScreen>
             widget.tripList.clear();
           }
 
-          widget.tripTypeId = '1';
-          if (widget.tripTypeId == '1' && backTrips.isEmpty) {
-            widget.tripListBack?.clear();
+          if (_isRoundTripSearch) {
+            widget.tripTypeId = '2';
+            if (backTrips.isNotEmpty) {
+              widget.tripListBack = backTrips;
+            } else if (_isShowingBackTrips) {
+              widget.tripListBack?.clear();
+            }
+          } else {
             widget.tripTypeId = '1';
+            widget.tripListBack?.clear();
           }
           print(widget.tripTypeId.toString());
-          if (backTrips.isNotEmpty) {
-            widget.tripTypeId = '2';
-            widget.tripListBack = backTrips;
-          }
         });
 
         Reservationtimer.stoptimer();
@@ -3533,7 +3566,7 @@ class _TimesScreenState extends State<TimesScreen>
 
   void _fetchTripsForSelectedDay() {
     _timesTripsCubit.getTimes(
-      tripType: _hasBackTrips ? "2" : widget.tripTypeId.toString(),
+      tripType: _isRoundTripSearch ? "2" : widget.tripTypeId.toString(),
       fromStationID: widget.fromStationID.toString(),
       toStationID: widget.toStationID.toString(),
       dateGo: DateGo,
