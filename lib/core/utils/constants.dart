@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:swa/config/routes/app_routes.dart';
+import 'package:swa/core/utils/arabic_text_sanitizer.dart';
 import 'package:swa/core/utils/app_colors.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/styles.dart';
@@ -58,7 +59,9 @@ class Constants {
       VoidCallback? onPress,
       bool? showDuration,
       Color? color}) {
-    final Color statusColor = _snackBarStatusColor(text: text, color: color);
+    final displayText = ArabicTextSanitizer.snackBarMessage(text);
+    final Color statusColor =
+        _snackBarStatusColor(text: displayText, color: color);
 
     scaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(
@@ -73,7 +76,7 @@ class Constants {
           textDirection:
               LanguageClass.isEnglish ? TextDirection.ltr : TextDirection.rtl,
           child: Text(
-            _capitalizeFirstLetter(text),
+            _capitalizeFirstLetter(displayText),
             textAlign:
                 LanguageClass.isEnglish ? TextAlign.start : TextAlign.end,
             style: fontStyle(

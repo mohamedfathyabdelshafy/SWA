@@ -1,7 +1,5 @@
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
-import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:swa/config/routes/app_routes.dart';
 import 'package:swa/core/utils/app_colors.dart';
@@ -11,7 +9,6 @@ import 'package:swa/core/widgets/app_dialog.dart';
 import 'package:swa/core/widgets/timer.dart';
 import 'package:swa/features/bus_reservation_layout/data/models/Ticket_class.dart';
 import 'package:swa/features/bus_reservation_layout/data/repo/bus_reservation_repo.dart';
-import 'package:swa/features/bus_reservation_layout/presentation/PLOH/bus_layout_reservation_cubit.dart';
 import 'package:swa/main.dart';
 
 class Timerwidget extends StatefulWidget {
@@ -80,11 +77,11 @@ class _TimerwidgetState extends State<Timerwidget> {
             AppDialog.show(
               barrierDismissible: false,
               context: context,
-              confirmText: "ok",
+              confirmText: LanguageClass.isEnglish ? 'OK' : 'حسنًا',
               type: AppDialogType.warning,
               message: LanguageClass.isEnglish
                   ? 'Time for reservation has been finished start again'
-                  : "??? ????? ??? ?????? ???? ?? ????",
+                  : 'انتهى وقت الحجز، برجاء بدء الحجز مرة أخرى',
               onConfirm: () {
                 Reservationtimer.stoptimer();
               },

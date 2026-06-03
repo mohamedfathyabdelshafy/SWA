@@ -1,30 +1,41 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:swa/main.dart';
+import 'package:swa/core/utils/arabic_text_sanitizer.dart';
+import 'package:swa/core/utils/language.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+  group('ArabicTextSanitizer', () {
+    tearDown(() {
+      LanguageClass.isEnglish = true;
+    });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    test('replaces corrupted Arabic placeholder text', () {
+      LanguageClass.isEnglish = false;
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      final text = ArabicTextSanitizer.dialogMessage(
+        '??? ????? ??? ?????? ???? ?? ????',
+      );
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      expect(text, 'حدث خطأ غير متوقع، برجاء المحاولة مرة أخرى');
+    });
+
+    test('keeps valid Arabic text unchanged', () {
+      LanguageClass.isEnglish = false;
+
+      final text = ArabicTextSanitizer.dialogMessage(
+        'انتهى وقت الحجز، برجاء بدء الحجز مرة أخرى',
+      );
+
+      expect(text, 'انتهى وقت الحجز، برجاء بدء الحجز مرة أخرى');
+    });
+
+    test('keeps English text unchanged', () {
+      LanguageClass.isEnglish = true;
+
+      final text = ArabicTextSanitizer.dialogMessage(
+        'Time for reservation has been finished start again',
+      );
+
+      expect(text, 'Time for reservation has been finished start again');
+    });
   });
 }

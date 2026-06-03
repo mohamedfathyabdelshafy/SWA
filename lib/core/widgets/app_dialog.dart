@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:swa/core/utils/app_colors.dart';
+import 'package:swa/core/utils/arabic_text_sanitizer.dart';
 import 'package:swa/core/utils/language.dart';
 import 'package:swa/core/utils/styles.dart';
 import 'package:swa/config/routes/app_routes.dart';
@@ -19,6 +20,7 @@ class AppDialog {
     VoidCallback? onConfirm,
   }) {
     final dialogTitle = title ?? _title(type);
+    final dialogMessage = ArabicTextSanitizer.dialogMessage(message);
 
     return showDialog<T>(
       context: context,
@@ -53,7 +55,7 @@ class AppDialog {
                   const SizedBox(height: 8),
                 ],
                 Text(
-                  message,
+                  dialogMessage,
                   textAlign: TextAlign.center,
                   style: fontStyle(
                     color: AppColors.blackColor,

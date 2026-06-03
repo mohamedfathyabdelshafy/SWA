@@ -44,6 +44,6 @@ class EndPoints {
   static const String sendEmail = '${baseUrl}Settings/SubmitContactUsMessage';
 
   static const String huaweiVersion = "1.2.8";
-  static const String playStoreVersion = "1.2.7";
+  static const String playStoreVersion = "1.2.8";
   static const String iosVersion = "2.1.5";
 }
