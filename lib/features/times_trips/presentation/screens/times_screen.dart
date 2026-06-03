@@ -204,7 +204,7 @@ class _TimesScreenState extends State<TimesScreen>
       return _isShowingBackTrips ? "Back" : "Go";
     }
 
-    return _isShowingBackTrips ? "Ø¹ÙˆØ¯Ù‡" : "Ø°Ù‡Ø§Ø¨";
+    return _isShowingBackTrips ? "عودة" : "ذهاب";
   }
 
   @override
@@ -355,7 +355,7 @@ class _TimesScreenState extends State<TimesScreen>
                               fontSize: 10.sp),
                         )
                       : Text(
-                          "\u202B${widget.numberOfAdults} Ø¨Ø§Ù„Øº - ${widget.dateTrip}",
+                          "\u202B${widget.numberOfAdults} بالغ - ${widget.dateTrip}",
                           style: fontStyle(
                               color: Colors.grey,
                               fontFamily: FontFamily.regular,
@@ -440,7 +440,7 @@ class _TimesScreenState extends State<TimesScreen>
                                                 ? recommendedvalue!
                                                 : (LanguageClass.isEnglish)
                                                     ? "Recommended"
-                                                    : "Ø§Ù„Ù…ÙˆØµÙŠ Ø¨Ù‡Ø§",
+                                                    : "الموصى بها",
                                             hasSelection:
                                                 recommendedvalue != null,
                                             onClearSelection:
@@ -498,7 +498,7 @@ class _TimesScreenState extends State<TimesScreen>
                                           return _buildFilterCard(
                                             title: LanguageClass.isEnglish
                                                 ? "Recommended"
-                                                : "Ø§Ù„Ù…ÙˆØµÙŠ Ø¨Ù‡Ø§",
+                                                : "الموصى بها",
                                             icon: Icons
                                                 .keyboard_arrow_down_rounded,
                                           );
@@ -507,7 +507,7 @@ class _TimesScreenState extends State<TimesScreen>
                                         return _buildFilterCard(
                                           title: LanguageClass.isEnglish
                                               ? "Recommended"
-                                              : "Ø§Ù„Ù…ÙˆØµÙŠ Ø¨Ù‡Ø§",
+                                              : "الموصى بها",
                                           icon:
                                               Icons.keyboard_arrow_down_rounded,
                                         );
@@ -536,7 +536,7 @@ class _TimesScreenState extends State<TimesScreen>
                                                 ? companeyvalue!
                                                 : LanguageClass.isEnglish
                                                     ? "Companies"
-                                                    : "Ø§Ù„Ø´Ø±ÙƒØ§Øª",
+                                                    : "الشركات",
                                             hasSelection: companeyvalue != null,
                                             onClearSelection:
                                                 _clearCompanyFilter,
@@ -584,7 +584,7 @@ class _TimesScreenState extends State<TimesScreen>
                                           return _buildFilterCard(
                                             title: LanguageClass.isEnglish
                                                 ? "Companies"
-                                                : "Ø§Ù„Ø´Ø±ÙƒØ§Øª",
+                                                : "الشركات",
                                             icon: Icons
                                                 .keyboard_arrow_down_rounded,
                                           );
@@ -597,7 +597,7 @@ class _TimesScreenState extends State<TimesScreen>
                                         return _buildFilterCard(
                                           title: LanguageClass.isEnglish
                                               ? "Companies"
-                                              : "Ø§Ù„Ø´Ø±ÙƒØ§Øª",
+                                              : "الشركات",
                                           icon:
                                               Icons.keyboard_arrow_down_rounded,
                                         );
@@ -709,7 +709,7 @@ class _TimesScreenState extends State<TimesScreen>
                                                           LanguageClass
                                                                   .isEnglish
                                                               ? "Enjoy for less with ${widget.tripList[index].companyName}"
-                                                              : "Ø§Ø³ØªÙ…ØªØ¹ Ø¨ØªÙƒÙ„ÙØ© Ø£Ù‚Ù„ Ù…Ø¹ Ø­Ø§ÙÙ„Ø§Øª ${widget.tripList[index].companyName}",
+                                                              : "استمتع بتكلفة أقل مع حافلات ${widget.tripList[index].companyName}",
                                                           style: fontStyle(
                                                               color:
                                                                   Colors.white,
@@ -722,7 +722,7 @@ class _TimesScreenState extends State<TimesScreen>
                                                           LanguageClass
                                                                   .isEnglish
                                                               ? "Unbeatable trips deals with ${widget.tripList[index].companyName}! "
-                                                              : "Ø¹Ø±ÙˆØ¶ Ø±Ø­Ù„Ø§Øª Ù„Ø§ ØªÙØ¶Ø§Ù‡Ù‰ Ù…Ø¹ ${widget.tripList[index].companyName}!",
+                                                              : "عروض رحلات لا تضاهى مع ${widget.tripList[index].companyName}!",
                                                           style: fontStyle(
                                                               color:
                                                                   Colors.white,
@@ -736,7 +736,7 @@ class _TimesScreenState extends State<TimesScreen>
                                                     Text(
                                                       LanguageClass.isEnglish
                                                           ? "Sponsored"
-                                                          : "Ù…Ù…ÙˆÙ„",
+                                                          : "ممول",
                                                       style: fontStyle(
                                                           color: Colors.white,
                                                           fontFamily: FontFamily
@@ -800,7 +800,7 @@ class _TimesScreenState extends State<TimesScreen>
                                                             (LanguageClass
                                                                     .isEnglish
                                                                 ? "Swa"
-                                                                : "Ø³ÙˆØ§"),
+                                                                : "سوا"),
                                                         style: fontStyle(
                                                             color: Colors.black,
                                                             fontFamily:
@@ -1555,7 +1555,7 @@ class _TimesScreenState extends State<TimesScreen>
                                                         //   title: (LanguageClass
                                                         //           .isEnglish)
                                                         //       ? "1 min"
-                                                        //       : "20 Ø¯Ù‚ÙŠÙ‚Ø©",
+                                                        //       : "20 دقيقة",
                                                         //   padding: EdgeInsets.zero,
                                                         //   iconCustom: true,
                                                         //   widget: Icon(
@@ -1579,7 +1579,7 @@ class _TimesScreenState extends State<TimesScreen>
                                                         //   title: (LanguageClass
                                                         //           .isEnglish)
                                                         //       ? "20 min"
-                                                        //       : "20 Ø¯Ù‚ÙŠÙ‚Ø©",
+                                                        //       : "20 دقيقة",
                                                         //   padding: EdgeInsets.zero,
                                                         //   iconCustom: true,
                                                         //   widget: Icon(
@@ -1883,7 +1883,7 @@ class _TimesScreenState extends State<TimesScreen>
                                                                   LanguageClass
                                                                           .isEnglish
                                                                       ? 'Book'
-                                                                      : 'Ø­Ø¬Ø²',
+                                                                      : 'حجز',
                                                                   textAlign:
                                                                       TextAlign
                                                                           .center,
@@ -2002,7 +2002,7 @@ class _TimesScreenState extends State<TimesScreen>
                                                           LanguageClass
                                                                   .isEnglish
                                                               ? "Enjoy for less with ${widget.tripListBack?[index].companyName}"
-                                                              : "Ø§Ø³ØªÙ…ØªØ¹ Ø¨ØªÙƒÙ„ÙØ© Ø£Ù‚Ù„ Ù…Ø¹ Ø­Ø§ÙÙ„Ø§Øª ${widget.tripListBack?[index].companyName}",
+                                                              : "استمتع بتكلفة أقل مع حافلات ${widget.tripListBack?[index].companyName}",
                                                           style: fontStyle(
                                                               color:
                                                                   Colors.white,
@@ -2015,7 +2015,7 @@ class _TimesScreenState extends State<TimesScreen>
                                                           LanguageClass
                                                                   .isEnglish
                                                               ? "Unbeatable trips deals with ${widget.tripListBack?[index].companyName}! "
-                                                              : "Ø¹Ø±ÙˆØ¶ Ø±Ø­Ù„Ø§Øª Ù„Ø§ ØªÙØ¶Ø§Ù‡Ù‰ Ù…Ø¹ ${widget.tripListBack?[index].companyName}!",
+                                                              : "عروض رحلات لا تضاهى مع ${widget.tripListBack?[index].companyName}!",
                                                           style: fontStyle(
                                                               color:
                                                                   Colors.white,
@@ -2029,7 +2029,7 @@ class _TimesScreenState extends State<TimesScreen>
                                                     Text(
                                                       LanguageClass.isEnglish
                                                           ? "Sponsored"
-                                                          : "Ù…Ù…ÙˆÙ„",
+                                                          : "ممول",
                                                       style: fontStyle(
                                                           color: Colors.white,
                                                           fontFamily: FontFamily
@@ -2094,7 +2094,7 @@ class _TimesScreenState extends State<TimesScreen>
                                                             (LanguageClass
                                                                     .isEnglish
                                                                 ? "Swa"
-                                                                : "Ø³ÙˆØ§"),
+                                                                : "سوا"),
                                                         style: fontStyle(
                                                             color: Colors.black,
                                                             fontFamily:
@@ -3067,7 +3067,7 @@ class _TimesScreenState extends State<TimesScreen>
                                                                     text: LanguageClass
                                                                             .isEnglish
                                                                         ? "Please reserve go trip first"
-                                                                        : "Ø¨Ø±Ø¬Ø§Ø¡ Ø§Ø®ØªÙŠØ§Ø± Ø±Ø­Ù„Ø© Ø°Ù‡Ø§Ø¨ Ø§ÙˆÙ„Ø§Ù‹");
+                                                                        : "برجاء اختيار رحلة ذهاب أولًا");
                                                               }
                                                             },
                                                             child: Container(
@@ -3116,7 +3116,7 @@ class _TimesScreenState extends State<TimesScreen>
                                                                   LanguageClass
                                                                           .isEnglish
                                                                       ? 'Book'
-                                                                      : 'Ø­Ø¬Ø²',
+                                                                      : 'حجز',
                                                                   textAlign:
                                                                       TextAlign
                                                                           .center,
@@ -3196,7 +3196,7 @@ class _TimesScreenState extends State<TimesScreen>
                                 child: Text(
                                   LanguageClass.isEnglish
                                       ? "Continue"
-                                      : "Ø§Ø³ØªÙ…Ø±",
+                                      : "استمر",
                                   style: fontStyle(
                                       color: AppColors.white,
                                       fontWeight: FontWeight.normal,
@@ -3363,7 +3363,7 @@ class _TimesScreenState extends State<TimesScreen>
           context: context,
           text: LanguageClass.isEnglish
               ? "No trips in this date"
-              : "Ã™â€žÃ˜Â§ Ã™Å Ã™Ë†Ã˜Â¬Ã˜Â¯ Ã™â€¦Ã™Ë†Ã˜Â§Ã˜Â¹Ã™Å Ã˜Â¯ Ã™ÂÃ™Å  Ã™â€¡Ã˜Â°Ã˜Â§ Ã˜Â§Ã™â€žÃ™â€¦Ã™Ë†Ã˜Â¹Ã˜Â¯",
+              : "لا يوجد مواعيد في هذا الموعد",
         );
       }
     } else if (state is ErrorTimesTrips) {
@@ -3881,7 +3881,7 @@ class _TimesScreenState extends State<TimesScreen>
           ? recommendedvalue!
           : LanguageClass.isEnglish
               ? "Recommended"
-              : "Ø§Ù„Ù…ÙˆØµÙŠ Ø¨Ù‡Ø§",
+              : "الموصى بها",
       hasSelection: recommendedvalue != null,
       onClearSelection: _clearRecommendedFilter,
       dropdownItems: _recommendedFilterItems,
